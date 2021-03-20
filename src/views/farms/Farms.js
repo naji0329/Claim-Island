@@ -22,7 +22,6 @@ const Farms = () => {
                 </Card>
             </Col>
         </Row>
-
     </div>
 };
 
