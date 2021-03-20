@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h2{
+  color: purple;
+}
+
+.connectButton{
+  background-color: purple;
+  color: purple;
+}

@@ -16,12 +16,14 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Container, Row, Col
+  Container, Row, Col,
+  Form, Button
 } from 'reactstrap';
 
 import Farms from './views/farms/Farms';
 import Nest from './views/nest/Nest';
 import Home from './views/home/Home';
+import Vault from './views/vault/Vault';
 import {  getWeb3, getContract, httpProvider } from './web3';
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -35,7 +37,15 @@ const App = (props) => {
   return (
     <Router>
       <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">reactstrap</NavbarBrand>
+        <NavbarBrand href="/">
+          <img
+            alt=""
+            src="/logo.svg"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+          />
+        </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -48,11 +58,17 @@ const App = (props) => {
             <NavItem>
               <NavLink tag={RRNavLink} to="/nest">Nest</NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink tag={RRNavLink} to="/vault">Vault</NavLink>
+            </NavItem>
           </Nav>
+          <Form inline>
+            <Button as="input" variant="primary" type="button" value="Input">Connect</Button>
+          </Form>   
         </Collapse>
       </Navbar>
 
-      <ProSidebar
+      {/* <ProSidebar
         image={false}
         rtl={true}
         collapsed={false}
@@ -72,7 +88,7 @@ const App = (props) => {
             <Link to="/nest">Nest</Link>
           </MenuItem>
         </Menu>
-      </ProSidebar>
+      </ProSidebar> */}
 
       <Container fluid={true}>
         <Row>
@@ -85,6 +101,9 @@ const App = (props) => {
             </Route>
             <Route path="/nest">
               <Nest />
+            </Route>
+            <Route path="/vault">
+              <Vault />
             </Route>
             <Route path="/">
               <Home />
