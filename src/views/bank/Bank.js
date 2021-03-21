@@ -48,7 +48,7 @@ const Bank = () => {
                 <InputGroupText style={{fontSize: '8px'}}>$PEARL</InputGroupText> 
                 <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>      
               </InputGroup>
-              <Button style={{marginTop: '10px'}}>Unlock Wallet</Button>
+              <Button style={{marginTop: '10px', backgroundColor: "#38DCDC"}}>Unlock Wallet</Button>
             </CardBody>
           </Card>
 
@@ -71,7 +71,7 @@ const Bank = () => {
                 <CardImg top style={{width: '40px', height: '40px'}} src={require(`../../assets/img/transparent/cs2-03.png`).default} alt="Card image cap" />
                 <CardText style={{fontSize: '8px'}}>$PEARL</CardText>
               </InputGroup>
-              <Button style={{marginTop: '10px'}}>Unlock Wallet</Button>
+              <Button style={{marginTop: '10px', backgroundColor: "#38DCDC"}}>Unlock Wallet</Button>
             </CardBody>
           </Card>
 
@@ -89,10 +89,10 @@ const Bank = () => {
                 <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>      
               </InputGroup>
               <CardText style={{fontSize: '20px'}}>Deposit Fee: <b>0%</b></CardText>
-              <Button>Harvest</Button>
+              <Button style={{backgroundColor: "#0072E3"}}>Harvest</Button>
               <br/> 
               {/* icon goes here */}
-              <Button style={{marginTop: '10px'}}>Approve contract</Button>
+              <Button style={{marginTop: '10px', backgroundColor: "#38DCDC"}}>Approve contract</Button>
             </CardBody>
           </Card>
           <Card>
@@ -109,10 +109,10 @@ const Bank = () => {
                 <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>      
               </InputGroup>
               <CardText style={{fontSize: '20px'}}>Deposit Fee: <b>0%</b></CardText>
-              <Button>Harvest</Button>
+              <Button style={{backgroundColor: "#0072E3"}}>Harvest</Button>
               <br/>
               {/* icon goes here */}
-              <Button style={{marginTop: '10px'}}>Approve contract</Button>
+              <Button style={{marginTop: '10px', backgroundColor: "#38DCDC"}}>Approve contract</Button>
             </CardBody>
           </Card>
         </CardColumns>
