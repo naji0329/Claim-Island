@@ -1,12 +1,18 @@
 body {
   margin: 0;
-  font-family: 'Kanit' sans-serif;
+  font-family: 'Roboto' sans-serif;
   
   /* -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+
+* {
+ /* font-size: 100%; */
+ font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 code {
@@ -37,3 +43,6 @@ h2{
   font-weight: bold;
 }
 
+.fontStyle{
+  /* font-family: trio; */
+}

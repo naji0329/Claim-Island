@@ -82,14 +82,16 @@ const Bank = () => {
             <CardBody style={{height: '250px'}}>
               <Row>
                 <CardImg top style={{width: '40px', height: '40px'}} src={require(`../../assets/img/transparent/cs2-03.png`).default} alt="Card image cap" />
-                <CardText style={{fontSize: '20px'}}>$PEARL -> $PEARL</CardText>
+                <CardText style={{fontSize: '14px'}}>$PEARL -> $PEARL</CardText>
               </Row>
-              <InputGroup>
-                <InputGroupText style={{fontSize: '8px'}}>APR</InputGroupText> 
-                <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>      
-              </InputGroup>
-              <CardText style={{fontSize: '20px'}}>Deposit Fee: <b>0%</b></CardText>
+              <CardText style={{fontSize: '14px'}}>APR: <b>84.5%</b></CardText>
+              <CardText style={{fontSize: '14px'}}>Deposit Fee: <b>0%</b></CardText>
               <Button style={{backgroundColor: "#0072E3"}}>Harvest</Button>
+            
+              {/* <Row>
+                <Button style={{backgroundColor: "#0072E3"}}>Harvest</Button>
+                <CardText style={{fontSize: '14px'}}>$PEARL Earned: <p>0</p></CardText>
+              </Row> */}
               <br/> 
               {/* icon goes here */}
               <Button style={{marginTop: '10px', backgroundColor: "#38DCDC"}}>Approve contract</Button>
@@ -102,13 +104,10 @@ const Bank = () => {
             <CardBody style={{height: '250px'}}>
               <Row>
                 <CardImg top style={{width: '40px', height: '40px'}} src={require(`../../assets/img/transparent/cs2-03.png`).default} alt="Card image cap" />
-                <CardText style={{fontSize: '20px'}}>$CLAM -> $PEARL</CardText>
+                <CardText style={{fontSize: '14px'}}>$CLAM -> $PEARL</CardText>
               </Row>
-              <InputGroup>
-                <InputGroupText style={{fontSize: '8px'}}>APR</InputGroupText> 
-                <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>      
-              </InputGroup>
-              <CardText style={{fontSize: '20px'}}>Deposit Fee: <b>0%</b></CardText>
+              <CardText style={{fontSize: '14px'}}>APR: <b>82.3%</b></CardText>
+              <CardText style={{fontSize: '14px'}}>Deposit Fee: <b>0%</b></CardText>
               <Button style={{backgroundColor: "#0072E3"}}>Harvest</Button>
               <br/>
               {/* icon goes here */}
