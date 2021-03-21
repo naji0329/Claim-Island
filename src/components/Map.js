@@ -47,12 +47,12 @@ const addLeafletMap = (mapContainer, history) => {
   // initialize the leaflet map
   const map = L.map(mapContainer, {
       crs: L.CRS.Simple,
-      // minZoom: -1,
-      maxZoom: 3,
+      minZoom: -1,
+      // maxZoom: 3,
       zoomControl: false
   });
   // map.dragging.disable();
-  map.setView( [560, 960], -1);
+  map.setView( [560, 960]);
 
   // add the image and bounds
   const bounds = [[0,0], [1080,1920]];
@@ -62,7 +62,7 @@ const addLeafletMap = (mapContainer, history) => {
   // Navigation Icon dimensions
   const LeafIcon = L.Icon.extend({
       options: {
-          iconSize:     [200, 200],
+          iconSize:     [100, 100],
           iconAnchor:   [22, 94],
           popupAnchor:  [-3, -76]
       }
