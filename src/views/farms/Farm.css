@@ -1,23 +1,23 @@
-.App {
-    text-align: left;
-    width: 90%;
-    padding: 5%;
-  }
+.Farm {
+  text-align: center;
+  width: 90%;
+  padding: 5%;
+}
   
-  .blackColor{
-    color: black;
-  }
+.blackColor{
+  color: black;
+}
 
-  h2{
-      margin-bottom: 30px;
-  }
+h2{
+  margin-bottom: 30px;
+  font-family: "AristotelicaBold";
+}
 
 .card-img-top{
-    height: 60px; 
-    width: 60px;
-
+  height: 60px; 
+  width: 60px;
 }
 
 .card-body{
-    background-color: #F6F3D8;
+  background-color: #F6F3D8;
 }

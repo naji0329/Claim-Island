@@ -35,7 +35,7 @@ const NavbarComp = () => {
       <Collapse isOpen={isOpen} navbar>
         <Nav className="mr-auto" navbar>
           {ROUTES.map((k, i) => {
-            return <NavItem>
+            return <NavItem key={i}>
               <NavLink style={{color: "#38DCDC", fontFamily: "AristotelicaBold", fontSize: "20px", marginTop: "10px"}} tag={RRNavLink} key={i} to={k.url}>{k.title}</NavLink>
             </NavItem>
           })}
