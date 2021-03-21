@@ -17,6 +17,7 @@ const Map = (props) => {
   const mapStyles = {
     width: '100%',
     height: '100%',
+    zIndex: 9999,
     backgroundColor: 'transparent' // '#3a4964'
   };
 
@@ -48,7 +49,7 @@ const addLeafletMap = (mapContainer, history) => {
   const map = L.map(mapContainer, {
       crs: L.CRS.Simple,
       minZoom: -1,
-      // maxZoom: 3,
+      maxZoom: 2,
       zoomControl: false
   });
   // map.dragging.disable();
