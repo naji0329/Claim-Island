@@ -1,0 +1,19 @@
+.App {
+    /* text-align: center; */
+    width: 80%;
+    padding: 5%;
+  }
+  
+  .blackColor{
+    color: black;
+  }
+
+  h2{
+      margin-bottom: 30px;
+  }
+
+.exchange{
+  width: 50% !important;
+  background-color: black !important;
+  padding: 10 im !important;
+}

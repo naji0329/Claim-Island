@@ -1,0 +1,23 @@
+.App {
+    text-align: left;
+    width: 90%;
+    padding: 5%;
+  }
+  
+  .blackColor{
+    color: black;
+  }
+
+  h2{
+      margin-bottom: 30px;
+  }
+
+.card-img-top{
+    height: 60px; 
+    width: 60px;
+
+}
+
+.card-body{
+    background-color: #F6F3D8;
+}
