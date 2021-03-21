@@ -4,9 +4,9 @@ export const FARMS = [
 ];
 
 export const HOME_ICONS = [
-    { src: 'clam_heart_pink_pearl_pink.png', url: '/farms', location: [ 250, 750 ] },
-    { src: 'clam_green_nopearl.png', url: '/vault', location: [ 1400, 850 ] },
-    { src: 'clam_bigmouth_pink_pearl_yellow.png', url: '/bank', location: [ 930, 450 ] },
+    { src: 'label_farmclams.png', url: '/farms', location: [ 230, 900 ] },
+    { src: 'label_vaultclams.png', url: '/vault', location: [ 1400, 980 ] },
+    { src: 'label_buyclams.png', url: '/bank', location: [ 1050, 550 ] },
 ];
 
 export const CLAMS = [

@@ -70,7 +70,7 @@ const addLeafletMap = (mapContainer, history) => {
 
   // add the navigation icons
   HOME_ICONS.forEach((k) => {
-    const icon = new LeafIcon({iconUrl: require('../assets/img/clamjam/' + k.src).default});
+    const icon = new LeafIcon({iconUrl: require(`../assets/img/${k.src}`).default});
     const marker = L.marker(getLngLat(k.location), {icon}).addTo(map);
     marker.addEventListener('click', () => history.push(k.url));
   });
