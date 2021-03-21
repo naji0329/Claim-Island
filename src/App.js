@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useWallet } from '@binance-chain/bsc-use-wallet'
 
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
+
+import { ResetCSS } from '@pancakeswap-libs/uikit'
 
 import {
   Container, Row, Col
@@ -18,8 +21,17 @@ import NavbarComp from './components/Navbar';
 
 // Main App Component
 const App = (props) => {
+  const { account, connect } = useWallet()
+
+  useEffect(() => {
+    if (!account && window.localStorage.getItem('accountStatus')) {
+      connect('injected')
+    }
+  }, [account, connect])
+
   return (
     <Router>
+      <ResetCSS />
       <NavbarComp />
 
       <Container fluid={true} className="p-0">

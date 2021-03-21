@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ModalProvider } from '@pancakeswap-libs/uikit'
 // import bsc from '@binance-chain/bsc-use-wallet'
 // import { UseWalletProvider } from 'use-wallet'
 // import { UseWalletProvider } from '@binance-chain/bsc-use-wallet'
@@ -27,7 +28,9 @@ ReactDOM.render(
       bsc,
     }}>
       <ThemeProvider theme={dark}>
-        <App />
+        <ModalProvider>
+          <App />
+        </ModalProvider>
       </ThemeProvider>
   </bsc.UseWalletProvider>,
   document.getElementById('root')
