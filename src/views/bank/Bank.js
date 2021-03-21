@@ -22,17 +22,17 @@ import {
 } from 'reactstrap';
 
 import logo from '../../assets/logo.svg';
-import './Vault.css';
+import './Bank.css';
 
-const Vault = () => {
+const Bank = () => {
 
   return(
     <Router>
       <div className="App">
-        <h2 className='header'>Your Vault</h2>
+        <h2 className='header'>Bank</h2>
         <CardColumns>
             <Card className='Card'>
-                <CardImg top width="100%" src="src\assets\clam-pic.jpg" alt="Your clam or pearl" />
+                <CardImg top width="100%" src="src\assets\clams.jpg" alt="Your clam or pearl" />
                 <CardBody>
                     <CardTitle tag="h5">Name of the NFT</CardTitle>
                     {/* <CardSubtitle tag="h6" className="mb-2 text-muted">Balance:</CardSubtitle> */}
@@ -58,4 +58,4 @@ const Vault = () => {
   );
 };
 
-export default Vault;
+export default Bank;

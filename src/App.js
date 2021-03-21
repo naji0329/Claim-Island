@@ -24,10 +24,11 @@ import Farms from './views/farms/Farms';
 import Nest from './views/nest/Nest';
 import Home from './views/home/Home';
 import Vault from './views/vault/Vault';
+import Bank from './views/bank/Bank';
 import {  getWeb3, getContract, httpProvider } from './web3';
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCoffee } from '@fortawesome/free-solid-svg-icons'
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 const App = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +37,7 @@ const App = (props) => {
 
   return (
     <Router>
-      <Navbar color="light" light expand="md">
+      <Navbar className="navbar" color="light" light expand="md">
         <NavbarBrand href="/">
           <img
             alt=""
@@ -55,11 +56,14 @@ const App = (props) => {
             <NavItem>
               <NavLink tag={RRNavLink} to="/farms">Farms</NavLink>
             </NavItem>
-            <NavItem>
+            {/* <NavItem>
               <NavLink tag={RRNavLink} to="/nest">Nest</NavLink>
-            </NavItem>
+            </NavItem> */}
             <NavItem>
               <NavLink tag={RRNavLink} to="/vault">Vault</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={RRNavLink} to="/bank">Bank</NavLink>
             </NavItem>
           </Nav>
           <Form inline>
@@ -104,6 +108,9 @@ const App = (props) => {
             </Route>
             <Route path="/vault">
               <Vault />
+            </Route>
+            <Route path="/bank">
+              <Bank />
             </Route>
             <Route path="/">
               <Home />
