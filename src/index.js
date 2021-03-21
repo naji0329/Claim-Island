@@ -8,14 +8,13 @@ import * as bsc from '@binance-chain/bsc-use-wallet'
 import { ThemeProvider } from 'styled-components'
 import { light, dark } from '@pancakeswap-libs/uikit'
 
-
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // import library css
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'leaflet/dist/leaflet.css';
+import './index.css';
 
 const chainId = 56;
 const rpcUrl = "https://bsc-dataseed.binance.org";

@@ -44,7 +44,7 @@ const Farms = () => {
                     <CardSubtitle tag="h6" className="mb-2 text-muted">A place to select and deposit Clams</CardSubtitle>
                     <CardText>Choose Clams from your Vault to deposit into the Farm</CardText>
 
-                    <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+                    <Dropdown isOpen={dropdownOpen} toggle={toggle} style={{marginTop: "10px"}}>
                         <DropdownToggle caret  style={{backgroundColor: '#0072E3'}}>
                             Select Clams
                         </DropdownToggle>
@@ -69,9 +69,9 @@ const Farms = () => {
                         <CardTitle tag="h5">{clam.title}</CardTitle>
                         <CardSubtitle tag="h6" className="mb-2 text-muted">This clam is in the farm</CardSubtitle>
                         <CardText>This Clam has been selected for farming.</CardText>
-                        <Button>Withdraw</Button>
+                        <Button style={{marginTop: "10px"}}>Withdraw</Button>
 
-                        <Button id={clam.value} type="button" style={{backgroundColor: '#0072E3', marginLeft: "10px"}}>
+                        <Button id={clam.value} type="button" style={{marginTop: "10px", backgroundColor: '#0072E3', marginLeft: "10px"}}>
                             Info
                         </Button>
                         {/* <Popover placement="bottom" isOpen={popoverOpen} target={clam.value} toggle={togglePop}>

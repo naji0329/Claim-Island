@@ -1,39 +1,28 @@
+@font-face {
+  font-family: AristotelicaBold;
+  src: url(./assets/fonts/aristotelicaText_bold.otf) format("opentype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: TrioGrotesk;
+  src: url(./assets/fonts/trio_grotesk.otf) format("opentype");
+  font-weight: bold;
+}
+
 body {
   margin: 0;
-  font-family: 'Kanit' sans-serif;
   
   /* -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: "TrioGrotesk";
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  font-family: "TrioGrotesk";
 }
 
-h2{
-  color: purple;
-}
-
-.connectButton{
-  background-color: purple;
-  color: purple;
-}
-
-.card{
-  box-shadow: 5px 5px 5px #aaaaaa;
-}
-
-.card-body{
-  background-color: white;
-}
-
-@font-face {
-  font-family: AristotelicaBold;
-  src: url(./assets/fonts/aristotelica.text-trial-bold.ttf);
-  font-weight: bold;
-}
 
