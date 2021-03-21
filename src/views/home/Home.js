@@ -28,7 +28,10 @@ const Home = () => {
     <Router>
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <img src={logo} className="App-logo" alt="logo" usemap="#mapname"/>
+          <map name="mapname">
+              <area shape="rect" coords="48,48,100,100" href="/farms" alt="alttext"/>
+          </map>
           <p className="blackColor">
             Map will go here
           </p>
