@@ -1,43 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  NavLink as RRNavLink
-} from "react-router-dom";
-
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  Container, Row, Col
-} from 'reactstrap';
-
-import logo from '../../assets/logo.svg';
-// import clam from '../../assets/img/clamjam/clam_bigmouth_pink_nopearl.png';
 import './Home.css';
+import Map from '../../components/Map'
 
+// Main Home Component
 const Home = () => {
   return(
-    <Router>
-      <div className="App">
-        <img src={logo} className="App-logo" alt="logo" usemap="#mapname"/>
-        <map name="mapname">
-            <area shape="rect" coords="48,48,300,300" href="https://www.google.com/" alt="alttext"/>
-        </map>
-        <header className="App-header">
-          <p className="blackColor">
-            Map will go here
-          </p>
-        </header>
+      <div className="Home">
+        <Map></Map>
       </div>
-    </Router>
   );
 };
 
