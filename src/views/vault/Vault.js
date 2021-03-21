@@ -34,33 +34,6 @@ const Vault = () => {
 
   };
 
-  const renderClamCard  = (clam) => {
-    return(
-      <Card>
-        <CardImg top style={{width: '200px', height: '200px'}} src={AddClam} alt="Card image cap" />
-        <CardBody style={{height: '200px'}}>
-            <CardTitle tag="h5">Deposit Clams</CardTitle>
-            <CardSubtitle tag="h6" className="mb-2 text-muted">A place to select and deposit Clams</CardSubtitle>
-            <CardText>Choose Clams from your Vault to deposit into the Farm</CardText>
-
-            <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggle caret  style={{backgroundColor: '#0072E3'}}>
-                    Select Clams
-                </DropdownToggle>
-                <DropdownMenu>
-                    {CLAMS.map((k, i) => {
-                        return <DropdownItem key={i} onClick={() => addClamToFarm(k)}>
-                            <img style={{width: "50px", height: "50px"}} src={require(`../../assets/img/clamjam/${k.src}`).default}/>
-                            <span style={{fontFamily: "AristotelicaBold", fontSize: "16px"}}>{k.title}</span>
-                        </DropdownItem>;
-                    })}
-                    
-                  </DropdownMenu>
-              </Dropdown>
-          </CardBody>
-      </Card>
-    );
-  }
 
   return(
       <div className="App">
