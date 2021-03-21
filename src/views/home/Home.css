@@ -2,9 +2,9 @@
   text-align: center;
 }
 
-.App-logo {
+img.App-logo {
   height: 500px;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 /* @media (prefers-reduced-motion: no-preference) {
