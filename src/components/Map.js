@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useHistory } from "react-router-dom";
 import * as L from 'leaflet';
 
-import mapImg from '../assets/img/clamswap_navigation_map.png';
+import mapImg from '../assets/img/clamswap_navigation_map_tr.png';
 import { HOME_ICONS } from '../constants';
 
 // Main Map Component
@@ -17,7 +17,7 @@ const Map = (props) => {
   const mapStyles = {
     width: '100%',
     height: '100%',
-    backgroundColor: '#3a4964'
+    backgroundColor: 'transparent' // '#3a4964'
   };
 
   return(
