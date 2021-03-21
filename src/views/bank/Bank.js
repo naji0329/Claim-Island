@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FormControl } from 'react-bootstrap';
 
 import {
   BrowserRouter as Router,
@@ -18,7 +19,7 @@ import {
   NavLink,
   Container, Row, Col,
   Button,
-  Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, CardColumns
+  Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, CardColumns, InputGroupText, InputGroup
 } from 'reactstrap';
 
 import logo from '../../assets/logo.svg';
@@ -30,29 +31,21 @@ const Bank = () => {
     <Router>
       <div className="App">
         <h2 className='header'>Bank</h2>
-        <CardColumns>
-            <Card className='Card'>
-                <CardImg top width="100%" src="src\assets\clams.jpg" alt="Your clam or pearl" />
-                <CardBody>
-                    <CardTitle tag="h5">Name of the NFT</CardTitle>
-                    {/* <CardSubtitle tag="h6" className="mb-2 text-muted">Balance:</CardSubtitle> */}
-                </CardBody>
-            </Card>
-            <Card className='Card'>
-                <CardImg top width="100%" src="src\assets\clams.jpg" alt="Your clam or pearl" />
-                <CardBody>
-                    <CardTitle tag="h5">Name of the NFT</CardTitle>
-                    {/* <CardSubtitle tag="h6" className="mb-2 text-muted">Balance:</CardSubtitle> */}
-                </CardBody>
-            </Card>
-            <Card className='Card'>
-                <CardImg top width="100%" src="src\assets\clams.jpg" alt="Your clam or pearl" />
-                <CardBody>
-                    <CardTitle tag="h5">Name of the NFT</CardTitle>
-                    {/* <CardSubtitle tag="h6" className="mb-2 text-muted">Balance:</CardSubtitle> */}
-                </CardBody>
-            </Card>
-        </CardColumns>
+        <div classname="exchange">
+          <InputGroup>
+            <InputGroupText>Exchange</InputGroupText> 
+            {/* <DropdownButton title="Coin"></DropdownButton> */}
+
+            <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>      
+          </InputGroup>
+          <InputGroup>
+            <InputGroupText>To</InputGroupText> 
+            {/* <DropdownButton title="Coin"></DropdownButton> */}
+
+            <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>      
+          </InputGroup>
+        </div>
+      
       </div>
     </Router>
   );
