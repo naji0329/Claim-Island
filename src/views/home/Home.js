@@ -6,7 +6,7 @@ import Map from '../../components/Map'
 // Main Home Component
 const Home = () => {
   return(
-      <div className="Home">
+      <div className="Home" style={{height: '95.5vh'}}>
         <Map></Map>
       </div>
   );

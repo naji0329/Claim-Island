@@ -9,7 +9,7 @@ import {
 
 import './Farm.css';
 
-import { FARMS } from '../../constants/farms';
+import { FARMS } from '../../constants';
 
 const Farms = () => {
     return <div className="App"> 

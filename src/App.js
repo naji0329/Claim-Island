@@ -22,9 +22,9 @@ const App = (props) => {
     <Router>
       <NavbarComp />
 
-      <Container fluid={true}>
-        <Row>
-          <Col sm={{ size: 10, order: 2, offset: 2 }}>
+      <Container fluid={true} className="p-0">
+        <Row className="no-gutters">
+          <Col sm={{ size: 12 }}>
             <Switch>
               {ROUTES.map((k, i) => {
                 return <Route

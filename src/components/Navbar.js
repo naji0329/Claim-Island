@@ -22,12 +22,12 @@ const NavbarComp = () => {
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <Navbar className="navbar" color="light" light expand="md">
+    <Navbar className="navbar" dark expand="md" style={{backgroundColor: "#000000"}}>
       <NavbarBrand href="/">
         <img
             alt=""
-            src={require("../assets/logo.png").default}
-            style={{width: "100px", height: "30px"}}
+            src={require("../assets/img/transparent/1.png").default}
+            style={{width: "200px", height: "60px"}}
             className="d-inline-block align-top"
         />
       </NavbarBrand>
@@ -36,12 +36,12 @@ const NavbarComp = () => {
         <Nav className="mr-auto" navbar>
           {ROUTES.map((k, i) => {
             return <NavItem>
-              <NavLink tag={RRNavLink} key={i} to={k.url}>{k.title}</NavLink>
+              <NavLink style={{color: "#38DCDC", fontFamily: "AristotelicaBold", fontSize: "20px", marginTop: "10px"}} tag={RRNavLink} key={i} to={k.url}>{k.title}</NavLink>
             </NavItem>
           })}
         </Nav>
         <Form inline>
-            <Button variant="primary" onClick={toggle}>Connect</Button>
+            <Button onClick={toggle} style={{backgroundColor: "#0072E3"}}>Connect</Button>
         </Form> 
       </Collapse>
     </Navbar>

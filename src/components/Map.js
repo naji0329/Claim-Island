@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { useHistory } from "react-router-dom";
 import * as L from 'leaflet';
 
-import mapImg from '../assets/img/mordor.jpg';
-import { HOME_ICONS } from '../constants/farms';
+import mapImg from '../assets/img/clamswap_navigation_map.png';
+import { HOME_ICONS } from '../constants';
 
 // Main Map Component
 const Map = (props) => {
@@ -15,9 +15,9 @@ const Map = (props) => {
   });
 
   const mapStyles = {
-    width: '1000px',
-    height: '750px',
-    border: '1px solid black'
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#3a4964'
   };
 
   return(
@@ -47,15 +47,15 @@ const addLeafletMap = (mapContainer, history) => {
   // initialize the leaflet map
   const map = L.map(mapContainer, {
       crs: L.CRS.Simple,
-      minZoom: -2,
-      maxZoom: -2,
+      // minZoom: -1,
+      maxZoom: 3,
       zoomControl: false
   });
-  map.dragging.disable();
-  map.setView( [1500, 2000], -2);
+  // map.dragging.disable();
+  map.setView( [560, 960], -1);
 
   // add the image and bounds
-  const bounds = [[0,0], [3000,4000]];
+  const bounds = [[0,0], [1080,1920]];
   const image = L.imageOverlay(mapImg, bounds).addTo(map);
   map.fitBounds(bounds);
 

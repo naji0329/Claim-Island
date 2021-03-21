@@ -31,3 +31,9 @@ h2{
   background-color: white;
 }
 
+@font-face {
+  font-family: AristotelicaBold;
+  src: url(./assets/fonts/aristotelica.text-trial-bold.ttf);
+  font-weight: bold;
+}
+
