@@ -17,6 +17,8 @@ import {
 
 import ROUTES from '../router';
 
+import UnlockButton from './UnlockButton';
+
 const NavbarComp = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
@@ -41,7 +43,8 @@ const NavbarComp = () => {
           })}
         </Nav>
         <Form inline>
-            <Button onClick={toggle} style={{backgroundColor: "#38DCDC"}}>Connect</Button>
+            {/* <Button onClick={toggle} style={{backgroundColor: "#38DCDC"}}>Connect</Button> */}
+            <UnlockButton />
         </Form> 
       </Collapse>
     </Navbar>

@@ -1,5 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import bsc from '@binance-chain/bsc-use-wallet'
+// import { UseWalletProvider } from 'use-wallet'
+// import { UseWalletProvider } from '@binance-chain/bsc-use-wallet'
+import * as bsc from '@binance-chain/bsc-use-wallet'
+import { ThemeProvider } from 'styled-components'
+import { light, dark } from '@pancakeswap-libs/uikit'
+
+
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -8,10 +16,20 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'leaflet/dist/leaflet.css';
 
+const chainId = 56;
+const rpcUrl = "https://bsc-dataseed.binance.org";
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <bsc.UseWalletProvider
+    chainId={chainId}
+    connectors={{
+      walletconnect: { rpcUrl },
+      bsc,
+    }}>
+      <ThemeProvider theme={dark}>
+        <App />
+      </ThemeProvider>
+  </bsc.UseWalletProvider>,
   document.getElementById('root')
 );
 

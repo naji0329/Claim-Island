@@ -4,8 +4,8 @@ export const FARMS = [
 ];
 
 export const HOME_ICONS = [
-    { src: 'label_farmclams.png', url: '/farms', location: [ 230, 800 ] },
-    { src: 'label_vaultclams.png', url: '/vault', location: [ 1400, 880 ] },
+    { src: 'label_farmclams.png', url: '/farms', location: [ 1400, 880 ] },
+    { src: 'label_vaultclams.png', url: '/vault', location: [ 230, 800 ] },
     { src: 'label_buyclams.png', url: '/bank', location: [ 1050, 500 ] },
 ];
 
