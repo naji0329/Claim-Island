@@ -68,3 +68,13 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Web3 setup
+1. connect contracts to the code
+```
+cd src && ln -s ../../clamswap-contracts/build/contracts contracts
+```
+
+2. Add contract addresses and RPC Url in **.env** file.
+
+3. Web3 code is in **services/web3.js**.
