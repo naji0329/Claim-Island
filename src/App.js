@@ -15,8 +15,8 @@ import {
 
 import ROUTES from './router';
 
-// import {  getClamTokenContract, getContract, httpProvider } from './services/web3';
-import {  getContract, httpProvider } from './services/web3';
+import {  getClamTokenContract, getContract, httpProvider } from './services/web3';
+// import {  getContract, httpProvider } from './services/web3';
 
 import NavbarComp from './components/Navbar';
 
@@ -25,8 +25,8 @@ import NavbarComp from './components/Navbar';
 const App = (props) => {
   const { account, connect } = useWallet()
 
-  // const contract = getClamTokenContract();
-  // console.log(contract);
+  const contract = getClamTokenContract();
+  console.log(contract);
 
   useEffect(() => {
     if (!account && window.localStorage.getItem('accountStatus')) {

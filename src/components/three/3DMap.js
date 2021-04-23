@@ -3,10 +3,13 @@ import * as THREE from 'three';
 import { Vector3 } from 'three';
 // import * as GUI from '../../loaders/dat.gui.module.js';
 import OBJLoader from '../../loaders/OBJLoader';
+import MTLLoader from '../../loaders/MTLLoader';
 import Water from '../../loaders/Water';
 import Sky from '../../loaders/Sky';
 import { OrbitControls, MapControls} from '../../loaders/OrbitControls';
 // window.THREE = THREE;
+
+import { ISLAND_OBJECTS } from './constants';
 
 THREE.Cache.enabled = true;
 
@@ -60,7 +63,10 @@ const create3DScene = (element) => {
 
     addLights(scene);
 
-    loadObject('models/island.obj', scene);
+    // load objects and materials
+    ISLAND_OBJECTS.forEach((obj) => {
+        loadTexture({ ...obj, scene });
+    });
 
     animate({
         scene,
@@ -76,25 +82,98 @@ const addLights = (scene) => {
     const ambient = new THREE.AmbientLight( 0x016c59 );
     scene.add( ambient );
 
-    const directionalLight = new THREE.DirectionalLight( 0xffeedd );
-    directionalLight.position.set( 500, 100, 0 ).normalize();
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 10 );
+    directionalLight.position.set( 0, 10, 0 ).normalize();
     scene.add( directionalLight );
 };
 
+const loadTexture = ({
+    materialUrl,
+    objectUrl,
+    textureUrl,
+    scene
+}) => {
+    const loader = new THREE.TextureLoader();
+    loader.load(textureUrl, (texture) => {
+        loadMaterial({
+            materialUrl,
+            objectUrl,
+            texture,
+            scene
+        });
+    }, undefined, function(err) {
+        console.log(err);
+    })
+};
+
+// LOAD a Material and then load object
+const loadMaterial = ({
+    materialUrl,
+    objectUrl,
+    texture,
+    scene
+}) => {
+    const loader = new MTLLoader();
+    loader.load(materialUrl, function ( materials ) {
+        // console.log(material);
+        materials.preload();
+        loadObject(objectUrl, scene, materials, texture);
+    }, undefined, function(error) {
+        console.log('Material Error: ', error);
+    });
+}
+
 // LOAD A 3D OBJECT
-const loadObject = (url, scene) => {
+const loadObject = (url, scene, materials, texture) => {
     const loader = new OBJLoader();
+    loader.setMaterials( materials );
     loader.load(url, function ( object ) {
         object.traverse( function ( child ) {
             if ( child instanceof THREE.Mesh ) {
-                child.material = new THREE.MeshStandardMaterial( {
-                    color: 0xffffff,
-                    emissive: 0xfb6a4a,
-                    emissiveIntensity: 0.4,
-                    metalness: 1
-                } );
-                child.scale.set(200, 200, 200)
-                child.rotation.set(0, 5.3, 0)
+                if(child.material.length > 0) {
+                    child.material.forEach( mat => {
+                        child.material.map = texture;
+                        child.material.map.needsUpdate = true;
+                    });
+                } else {
+                    child.material.map = texture;
+                    // child.material.color.setHex( 0xff0000 );
+                    child.material.map.needsUpdate = true;
+                    // child.material = new THREE.MeshPhongMaterial( {
+                    //     map: texture
+                    // });
+                    // child.material = [
+                    //     // child.material,
+                    //     new THREE.MeshPhongMaterial({
+                    //         // map: texture
+                    //         color: 0xff0000,
+                    //     })
+                    // ];
+                    // child.material.needsUpdate = true;
+                }
+                // console.log(child.material)
+                // child.material = materials;
+                // child.material = new THREE.MeshPhongMaterial( {
+                //     map: texture
+                //     // color: 0xff0000,
+                //     // emissive: 0xfb6a4a,
+                //     // emissiveIntensity: 0.4,
+                //     // metalness: 1
+                // } );
+                // child.material = new THREE.MeshStandardMaterial( {
+                //     color: 0xffffff,
+                //     emissive: 0xfb6a4a,
+                //     emissiveIntensity: 0.4,
+                //     metalness: 1
+                // } );
+                // child.scale.set(200, 200, 200)
+                // child.rotation.set(0, 5.3, 0)
+                child.scale.set(2, 2, 2)
+                child.position.set(0, 7, 0);
+                // child.material.map = texture;
+                // child.material.color = 0xff0000;
+                // child.material.needsUpdate = true;
+                // child.material.setValues({ color: 0xFF0000 })
             }
         });
         // directionalLight.lookAt(object);
@@ -154,7 +233,7 @@ const createSky = ({ scene, water, sun, renderer }) => {
     skyUniforms[ 'mieDirectionalG' ].value = 0.8;
 
     const parameters = {
-        inclination: 0.49,
+        inclination: 0.47,
         azimuth: 0.205
     };
 
