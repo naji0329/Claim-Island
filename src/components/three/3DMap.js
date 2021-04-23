@@ -4,6 +4,8 @@ import { Vector3 } from 'three';
 // import * as GUI from '../../loaders/dat.gui.module.js';
 import OBJLoader from '../../loaders/OBJLoader';
 import MTLLoader from '../../loaders/MTLLoader';
+import GLTFLoader from '../../loaders/GLTFLoader';
+// import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 import Water from '../../loaders/Water';
 import Sky from '../../loaders/Sky';
 import { OrbitControls, MapControls} from '../../loaders/OrbitControls';
@@ -46,6 +48,7 @@ const create3DScene = (element) => {
     // camera.lookAt( 0, 0, 0 );
     const camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 20000 );
 	camera.position.set( 30, 30, 100 );
+    // camera.position.set( 1, 1, 20 );
     // camera.position.set( 0, 2, 5 );
 
     // orbit controls to pan and zoom
@@ -64,9 +67,16 @@ const create3DScene = (element) => {
     addLights(scene);
 
     // load objects and materials
-    ISLAND_OBJECTS.forEach((obj) => {
-        loadTexture({ ...obj, scene });
-    });
+    // ISLAND_OBJECTS.forEach((obj) => {
+    //     loadTexture({ ...obj, scene });
+    // });
+    loadGLTF('glb_files/Bank_Island.glb', scene);
+    loadGLTF('glb_files/Farm_Island.glb', scene);
+    loadGLTF('glb_files/Market_Island.glb', scene);
+    loadGLTF('glb_files/Vault_Island.glb', scene);
+    loadGLTF('glb_files/Bridges.glb', scene);
+    loadGLTF('glb_files/Rocks.glb', scene);
+    loadGLTF('glb_files/LillyPads.glb', scene);
 
     animate({
         scene,
@@ -79,12 +89,35 @@ const create3DScene = (element) => {
 
 // ADD LIGHTS
 const addLights = (scene) => {
-    const ambient = new THREE.AmbientLight( 0x016c59 );
+    const ambient = new THREE.AmbientLight( 0xffffff );
     scene.add( ambient );
 
-    const directionalLight = new THREE.DirectionalLight( 0xffffff, 10 );
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
     directionalLight.position.set( 0, 10, 0 ).normalize();
     scene.add( directionalLight );
+};
+
+const loadGLTF = (url, scene) => {
+    const loader = new GLTFLoader();
+    loader.load(url, (gltf) => {
+        console.log(gltf)
+        // scene.add(gltf);
+
+        gltf.scene.scale.set( 500, 500, 500 );			   
+        gltf.scene.position.x = 0;				    //Position (x = right+ left-) 
+        gltf.scene.position.y = 10;				    //Position (y = up+, down-)
+        gltf.scene.position.z = 0;	
+
+        scene.add( gltf.scene );
+
+		// gltf.animations; // Array<THREE.AnimationClip>
+		// gltf.scene; // THREE.Group
+		// gltf.scenes; // Array<THREE.Group>
+		// gltf.cameras; // Array<THREE.Camera>
+		// gltf.asset; // Object
+    }, undefined, function(err) {
+        console.log(err);
+    })
 };
 
 const loadTexture = ({
