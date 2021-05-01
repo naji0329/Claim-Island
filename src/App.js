@@ -7,7 +7,7 @@ import {
   Route
 } from "react-router-dom";
 
-import { ResetCSS } from '@pancakeswap-libs/uikit'
+// import { ResetCSS } from '@pancakeswap-libs/uikit'
 
 import {
   Container, Row, Col
@@ -15,10 +15,14 @@ import {
 
 import ROUTES from './router';
 
+import ClamIsland from './assets/img/clam_island_sign.png';
+import TgIcon from './assets/img/tg-icon.png';
+import TwitterIcon from './assets/img/twitter-icon.png';
+
 // import {  getClamTokenContract, getContract, httpProvider } from './services/web3';
 // import {  getContract, httpProvider } from './services/web3';
 
-import NavbarComp from './components/Navbar';
+// import NavbarComp from './components/Navbar';
 
 
 // Main App Component
@@ -36,8 +40,40 @@ const App = (props) => {
 
   return (
     <Router>
-      <ResetCSS />
-      <NavbarComp />
+      {/* <ResetCSS /> */}
+      {/* <NavbarComp /> */}
+      <img src={ClamIsland}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 'calc(50% - 260px)',
+          zIndex: 9999,
+          width: '520px'
+      }}/>
+
+      <a href="https://telegram.com" target="_blank">
+        <img src={TgIcon}
+          style={{
+            position: 'absolute',
+            top: '170px',
+            left: 'calc(50% - 35px)',
+            zIndex: 9999,
+            cursor: 'pointer',
+            width: '28px'
+        }}/>
+      </a>
+
+      <a href="https://twitter.com/clam_island" target="_blank">
+      <img src={TwitterIcon}
+        style={{
+          position: 'absolute',
+          top: '170px',
+          left: 'calc(50% + 7px)',
+          zIndex: 9999,
+          cursor: 'pointer',
+          width: '28px'
+      }}/>
+      </a>
 
       <Container fluid={true} className="p-0">
         <Row className="no-gutters">
