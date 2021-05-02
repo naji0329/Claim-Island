@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "clamswap"
+    "default": "clam-island",
+    "production": "clam-island"
   }
 }
