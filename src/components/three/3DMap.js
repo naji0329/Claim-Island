@@ -152,6 +152,7 @@ const animate = ({
     water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
 
     let t = clock.getElapsedTime();
+    const tdelta = clock.getDelta();
     giveBuoyancy(ship, t, 5, 15);
     giveBuoyancy(bank, t, 2, 2);
     giveBuoyancy(market, t, 2, 2);
@@ -161,7 +162,7 @@ const animate = ({
     giveBuoyancy(lilly, t, 0.3, 32);
     giveBuoyancy(sailboat, t, 5, 60);
 
-    flyingSeagulls(seagulls, t);
+    flyingSeagulls(seagulls, tdelta);
     swimmingDolphins(dolphins, t);
 
     renderer.render( scene, camera );
@@ -177,41 +178,10 @@ const giveBuoyancy = (obj, t, factor, init) => {
 
 const flyingSeagulls = (seagulls, t) => {
     if(seagulls) {
+        const axis = new THREE.Vector3(0, 1, 0);
         seagulls.forEach((seagull, i) => {
-            // const theta = Math.atan(seagull.position.x / seagull.position.z);
-            // const radius = seagull.position.x * Math.sin(theta);
-            // console.log(theta, radius)
-
-            // console.log(seagull.position.x / seagull.position.z);
-            // if(radius && radius !== 0) {
-                // seagull.position.x = radius * Math.sin(-t);
-                const zpos = i === 0 ? -100
-                    : i === 1 ? 200
-                    : i === 2 ? -300
-                    : -100;
-
-                const xpos = i === 0 ? 0
-                    : i === 1 ? 0
-                    : i === 2 ? 300
-                    : 350;
-
-                const theta = i === 0 ? 0.3
-                    : i === 1 ? 0.4
-                    : i === 2 ? 0.2
-                    : 0.35;
-
-                const radius = i === 0 ? 100
-                    : i === 1 ? 100
-                    : i === 2 ? 150
-                    : 80;
-
-                seagull.position.x = xpos + radius * Math.sin(-t * theta );
-                seagull.position.z = zpos + radius * Math.cos(-t * theta );
-            // } else {
-            //     console.log(seagull.position)
-            //     console.log(theta, radius)
-            // }
-            seagull.rotateY(-0.008)
+                const theta = THREE.Math.degToRad(15 * (i+1)) * 0.015;
+                rotateAboutPoint(seagull.obj, seagull.pivot, axis, theta);
         });
     }
 };
@@ -226,5 +196,28 @@ const swimmingDolphins = (dolphins, t) => {
         });
     }
 };
+
+// obj - your object (THREE.Object3D or derived)
+// point - the point of rotation (THREE.Vector3)
+// axis - the axis of rotation (normalized THREE.Vector3)
+// theta - radian value of rotation
+// pointIsWorld - boolean indicating the point is in world coordinates (default = false)
+function rotateAboutPoint(obj, point, axis, theta, pointIsWorld){
+    pointIsWorld = (pointIsWorld === undefined)? false : pointIsWorld;
+
+    if(pointIsWorld){
+        obj.parent.localToWorld(obj.position); // compensate for world coordinate
+    }
+
+    obj.position.sub(point); // remove the offset
+    obj.position.applyAxisAngle(axis, theta); // rotate the POSITION
+    obj.position.add(point); // re-add the offset
+
+    if(pointIsWorld){
+        obj.parent.worldToLocal(obj.position); // undo world coordinates compensation
+    }
+
+    obj.rotateOnAxis(axis, theta); // rotate the OBJECT
+}
 
 export default Map3D;

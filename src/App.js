@@ -51,7 +51,7 @@ const App = (props) => {
           width: '520px'
       }}/>
 
-      <a href="https://telegram.com" target="_blank">
+      <a href="https://t.me/clamislandann" target="_blank">
         <img src={TgIcon}
           style={{
             position: 'absolute',

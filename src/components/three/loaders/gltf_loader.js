@@ -62,11 +62,30 @@ const loadGLTF = async (url, scene, type='island') => {
             // console.log(clone)
             if(clone) {
                 clone.scale.set( 2, 2, 2 );			   
-                clone.position.z = i * 250 * Math.random();
-                clone.position.x = i * 250 * Math.random();
+                // clone.position.z = i * 250 * Math.random();
+                // clone.position.x = i * 250 * Math.random();
+                clone.rotateY(THREE.Math.degToRad(180));
+
+                const zpos = i === 1 ? -100
+                    : i === 2 ? 200
+                    : i === 3 ? -300
+                    : 0;
+
+                const xpos = i === 1 ? 0
+                    : i === 2 ? -50
+                    : i === 3 ? 200
+                    : 300;
+                const pivot = new THREE.Vector3(xpos, clone.position.y, zpos);
+
+                clone.position.z = zpos + 100;
+                clone.position.x = xpos + 100;
+
                 // clone.position.y = 100 + i * 250 * Math.random();				    //Position (y = up+, down-)
                 scene.add(clone);
-                seagulls.push(clone);
+                seagulls.push({
+                    obj: clone,
+                    pivot
+                });
             }
         }
         return seagulls;
@@ -79,7 +98,7 @@ const loadGLTF = async (url, scene, type='island') => {
         // scene.add(gltf.scene);
         // const obj = gltf.scene.children[0];
         const dolphins = [];
-        for(let i = 0; i < 10; i++) {
+        for(let i = 0; i < 5; i++) {
             const clone = gltf.scene.clone();
             // console.log(clone)
             if(clone) {
