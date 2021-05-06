@@ -12,7 +12,7 @@ const clock = new THREE.Clock();
 THREE.Cache.enabled = true;
 
 const Map3D = (props) => {
-    const mapRef = useRef(null); 
+    const mapRef = useRef(null);
 
     useEffect(() => {
         create3DScene(mapRef.current)
@@ -32,7 +32,7 @@ const create3DScene = async (element) => {
     // renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
     // renderer.gammaFactor = 2.2;
     renderer.setSize( window.innerWidth, window.innerHeight );
-    
+
 
     // renderer.setPixelRatio( window.devicePixelRatio );
     // renderer.setSize( window.innerWidth, window.innerHeight );
@@ -178,10 +178,11 @@ const giveBuoyancy = (obj, t, factor, init) => {
 
 const flyingSeagulls = (seagulls, t) => {
     if(seagulls) {
-        const axis = new THREE.Vector3(0, 1, 0);
+        //const axis = new THREE.Vector3(0, 1, 0);
         seagulls.forEach((seagull, i) => {
-                const theta = THREE.Math.degToRad(15 * (i+1)) * 0.015;
-                rotateAboutPoint(seagull.obj, seagull.pivot, axis, theta);
+                //const theta = THREE.Math.degToRad(15 * (i+1)) * 0.015;
+                //rotateAboutPoint(seagull.obj, seagull.pivot, axis, theta);
+                seagull.pivot.rotation.y += seagull.pivot.userData.speed + 0.005;
         });
     }
 };
