@@ -61,10 +61,15 @@ const loadGLTF = async (url, scene, type='island') => {
             const clone = gltf.scene.clone();
             // console.log(clone)
             if(clone) {
-                clone.scale.set( 2, 2, 2 );			   
+                clone.scale.set( 1, 1, 1 );			   
                 // clone.position.z = i * 250 * Math.random();
                 // clone.position.x = i * 250 * Math.random();
                 clone.rotateY(THREE.Math.degToRad(180));
+                // clone.rotateX(THREE.Math.degToRad(-30));
+                // clone.rotateZ(THREE.Math.degToRad(-30));
+                // clone.rotateY(0.2);
+                // clone.rotateX(4.7);
+                // clone.rotateZ(0);
 
                 const zpos = i === 1 ? -100
                     : i === 2 ? 200
@@ -79,6 +84,7 @@ const loadGLTF = async (url, scene, type='island') => {
 
                 clone.position.z = zpos + 100;
                 clone.position.x = xpos + 100;
+                clone.position.y = 200 + Math.random() * 100;
 
                 // clone.position.y = 100 + i * 250 * Math.random();				    //Position (y = up+, down-)
                 scene.add(clone);
