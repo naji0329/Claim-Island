@@ -33,7 +33,6 @@ const createSky = ({ scene, water, renderer }) => {
 
         sky.material.uniforms[ 'sunPosition' ].value.copy( sun );
         water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
-
         scene.environment = pmremGenerator.fromScene( sky ).texture;
 
     }

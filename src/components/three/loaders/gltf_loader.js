@@ -45,10 +45,10 @@ const loadGLTF = async (url, scene, type='island') => {
         gltf.scene.position.y = 30;				    //Position (y = up+, down-)
         gltf.scene.position.z = 0;
     } else if(type === 'sailboat') {
-        gltf.scene.scale.set( 30, 30, 30 );
+        gltf.scene.scale.set( 20, 20, 20 );
         gltf.scene.position.x = 0;				    //Position (x = right+ left-)
         gltf.scene.position.y = 60;				    //Position (y = up+, down-)
-        gltf.scene.position.z = 600;
+        gltf.scene.position.z = 400;
         gltf.scene.rotation.y = 5;
     } else if(type === 'seagull') {
         gltf.scene.scale.set( 5, 5, 5 );
@@ -68,10 +68,10 @@ const loadGLTF = async (url, scene, type='island') => {
                 // clone.rotateX(THREE.Math.degToRad(-30));
                 // clone.rotateZ(THREE.Math.degToRad(-30));
                  clone.rotation.y = 6.2;
-                 clone.rotation.x = 3.4;
+                 clone.rotation.x = 3.1;
                  clone.rotation.z = 2.8;
 
-                 console.log(clone);
+                 //console.log(clone);
 
                 const zpos = i === 1 ? -100
                     : i === 2 ? 200
@@ -109,28 +109,65 @@ const loadGLTF = async (url, scene, type='island') => {
         gltf.scene.scale.set( 10, 10, 10 );
         gltf.scene.position.x = 0;				    //Position (x = right+ left-)
         gltf.scene.position.y = 10;				    //Position (y = up+, down-)
-        gltf.scene.position.z = -500;
+        gltf.scene.position.z = -300;
         // scene.add(gltf.scene);
         // const obj = gltf.scene.children[0];
         const dolphins = [];
-        for(let i = 0; i < 5; i++) {
+        for(let i = 0; i < 2; i++) {
             const clone = gltf.scene.clone();
             // console.log(clone)
             if(clone) {
                 clone.scale.set( 10, 10, 10 );
-                clone.position.z = -600 + i*50*Math.random();
-                clone.position.x = i*-20;
-                scene.add(clone);
-                dolphins.push(clone);
+                const pivot = new THREE.Object3D();
+                pivot.position.z = Math.random() * 225 - 500;
+                pivot.position.x = Math.random() * 70 - 150;
+                pivot.rotation.x += THREE.Math.degToRad(Math.random() * 90);
+                pivot.position.y = -295;
+                pivot.userData.under = false;
+                clone.position.y = 50;
+                clone.rotation.x = 5;
+                scene.add(pivot);
+                //console.log(pivot);
+                pivot.add(clone);
+                dolphins.push({
+                    obj: clone,
+                    pivot
+                });
             }
         }
+
+        for(let i = 0; i < 3; i++) {
+            const clone = gltf.scene.clone();
+            // console.log(clone)
+            if(clone) {
+                clone.scale.set( 10, 10, 10 );
+                const pivot = new THREE.Object3D();
+                pivot.position.z = Math.random() * 100 + 350;
+                pivot.position.x = Math.random() * 100 - 250;
+                pivot.rotation.x += THREE.Math.degToRad(Math.random() * 90);
+                pivot.position.y = -295;
+                pivot.userData.under = false;
+                clone.position.y = 50;
+                clone.rotation.x = 5;
+                scene.add(pivot);
+                //console.log(pivot);
+                pivot.add(clone);
+                dolphins.push({
+                    obj: clone,
+                    pivot
+                });
+            }
+        }
+
         return dolphins;
 
     } else if(type === 'ship')  {
-        gltf.scene.scale.set( 500, 500, 500 );
-        gltf.scene.position.x = 0;				    //Position (x = right+ left-)
-        gltf.scene.position.y = 15;				    //Position (y = up+, down-)
+        gltf.scene.scale.set( 20, 20, 20 );
+        gltf.scene.position.x = -200;				    //Position (x = right+ left-)
+        gltf.scene.position.y = 0;				    //Position (y = up+, down-)
         gltf.scene.position.z = 20;
+
+        //console.log(gltf.scene);
     }
 
     if(['dolphin', 'seagull'].indexOf(type) === -1) {
