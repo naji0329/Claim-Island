@@ -61,7 +61,7 @@ const create3DScene = async (element) => {
     controls.maxDistance = 2000;
     controls.maxPolarAngle = Math.PI/2;
 
-    console.log(controls);
+    console.log(camera, controls);
 
     // create a scene
     const scene = new THREE.Scene();
@@ -94,7 +94,8 @@ const create3DScene = async (element) => {
     const seagulls = await loadGLTF('glb_files/seagull.glb', scene, 'seagull');
     const dolphins = await loadGLTF('glb_files/dolphin.glb', scene, 'dolphin');
 
-    //console.log(bank);
+    console.log(bank, farm, market,  vault, bridge, rocks);
+
     // load animation after models load
     animate({
         scene,
@@ -119,30 +120,30 @@ const addLights = (scene) => {
     // const ambient = new THREE.AmbientLight( 0xffffff );
     // scene.add( ambient );
 
-    const directionalLight = new THREE.DirectionalLight( 0xffffff, 4 );
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 2.5 );
     //directionalLight.position.set( 140, 10, 0 ).normalize();
-    directionalLight.position.set( 2700, 2000, -900 );
+    directionalLight.position.set( 500, 400, -100 );
     directionalLight.rotation.set(0, 0.3, -0.55);
     directionalLight.castShadow = true;
-    directionalLight.shadow.camera.scale.set(500, 500, 500);
+    directionalLight.shadow.camera.scale.set(150, 150, 150);
     directionalLight.shadow.mapSize.set(2048, 2048);
     scene.add( directionalLight );
-    //console.log(directionalLight);
+    console.log(directionalLight);
 
-    const directionalLight2 = new THREE.DirectionalLight( 0xffffff, 0.7 );
+    const directionalLight2 = new THREE.DirectionalLight( 0xffffff, 0.5 );
     //directionalLight2.position.set( -190, 10, 0 ).normalize();
     directionalLight2.position.set( -2700, 2000, 900 );
     directionalLight2.rotation.set(0, 0.3, 0.6);
 
     //directionalLight2.castShadow = true;
     scene.add( directionalLight2 );
-    //console.log(directionalLight2);
+    console.log(directionalLight2);
 
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xe0fffc, 0.25);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xe0fffc, 0.4);
     scene.add(hemiLight);
 
-    //console.log(hemiLight);
- 
+    console.log(hemiLight);
+
     //scene.add( new THREE.DirectionalLightHelper( directionalLight, 5, 0xfc0317 ) );
     //scene.add( new THREE.CameraHelper( directionalLight.shadow.camera, 5, 0x0022ff ) );
     //scene.add( new THREE.DirectionalLightHelper( directionalLight2, 5, 0xfc0317 ) );
