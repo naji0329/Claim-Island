@@ -29,10 +29,10 @@ const loadGLTF = async (url, scene, type='island') => {
         gltf.scene.position.y = 2;				    //Position (y = up+, down-)
         gltf.scene.position.z = 0;
     } else if(type === 'bridge') {
-        gltf.scene.scale.set( 1000, 1000, 1000 );
-        gltf.scene.position.x = 0;				    //Position (x = right+ left-)
+        gltf.scene.scale.set( 1250, 1000, 1250 );
+        gltf.scene.position.x = -10;				    //Position (x = right+ left-)
         gltf.scene.position.y = 30;				    //Position (y = up+, down-)
-        gltf.scene.position.z = 0;
+        gltf.scene.position.z = 10;
     } else if(type === 'lillies') {
         gltf.scene.scale.set( 1000, 1000, 1000 );
         gltf.scene.position.x = 0;				    //Position (x = right+ left-)
@@ -47,7 +47,7 @@ const loadGLTF = async (url, scene, type='island') => {
         gltf.scene.scale.set( 20, 20, 20 );
         gltf.scene.position.x = 0;				    //Position (x = right+ left-)
         gltf.scene.position.y = 60;				    //Position (y = up+, down-)
-        gltf.scene.position.z = 400;
+        gltf.scene.position.z = 440;
         gltf.scene.rotation.y = 5;
     } else if(type === 'seagull') {
         gltf.scene.scale.set( 5, 5, 5 );
@@ -135,7 +135,7 @@ const loadGLTF = async (url, scene, type='island') => {
 
     } else if(type === 'ship')  {
         gltf.scene.scale.set( 20, 20, 20 );
-        gltf.scene.position.x = -200;
+        gltf.scene.position.x = -220;
         gltf.scene.position.y = 0;
         gltf.scene.position.z = 20;
     }

@@ -58,8 +58,8 @@ const create3DScene = async (element) => {
     controls.minZoom = 1;
     controls.maxZoom = 3;
     controls.minDistance = 400;
-    controls.maxDistance = 2000;
-    controls.maxPolarAngle = Math.PI/2;
+    controls.maxDistance = 1000;
+    controls.maxPolarAngle = 1.5;
 
     console.log(camera, controls);
 
@@ -94,7 +94,9 @@ const create3DScene = async (element) => {
     const seagulls = await loadGLTF('glb_files/seagull.glb', scene, 'seagull');
     const dolphins = await loadGLTF('glb_files/dolphin.glb', scene, 'dolphin');
 
-    console.log(bank, farm, market,  vault, bridge, rocks);
+    //market.position.z = 40;
+    //vault.position.x = 35;
+    console.log(bank, farm, market,  vault, bridge, rocks, sailboat, ship);
 
     // load animation after models load
     animate({
@@ -178,7 +180,7 @@ const animate = ({
     let t = clock.getElapsedTime();
     const tdelta = clock.getDelta();
     giveBuoyancy(ship, t, 4, 35);
-    giveBuoyancy(bank, t, 2, 2);
+    giveBuoyancy(bank, t, 2, -5);
     giveBuoyancy(market, t, 2, 2);
     giveBuoyancy(vault, t, 2, 2);
     giveBuoyancy(bridge, t, 2, 30);
