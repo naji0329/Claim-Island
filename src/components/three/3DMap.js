@@ -60,6 +60,7 @@ const create3DScene = async (element) => {
     controls.minDistance = 400;
     controls.maxDistance = 1000;
     controls.maxPolarAngle = 1.5;
+    controls.enablePan = false;
 
     console.log(camera, controls);
 
