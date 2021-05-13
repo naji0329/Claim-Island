@@ -42,15 +42,15 @@ const App = (props) => {
     <Router>
       {/* <ResetCSS /> */}
       {/* <NavbarComp /> */}
-      <div class="opening-soon">
+      <div className="opening-soon">
 
-        <a class="social-link" href="https://t.me/clamislandann" target="_blank" class="social-icon" style={{
+        <a className="social-link" href="https://t.me/clamislandann" target="_blank" className="social-icon" style={{
           right: '110px'
       }}>
           <img src={TgIcon} />
         </a>
 
-        <a href="https://twitter.com/clam_island" target="_blank" class="social-icon" style={{
+        <a href="https://twitter.com/clam_island" target="_blank" className="social-icon" style={{
           right: '70px'
       }}>
         <img src={TwitterIcon} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 import { OrbitControls, MapControls} from '../../loaders/OrbitControls';
@@ -7,24 +7,35 @@ import loadGLTF from './loaders/gltf_loader';
 import createWater from './create_water';
 import createSky from './create_sky';
 
+import clamIcon from '../../assets/clam-icon.png';
+
+import './3d_map.css'
+
 const clock = new THREE.Clock();
 
 THREE.Cache.enabled = true;
 
 const Map3D = (props) => {
     const mapRef = useRef(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        create3DScene(mapRef.current)
-    });
+        create3DScene(mapRef.current, setLoading)
+    }, [mapRef]);
 
     return (
-        <div ref={mapRef}></div>
+        <div>
+            <div className={!loading ? 'hide': 'loading-screen'}>
+                <img src={clamIcon}/>
+                <p>Taking you to Clam Island...</p>
+            </div>
+            <div className='three-container' ref={mapRef}></div>
+        </div>
     );
 };
 
 // CREATE A 3D SCENE
-const create3DScene = async (element) => {
+const create3DScene = async (element, setLoading) => {
     // create a 3d renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.shadowMap.enabled = true;
@@ -66,7 +77,7 @@ const create3DScene = async (element) => {
 
     // create a scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0xe1e1e1 );
+    // scene.background = new THREE.Color( 0xe1e1e1 );
 
 
     const water = createWater({ scene });
@@ -76,9 +87,9 @@ const create3DScene = async (element) => {
     addLights(scene);
 
     // load animation before all models load
-    animate({
-        scene, water, camera, controls, renderer
-    });
+    // animate({
+    //     scene, water, camera, controls, renderer
+    // });
 
     // load gltf
     const bank = await loadGLTF('glb_files/Bank_Island.glb', scene);
@@ -98,6 +109,8 @@ const create3DScene = async (element) => {
     //market.position.z = 40;
     //vault.position.x = 35;
     console.log(bank, farm, market,  vault, bridge, rocks, sailboat, ship);
+
+    setLoading(false);
 
     // load animation after models load
     animate({

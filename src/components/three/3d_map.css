@@ -1,0 +1,37 @@
+.hide {
+    display: none;
+}
+
+.three-container {
+    background-color: #000;
+}
+
+.loading-screen {
+    position: absolute;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    margin-left: -150px;
+    top: 50%;
+    margin-top: -150px;
+}
+
+.loading-screen img {
+    width: 100%;
+    margin-bottom: 20px;
+
+    animation: blink 2s ease-in infinite;
+}
+
+@keyframes blink {
+  from, to { opacity: 1 }
+  50% { opacity: 0 }
+}
+
+.loading-screen p {
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    color: #0576e2;
+    font-family: AristotelicaBold;
+}
