@@ -9,6 +9,8 @@ import createSky from './create_sky';
 
 import clamIcon from '../../assets/clam-icon.png';
 
+import CharacterSpeak from '../characters';
+
 import './3d_map.css'
 
 const clock = new THREE.Clock();
@@ -31,6 +33,7 @@ const Map3D = (props) => {
                     <p>Taking you to Clam Island...</p>
                 </div>
             </div>
+            <CharacterSpeak character={'nacre'} speech={'welcome'}/>
             <div className='three-container' ref={mapRef}></div>
         </div>
     );
