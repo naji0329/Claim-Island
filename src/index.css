@@ -43,4 +43,6 @@ body {
 .container-fluid {
   position: absolute;
   top: 0;
+  overflow: hidden;
+  height: 100%;
 }

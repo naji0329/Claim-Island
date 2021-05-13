@@ -17,12 +17,21 @@ const CharacterSpeak = (props) => {
     const [showBubble, setShowBubble] = useState(true);
 
     const onClick = (e) => {
-        setShowBubble(false);
+        const bubble = document.getElementsByClassName('text-bubble')[0];
+        const speechHt = bubble.getElementsByClassName('speech')[0].offsetHeight;
+        const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+        const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        const character = document.getElementsByClassName('character-container')[0];
+        const characterWt = character.getElementsByClassName('character')[0].offsetWidth;
+        bubble.style.top = speechHt + vh * 0.02 + 80 + "px";
+        character.style.left = characterWt + vw * 0.03 + 30 + "px";
     };
 
     return (
         <div className={showBubble ? 'character-bubble' : 'character-bubble hide-bubble'}>
-            <img src={charImg} className="character"/>
+            <div className="character-container">
+              <img src={charImg} className="character"/>
+            </div>
             <div className="text-bubble">
                 <div className="name">{charName}</div>
                 <div className="speech">
