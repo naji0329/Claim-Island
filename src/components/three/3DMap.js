@@ -25,9 +25,11 @@ const Map3D = (props) => {
 
     return (
         <div>
-            <div className={!loading ? 'hide': 'loading-screen'}>
-                <img src={clamIcon}/>
-                <p>Taking you to Clam Island...</p>
+            <div className={!loading ? 'loading-screen hide': 'loading-screen'}>
+                <div className="loading-elems">
+                    <img src={clamIcon}/>
+                    <p>Taking you to Clam Island...</p>
+                </div>
             </div>
             <div className='three-container' ref={mapRef}></div>
         </div>
@@ -87,9 +89,9 @@ const create3DScene = async (element, setLoading) => {
     addLights(scene);
 
     // load animation before all models load
-    // animate({
-    //     scene, water, camera, controls, renderer
-    // });
+    animate({
+        scene, water, camera, controls, renderer
+    });
 
     // load gltf
     const bank = await loadGLTF('glb_files/Bank_Island.glb', scene);
