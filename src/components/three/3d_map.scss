@@ -1,7 +1,7 @@
 .hide {
     visibility: hidden;
     opacity: 0;
-    transition: visibility 0s 2s, opacity 2s linear;
+    transition: visibility 0s 1s, opacity 1s ease-in;
 }
 
 .three-container {

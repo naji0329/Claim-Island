@@ -17,7 +17,7 @@ const SPEECHES = [
     The island isn't open yet so you can't go into any of the buildings,
     but feel free to have a look around while we're here.`,
     `Nice place, isn't it? Not long before it opens now. I'll be sure to give you the inside scoop if I hear something.`
-    
+
 ];
 
 const CharacterSpeak = (props) => {
@@ -28,7 +28,16 @@ const CharacterSpeak = (props) => {
 
     const onClick = (e) => {
         setShowBubble(false);
+        document.querySelector('.character').style.marginTop = document.querySelector('.character').offsetHeight - 76 + "px";
+        document.querySelector('.character-wrap .character').style.pointerEvents = "auto";
+        document.querySelector('.character-wrap .character').style.cursor = "pointer"
     };
+
+    const onClickCharacter = (e) => {
+      setShowBubble(true);
+      setSpeech(SPEECHES[1]);
+      document.querySelector('.character-wrap .character').style.marginTop = "0px";
+    }
 
     const onClickBubble = (e) => {
         setShowBubble(true);
@@ -38,7 +47,9 @@ const CharacterSpeak = (props) => {
     return (
         <div className={showBubble ? 'character-bubble' : 'character-bubble hide-bubble'}>
             <div className="character-container">
-              <img src={charImg} className="character"/>
+              <div className="character-wrap">
+                <img src={charImg} className="character" onClick={onClickCharacter}/>
+              </div>
             </div>
             <Button className="btn character-container-round" onClick={(e) => onClickBubble(e)}>
               <img src={charImg} className="character"/>
@@ -53,5 +64,6 @@ const CharacterSpeak = (props) => {
         </div>
     );
 };
+
 
 export default CharacterSpeak;

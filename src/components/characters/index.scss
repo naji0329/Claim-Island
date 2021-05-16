@@ -14,23 +14,47 @@
     .character-container {
         opacity: 1;
         height: 100%;
+        width: 15%;
         float: right;
         margin-right: 3%;
-        position: absolute;
+        position: relative;
+        clip-path: circle(200% at 50% 38px);
         right: 10px;
         bottom: 5px;
+        padding-top: 20px;
         // overflow: hidden;
         // border-radius: 0%;
         // padding: 0px;
         // border: 2px solid transparent;
         // width: 200px;
         // transition: opacity 2s, left 2s ease-out;
-        transition: opacity 2s, width 2s, height 2s, border-radius 2s, padding 2s, border 2s ease-out;
+        transition: width 1s, bottom 1s, ease-out;
 
-        .character {
-            height: 100%;
-            // transition: opacity 2s, height 2s, border-radius 2s, padding 2s, border 2s,  width 2s ease-out;
+        .character-wrap {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 100%;
+          height: 100%;
+          text-align: right;
+          //transition: clip-path 1s, width 1s, height 1s, background-color 1s, ease-out;
+
+          .character {
+              height: 100%;
+              width: 100%;
+              object-fit: contain;
+              object-position: top;
+              clip-path: circle(200% at 50% 38px);
+              background-color: hsla(0,0%,100%,0);
+              margin-top: 0px;
+              padding-top: 0px;
+              //clip-path: circle(200% at 50% 38px);
+              transition: all 0.6s ease-in-out;
+          }
+
         }
+
+
 
         @media screen and (max-width: 992px) {
             display: none;
@@ -73,17 +97,17 @@
         width: 75%;
         padding-top: 45vh;
         margin-right: 40px;
-        float: left;
+        float: right;
         top: 0px;
-        transition: opacity 1s, top 1s ease-out;
-
-        @media screen and (max-width: 1490px) {
-            width: 65%;
-        }
+        transition: all 0.6s ease-in-out;
 
         @media screen and (max-width: 1440px) {
+            width: 65%;
             padding-top: 25vh;
-            width: 75%;
+        }
+
+        @media screen and (max-width: 992px) {
+            margin-right: 103px;
         }
 
         .name {
@@ -140,7 +164,7 @@
                 @media screen and (max-width: 992px) {
                     font-size: 25px;
                 }
-            
+
 
                 @media screen and (max-width: 548px) {
                     font-size: 16px;
@@ -181,8 +205,11 @@
     // display: none;
     .character-container {
         // left: 20%;
-        opacity: 0;
-        height: 75px;
+        //opacity: 0;
+        //width: 76px;
+        //height: 76px;
+        //clip-path: circle(38px at 50% 38px);
+        //background-color: hsla(0,0%,100%,.7);
         // width: 75px;
         // border-radius: 50%;
         // background-color: rgba(240,240,240, 0.7);
@@ -195,9 +222,24 @@
         //     height: unset;
         //     width: 100%;
         // }
+        .character-wrap{
+          //width: 1%;
+          //height: 1%;
+          //background-color: hsla(0,0%,100%,0.7);
+
+
+          .character {
+            width: 80px;
+            height: 216.2px;
+            clip-path: circle(38px at 50% 38px);
+            background-color: hsla(0,0%,100%,0.7);
+            padding-top: 10px;
+          }
+        }
+
     }
     .character-container-round {
-        opacity: 1;
+        //opacity: 1;
     }
     .text-bubble {
         top: 50%;
