@@ -25,3 +25,4 @@ yarn-error.log*
 .firebase
 
 src/contracts
+firebase-debug.log
