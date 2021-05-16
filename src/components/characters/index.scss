@@ -19,11 +19,17 @@
         position: absolute;
         right: 10px;
         bottom: 5px;
+        // overflow: hidden;
+        // border-radius: 0%;
+        // padding: 0px;
+        // border: 2px solid transparent;
+        // width: 200px;
         // transition: opacity 2s, left 2s ease-out;
-        transition: opacity 2s, width 2s, height 1.5s ease-out;
+        transition: opacity 2s, width 2s, height 2s, border-radius 2s, padding 2s, border 2s ease-out;
 
         .character {
             height: 100%;
+            // transition: opacity 2s, height 2s, border-radius 2s, padding 2s, border 2s,  width 2s ease-out;
         }
 
         @media screen and (max-width: 992px) {
@@ -177,6 +183,18 @@
         // left: 20%;
         opacity: 0;
         height: 75px;
+        // width: 75px;
+        // border-radius: 50%;
+        // background-color: rgba(240,240,240, 0.7);
+        // border: 2px solid #0000ff;
+        // padding: 5px;
+        // @media screen and (max-width: 548px) {
+        //     right: 5px;
+        // }
+        // .character {
+        //     height: unset;
+        //     width: 100%;
+        // }
     }
     .character-container-round {
         opacity: 1;
