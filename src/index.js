@@ -14,7 +14,7 @@ import reportWebVitals from './reportWebVitals';
 // import library css
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'leaflet/dist/leaflet.css';
-import './index.css';
+import './index.scss';
 
 const chainId = 56;
 const rpcUrl = "https://bsc-dataseed.binance.org";

@@ -42,22 +42,30 @@ const App = (props) => {
     <Router>
       {/* <ResetCSS /> */}
       {/* <NavbarComp /> */}
-      <div className="opening-soon">
 
-        <a className="social-link" href="https://t.me/clamislandann" target="_blank" className="social-icon" style={{
-          right: '110px'
-      }}>
-          <img src={TgIcon} />
-        </a>
-
-        <a href="https://twitter.com/clam_island" target="_blank" className="social-icon" style={{
-          right: '70px'
-      }}>
-        <img src={TwitterIcon} />
-        </a>
-
-      </div>
       <Container fluid={true} className="p-0">
+        <Row className="no-gutters">
+          <Col sm={{ size: 12 }}>
+            <div  style={{paddingLeft: '10px', paddingRight: '10px'}}>
+              <div className="opening-soon">
+                <a className="social-link"
+                  href="https://t.me/clamislandann"
+                  target="_blank"
+                  className="social-icon"
+                  style={{ right: '110px' }}>
+                    <img src={TgIcon} />
+                </a>
+
+                <a href="https://twitter.com/clam_island"
+                  target="_blank"
+                  className="social-icon"
+                  style={{ right: '70px' }}>
+                    <img src={TwitterIcon} />
+                </a>
+              </div>
+            </div>
+          </Col>
+        </Row>
         <Row className="no-gutters">
           <Col sm={{ size: 12 }}>
             <Switch>

@@ -9,7 +9,7 @@ import Al from '../../assets/characters/al.png';
 import Tanja from '../../assets/characters/tanja.png';
 import Diego from '../../assets/characters/diego.png';
 
-import './index.css';
+import './index.scss';
 
 const CharacterSpeak = (props) => {
     const [charImg, setCharImg] = useState(Nacre);
@@ -17,14 +17,13 @@ const CharacterSpeak = (props) => {
     const [showBubble, setShowBubble] = useState(true);
 
     const onClick = (e) => {
-        const bubble = document.getElementsByClassName('text-bubble')[0];
-        const speechHt = bubble.getElementsByClassName('speech')[0].offsetHeight;
-        const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-        const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-        const character = document.getElementsByClassName('character-container')[0];
-        const characterWt = character.getElementsByClassName('character')[0].offsetWidth;
-        bubble.style.top = speechHt + vh * 0.02 + 80 + "px";
-        character.style.left = characterWt + vw * 0.03 + 30 + "px";
+        setShowBubble(false);
+    };
+
+    const onClickBubble = (e) => {
+        console.log('#########');
+        // setShowBubble(true);
+        console.log(showBubble)
     };
 
     return (
@@ -32,6 +31,9 @@ const CharacterSpeak = (props) => {
             <div className="character-container">
               <img src={charImg} className="character"/>
             </div>
+            <Button className="btn character-container-round" onClick={(e) => onClickBubble(e)}>
+              <img src={charImg} className="character"/>
+            </Button>
             <div className="text-bubble">
                 <div className="name">{charName}</div>
                 <div className="speech">

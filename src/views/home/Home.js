@@ -1,8 +1,9 @@
 import React from 'react';
 
-import './Home.css';
+import './Home.scss';
 import Map from '../../components/Map'
 import Map3D from '../../components/three/3DMap'
+import CharacterSpeak from '../../components/characters';
 
 // Main Home Component
 const Home = () => {
@@ -10,6 +11,7 @@ const Home = () => {
       <div className="Home" style={{height: '95.5vh'}}>
         {/* <Map></Map> */}
         <Map3D></Map3D>
+        <CharacterSpeak character={'nacre'} speech={'welcome'}/>
       </div>
   );
 };
