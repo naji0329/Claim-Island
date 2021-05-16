@@ -83,7 +83,7 @@
 
         @media screen and (max-width: 1440px) {
             padding-top: 25vh;
-            width: 75%;
+            width: 70%;
         }
 
         .name {
@@ -129,21 +129,32 @@
             text-align: justify;
             box-shadow: 0 0 5px 3px;
 
+            @media screen and (max-width: 1440px) {
+                padding-top: 60px;
+            }
+
+            @media screen and (max-width: 992px) {
+                padding-top: 40px;
+            }
+
             @media screen and (max-width: 548px) {
-                padding: 20px;
+                padding: 30px;
             }
 
             .speech-text {
                 font-size: 30px;
                 font-family: AristotelicaBold;
 
-                @media screen and (max-width: 992px) {
-                    font-size: 25px;
+                @media screen and (max-width: 1440px) {
+                    font-size: 18px;
                 }
-            
+
+                @media screen and (max-width: 992px) {
+                    font-size: 16px;
+                }
 
                 @media screen and (max-width: 548px) {
-                    font-size: 16px;
+                    font-size: 14px;
                 }
             }
         }
