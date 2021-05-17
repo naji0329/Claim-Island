@@ -84,6 +84,16 @@ export const OrbitControls = function ( object, domElement ) {
 	// public methods
 	//
 
+	this.dollyIn = function () {
+		dollyIn( getZoomScale() );
+		scope.update();
+	};
+
+	this.dollyOut = function () {
+		dollyOut( getZoomScale() );
+		scope.update();
+	};
+
 	this.getPolarAngle = function () {
 
 		return spherical.phi;

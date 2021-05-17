@@ -11,6 +11,11 @@ import clamIcon from '../../assets/clam-icon.png';
 
 import './3d_map.scss'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearchPlus, faSearchMinus } from '@fortawesome/free-solid-svg-icons'
+
+import { Button } from 'react-bootstrap';
+
 const clock = new THREE.Clock();
 
 THREE.Cache.enabled = true;
@@ -18,10 +23,19 @@ THREE.Cache.enabled = true;
 const Map3D = (props) => {
     const mapRef = useRef(null);
     const [loading, setLoading] = useState(true);
+    const [controls, setControls] = useState({});
 
     useEffect(() => {
-        create3DScene(mapRef.current, setLoading)
+        create3DScene(mapRef.current, setLoading, setControls);
     }, [mapRef]);
+
+    const zoomIn = () => {
+        controls.dollyIn();
+    };
+
+    const zoomOut = () => {
+        controls.dollyOut();
+    };
 
     return (
         <div>
@@ -31,13 +45,19 @@ const Map3D = (props) => {
                     <p>Taking you to Clam Island...</p>
                 </div>
             </div>
+            <Button variant="link" className="zoom-btn zoom-in" onClick={zoomIn}>
+                <FontAwesomeIcon icon={faSearchPlus} />
+            </Button>
+            <Button variant="link" className="zoom-btn zoom-out" onClick={zoomOut}>
+                <FontAwesomeIcon icon={faSearchMinus} />
+            </Button>
             <div className='three-container' ref={mapRef}></div>
         </div>
     );
 };
 
 // CREATE A 3D SCENE
-const create3DScene = async (element, setLoading) => {
+const create3DScene = async (element, setLoading, setControls) => {
     // create a 3d renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.shadowMap.enabled = true;
@@ -75,7 +95,8 @@ const create3DScene = async (element, setLoading) => {
     controls.maxPolarAngle = 1.5;
     controls.enablePan = false;
 
-    console.log(camera, controls);
+    // console.log(camera, controls);
+    setControls(controls);
 
     // create a scene
     const scene = new THREE.Scene();
@@ -90,7 +111,7 @@ const create3DScene = async (element, setLoading) => {
 
     // load animation before all models load
     animate({
-        scene, water, camera, controls, renderer
+        scene, water, camera, controls, renderer, setControls
     });
 
     // load gltf
@@ -129,7 +150,8 @@ const create3DScene = async (element, setLoading) => {
         boats,
         sailboat,
         seagulls,
-        dolphins
+        dolphins,
+        setControls
     });
 };
 
@@ -170,7 +192,7 @@ const addLights = (scene) => {
 const animate = ({
     scene, camera, water, controls, renderer, ship,
     bank, market, vault, bridge, boats, sailboat,
-    seagulls, dolphins
+    seagulls, dolphins, setControls
 }) => {
     window.requestAnimationFrame(function() {
         animate({
@@ -187,10 +209,11 @@ const animate = ({
             boats,
             sailboat,
             seagulls,
-            dolphins
+            dolphins, setControls
         });
     });
     controls.update();
+    setControls(controls);
     water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
 
     let t = clock.getElapsedTime();
