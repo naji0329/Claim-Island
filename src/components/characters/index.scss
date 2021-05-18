@@ -11,7 +11,12 @@
         height: 55%;
     }
 
+    @media screen and (max-width: 548px) {
+        bottom: 10%;
+    }
+
     .character-container {
+        pointer-events: auto;
         opacity: 1;
         height: 100%;
         width: 15%;

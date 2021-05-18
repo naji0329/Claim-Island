@@ -49,7 +49,7 @@ const App = (props) => {
             <div  style={{paddingLeft: '10px', paddingRight: '10px'}}>
               <div className="opening-soon">
                 <a className="social-link"
-                  href="https://t.me/clamislandann"
+                  href="https://t.me/clamisland"
                   target="_blank"
                   className="social-icon"
                   style={{ right: '110px' }}>
