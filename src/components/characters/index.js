@@ -16,7 +16,7 @@ const SPEECHES = [
     `G'day, welcome to Clam Island!
     The island isn't open yet so you can't go into any of the buildings,
     but feel free to have a look around while we're here.`,
-    `Nice place, isn't it? Not long before it opens now. I'll be sure to give you the inside scoop if I hear something.`
+    `Nice place, isn't it? Not long before it opens now. I hear Tanja will be back next week at the bank for some sort of presale before the island opens...`
 
 ];
 
