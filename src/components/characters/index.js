@@ -2,29 +2,24 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import {
     Button
-} from 'reactstrap'
+} from 'reactstrap';
 
-import Nacre from '../../assets/characters/captain_nacre.png';
-import Al from '../../assets/characters/al.png';
-import Tanja from '../../assets/characters/tanja.png';
-import Diego from '../../assets/characters/diego.png';
+import { SPEECHES, CHARACTERS, BUTTONS } from './constants';
 
 import './index.scss';
 
-
-const SPEECHES = [
-    `G'day, welcome to Clam Island!
-    The island isn't open yet so you can't go into any of the buildings,
-    but feel free to have a look around while we're here.`,
-    `Nice place, isn't it? Not long before it opens now. I'll be sure to give you the inside scoop if I hear something.`
-
-];
-
 const CharacterSpeak = (props) => {
-    const [charImg, setCharImg] = useState(Nacre);
-    const [charName, setCharName] = useState('Captain Nacre');
+    const character = CHARACTERS[props.character];
+    const speechTrack = SPEECHES[props.speech];
+    const btnTrack = BUTTONS[props.speech];
+
+    const [charImg, setCharImg] = useState(character.charImg);
+    const [charName, setCharName] = useState(character.name);
     const [showBubble, setShowBubble] = useState(true);
-    const [speech, setSpeech] = useState(SPEECHES[0]);
+    const [trackCount, setTrackCount] = useState(0);
+
+    const [speech, setSpeech] = useState(speechTrack[trackCount]);
+    const [buttonText, setButtonText] = useState(btnTrack[trackCount]);
 
     const onClick = (e) => {
         setShowBubble(false);
@@ -35,13 +30,19 @@ const CharacterSpeak = (props) => {
 
     const onClickCharacter = (e) => {
       setShowBubble(true);
-      setSpeech(SPEECHES[1]);
+      setSpeech(speechTrack[trackCount+1]);
+      setButtonText(btnTrack[trackCount+1]);
+      const newCount = trackCount + 1;
+      setTrackCount(newCount);
       document.querySelector('.character-wrap .character').style.marginTop = "0px";
     }
 
     const onClickBubble = (e) => {
         setShowBubble(true);
-        setSpeech(SPEECHES[1]);
+        setSpeech(speechTrack[trackCount+1]);
+        setButtonText(btnTrack[trackCount+1]);
+        const newCount = trackCount + 1;
+        setTrackCount(newCount);
     };
 
     return (
@@ -59,7 +60,7 @@ const CharacterSpeak = (props) => {
                 <div className="speech">
                     <p className="speech-text">{speech}</p>
                 </div>
-                <Button className="btn" onClick={onClick}>OK</Button>
+                <Button className="btn" onClick={onClick}>{buttonText}</Button>
             </div>
         </div>
     );

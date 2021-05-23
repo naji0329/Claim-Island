@@ -11,7 +11,7 @@ const Home = () => {
       <div className="Home" style={{height: '95.5vh'}}>
         {/* <Map></Map> */}
         <Map3D></Map3D>
-        <CharacterSpeak character={'nacre'} speech={'welcome'}/>
+          <CharacterSpeak character={'nacre'} speech={'welcome'}/>
       </div>
   );
 };
