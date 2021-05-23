@@ -1,0 +1,1 @@
+export const shellPresaleAddress = '0x921dF396796dDA4c3d40de8c47eDad936f568746'
