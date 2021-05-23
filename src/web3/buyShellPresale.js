@@ -1,10 +1,6 @@
 import shellPresaleAbi from './abi/shellPresale.json'
 import {shellPresaleAddress} from './constants'
-import getWeb3 from './getWeb3'
-
-const web3 = getWeb3()
-
-export const contractFactory = ({abi, address}) => new web3.eth.Contract(abi, address)
+import { contractFactory } from './index'
 
 const buyShellPresale = async ({ account, amount }) => {
   const shellPresale = contractFactory({abi: shellPresaleAbi, address: shellPresaleAddress })
