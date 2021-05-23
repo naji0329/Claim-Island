@@ -13,7 +13,7 @@ export const CHARACTERS = {
         charImg: Diego
     },
     tanja: {
-        name: 'Thotiana',
+        name: 'Tanja',
         charImg: Tanja
     },
     al: {
