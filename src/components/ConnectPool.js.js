@@ -3,7 +3,8 @@ import { useWalletModal } from "@pancakeswap-libs/uikit";
 import { useWallet } from "@binance-chain/bsc-use-wallet";
 import { Button } from "reactstrap";
 import buyShellPresale from "../web3/buyShellPresale.js";
-import { accountShellBalance } from "../web3/bep20";
+import { accountShellBalance, addTokenToMetamask } from "../web3/bep20";
+import { shellTokenAddress } from "../web3/constants";
 import { formatBN } from "../utils/number";
 import { utils } from "web3";
 const BN = utils.BN;
@@ -67,6 +68,9 @@ const ConnectPool = (props) => {
           <div style={buttonColor} >$SHELL: {formatBN(shellBalance, 2)}</div>
           <Button onClick={() => purchaseShell(account)} style={buttonColor}>
             Buy Shell
+          </Button>
+          <Button onClick={() => addTokenToMetamask({ tokenAddress: shellTokenAddress, tokenSymbol: 'SHELL', tokenDecimals: 18, tokenImage: 'https://clamisland.fi/favicon/favicon.ico' })} style={buttonColor}>
+            Add Shell to Metamask
           </Button>
         </>
       )}
