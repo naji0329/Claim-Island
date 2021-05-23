@@ -13,6 +13,8 @@ const flexEnd = {
   display: "flex",
   justifyContent: "flex-end",
   padding: "1rem",
+  zIndex: 999,
+  position: "relative"
 };
 
 const buttonColor = {
