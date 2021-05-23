@@ -10,12 +10,6 @@
   font-weight: bold;
 }
 
-@font-face {
-  font-family: TrioGrotesk;
-  src: url(./assets/fonts/TrioGrotesk.otf) format("opentype");
-  font-weight: bold;
-}
-
 body {
   margin: 0;
 
@@ -32,12 +26,13 @@ body {
 }
 
 .opening-soon {
+  margin-left: auto;
+  margin-right: auto;
   width: 420px;
   height: 180px;
-  position: absolute;
+  position: relative;
   z-index: 9999;
   background-image: url(./assets/img/clam_island_sign.png);
-  left: calc(50% - 210px);
 }
 
 .social-icon {

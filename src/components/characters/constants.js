@@ -31,13 +31,13 @@ export const SPEECHES = {
         `Nice place, isn't it? Not long before it opens now. I'll be sure to give you the inside scoop if I hear something.`
     ],
     shell_presale: [`
-        Welcome, clam investor! You're early! Clam Island Bank isn't open yet.
-        But since you already made this trip here, I can offer you some $SHELLs ahead of grand opening.
+        Welcome, traveller! You're early! Clam Island Bank isn't open yet.
+        But since you already made this trip here, I can offer you some $SHELL tokens ahead of our grand opening.
         How does that sound?`,
 
-        `Before you pull your wallet, I must say that we are currently having a 20 $SHELL individual cap or 2 BNB cap. Our presale hard cap is 100 $SHELL or 200 BNB`,
+        `Before you pull your wallet, I should let you know that we are currently having a 15 $SHELL (3 BNB) individual cap. Our presale hard cap is 2,000 $SHELL or 400 BNB.`,
 
-        `Congratulations on being one of first customers! I look forward to seeing you at the launch! See vault on the map to see what you own.`
+        `Congratulations on being one of our first customers! I look forward to seeing you at the launch!`
     ],
     clam_presale: [
         `Welcome, traveller! You're early! Clam Island Shop isn't open for business yet. But I can hook you up with some fresh Clams we caught this morning. Would you like to buy some?`,
@@ -54,7 +54,7 @@ export const BUTTONS = {
         'OK'
     ],
     shell_presale: [
-        'Fuck yea!',
+        'Sounds good!',
         'I understand',
         'Go to map'
     ],
