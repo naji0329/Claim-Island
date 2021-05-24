@@ -248,7 +248,7 @@ export const BUTTONS = {
 };
 
 function showPresaleCountdown() {
-    const total = Date.parse("Mon May 24 2021 21:00:00 GMT+0000") - Date.parse(String(new Date()));
+    const total = Date.parse("Tue May 25 2021 09:00:00 GMT+0000") - Date.parse(String(new Date()));
     const minutes = Math.floor((total / 1000 / 60) % 60);
     const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
 

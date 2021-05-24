@@ -9,7 +9,7 @@ import { weiRaised, presaleCap } from "../../web3/buyShellPresale";
 
 import { Progress } from "reactstrap";
 
-const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Mon May 24 2021 21:00:00 GMT+0000");
+const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Tue May 25 2021 09:00:00 GMT+0000");
 
 const ShellPresale = () => {
   const [showConnect, setConnect] = useState(false);
