@@ -117,14 +117,6 @@ const CharacterSpeak = (props) => {
       }
     }
 
-    const onClickBubble = (e) => {
-        setShowBubble(true);
-        //setSpeech(speechTrack[trackCount+1]);
-        //setButtonText(btnTrack[trackCount+1]);
-        const newCount = trackCount + 1;
-        setTrackCount(newCount);
-    };
-
     return (
         <div className={showBubble ? 'character-bubble' : 'character-bubble hide-bubble'}>
             <div className="character-container">
@@ -132,7 +124,7 @@ const CharacterSpeak = (props) => {
                 <img src={charImg} className="character" onClick={onClickCharacter}/>
               </div>
             </div>
-            <Button className="btn character-container-round" onClick={(e) => onClickBubble(e)}>
+            <Button className="btn character-container-round" onClick={onClickCharacter}>
               <img src={charImg} className="character"/>
             </Button>
             <div className="text-bubble">
