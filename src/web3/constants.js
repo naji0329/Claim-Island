@@ -1,2 +1,2 @@
-export const shellPresaleAddress = '0x921dF396796dDA4c3d40de8c47eDad936f568746'
-export const shellTokenAddress = '0x2DB46224672C3a997F5Bf51aDE9C618434992c94'
+export const shellPresaleAddress = '0xC3Fa67445d3dDd8908cc64be4560af9dD71B8818'
+export const shellTokenAddress = '0xDA57e655C5d47ab32806241cBd6aA40bf192c0c1'
