@@ -1,5 +1,5 @@
 // import ClamIslandBank from '../../assets/locations/clam_island_bank.png';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import './index.scss';
 import CharacterSpeak from '../../components/characters';
 
@@ -11,6 +11,7 @@ const ShellPresale = () => {
     const [showConnect, setConnect] = useState(false);
     const [saleStatus, setSaleStatus] = useState('');
     const [saleErrorMsg, setSaleErrorMsg] = useState('');
+    const [speech, triggerSpeech] = useState('');
 
     return (
         <>
@@ -20,8 +21,8 @@ const ShellPresale = () => {
             </video>
           </div>
           <div className="shell-presale">
-              <ConnectPool showConnect={showConnect} callback={setSaleStatus} errCallback={setSaleErrorMsg} />
-              <CharacterSpeak character={'tanja'} speech={'shell_presale'} setConnect={setConnect} saleStatus={saleStatus} saleErrorMsg={saleErrorMsg}/>
+              <ConnectPool showConnect={showConnect} callback={setSaleStatus} errCallback={setSaleErrorMsg} triggerSpeech={triggerSpeech} />
+              <CharacterSpeak character={'tanja'} speech={'shell_presale'} setConnect={setConnect} saleStatus={saleStatus} saleErrorMsg={saleErrorMsg} triggerSpeech={speech}/>
           </div>
         </>
     );

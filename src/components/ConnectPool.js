@@ -72,6 +72,8 @@ const ConnectPool = (props) => {
       return;
     }
 
+    props.triggerSpeech('buy');
+
     const bnbAmount = utils.toWei(purchaseAmount, "ether");
     try {
       await buyShellPresale({ account, amount: bnbAmount }, props.callback, props.errCallback);
@@ -86,7 +88,7 @@ const ConnectPool = (props) => {
     return props.showConnect ? (
       <div style={flexEnd}>
         {!account && (
-          <Button onClick={onPresentConnectModal} style={buttonColor}>
+          <Button onClick={() => { props.triggerSpeech('connect'); onPresentConnectModal(); }} style={buttonColor}>
             Connect Wallet
           </Button>
         )}

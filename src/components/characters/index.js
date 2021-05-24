@@ -72,6 +72,12 @@ const CharacterSpeak = (props) => {
         }
     }, [props.saleStatus, props.saleErrorMsg]);
 
+    useEffect(() => {
+      if(['buy', 'connect'].indexOf(props.triggerSpeech) !== -1) {
+        onClickNext();
+      }
+    }, [props.triggerSpeech])
+
     const onClickAlt = (e) => {
         let destination = btnTrack[trackCount].alt.destination;
         switch (btnTrack[trackCount].alt.action) {
