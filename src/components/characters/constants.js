@@ -72,11 +72,12 @@ export const SPEECHES = {
       },
 
       notOpen: {
-        text: `Great! however, our presale is not open yet. It will open at 9am UTC on 24 May 2021, which is in <span id="countdown"></span> minutes. Please come back then.`,
+        text: `Welcome, traveller! You're early! Clam Island Bank isn't open yet.
+        We are offering a limited presale of $SHELL tokens, but that presale opens at 9am UTC on 24 May 2021. Please come back then.`,
         next: false,
         dismiss: false,
         skip: false
-      }
+      },
 
       notice: {
         text: `Before you pull your wallet, I should let you know that we are currently having a 15 $SHELL (3 BNB) individual cap. Our presale hard cap is 2,000 $SHELL or 400 BNB. $SHELL is also not transferable until we open!`,
@@ -100,7 +101,7 @@ export const SPEECHES = {
       },
 
       processing: {
-        text: `Please hold while we process your transaction...`
+        text: `Please hold while we process your transaction...`,
         next: `congrats`,
         dismiss: false,
         skip: false
