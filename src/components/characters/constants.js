@@ -53,7 +53,7 @@ export const SPEECHES = {
 
     shell_presale_not_started: {
       welcome: {
-        text: `Welcome, traveller! You're early! $SHELL presale starts in ${showPresaleCountdown()} Please check back in then.`,
+        text: `Welcome, traveller! You're early! $SHELL 2nd round of presale starts in ${showPresaleCountdown()} Please check back in then.`,
         next: false,
         dismiss: true,
         skip: false
@@ -253,7 +253,7 @@ export const BUTTONS = {
 
 
   function showPresaleCountdown() {
-    const total = Date.parse("Wed May 24 2021 10:15:00 GMT+0000") - Date.parse(String(new Date()));
+    const total = Date.parse("Mon May 24 2021 21:00:00 GMT+0000") - Date.parse(String(new Date()));
     const seconds = Math.floor((total / 1000) % 60);
     const minutes = Math.floor((total / 1000 / 60) % 60);
     const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
