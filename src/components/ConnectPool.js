@@ -76,76 +76,82 @@ const ConnectPool = (props) => {
     }
   };
 
-  return (
-    <div style={flexEnd}>
-      {!account && (
-        <Button onClick={onPresentConnectModal} {...props} style={buttonColor}>
-          Connect Wallet
-        </Button>
-      )}
-      {account && (
-        <>
-          <Button style={buttonColor} pill>
-            $SHELL Balance: {formatBN(shellBalance, 2)}
+  const render = () => {
+    return props.showConnect ? (
+      <div style={flexEnd}>
+        {!account && (
+          <Button onClick={onPresentConnectModal} style={buttonColor}>
+            Connect Wallet
           </Button>
-          <Button
-            onClick={() =>
-              addTokenToMetamask({
-                tokenAddress: shellTokenAddress,
-                tokenSymbol: "SHELL",
-                tokenDecimals: 18,
-                tokenImage: "https://clamisland.fi/favicon/favicon.ico",
-              })
-            }
-            style={buttonColor}
-          >
-            Add Shell to Metamask
-          </Button>
+        )}
+        {account && (
+          <>
+            <Button style={buttonColor} pill="true">
+              $SHELL Balance: {formatBN(shellBalance, 2)}
+            </Button>
+            <Button
+              onClick={() =>
+                addTokenToMetamask({
+                  tokenAddress: shellTokenAddress,
+                  tokenSymbol: "SHELL",
+                  tokenDecimals: 18,
+                  tokenImage: "https://clamisland.fi/favicon/favicon.ico",
+                })
+              }
+              style={buttonColor}
+            >
+              Add Shell to Metamask
+            </Button>
 
-          <Button color="success" onClick={toggle}>
-            Buy Shell
-          </Button>
-          <Modal isOpen={modal} centered={true} size="lg" toggle={toggle} className="shell-modal">
-            <ModalHeader toggle={toggle}>
-              GET $SHELL
-              <div>
-                <Badge color="dark" pill>
-                  $SHELL Balance: {formatBN(shellBalance, 2)}
-                </Badge>
-                <Badge color="dark" pill>
-                  You can use up to {(INDIVIDUAL_CAP - Number(individualLimit)).toFixed(2)} BNB to purchase $SHELL
-                </Badge>
-              </div>
-            </ModalHeader>
-            <ModalBody>
-              <Form>
-                <FormGroup>
-                  <Label for="shell">Enter BNB Amount</Label>
-                  <Input
-                    type="text"
-                    value={purchaseAmount}
-                    onChange={(e) => setPurchaseAmount(e.target.value)}
-                    name="buy-shell"
-                    placeholder="enter Amount of BNB"
-                  />
-                  {purchaseAmount > 0 && (
-                    <p>You will receive {Number(purchaseAmount) * Number(presaleRate.toString())} in SHELL</p>
-                  )}
-                </FormGroup>
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="success" onClick={() => purchaseShell(account)}>
-                Buy
-              </Button>
-              <Button color="danger" onClick={toggle}>
-                Cancel
-              </Button>
-            </ModalFooter>
-          </Modal>
-        </>
-      )}
-    </div>
+            <Button color="success" onClick={toggle}>
+              Buy Shell
+            </Button>
+            <Modal isOpen={modal} centered={true} size="lg" toggle={toggle} className="shell-modal">
+              <ModalHeader toggle={toggle}>
+                GET $SHELL
+                <div>
+                  <Badge color="dark" pill="true">
+                    $SHELL Balance: {formatBN(shellBalance, 2)}
+                  </Badge>
+                  <Badge color="dark" pill="true">
+                    You can use up to {(INDIVIDUAL_CAP - Number(individualLimit)).toFixed(2)} BNB to purchase $SHELL
+                  </Badge>
+                </div>
+              </ModalHeader>
+              <ModalBody>
+                <Form>
+                  <FormGroup>
+                    <Label for="shell">Enter BNB Amount</Label>
+                    <Input
+                      type="text"
+                      value={purchaseAmount}
+                      onChange={(e) => setPurchaseAmount(e.target.value)}
+                      name="buy-shell"
+                      placeholder="enter Amount of BNB"
+                    />
+                    {purchaseAmount > 0 && (
+                      <p>You will receive {Number(purchaseAmount) * Number(presaleRate.toString())} in SHELL</p>
+                    )}
+                  </FormGroup>
+                </Form>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="success" onClick={() => purchaseShell(account)}>
+                  Buy
+                </Button>
+                <Button color="danger" onClick={toggle}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </>
+        )}
+      </div>
+    ): <div></div>;
+  };
+
+  return (
+    <>{render()}</>
   );
 };
 

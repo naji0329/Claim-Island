@@ -71,6 +71,8 @@ const CharacterSpeak = (props) => {
             break;
 
           case "connectWallet_next":
+            console.log('@@@@@@@@@ connecting')
+            props.setConnect(true);
             break;
 
         }
