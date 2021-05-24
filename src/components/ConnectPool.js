@@ -87,7 +87,7 @@ const ConnectPool = (props) => {
     }
   }, [connectedAccount]);
 
-  console.log({ purchaseAmount, shellBalance, individualLimit })
+  // console.log({ purchaseAmount, shellBalance, individualLimit })
 
   const purchaseShell = async (connectedAccount) => {
     if (purchaseAmount === '' || purchaseAmount === '0' || purchaseAmount === null || purchaseAmount === 0) {
@@ -161,14 +161,21 @@ const ConnectPool = (props) => {
                         name="buy-shell"
                         placeholder="enter Amount of BNB"
                       />
-                      {purchaseAmount > 0 && (
+                      {purchaseAmount > 0 && purchaseAmount <= 3 && (
                         <p>You will receive {Number(purchaseAmount) * Number(presaleRate.toString())} in SHELL</p>
+                      )}
+                      {purchaseAmount > 3 && (
+                        <p>Individual Limit of 3BNB has been applied</p>
                       )}
                     </FormGroup>
                   </Form>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="success" onClick={() => purchaseShell(connectedAccount)}>
+                  <Button
+                    color="success"
+                    onClick={() => purchaseShell(connectedAccount)}
+                    style={{opacity: (purchaseAmount > 3 ? 0.5 : 1)}}
+                    disabled={purchaseAmount > 3}>
                     Buy
                   </Button>
                   <Button color="danger" onClick={toggle}>
