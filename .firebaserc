@@ -2,6 +2,6 @@
   "projects": {
     "default": "clam-island",
     "production": "clam-island",
-    "development": "clam-island-dev"
+    "dev": "clam-island-dev"
   }
 }
