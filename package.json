@@ -31,6 +31,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "serve": "HOST=0.0.0.0 npm start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

@@ -90,7 +90,7 @@ const ConnectPool = (props) => {
         )}
         {account && (
           <>
-            <Button style={buttonColor} pill="true">
+            <Button style={buttonColor} pill={true}>
               $SHELL Balance: {formatBN(shellBalance, 2)}
             </Button>
             <Button
@@ -114,10 +114,10 @@ const ConnectPool = (props) => {
               <ModalHeader toggle={toggle}>
                 GET $SHELL
                 <div>
-                  <Badge color="dark" pill="true">
+                  <Badge color="dark" pill={true}>
                     $SHELL Balance: {formatBN(shellBalance, 2)}
                   </Badge>
-                  <Badge color="dark" pill="true">
+                  <Badge color="dark" pill={true}>
                     You can use up to {(INDIVIDUAL_CAP - Number(individualLimit)).toFixed(2)} BNB to purchase $SHELL
                   </Badge>
                 </div>
