@@ -25,8 +25,13 @@ export const CHARACTERS = {
 export const SPEECHES = {
     welcome: {
       welcome: {
-        text: `G'day, welcome to Clam Island!
-        The island isn't open yet, but I hear Tanja is running some sort of presale for $SHELL. Would you like me to take you there?`,
+        text: `G'day, welcome to Clam Island!`,
+        next: 'first',
+        dismiss: false,
+        skip: false
+      },
+      first: {
+        text: `The island isn't open yet, but I hear Tanja is running some sort of presale for $SHELL. Would you like me to take you there?`,
         next: 'second',
         dismiss: false,
         skip: false
@@ -98,6 +103,10 @@ export const BUTTONS = {
 
     welcome: {
       welcome: {
+        next: '▶',
+        alt: false
+      },
+      first: {
         next: 'No thanks',
         alt: {
           text: 'Let\'s go!',
