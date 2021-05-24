@@ -53,8 +53,7 @@ export const SPEECHES = {
 
     shell_presale_not_started: {
       welcome: {
-        text: `Welcome, traveller! You're early! $SHELL presale starts in ${showPresaleCountdown()}.
-        How does that sound?`,
+        text: `Welcome, traveller! You're early! $SHELL presale starts in ${showPresaleCountdown()} Please check back in then.`,
         next: false,
         dismiss: true,
         skip: false
