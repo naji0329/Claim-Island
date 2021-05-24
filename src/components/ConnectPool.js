@@ -28,7 +28,7 @@ const ConnectPool = (props) => {
   const { account, connect, reset } = useWallet();
   const { onPresentConnectModal } = useWalletModal(connect, reset);
   const [shellBalance, setShellBalance] = useState(new BN(0));
-  const [presaleRate, setPresaleRate] = useState(new BN(15));
+  const [presaleRate, setPresaleRate] = useState(new BN(5));
   const [individualLimit, setIndividualLimit] = useState(new BN(0));
   const [purchaseAmount, setPurchaseAmount] = useState(0);
 
