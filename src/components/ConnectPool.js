@@ -42,13 +42,15 @@ const ConnectPool = (props) => {
     if (account) {
       async function updateUserShellPresaleData() {
         const shellBal = await accountShellBalance(account);
+        const formatedBalance = utils.fromWei(shellBal, 'ether')
         const saleRate = await getPresaleRate();
         const indLimitValue = await individualLimitUsed(account);
+        const formatedIndividualLimit = utils.fromWei(indLimitValue, 'ether')
 
         if (!isCancelled) {
-          setShellBalance(shellBal);
+          setShellBalance(formatedBalance);
           setPresaleRate(saleRate);
-          setIndividualLimit(indLimitValue);
+          setIndividualLimit(formatedIndividualLimit);
         }
       }
 
@@ -63,8 +65,10 @@ const ConnectPool = (props) => {
     }
   }, [account]);
 
+  console.log({ purchaseAmount, shellBalance, individualLimit })
+
   const purchaseShell = async (account) => {
-    if (purchaseAmount === '' || purchaseAmount === '0' || purchaseAmount === null) {
+    if (purchaseAmount === '' || purchaseAmount === '0' || purchaseAmount === null || purchaseAmount === 0) {
       return;
     }
 
