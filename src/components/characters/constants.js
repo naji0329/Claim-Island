@@ -23,13 +23,23 @@ export const CHARACTERS = {
 };
 
 export const SPEECHES = {
-    welcome: [
-        `G'day, welcome to Clam Island!
+    welcome: {
+      welcome: {
+        text: `G'day, welcome to Clam Island!
         The island isn't open yet so you can't go into any of the buildings,
         but feel free to have a look around while we're here.`,
+        next: 'second',
+        dismiss: true,
+        skip: false
+      },
+      second: {
+        text: `Nice place, isn't it? Not long before it opens now. I'll be sure to give you the inside scoop if I hear something.`,
+        next: 'second',
+        dismiss: true,
+        skip: false
+      }
+    },
 
-        `Nice place, isn't it? Not long before it opens now. I'll be sure to give you the inside scoop if I hear something.`
-    ],
     shell_presale: {
       welcome: {
         text: `Welcome, traveller! You're early! Clam Island Bank isn't open yet.
@@ -79,10 +89,18 @@ export const SPEECHES = {
 };
 
 export const BUTTONS = {
-    welcome: [
-        'OK',
-        'OK'
-    ],
+
+    welcome: {
+      welcome: {
+        next: 'OK',
+        alt: false
+      },
+      second: {
+        next: 'OK',
+        alt: false
+      }
+    },
+
     shell_presale: {
       welcome: {
         next: "Sounds good!",

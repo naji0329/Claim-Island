@@ -27,27 +27,33 @@ const CharacterSpeak = (props) => {
     const [buttonAltText, setButtonAltText] = useState(btnTrack[trackCount].alt.text);
 
     const onClickNext = (e) => {
+        let timeOut = 0;
         if(speechTrack[trackCount].dismiss) {
           setShowBubble(false);
           document.querySelector('.character').style.marginTop = document.querySelector('.character').offsetHeight - 76 + "px";
           document.querySelector('.character-wrap .character').style.pointerEvents = "auto";
           document.querySelector('.character-wrap .character').style.cursor = "pointer";
-        } else {
-          setSpeech(speechTrack[speechTrack[trackCount].next].text);
-          setTrackCount(speechTrack[trackCount].next);
-          console.log(trackCount);
-          if(btnTrack[speechTrack[trackCount].next].next) {
-            document.querySelector('#btn-next').style.display = 'block';
-            setButtonNextText(btnTrack[speechTrack[trackCount].next].next);
-          } else {
-            document.querySelector('#btn-next').style.display = 'none';
-          }
-          if(btnTrack[speechTrack[trackCount].next].alt) {
-            document.querySelector('#btn-alt').style.display = 'block';
-            setButtonAltText(btnTrack[speechTrack[trackCount].next].alt.text);
-          } else {
-            document.querySelector('#btn-alt').style.display = 'none';
-          }
+          timeOut = 1000;
+        }
+        if(speechTrack[trackCount].next) {
+          setTimeout(function(){
+            setSpeech(speechTrack[speechTrack[trackCount].next].text);
+            setTrackCount(speechTrack[trackCount].next);
+            console.log(trackCount);
+            if(btnTrack[speechTrack[trackCount].next].next) {
+              document.querySelector('#btn-next').style.display = 'block';
+              setButtonNextText(btnTrack[speechTrack[trackCount].next].next);
+            } else {
+              document.querySelector('#btn-next').style.display = 'none';
+            }
+            if(btnTrack[speechTrack[trackCount].next].alt) {
+              document.querySelector('#btn-alt').style.display = 'block';
+              setButtonAltText(btnTrack[speechTrack[trackCount].next].alt.text);
+            } else {
+              document.querySelector('#btn-alt').style.display = 'none';
+            }
+          }, timeOut)
+
         }
 
     };
@@ -72,17 +78,21 @@ const CharacterSpeak = (props) => {
     };
 
     const onClickCharacter = (e) => {
-      setShowBubble(true);
-      setSpeech(speechTrack[trackCount+1]);
+      if(!showBubble) {
+        setShowBubble(true);
+      //setSpeech(speechTrack[trackCount+1]);
       //setButtonText(btnTrack[trackCount+1]);
-      const newCount = trackCount + 1;
-      setTrackCount(newCount);
-      document.querySelector('.character-wrap .character').style.marginTop = "0px";
+      //const newCount = trackCount + 1;
+      //setTrackCount(newCount);
+        document.querySelector('.character-wrap .character').style.marginTop = "0px";
+      } else {
+
+      }
     }
 
     const onClickBubble = (e) => {
         setShowBubble(true);
-        setSpeech(speechTrack[trackCount+1]);
+        //setSpeech(speechTrack[trackCount+1]);
         //setButtonText(btnTrack[trackCount+1]);
         const newCount = trackCount + 1;
         setTrackCount(newCount);
