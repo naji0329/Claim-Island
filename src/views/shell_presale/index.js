@@ -6,7 +6,7 @@ import ConnectPool from "../../components/ConnectPool.js";
 
 import Bank from "../../assets/locations/bank_animated.mp4";
 
-const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Wed May 24 2021 09:00:00 GMT+0000");
+const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Wed May 24 2021 10:15:00 GMT+0000");
 
 const ShellPresale = () => {
   const [showConnect, setConnect] = useState(false);
