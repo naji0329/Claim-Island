@@ -1,4 +1,4 @@
-import ClamIslandBank from '../../assets/locations/clam_island_bank.png';
+// import ClamIslandBank from '../../assets/locations/clam_island_bank.png';
 import './index.scss';
 import CharacterSpeak from '../../components/characters';
 
