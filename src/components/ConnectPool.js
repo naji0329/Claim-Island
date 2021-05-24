@@ -6,6 +6,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Badge, Form, FormGr
 import buyShellPresale, { getPresaleRate, individualLimitUsed } from "../web3/buyShellPresale.js";
 import { accountShellBalance, addTokenToMetamask } from "../web3/bep20";
 import { shellTokenAddress } from "../web3/constants";
+import { web3 } from "../web3";
 import { formatBN } from "../utils/number";
 import { utils } from "web3";
 
@@ -28,7 +29,7 @@ const buttonColor = {
 const INDIVIDUAL_CAP = 3;
 
 const ConnectPool = (props) => {
-  const { account, connect, reset } = useWallet();
+  const { account, connect, reset, status } = useWallet();
   const { onPresentConnectModal } = useWalletModal(connect, reset);
   const [shellBalance, setShellBalance] = useState(new BN(0));
   const [presaleRate, setPresaleRate] = useState(new BN(5));
@@ -36,8 +37,15 @@ const ConnectPool = (props) => {
   const [purchaseAmount, setPurchaseAmount] = useState(0);
   const [filled, setFilled] = useState(false);
 
+  const [connectedAccount, setConAccount] = useState('');
+
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
+
+  // detect if account is connected
+  web3.eth.getAccounts().then((acc) => {
+    setConAccount(acc[0] || '');
+  });
 
   useEffect(() => {
       if(+props.progress === 400) {
@@ -45,16 +53,23 @@ const ConnectPool = (props) => {
       }
   }, [props.progress]);
 
+  // set account when connected from usewallet provider
+  useEffect(() => {
+      if(status === 'connected') {
+        setConAccount(account);
+      }
+  }, [status])
+
   // Update SHELL presale info
   useEffect(() => {
     let isCancelled = false;
 
-    if (account) {
+    if (connectedAccount) {
       async function updateUserShellPresaleData() {
-        const shellBal = await accountShellBalance(account);
+        const shellBal = await accountShellBalance(connectedAccount);
         const formatedBalance = utils.fromWei(shellBal, 'ether')
         const saleRate = await getPresaleRate();
-        const indLimitValue = await individualLimitUsed(account);
+        const indLimitValue = await individualLimitUsed(connectedAccount);
         const formatedIndividualLimit = utils.fromWei(indLimitValue, 'ether')
 
         if (!isCancelled) {
@@ -73,9 +88,11 @@ const ConnectPool = (props) => {
         clearInterval(id);
       };
     }
-  }, [account]);
+  }, [connectedAccount]);
 
-  const purchaseShell = async (account) => {
+  // console.log({ purchaseAmount, shellBalance, individualLimit })
+
+  const purchaseShell = async (connectedAccount) => {
     if (purchaseAmount === '' || purchaseAmount === '0' || purchaseAmount === null || purchaseAmount === 0) {
       return;
     }
@@ -84,7 +101,7 @@ const ConnectPool = (props) => {
 
     const bnbAmount = utils.toWei(purchaseAmount, "ether");
     try {
-      await buyShellPresale({ account, amount: bnbAmount }, props.callback, props.errCallback);
+      await buyShellPresale({ connectedAccount, amount: bnbAmount }, props.callback, props.errCallback);
     } catch (e) {
       props.callback('sale_failure');
       console.log(`Error: ${e.message}`, typeof e.message);
@@ -96,12 +113,12 @@ const ConnectPool = (props) => {
   const render = () => {
     return props.showConnect ? (
       <div style={flexEnd}>
-        {!account && (
+        {!connectedAccount && (
           <Button onClick={() => { props.triggerSpeech('connect'); onPresentConnectModal(); }} style={buttonColor}>
             Connect Wallet
           </Button>
         )}
-        {account && (
+        {connectedAccount && (
           <>
             <Button style={buttonColor} pill={true}>
               $SHELL Balance: {formatBN(shellBalance, 2)}
@@ -148,14 +165,21 @@ const ConnectPool = (props) => {
                         name="buy-shell"
                         placeholder="enter BNB amount"
                       />
-                      {purchaseAmount > 0 && (
+                      {purchaseAmount > 0 && purchaseAmount <= 3 && (
                         <p>You will receive {Number(purchaseAmount) * Number(presaleRate.toString())} in SHELL</p>
+                      )}
+                      {purchaseAmount > 3 && (
+                        <p>Individual Limit of 3BNB has been applied</p>
                       )}
                     </FormGroup>
                   </Form>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="success" onClick={() => purchaseShell(account)} disabled={INDIVIDUAL_CAP === Number(individualLimit)}>
+                  <Button
+                    color="success"
+                    onClick={() => purchaseShell(connectedAccount)}
+                    style={{opacity: (purchaseAmount > 3 ? 0.5 : 1)}}
+                    disabled={purchaseAmount > 3 || INDIVIDUAL_CAP === Number(individualLimit)}>
                     Buy
                   </Button>
                   {INDIVIDUAL_CAP === Number(individualLimit) && <p>You reached your quota</p>}

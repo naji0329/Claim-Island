@@ -13,17 +13,16 @@ const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Mon May 24 20
 
 const ShellPresale = () => {
   const [showConnect, setConnect] = useState(false);
-  const [saleStatus, setSaleStatus] = useState("");
-  const [saleErrorMsg, setSaleErrorMsg] = useState("");
-  const [speech, triggerSpeech] = useState("");
+  const [saleStatus, setSaleStatus] = useState('');
+  const [saleErrorMsg, setSaleErrorMsg] = useState('');
+  const [speech, triggerSpeech] = useState('');
   const [progress, setProgress] = useState(25);
 
   setInterval(async () => {
-    const cap = await presaleCap();
-    const wei = await weiRaised();
-    const prog = (Number(wei) / cap) * 100;
-
-    setProgress(prog);
+      const cap = await presaleCap();
+      const wei = await weiRaised();
+      const prog = (Number(wei) / cap) * 100;
+      setProgress(prog);
   }, 3000);
 
   return (
