@@ -74,8 +74,10 @@ const ConnectPool = (props) => {
 
     const bnbAmount = utils.toWei(purchaseAmount, "ether");
     try {
-      await buyShellPresale({ account, amount: bnbAmount });
+      await buyShellPresale({ account, amount: bnbAmount }, props.callback, props.errCallback);
     } catch (e) {
+      props.callback('sale_failure');
+      props.errCallback(e.message);
       console.log(`Error: ${e}`);
     }
   };

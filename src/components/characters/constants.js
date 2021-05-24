@@ -25,8 +25,13 @@ export const CHARACTERS = {
 export const SPEECHES = {
     welcome: {
       welcome: {
-        text: `G'day, welcome to Clam Island!
-        The island isn't open yet, but I hear Tanja is running some sort of presale for $SHELL. Would you like me to take you there?`,
+        text: `G'day, welcome to Clam Island!`,
+        next: 'first',
+        dismiss: false,
+        skip: false
+      },
+      first: {
+        text: `The island isn't open yet, but I hear Tanja is running some sort of presale for $SHELL. Would you like me to take you there?`,
         next: 'second',
         dismiss: false,
         skip: false
@@ -67,21 +72,21 @@ export const SPEECHES = {
       },
 
       notice: {
-        text: `Before you pull your wallet, I should let you know that we are currently having a 15 $SHELL (3 BNB) individual cap. Our presale hard cap is 2,000 $SHELL or 400 BNB.`,
+        text: `Before you pull your wallet, I should let you know that we are currently having a 15 $SHELL (3 BNB) individual cap. Our presale hard cap is 2,000 $SHELL or 400 BNB. $SHELL is also not transferable until we open!`,
         next: `connect`,
         dismiss: false,
         skip: false
       },
 
       connect: {
-        text: `First, let's get your wallet connected. You will need to do this in order to purchase $SHELL.`,
+        text: `First, let's get your wallet connected. You will need to do this in order to purchase $SHELL. Press the "Connect Wallet" button in the top right of the screen.`,
         next: `purchase`,
         dismiss: false,
         skip: `purchase`
       },
 
       purchase: {
-        text: `Great! You can now use the interface above to buy $SHELL. Remember that you can buy a maximum of 15 $SHELL!`,
+        text: `Great! Now you can press "Buy Shell" in the top right of the screen to purchase $SHELL. Remember that you can buy a maximum of 15 $SHELL!`,
         next: `congrats`,
         dismiss: true,
         skip: false
@@ -108,6 +113,10 @@ export const BUTTONS = {
 
     welcome: {
       welcome: {
+        next: '▶',
+        alt: false
+      },
+      first: {
         next: 'No thanks',
         alt: {
           text: 'Let\'s go!',

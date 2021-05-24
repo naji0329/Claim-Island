@@ -6,6 +6,9 @@ import {
 
 import { SPEECHES, CHARACTERS, BUTTONS } from './constants';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import './index.scss';
 
 const CharacterSpeak = (props) => {
@@ -55,10 +58,22 @@ const CharacterSpeak = (props) => {
               document.querySelector('#btn-alt').style.display = 'none';
             }
           }, timeOut)
-
+        }
+        if(speechTrack[trackCount].next == 'connect') {
+          console.log('@@@@@@@@@ connecting');
+          props.setConnect(true);
         }
 
     };
+
+    // TODO: continue flow after sale success or failure
+    useEffect(()=>{
+        console.log('#### sale confirmed or failure', props.saleStatus);
+        console.log(props.saleErrorMsg)
+        if(props.saleStatus === 'sale_failure') {
+            toast('There was an error during your purchase');
+        }
+    }, [props.saleStatus, props.saleErrorMsg]);
 
     const onClickAlt = (e) => {
         let destination = btnTrack[trackCount].alt.destination;
@@ -73,8 +88,8 @@ const CharacterSpeak = (props) => {
             break;
 
           case "connectWallet_next":
-            console.log('@@@@@@@@@ connecting')
-            props.setConnect(true);
+            //console.log('@@@@@@@@@ connecting')
+            //props.setConnect(true);
             break;
 
         }
@@ -122,6 +137,7 @@ const CharacterSpeak = (props) => {
                 <Button className="btn" id="btn-next" onClick={onClickNext}>{buttonNextText}</Button>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 };
