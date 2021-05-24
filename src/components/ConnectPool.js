@@ -133,7 +133,7 @@ const ConnectPool = (props) => {
               Add Shell to Metamask
             </Button>
 
-            {!filled ? 
+            {!filled ?
               <>
               <Button color="success" onClick={toggle}>
                 Buy Shell
