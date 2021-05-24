@@ -58,7 +58,10 @@ const CharacterSpeak = (props) => {
               document.querySelector('#btn-alt').style.display = 'none';
             }
           }, timeOut)
-
+        }
+        if(speechTrack[trackCount].next == 'connect') {
+          console.log('@@@@@@@@@ connecting');
+          props.setConnect(true);
         }
 
     };
@@ -85,8 +88,8 @@ const CharacterSpeak = (props) => {
             break;
 
           case "connectWallet_next":
-            console.log('@@@@@@@@@ connecting')
-            props.setConnect(true);
+            //console.log('@@@@@@@@@ connecting')
+            //props.setConnect(true);
             break;
 
         }
