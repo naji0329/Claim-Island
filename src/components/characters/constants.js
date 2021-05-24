@@ -46,6 +46,16 @@ export const SPEECHES = {
 
     },
 
+    shell_presale_not_started: {
+      welcome: {
+        text: `Welcome, traveller! You're early! $SHELL presale starts in ${showPresaleCountdown()}.
+        How does that sound?`,
+        next: false,
+        dismiss: true,
+        skip: false
+      },
+    },
+
     shell_presale: {
       welcome: {
         text: `Welcome, traveller! You're early! Clam Island Bank isn't open yet.
@@ -120,10 +130,21 @@ export const BUTTONS = {
 
     },
 
+    shell_presale_not_started: {
+      welcome: {
+        next: 'Ok',
+        alt: {
+          action: "url",
+          destination: "/",
+          text: "Exit bank"
+        }
+      },
+    },
+
     shell_presale: {
       welcome: {
         next: "Sounds good!",
-        alt: false
+        alt: false,
       },
 
       notice: {
@@ -159,4 +180,17 @@ export const BUTTONS = {
       }
 
     }
+  }
+
+
+  function showPresaleCountdown() {
+    const total = Date.parse("Wed May 24 2021 09:00:00 GMT+0000") - Date.parse(String(new Date()));
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+    const days = Math.floor(total / (1000 * 60 * 60 * 24));
+
+    return `Presale start in: ${hours} hours  ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes and ${
+      seconds > 9 ? seconds : "0" + seconds.toString()
+    } seconds`;
   }
