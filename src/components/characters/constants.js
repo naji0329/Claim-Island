@@ -71,6 +71,13 @@ export const SPEECHES = {
         skip: false
       },
 
+      notOpen: {
+        text: `Great! however, our presale is not open yet. It will open at 9am UTC on 24 May 2021, which is in <span id="countdown"></span> minutes. Please come back then.`,
+        next: false,
+        dismiss: false,
+        skip: false
+      }
+
       notice: {
         text: `Before you pull your wallet, I should let you know that we are currently having a 15 $SHELL (3 BNB) individual cap. Our presale hard cap is 2,000 $SHELL or 400 BNB. $SHELL is also not transferable until we open!`,
         next: `connect`,
@@ -87,17 +94,38 @@ export const SPEECHES = {
 
       purchase: {
         text: `Great! Now you can press "Buy Shell" in the top right of the screen to purchase $SHELL. Remember that you can buy a maximum of 15 $SHELL!`,
+        next: `processing`,
+        dismiss: false,
+        skip: false
+      },
+
+      processing: {
+        text: `Please hold while we process your transaction...`
         next: `congrats`,
-        dismiss: true,
+        dismiss: false,
         skip: false
       },
 
       congrats: {
-        text: `Congratulations on being one of our first customers! You can see your $SHELL balance at the top right of the screen. Remember they are not transferable until Clam Island opens! I look forward to seeing you at the launch!`,
+        text: `Congratulations on being one of our first customers! You can see your $SHELL balance at the top right of the screen. Remember they are not transferable until Clam Island opens! We look forward to seeing you at the launch!`,
         next: false,
         dismiss: true,
         skip: false
-      }
+      },
+
+      error: {
+        text: `I'm sorry, something seems to have gone wrong with your purchase. Please try again, or try contacting our support staff in <a href="https://t.me/clamisland">Telegram</a>.`,
+        next: false,
+        dismiss: false,
+        skip: false
+      },
+
+      cancel: {
+        text: `Ok, let me know if you change your mind and want to buy some $SHELL.`,
+        next: 'purchase',
+        dismiss: false,
+        skip: false
+      },
     },
 
     clam_presale: [
@@ -167,20 +195,52 @@ export const BUTTONS = {
 
       connect: {
         next: false,
+        alt: false
+      },
+
+      processing: {
+        next: false,
+        alt: false
+      },
+
+      error: {
+        next: false,
         alt: {
-          action: "connectWallet_next",
-          destination: "purchase",
-          text: 'Connect'
+          action: "url",
+          destination: "/",
+          text: "Exit bank"
         }
       },
 
       purchase: {
-        next: "Ok",
-        alt: false
+        next: false,
+        alt: {
+          action: "speech",
+          destination: "cancel",
+          text: "Cancel"
+        }
+      },
+
+      cancel: {
+        next: `I'm ready to buy`,
+        alt: {
+          action: "url",
+          destination: "/",
+          text: "Exit bank"
+        }
+      },
+
+      notOpen: {
+        next: false,
+        alt: {
+          action: "url",
+          destination: "/",
+          text: "Exit bank"
+        }
       },
 
       congrats: {
-        next: "Ok",
+        next: "OK",
         alt: {
           action: "url",
           destination: "/",
