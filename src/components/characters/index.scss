@@ -188,39 +188,54 @@
             }
         }
 
-        .btn {
-            position: absolute;
-            border: 2px solid #38DCDC;
-            bottom: 20px;
-            right: 30px;
-            background-color: #38DCDC;
-            width: 200px;
-            font-size: 20px;
-            font-family: AristotelicaBold;
-            padding-top: 15px;
-            border-radius: 10px;
-            pointer-events: auto;
+        .buttons {
+          position: absolute;
+          bottom: 20px;
+          right: 30px;
+          //text-align: right;
 
-            @media screen and (max-width: 992px) {
-                bottom: -25px;
-            }
+          #btn-alt {
+            display: none;
+          }
 
-            @media screen and (max-width: 548px) {
-                width: 100px;
-                right: unset;
-                left: calc(50% - 50px);
-                font-size: 14px;
-            }
+          .btn {
+              position: relative;
+              float: right;
+              margin-left: 20px;
+              border: 2px solid #38DCDC;
+              //bottom: 20px;
+              //right: 30px;
+              background-color: #38DCDC;
+              width: 200px;
+              font-size: 20px;
+              font-family: AristotelicaBold;
+              padding-top: 15px;
+              border-radius: 10px;
+              pointer-events: auto;
+
+              @media screen and (max-width: 992px) {
+                  bottom: -25px;
+              }
+
+              @media screen and (max-width: 548px) {
+                  width: 100px;
+                  right: unset;
+                  left: calc(50% - 50px);
+                  font-size: 14px;
+              }
 
 
-            &:hover,
-            &:focus,
-            &:active {
-                background-color: #34cfcf;
-                color: #0576e2;
-                border: 2px solid #fff;
-            }
+              &:hover,
+              &:focus,
+              &:active {
+                  background-color: #34cfcf;
+                  color: #0576e2;
+                  border: 2px solid #fff;
+              }
+          }
         }
+
+
 
     }
 }
