@@ -109,6 +109,7 @@ const ConnectPool = (props) => {
       toast(formatError, {autoClose: 8000})
     }
   };
+  const disableButton = (Number(purchaseAmount) + Number(individualLimit)) > INDIVIDUAL_CAP || INDIVIDUAL_CAP === Number(individualLimit)
 
   const render = () => {
     return props.showConnect ? (
@@ -168,7 +169,7 @@ const ConnectPool = (props) => {
                       {purchaseAmount > 0 && purchaseAmount <= 3 && (
                         <p>You will receive {Number(purchaseAmount) * Number(presaleRate.toString())} in SHELL</p>
                       )}
-                      {purchaseAmount > 3 && (
+                      {(Number(purchaseAmount) + Number(individualLimit)) > INDIVIDUAL_CAP && (
                         <p>Individual Limit of 3BNB has been applied</p>
                       )}
                     </FormGroup>
@@ -178,8 +179,8 @@ const ConnectPool = (props) => {
                   <Button
                     color="success"
                     onClick={() => purchaseShell(connectedAccount)}
-                    style={{opacity: (purchaseAmount > 3 ? 0.5 : 1)}}
-                    disabled={purchaseAmount > 3 || INDIVIDUAL_CAP === Number(individualLimit)}>
+                    style={{opacity: (disableButton ? 0.5 : 1)}}
+                    disabled={disableButton}>
                     Buy
                   </Button>
                   {INDIVIDUAL_CAP === Number(individualLimit) && <p>You reached your quota</p>}
