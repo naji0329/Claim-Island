@@ -2,7 +2,7 @@ import shellPresaleAbi from './abi/shellPresale.json'
 import {shellPresaleAddress} from './constants'
 import { contractFactory } from './index'
 
-const buyShellPresale = async ({ account, amount }) => {
+const buyShellPresale = async ({ account, amount }, callback, errCallback) => {
   const shellPresale = contractFactory({abi: shellPresaleAbi, address: shellPresaleAddress })
 
   const method = shellPresale.methods.buyTokens()
@@ -19,8 +19,11 @@ const buyShellPresale = async ({ account, amount }) => {
   }).once('confirmation', async () => {
     try {
       console.log('Success') // add a toaster here
+      callback('sale_success');
     } catch (error) {
       console.error(error) // add toaster to show error
+      callback('sale_failure');
+      errCallback(error.message);
     }
   });
 }

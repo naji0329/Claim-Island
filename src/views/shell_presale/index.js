@@ -9,6 +9,8 @@ import Bank from '../../assets/locations/bank_animated.mp4';
 
 const ShellPresale = () => {
     const [showConnect, setConnect] = useState(false);
+    const [saleStatus, setSaleStatus] = useState('');
+    const [saleErrorMsg, setSaleErrorMsg] = useState('');
 
     return (
         <>
@@ -18,8 +20,8 @@ const ShellPresale = () => {
             </video>
           </div>
           <div className="shell-presale">
-              <ConnectPool showConnect={showConnect} />
-              <CharacterSpeak character={'tanja'} speech={'shell_presale'} setConnect={setConnect}/>
+              <ConnectPool showConnect={showConnect} callback={setSaleStatus} errCallback={setSaleErrorMsg} />
+              <CharacterSpeak character={'tanja'} speech={'shell_presale'} setConnect={setConnect} saleStatus={saleStatus} saleErrorMsg={saleErrorMsg}/>
           </div>
         </>
     );
