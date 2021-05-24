@@ -5,7 +5,7 @@ import CharacterSpeak from "../../components/characters";
 import ConnectPool from "../../components/ConnectPool.js";
 
 import Bank from "../../assets/locations/bank_animated.mp4";
-import { weiRaised } from "../../web3/bep20";
+import { weiRaised, presaleCap } from "../../web3/buyShellPresale";
 
 import { Progress } from 'reactstrap';
 
@@ -16,15 +16,15 @@ const ShellPresale = () => {
   const [saleStatus, setSaleStatus] = useState('');
   const [saleErrorMsg, setSaleErrorMsg] = useState('');
   const [speech, triggerSpeech] = useState('');
-  const [progress, setProgress] = useState(50);
-
-  console.log('### wei raised', weiRaised());
+  const [progress, setProgress] = useState(25);
 
   setInterval(async () => {
+      const cap = await presaleCap();
       const wei = await weiRaised();
-      const prog = (wei - 100) / 3;
+      const prog = (Number(wei) / cap) * 100;
+      console.log({ wei, prog })
       setProgress(prog);
-  }, 100);
+  }, 3000);
 
   return (
     <>

@@ -43,3 +43,17 @@ export const individualLimitUsed = async (account) => {
 
   return value;
 }
+
+export const weiRaised = async () => {
+  const shellPresale = contractFactory({abi: shellPresaleAbi, address: shellPresaleAddress })
+  const weiRaised = await shellPresale.methods.weiRaised().call();
+
+  return weiRaised;
+};
+
+export const presaleCap = async () => {
+  const shellPresale = contractFactory({abi: shellPresaleAbi, address: shellPresaleAddress })
+  const cap = await shellPresale.methods.CAP().call();
+
+  return cap;
+};

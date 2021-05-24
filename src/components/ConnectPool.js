@@ -72,8 +72,6 @@ const ConnectPool = (props) => {
     }
   }, [account]);
 
-  console.log({ purchaseAmount, shellBalance, individualLimit })
-
   const purchaseShell = async (account) => {
     if (purchaseAmount === '' || purchaseAmount === '0' || purchaseAmount === null || purchaseAmount === 0) {
       return;
@@ -118,7 +116,7 @@ const ConnectPool = (props) => {
               Add Shell to Metamask
             </Button>
 
-            {!filled ? 
+            {!filled ?
               <>
               <Button color="success" onClick={toggle}>
                 Buy Shell

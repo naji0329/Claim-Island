@@ -9,13 +9,6 @@ const balanceOf = async ({ account, abi, address }) => {
   return accountBalance;
 };
 
-export const weiRaised = async (account) => {
-  const token = contractFactory({ abi: shellTokenAbi, address: shellTokenAddress });
-  // const wei = await token.methods.weiRaised.call();
-  const wei = 250;
-  return wei;
-};
-
 export const accountShellBalance = async (account) => {
   const bal = await balanceOf({ account, abi: shellTokenAbi, address: shellTokenAddress });
   return bal;
