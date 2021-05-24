@@ -76,7 +76,7 @@ export const SPEECHES = {
         next: false,
         dismiss: false,
         skip: false
-      }
+      },
 
       notice: {
         text: `Before you pull your wallet, I should let you know that we are currently having a 15 $SHELL (3 BNB) individual cap. Our presale hard cap is 2,000 $SHELL or 400 BNB. $SHELL is also not transferable until we open!`,
@@ -100,7 +100,7 @@ export const SPEECHES = {
       },
 
       processing: {
-        text: `Please hold while we process your transaction...`
+        text: `Please hold while we process your transaction...`,
         next: `congrats`,
         dismiss: false,
         skip: false
