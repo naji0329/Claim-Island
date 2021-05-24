@@ -26,18 +26,24 @@ export const SPEECHES = {
     welcome: {
       welcome: {
         text: `G'day, welcome to Clam Island!
-        The island isn't open yet so you can't go into any of the buildings,
-        but feel free to have a look around while we're here.`,
+        The island isn't open yet, but I hear Tanja is running some sort of presale for $SHELL. Would you like me to take you there?`,
         next: 'second',
-        dismiss: true,
+        dismiss: false,
         skip: false
       },
       second: {
-        text: `Nice place, isn't it? Not long before it opens now. I'll be sure to give you the inside scoop if I hear something.`,
-        next: 'second',
+        text: `Alright, well feel free to take a look around. Just let me know if you change your mind on that presale.`,
+        next: 'third',
         dismiss: true,
         skip: false
-      }
+      },
+      third: {
+        text: `Do you want to check out that presale now?`,
+        next: 'second',
+        dismiss: false,
+        skip: false
+      },
+
     },
 
     shell_presale: {
@@ -92,13 +98,26 @@ export const BUTTONS = {
 
     welcome: {
       welcome: {
-        next: 'OK',
-        alt: false
+        next: 'No thanks',
+        alt: {
+          text: 'Let\'s go!',
+          action: "url",
+          destination: "/shell-presale"
+        }
       },
       second: {
         next: 'OK',
         alt: false
-      }
+      },
+      third: {
+        next: 'No thanks',
+        alt: {
+          text: 'Let\'s go!',
+          action: "url",
+          destination: "/shell-presale"
+        }
+      },
+
     },
 
     shell_presale: {
