@@ -26,3 +26,17 @@ const buyShellPresale = async ({ account, amount }) => {
 }
 
 export default buyShellPresale;
+
+export const getPresaleRate = async () => {
+  const shellPresale = contractFactory({abi: shellPresaleAbi, address: shellPresaleAddress })
+  const rate = await shellPresale.methods.RATE().call()
+
+  return rate;
+}
+
+export const individualLimitUsed = async (account) => {
+  const shellPresale = contractFactory({abi: shellPresaleAbi, address: shellPresaleAddress })
+  const value = await shellPresale.methods.individualLimit(account).call()
+
+  return value;
+}
