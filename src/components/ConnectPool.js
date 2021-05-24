@@ -31,9 +31,16 @@ const ConnectPool = (props) => {
   const [presaleRate, setPresaleRate] = useState(new BN(5));
   const [individualLimit, setIndividualLimit] = useState(new BN(0));
   const [purchaseAmount, setPurchaseAmount] = useState(0);
+  const [filled, setFilled] = useState(false);
 
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
+
+  useEffect(() => {
+      if(+props.progress === 400) {
+        setFilled(true);
+      }
+  }, [props.progress]);
 
   // Update SHELL presale info
   useEffect(() => {
@@ -111,47 +118,50 @@ const ConnectPool = (props) => {
               Add Shell to Metamask
             </Button>
 
-            <Button color="success" onClick={toggle}>
-              Buy Shell
-            </Button>
-            <Modal isOpen={modal} centered={true} size="lg" toggle={toggle} className="shell-modal">
-              <ModalHeader toggle={toggle}>
-                GET $SHELL
-                <div>
-                  <Badge color="dark" pill={true}>
-                    $SHELL Balance: {formatBN(shellBalance, 2)}
-                  </Badge>
-                  <Badge color="dark" pill={true}>
-                    You can use up to {(INDIVIDUAL_CAP - Number(individualLimit)).toFixed(2)} BNB to purchase $SHELL
-                  </Badge>
-                </div>
-              </ModalHeader>
-              <ModalBody>
-                <Form>
-                  <FormGroup>
-                    <Label for="shell">Enter BNB Amount</Label>
-                    <Input
-                      type="text"
-                      value={purchaseAmount}
-                      onChange={(e) => setPurchaseAmount(e.target.value)}
-                      name="buy-shell"
-                      placeholder="enter Amount of BNB"
-                    />
-                    {purchaseAmount > 0 && (
-                      <p>You will receive {Number(purchaseAmount) * Number(presaleRate.toString())} in SHELL</p>
-                    )}
-                  </FormGroup>
-                </Form>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="success" onClick={() => purchaseShell(account)}>
-                  Buy
-                </Button>
-                <Button color="danger" onClick={toggle}>
-                  Cancel
-                </Button>
-              </ModalFooter>
-            </Modal>
+            {!filled ? 
+              <>
+              <Button color="success" onClick={toggle}>
+                Buy Shell
+              </Button>
+              <Modal isOpen={modal} centered={true} size="lg" toggle={toggle} className="shell-modal">
+                <ModalHeader toggle={toggle}>
+                  GET $SHELL
+                  <div>
+                    <Badge color="dark" pill={true}>
+                      $SHELL Balance: {formatBN(shellBalance, 2)}
+                    </Badge>
+                    <Badge color="dark" pill={true}>
+                      You can use up to {(INDIVIDUAL_CAP - Number(individualLimit)).toFixed(2)} BNB to purchase $SHELL
+                    </Badge>
+                  </div>
+                </ModalHeader>
+                <ModalBody>
+                  <Form>
+                    <FormGroup>
+                      <Label for="shell">Enter BNB Amount</Label>
+                      <Input
+                        type="text"
+                        value={purchaseAmount}
+                        onChange={(e) => setPurchaseAmount(e.target.value)}
+                        name="buy-shell"
+                        placeholder="enter Amount of BNB"
+                      />
+                      {purchaseAmount > 0 && (
+                        <p>You will receive {Number(purchaseAmount) * Number(presaleRate.toString())} in SHELL</p>
+                      )}
+                    </FormGroup>
+                  </Form>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="success" onClick={() => purchaseShell(account)}>
+                    Buy
+                  </Button>
+                  <Button color="danger" onClick={toggle}>
+                    Cancel
+                  </Button>
+                </ModalFooter>
+              </Modal>
+              </> : <Button color="danger">Presale Filled</Button>}
           </>
         )}
       </div>
