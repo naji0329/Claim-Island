@@ -53,7 +53,7 @@ export const SPEECHES = {
 
     shell_presale_not_started: {
       welcome: {
-        text: `Welcome, traveller! You're early! $SHELL 2nd round of presale starts in ${showPresaleCountdown()} Please check back in then.`,
+        text: `Welcome, traveller! You're early! $SHELL 2nd round of presale starts in ${showPresaleCountdown()}. Please check back in then.`,
         next: false,
         dismiss: true,
         skip: false
@@ -259,7 +259,7 @@ export const BUTTONS = {
     const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
     const days = Math.floor(total / (1000 * 60 * 60 * 24));
 
-    return `Presale start in: ${hours} hours  ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes and ${
+    return `${hours} hours  ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes and ${
       seconds > 9 ? seconds : "0" + seconds.toString()
     } seconds`;
   }
