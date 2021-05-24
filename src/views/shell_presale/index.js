@@ -18,8 +18,6 @@ const ShellPresale = () => {
   const [speech, triggerSpeech] = useState('');
   const [progress, setProgress] = useState(50);
 
-  console.log('### wei raised', weiRaised());
-
   setInterval(async () => {
       const wei = await weiRaised();
       const prog = (wei - 100) / 3;

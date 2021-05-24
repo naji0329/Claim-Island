@@ -29,8 +29,6 @@ const CharacterSpeak = (props) => {
     const [buttonNextText, setButtonNextText] = useState(btnTrack[trackCount].next);
     const [buttonAltText, setButtonAltText] = useState(btnTrack[trackCount].alt.text);
 
-
-
     const onClickNext = (e) => {
         let timeOut = 0;
         if(speechTrack[trackCount].dismiss) {
