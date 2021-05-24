@@ -42,10 +42,13 @@ const ConnectPool = (props) => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
-  // detect if account is connected
-  web3.eth.getAccounts().then((acc) => {
-    setConAccount(acc[0] || '');
-  });
+  if(web3 && web3.eth) {
+    // detect if account is connected
+    web3.eth.getAccounts().then((acc) => {
+      setConAccount(acc[0] || '');
+    });
+  }
+
 
   useEffect(() => {
       if(+props.progress === 400) {
