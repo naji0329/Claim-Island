@@ -28,7 +28,7 @@ const ShellPresale = () => {
   return (
     <>
       <Progress striped color="danger" value={progress}>
-        Presale Filled
+        Presale Filled {progress}%
       </Progress>
       <div id="env-wrapper">
         <video autoPlay muted loop id="env">
