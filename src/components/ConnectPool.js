@@ -8,6 +8,9 @@ import { accountShellBalance, addTokenToMetamask } from "../web3/bep20";
 import { shellTokenAddress } from "../web3/constants";
 import { formatBN } from "../utils/number";
 import { utils } from "web3";
+
+import { toast } from 'react-toastify';
+
 const BN = utils.BN;
 
 const flexEnd = {
@@ -84,8 +87,9 @@ const ConnectPool = (props) => {
       await buyShellPresale({ account, amount: bnbAmount }, props.callback, props.errCallback);
     } catch (e) {
       props.callback('sale_failure');
-      props.errCallback(e.message);
-      console.log(`Error: ${e}`);
+      console.log(`Error: ${e.message}`, typeof e.message);
+      const formatError = e.message.split('"message": "')[1].split('",')[0]
+      toast(formatError, {autoClose: 8000})
     }
   };
 
@@ -142,7 +146,7 @@ const ConnectPool = (props) => {
                         value={purchaseAmount}
                         onChange={(e) => setPurchaseAmount(e.target.value)}
                         name="buy-shell"
-                        placeholder="enter Amount of BNB"
+                        placeholder="enter BNB amount"
                       />
                       {purchaseAmount > 0 && (
                         <p>You will receive {Number(purchaseAmount) * Number(presaleRate.toString())} in SHELL</p>
@@ -151,9 +155,10 @@ const ConnectPool = (props) => {
                   </Form>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="success" onClick={() => purchaseShell(account)}>
+                  <Button color="success" onClick={() => purchaseShell(account)} disabled={INDIVIDUAL_CAP === Number(individualLimit)}>
                     Buy
                   </Button>
+                  {INDIVIDUAL_CAP === Number(individualLimit) && <p>You reached your quota</p>}
                   <Button color="danger" onClick={toggle}>
                     Cancel
                   </Button>

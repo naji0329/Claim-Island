@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
     Button
@@ -72,7 +72,6 @@ const CharacterSpeak = (props) => {
         console.log(props.saleErrorMsg)
         if(props.saleStatus === 'sale_failure') {
             toast('There was an error during your purchase');
-
         }
         if(props.saleStatus === 'sale_success') {
           onClickNext();
