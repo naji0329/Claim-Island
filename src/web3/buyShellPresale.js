@@ -1,9 +1,17 @@
 import shellPresaleAbi from './abi/shellPresale.json'
 import {shellPresaleAddress} from './constants'
 import { contractFactory } from './index'
+import { web3 } from "./index"
 
 const buyShellPresale = async ({ account, amount }, callback, errCallback) => {
   const shellPresale = contractFactory({abi: shellPresaleAbi, address: shellPresaleAddress })
+
+  // i would never do it this way normally
+  if (web3 && web3.eth && !account) {
+    const acc = await web3.eth.getAccounts();
+    console.log("acc: ", acc);
+    account = acc[0];
+  }
 
   const method = shellPresale.methods.buyTokens()
 
