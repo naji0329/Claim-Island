@@ -31,21 +31,21 @@ export const SPEECHES = {
       skip: false,
     },
     first: {
-      text: `The island isn't open yet, but I hear Tanja is running some sort of presale for $SHELL. Would you like me to take you there?`,
+      text: `The island isn't open yet, but Tanja just finished a presale for $SHELL tokens. I hear Diego will have some Clams available for presale soon...`,
       next: "second",
       dismiss: false,
       skip: false,
     },
     second: {
-      text: `Alright, well feel free to take a look around. Just let me know if you change your mind on that presale.`,
+      text: `I'll be sure to let you know when that becomes available. In the meantime, feel free to look around. You won't be able to go inside any buildings though.`,
       next: "third",
       dismiss: true,
       skip: false,
     },
     third: {
-      text: `Do you want to check out that presale now?`,
-      next: "second",
-      dismiss: false,
+      text: `Nice place, isn't it? Dunno about you, but I'm looking forward to the grand opening.`,
+      next: false,
+      dismiss: true,
       skip: false,
     },
   },
@@ -61,17 +61,25 @@ export const SPEECHES = {
 
   shell_presale_finished: {
     welcome: {
-      text: `Welcome, traveller! You're late! $SHELL presale finished.`,
-      next: "notice",
-      dismiss: true,
+      text: `Welcome, traveller!`,
+      next: 'first',
+      dismiss: false,
       skip: false,
     },
-    notice: {
-      text: `But you can read more on Clam Island and what will happen here. Would you like that?`,
-      next: false,
-      dismiss: true,
-      skip: false,
+
+    first: {
+      text: `Sorry, you're a bit late! the $SHELL presale has finished. But you can read more on Clam Island and what will happen here. Would you like that?`,
+      next: 'second',
+      dismiss: false,
+      skip: false
     },
+
+    second: {
+      text: `Ok, let me know if you change your mind!`,
+      next: 'first',
+      dismiss: true,
+      skip: false
+    }
   },
 
   shell_presale: {
@@ -158,24 +166,16 @@ export const BUTTONS = {
       alt: false,
     },
     first: {
-      next: "No thanks",
-      alt: {
-        text: "Let's go!",
-        action: "url",
-        destination: "/shell-presale",
-      },
+      next: "▶",
+      alt: false
     },
     second: {
       next: "OK",
       alt: false,
     },
     third: {
-      next: "No thanks",
-      alt: {
-        text: "Let's go!",
-        action: "url",
-        destination: "/shell-presale",
-      },
+      next: "Keep exploring",
+      alt: false
     },
   },
 
@@ -192,16 +192,22 @@ export const BUTTONS = {
 
   shell_presale_finished: {
     welcome: {
-      next: "Ok",
-      alt: false,
+      next: '▶',
+      alt: false
     },
-    notice: {
-      next: "Thanks, but no",
+
+    first: {
+      next: 'No thanks',
       alt: {
         action: "url",
         destination: "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
-        text: "Sure!",
+        text: "Sure!"
       },
+    },
+
+    second: {
+      next: "OK",
+      alt: false,
     },
   },
 
