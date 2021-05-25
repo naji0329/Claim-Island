@@ -52,7 +52,7 @@ export const SPEECHES = {
 
   shell_presale_not_started: {
     welcome: {
-      text: `Welcome, traveller! You're early! $SHELL 2nd round of presale starts in ${ showPresaleCountdown()}. Please check back in then.`,
+      text: `Welcome, traveller! You're early! $SHELL 2nd round of presale starts in ${showPresaleCountdown()}. Please check back in then.`,
       next: false,
       dismiss: true,
       skip: false,
@@ -62,7 +62,7 @@ export const SPEECHES = {
   shell_presale_finished: {
     welcome: {
       text: `Welcome, traveller! You're late! $SHELL presale finished.`,
-      next: 'notice',
+      next: "notice",
       dismiss: true,
       skip: false,
     },
@@ -193,13 +193,13 @@ export const BUTTONS = {
   shell_presale_finished: {
     welcome: {
       next: "Ok",
-      alt: false
+      alt: false,
     },
     notice: {
       next: "Thanks, but no",
       alt: {
         action: "url",
-        destination: "https://clamisland.medium.com/clam-island-presale-30090591d4f",
+        destination: "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
         text: "Sure!",
       },
     },
@@ -278,9 +278,9 @@ export const BUTTONS = {
 };
 
 function showPresaleCountdown() {
-    const total = Date.parse("Tue May 25 2021 09:00:00 GMT+0000") - Date.parse(String(new Date()));
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-    const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+  const total = Date.parse("Tue May 25 2021 09:00:00 GMT+0000") - Date.parse(String(new Date()));
+  const minutes = Math.floor((total / 1000 / 60) % 60);
+  const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
 
-    return `${hours} hours and ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes`;
+  return `${hours} hours and ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes`;
 }
