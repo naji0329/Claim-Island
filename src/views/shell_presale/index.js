@@ -9,20 +9,20 @@ import { weiRaised, presaleCap } from "../../web3/buyShellPresale";
 
 import { Progress } from "reactstrap";
 
-const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Tue May 25 2021 09:00:00 GMT+0000");
+// const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Tue May 25 2021 09:00:00 GMT+0000");
 
 const ShellPresale = () => {
   const [showConnect, setConnect] = useState(false);
-  const [saleStatus, setSaleStatus] = useState('');
-  const [saleErrorMsg, setSaleErrorMsg] = useState('');
-  const [speech, triggerSpeech] = useState('');
+  const [saleStatus, setSaleStatus] = useState("");
+  const [saleErrorMsg, setSaleErrorMsg] = useState("");
+  const [speech, triggerSpeech] = useState("");
   const [progress, setProgress] = useState(25);
 
   setInterval(async () => {
-      const cap = await presaleCap();
-      const wei = await weiRaised();
-      const prog = (Number(wei) / cap) * 100;
-      setProgress(prog);
+    const cap = await presaleCap();
+    const wei = await weiRaised();
+    const prog = (Number(wei) / cap) * 100;
+    setProgress(prog);
   }, 3000);
 
   return (
@@ -44,7 +44,16 @@ const ShellPresale = () => {
           progress={progress}
         />
 
-        {hasNotStarted && (
+        <CharacterSpeak
+          character={"tanja"}
+          speech={"shell_presale_finished"}
+          setConnect={setConnect}
+          saleStatus={saleStatus}
+          saleErrorMsg={saleErrorMsg}
+          triggerSpeech={speech}
+        />
+
+        {/* {hasNotStarted && (
           <CharacterSpeak
             character={"tanja"}
             speech={"shell_presale_not_started"}
@@ -64,7 +73,7 @@ const ShellPresale = () => {
             saleErrorMsg={saleErrorMsg}
             triggerSpeech={speech}
           />
-        )}
+        )} */}
       </div>
     </>
   );

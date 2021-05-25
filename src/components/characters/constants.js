@@ -59,6 +59,21 @@ export const SPEECHES = {
     },
   },
 
+  shell_presale_finished: {
+    welcome: {
+      text: `Welcome, traveller! You're late! $SHELL presale finished.`,
+      next: 'notice',
+      dismiss: true,
+      skip: false,
+    },
+    notice: {
+      text: `But you can read more on Clam Island and what will happen here. Would you like that?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+  },
+
   shell_presale: {
     welcome: {
       text: `Welcome, traveller! You're early! Clam Island Bank isn't open yet.
@@ -171,6 +186,21 @@ export const BUTTONS = {
         action: "url",
         destination: "/",
         text: "Exit bank",
+      },
+    },
+  },
+
+  shell_presale_finished: {
+    welcome: {
+      next: "Ok",
+      alt: false
+    },
+    notice: {
+      next: "Thanks, but no",
+      alt: {
+        action: "url",
+        destination: "https://clamisland.medium.com/clam-island-presale-30090591d4f",
+        text: "Sure!",
       },
     },
   },
