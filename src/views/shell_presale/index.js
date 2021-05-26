@@ -16,7 +16,7 @@ const ShellPresale = () => {
   const [saleStatus, setSaleStatus] = useState("");
   const [saleErrorMsg, setSaleErrorMsg] = useState("");
   const [speech, triggerSpeech] = useState("");
-  const [progress, setProgress] = useState(25);
+  const [progress, setProgress] = useState(100);
 
   setInterval(async () => {
     const cap = await presaleCap();
