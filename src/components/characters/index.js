@@ -29,6 +29,12 @@ const CharacterSpeak = (props) => {
     const [buttonNextText, setButtonNextText] = useState(btnTrack[trackCount].next);
     const [buttonAltText, setButtonAltText] = useState(btnTrack[trackCount].alt.text);
 
+    useEffect(()=>{
+      if(!props.web3) {
+        setSpeech('Please install a ethereum wallet and reload the page.');
+      }
+    }, [])
+
     const onClickNext = (e) => {
         let timeOut = 0;
         if(speechTrack[trackCount].dismiss) {

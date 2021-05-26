@@ -6,6 +6,7 @@ import ConnectPool from "../../components/ConnectPool.js";
 
 import Bank from "../../assets/locations/bank_animated.mp4";
 import { weiRaised, presaleCap } from "../../web3/buyShellPresale";
+import getWeb3 from '../../web3/getWeb3';
 
 import { Progress } from "reactstrap";
 
@@ -18,12 +19,16 @@ const ShellPresale = () => {
   const [speech, triggerSpeech] = useState("");
   const [progress, setProgress] = useState(100);
 
-  setInterval(async () => {
-    const cap = await presaleCap();
-    const wei = await weiRaised();
-    const prog = (Number(wei) / cap) * 100;
-    setProgress(prog);
-  }, 3000);
+  const web3 = getWeb3();
+
+  if(web3) {
+    setInterval(async () => {
+      const cap = await presaleCap();
+      const wei = await weiRaised();
+      const prog = (Number(wei) / cap) * 100;
+      setProgress(prog);
+    }, 3000);
+  }
 
   return (
     <>
@@ -36,17 +41,20 @@ const ShellPresale = () => {
         </video>
       </div>
       <div className="shell-presale">
-        <ConnectPool
-          showConnect={showConnect}
-          callback={setSaleStatus}
-          errCallback={setSaleErrorMsg}
-          triggerSpeech={triggerSpeech}
-          progress={progress}
-        />
+        {web3 ? 
+          <ConnectPool
+            showConnect={showConnect}
+            callback={setSaleStatus}
+            errCallback={setSaleErrorMsg}
+            triggerSpeech={triggerSpeech}
+            progress={progress}
+          />
+          : ''}
 
         <CharacterSpeak
           character={"tanja"}
           speech={"shell_presale_finished"}
+          web3={web3}
           setConnect={setConnect}
           saleStatus={saleStatus}
           saleErrorMsg={saleErrorMsg}
