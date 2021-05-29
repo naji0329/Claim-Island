@@ -118,7 +118,7 @@ const create3DScene = async (element, setLoading, setControls) => {
     console.log('loading bank island ...');
     const bank = await loadGLTF('glb_files/Bank_Island.glb', scene);
     console.log('loading farm island ...');
-    const farm = await loadGLTF('glb_files/farm_island.glb', scene);
+    const farm = await loadGLTF('glb_files/Farm_Island.glb', scene);
     console.log('loading market island ...');
     const market = await loadGLTF('glb_files/Market_Island.glb', scene);
     console.log('loading vault island ...');
