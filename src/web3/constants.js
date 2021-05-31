@@ -1,2 +1,4 @@
 export const shellPresaleAddress = '0x28D51F0E6CC2138fB134986423cb7429E713763E'
 export const shellTokenAddress = '0x01c16da6E041Cf203959624Ade1F39652973D0EB'
+export const clamPresaleAddress = '0x28D51F0E6CC2138fB134986423cb7429E713763E'
+export const clamTokenAddress = '0x01c16da6E041Cf203959624Ade1F39652973D0EB'
