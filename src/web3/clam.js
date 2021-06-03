@@ -9,7 +9,7 @@ const balanceOf = async ({ account, abi, address }) => {
   return accountBalance;
 };
 
-export const accountBalance = async (account) => {
+export const accountClamBalance = async (account) => {
   const bal = await balanceOf({ account, abi: clamNFTAbi, address: clamNFTAddress });
   return bal;
 };

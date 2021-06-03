@@ -160,7 +160,7 @@ export const SPEECHES = {
 
   clam_presale_not_started: {
     welcome: {
-      text: `Welcome, traveller! You're early! $CLAM 1st round of presale starts in ${showPresaleCountdown()}. Please check back in then.`,
+      text: `Welcome, traveller! You're early! $CLAM 1st round of presale starts in ${clamPresaleCountdown()}. Please check back in then.`,
       next: false,
       dismiss: true,
       skip: false,
@@ -493,4 +493,13 @@ function showPresaleCountdown() {
   const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
 
   return `${hours} hours and ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes`;
+}
+
+function clamPresaleCountdown() {
+  const total = Date.parse("Tue June 18 2021 09:00:00 GMT+0000") - Date.parse(String(new Date()));
+  const minutes = Math.floor((total / 1000 / 60) % 60);
+  const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(total / (1000 * 60 * 60 * 24))
+
+  return `${days} days, ${hours} hours and ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes`;
 }

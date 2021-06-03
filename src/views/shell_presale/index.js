@@ -41,7 +41,7 @@ const ShellPresale = () => {
         </video>
       </div>
       <div className="shell-presale">
-        {web3 ? 
+        {web3 ?
           <ConnectPool
             showConnect={showConnect}
             callback={setSaleStatus}
