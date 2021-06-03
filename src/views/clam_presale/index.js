@@ -6,7 +6,8 @@ import CharacterSpeak from "../../components/characters";
 import ConnectPool from "../../components/ConnectPool.js";
 
 import Shop from "../../assets/locations/shop_animated.mp4";
-import { weiRaised, presaleCap } from "../../web3/buyClamPresale";
+import { presaleCap } from "../../web3/buyClamPresale";
+import { totalClamSupply } from "../../web3/clam";
 import getWeb3 from '../../web3/getWeb3';
 
 import { Progress } from "reactstrap";
@@ -18,15 +19,15 @@ const ClamPresale = () => {
   const [saleStatus, setSaleStatus] = useState("");
   const [saleErrorMsg, setSaleErrorMsg] = useState("");
   const [speech, triggerSpeech] = useState("");
-  const [progress, setProgress] = useState(100);
+  const [progress, setProgress] = useState(0);
 
   const web3 = getWeb3();
 
   if(web3) {
     setInterval(async () => {
       const cap = await presaleCap();
-      const wei = await weiRaised();
-      const prog = (Number(wei) / cap) * 100;
+      const totalSupply = await totalClamSupply();
+      const prog = (Number(totalSupply) / cap) * 100;
       setProgress(prog);
     }, 3000);
   }
@@ -42,7 +43,7 @@ const ClamPresale = () => {
         </video>
       </div>
       <div className="clam-presale">
-        {web3 ? 
+        {web3 ?
           <ConnectPool
             showConnect={showConnect}
             callback={setSaleStatus}

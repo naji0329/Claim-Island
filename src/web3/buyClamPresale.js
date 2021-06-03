@@ -1,19 +1,15 @@
 import clamPresaleAbi from './abi/clamPresale.json'
 import {clamPresaleAddress} from './constants'
 import { contractFactory } from './index'
-import { web3 } from "./index"
 
-const buyClamPresale = async ({ account, amount }, callback, errCallback) => {
-  const clamPresale = contractFactory({abi: clamPresaleAbi, address: clamPresaleAddress })
-
-  // i would never do it this way normally
-  if (web3 && web3.eth && !account) {
-    const acc = await web3.eth.getAccounts();
-    console.log("acc: ", acc);
-    account = acc[0];
+export const buyClamPresale = async ({ account, amount }, callback, errCallback) => {
+  if (!account) {
+    throw new Error('there is no account connected')
   }
 
-  const method = clamPresale.methods.buyTokens()
+  const clamPresale = contractFactory({abi: clamPresaleAbi, address: clamPresaleAddress })
+
+  const method = clamPresale.methods.buyClam()
 
   const gasEstimation = await method.estimateGas({
     from: account,
@@ -36,32 +32,51 @@ const buyClamPresale = async ({ account, amount }, callback, errCallback) => {
   });
 }
 
-export default buyClamPresale;
+export const collectClam = async ({ account }, callback, errCallback) => {
+  if (!account) {
+    throw new Error('there is no account connected')
+  }
 
-export const getPresaleRate = async () => {
   const clamPresale = contractFactory({abi: clamPresaleAbi, address: clamPresaleAddress })
-  const rate = await clamPresale.methods.RATE().call()
 
-  return rate;
+  const method = clamPresale.methods.collectClam()
+
+  const gasEstimation = await method.estimateGas({
+    from: account,
+  });
+
+  await method.send({
+    from: account,
+    gas: gasEstimation,
+  }).once('confirmation', async () => {
+    try {
+      console.log('Success') // add a toaster here
+      callback('sale_success');
+    } catch (error) {
+      console.error(error) // add toaster to show error
+      callback('sale_failure');
+      errCallback(error.message);
+    }
+  });
 }
 
-export const individualLimitUsed = async (account) => {
+export const getClamPrice = async () => {
   const clamPresale = contractFactory({abi: clamPresaleAbi, address: clamPresaleAddress })
-  const value = await clamPresale.methods.individualLimit(account).call()
+  const price = await clamPresale.methods.getNFTPrice().call()
+
+  return price;
+}
+
+export const presaleCap = async () => {
+  const clamPresale = contractFactory({abi: clamPresaleAbi, address: clamPresaleAddress })
+  const value = await clamPresale.methods.MAX_SUPPLY().call()
 
   return value;
 }
 
-export const weiRaised = async () => {
+export const hasSaleStarted = async () => {
   const clamPresale = contractFactory({abi: clamPresaleAbi, address: clamPresaleAddress })
-  const weiRaised = await clamPresale.methods.weiRaised().call();
+  const value = await clamPresale.methods.hasSaleStarted().call()
 
-  return weiRaised;
-};
-
-export const presaleCap = async () => {
-  const clamPresale = contractFactory({abi: clamPresaleAbi, address: clamPresaleAddress })
-  const cap = await clamPresale.methods.CAP().call();
-
-  return cap;
-};
+  return value;
+}
