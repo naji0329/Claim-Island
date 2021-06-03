@@ -2,7 +2,7 @@ import clamPresaleAbi from './abi/clamPresale.json'
 import {clamPresaleAddress} from './constants'
 import { contractFactory } from './index'
 
-export const buyClamPresale = async ({ account, amount }, callback, errCallback) => {
+const buyClamPresale = async ({ account, amount }, callback, errCallback) => {
   if (!account) {
     throw new Error('there is no account connected')
   }
@@ -31,6 +31,8 @@ export const buyClamPresale = async ({ account, amount }, callback, errCallback)
     }
   });
 }
+
+export default buyClamPresale;
 
 export const collectClam = async ({ account }, callback, errCallback) => {
   if (!account) {

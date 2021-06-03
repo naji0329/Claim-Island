@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./index.scss";
 import CharacterSpeak from "../../components/characters";
 
-import ConnectPool from "../../components/ConnectPool.js";
+import ConnectPoolClam from "../../components/ConnectPoolClam.js";
 
 import Shop from "../../assets/locations/shop_animated.mp4";
 import { presaleCap } from "../../web3/buyClamPresale";
@@ -15,7 +15,7 @@ import { Progress } from "reactstrap";
 // const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Tue May 25 2021 09:00:00 GMT+0000");
 
 const ClamPresale = () => {
-  const [showConnect, setConnect] = useState(false);
+  const [showConnect, setConnect] = useState(true);
   const [saleStatus, setSaleStatus] = useState("");
   const [saleErrorMsg, setSaleErrorMsg] = useState("");
   const [speech, triggerSpeech] = useState("");
@@ -44,7 +44,7 @@ const ClamPresale = () => {
       </div>
       <div className="clam-presale">
         {web3 ?
-          <ConnectPool
+          <ConnectPoolClam
             showConnect={showConnect}
             callback={setSaleStatus}
             errCallback={setSaleErrorMsg}

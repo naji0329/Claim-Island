@@ -1,5 +1,6 @@
+import clamNFTAbi from "./abi/ClamNFT.json";
 import shellTokenAbi from "./abi/BEP20.json";
-import { shellTokenAddress } from "./constants";
+import { shellTokenAddress, clamNFTAddress } from "./constants";
 import { contractFactory } from "./index";
 
 const balanceOf = async ({ account, abi, address }) => {
@@ -11,6 +12,11 @@ const balanceOf = async ({ account, abi, address }) => {
 
 export const accountShellBalance = async (account) => {
   const bal = await balanceOf({ account, abi: shellTokenAbi, address: shellTokenAddress });
+  return bal;
+};
+
+export const accountClamBalance = async (account) => {
+  const bal = await balanceOf({ account, abi: clamNFTAbi, address: clamNFTAddress });
   return bal;
 };
 
