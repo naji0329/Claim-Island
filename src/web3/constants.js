@@ -6,3 +6,5 @@ export const clamPresaleAddress = '0xe22FAB513617aA656C90E8e1EcC3F9d8C6476efb'
 export const clamNFTAddress = '0xb9B983915723D0314738E6cE0608FB983791c44C'
 
 export const rngAddress = '0xb0b2d085c3bd0d0abc23f86190d3fd94e1d764a0'
+
+export const communityVotingAddress = '0x000F56780E4DC3f619A08EDf84948780be5C83Cf'
