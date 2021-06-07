@@ -37,6 +37,8 @@ const ConnectPool = (props) => {
   const [purchaseAmount, setPurchaseAmount] = useState(0);
   const [filled, setFilled] = useState(false);
 
+  const [showModal, setShowModal] = useState(true);
+
   const [connectedAccount, setConAccount] = useState('');
 
   const [modal, setModal] = useState(false);
@@ -48,6 +50,12 @@ const ConnectPool = (props) => {
       setConAccount(acc[0] || '');
     });
   }
+
+  useEffect(() => {
+      if(typeof props.showModal !== 'undefined') {
+        setShowModal(props.showModal);
+      }
+  }, [props.showModal]);
 
 
   useEffect(() => {
@@ -141,7 +149,7 @@ const ConnectPool = (props) => {
               Add Shell to Metamask
             </Button>
 
-            {!filled ?
+            {!filled && showModal ?
               <>
               <Button color="success" onClick={toggle}>
                 Buy Shell
@@ -192,7 +200,7 @@ const ConnectPool = (props) => {
                   </Button>
                 </ModalFooter>
               </Modal>
-              </> : <Button color="danger">Presale Filled</Button>}
+              </> : showModal ? <Button color="danger">Presale Filled</Button> : ''}
           </>
         )}
       </div>

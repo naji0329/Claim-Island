@@ -20,7 +20,7 @@ import {
   hasAccountedVoted
 } from '../web3/communityVoting';
 
-const Voting = () => {
+const Voting = (props) => {
     const [hasAccountVoted, setAlreadyVoted] = useState(false);
     const [oneVotes, setOneVotes] = useState(0);
     const [twoVotes, setTwoVotes] = useState(0);
@@ -29,14 +29,19 @@ const Voting = () => {
     const [connectedAccount, setConAccount] = useState('');
 
     const [modal, setModal] = useState(true);
-    const toggle = () => setModal(!modal);
+    const toggle = () => {
+      setModal(false);
+      props.setVoting(false);
+    }
 
     if(web3 && web3.eth) {
       // detect if account is connected
       web3.eth.getAccounts().then( async (acc) => {
         setConAccount(acc[0] || '');
-        const hasVoted = await hasAccountedVoted(acc[0]);
-        setAlreadyVoted(hasVoted);
+        if(acc[0]) {
+          const hasVoted = await hasAccountedVoted(acc[0]);
+          setAlreadyVoted(hasVoted);
+        }
       });
     }
 
