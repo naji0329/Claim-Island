@@ -8,6 +8,8 @@ import {
     Badge, Form, FormGroup, Label, Input
 } from "reactstrap";
 
+import { ToastContainer, toast } from 'react-toastify';
+
 import {
   voteOptionOne,
   voteOptionTwo,
@@ -41,27 +43,33 @@ const Voting = () => {
 
     const vote = async (connectedAccount, option) => {
       let hasVoted;
-      switch (option) {
-        case 1:
-          await voteOptionOne(connectedAccount);
-          hasVoted = await hasAccountedVoted(connectedAccount);
-          setAlreadyVoted(hasVoted);
-          break;
-        case 2:
-          await voteOptionTwo(connectedAccount);
-          hasVoted = await hasAccountedVoted(connectedAccount);
-          setAlreadyVoted(hasVoted);
-          break;
-        case 3:
-          await voteOptionThree(connectedAccount);
-          hasVoted = await hasAccountedVoted(connectedAccount);
-          setAlreadyVoted(hasVoted);
-          break;
-      
-        default:
-          break;
+      try {
+        switch (option) {
+          case 1:
+              await voteOptionOne(connectedAccount);
+            hasVoted = await hasAccountedVoted(connectedAccount);
+            setAlreadyVoted(hasVoted);
+            break;
+          case 2:
+            await voteOptionTwo(connectedAccount);
+            hasVoted = await hasAccountedVoted(connectedAccount);
+            setAlreadyVoted(hasVoted);
+            break;
+          case 3:
+            await voteOptionThree(connectedAccount);
+            hasVoted = await hasAccountedVoted(connectedAccount);
+            setAlreadyVoted(hasVoted);
+            break;
+        
+          default:
+            break;
+        }
+      } catch (e) {
+        const formatError = !!e.message.split('"message": "')[1]
+          ? e.message.split('"message": "')[1].split('",')[0]
+          : e.message;
+        toast(`There was an error during voting. ${formatError}`);
       }
-
     }
 
   useEffect(() => {
@@ -90,6 +98,9 @@ const Voting = () => {
   }
 
     return (
+        <div>
+        <ToastContainer />
+
         <Modal isOpen={modal} centered={true} size="lg" toggle={toggle} className="voting-modal" backdrop={false}>
             <ModalHeader toggle={toggle}>
                 When should $SHELL be unlocked ?
@@ -153,6 +164,7 @@ const Voting = () => {
                 </Button>
             </ModalFooter>
         </Modal>
+        </div>
     )
 }
 
