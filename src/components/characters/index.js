@@ -48,20 +48,25 @@ const CharacterSpeak = (props) => {
         }
         if(speechTrack[trackCount].next) {
           setTimeout(function(){
-            setSpeech(speechTrack[speechTrack[trackCount].next].text);
-            setTrackCount(speechTrack[trackCount].next);
-            console.log(trackCount);
-            if(btnTrack[speechTrack[trackCount].next].next) {
-              document.querySelector('#btn-next').style.display = 'block';
-              setButtonNextText(btnTrack[speechTrack[trackCount].next].next);
-            } else {
-              document.querySelector('#btn-next').style.display = 'none';
-            }
-            if(btnTrack[speechTrack[trackCount].next].alt) {
-              document.querySelector('#btn-alt').style.display = 'block';
-              setButtonAltText(btnTrack[speechTrack[trackCount].next].alt.text);
-            } else {
-              document.querySelector('#btn-alt').style.display = 'none';
+            if(
+              (props.speech.indexOf('voting') !== -1 && props.connectedAccount)
+              || props.speech.indexOf('voting') === -1
+            ) {
+              setSpeech(speechTrack[speechTrack[trackCount].next].text);
+              setTrackCount(speechTrack[trackCount].next);
+              console.log(trackCount);
+              if(btnTrack[speechTrack[trackCount].next].next) {
+                document.querySelector('#btn-next').style.display = 'block';
+                setButtonNextText(btnTrack[speechTrack[trackCount].next].next);
+              } else {
+                document.querySelector('#btn-next').style.display = 'none';
+              }
+              if(btnTrack[speechTrack[trackCount].next].alt) {
+                document.querySelector('#btn-alt').style.display = 'block';
+                setButtonAltText(btnTrack[speechTrack[trackCount].next].alt.text);
+              } else {
+                document.querySelector('#btn-alt').style.display = 'none';
+              }
             }
           }, timeOut)
         }
@@ -90,7 +95,7 @@ const CharacterSpeak = (props) => {
     }, [props.saleStatus, props.saleErrorMsg]);
 
     useEffect(() => {
-      if(['buy', 'connect'].indexOf(props.triggerSpeech) !== -1) {
+      if(['buy', 'connect'].indexOf(props.triggerSpeech) !== -1 && props.speech.indexOf('voting') === -1) {
         onClickNext();
       }
     }, [props.triggerSpeech])

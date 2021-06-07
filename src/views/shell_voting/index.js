@@ -6,30 +6,36 @@ import ConnectPool from "../../components/ConnectPool.js";
 import Voting from "../../components/Voting";
 
 import Bank from "../../assets/locations/bank_animated.mp4";
-import { weiRaised, presaleCap } from "../../web3/buyShellPresale";
-import getWeb3 from '../../web3/getWeb3';
+import { web3 } from "../../web3";
 
-import { Progress } from "reactstrap";
+import {
+  hasAccountedVoted
+} from '../../web3/communityVoting'
 
 // const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Tue May 25 2021 09:00:00 GMT+0000");
 
 const ShellVoting = () => {
   const [voting, setVoting] = useState(false);
-  const [showConnect, setConnect] = useState(false);
+  const [showConnect, setConnect] = useState(true);
   const [saleStatus, setSaleStatus] = useState("");
   const [saleErrorMsg, setSaleErrorMsg] = useState("");
   const [speech, triggerSpeech] = useState("");
   const [progress, setProgress] = useState(100);
+  const [hasAccountVoted, setAlreadyVoted] = useState(false);
 
-  const web3 = getWeb3();
-
-  if(web3) {
-    setInterval(async () => {
-      const cap = await presaleCap();
-      const wei = await weiRaised();
-      const prog = (Number(wei) / cap) * 100;
-      setProgress(prog);
-    }, 3000);
+  const [connectedAccount, setConAccount] = useState('');
+  if(web3 && web3.eth) {
+    // detect if account is connected
+    web3.eth.getAccounts().then(async (acc) => {
+      setConAccount(acc[0] || '');
+      if(acc[0]) {
+        const hasVoted = await hasAccountedVoted(acc[0]);
+        setAlreadyVoted(hasVoted);
+        if(hasVoted) {
+          setVoting(true);
+        }
+      }
+    });
   }
 
   return (
@@ -40,26 +46,36 @@ const ShellVoting = () => {
         </video>
       </div>
       <div className="shell-presale">
-        {web3 ?
-          <ConnectPool
-            showConnect={showConnect}
-            callback={setSaleStatus}
-            errCallback={setSaleErrorMsg}
-            triggerSpeech={triggerSpeech}
-            progress={progress}
-          />
-          : ''}
+        <ConnectPool
+          showConnect={showConnect}
+          callback={setSaleStatus}
+          errCallback={setSaleErrorMsg}
+          triggerSpeech={triggerSpeech}
+          showModal={false}
+          progress={progress}
+        />
 
-        {voting ? <Voting /> : ''}
-        <CharacterSpeak
+        {voting ? <Voting setVoting={setVoting} /> : ''}
+
+        {!hasAccountVoted ? 
+          <CharacterSpeak
+            character={"tanja"}
+            speech={"shell_voting"}
+            setVote={setVoting}
+            saleStatus={saleStatus}
+            saleErrorMsg={saleErrorMsg}
+            connectedAccount={connectedAccount}
+            triggerSpeech={speech}
+          /> 
+        : <CharacterSpeak
           character={"tanja"}
-          speech={"shell_voting"}
-          web3={web3}
+          speech={"shell_voted_already"}
           setVote={setVoting}
           saleStatus={saleStatus}
           saleErrorMsg={saleErrorMsg}
+          connectedAccount={connectedAccount}
           triggerSpeech={speech}
-        /> 
+        /> }
 
         {/* <CharacterSpeak
           character={"tanja"}
@@ -71,27 +87,6 @@ const ShellVoting = () => {
           triggerSpeech={speech}
         /> */}
 
-        {/* {hasNotStarted && (
-          <CharacterSpeak
-            character={"tanja"}
-            speech={"shell_presale_not_started"}
-            setConnect={setConnect}
-            saleStatus={saleStatus}
-            saleErrorMsg={saleErrorMsg}
-            triggerSpeech={speech}
-          />
-        )}
-
-        {!hasNotStarted && (
-          <CharacterSpeak
-            character={"tanja"}
-            speech={"shell_presale"}
-            setConnect={setConnect}
-            saleStatus={saleStatus}
-            saleErrorMsg={saleErrorMsg}
-            triggerSpeech={speech}
-          />
-        )} */}
       </div>
     </>
   );
