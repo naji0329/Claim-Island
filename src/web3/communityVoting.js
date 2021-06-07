@@ -5,19 +5,76 @@ import { contractFactory } from "./index";
 export const voteOptionOne = async (account) => {
   const voting = contractFactory({ abi: communityVotingAbi, address: communityVotingAddress });
 
-  await voting.methods.voteOptionOne({ from: account });
+  const method = voting.methods.voteOptionOne();
+  const gasEstimation = await method.estimateGas({
+    from: account,
+  });
+
+  await method
+    .send({
+      from: account,
+      gas: gasEstimation,
+    })
+    .once("confirmation", async () => {
+      try {
+        console.log("Success"); // add a toaster here
+        // callback("sale_success");
+      } catch (error) {
+        console.error(error); // add toaster to show error
+        // callback("sale_failure");
+        // errCallback(error.message);
+      }
+    });
 };
 
 export const voteOptionTwo = async (account) => {
   const voting = contractFactory({ abi: communityVotingAbi, address: communityVotingAddress });
 
-  await voting.methods.voteOptionTwo({ from: account });
+  const method = voting.methods.voteOptionTwo();
+  const gasEstimation = await method.estimateGas({
+    from: account,
+  });
+
+  await method
+    .send({
+      from: account,
+      gas: gasEstimation,
+    })
+    .once("confirmation", async () => {
+      try {
+        console.log("Success"); // add a toaster here
+        // callback("sale_success");
+      } catch (error) {
+        console.error(error); // add toaster to show error
+        // callback("sale_failure");
+        // errCallback(error.message);
+      }
+    });
 };
 
 export const voteOptionThree = async (account) => {
   const voting = contractFactory({ abi: communityVotingAbi, address: communityVotingAddress });
 
-  await voting.methods.voteOptionThree({ from: account });
+  const method = voting.methods.voteOptionThree();
+  const gasEstimation = await method.estimateGas({
+    from: account,
+  });
+
+  await method
+    .send({
+      from: account,
+      gas: gasEstimation,
+    })
+    .once("confirmation", async () => {
+      try {
+        console.log("Success"); // add a toaster here
+        // callback("sale_success");
+      } catch (error) {
+        console.error(error); // add toaster to show error
+        // callback("sale_failure");
+        // errCallback(error.message);
+      }
+    });
 };
 
 export const votesForOptionOne = async () => {
