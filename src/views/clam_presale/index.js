@@ -12,6 +12,8 @@ import getWeb3 from "../../web3/getWeb3";
 
 import { Progress } from "reactstrap";
 
+const BSC_CHAIN_ID = 56;
+
 const ClamPresale = () => {
   const [showConnect, setConnect] = useState(true);
   const [saleStatus, setSaleStatus] = useState("");
@@ -23,8 +25,7 @@ const ClamPresale = () => {
   const web3 = getWeb3();
 
   useAsync(async () => {
-
-    if (web3) {
+    if (web3) {      
       setInterval(async () => {
         const cap = await presaleCap();
         const totalSupply = await totalClamSupply();
@@ -34,6 +35,12 @@ const ClamPresale = () => {
 
       const hasIt = await getHasSaleStarted();
       setHasSaleStarted(hasIt);
+
+      const networkVersion = await web3.eth.net.getId()
+      console.log({networkVersion})
+      if(networkVersion !== BSC_CHAIN_ID) {
+        alert('Wrong Network, please change to Binance Smart Chain')
+      }
     }
   })
 
