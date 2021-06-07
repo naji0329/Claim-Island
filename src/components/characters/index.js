@@ -69,6 +69,10 @@ const CharacterSpeak = (props) => {
           console.log('@@@@@@@@@ connecting');
           props.setConnect(true);
         }
+        console.log(speechTrack[trackCount])
+        if(speechTrack[trackCount].next == 'vote') {
+          props.setVote(true);
+        }
 
     };
 

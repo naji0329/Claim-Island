@@ -50,6 +50,33 @@ export const SPEECHES = {
     },
   },
 
+  shell_voting: {
+    welcome: {
+      text: `Welcome, traveller!`,
+      next: 'vote',
+      dismiss: false,
+      skip: false,
+    },
+
+    vote: {
+      text: `
+        Since some $SHELL presale buyers were wondering about the transfer lock,
+        we thought that the fairest thing we could do is to let all the $SHELL presale
+        token holders vote on the unlock time. We're all about democracy here at Clam Island!
+      `,
+      next: 'second',
+      dismiss: false,
+      skip: false
+    },
+
+    second: {
+      text: `Thank you for your Vote.`,
+      next: 'first',
+      dismiss: true,
+      skip: false
+    }
+  },
+
   shell_presale_not_started: {
     welcome: {
       text: `Welcome, traveller! You're early! $SHELL 2nd round of presale starts in ${showPresaleCountdown()}. Please check back in then.`,
@@ -277,6 +304,23 @@ export const BUTTONS = {
     third: {
       next: "Keep exploring",
       alt: false
+    },
+  },
+
+  shell_voting: {
+    welcome: {
+      next: '▶',
+      alt: false
+    },
+
+    vote: {
+      next: 'Sure',
+      alt: false,
+    },
+
+    second: {
+      next: "OK",
+      alt: false,
     },
   },
 
