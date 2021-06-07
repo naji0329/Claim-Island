@@ -41,33 +41,51 @@ const CharacterSpeak = (props) => {
         let timeOut = 0;
         if(speechTrack[trackCount].dismiss) {
           setShowBubble(false);
-          document.querySelector('.character').style.marginTop = document.querySelector('.character').offsetHeight - 76 + "px";
+          const characterImg = document.querySelector('.character');
+          characterImg.style.marginTop = characterImg.offsetHeight - 76 + "px";
+          switch(charName) {
+            case "Tanja":
+              characterImg.style.paddingRight = "15px";
+              break;
+            case "Diego":
+              characterImg.style.paddingLeft = "5px";
+              break;
+          }
           document.querySelector('.character-wrap .character').style.pointerEvents = "auto";
           document.querySelector('.character-wrap .character').style.cursor = "pointer";
           timeOut = 1000;
         }
         if(speechTrack[trackCount].next) {
           setTimeout(function(){
-            setSpeech(speechTrack[speechTrack[trackCount].next].text);
-            setTrackCount(speechTrack[trackCount].next);
-            console.log(trackCount);
-            if(btnTrack[speechTrack[trackCount].next].next) {
-              document.querySelector('#btn-next').style.display = 'block';
-              setButtonNextText(btnTrack[speechTrack[trackCount].next].next);
-            } else {
-              document.querySelector('#btn-next').style.display = 'none';
-            }
-            if(btnTrack[speechTrack[trackCount].next].alt) {
-              document.querySelector('#btn-alt').style.display = 'block';
-              setButtonAltText(btnTrack[speechTrack[trackCount].next].alt.text);
-            } else {
-              document.querySelector('#btn-alt').style.display = 'none';
+            if(
+              (props.speech.indexOf('voting') !== -1 && props.connectedAccount)
+              || props.speech.indexOf('voting') === -1
+            ) {
+              setSpeech(speechTrack[speechTrack[trackCount].next].text);
+              setTrackCount(speechTrack[trackCount].next);
+              console.log(trackCount);
+              if(btnTrack[speechTrack[trackCount].next].next) {
+                document.querySelector('#btn-next').style.display = 'block';
+                setButtonNextText(btnTrack[speechTrack[trackCount].next].next);
+              } else {
+                document.querySelector('#btn-next').style.display = 'none';
+              }
+              if(btnTrack[speechTrack[trackCount].next].alt) {
+                document.querySelector('#btn-alt').style.display = 'block';
+                setButtonAltText(btnTrack[speechTrack[trackCount].next].alt.text);
+              } else {
+                document.querySelector('#btn-alt').style.display = 'none';
+              }
             }
           }, timeOut)
         }
         if(speechTrack[trackCount].next == 'connect') {
           console.log('@@@@@@@@@ connecting');
           props.setConnect(true);
+        }
+        console.log(speechTrack[trackCount])
+        if(speechTrack[trackCount].next == 'vote') {
+          props.setVote(true);
         }
 
     };
@@ -86,7 +104,7 @@ const CharacterSpeak = (props) => {
     }, [props.saleStatus, props.saleErrorMsg]);
 
     useEffect(() => {
-      if(['buy', 'connect'].indexOf(props.triggerSpeech) !== -1) {
+      if(['buy', 'connect'].indexOf(props.triggerSpeech) !== -1 && props.speech.indexOf('voting') === -1) {
         onClickNext();
       }
     }, [props.triggerSpeech])

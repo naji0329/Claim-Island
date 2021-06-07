@@ -50,6 +50,85 @@ export const SPEECHES = {
     },
   },
 
+  shell_voting_complete: {
+    welcome: {
+      text: `Welcome, traveller!. $SHELL voting is over.`,
+      next: 'welcome',
+      dismiss: true,
+      skip: false,
+    }
+  },
+
+  shell_voted_already: {
+    welcome: {
+      text: `Welcome, traveller!. Please connect your wallet if not connected and then proceed.`,
+      next: 'first',
+      dismiss: false,
+      skip: false,
+    },
+
+    first: {
+      text: `
+        Looks like you already voted! Would you like to see the results?
+      `,
+      next: 'vote',
+      dismiss: false,
+      skip: false
+    },
+
+    vote: {
+      text: `Thank you for your Vote.`,
+      next: 'first',
+      dismiss: true,
+      skip: false
+    }
+  },
+
+  shell_voting: {
+    welcome: {
+      text: `Welcome, traveller!. Please connect your wallet if not connected and then proceed.`,
+      next: 'first',
+      dismiss: false,
+      skip: false,
+    },
+
+    first: {
+      text: `
+        Since some $SHELL presale buyers were wondering about the transfer lock,
+        we thought that the fairest thing we could do is to let all the $SHELL presale
+        token holders vote on the unlock time. We're all about democracy here at Clam Island!
+      `,
+      next: 'second',
+      dismiss: false,
+      skip: false
+    },
+
+    second: {
+      text: `
+      Please note, you can vote only once, and you must use the wallet address that holds the $SHELL from our presale.
+      `,
+      next: 'vote',
+      dismiss: false,
+      skip: false
+    },
+
+    vote: {
+      text: `
+        Please cast your vote. To Vote you can click any of the buttons. You can click cancel to dismiss the window.
+      `,
+      next: 'last',
+      dismiss: false,
+      skip: false
+    },
+
+    last: {
+      text: ` Thank you for you Vote. If you did not vote but cancelled the window, you can go back and cast your vote again.`,
+      next: 'first',
+      dismiss: true,
+      skip: false
+    }
+  },
+
   shell_presale_not_started: {
     welcome: {
       text: `Welcome, traveller! You're early! $SHELL 2nd round of presale starts in ${showPresaleCountdown()}. Please check back in then.`,
@@ -277,6 +356,57 @@ export const BUTTONS = {
     third: {
       next: "Keep exploring",
       alt: false
+    },
+  },
+
+  shell_voting_complete: {
+    welcome: {
+      next: 'OK',
+      alt: false
+    }
+  },
+
+  shell_voted_already: {
+    welcome: {
+      next: '▶',
+      alt: false
+    },
+
+    first: {
+      next: 'Sure',
+      alt: false,
+    },
+
+    vote: {
+      next: 'OK',
+      alt: false,
+    },
+  },
+
+  shell_voting: {
+    welcome: {
+      next: '▶',
+      alt: false
+    },
+
+    first: {
+      next: 'Sure',
+      alt: false,
+    },
+
+    second: {
+      next: 'Got It',
+      alt: false,
+    },
+
+    vote: {
+      next: 'Sure',
+      alt: false,
+    },
+
+    last: {
+      next: "OK",
+      alt: false,
     },
   },
 
