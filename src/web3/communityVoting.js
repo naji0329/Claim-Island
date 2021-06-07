@@ -83,7 +83,7 @@ export const votesForOptionOne = async () => {
   const optionOne = await voting.methods.OPTION_ONE().call();
   const value = await voting.methods.votesFor(optionOne).call();
 
-  return value;
+  return value / 1e18;
 };
 
 export const votesForOptionTwo = async () => {
@@ -92,7 +92,7 @@ export const votesForOptionTwo = async () => {
   const optionTwo = await voting.methods.OPTION_TWO().call();
   const value = await voting.methods.votesFor(optionTwo).call();
 
-  return value;
+  return value / 1e18;
 };
 
 export const votesForOptionThree = async () => {
@@ -101,7 +101,7 @@ export const votesForOptionThree = async () => {
   const optionThree = await voting.methods.OPTION_THREE().call();
   const value = await voting.methods.votesFor(optionThree).call();
 
-  return value;
+  return value / 1e18;
 };
 
 export const hasAccountedVoted = async (account) => {

@@ -22,9 +22,9 @@ import {
 
 const Voting = () => {
     const [hasAccountVoted, setAlreadyVoted] = useState(false);
-    const [oneVotes, setOneVotes] = useState(50);
-    const [twoVotes, setTwoVotes] = useState(80);
-    const [threeVotes, setThreeVotes] = useState(120);
+    const [oneVotes, setOneVotes] = useState(0);
+    const [twoVotes, setTwoVotes] = useState(0);
+    const [threeVotes, setThreeVotes] = useState(0);
 
     const [connectedAccount, setConAccount] = useState('');
 
@@ -36,7 +36,6 @@ const Voting = () => {
       web3.eth.getAccounts().then( async (acc) => {
         setConAccount(acc[0] || '');
         const hasVoted = await hasAccountedVoted(acc[0]);
-        console.log(hasVoted)
         setAlreadyVoted(hasVoted);
       });
     }
@@ -73,8 +72,6 @@ const Voting = () => {
     }
 
   useEffect(() => {
-    let isCancelled = false;
-
     if (hasAccountVoted) {
       async function updateAccData() {
         const oneVotes = await votesForOptionOne(connectedAccount);
@@ -84,6 +81,8 @@ const Voting = () => {
         setTwoVotes(twoVotes);
         setThreeVotes(threeVotes);
       }
+
+      updateAccData();
     }
   }, [hasAccountVoted]);
 
