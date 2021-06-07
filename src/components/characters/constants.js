@@ -50,9 +50,18 @@ export const SPEECHES = {
     },
   },
 
+  shell_voting_complete: {
+    welcome: {
+      text: `Welcome, traveller!. $SHELL voting is over.`,
+      next: 'welcome',
+      dismiss: true,
+      skip: false,
+    }
+  },
+
   shell_voted_already: {
     welcome: {
-      text: `Welcome, traveller!. Please connect your wallet.`,
+      text: `Welcome, traveller!. Please connect your wallet if not connected and then proceed.`,
       next: 'first',
       dismiss: false,
       skip: false,
@@ -77,7 +86,7 @@ export const SPEECHES = {
 
   shell_voting: {
     welcome: {
-      text: `Welcome, traveller!. Please connect your wallet.`,
+      text: `Welcome, traveller!. Please connect your wallet if not connected and then proceed.`,
       next: 'first',
       dismiss: false,
       skip: false,
@@ -348,6 +357,13 @@ export const BUTTONS = {
       next: "Keep exploring",
       alt: false
     },
+  },
+
+  shell_voting_complete: {
+    welcome: {
+      next: 'OK',
+      alt: false
+    }
   },
 
   shell_voted_already: {
