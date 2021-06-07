@@ -71,7 +71,7 @@ export const SPEECHES = {
 
     second: {
       text: `Thank you for your Vote.`,
-      next: 'first',
+      next: 'vote',
       dismiss: true,
       skip: false
     }

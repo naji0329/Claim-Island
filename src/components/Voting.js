@@ -19,11 +19,10 @@ import {
 } from '../web3/communityVoting';
 
 const Voting = () => {
-    const [progress, setProgress] = useState(50);
     const [hasAccountVoted, setAlreadyVoted] = useState(false);
-    const [oneVotes, setOneVotes] = useState(0);
-    const [twoVotes, setTwoVotes] = useState(0);
-    const [threeVotes, setThreeVotes] = useState(0);
+    const [oneVotes, setOneVotes] = useState(50);
+    const [twoVotes, setTwoVotes] = useState(80);
+    const [threeVotes, setThreeVotes] = useState(120);
 
     const [connectedAccount, setConAccount] = useState('');
 
@@ -83,14 +82,15 @@ const Voting = () => {
   const getPercVotes = (votes) => {
     const sum = oneVotes + twoVotes + threeVotes;
     if(sum > 0) {
-      return votes / sum * 100;
+      const val = votes / sum * 100;
+      return val;
     } else {
       return 0;
     }
   }
 
     return (
-        <Modal isOpen={modal} centered={true} size="lg" toggle={toggle} className="voting-modal">
+        <Modal isOpen={modal} centered={true} size="lg" toggle={toggle} className="voting-modal" backdrop={false}>
             <ModalHeader toggle={toggle}>
                 When should $SHELL be unlocked ?
             </ModalHeader>
@@ -98,58 +98,56 @@ const Voting = () => {
                 {hasAccountVoted ? 
                   <ul style={{listStyle: 'none'}}>
                       <li>
-                          <FontAwesomeIcon icon={faCheck} />
                           <div style={{display: 'inline-block', width: '90%', marginLeft: '3%'}}>
-                            <Progress striped color="danger" value={getPercVotes(oneVotes)}>
-                                Immediately {progress}% (oneVotes)
-                            </Progress>
+                            <div style={{width: '100%'}}>
+                              <span style={{float: 'right'}}>{getPercVotes(oneVotes)}% ({oneVotes} votes)</span>
+                              <span style={{float: 'left'}}>Immediately</span>
+                            </div>
+                            <Progress style={{clear: 'both'}} striped value={getPercVotes(oneVotes)} barStyle={{backgroundColor: '#3869d9'}}/>
                           </div>
                       </li>
                       <li>
-                          <FontAwesomeIcon icon={faCheck} />
                           <div style={{display: 'inline-block', width: '90%', marginLeft: '3%'}}>
-                            <Progress striped color="danger" value={getPercVotes(twoVotes)}>
-                                After Clam Presale {progress}% (twoVotes)
-                            </Progress>
+                            <div style={{width: '100%'}}>
+                              <span style={{float: 'right'}}>{getPercVotes(twoVotes)}% ({twoVotes} votes)</span>
+                              <span style={{float: 'left'}}>After Clam Presale</span>
+                            </div>
+                            <Progress style={{clear: 'both'}} striped value={getPercVotes(twoVotes)} barStyle={{backgroundColor: '#fdefc6'}}/>
                           </div>
                       </li>
                       <li>
-                          <FontAwesomeIcon icon={faCheck} />
                           <div style={{display: 'inline-block', width: '90%', marginLeft: '3%'}}>
-                            <Progress striped color="danger" value={getPercVotes(threeVotes)}>
-                                When Clam Island Opens {progress}% (threeVotes)
-                            </Progress>
+                            <div style={{width: '100%'}}>
+                              <span style={{float: 'right'}}>{getPercVotes(threeVotes)}% ({threeVotes} votes)</span>
+                              <span style={{float: 'left'}}>When Clam Island Opens</span>
+                            </div>
+                            <Progress style={{clear: 'both'}} striped value={getPercVotes(threeVotes)} barStyle={{backgroundColor: '#23d0e3'}}/>
                           </div>
                       </li>
                   </ul>
                 : <ul style={{listStyle: 'none'}}>
-                    <li style={{marginBottom: '10px'}}>
+                    <li style={{marginBottom: '10px', display: 'inline-block', marginRight: '10px'}}>
                       <Button
-                        color="danger"
+                        color="primary"
+                        style={{backgroundColor: '#3869d9'}}
                         onClick={() => vote(connectedAccount, 1)}>Immediately</Button>
                     </li>
-                    <li style={{marginBottom: '10px'}}>
+                    <li style={{marginBottom: '10px', display: 'inline-block', marginRight: '10px'}}>
                       <Button
                         color="warning"
+                        style={{backgroundColor: '#fdefc6'}}
                         onClick={() => vote(connectedAccount, 2)}>After Clam Presale</Button>
                     </li>
-                    <li style={{marginBottom: '10px'}}>
+                    <li style={{marginBottom: '10px', display: 'inline-block', marginRight: '10px'}}>
                       <Button
-                        color="success"
+                        color="primary"
+                        style={{backgroundColor: '#23d0e3'}}
                         onClick={() => vote(connectedAccount, 3)}>When Clam Island Opens</Button>
                     </li>
                 </ul>
                 }
             </ModalBody>
             <ModalFooter>
-                {/* {!hasAccountVoted ? 
-                  <Button
-                      color="success"
-                      onClick={() => vote(connectedAccount)}
-                      style={{}}>
-                  VOTE
-                  </Button>
-                : ''} */}
                 <Button color="danger" onClick={toggle}>
                     Cancel
                 </Button>
