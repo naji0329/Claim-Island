@@ -7,6 +7,7 @@ import { ModalProvider } from "@pancakeswap-libs/uikit";
 import * as bsc from "@binance-chain/bsc-use-wallet";
 import { ThemeProvider } from "styled-components";
 import { light, dark } from "@pancakeswap-libs/uikit";
+import { ChainId, DAppProvider } from "@usedapp/core";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -19,6 +20,13 @@ import "./index.scss";
 const chainId = 56;
 const rpcUrl = "https://bsc-dataseed.binance.org";
 
+const config = {
+  readOnlyChainId: ChainId.BSC,
+  readOnlyUrls: {
+    [ChainId.BSC]: "https://bsc-dataseed.binance.org",
+  },
+};
+
 ReactDOM.render(
   <bsc.UseWalletProvider
     chainId={chainId}
@@ -27,11 +35,13 @@ ReactDOM.render(
       bsc,
     }}
   >
-    <ThemeProvider theme={dark}>
-      <ModalProvider>
-        <App />
-      </ModalProvider>
-    </ThemeProvider>
+    <DAppProvider config={config}>
+      <ThemeProvider theme={dark}>
+        <ModalProvider>
+          <App />
+        </ModalProvider>
+      </ThemeProvider>
+    </DAppProvider>
   </bsc.UseWalletProvider>,
   document.getElementById("root")
 );
