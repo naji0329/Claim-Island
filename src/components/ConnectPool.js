@@ -14,6 +14,8 @@ import {
   Input,
 } from "reactstrap";
 
+import { VotingStore } from "../store/voting";
+
 import buyShellPresale, {
   getPresaleRate,
   individualLimitUsed,
@@ -62,6 +64,11 @@ const ConnectPool = (props) => {
     // detect if account is connected
     web3.eth.getAccounts().then((acc) => {
       setConAccount(acc[0] || "");
+      if (acc[0]) {
+        VotingStore.update((k) => {
+          k.walletConnected = true;
+        });
+      }
     });
   }
 

@@ -15,6 +15,8 @@ import {
   Input,
 } from "reactstrap";
 
+import { VotingStore } from "../store/voting";
+
 import { ToastContainer, toast } from "react-toastify";
 
 import {
@@ -39,6 +41,10 @@ const Voting = (props) => {
   const toggle = () => {
     setModal(false);
     props.setVoting(false);
+
+    VotingStore.update((k) => {
+      k.cancelled = true;
+    });
   };
 
   if (web3 && web3.eth) {
@@ -54,6 +60,9 @@ const Voting = (props) => {
 
   const vote = async (connectedAccount, option) => {
     let hasVoted;
+    VotingStore.update((k) => {
+      k.inProgress = true;
+    });
     try {
       switch (option) {
         case 1:
@@ -75,7 +84,16 @@ const Voting = (props) => {
         default:
           break;
       }
+      VotingStore.update((k) => {
+        k.inProgress = false;
+        k.complete = true;
+      });
     } catch (e) {
+      VotingStore.update((k) => {
+        k.inProgress = false;
+        k.complete = true;
+        k.error = true;
+      });
       const formatError = !!e.message.split('"message": "')[1]
         ? e.message.split('"message": "')[1].split('",')[0]
         : e.message;
@@ -93,6 +111,10 @@ const Voting = (props) => {
         setTwoVotes(twoVotes);
         setThreeVotes(threeVotes);
       }
+
+      VotingStore.update((k) => {
+        k.alreadyVoted = true;
+      });
 
       updateAccData();
     }

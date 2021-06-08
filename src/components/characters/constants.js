@@ -71,13 +71,21 @@ export const SPEECHES = {
       text: `
         Looks like you already voted! Would you like to see the results?
       `,
-      next: "vote",
+      next: "last",
+      showVote: true,
       dismiss: false,
       skip: false,
     },
 
-    vote: {
-      text: `Thank you for your Vote.`,
+    last: {
+      text: `Thank you for your Vote. Here are your results.`,
+      next: "first",
+      dismiss: true,
+      skip: false,
+    },
+
+    cancel: {
+      text: `Thank you for your Vote. Here are your results.`,
       next: "first",
       dismiss: true,
       skip: false,
@@ -121,8 +129,35 @@ export const SPEECHES = {
       skip: false,
     },
 
+    error: {
+      text: `
+        Looks like something went wrong. Please try again.
+      `,
+      next: "vote",
+      dismiss: false,
+      skip: false,
+    },
+
+    progress: {
+      text: `
+        Vote in progress, please wait...
+      `,
+      next: "last",
+      dismiss: false,
+      skip: false,
+    },
+
+    cancel: {
+      text: `
+        OK, just let me know when you want to vote!
+      `,
+      next: "first",
+      dismiss: true,
+      skip: false,
+    },
+
     last: {
-      text: ` Thank you for you Vote. If you did not vote but cancelled the window, you can go back and cast your vote again.`,
+      text: ` Thank you for you Vote. Here are your results.`,
       next: "first",
       dismiss: true,
       skip: false,
@@ -376,7 +411,7 @@ export const BUTTONS = {
       alt: false,
     },
 
-    vote: {
+    last: {
       next: "OK",
       alt: false,
     },
@@ -400,6 +435,21 @@ export const BUTTONS = {
 
     vote: {
       next: "Sure",
+      alt: false,
+    },
+
+    error: {
+      next: "OK",
+      alt: false,
+    },
+
+    progress: {
+      next: false,
+      alt: false,
+    },
+
+    cancel: {
+      next: "OK",
       alt: false,
     },
 

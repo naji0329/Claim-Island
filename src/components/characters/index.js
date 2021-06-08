@@ -9,19 +9,28 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./index.scss";
 
+import { VotingStore } from "../../store/voting";
+
 const CharacterSpeak = (props) => {
+  const votingInProgress = VotingStore.useState((s) => s.inProgress);
+  const votingComplete = VotingStore.useState((s) => s.complete);
+  const votingCancelled = VotingStore.useState((s) => s.cancelled);
+  const votingError = VotingStore.useState((s) => s.error);
+  const votingAlreadyVoted = VotingStore.useState((s) => s.alreadyVoted);
+  const votingWalletConnected = VotingStore.useState((s) => s.walletConnected);
+
   const character = CHARACTERS[props.character];
   const speechTrack = SPEECHES[props.speech];
   const btnTrack = BUTTONS[props.speech];
 
-  console.log(speechTrack);
-  console.log(btnTrack);
+  // console.log(speechTrack);
+  // console.log(btnTrack);
 
   const [charImg, setCharImg] = useState(character.charImg);
   const [charName, setCharName] = useState(character.name);
   const [showBubble, setShowBubble] = useState(true);
-  const [trackCount, setTrackCount] = useState(Object.keys(speechTrack)[0]);
-  console.log(trackCount);
+  let [trackCount, setTrackCount] = useState(Object.keys(speechTrack)[0]);
+  // console.log(trackCount);
 
   const [speech, setSpeech] = useState(speechTrack[trackCount].text);
   const [buttonNextText, setButtonNextText] = useState(
@@ -39,9 +48,9 @@ const CharacterSpeak = (props) => {
 
     */
 
-  const onClickNext = (e) => {
+  const onClickNext = (direct = false) => {
     let timeOut = 0;
-    if (speechTrack[trackCount].dismiss) {
+    if (speechTrack[trackCount].dismiss && !direct) {
       setShowBubble(false);
       const characterImg = document.querySelector(".character");
       characterImg.style.marginTop = characterImg.offsetHeight - 76 + "px";
@@ -65,30 +74,49 @@ const CharacterSpeak = (props) => {
           (props.speech.indexOf("voting") !== -1 && props.connectedAccount) ||
           props.speech.indexOf("voting") === -1
         ) {
-          setSpeech(speechTrack[speechTrack[trackCount].next].text);
-          setTrackCount(speechTrack[trackCount].next);
-          console.log(trackCount);
-          if (btnTrack[speechTrack[trackCount].next].next) {
-            document.querySelector("#btn-next").style.display = "block";
-            setButtonNextText(btnTrack[speechTrack[trackCount].next].next);
+          if (!direct) {
+            setSpeech(speechTrack[speechTrack[trackCount].next].text);
+            setTrackCount(speechTrack[trackCount].next);
+            if (btnTrack[speechTrack[trackCount].next].next) {
+              document.querySelector("#btn-next").style.display = "block";
+              setButtonNextText(btnTrack[speechTrack[trackCount].next].next);
+            } else {
+              document.querySelector("#btn-next").style.display = "none";
+            }
+            if (btnTrack[speechTrack[trackCount].next].alt) {
+              document.querySelector("#btn-alt").style.display = "block";
+              setButtonAltText(btnTrack[speechTrack[trackCount].next].alt.text);
+            } else {
+              document.querySelector("#btn-alt").style.display = "none";
+            }
           } else {
-            document.querySelector("#btn-next").style.display = "none";
-          }
-          if (btnTrack[speechTrack[trackCount].next].alt) {
-            document.querySelector("#btn-alt").style.display = "block";
-            setButtonAltText(btnTrack[speechTrack[trackCount].next].alt.text);
-          } else {
-            document.querySelector("#btn-alt").style.display = "none";
+            setSpeech(speechTrack[trackCount].text);
+
+            if (btnTrack[trackCount].next) {
+              document.querySelector("#btn-next").style.display = "block";
+              setButtonNextText(btnTrack[trackCount].next);
+            } else {
+              document.querySelector("#btn-next").style.display = "none";
+            }
+            if (btnTrack[trackCount].alt) {
+              document.querySelector("#btn-alt").style.display = "block";
+              setButtonAltText(btnTrack[trackCount].alt.text);
+            } else {
+              document.querySelector("#btn-alt").style.display = "none";
+            }
           }
         }
       }, timeOut);
     }
+
     if (speechTrack[trackCount].next == "connect") {
-      console.log("@@@@@@@@@ connecting");
       props.setConnect(true);
     }
-    console.log(speechTrack[trackCount]);
-    if (speechTrack[trackCount].next == "vote") {
+
+    if (
+      speechTrack[trackCount].next == "vote" ||
+      speechTrack[trackCount].showVote
+    ) {
       props.setVote(true);
     }
   };
@@ -105,6 +133,7 @@ const CharacterSpeak = (props) => {
     }
   }, [props.saleStatus, props.saleErrorMsg]);
 
+  // for Buy and Connect
   useEffect(() => {
     if (
       ["buy", "connect"].indexOf(props.triggerSpeech) !== -1 &&
@@ -113,6 +142,58 @@ const CharacterSpeak = (props) => {
       onClickNext();
     }
   }, [props.triggerSpeech]);
+
+  useEffect(() => {
+    // console.log("######## voting progress", votingInProgress);
+    // console.log("######## voting error", votingError);
+    // console.log("######## voting cancelled", votingCancelled);
+
+    if (votingInProgress) {
+      setTrackCount("progress");
+      trackCount = "progress";
+      onClickNext(true);
+    }
+
+    if (votingComplete) {
+      setTrackCount("last");
+      trackCount = "last";
+      onClickNext(true);
+      VotingStore.update((k) => {
+        k.complete = false;
+      });
+    }
+
+    if (votingCancelled) {
+      setTrackCount("cancel");
+      trackCount = "cancel";
+      onClickNext(true);
+      VotingStore.update((k) => {
+        k.cancelled = false;
+      });
+    }
+
+    if (votingAlreadyVoted) {
+      setTrackCount("last");
+      trackCount = "last";
+      onClickNext(true);
+    }
+
+    if (votingError) {
+      setTrackCount("error");
+      trackCount = "error";
+      onClickNext(true);
+      VotingStore.update((k) => {
+        k.error = false;
+      });
+    }
+  }, [
+    votingInProgress,
+    votingError,
+    votingCancelled,
+    votingAlreadyVoted,
+    votingComplete,
+    votingWalletConnected,
+  ]);
 
   const onClickAlt = (e) => {
     let destination = btnTrack[trackCount].alt.destination;
@@ -168,14 +249,22 @@ const CharacterSpeak = (props) => {
         <div className="speech">
           <p className="speech-text">{speech}</p>
         </div>
-        <div className="buttons">
-          <Button className="btn" id="btn-alt" onClick={onClickAlt}>
-            {buttonAltText}
-          </Button>
-          <Button className="btn" id="btn-next" onClick={onClickNext}>
-            {buttonNextText}
-          </Button>
-        </div>
+        {votingWalletConnected ? (
+          <div className="buttons">
+            <Button className="btn" id="btn-alt" onClick={onClickAlt}>
+              {buttonAltText}
+            </Button>
+            <Button
+              className="btn"
+              id="btn-next"
+              onClick={(e) => onClickNext()}
+            >
+              {buttonNextText}
+            </Button>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
       <ToastContainer />
     </div>

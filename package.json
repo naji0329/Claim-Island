@@ -19,6 +19,7 @@
     "leaflet": "^1.7.1",
     "moment": "^2.29.1",
     "node-sass": "5.0.0",
+    "pullstate": "^1.22.1",
     "react": "^17.0.1",
     "react-bootstrap": "^1.5.2",
     "react-countdown": "^2.3.2",
