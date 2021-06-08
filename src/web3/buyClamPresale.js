@@ -8,7 +8,10 @@ export const buyClamPresale = async ({ account }, callback, errCallback) => {
     throw new Error("there is no account connected");
   }
 
-  const clamPresale = contractFactory({ abi: clamPresaleAbi, address: clamPresaleAddress });
+  const clamPresale = contractFactory({
+    abi: clamPresaleAbi,
+    address: clamPresaleAddress,
+  });
 
   const oracleFee = await getOracleFee();
   const currentPrice = await getClamPrice();
@@ -44,7 +47,10 @@ export const collectClam = async ({ account }, callback, errCallback) => {
     throw new Error("there is no account connected");
   }
 
-  const clamPresale = contractFactory({ abi: clamPresaleAbi, address: clamPresaleAddress });
+  const clamPresale = contractFactory({
+    abi: clamPresaleAbi,
+    address: clamPresaleAddress,
+  });
 
   const method = clamPresale.methods.collectClam();
 
@@ -70,21 +76,30 @@ export const collectClam = async ({ account }, callback, errCallback) => {
 };
 
 export const getClamPrice = async () => {
-  const clamPresale = contractFactory({ abi: clamPresaleAbi, address: clamPresaleAddress });
+  const clamPresale = contractFactory({
+    abi: clamPresaleAbi,
+    address: clamPresaleAddress,
+  });
   const price = await clamPresale.methods.getNFTPrice().call();
 
   return price;
 };
 
 export const presaleCap = async () => {
-  const clamPresale = contractFactory({ abi: clamPresaleAbi, address: clamPresaleAddress });
+  const clamPresale = contractFactory({
+    abi: clamPresaleAbi,
+    address: clamPresaleAddress,
+  });
   const value = await clamPresale.methods.MAX_SUPPLY().call();
 
   return value;
 };
 
 export const hasSaleStarted = async () => {
-  const clamPresale = contractFactory({ abi: clamPresaleAbi, address: clamPresaleAddress });
+  const clamPresale = contractFactory({
+    abi: clamPresaleAbi,
+    address: clamPresaleAddress,
+  });
   const value = await clamPresale.methods.hasSaleStarted().call();
 
   return value;

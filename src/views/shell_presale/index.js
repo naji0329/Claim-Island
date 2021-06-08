@@ -6,7 +6,7 @@ import ConnectPool from "../../components/ConnectPool.js";
 
 import Bank from "../../assets/locations/bank_animated.mp4";
 import { weiRaised, presaleCap } from "../../web3/buyShellPresale";
-import getWeb3 from '../../web3/getWeb3';
+import getWeb3 from "../../web3/getWeb3";
 
 import { Progress } from "reactstrap";
 
@@ -21,7 +21,7 @@ const ShellPresale = () => {
 
   const web3 = getWeb3();
 
-  if(web3) {
+  if (web3) {
     setInterval(async () => {
       const cap = await presaleCap();
       const wei = await weiRaised();
@@ -41,7 +41,7 @@ const ShellPresale = () => {
         </video>
       </div>
       <div className="shell-presale">
-        {web3 ?
+        {web3 ? (
           <ConnectPool
             showConnect={showConnect}
             callback={setSaleStatus}
@@ -49,7 +49,9 @@ const ShellPresale = () => {
             triggerSpeech={triggerSpeech}
             progress={progress}
           />
-          : ''}
+        ) : (
+          ""
+        )}
 
         <CharacterSpeak
           character={"tanja"}

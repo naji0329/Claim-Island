@@ -10,13 +10,16 @@ const balanceOf = async ({ account, abi, address }) => {
 };
 
 export const accountClamBalance = async (account) => {
-  const bal = await balanceOf({ account, abi: clamNFTAbi, address: clamNFTAddress });
+  const bal = await balanceOf({
+    account,
+    abi: clamNFTAbi,
+    address: clamNFTAddress,
+  });
   return bal;
 };
 
 export const totalClamSupply = async (account) => {
-  const clamNft = contractFactory({abi: clamNFTAbi, address: clamNFTAddress })
-  const totalSupply = await clamNft.methods.totalSupply().call()
+  const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
+  const totalSupply = await clamNft.methods.totalSupply().call();
   return totalSupply;
 };
-

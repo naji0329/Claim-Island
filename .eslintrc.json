@@ -1,0 +1,37 @@
+{
+    "parser": "babel-eslint",
+    "extends": [
+      "plugin:react/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 8,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "env": {
+      "browser": true
+    },
+    "rules": {
+      "react/react-in-jsx-scope": "off",
+      "max-len": "off",
+      "no-unused-vars": "warn",
+      "object-curly-newline": ["error",{ "consistent": true}],
+      "prefer-arrow-callback": "error",
+      "prettier/prettier": "error",
+      "quote-props": ["error", "as-needed"],
+      "react/display-name" : "off",
+      "react/jsx-uses-react": [2],
+      "react/jsx-uses-vars": [2],
+      "react/prop-types": "off",
+      "react/sort-comp": "off"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  }
+  
