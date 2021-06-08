@@ -36,9 +36,9 @@ const ShellVoting = () => {
       if (acc[0]) {
         const hasVoted = await hasAccountedVoted(acc[0]);
         setAlreadyVoted(hasVoted);
-        if (hasVoted) {
-          setVoting(true);
-        }
+        // if (hasVoted) {
+        //   setVoting(true);
+        // }
       }
     });
   }

@@ -247,7 +247,7 @@ const Voting = (props) => {
         </ModalBody>
         <ModalFooter>
           <Button color="danger" onClick={toggle}>
-            Cancel
+            Close
           </Button>
         </ModalFooter>
       </Modal>
