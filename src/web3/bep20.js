@@ -11,16 +11,29 @@ const balanceOf = async ({ account, abi, address }) => {
 };
 
 export const accountShellBalance = async (account) => {
-  const bal = await balanceOf({ account, abi: shellTokenAbi, address: shellTokenAddress });
+  const bal = await balanceOf({
+    account,
+    abi: shellTokenAbi,
+    address: shellTokenAddress,
+  });
   return bal;
 };
 
 export const accountClamBalance = async (account) => {
-  const bal = await balanceOf({ account, abi: clamNFTAbi, address: clamNFTAddress });
+  const bal = await balanceOf({
+    account,
+    abi: clamNFTAbi,
+    address: clamNFTAddress,
+  });
   return bal;
 };
 
-export const addTokenToMetamask = async ({ tokenAddress, tokenSymbol, tokenDecimals, tokenImage }) => {
+export const addTokenToMetamask = async ({
+  tokenAddress,
+  tokenSymbol,
+  tokenDecimals,
+  tokenImage,
+}) => {
   if (!window.ethereum) {
     throw new Error("there is no wallet on browser");
   }

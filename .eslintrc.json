@@ -15,8 +15,9 @@
       "browser": true
     },
     "rules": {
+      "react/react-in-jsx-scope": "off",
       "max-len": "off",
-      "no-unused-vars": ["error", { "args": "after-used" }],
+      "no-unused-vars": "warn",
       "object-curly-newline": ["error",{ "consistent": true}],
       "prefer-arrow-callback": "error",
       "prettier/prettier": "error",
@@ -25,7 +26,6 @@
       "react/jsx-uses-react": [2],
       "react/jsx-uses-vars": [2],
       "react/prop-types": "off",
-      "react/react-in-jsx-scope": [2],
       "react/sort-comp": "off"
     },
     "settings": {

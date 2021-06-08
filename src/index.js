@@ -1,20 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { ModalProvider } from '@pancakeswap-libs/uikit'
+import React from "react";
+import ReactDOM from "react-dom";
+import { ModalProvider } from "@pancakeswap-libs/uikit";
 // import bsc from '@binance-chain/bsc-use-wallet'
 // import { UseWalletProvider } from 'use-wallet'
 // import { UseWalletProvider } from '@binance-chain/bsc-use-wallet'
-import * as bsc from '@binance-chain/bsc-use-wallet'
-import { ThemeProvider } from 'styled-components'
-import { light, dark } from '@pancakeswap-libs/uikit'
+import * as bsc from "@binance-chain/bsc-use-wallet";
+import { ThemeProvider } from "styled-components";
+import { light, dark } from "@pancakeswap-libs/uikit";
 
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 
 // import library css
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'leaflet/dist/leaflet.css';
-import './index.scss';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "leaflet/dist/leaflet.css";
+import "./index.scss";
 
 const chainId = 56;
 const rpcUrl = "https://bsc-dataseed.binance.org";
@@ -25,14 +25,15 @@ ReactDOM.render(
     connectors={{
       walletconnect: { rpcUrl },
       bsc,
-    }}>
-      <ThemeProvider theme={dark}>
-        <ModalProvider>
-          <App />
-        </ModalProvider>
-      </ThemeProvider>
+    }}
+  >
+    <ThemeProvider theme={dark}>
+      <ModalProvider>
+        <App />
+      </ModalProvider>
+    </ThemeProvider>
   </bsc.UseWalletProvider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

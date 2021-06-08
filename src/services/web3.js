@@ -1,4 +1,4 @@
-import Web3 from 'web3';
+import Web3 from "web3";
 
 // import * as ClamToken from '../contracts/Clam.json';
 // import * as PearlToken from '../contracts/PearlCore.json';
@@ -11,7 +11,9 @@ const CLAM_CORE = process.env.REACT_APP_CLAM_CORE;
 const PEARL_CORE = process.env.REACT_APP_PEARL_CORE;
 const RPC_URL = process.env.REACT_APP_RPC_URL;
 
-const httpProvider = new Web3.providers.HttpProvider(RPC_URL, { timeout: 10000 });
+const httpProvider = new Web3.providers.HttpProvider(RPC_URL, {
+  timeout: 10000,
+});
 
 const getWeb3 = () => {
   const web3 = new Web3(httpProvider);
@@ -50,5 +52,5 @@ export {
   // getPearlTokenContract,
   // getClamNFTContract,
   // getPearlNFTContract,
-  httpProvider
+  httpProvider,
 };

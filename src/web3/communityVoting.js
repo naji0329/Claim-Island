@@ -3,7 +3,10 @@ import { communityVotingAddress } from "./constants";
 import { contractFactory } from "./index";
 
 export const voteOptionOne = async (account) => {
-  const voting = contractFactory({ abi: communityVotingAbi, address: communityVotingAddress });
+  const voting = contractFactory({
+    abi: communityVotingAbi,
+    address: communityVotingAddress,
+  });
 
   const method = voting.methods.voteOptionOne();
   const gasEstimation = await method.estimateGas({
@@ -28,7 +31,10 @@ export const voteOptionOne = async (account) => {
 };
 
 export const voteOptionTwo = async (account) => {
-  const voting = contractFactory({ abi: communityVotingAbi, address: communityVotingAddress });
+  const voting = contractFactory({
+    abi: communityVotingAbi,
+    address: communityVotingAddress,
+  });
 
   const method = voting.methods.voteOptionTwo();
   const gasEstimation = await method.estimateGas({
@@ -53,7 +59,10 @@ export const voteOptionTwo = async (account) => {
 };
 
 export const voteOptionThree = async (account) => {
-  const voting = contractFactory({ abi: communityVotingAbi, address: communityVotingAddress });
+  const voting = contractFactory({
+    abi: communityVotingAbi,
+    address: communityVotingAddress,
+  });
 
   const method = voting.methods.voteOptionThree();
   const gasEstimation = await method.estimateGas({
@@ -78,7 +87,10 @@ export const voteOptionThree = async (account) => {
 };
 
 export const votesForOptionOne = async () => {
-  const voting = contractFactory({ abi: communityVotingAbi, address: communityVotingAddress });
+  const voting = contractFactory({
+    abi: communityVotingAbi,
+    address: communityVotingAddress,
+  });
 
   const optionOne = await voting.methods.OPTION_ONE().call();
   const value = await voting.methods.votesFor(optionOne).call();
@@ -87,7 +99,10 @@ export const votesForOptionOne = async () => {
 };
 
 export const votesForOptionTwo = async () => {
-  const voting = contractFactory({ abi: communityVotingAbi, address: communityVotingAddress });
+  const voting = contractFactory({
+    abi: communityVotingAbi,
+    address: communityVotingAddress,
+  });
 
   const optionTwo = await voting.methods.OPTION_TWO().call();
   const value = await voting.methods.votesFor(optionTwo).call();
@@ -96,7 +111,10 @@ export const votesForOptionTwo = async () => {
 };
 
 export const votesForOptionThree = async () => {
-  const voting = contractFactory({ abi: communityVotingAbi, address: communityVotingAddress });
+  const voting = contractFactory({
+    abi: communityVotingAbi,
+    address: communityVotingAddress,
+  });
 
   const optionThree = await voting.methods.OPTION_THREE().call();
   const value = await voting.methods.votesFor(optionThree).call();
@@ -105,7 +123,10 @@ export const votesForOptionThree = async () => {
 };
 
 export const hasAccountedVoted = async (account) => {
-  const voting = contractFactory({ abi: communityVotingAbi, address: communityVotingAddress });
+  const voting = contractFactory({
+    abi: communityVotingAbi,
+    address: communityVotingAddress,
+  });
 
   const value = await voting.methods.hasUserVoted(account).call();
 

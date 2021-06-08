@@ -11,7 +11,9 @@ export const getOracleFee = async () => {
 
 export const getPearlProductionTime = async (requestHash) => {
   const clamPresale = contractFactory({ abi: rngAbi, address: rngAddress });
-  const value = await clamPresale.methods.getPearlProductionTime(requestHash).call();
+  const value = await clamPresale.methods
+    .getPearlProductionTime(requestHash)
+    .call();
 
   return value;
 };

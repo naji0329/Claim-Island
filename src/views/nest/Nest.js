@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const Nest = () => {
-    return <div>Nest</div>
+  return <div>Nest</div>;
 };
 
 export default Nest;

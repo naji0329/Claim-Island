@@ -53,16 +53,16 @@ export const SPEECHES = {
   shell_voting_complete: {
     welcome: {
       text: `Welcome, traveller!. $SHELL voting is over.`,
-      next: 'welcome',
+      next: "welcome",
       dismiss: true,
       skip: false,
-    }
+    },
   },
 
   shell_voted_already: {
     welcome: {
       text: `Welcome, traveller!. Please connect your wallet if not connected and then proceed.`,
-      next: 'first',
+      next: "first",
       dismiss: false,
       skip: false,
     },
@@ -71,23 +71,23 @@ export const SPEECHES = {
       text: `
         Looks like you already voted! Would you like to see the results?
       `,
-      next: 'vote',
+      next: "vote",
       dismiss: false,
-      skip: false
+      skip: false,
     },
 
     vote: {
       text: `Thank you for your Vote.`,
-      next: 'first',
+      next: "first",
       dismiss: true,
-      skip: false
-    }
+      skip: false,
+    },
   },
 
   shell_voting: {
     welcome: {
       text: `Welcome, traveller!. Please connect your wallet if not connected and then proceed.`,
-      next: 'first',
+      next: "first",
       dismiss: false,
       skip: false,
     },
@@ -98,35 +98,35 @@ export const SPEECHES = {
         we thought that the fairest thing we could do is to let all the $SHELL presale
         token holders vote on the unlock time. We're all about democracy here at Clam Island!
       `,
-      next: 'second',
+      next: "second",
       dismiss: false,
-      skip: false
+      skip: false,
     },
 
     second: {
       text: `
       Please note, you can vote only once, and you must use the wallet address that holds the $SHELL from our presale.
       `,
-      next: 'vote',
+      next: "vote",
       dismiss: false,
-      skip: false
+      skip: false,
     },
 
     vote: {
       text: `
         Please cast your vote. To Vote you can click any of the buttons. You can click cancel to dismiss the window.
       `,
-      next: 'last',
+      next: "last",
       dismiss: false,
-      skip: false
+      skip: false,
     },
 
     last: {
       text: ` Thank you for you Vote. If you did not vote but cancelled the window, you can go back and cast your vote again.`,
-      next: 'first',
+      next: "first",
       dismiss: true,
-      skip: false
-    }
+      skip: false,
+    },
   },
 
   shell_presale_not_started: {
@@ -141,24 +141,24 @@ export const SPEECHES = {
   shell_presale_finished: {
     welcome: {
       text: `Welcome, traveller!`,
-      next: 'first',
+      next: "first",
       dismiss: false,
       skip: false,
     },
 
     first: {
       text: `Sorry, you're a bit late! the $SHELL presale has finished. But you can read more on Clam Island and what will happen here. Would you like that?`,
-      next: 'second',
+      next: "second",
       dismiss: false,
-      skip: false
+      skip: false,
     },
 
     second: {
       text: `Ok, let me know if you change your mind!`,
-      next: 'first',
+      next: "first",
       dismiss: true,
-      skip: false
-    }
+      skip: false,
+    },
   },
 
   shell_presale: {
@@ -249,24 +249,24 @@ export const SPEECHES = {
   clam_presale_finished: {
     welcome: {
       text: `Welcome, traveller!`,
-      next: 'first',
+      next: "first",
       dismiss: false,
       skip: false,
     },
 
     first: {
       text: `Sorry, you're a bit late! the $CLAM presale has finished. But you can read more on Clam Island and what will happen here. Would you like that?`,
-      next: 'second',
+      next: "second",
       dismiss: false,
-      skip: false
+      skip: false,
     },
 
     second: {
       text: `Ok, let me know if you change your mind!`,
-      next: 'first',
+      next: "first",
       dismiss: true,
-      skip: false
-    }
+      skip: false,
+    },
   },
 
   clam_presale: {
@@ -336,7 +336,6 @@ export const SPEECHES = {
       skip: false,
     },
   },
-
 };
 
 export const BUTTONS = {
@@ -347,7 +346,7 @@ export const BUTTONS = {
     },
     first: {
       next: "▶",
-      alt: false
+      alt: false,
     },
     second: {
       next: "OK",
@@ -355,52 +354,52 @@ export const BUTTONS = {
     },
     third: {
       next: "Keep exploring",
-      alt: false
+      alt: false,
     },
   },
 
   shell_voting_complete: {
     welcome: {
-      next: 'OK',
-      alt: false
-    }
+      next: "OK",
+      alt: false,
+    },
   },
 
   shell_voted_already: {
     welcome: {
-      next: '▶',
-      alt: false
+      next: "▶",
+      alt: false,
     },
 
     first: {
-      next: 'Sure',
+      next: "Sure",
       alt: false,
     },
 
     vote: {
-      next: 'OK',
+      next: "OK",
       alt: false,
     },
   },
 
   shell_voting: {
     welcome: {
-      next: '▶',
-      alt: false
+      next: "▶",
+      alt: false,
     },
 
     first: {
-      next: 'Sure',
+      next: "Sure",
       alt: false,
     },
 
     second: {
-      next: 'Got It',
+      next: "Got It",
       alt: false,
     },
 
     vote: {
-      next: 'Sure',
+      next: "Sure",
       alt: false,
     },
 
@@ -423,16 +422,17 @@ export const BUTTONS = {
 
   shell_presale_finished: {
     welcome: {
-      next: '▶',
-      alt: false
+      next: "▶",
+      alt: false,
     },
 
     first: {
-      next: 'No thanks',
+      next: "No thanks",
       alt: {
         action: "url",
-        destination: "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
-        text: "Sure!"
+        destination:
+          "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
+        text: "Sure!",
       },
     },
 
@@ -452,7 +452,8 @@ export const BUTTONS = {
       next: "I understand",
       alt: {
         action: "url",
-        destination: "https://clamisland.medium.com/clam-island-presale-30090591d4f",
+        destination:
+          "https://clamisland.medium.com/clam-island-presale-30090591d4f",
         text: "More information",
       },
     },
@@ -526,16 +527,17 @@ export const BUTTONS = {
 
   clam_presale_finished: {
     welcome: {
-      next: '▶',
-      alt: false
+      next: "▶",
+      alt: false,
     },
 
     first: {
-      next: 'No thanks',
+      next: "No thanks",
       alt: {
         action: "url",
-        destination: "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
-        text: "Sure!"
+        destination:
+          "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
+        text: "Sure!",
       },
     },
 
@@ -555,7 +557,8 @@ export const BUTTONS = {
       next: "I understand",
       alt: {
         action: "url",
-        destination: "https://clamisland.medium.com/clam-island-presale-30090591d4f",
+        destination:
+          "https://clamisland.medium.com/clam-island-presale-30090591d4f",
         text: "More information",
       },
     },
@@ -618,18 +621,26 @@ export const BUTTONS = {
 };
 
 function showPresaleCountdown() {
-  const total = Date.parse("Tue May 25 2021 09:00:00 GMT+0000") - Date.parse(String(new Date()));
+  const total =
+    Date.parse("Tue May 25 2021 09:00:00 GMT+0000") -
+    Date.parse(String(new Date()));
   const minutes = Math.floor((total / 1000 / 60) % 60);
   const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
 
-  return `${hours} hours and ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes`;
+  return `${hours} hours and ${
+    minutes > 9 ? minutes : "0" + minutes.toString()
+  } minutes`;
 }
 
 function clamPresaleCountdown() {
-  const total = Date.parse("Tue June 18 2021 09:00:00 GMT+0000") - Date.parse(String(new Date()));
+  const total =
+    Date.parse("Tue June 18 2021 09:00:00 GMT+0000") -
+    Date.parse(String(new Date()));
   const minutes = Math.floor((total / 1000 / 60) % 60);
   const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
-  const days = Math.floor(total / (1000 * 60 * 60 * 24))
+  const days = Math.floor(total / (1000 * 60 * 60 * 24));
 
-  return `${days} days, ${hours} hours and ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes`;
+  return `${days} days, ${hours} hours and ${
+    minutes > 9 ? minutes : "0" + minutes.toString()
+  } minutes`;
 }

@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useWalletModal } from "@pancakeswap-libs/uikit";
 import { useWallet } from "@binance-chain/bsc-use-wallet";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Badge } from "reactstrap";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Badge,
+} from "reactstrap";
 
 import { buyClamPresale, getClamPrice } from "../web3/buyClamPresale.js";
 import { accountClamBalance } from "../web3/clam";
@@ -89,11 +96,17 @@ const ConnectPoolClam = (props) => {
     props.triggerSpeech("buy");
 
     try {
-      await buyClamPresale({ account: connectedAccount }, props.callback, props.errCallback);
+      await buyClamPresale(
+        { account: connectedAccount },
+        props.callback,
+        props.errCallback
+      );
     } catch (e) {
       props.callback("sale_failure");
       console.log(`Error: ${e.message}`, typeof e.message);
-      const formatError = !!e.message.split('"message": "')[1] ? e.message.split('"message": "')[1].split('",')[0] : e.message;
+      const formatError = !!e.message.split('"message": "')[1]
+        ? e.message.split('"message": "')[1].split('",')[0]
+        : e.message;
       toast(formatError, { autoClose: 8000 });
     }
   };
@@ -118,7 +131,8 @@ const ConnectPoolClam = (props) => {
         {connectedAccount && (
           <>
             <Button style={buttonColor} pill={true.toString()}>
-              { clamBalance && `You have ${clamBalance} Clam ${clamBalance > 1 ? 's' : '' }`}
+              {clamBalance &&
+                `You have ${clamBalance} Clam ${clamBalance > 1 ? "s" : ""}`}
             </Button>
 
             {!filled ? (
@@ -126,12 +140,18 @@ const ConnectPoolClam = (props) => {
                 <Button color="success" onClick={toggle}>
                   Buy Clam
                 </Button>
-                <Modal isOpen={modal} centered={true} size="md" className="clam-modal">
+                <Modal
+                  isOpen={modal}
+                  centered={true}
+                  size="md"
+                  className="clam-modal"
+                >
                   <ModalHeader style={{ justifyContent: "center" }}>
                     GET Clams
                     <div>
                       <Badge color="dark" pill={true}>
-                        Current Clam Price: {utils.fromWei(presalePrice, "ether")} BNB
+                        Current Clam Price:{" "}
+                        {utils.fromWei(presalePrice, "ether")} BNB
                       </Badge>
                     </div>
                   </ModalHeader>
