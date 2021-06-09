@@ -249,7 +249,11 @@ const CharacterSpeak = (props) => {
         <div className="speech">
           <p className="speech-text">{speech}</p>
         </div>
-        {votingWalletConnected ? (
+        {
+          (
+            votingWalletConnected &&
+            ['shell_voting', 'shell_voted_already', 'shell_voting_complete'].indexOf(props.speech) !== -1
+          ) || ['shell_voting', 'shell_voted_already', 'shell_voting_complete'].indexOf(props.speech) === -1 ? (
           <div className="buttons">
             <Button className="btn" id="btn-alt" onClick={onClickAlt}>
               {buttonAltText}
