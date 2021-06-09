@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useAsync } from "react-use";
-import { useEthers, useTokenBalance, ChainId } from "@usedapp/core";
+import {
+  useEthers,
+  useTokenBalance,
+  useEtherBalance,
+  ChainId,
+} from "@usedapp/core";
 
 import { formatUnits } from "@ethersproject/units";
 
 import { clamNFTAddress } from "../web3/constants.js";
+import { AccountStore } from "../store/account";
 
 const ErrorAlert = ({ title, description }) => (
   <div className="w-full absolute">
@@ -33,11 +39,33 @@ const Web3Navbar = () => {
   const [activateError, setActivateError] = useState("");
   const { activateBrowserWallet, account, chainId, error } = useEthers();
   const clamBalance = useTokenBalance(clamNFTAddress, account);
-  console.log({ error, activateError });
+  const bnbBalance = useEtherBalance(account);
 
   useAsync(async () => {
     console.log("loaded");
   });
+
+  useEffect(() => {
+    const newClamBalance = clamBalance ? formatUnits(clamBalance, 0) : 0;
+    const newBnbBalance = bnbBalance ? formatUnits(bnbBalance, 18) : 0;
+    console.log("######## account balance", { newClamBalance, newBnbBalance });
+
+    AccountStore.update((obj) => {
+      obj.clamBalance = newClamBalance;
+    });
+
+    AccountStore.update((obj) => {
+      obj.bnbBalance = newBnbBalance;
+    });
+
+    AccountStore.update((obj) => {
+      obj.isConnected = account ? true : false;
+    });
+
+    AccountStore.update((obj) => {
+      obj.error = activateError;
+    });
+  }, [clamBalance, bnbBalance, activateError]);
 
   useEffect(() => {
     if (error) {

@@ -1,75 +1,118 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAsync } from "react-use";
-import { useEthers, shortenAddress } from "@usedapp/core";
+import { Progress } from "reactstrap";
+import { formatUnits } from "@ethersproject/units";
 
 import "./index.scss";
 import CharacterSpeak from "../../components/characters";
-
 import ConnectPoolClam from "../../components/ConnectPoolClam.js";
 import Web3Navbar from "../../components/Web3Navbar";
-
 import Shop from "../../assets/locations/shop_animated.mp4";
+
 import {
   presaleCap,
   hasSaleStarted as getHasSaleStarted,
+  getClamPrice,
 } from "../../web3/buyClamPresale";
 import { totalClamSupply } from "../../web3/clam";
 import getWeb3 from "../../web3/getWeb3";
+import { PresaleStore } from "../../store/presale";
+import { AccountStore } from "../../store/account";
 
-import { Progress } from "reactstrap";
-
-const BSC_CHAIN_ID = 56;
+import ClamMintModal from "./ClamMintModal";
 
 const ClamPresale = () => {
-  const [showConnect, setConnect] = useState(true);
-  const [saleStatus, setSaleStatus] = useState("");
-  const [hasSaleStarted, setHasSaleStarted] = useState(false);
-  const [saleErrorMsg, setSaleErrorMsg] = useState("");
-  const [speech, triggerSpeech] = useState("");
-  const [progress, setProgress] = useState(0);
-
   const web3 = getWeb3();
+  const isConnected = AccountStore.useState((obj) => obj.isConnected);
+
+  // presale props
+  const [statePresale, setStatePresale] = useState({
+    cap: "0",
+    totalSupply: "0",
+    progress: 0,
+    salePrice: "0",
+    isStarted: false,
+  });
+
+  // characters state
+  const [speech, triggerSpeech] = useState("");
+  const [saleStatus, setSaleStatus] = useState(""); // what is that?
+  const [saleErrorMsg, setSaleErrorMsg] = useState(""); // what is that?
+  const [connect, setConnect] = useState(""); // what is that?
+
+  const fetchPresaleData = async () => {
+    console.log("fetch presale stats");
+
+    const [hasSaleStarted, cap, totalSupply, salePrice] = await Promise.all([
+      getHasSaleStarted(),
+      presaleCap(),
+      totalClamSupply(),
+      getClamPrice(),
+    ]);
+
+    setStatePresale({
+      cap, // max will be minted tokens
+      totalSupply, // current minted tokens
+      salePrice: formatUnits(salePrice, 18),
+      progress: (Number(totalSupply) / cap) * 100,
+      isStarted: hasSaleStarted,
+    });
+  };
 
   useAsync(async () => {
-    if (web3) {
-      setInterval(async () => {
-        const cap = await presaleCap();
-        const totalSupply = await totalClamSupply();
-        const prog = (Number(totalSupply) / cap) * 100;
-        setProgress(prog);
-      }, 3000);
+    console.log({ isConnected });
+    // init call
+    await fetchPresaleData();
 
-      const hasIt = await getHasSaleStarted();
-      setHasSaleStarted(hasIt);
-    }
+    setInterval(async () => {
+      // update every 10s
+      await fetchPresaleData();
+    }, 10000); //10s
   });
+
+  useEffect(() => {
+    PresaleStore.update((obj) => ({ ...obj, ...statePresale }));
+  }, [statePresale]);
 
   return (
     <>
+      {console.log({ statePresale })}
       <Web3Navbar />
 
-      <Progress striped color="danger" value={progress}>
-        {progress}% of Clams Purchased
+      <Progress striped color="success" value={statePresale.progress}>
+        {statePresale.progress}% of Clams Purchased
       </Progress>
-      <div id="env-wrapper">
+      <div
+        id="env-wrapper"
+        className="bg-gradient-to-t from-yellow-400 via-red-500 to-green-300"
+      >
         <video autoPlay muted loop id="env">
           <source src={Shop} type="video/mp4" />
         </video>
       </div>
+
+      <div className="w-full h-full relative z-50">
+        {statePresale.isStarted && (
+          <>
+            <ClamMintModal />
+          </>
+        )}
+      </div>
+
       <div className="clam-presale">
-        {web3 ? (
+        {isConnected ? (
           <ConnectPoolClam
-            showConnect={showConnect}
+            showConnect={isConnected}
             callback={setSaleStatus}
             errCallback={setSaleErrorMsg}
             triggerSpeech={triggerSpeech}
-            progress={progress}
+            progress={statePresale.progress}
           />
         ) : (
           <></>
         )}
 
-        {!hasSaleStarted && (
+        {!statePresale.isStarted && (
           <CharacterSpeak
             character={"diego"}
             speech={"clam_presale_not_started"}
@@ -81,7 +124,7 @@ const ClamPresale = () => {
           />
         )}
 
-        {hasSaleStarted && (
+        {statePresale.isStarted && (
           <CharacterSpeak
             character={"diego"}
             speech={"clam_presale"}
