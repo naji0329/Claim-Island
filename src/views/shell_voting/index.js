@@ -83,8 +83,7 @@ const ShellVoting = () => {
         renderer={renderer}
       />
       <div id="env-wrapper">
-        <video autoPlay muted loop id="env">
-          <source src={Bank} type="video/mp4" />
+        <video autoPlay muted loop src={Bank} id="env">
         </video>
       </div>
       <div className="shell-presale">
