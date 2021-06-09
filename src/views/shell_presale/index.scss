@@ -18,12 +18,8 @@
 }
 
 #env {
-  height: 100%;
-  width: 200vh;
-  min-width: 100%;
-  min-height: 50vw;
-  right: 0;
-  bottom: 0;
+  object-fit: cover;
+  object-position: right bottom;
   position: absolute;
   pointer-events: none;
 }

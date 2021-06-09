@@ -18,16 +18,24 @@
 }
 
 #env {
+  object-fit: cover;
+  object-position: right bottom;
+  width: 100%;
   height: 100%;
-  width: 200vh;
-  min-width: 100%;
-  min-height: 50vw;
-  right: 0;
-  bottom: 0;
   position: absolute;
   pointer-events: none;
 }
 
 .opening-soon {
   display: none;
+}
+
+.wallet-balance {
+  line-height: 38px;
+  margin-right: 20px;
+  color: white;
+}
+
+.sc-connect {
+  background: rgba(0,0,0,0.5);
 }

@@ -14,6 +14,7 @@ import { web3 } from "../../web3";
 
 import { hasAccountedVoted } from "../../web3/communityVoting";
 
+
 const COUNTDOWN_END_TIME = "2021-06-10";
 
 // const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Tue May 25 2021 09:00:00 GMT+0000");

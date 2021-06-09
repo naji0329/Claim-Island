@@ -61,7 +61,7 @@ export const SPEECHES = {
 
   shell_voted_already: {
     welcome: {
-      text: `Welcome, traveller!. Please connect your wallet if not connected and then proceed.`,
+      text: `Welcome, traveller! If you haven't done so already, Please connect your wallet to proceed.`,
       next: "first",
       dismiss: false,
       skip: false,
@@ -94,7 +94,7 @@ export const SPEECHES = {
 
   shell_voting: {
     welcome: {
-      text: `Welcome, traveller!. Please connect your wallet if not connected and then proceed.`,
+      text: `Welcome, traveller! If you haven't done so already, Please connect your wallet to proceed.`,
       next: "first",
       dismiss: false,
       skip: false,
@@ -113,7 +113,7 @@ export const SPEECHES = {
 
     second: {
       text: `
-      Please note, you can vote only once, and you must use the wallet address that holds the $SHELL from our presale.
+      Please note, you can vote only once, and you must use the wallet address that holds the $SHELL from our presale. Each $SHELL you own will cast one vote.
       `,
       next: "vote",
       dismiss: false,
@@ -122,7 +122,7 @@ export const SPEECHES = {
 
     vote: {
       text: `
-        Please cast your vote. To Vote you can click any of the buttons. You can click cancel to dismiss the window.
+        Please cast your vote above.
       `,
       next: "last",
       dismiss: false,

@@ -39,7 +39,7 @@ const flexEnd = {
 };
 
 const buttonColor = {
-  backgroundColor: "#38DCDC",
+  backgroundColor: "#0072E3",
 };
 
 const INDIVIDUAL_CAP = 3;
@@ -155,7 +155,7 @@ const ConnectPool = (props) => {
 
   const render = () => {
     return props.showConnect ? (
-      <div style={flexEnd}>
+      <div className="sc-connect" style={flexEnd}>
         {!connectedAccount && (
           <Button
             onClick={() => {
@@ -169,9 +169,9 @@ const ConnectPool = (props) => {
         )}
         {connectedAccount && (
           <>
-            <Button style={buttonColor} pill={true}>
+            <div className="wallet-balance">
               $SHELL Balance: {formatBN(shellBalance, 2)}
-            </Button>
+            </div>
             <Button
               onClick={() =>
                 addTokenToMetamask({
