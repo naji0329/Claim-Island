@@ -20,19 +20,12 @@ import { PresaleStore } from "../../store/presale";
 import { AccountStore } from "../../store/account";
 
 import ClamMintModal from "./ClamMintModal";
+import Web3ClamPresale from "./Web3ClamPresale";
 
 const ClamPresale = () => {
   const web3 = getWeb3();
   const isConnected = AccountStore.useState((obj) => obj.isConnected);
-
-  // presale props
-  const [statePresale, setStatePresale] = useState({
-    cap: "0",
-    totalSupply: "0",
-    progress: 0,
-    salePrice: "0",
-    isStarted: false,
-  });
+  const presale = PresaleStore.useState((obj) => obj);
 
   // characters state
   const [speech, triggerSpeech] = useState("");
@@ -40,48 +33,13 @@ const ClamPresale = () => {
   const [saleErrorMsg, setSaleErrorMsg] = useState(""); // what is that?
   const [connect, setConnect] = useState(""); // what is that?
 
-  const fetchPresaleData = async () => {
-    console.log("fetch presale stats");
-
-    const [hasSaleStarted, cap, totalSupply, salePrice] = await Promise.all([
-      getHasSaleStarted(),
-      presaleCap(),
-      totalClamSupply(),
-      getClamPrice(),
-    ]);
-
-    setStatePresale({
-      cap, // max will be minted tokens
-      totalSupply, // current minted tokens
-      salePrice: formatUnits(salePrice, 18),
-      progress: (Number(totalSupply) / cap) * 100,
-      isStarted: hasSaleStarted,
-    });
-  };
-
-  useAsync(async () => {
-    console.log({ isConnected });
-    // init call
-    await fetchPresaleData();
-
-    setInterval(async () => {
-      // update every 10s
-      await fetchPresaleData();
-    }, 10000); //10s
-  });
-
-  useEffect(() => {
-    PresaleStore.update((obj) => ({ ...obj, ...statePresale }));
-  }, [statePresale]);
-
   return (
     <>
-      {console.log({ statePresale })}
+      {console.log({ presale, isConnected })}
       <Web3Navbar />
 
-      <Progress striped color="success" value={statePresale.progress}>
-        {statePresale.progress}% of Clams Purchased
-      </Progress>
+      <Web3ClamPresale />
+
       <div
         id="env-wrapper-clam-presale"
         className="bg-gradient-to-t from-yellow-400 via-red-500 to-green-300"
@@ -92,7 +50,7 @@ const ClamPresale = () => {
       </div>
 
       <div className="w-full h-full relative z-50">
-        {statePresale.isStarted && (
+        {presale.isStarted && (
           <>
             <ClamMintModal />
           </>
@@ -106,13 +64,13 @@ const ClamPresale = () => {
             callback={setSaleStatus}
             errCallback={setSaleErrorMsg}
             triggerSpeech={triggerSpeech}
-            progress={statePresale.progress}
+            progress={presale.progress}
           />
         ) : (
           <></>
         )}
 
-        {!statePresale.isStarted && (
+        {!presale.isStarted && (
           <CharacterSpeak
             character={"diego"}
             speech={"clam_presale_not_started"}
@@ -124,7 +82,7 @@ const ClamPresale = () => {
           />
         )}
 
-        {statePresale.isStarted && (
+        {presale.isStarted && (
           <CharacterSpeak
             character={"diego"}
             speech={"clam_presale"}

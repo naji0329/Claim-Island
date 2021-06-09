@@ -5,4 +5,5 @@ export const AccountStore = new Store({
   clamBalance: "0",
   error: undefined,
   isConnected: undefined,
+  isBSChain: undefined,
 });
