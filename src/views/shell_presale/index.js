@@ -35,8 +35,8 @@ const ShellPresale = () => {
       <Progress striped color="danger" value={progress}>
         Presale Filled {progress}%
       </Progress>
-      <div id="env-wrapper">
-        <video autoPlay muted loop id="env">
+      <div id="env-wrapper-shell-presale">
+        <video autoPlay muted loop className="env">
           <source src={Bank} type="video/mp4" />
         </video>
       </div>

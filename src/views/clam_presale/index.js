@@ -83,10 +83,10 @@ const ClamPresale = () => {
         {statePresale.progress}% of Clams Purchased
       </Progress>
       <div
-        id="env-wrapper"
+        id="env-wrapper-clam-presale"
         className="bg-gradient-to-t from-yellow-400 via-red-500 to-green-300"
       >
-        <video autoPlay muted loop id="env">
+        <video autoPlay muted loop className="env">
           <source src={Shop} type="video/mp4" />
         </video>
       </div>

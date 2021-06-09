@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import "./index.scss";
 import CharacterSpeak from "../../components/characters";
 
-import Moment from "react-moment";
-import moment from "moment";
 import Countdown from "react-countdown";
 
 import ConnectPool from "../../components/ConnectPool.js";
@@ -82,11 +80,10 @@ const ShellVoting = () => {
         onComplete={countdownComplete}
         renderer={renderer}
       />
-      <div id="env-wrapper">
-        <video autoPlay muted loop src={Bank} id="env">
-        </video>
+      <div id="env-wrapper-voting">
+        <video autoPlay muted loop src={Bank} className="env" />
       </div>
-      <div className="shell-presale">
+      <div className="shell-voting">
         <ConnectPool
           showConnect={showConnect}
           callback={setSaleStatus}

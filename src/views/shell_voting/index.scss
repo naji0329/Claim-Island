@@ -1,4 +1,4 @@
-.shell-presale {
+.shell-voting {
     width: 100%;
     height: 100vh;
     background-color: #e1c18b;
@@ -10,7 +10,7 @@
     //background-position: center, center;
 }
 
-#env-wrapper {
+#env-wrapper-voting {
   overflow: hidden;
   position: fixed;
   width: 100%;
@@ -18,20 +18,20 @@
   background: url('../../assets/locations/bank_static.jpg');
   background-size: cover;
   background-position: right bottom;
+
+  .env {
+    object-fit: cover;
+    object-position: right bottom;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+  }
 }
 
-#env {
-  object-fit: cover;
-  object-position: right bottom;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  pointer-events: none;
-}
-
-.opening-soon {
-  display: none;
-}
+// .opening-soon {
+//   display: none;
+// }
 
 .wallet-balance {
   line-height: 38px;

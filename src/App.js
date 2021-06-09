@@ -9,9 +9,6 @@ import { Container, Row, Col } from "reactstrap";
 
 import ROUTES from "./router";
 
-import ClamIsland from "./assets/img/clam_island_sign.png";
-import TgIcon from "./assets/img/tg-icon.png";
-import TwitterIcon from "./assets/img/twitter-icon.png";
 
 // import {  getClamTokenContract, getContract, httpProvider } from './services/web3';
 // import {  getContract, httpProvider } from './services/web3';
@@ -35,35 +32,7 @@ const App = (props) => {
     <Router>
       {/* <ResetCSS /> */}
       {/* <NavbarComp /> */}
-
       <Container fluid={true} className="p-0">
-        <Row className="no-gutters">
-          <Col sm={{ size: 12 }}>
-            <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-              <div className="opening-soon">
-                <a
-                  className="social-link social-icon"
-                  href="https://t.me/clamisland"
-                  target="_blank"
-                  style={{ right: "110px" }}
-                  rel="noreferrer"
-                >
-                  <img src={TgIcon} />
-                </a>
-
-                <a
-                  href="https://twitter.com/clam_island"
-                  target="_blank"
-                  className="social-icon"
-                  style={{ right: "70px" }}
-                  rel="noreferrer"
-                >
-                  <img src={TwitterIcon} />
-                </a>
-              </div>
-            </div>
-          </Col>
-        </Row>
         <Row className="no-gutters">
           <Col sm={{ size: 12 }}>
             <Switch>
