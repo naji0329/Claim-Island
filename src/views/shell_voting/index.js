@@ -61,14 +61,15 @@ const ShellVoting = () => {
             margin: 0,
             color: "#fff",
             fontWeight: "bold",
-            fontSize: "12px",
-            backgroundColor: "#dc3545",
+            fontSize: "16px",
+            padding: "5px",
+            backgroundColor: "#34cfcf",
             backgroundImage:
               "linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)",
             backgroundSize: "1rem 1rem",
           }}
         >
-          Voting Ends In {days}:{hours}:{minutes}:{seconds}
+          Voting Ends In {days} days {hours} hours {minutes} minutes {seconds} seconds
         </p>
       );
     }

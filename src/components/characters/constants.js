@@ -52,7 +52,7 @@ export const SPEECHES = {
 
   shell_voting_complete: {
     welcome: {
-      text: `Welcome, traveller!. $SHELL voting is over.`,
+      text: `Welcome, traveller! Unfortunately you're rather late. $SHELL voting is over.`,
       next: "welcome",
       dismiss: true,
       skip: false,
@@ -78,14 +78,14 @@ export const SPEECHES = {
     },
 
     last: {
-      text: `Thank you for your Vote. Here are your results.`,
+      text: `Thank you for your Vote. Here are the results.`,
       next: "first",
       dismiss: true,
       skip: false,
     },
 
     cancel: {
-      text: `Thank you for your Vote. Here are your results.`,
+      text: `Thank you for your Vote. Here are the results.`,
       next: "first",
       dismiss: true,
       skip: false,
