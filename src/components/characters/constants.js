@@ -157,7 +157,7 @@ export const SPEECHES = {
     },
 
     last: {
-      text: ` Thank you for you Vote. Here are your results.`,
+      text: ` Thank you for you Vote. Here are the results.`,
       next: "first",
       dismiss: true,
       skip: false,
