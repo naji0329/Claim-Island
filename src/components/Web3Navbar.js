@@ -50,6 +50,7 @@ const Web3Navbar = () => {
     const newBnbBalance = bnbBalance ? formatUnits(bnbBalance, 18) : 0;
     console.log("######## account balance", { newClamBalance, newBnbBalance });
 
+    // account props needs to be set individually cuz they are independent from each other
     AccountStore.update((obj) => {
       obj.clamBalance = newClamBalance;
     });
@@ -65,7 +66,15 @@ const Web3Navbar = () => {
     AccountStore.update((obj) => {
       obj.error = activateError;
     });
-  }, [clamBalance, bnbBalance, activateError]);
+
+    AccountStore.update((obj) => {
+      obj.isBSChain = chainId === ChainId.BSC;
+    });
+
+    AccountStore.update((obj) => {
+      obj.account = account;
+    });
+  }, [clamBalance, bnbBalance, activateError, chainId, account]);
 
   useEffect(() => {
     if (error) {

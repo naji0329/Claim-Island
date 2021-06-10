@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useAsync } from "react-use";
 import { useForm } from "react-hook-form";
-import { parseUnits, formatUnits } from "@ethersproject/units";
-
+import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import "./index.scss";
+
+import { buyClamPresale } from "../../web3/buyClamPresale";
+import { clamPresaleAddress } from "../../web3/constants";
 
 import { AccountStore } from "../../store/account";
 import { PresaleStore } from "../../store/presale";
@@ -22,8 +23,10 @@ const Divider = () => (
   </div>
 );
 
-const ClamMintModal = ({ progress }) => {
-  const { clamBalance, bnbBalance } = AccountStore.useState((obj) => obj);
+const ClamMintModal = ({}) => {
+  const bnbBalance = AccountStore.useState((obj) => obj.bnbBalance);
+  const clamBalance = AccountStore.useState((obj) => obj.clamBalance);
+  const account = AccountStore.useState((obj) => obj.account);
   const presaleState = PresaleStore.useState((obj) => obj);
 
   const INDIVIDUAL_CAP = 1;
@@ -32,8 +35,16 @@ const ClamMintModal = ({ progress }) => {
   const { register, handleSubmit, setValue, reset, formState, getValues } =
     useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    console.log({ data, account });
+
+    await buyClamPresale({ account })
+      .then((res) => {
+        alert(res);
+      })
+      .catch((e) => {
+        alert(e.message);
+      });
   };
 
   return (
@@ -52,7 +63,14 @@ const ClamMintModal = ({ progress }) => {
                 <h2 className="text-blue-700 font-semibold text-2xl tracking-wide mb-2">
                   Get Clams on BSC
                 </h2>
-                <p className="text-gray-500 text-base">0x...</p>
+                <a
+                  className="text-gray-500 text-base underline"
+                  href={getExplorerAddressLink(clamPresaleAddress, ChainId.BSC)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {clamPresaleAddress}
+                </a>
               </div>
 
               {/* input */}
@@ -154,14 +172,14 @@ const ClamMintModal = ({ progress }) => {
                     type="submit"
                     className="disabled cursor-not-allowed block uppercase text-center shadow bg-blue-300  focus:shadow-outline focus:outline-none text-white text-2xl py-3 px-10 rounded-xl"
                   >
-                    Buy 1 Clam(s)
+                    Not allowed buy more
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="disabled:opacity-50 block uppercase text-center shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-2xl py-3 px-10 rounded-xl"
+                    className="block uppercase text-center shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-2xl py-3 px-10 rounded-xl"
                   >
-                    Buy 1 Clam(s)
+                    Buy 1 Clam
                   </button>
                 )}
               </div>

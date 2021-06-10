@@ -20,19 +20,12 @@ import { PresaleStore } from "../../store/presale";
 import { AccountStore } from "../../store/account";
 
 import ClamMintModal from "./ClamMintModal";
+import Web3ClamPresale from "./Web3ClamPresale";
 
 const ClamPresale = () => {
   const web3 = getWeb3();
   const isConnected = AccountStore.useState((obj) => obj.isConnected);
-
-  // presale props
-  const [statePresale, setStatePresale] = useState({
-    cap: "0",
-    totalSupply: "0",
-    progress: 0,
-    salePrice: "0",
-    isStarted: false,
-  });
+  const presale = PresaleStore.useState((obj) => obj);
 
   // characters state
   const [speech, triggerSpeech] = useState("");
@@ -40,101 +33,53 @@ const ClamPresale = () => {
   const [saleErrorMsg, setSaleErrorMsg] = useState(""); // what is that?
   const [connect, setConnect] = useState(""); // what is that?
 
-  const fetchPresaleData = async () => {
-    console.log("fetch presale stats");
-
-    const [hasSaleStarted, cap, totalSupply, salePrice] = await Promise.all([
-      getHasSaleStarted(),
-      presaleCap(),
-      totalClamSupply(),
-      getClamPrice(),
-    ]);
-
-    setStatePresale({
-      cap, // max will be minted tokens
-      totalSupply, // current minted tokens
-      salePrice: formatUnits(salePrice, 18),
-      progress: (Number(totalSupply) / cap) * 100,
-      isStarted: hasSaleStarted,
-    });
-  };
-
-  useAsync(async () => {
-    console.log({ isConnected });
-    // init call
-    await fetchPresaleData();
-
-    setInterval(async () => {
-      // update every 10s
-      await fetchPresaleData();
-    }, 10000); //10s
-  });
-
-  useEffect(() => {
-    PresaleStore.update((obj) => ({ ...obj, ...statePresale }));
-  }, [statePresale]);
-
   return (
     <>
-      {console.log({ statePresale })}
+      {console.log({ presale, isConnected })}
       <Web3Navbar />
-
-      <Progress striped color="success" value={statePresale.progress}>
-        {statePresale.progress}% of Clams Purchased
-      </Progress>
-      <div
-        id="env-wrapper-clam-presale"
-        className="bg-gradient-to-t from-yellow-400 via-red-500 to-green-300"
-      >
-        <video autoPlay muted loop className="env">
+      <Web3ClamPresale />
+      {/* container */}
+      <div className="min-w-screen min-h-screen flex items-center overflow-hidden relative bg-gradient-to-t from-blue-400 to-green-500">
+        <video
+          autoPlay
+          muted
+          loop
+          className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-10"
+        >
           <source src={Shop} type="video/mp4" />
         </video>
-      </div>
 
-      <div className="w-full h-full relative z-50">
-        {statePresale.isStarted && (
-          <>
-            <ClamMintModal />
-          </>
-        )}
-      </div>
+        {/* chat character   */}
+        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20 -top-12">
+          {!presale.isStarted && (
+            <CharacterSpeak
+              character={"diego"}
+              speech={"clam_presale_not_started"}
+              web3={web3}
+              setConnect={setConnect}
+              saleStatus={saleStatus}
+              saleErrorMsg={saleErrorMsg}
+              triggerSpeech={speech}
+            />
+          )}
 
-      <div className="clam-presale">
-        {isConnected ? (
-          <ConnectPoolClam
-            showConnect={isConnected}
-            callback={setSaleStatus}
-            errCallback={setSaleErrorMsg}
-            triggerSpeech={triggerSpeech}
-            progress={statePresale.progress}
-          />
-        ) : (
-          <></>
-        )}
+          {presale.isStarted && (
+            <CharacterSpeak
+              character={"diego"}
+              speech={"clam_presale"}
+              web3={web3}
+              setConnect={setConnect}
+              saleStatus={saleStatus}
+              saleErrorMsg={saleErrorMsg}
+              triggerSpeech={speech}
+            />
+          )}
+        </div>
 
-        {!statePresale.isStarted && (
-          <CharacterSpeak
-            character={"diego"}
-            speech={"clam_presale_not_started"}
-            web3={web3}
-            setConnect={setConnect}
-            saleStatus={saleStatus}
-            saleErrorMsg={saleErrorMsg}
-            triggerSpeech={speech}
-          />
-        )}
-
-        {statePresale.isStarted && (
-          <CharacterSpeak
-            character={"diego"}
-            speech={"clam_presale"}
-            web3={web3}
-            setConnect={setConnect}
-            saleStatus={saleStatus}
-            saleErrorMsg={saleErrorMsg}
-            triggerSpeech={speech}
-          />
-        )}
+        {/* modal */}
+        <div className="flex-1 justify-center min-h-full min-w-full  md:flex items-center absolute z-30 -top-0 md:-top-64">
+          {presale.isStarted && <ClamMintModal />}
+        </div>
       </div>
     </>
   );

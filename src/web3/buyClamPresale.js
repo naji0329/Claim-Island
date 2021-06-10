@@ -33,11 +33,11 @@ export const buyClamPresale = async ({ account }, callback, errCallback) => {
     .once("confirmation", async () => {
       try {
         console.log("Success"); // add a toaster here
-        callback("sale_success");
+        return "sale_success";
       } catch (error) {
         console.error(error); // add toaster to show error
-        callback("sale_failure");
-        errCallback(error.message);
+        // callback("sale_failure");
+        return error;
       }
     });
 };
