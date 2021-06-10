@@ -6,4 +6,5 @@ export const AccountStore = new Store({
   error: undefined,
   isConnected: undefined,
   isBSChain: undefined,
+  account: undefined,
 });

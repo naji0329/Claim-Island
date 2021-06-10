@@ -70,7 +70,11 @@ const Web3Navbar = () => {
     AccountStore.update((obj) => {
       obj.isBSChain = chainId === ChainId.BSC;
     });
-  }, [clamBalance, bnbBalance, activateError, chainId]);
+
+    AccountStore.update((obj) => {
+      obj.account = account;
+    });
+  }, [clamBalance, bnbBalance, activateError, chainId, account]);
 
   useEffect(() => {
     if (error) {
