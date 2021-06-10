@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import Clams3D from '../../components/three/3DClams/3DClams';
+
 import AddClam from "../../assets/img/add_clam.png";
 
 import {
@@ -48,6 +50,7 @@ const Vault = () => {
       <h2 className="header">Your Vault</h2>
       <div style={{ textAlign: "#left" }}>
         <h3>Clams</h3>
+        <Clams3D />
         <CardColumns>
           {CLAMS.map((k, i) => {
             const src = require(`../../assets/img/clamjam/${k.src}`).default;
