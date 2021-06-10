@@ -9,6 +9,7 @@ import {
   hasSaleStarted as getHasSaleStarted,
   getClamPrice,
 } from "../../web3/buyClamPresale";
+
 import { totalClamSupply } from "../../web3/clam";
 import { PresaleStore } from "../../store/presale";
 import { AccountStore } from "../../store/account";
@@ -28,22 +29,22 @@ const Web3ClamPresale = () => {
   const fetchPresaleData = async () => {
     console.log("fetch presale data", { isBSChain });
 
-    if (isBSChain) {
-      const [hasSaleStarted, cap, totalSupply, salePrice] = await Promise.all([
-        getHasSaleStarted(),
-        presaleCap(),
-        totalClamSupply(),
-        getClamPrice(),
-      ]);
+    // if (isBSChain) {
+    const [hasSaleStarted, cap, totalSupply, salePrice] = await Promise.all([
+      getHasSaleStarted(),
+      presaleCap(),
+      totalClamSupply(),
+      getClamPrice(),
+    ]);
 
-      setStatePresale({
-        cap, // max will be minted tokens
-        totalSupply, // current minted tokens
-        salePrice: formatUnits(salePrice, 18),
-        progress: (Number(totalSupply) / cap) * 100,
-        isStarted: hasSaleStarted,
-      });
-    }
+    setStatePresale({
+      cap, // max will be minted tokens
+      totalSupply, // current minted tokens
+      salePrice: formatUnits(salePrice, 18),
+      progress: (Number(totalSupply) / cap) * 100,
+      isStarted: hasSaleStarted,
+    });
+    // }
   };
 
   useAsync(async () => {
