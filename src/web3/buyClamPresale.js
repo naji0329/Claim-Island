@@ -43,7 +43,7 @@ export const buyClamPresale = async ({ account }, callback, errCallback) => {
     });
 };
 
-export const collectClam = async ({ account }, callback, errCallback) => {
+export const collectClam = async (account, callback, errCallback) => {
   if (!account) {
     throw new Error("there is no account connected");
   }
@@ -66,12 +66,13 @@ export const collectClam = async ({ account }, callback, errCallback) => {
     })
     .once("confirmation", async () => {
       try {
-        console.log("Success"); // add a toaster here
-        callback("sale_success");
+        console.log("Success", { res }); // add a toaster here
+        // return "sale_success";
+        return res;
       } catch (error) {
         console.error(error); // add toaster to show error
-        callback("sale_failure");
-        errCallback(error.message);
+        // callback("sale_failure");
+        return error;
       }
     });
 };
@@ -113,8 +114,24 @@ export const hasPurchasedClam = async (address) => {
       address: clamPresaleAddress,
     });
     const value = await clamPresale.methods.hasPurchasedClam(address).call();
-    console.log("hasPurchasedClam", { value });
     return value;
+  }
+};
+
+export const rngRequestHashFromBuyersClam = async (address) => {
+  if (address) {
+    const clamPresale = contractFactory({
+      abi: clamPresaleAbi,
+      address: clamPresaleAddress,
+    });
+    const value = await clamPresale.methods
+      .rngRequestHashFromBuyersClam(address)
+      .call();
+    console.log("rngRequestHashFromBuyersClam", { value });
+    return value ===
+      "0x0000000000000000000000000000000000000000000000000000000000000000"
+      ? undefined
+      : value;
   }
 };
 
@@ -125,4 +142,5 @@ export default {
   presaleCap,
   hasSaleStarted,
   hasPurchasedClam,
+  rngRequestHashFromBuyersClam,
 };

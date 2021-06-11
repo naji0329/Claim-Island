@@ -18,6 +18,7 @@ const initialState = {
     salePrice: "0",
     isStarted: false,
     hasPurchasedClam: false,
+    rng: undefined, // from call rngRequestHashFromBuyersClam
   },
 };
 
