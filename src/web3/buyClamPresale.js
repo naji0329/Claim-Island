@@ -3,7 +3,7 @@ import { clamPresaleAddress } from "./constants";
 import { contractFactory } from "./index";
 import { getOracleFee } from "./rng";
 
-export const buyClamPresale = async ({ account }, callback, errCallback) => {
+export const buyClamPresale = async (account, callback, errCallback) => {
   if (!account) {
     throw new Error("there is no account connected");
   }
