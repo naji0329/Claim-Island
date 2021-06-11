@@ -6,16 +6,17 @@ import {
   useEtherBalance,
   ChainId,
 } from "@usedapp/core";
+import { connect } from "redux-zero/react";
+import { actions } from "../store/redux";
 
 import { formatUnits } from "@ethersproject/units";
 
 import { clamNFTAddress } from "../web3/constants.js";
-import { AccountStore } from "../store/account";
 
 const ErrorAlert = ({ title, description }) => (
   <div className="w-full absolute">
     <div
-      className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2"
+      className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-50"
       role="alert"
     >
       <div className="flex">
@@ -35,10 +36,15 @@ const ErrorAlert = ({ title, description }) => (
   </div>
 );
 
-const Web3Navbar = () => {
+const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
+
+const Web3Navbar = ({ updateAccount, account: { clamBalance } }) => {
+  //  is called several times thus need a state to lower the renders
   const [activateError, setActivateError] = useState("");
+  const [activateBnbBalance, setActivateBnbBalance] = useState("0");
+
   const { activateBrowserWallet, account, chainId, error } = useEthers();
-  const clamBalance = useTokenBalance(clamNFTAddress, account);
+  // const clamBalance = useTokenBalance(clamNFTAddress, account); // TODO - not working
   const bnbBalance = useEtherBalance(account);
 
   useAsync(async () => {
@@ -46,41 +52,33 @@ const Web3Navbar = () => {
   });
 
   useEffect(() => {
-    const newClamBalance = clamBalance ? formatUnits(clamBalance, 0) : 0;
-    const newBnbBalance = bnbBalance ? formatUnits(bnbBalance, 18) : 0;
-    console.log("######## account balance", { newClamBalance, newBnbBalance });
+    console.log("useEffect updateAccount");
 
-    // account props needs to be set individually cuz they are independent from each other
-    AccountStore.update((obj) => {
-      obj.clamBalance = newClamBalance;
+    updateAccount({
+      bnbBalance: activateBnbBalance,
+      // clamBalance: newClamBalance,
+      error: activateError,
+      isConnected: account ? true : false,
+      isBSChain: chainId === ChainId.BSC,
+      address: account,
     });
-
-    AccountStore.update((obj) => {
-      obj.bnbBalance = newBnbBalance;
-    });
-
-    AccountStore.update((obj) => {
-      obj.isConnected = account ? true : false;
-    });
-
-    AccountStore.update((obj) => {
-      obj.error = activateError;
-    });
-
-    AccountStore.update((obj) => {
-      obj.isBSChain = chainId === ChainId.BSC;
-    });
-
-    AccountStore.update((obj) => {
-      obj.account = account;
-    });
-  }, [clamBalance, bnbBalance, activateError, chainId, account]);
+  }, [account, chainId, activateError, activateBnbBalance]);
 
   useEffect(() => {
     if (error) {
       setActivateError(error.message);
     }
   }, [error]);
+
+  useEffect(() => {
+    // bnbBalance is bignumber
+    const balance = formatBNB(bnbBalance);
+    // console.log("useEffect", { balance });
+    if (balance !== activateBnbBalance) {
+      // balance is string
+      setActivateBnbBalance(balance);
+    }
+  }, [bnbBalance]);
 
   return (
     <>
@@ -107,32 +105,18 @@ const Web3Navbar = () => {
         />
       )}
 
-      <nav className="flex items-center justify-between flex-wrap bg-white py-4 lg:px-12 shadow border-solid border-b-4 border-blue-200">
+      <nav className="flex-1 min-h-48 min-w-full  md:flex items-center absolute top-10 z-40">
+        {/* <nav className="flex items-center justify-between flex-wrap bg-white py-4 lg:px-12 shadow border-solid border-b-4 border-blue-200"> */}
         <div className="flex justify-between lg:w-auto w-full lg:border-b-0 pl-6 pr-2 border-solid border-b-2 border-gray-300 pb-0 lg:pb-2">
           <div className="flex items-center flex-shrink-0 text-gray-800 mr-16">
-            <span className="font-semibold text-xl tracking-tight">$CLAM</span>
-          </div>
-          <div className="block lg:hidden ">
-            <button
-              id="nav"
-              className="flex items-center px-3 py-2 border-2 rounded text-blue-700 border-blue-700 hover:text-blue-700 hover:border-blue-700"
-            >
-              <svg
-                className="fill-current h-3 w-3"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <title>Menu</title>
-                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-              </svg>
-            </button>
+            {/* <span className="font-semibold text-xl tracking-tight">$CLAM</span> */}
           </div>
         </div>
 
         <div className="menu w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
           <div className="lg:flex-grow">
             {account && (
-              <p className="block lg:inline-block lg:mt-0 px-4 py-2  mr-2">
+              <p className="block lg:inline-block lg:mt-0 px-4 py-2  mr-2 bg-white shadow rounded">
                 Account:{" "}
                 <span className="bg-blue-100 text-blue-500 p-1 rounded text-sm">
                   {account}
@@ -145,7 +129,7 @@ const Web3Navbar = () => {
             {!account && (
               <button
                 type="button"
-                className="focus:outline-none block text-md px-4  ml-2 py-2 rounded border-2 border-blue-400 text-blue-600 font-bold hover:text-white hover:bg-blue-400"
+                className="focus:outline-none block text-md px-4 ml-2 py-2 rounded border-2 border-white  bg-blue-600 text-white font-bold hover:text-white hover:bg-blue-400"
                 onClick={() => activateBrowserWallet()}
               >
                 Connect Wallet
@@ -154,7 +138,7 @@ const Web3Navbar = () => {
 
             {account && (
               <>
-                <p className="block lg:inline-block lg:mt-0 px-4 py-2  mr-2">
+                <p className="block lg:inline-block lg:mt-0 px-4 py-2  mr-2 rounded bg-white shadow">
                   Balance:{" "}
                   <span className="bg-blue-100 text-blue-500 p-1 rounded text-sm">
                     {clamBalance ? formatUnits(clamBalance, 0) : 0} CLAM
@@ -168,5 +152,6 @@ const Web3Navbar = () => {
     </>
   );
 };
-
-export default Web3Navbar;
+// just send everything
+const mapToProps = (redux) => redux;
+export default connect(mapToProps, actions)(Web3Navbar);

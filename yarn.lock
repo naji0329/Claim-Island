@@ -14360,6 +14360,11 @@ reduce-css-calc@^2.1.8:
     css-unit-converter "^1.1.1"
     postcss-value-parser "^3.3.0"
 
+redux-zero@^5.1.7:
+  version "5.1.7"
+  resolved "https://registry.yarnpkg.com/redux-zero/-/redux-zero-5.1.7.tgz#31b307b44178677c492f2d7306e8d8b44d64f5de"
+  integrity sha512-CGSnep4N3ivbmpdO/yAXwdmPv0zdbDBcim4XiErO77PLukpYolhSHBZbZo9HImb5qrnnKOd3dJpbgwFOrRN6uA==
+
 regenerate-unicode-properties@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-8.2.0.tgz#e5de7111d655e7ba60c057dbe9ff37c87e65cdec"

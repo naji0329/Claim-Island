@@ -9,6 +9,9 @@ import { ThemeProvider } from "styled-components";
 import { light, dark } from "@pancakeswap-libs/uikit";
 import { ChainId, DAppProvider } from "@usedapp/core";
 
+import { Provider } from "redux-zero/react";
+import { store } from "./store/redux";
+
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
@@ -28,21 +31,23 @@ const config = {
 };
 
 ReactDOM.render(
-  <bsc.UseWalletProvider
-    chainId={chainId}
-    connectors={{
-      walletconnect: { rpcUrl },
-      bsc,
-    }}
-  >
-    <DAppProvider config={config}>
-      <ThemeProvider theme={dark}>
-        <ModalProvider>
-          <App />
-        </ModalProvider>
-      </ThemeProvider>
-    </DAppProvider>
-  </bsc.UseWalletProvider>,
+  <Provider store={store}>
+    <bsc.UseWalletProvider
+      chainId={chainId}
+      connectors={{
+        walletconnect: { rpcUrl },
+        bsc,
+      }}
+    >
+      <DAppProvider config={config}>
+        <ThemeProvider theme={dark}>
+          <ModalProvider>
+            <App />
+          </ModalProvider>
+        </ThemeProvider>
+      </DAppProvider>
+    </bsc.UseWalletProvider>
+  </Provider>,
   document.getElementById("root")
 );
 

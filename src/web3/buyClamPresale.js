@@ -30,10 +30,11 @@ export const buyClamPresale = async ({ account }, callback, errCallback) => {
       gas: gasEstimation,
       value: amount,
     })
-    .once("confirmation", async () => {
+    .once("confirmation", async (res) => {
       try {
-        console.log("Success"); // add a toaster here
-        return "sale_success";
+        console.log("Success", { res }); // add a toaster here
+        // return "sale_success";
+        return res;
       } catch (error) {
         console.error(error); // add toaster to show error
         // callback("sale_failure");
@@ -103,4 +104,25 @@ export const hasSaleStarted = async () => {
   const value = await clamPresale.methods.hasSaleStarted().call();
 
   return value;
+};
+
+export const hasPurchasedClam = async (address) => {
+  if (address) {
+    const clamPresale = contractFactory({
+      abi: clamPresaleAbi,
+      address: clamPresaleAddress,
+    });
+    const value = await clamPresale.methods.hasPurchasedClam(address).call();
+    console.log("hasPurchasedClam", { value });
+    return value;
+  }
+};
+
+export default {
+  buyClamPresale,
+  collectClam,
+  getClamPrice,
+  presaleCap,
+  hasSaleStarted,
+  hasPurchasedClam,
 };

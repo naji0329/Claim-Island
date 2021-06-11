@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { getExplorerAddressLink, ChainId } from "@usedapp/core";
+import { connect } from "redux-zero/react";
 import "./index.scss";
 
 import { buyClamPresale } from "../../web3/buyClamPresale";
 import { clamPresaleAddress } from "../../web3/constants";
-
-import { AccountStore } from "../../store/account";
-import { PresaleStore } from "../../store/presale";
 
 const Divider = () => (
   <div className="w-full flex flex-col justify-center items-center my-2">
@@ -23,24 +21,22 @@ const Divider = () => (
   </div>
 );
 
-const ClamMintModal = ({}) => {
-  const bnbBalance = AccountStore.useState((obj) => obj.bnbBalance);
-  const clamBalance = AccountStore.useState((obj) => obj.clamBalance);
-  const account = AccountStore.useState((obj) => obj.account);
-  const presaleState = PresaleStore.useState((obj) => obj);
-
+const ClamMintModal = ({
+  account: { bnbBalance, address },
+  presale: { salePrice, hasPurchasedClam },
+}) => {
   const INDIVIDUAL_CAP = 1;
-  //  disableButton = clamBalance > INDIVIDUAL_CAP;
+  //  disableButton = hasPurchasedClam > INDIVIDUAL_CAP;
 
   const { register, handleSubmit, setValue, reset, formState, getValues } =
     useForm();
 
   const onSubmit = async (data) => {
-    console.log({ data, account });
+    console.log({ data, address });
 
-    await buyClamPresale({ account })
+    await buyClamPresale({ address })
       .then((res) => {
-        alert(res);
+        alert("You just got a CLAM! Congrats!");
       })
       .catch((e) => {
         alert(e.message);
@@ -51,9 +47,8 @@ const ClamMintModal = ({}) => {
     <>
       {console.log({
         form: getValues(),
-        clamBalance,
+        hasPurchasedClam,
         bnbBalance,
-        presaleState,
       })}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex flex-col justify-center items-center">
@@ -89,7 +84,7 @@ const ClamMintModal = ({}) => {
                         <div className="flex flex-row">
                           <input
                             disabled
-                            value={presaleState.salePrice}
+                            value={salePrice}
                             className="bg-grey-lighter text-grey-darker p-2 font-normal rounded text-grey-darkest border border-grey-lighter rounded-l-none font-bold"
                             {...register("input", { required: true })}
                             // onChange={(v) => {
@@ -157,20 +152,18 @@ const ClamMintModal = ({}) => {
                           </span>
                         </div>
                       </div>
-                      <span className="mb-1">
-                        1 CLAM = {presaleState.salePrice} BNB
-                      </span>
+                      <span className="mb-1">1 CLAM = {salePrice} BNB</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="py-4 flex flex-col">
-                {clamBalance > INDIVIDUAL_CAP ? (
+                {hasPurchasedClam ? (
                   <button
                     disabled
                     type="submit"
-                    className="disabled cursor-not-allowed block uppercase text-center shadow bg-blue-300  focus:shadow-outline focus:outline-none text-white text-2xl py-3 px-10 rounded-xl"
+                    className="disabled cursor-not-allowed block uppercase text-center shadow bg-red-300  focus:shadow-outline focus:outline-none text-white text-2xl py-3 px-10 rounded-xl"
                   >
                     Not allowed buy more
                   </button>
@@ -191,4 +184,5 @@ const ClamMintModal = ({}) => {
   );
 };
 
-export default ClamMintModal;
+const mapToProps = (store) => store;
+export default connect(mapToProps)(ClamMintModal);
