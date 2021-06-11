@@ -23,3 +23,9 @@ export const totalClamSupply = async (account) => {
   const totalSupply = await clamNft.methods.totalSupply().call();
   return totalSupply;
 };
+
+export default {
+  balanceOf,
+  accountClamBalance,
+  totalClamSupply,
+};

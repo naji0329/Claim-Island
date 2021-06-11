@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useAsync } from "react-use";
-import { Progress } from "reactstrap";
-import { formatUnits } from "@ethersproject/units";
-
+import React, { useState } from "react";
+import { connect } from "redux-zero/react";
 import "./index.scss";
 import CharacterSpeak from "../../components/characters";
-import ConnectPoolClam from "../../components/ConnectPoolClam.js";
 import Web3Navbar from "../../components/Web3Navbar";
 import Shop from "../../assets/locations/shop_animated.mp4";
 
-import {
-  presaleCap,
-  hasSaleStarted as getHasSaleStarted,
-  getClamPrice,
-} from "../../web3/buyClamPresale";
-import { totalClamSupply } from "../../web3/clam";
 import getWeb3 from "../../web3/getWeb3";
-import { PresaleStore } from "../../store/presale";
-import { AccountStore } from "../../store/account";
 
 import ClamMintModal from "./ClamMintModal";
 import Web3ClamPresale from "./Web3ClamPresale";
 
-const ClamPresale = () => {
+const ClamPresale = ({ presale: { isStarted } }) => {
   const web3 = getWeb3();
-  const isConnected = AccountStore.useState((obj) => obj.isConnected);
-  const presale = PresaleStore.useState((obj) => obj);
 
   // characters state
   const [speech, triggerSpeech] = useState("");
@@ -35,7 +21,7 @@ const ClamPresale = () => {
 
   return (
     <>
-      {console.log({ presale, isConnected })}
+      {console.log({ isStarted })}
       <Web3Navbar />
       <Web3ClamPresale />
       {/* container */}
@@ -51,7 +37,7 @@ const ClamPresale = () => {
 
         {/* chat character   */}
         <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20 -top-12">
-          {!presale.isStarted && (
+          {!isStarted && (
             <CharacterSpeak
               character={"diego"}
               speech={"clam_presale_not_started"}
@@ -63,7 +49,7 @@ const ClamPresale = () => {
             />
           )}
 
-          {presale.isStarted && (
+          {isStarted && (
             <CharacterSpeak
               character={"diego"}
               speech={"clam_presale"}
@@ -78,11 +64,12 @@ const ClamPresale = () => {
 
         {/* modal */}
         <div className="flex-1 justify-center min-h-full min-w-full  md:flex items-center absolute z-30 -top-0 md:-top-64">
-          {presale.isStarted && <ClamMintModal />}
+          {isStarted && <ClamMintModal />}
         </div>
       </div>
     </>
   );
 };
 
-export default ClamPresale;
+const mapToProps = (state) => state;
+export default connect(mapToProps)(ClamPresale);
