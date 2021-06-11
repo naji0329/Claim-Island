@@ -36,25 +36,33 @@ const ClamMintModal = ({
 
     await buyClamPresale(address)
       .then((res) => {
-        alert("You just got a CLAM! Congrats!");
+        updateCharacter({
+          name: "diego",
+          action: "clam_presale.congrats.text",
+          button: {
+            text: "Ok",
+          },
+        });
       })
       .catch((e) => {
-        alert(e.message);
+        console.error(e);
+        updateCharacter({
+          name: "diego",
+          action: "clam_presale.error.text",
+          button: {
+            text: "Dismiss",
+          },
+        });
       });
   };
 
   return (
     <>
-      {console.log({
-        form: getValues(),
-        hasPurchasedClam,
-        bnbBalance,
-      })}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex flex-col justify-center items-center">
-          <div className="max-w-lg bg-white shadow-md rounded-lg overflow-hidden mx-auto">
-            <div className="py-4 px-8 mt-3">
-              <div className="flex flex-col mb-8">
+          <div className="max-w-md bg-white shadow-md rounded-lg overflow-hidden mx-auto">
+            <div className="px-3 py-2 mt-3">
+              <div className="flex flex-col mb-1">
                 <h2 className="text-blue-700 font-semibold text-2xl tracking-wide mb-2">
                   Get Clams on BSC
                 </h2>
@@ -70,7 +78,7 @@ const ClamMintModal = ({
 
               {/* input */}
               <div className="bg-white border-2 shadow-xl rounded-lg">
-                <div className="p-3">
+                <div className="px-2 py-1">
                   <div className="flex flex-col">
                     <h4 className="text-lg font-semibold">Price of Clam</h4>
                     <div className="flex flex-col text-sm text-gray-500">
@@ -105,7 +113,7 @@ const ClamMintModal = ({
                           </span>
                         </div>
                       </div>
-                      <span className="mb-1">/{bnbBalance} BNB available</span>
+                      <span className="mb-1">{bnbBalance} BNB available</span>
                     </div>
                   </div>
                 </div>
@@ -115,7 +123,7 @@ const ClamMintModal = ({
 
               {/* output */}
               <div className="bg-white border-2 shadow-xl rounded-lg">
-                <div className="p-3">
+                <div className="px-2 py-1">
                   <div className="flex flex-col">
                     <h4 className="text-lg font-semibold">Clams to buy</h4>
                     <div className="flex flex-col text-sm text-gray-500">
@@ -158,19 +166,19 @@ const ClamMintModal = ({
                 </div>
               </div>
 
-              <div className="py-4 flex flex-col">
+              <div className="py-2 flex flex-col">
                 {hasPurchasedClam ? (
                   <button
                     disabled
                     type="submit"
-                    className="disabled cursor-not-allowed block uppercase text-center shadow bg-red-300  focus:shadow-outline focus:outline-none text-white text-2xl py-3 px-10 rounded-xl"
+                    className="disabled cursor-not-allowed block uppercase text-center shadow bg-red-300  focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl"
                   >
                     Not allowed buy more
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="block uppercase text-center shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-2xl py-3 px-10 rounded-xl"
+                    className="block uppercase text-center shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl"
                   >
                     Buy 1 Clam
                   </button>

@@ -264,14 +264,6 @@ export const SPEECHES = {
     },
   },
 
-  // clam_presale: [
-  //   `Welcome, traveller! You're early! Clam Island Shop isn't open for business yet. But I can hook you up with some fresh Clams we caught this morning. Would you like to buy some?`,
-
-  //   `First, you would need to connect your wallet. Then choose your currency. Then select amount of Clams you want to purchase today.`,
-
-  //   `Congratulations! You have have purchased 1 Clam! I’ll keep it safe for you until the grand opening. How can I be useful now?`,
-  // ],
-
   clam_presale_not_started: {
     welcome: {
       text: `Welcome, traveller! You're early! $CLAM 1st round of presale starts in ${clamPresaleCountdown()}. Please check back in then.`,
@@ -351,7 +343,21 @@ export const SPEECHES = {
     },
 
     congrats: {
-      text: `Congratulations on being one of our first customers! You can see your $CLAM balance at the top right of the screen. Remember they are not transferable until Clam Island opens! We look forward to seeing you at the launch!`,
+      text: `Congratulations on being one of our first customers! You must now collect your $CLAM to reveal it!`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
+    conllection: {
+      text: `You Clam is ready for collection! Click in the button to send the transaction.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
+    congratsConllection: {
+      text: `You Got a CLAM! You can see your $CLAM balance at the top right of the screen. Remember they are not transferable until Clam Island opens! Le me show what you got!`,
       next: false,
       dismiss: true,
       skip: false,

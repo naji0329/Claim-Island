@@ -20,6 +20,14 @@ const initialState = {
     hasPurchasedClam: false,
     rng: undefined, // from call rngRequestHashFromBuyersClam
   },
+  character: {
+    name: undefined,
+    action: undefined,
+    button: {
+      text: undefined,
+      alt: undefined,
+    },
+  },
 };
 
 const middlewares = connect ? applyMiddleware(connect(initialState)) : [];
@@ -38,6 +46,14 @@ export const actions = (store) => ({
     return {
       presale: {
         ...state.presale,
+        ...value,
+      },
+    };
+  },
+  updateCharacter: (state, value) => {
+    return {
+      character: {
+        ...state.character,
         ...value,
       },
     };
