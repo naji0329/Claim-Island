@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
+import { useHistory } from "react-router-dom";
+
 import "./index.scss";
 
 import presaleContract from "../../web3/buyClamPresale";
@@ -14,6 +16,7 @@ const ClamCollectModal = ({
   presale: { hasPurchasedClam },
 }) => {
   const { handleSubmit } = useForm();
+  let history = useHistory();
 
   const onSubmit = async (data) => {
     console.log({ data, address });
@@ -22,6 +25,7 @@ const ClamCollectModal = ({
       .collectClam(address)
       .then((res) => {
         alert("You just got a CLAM! Congrats!");
+        history.push("/vault");
       })
       .catch((e) => {
         alert(e.message);
