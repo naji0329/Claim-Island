@@ -34,7 +34,7 @@ const ClamMintModal = ({
   const onSubmit = async (data) => {
     console.log({ data, address });
 
-    await buyClamPresale({ address })
+    await buyClamPresale(address)
       .then((res) => {
         alert("You just got a CLAM! Congrats!");
       })

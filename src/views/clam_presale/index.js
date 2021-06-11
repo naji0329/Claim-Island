@@ -8,9 +8,11 @@ import Shop from "../../assets/locations/shop_animated.mp4";
 import getWeb3 from "../../web3/getWeb3";
 
 import ClamMintModal from "./ClamMintModal";
+import ClamCollectModal from "./ClamCollectModal";
+
 import Web3ClamPresale from "./Web3ClamPresale";
 
-const ClamPresale = ({ presale: { isStarted } }) => {
+const ClamPresale = ({ presale: { isStarted, rng, hasPurchasedClam } }) => {
   const web3 = getWeb3();
 
   // characters state
@@ -60,11 +62,24 @@ const ClamPresale = ({ presale: { isStarted } }) => {
               triggerSpeech={speech}
             />
           )}
+
+          {/* {rng && hasPurchasedClam && (
+            <CharacterSpeak
+              character={"diego"}
+              speech={"clam_presale_collection"}
+              web3={web3}
+              setConnect={setConnect}
+              saleStatus={saleStatus}
+              saleErrorMsg={saleErrorMsg}
+              triggerSpeech={speech}
+            />
+          )} */}
         </div>
 
         {/* modal */}
         <div className="flex-1 justify-center min-h-full min-w-full  md:flex items-center absolute z-30 -top-0 md:-top-64">
-          {isStarted && <ClamMintModal />}
+          {isStarted && !rng && <ClamMintModal />}
+          {rng && hasPurchasedClam && <ClamCollectModal />}
         </div>
       </div>
     </>
