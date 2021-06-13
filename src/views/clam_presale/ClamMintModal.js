@@ -175,7 +175,7 @@ const ClamMintModal = ({
                 type="submit"
                 className="disabled cursor-not-allowed block uppercase text-center shadow bg-red-300  focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl"
               >
-                Not allowed buy more
+                Already purchased
               </button>
             ) : (
               <button
