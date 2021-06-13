@@ -7,6 +7,7 @@ import { connect } from "redux-zero/react";
 import "./index.scss";
 
 import presaleContract from "../../web3/buyClamPresale";
+import { getRNGFromHashRequest } from "../../web3/rng";
 import clamContract from "../../web3/clam";
 
 import { store, actions } from "../../store/redux";
@@ -26,7 +27,7 @@ const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
           totalSupply,
           salePrice,
           hasPurchasedClam,
-          rng,
+          hashRequest,
         ] = await Promise.all([
           presaleContract.hasSaleStarted(),
           presaleContract.presaleCap(),
@@ -36,7 +37,13 @@ const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
           presaleContract.rngRequestHashFromBuyersClam(address),
         ]);
 
-        console.log("updatePresale", { hasPurchasedClam, rng });
+        let rng;
+        if(hashRequest) {
+          rng = await getRNGFromHashRequest(hashRequest)
+        }
+        
+        console.log("updatePresale", { hasPurchasedClam, hashRequest, rng });
+
         updatePresale({
           cap, // max will be minted tokens
           totalSupply, // current minted tokens
@@ -44,6 +51,7 @@ const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
           progress: (Number(totalSupply) / cap) * 100,
           isStarted: hasSaleStarted,
           hasPurchasedClam,
+          hashRequest,
           rng,
         });
       }
