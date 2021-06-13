@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
@@ -6,6 +6,7 @@ import "./index.scss";
 
 import { buyClamPresale } from "../../web3/buyClamPresale";
 import { clamPresaleAddress } from "../../web3/constants";
+import { actions } from "../../store/redux";
 
 const Divider = () => (
   <div className="w-full flex flex-col justify-center items-center my-2">
@@ -24,6 +25,7 @@ const Divider = () => (
 const ClamMintModal = ({
   account: { bnbBalance, address },
   presale: { salePrice, hasPurchasedClam },
+  updateCharacter,
 }) => {
   const INDIVIDUAL_CAP = 1;
   //  disableButton = hasPurchasedClam > INDIVIDUAL_CAP;
@@ -193,4 +195,4 @@ const ClamMintModal = ({
 };
 
 const mapToProps = (store) => store;
-export default connect(mapToProps)(ClamMintModal);
+export default connect(mapToProps, actions)(ClamMintModal);

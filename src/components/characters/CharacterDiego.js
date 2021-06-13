@@ -15,6 +15,8 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
   console.log({ action, character, speech, button });
 
   const [showBubble, setShowBubble] = useState(true);
+  const [stateSpeech, setStateSpeech] = useState();
+
   let history = useHistory();
 
   const handleClickButton = () => {
@@ -35,7 +37,12 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
         break;
 
       case "speech":
-        setSpeech(button.alt.destination);
+        setStateSpeech(button.alt.destination);
+        break;
+
+      case "cb":
+        const callback = button.alt.destination;
+        callback();
         break;
     }
   };
@@ -73,9 +80,14 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
         <img src={character.charImg} className="character" />
       </Button>
       <div className="text-bubble">
-        <div className="name">{character.name}</div>
+        <div className="name px-10">{character.name}</div>
         <div className="speech">
-          <p className="speech-text">{speech}</p>
+          <div
+            className="speech-text"
+            dangerouslySetInnerHTML={{
+              __html: stateSpeech ? stateSpeech : speech,
+            }}
+          />
         </div>
         {/* todo */}
         <div className="buttons">

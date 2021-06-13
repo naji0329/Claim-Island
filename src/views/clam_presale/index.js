@@ -5,31 +5,48 @@ import CharacterDiego from "../../components/characters/CharacterDiego";
 import Web3Navbar from "../../components/Web3Navbar";
 import Shop from "../../assets/locations/shop_animated.mp4";
 
-import getWeb3 from "../../web3/getWeb3";
 import { actions } from "../../store/redux";
+import { SPEECHES } from "../../components/characters/constants";
 
 import ClamMintModal from "./ClamMintModal";
 import ClamCollectModal from "./ClamCollectModal";
 
 import Web3ClamPresale from "./Web3ClamPresale";
+import { get } from "react-hook-form";
 
 const ClamPresale = ({
   presale: { isStarted, rng, hasPurchasedClam },
   updateCharacter,
 }) => {
-  const web3 = getWeb3();
-
+  isStarted = true;
   useEffect(() => {
     console.log("useEffect", { isStarted });
 
     if (isStarted) {
-      updateCharacter({ name: "diego", action: "clam_presale.welcome.text" });
+      updateCharacter({
+        name: "diego",
+        action: "clam_presale.welcome.text",
+        button: {
+          text: "Show me how",
+          alt: {
+            action: "cb",
+            destination: () =>
+              updateCharacter({
+                name: "diego",
+                action: "clam_presale.connect.text",
+                button: {
+                  text: "Ok",
+                },
+              }),
+          },
+        },
+      });
     } else {
       updateCharacter({
         name: "diego",
         action: "clam_presale_not_started.welcome.text",
         button: {
-          text: "Dismiss",
+          text: "Ok",
         },
       });
     }
@@ -54,18 +71,6 @@ const ClamPresale = ({
         {/* chat character   */}
         <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
           <CharacterDiego />
-
-          {/* {rng && hasPurchasedClam && (
-            <CharacterSpeak
-              character={"diego"}
-              speech={"clam_presale_collection"}
-              web3={web3}
-              setConnect={setConnect}
-              saleStatus={saleStatus}
-              saleErrorMsg={saleErrorMsg}
-              triggerSpeech={speech}
-            />
-          )} */}
         </div>
 
         {/* modal   -top-0 md:-top-64 */}

@@ -103,6 +103,7 @@
         float: right;
         top: 0px;
         transition: all 0.6s ease-in-out;
+        font-family: AristotelicaBold !important; 
 
         @media screen and (max-width: 1440px) {
             width: 70%;
@@ -171,7 +172,7 @@
 
             .speech-text {
                 font-size: 30px;
-                font-family: Montserrat-Medium;
+                font-family: AristotelicaBold !important; 
 
                 @media screen and (max-width: 1440px) {
                     font-size: 18px;
@@ -194,9 +195,9 @@
           right: 30px;
           //text-align: right;
 
-          #btn-alt {
-            display: none;
-          }
+        //   #btn-alt {
+        //     display: none;
+        //   }
 
           .btn {
               position: relative;
