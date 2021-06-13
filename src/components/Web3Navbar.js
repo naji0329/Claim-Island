@@ -5,6 +5,7 @@ import {
   useTokenBalance,
   useEtherBalance,
   ChainId,
+  shortenAddress,
 } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { actions } from "../store/redux";
@@ -12,6 +13,8 @@ import { actions } from "../store/redux";
 import { formatUnits } from "@ethersproject/units";
 
 import { clamNFTAddress } from "../web3/constants.js";
+
+import Web3Avatar from "./Web3Avatar";
 
 const ErrorAlert = ({ title, description }) => (
   <div className="w-full absolute">
@@ -114,22 +117,14 @@ const Web3Navbar = ({ updateAccount, account: { clamBalance } }) => {
         </div>
 
         <div className="menu w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
-          <div className="lg:flex-grow">
-            {account && (
-              <p className="block lg:inline-block lg:mt-0 px-4 py-2  mr-2 bg-white shadow rounded">
-                Account:{" "}
-                <span className="bg-blue-100 text-blue-500 p-1 rounded text-sm">
-                  {account}
-                </span>
-              </p>
-            )}
-          </div>
+          <div className="lg:flex-grow"></div>
 
           <div className="flex">
             {!account && (
               <button
+                // style={{ fontFamily: "AristotelicaBold", lineHeight: "0.7rem" }}
                 type="button"
-                className="focus:outline-none block text-md px-4 ml-2 py-2 rounded border-2 border-white  bg-blue-600 text-white font-bold hover:text-white hover:bg-blue-400"
+                className="focus:outline-none block text-md px-4 ml-2 py-2 rounded-xl border-2 border-white  bg-blue-600 text-white font-bold hover:text-white hover:bg-blue-400"
                 onClick={() => activateBrowserWallet()}
               >
                 Connect Wallet
@@ -138,12 +133,19 @@ const Web3Navbar = ({ updateAccount, account: { clamBalance } }) => {
 
             {account && (
               <>
-                <p className="block lg:inline-block lg:mt-0 px-4 py-2  mr-2 rounded bg-white shadow">
-                  Balance:{" "}
-                  <span className="bg-blue-100 text-blue-500 p-1 rounded text-sm">
+                <div className="flex lg:mt-0 px-4 py-2  mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
+                  <span className="p-1  text-sm text-gray-200">
                     {clamBalance ? formatUnits(clamBalance, 0) : 0} CLAM
                   </span>
-                </p>
+                </div>
+
+                <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black  bg-opacity-80">
+                  <div className="p-1 text-sm text-gray-200">
+                    {shortenAddress(account)}
+                  </div>
+
+                  <Web3Avatar address={account} size={30} />
+                </div>
               </>
             )}
           </div>
