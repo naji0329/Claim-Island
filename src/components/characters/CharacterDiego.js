@@ -91,15 +91,13 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
         </div>
         {/* todo */}
         <div className="buttons">
-          {button.alt ? (
-            <Button className="btn" id="btn-alt" onClick={handleClickButtonAlt}>
-              {button.text}
-            </Button>
-          ) : (
-            <Button className="btn" id="btn-next" onClick={handleClickButton}>
-              {button.text}
-            </Button>
-          )}
+          <Button
+            className="btn"
+            id="btn-next"
+            onClick={button.alt ? handleClickButtonAlt : handleClickButton}
+          >
+            {button.text}
+          </Button>
         </div>
       </div>
     </div>
