@@ -40,14 +40,16 @@ const ErrorAlert = ({ title, description }) => (
 );
 
 const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
+const formatClam = (value) => (value ? formatUnits(value, 0) : "0");
 
-const Web3Navbar = ({ updateAccount, account: { clamBalance } }) => {
+const Web3Navbar = ({ updateAccount }) => {
   //  is called several times thus need a state to lower the renders
   const [activateError, setActivateError] = useState("");
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
+  const [activateClamBalance, setActivateClamBalance] = useState("0");
 
   const { activateBrowserWallet, account, chainId, error } = useEthers();
-  // const clamBalance = useTokenBalance(clamNFTAddress, account); // TODO - not working
+  const clamBalance = useTokenBalance(clamNFTAddress, account); // TODO - not working
   const bnbBalance = useEtherBalance(account);
 
   useAsync(async () => {
@@ -59,13 +61,19 @@ const Web3Navbar = ({ updateAccount, account: { clamBalance } }) => {
 
     updateAccount({
       bnbBalance: activateBnbBalance,
-      // clamBalance: newClamBalance,
+      clamBalance: activateClamBalance,
       error: activateError,
       isConnected: account ? true : false,
       isBSChain: chainId === ChainId.BSC,
       address: account,
     });
-  }, [account, chainId, activateError, activateBnbBalance]);
+  }, [
+    account,
+    chainId,
+    activateError,
+    activateBnbBalance,
+    activateClamBalance,
+  ]);
 
   useEffect(() => {
     if (error) {
@@ -82,6 +90,16 @@ const Web3Navbar = ({ updateAccount, account: { clamBalance } }) => {
       setActivateBnbBalance(balance);
     }
   }, [bnbBalance]);
+
+  useEffect(() => {
+    // clamBalance is bignumber
+    const balance = formatClam(clamBalance);
+    // console.log("useEffect", { balance });
+    if (balance !== activateClamBalance) {
+      // balance is string
+      setActivateClamBalance(balance);
+    }
+  }, [clamBalance]);
 
   return (
     <>
@@ -133,13 +151,13 @@ const Web3Navbar = ({ updateAccount, account: { clamBalance } }) => {
 
             {account && (
               <>
-                <div className="flex lg:mt-0 px-4 py-2  mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
-                  <span className="p-1  text-sm text-gray-200">
-                    {clamBalance ? formatUnits(clamBalance, 0) : 0} CLAM
+                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
+                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                    {activateClamBalance} CLAM
                   </span>
                 </div>
 
-                <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black  bg-opacity-80">
+                <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black bg-opacity-80">
                   <div className="p-1 text-sm text-gray-200">
                     {shortenAddress(account)}
                   </div>
