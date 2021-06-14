@@ -1,25 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import "./index.scss";
-import CharacterSpeak from "../../components/characters";
+import CharacterDiego from "../../components/characters/CharacterDiego";
 import Web3Navbar from "../../components/Web3Navbar";
 import Shop from "../../assets/locations/shop_animated.mp4";
 
-import getWeb3 from "../../web3/getWeb3";
+import { actions } from "../../store/redux";
+import { SPEECHES } from "../../components/characters/constants";
 
 import ClamMintModal from "./ClamMintModal";
 import ClamCollectModal from "./ClamCollectModal";
 
 import Web3ClamPresale from "./Web3ClamPresale";
+import { get } from "react-hook-form";
 
-const ClamPresale = ({ presale: { isStarted, rng, hasPurchasedClam } }) => {
-  const web3 = getWeb3();
+const ClamPresale = ({
+  presale: { isStarted, rng, hasPurchasedClam },
+  updateCharacter,
+}) => {
+  isStarted = true;
+  useEffect(() => {
+    console.log("useEffect", { isStarted });
 
-  // characters state
-  const [speech, triggerSpeech] = useState("");
-  const [saleStatus, setSaleStatus] = useState(""); // what is that?
-  const [saleErrorMsg, setSaleErrorMsg] = useState(""); // what is that?
-  const [connect, setConnect] = useState(""); // what is that?
+    if (isStarted) {
+      updateCharacter({
+        name: "diego",
+        action: "clam_presale.welcome.text",
+        button: {
+          text: "Show me how",
+          alt: {
+            action: "cb",
+            destination: () =>
+              updateCharacter({
+                name: "diego",
+                action: "clam_presale.connect.text",
+                button: {
+                  text: "Ok",
+                },
+              }),
+          },
+        },
+      });
+    } else {
+      updateCharacter({
+        name: "diego",
+        action: "clam_presale_not_started.welcome.text",
+        button: {
+          text: "Ok",
+        },
+      });
+    }
+  }, [isStarted]);
 
   return (
     <>
@@ -38,46 +69,12 @@ const ClamPresale = ({ presale: { isStarted, rng, hasPurchasedClam } }) => {
         </video>
 
         {/* chat character   */}
-        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20 -top-12">
-          {!isStarted && (
-            <CharacterSpeak
-              character={"diego"}
-              speech={"clam_presale_not_started"}
-              web3={web3}
-              setConnect={setConnect}
-              saleStatus={saleStatus}
-              saleErrorMsg={saleErrorMsg}
-              triggerSpeech={speech}
-            />
-          )}
-
-          {isStarted && (
-            <CharacterSpeak
-              character={"diego"}
-              speech={"clam_presale"}
-              web3={web3}
-              setConnect={setConnect}
-              saleStatus={saleStatus}
-              saleErrorMsg={saleErrorMsg}
-              triggerSpeech={speech}
-            />
-          )}
-
-          {/* {rng && hasPurchasedClam && (
-            <CharacterSpeak
-              character={"diego"}
-              speech={"clam_presale_collection"}
-              web3={web3}
-              setConnect={setConnect}
-              saleStatus={saleStatus}
-              saleErrorMsg={saleErrorMsg}
-              triggerSpeech={speech}
-            />
-          )} */}
+        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
+          <CharacterDiego />
         </div>
 
-        {/* modal */}
-        <div className="flex-1 justify-center min-h-full min-w-full  md:flex items-center absolute z-30 -top-0 md:-top-64">
+        {/* modal   -top-0 md:-top-64 */}
+        <div className="flex-1 justify-center min-h-full min-w-full  md:flex items-center absolute z-30 -top-36 md:-top-42">
           {isStarted && !rng && <ClamMintModal />}
           {rng && hasPurchasedClam && <ClamCollectModal />}
         </div>
@@ -87,4 +84,4 @@ const ClamPresale = ({ presale: { isStarted, rng, hasPurchasedClam } }) => {
 };
 
 const mapToProps = (state) => state;
-export default connect(mapToProps)(ClamPresale);
+export default connect(mapToProps, actions)(ClamPresale);
