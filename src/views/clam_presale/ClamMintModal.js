@@ -89,7 +89,7 @@ const ClamMintModal = ({
                   <div className="flex flex-col">
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex">
-                        <img className="h-12 mr-2" src={BNBLogo} />
+                        <img className="w-12 mr-2" src={BNBLogo} />
                         <input
                           disabled
                           value={salePrice}
@@ -133,7 +133,7 @@ const ClamMintModal = ({
                   <div className="flex flex-col">
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex">
-                        <img className="h-12 mr-2" src={ClamUnknown} />
+                        <img className="w-12 mr-2" src={ClamUnknown} />
                         <input
                           disabled
                           value="1"
