@@ -3,22 +3,22 @@ import { rngAddress } from "./constants";
 import { contractFactory } from "./index";
 
 export const getOracleFee = async () => {
-  const clamPresale = contractFactory({ abi: rngAbi, address: rngAddress });
-  const fee = await clamPresale.methods.getOracleFee().call();
+  const rng = contractFactory({ abi: rngAbi, address: rngAddress });
+  const fee = await rng.methods.getOracleFee().call();
 
   return fee;
 };
 
 export const getRNGFromHashRequest = async (requestHash) => {
-  const clamPresale = contractFactory({ abi: rngAbi, address: rngAddress });
-  const fee = await clamPresale.methods.getRNGFromHashRequest(requestHash).call();
+  const rng = contractFactory({ abi: rngAbi, address: rngAddress });
+  const value = await rng.methods.getRNGFromHashRequest(requestHash).call();
 
-  return fee;
+  return value;
 };
 
 export const getPearlProductionTime = async (requestHash) => {
-  const clamPresale = contractFactory({ abi: rngAbi, address: rngAddress });
-  const value = await clamPresale.methods
+  const rng = contractFactory({ abi: rngAbi, address: rngAddress });
+  const value = await rng.methods
     .getPearlProductionTime(requestHash)
     .call();
 
