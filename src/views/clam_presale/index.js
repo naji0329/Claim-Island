@@ -34,9 +34,9 @@ const ClamPresale = ({
               updateCharacter({
                 name: "diego",
                 action: "clam_presale.connect.text",
-                button: {
-                  text: "Ok",
-                },
+                // button: {
+                //   text: "Ok",
+                // },
               }),
           },
         },
