@@ -10,7 +10,7 @@ import "./index.scss";
 // button => obj {text, alt}
 const CharacterDiego = ({ action, button, onClickButton }) => {
   const character = get(CHARACTERS, "diego");
-  const speech = get(SPEECHES, action, "");
+  const speech = get(SPEECHES, action, action);
 
   console.log({ action, character, speech, button });
 

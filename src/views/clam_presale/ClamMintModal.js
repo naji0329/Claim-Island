@@ -46,10 +46,9 @@ const ClamMintModal = ({
         });
       })
       .catch((e) => {
-        console.error(e);
         updateCharacter({
           name: "diego",
-          action: "clam_presale.error.text",
+          action: e.message,
           button: {
             text: "Dismiss",
           },
