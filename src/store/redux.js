@@ -19,6 +19,7 @@ const initialState = {
     isStarted: false,
     hasPurchasedClam: false,
     rng: undefined, // from call rngRequestHashFromBuyersClam
+    hashRequest: undefined,
   },
   character: {
     name: undefined,
