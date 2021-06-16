@@ -30,11 +30,7 @@ import {
   // CardColumns,
 } from "reactstrap";
 
-<<<<<<< HEAD
-import logo from "../../assets/logo.svg";
-=======
 // import logo from "../../assets/logo.svg";
->>>>>>> ee2bac77ab803f1270e3c0ce3bd648129a1cbdb3
 import "./Vault.scss";
 
 import { PEARLS, CLAMS } from "../../constants";
