@@ -31,11 +31,11 @@ const ClamCollectModal = ({
           name: "diego",
           action: "clam_presale.congratsConllection.text",
           button: {
-            text: "Show my Clam",
-            alt: {
-              action: "internal",
-              destination: "/vault",
-            },
+            text: "Dismiss",
+            // alt: {
+            //   action: "internal",
+            //   destination: "/vault",
+            // },
           },
         });
       })
