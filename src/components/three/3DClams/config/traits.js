@@ -1,6 +1,6 @@
 export const traits = {
     shellShape: {
-        length: 3,
+        len: 3,
         val: '',
         shapes: {
             common: {
@@ -68,7 +68,7 @@ export const traits = {
         }
     },
     tongue: {
-        length: 3,
+        len: 3,
         val: '',
         shapes: {
             common: {
@@ -103,7 +103,7 @@ export const traits = {
         }
     },
     tongueColour: {
-        length: 3,
+        len: 3,
         colours: {
             red: {
                 val: [360, 205, -130],
@@ -202,7 +202,7 @@ export const traits = {
         }
     },
     shellColour: {
-        length: 3,
+        len: 3,
         colours: {
             red: {
                 val: [360, 205, -130],
@@ -301,7 +301,7 @@ export const traits = {
         }
     },
     innerColour: {
-        length: 3,
+        len: 3,
         colours: {
             red: {
                 val: [360, 205, -130],
@@ -400,7 +400,7 @@ export const traits = {
         }
     },
     lipColour: {
-        length: 3,
+        len: 3,
         colours: {
             red: {
                 val: [360, 205, -130],
@@ -499,7 +499,7 @@ export const traits = {
         }
     },
     pattern: {
-        length: 3,
+        len: 3,
         val: '',
         styles: {
             none: {
@@ -578,19 +578,19 @@ export const traits = {
         }
     },
     size: {
-        length: 2,
+        len: 2,
         min: 1,
         max: 100,
         val: ''
     },
     lifespan: {
-        length: 2,
+        len: 2,
         min: 5,
         max: 15,
         val: ''
     },
     glow: {
-        length: 3,
+        len: 3,
         yes: 0.0001
     }
 };
