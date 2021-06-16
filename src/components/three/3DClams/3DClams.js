@@ -110,16 +110,21 @@ const Clams3D = ({ width, height, clamDna }) => {
   };
 
   return (
-    <>
-      <div>
-        <Button className="mr-4" onClick={takePhoto}>Take Photo</Button>
-        <Button onClick={refreshTraits}>Refresh Traits</Button>
-        <div
-          className="three-container mt-4 mb-4"
-          ref={mapRef}
-          style={{ width, height }}
-        />
+    <div className="flex flex-col w-full justify-center bg-gray-50">
+
+      <div className="flex items-center justify-between w-full">
+        <Button className="flex flex-col items-center h-18 py-2" onClick={takePhoto}>Take Photo</Button>
+        <Button className="flex flex-col items-center h-18 py-2" onClick={refreshTraits}>Refresh Traits</Button>
       </div>
+
+      <div className="flex justify-between">
+        <div
+            className="three-container mt-4 mb-4"
+            ref={mapRef}
+            style={{ width, height }}
+          ></div>
+      </div>
+
       {/* <div>
         <PhotoshopPicker
           style={{}}
@@ -128,11 +133,11 @@ const Clams3D = ({ width, height, clamDna }) => {
         />
       </div> */}
 
-      <img src="" ref={mapRef1} style={{ width: "200px", height: "200px" }} />
-      <div>
+      <img className="hidden" src="" ref={mapRef1}  style={{ width, height }} />
+      {/* <div>
           {JSON.stringify(traits, null, 4)}
-      </div>
-    </>
+      </div> */}
+    </div>
   );
 };
 
