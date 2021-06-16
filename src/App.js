@@ -9,7 +9,6 @@ import { Container, Row, Col } from "reactstrap";
 
 import ROUTES from "./router";
 
-
 // import {  getClamTokenContract, getContract, httpProvider } from './services/web3';
 // import {  getContract, httpProvider } from './services/web3';
 

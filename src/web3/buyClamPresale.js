@@ -5,7 +5,7 @@ import { getOracleFee } from "./rng";
 
 export const buyClamPresale = async (account, callback, errCallback) => {
   if (!account) {
-    throw new Error("there is no account connected");
+    throw new Error("There is no account connected!");
   }
 
   const clamPresale = contractFactory({
@@ -45,7 +45,7 @@ export const buyClamPresale = async (account, callback, errCallback) => {
 
 export const collectClam = async (account, callback, errCallback) => {
   if (!account) {
-    throw new Error("there is no account connected");
+    throw new Error("There is no account connected!");
   }
 
   const clamPresale = contractFactory({

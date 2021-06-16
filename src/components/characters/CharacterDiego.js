@@ -10,7 +10,7 @@ import "./index.scss";
 // button => obj {text, alt}
 const CharacterDiego = ({ action, button, onClickButton }) => {
   const character = get(CHARACTERS, "diego");
-  const speech = get(SPEECHES, action, "");
+  const speech = get(SPEECHES, action, action);
 
   console.log({ action, character, speech, button });
 
@@ -64,14 +64,12 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
         showBubble ? "character-bubble" : "character-bubble hide-bubble"
       }
     >
-      <div className="character-container">
-        <div className="character-wrap flex items-end">
-          <img
-            src={character.charImg}
-            className="character"
-            onClick={handleClickCharacter}
-          />
-        </div>
+      <div className="character-container flex items-end">
+        <img
+          className="w-screen max-w-none"
+          src={character.charImg}
+          onClick={handleClickCharacter}
+        />
       </div>
       <Button
         className="btn character-container-round"

@@ -18,9 +18,7 @@ export const getRNGFromHashRequest = async (requestHash) => {
 
 export const getPearlProductionTime = async (requestHash) => {
   const rng = contractFactory({ abi: rngAbi, address: rngAddress });
-  const value = await rng.methods
-    .getPearlProductionTime(requestHash)
-    .call();
+  const value = await rng.methods.getPearlProductionTime(requestHash).call();
 
   return value;
 };

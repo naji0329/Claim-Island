@@ -38,10 +38,10 @@ const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
         ]);
 
         let rng;
-        if(hashRequest) {
-          rng = await getRNGFromHashRequest(hashRequest)
+        if (hashRequest) {
+          rng = await getRNGFromHashRequest(hashRequest);
         }
-        
+
         console.log("updatePresale", { hasPurchasedClam, hashRequest, rng });
 
         updatePresale({
