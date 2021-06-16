@@ -27,7 +27,7 @@ const ClamMintModal = ({
   updateCharacter,
 }) => {
   const INDIVIDUAL_CAP = 1;
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   //  disableButton = hasPurchasedClam > INDIVIDUAL_CAP;
 
   const { register, handleSubmit, setValue, reset, formState, getValues } =
