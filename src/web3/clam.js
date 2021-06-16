@@ -24,8 +24,15 @@ export const totalClamSupply = async (account) => {
   return totalSupply;
 };
 
+export const getClamData = async (tokenId) => {
+  const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
+  const value = await clamNft.methods.clamData(tokenId).call();
+  return value;
+};
+
 export default {
   balanceOf,
   accountClamBalance,
   totalClamSupply,
+  getClamData,
 };

@@ -43,7 +43,7 @@ const sliderValues = {
   b: 100,
 };
 
-const Clams3D = (props) => {
+const Clams3D = ({ width, height, clamDna }) => {
   const mapRef = useRef(null);
   const mapRef1 = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -52,7 +52,10 @@ const Clams3D = (props) => {
   const [scene, setScene] = useState("");
   const [renderer, setRenderer] = useState("");
 
-  const defaultTraits = getTraits();
+  if (!clamDna)  return (<div>No Clam to see!</div>);
+
+  const defaultTraits = getTraits(clamDna);
+  console.log({ defaultTraits })
   const defaultClamDir =
     "clam-models/" +
     defaultTraits.shellShape.replace(/\s+/g, "-").toLowerCase() +
@@ -90,7 +93,7 @@ const Clams3D = (props) => {
   };
 
   const refreshTraits = async () => {
-    const traits = getTraits();
+    const traits = getTraits(clamDna);
     const clamDir =
       "clam-models/" +
       traits.shellShape.replace(/\s+/g, "-").toLowerCase() +
@@ -114,7 +117,7 @@ const Clams3D = (props) => {
         <div
           className="three-container mt-4 mb-4"
           ref={mapRef}
-          style={{ width: props.width, height: props.height }}
+          style={{ width, height }}
         />
       </div>
       {/* <div>

@@ -1,55 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Clams3D from '../../components/three/3DClams/3DClams';
 
-import AddClam from "../../assets/img/add_clam.png";
+import { useParams } from "react-router-dom";
+import { getClamData } from "../../web3/clam";
 
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap";
-import { Popover, PopoverHeader, PopoverBody } from "reactstrap";
+
+// import AddClam from "../../assets/img/add_clam.png";
+
+// import {
+//   Dropdown,
+//   DropdownToggle,
+//   DropdownMenu,
+//   DropdownItem,
+// } from "reactstrap";
+// import { Popover, PopoverHeader, PopoverBody } from "reactstrap";
 
 import {
   Card,
-  CardImg,
+  // CardImg,
   CardText,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  Button,
-  Container,
-  Row,
-  Col,
-  CardColumns,
+  // CardBody,
+  // CardTitle,
+  // CardSubtitle,
+  // Button,
+  // Container,
+  // Row,
+  // Col,
+  // CardColumns,
 } from "reactstrap";
 
-import logo from "../../assets/logo.svg";
+// import logo from "../../assets/logo.svg";
 import "./Vault.scss";
 
 import { PEARLS, CLAMS } from "../../constants";
 
 const Vault = () => {
-  const [clams, setClams] = useState([]);
+  const [clamDna, setClamDna] = useState('');
+  // const [clams, setClams] = useState([]);
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
+  // const [dropdownOpen, setDropdownOpen] = useState(false);
+  // const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  const addClamToFarm = (clam) => {
-    // clams.push(clam);
-    setClams((k) => [...k, clam]);
+  // const addClamToFarm = (clam) => {
+  //   // clams.push(clam);
+  //   setClams((k) => [...k, clam]);
 
-    // const [popoverOpen, setPopoverOpen] = useState(false);
-    // const toggle = () => setPopoverOpen(!popoverOpen);
-  };
+  //   // const [popoverOpen, setPopoverOpen] = useState(false);
+  //   // const toggle = () => setPopoverOpen(!popoverOpen);
+  // };
+
+  let { tokenId } = useParams();
+  useEffect(() => {
+    if (tokenId) {
+      async function getClamDna() {
+        const clamData = await getClamData(tokenId);
+        setClamDna(clamData.dna);
+      }
+
+      getClamDna();
+    }
+  }, [clamDna]);
+
+
 
   return (
     <div className="App">
       <h2 className="header">Your Vault</h2>
       <div className="min-w-screen min-h-screen flex space-x-4 items-center relative">
-      <Clams3D width={500} height={500} />
+      { clamDna && <Clams3D width={500} height={500} clamDna={clamDna} /> }
+      { !clamDna && (
+          <Card>
+            <CardText tag="h5">There is no Clam to see :-(</CardText>
+          </Card>
+        )
+      }
       </div>
       {/* <div style={{ textAlign: "#left" }}>
         <h3>Clams</h3>
