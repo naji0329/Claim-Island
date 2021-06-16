@@ -51,29 +51,28 @@ const Clams3D = ({ width, height, clamDna }) => {
   const [layers, setLayers] = useState([]);
   const [scene, setScene] = useState("");
   const [renderer, setRenderer] = useState("");
+  const [traits, setTraits] = useState({});
+  const [clamDir, setClamDir] = useState('');
 
   if (!clamDna)  return (<div>No Clam to see!</div>);
 
-  const defaultTraits = getTraits(clamDna);
-  console.log({ defaultTraits })
-  const defaultClamDir =
-    "/clam-models/" +
-    defaultTraits.shellShape.replace(/\s+/g, "-").toLowerCase() +
-    "/";
-  console.log(defaultClamDir)
-  const [traits, setTraits] = useState(defaultTraits);
-  const [clamDir, setClamDir] = useState(defaultClamDir);
-
   useEffect(() => {
-    create3DScene(
-      mapRef.current,
-      setLayers,
-      setScene,
-      setRenderer,
-      traits,
-      clamDir,
-      takePhoto
-    );
+    const defaultTraits = getTraits(clamDna);
+    const defaultClamDir = `/clam-models/${defaultTraits.shellShape.replace(/\s+/g, "-").toLowerCase()}/`;
+    setTraits(defaultTraits);
+    setClamDir(defaultClamDir);
+
+    if(defaultClamDir) {
+      create3DScene(
+        mapRef.current,
+        setLayers,
+        setScene,
+        setRenderer,
+        defaultTraits,
+        defaultClamDir,
+        takePhoto
+      );
+    }
   }, [mapRef]);
 
   const handleChangeComplete = (color) => {
@@ -217,7 +216,6 @@ const loadModels = async (scene, clamDir, traits) => {
   const clamGroup = new THREE.Group();
 
   // load clam model
-  console.log(clamDir + "clam.glb")
   const clamModel = await loadGLTF(clamDir + "clam.glb");
   const clamRoot = clamModel.scene;
   clamRoot.traverse((n) => {
