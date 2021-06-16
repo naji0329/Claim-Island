@@ -57,9 +57,10 @@ const Clams3D = ({ width, height, clamDna }) => {
   const defaultTraits = getTraits(clamDna);
   console.log({ defaultTraits })
   const defaultClamDir =
-    "clam-models/" +
+    "/clam-models/" +
     defaultTraits.shellShape.replace(/\s+/g, "-").toLowerCase() +
     "/";
+  console.log(defaultClamDir)
   const [traits, setTraits] = useState(defaultTraits);
   const [clamDir, setClamDir] = useState(defaultClamDir);
 
@@ -95,7 +96,7 @@ const Clams3D = ({ width, height, clamDna }) => {
   const refreshTraits = async () => {
     const traits = getTraits(clamDna);
     const clamDir =
-      "clam-models/" +
+      "/clam-models/" +
       traits.shellShape.replace(/\s+/g, "-").toLowerCase() +
       "/";
     setTraits(traits);
@@ -183,7 +184,7 @@ const create3DScene = async (
   controls.update();
 
   const txloader = new THREE.TextureLoader();
-  const bgTexture = txloader.load("clam-models/clam-template-bg-3.png");
+  const bgTexture = txloader.load("/clam-models/clam-template-bg-3.png");
   const scene = new THREE.Scene();
   scene.background = bgTexture;
 
@@ -216,6 +217,7 @@ const loadModels = async (scene, clamDir, traits) => {
   const clamGroup = new THREE.Group();
 
   // load clam model
+  console.log(clamDir + "clam.glb")
   const clamModel = await loadGLTF(clamDir + "clam.glb");
   const clamRoot = clamModel.scene;
   clamRoot.traverse((n) => {
@@ -229,9 +231,9 @@ const loadModels = async (scene, clamDir, traits) => {
   clamGroup.add(clamRoot);
 
   // load tongue model
-  const tongueTex = await loadTexture("clam-models/tongue-normal.png");
+  const tongueTex = await loadTexture("/clam-models/tongue-normal.png");
   const tongueModel = await loadGLTF(
-    clamDir + "Tongues/" + traits.tongue.toLowerCase() + ".glb"
+    clamDir + "Tongues/" + (traits.tongue || 'Common').toLowerCase() + ".glb"
   );
   const tongueRoot = tongueModel.scene;
   tongueRoot.traverse((n) => {
@@ -358,7 +360,7 @@ const loadAllTextures = async (traits, clamDir) => {
     textures.map((k) => loadTexture(clamDir + k.img))
   );
   const base = await loadTexture(
-    "clam-models/patterns/" + traits.pattern.toLowerCase() + "_basecolor.png"
+    "/clam-models/patterns/" + traits.pattern.toLowerCase() + "_basecolor.png"
   );
 
   return Promise.all(
