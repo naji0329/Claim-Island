@@ -357,7 +357,7 @@ export const SPEECHES = {
     },
 
     congratsConllection: {
-      text: `You Got a CLAM! You can see your $CLAM balance at the top right of the screen. Remember they are not transferable until Clam Island opens! Le me show what you got!`,
+      text: `You Got a CLAM! You can see your $CLAM balance at the top right of the screen. Remember they are not transferable until Clam Island opens!`,
       next: false,
       dismiss: true,
       skip: false,
