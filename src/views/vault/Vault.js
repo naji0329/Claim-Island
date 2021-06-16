@@ -55,14 +55,14 @@ const Vault = () => {
     if (tokenId) {
       async function getClamDna() {
         const clamData = await getClamData(tokenId);
-        setClamDna(clamData.dna);
+        if (clamData.dna.length > 1 ) {
+          setClamDna(clamData.dna);
+        }
       }
 
       getClamDna();
     }
   }, [clamDna]);
-
-
 
   return (
     <div className="App">
