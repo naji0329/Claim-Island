@@ -64,7 +64,7 @@ export const collectClam = async (account, callback, errCallback) => {
       from: account,
       gas: gasEstimation,
     })
-    .once("confirmation", async () => {
+    .once("confirmation", async (res) => {
       try {
         console.log("Success", { res }); // add a toaster here
         // return "sale_success";
