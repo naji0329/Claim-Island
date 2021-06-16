@@ -27,7 +27,7 @@ import {
 } from "reactstrap";
 
 import logo from "../../assets/logo.svg";
-import "./Vault.css";
+import "./Vault.scss";
 
 import { PEARLS, CLAMS } from "../../constants";
 
@@ -48,9 +48,11 @@ const Vault = () => {
   return (
     <div className="App">
       <h2 className="header">Your Vault</h2>
-      <div style={{ textAlign: "#left" }}>
+      <div className="min-w-screen min-h-screen flex space-x-4 items-center relative">
+      <Clams3D width={500} height={500} />
+      </div>
+      {/* <div style={{ textAlign: "#left" }}>
         <h3>Clams</h3>
-        <Clams3D />
         <CardColumns>
           {CLAMS.map((k, i) => {
             const src = require(`../../assets/img/clamjam/${k.src}`).default;
@@ -98,7 +100,7 @@ const Vault = () => {
             );
           })}
         </CardColumns>
-      </div>
+      </div> */}
     </div>
   );
 };

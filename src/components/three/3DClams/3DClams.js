@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import Konva from 'konva';
-import { PhotoshopPicker } from 'react-color';
+import Konva from "konva";
+import { PhotoshopPicker } from "react-color";
 
-import { getTraits } from './main';
+import { getTraits } from "./main";
 
 import { OrbitControls, MapControls } from "../../../loaders/OrbitControls";
 import GLTFLoader from "../../../loaders/GLTFLoader";
@@ -15,93 +15,148 @@ const clock = new THREE.Clock();
 THREE.Cache.enabled = true;
 
 const loadTexture = (url) => {
-    return new Promise(resolve => {
-        new THREE.TextureLoader().load(url, resolve)
-    });
+  return new Promise((resolve) => {
+    new THREE.TextureLoader().load(url, resolve);
+  });
 };
 
 const loadGLTF = (url) => {
-    return new Promise(resolve => {
-        new GLTFLoader().load(url, resolve)
-    });
+  return new Promise((resolve) => {
+    new GLTFLoader().load(url, resolve);
+  });
 };
 
 const loadObj = (url) => {
-    return new Promise(resolve => {
-        new THREE.ObjectLoader().load(url, resolve)
-    });
+  return new Promise((resolve) => {
+    new THREE.ObjectLoader().load(url, resolve);
+  });
 };
 
 const imageArray = [];
 let containers = [];
 const sliderValues = {
-    h: 150,
-    s: 1,
-    v: -1.6
-}
+  //   h: 150,
+  //   s: -2,
+  //   v: -2,
+  r: 100,
+  g: 100,
+  b: 100,
+};
 
 const Clams3D = (props) => {
   const mapRef = useRef(null);
   const mapRef1 = useRef(null);
   const [loading, setLoading] = useState(true);
-  const [color, setColor] = useState('#fff');
+  const [color, setColor] = useState(sliderValues);
   const [layers, setLayers] = useState([]);
-  const [scene, setScene] = useState('');
-  const [renderer, setRenderer] = useState('');
+  const [scene, setScene] = useState("");
+  const [renderer, setRenderer] = useState("");
+
+  const defaultTraits = getTraits();
+  const defaultClamDir =
+    "clam-models/" +
+    defaultTraits.shellShape.replace(/\s+/g, "-").toLowerCase() +
+    "/";
+  const [traits, setTraits] = useState(defaultTraits);
+  const [clamDir, setClamDir] = useState(defaultClamDir);
 
   useEffect(() => {
-    create3DScene(mapRef.current, setLayers, setScene, setRenderer);
+    create3DScene(
+      mapRef.current,
+      setLayers,
+      setScene,
+      setRenderer,
+      traits,
+      clamDir,
+      takePhoto
+    );
   }, [mapRef]);
 
   const handleChangeComplete = (color) => {
-    setKonvaLayerTexture(layers[0], color.hsv);
-    setKonvaLayerTexture(layers[1], color.hsv);
-    setKonvaLayerTexture(layers[2], color.hsv);
-    setKonvaLayerTexture(layers[3], color.hsv);
-    updateShellTextures(scene, layers);
-
-    setColor(color.hsv);
+    // console.log(color);
+    // setKonvaLayerTexture(layers[0], color.rgb);
+    // setKonvaLayerTexture(layers[1], color.rgb);
+    // setKonvaLayerTexture(layers[2], color.rgb);
+    // setKonvaLayerTexture(layers[3], color.rgb);
+    // updateShellTextures(scene, layers);
+    // setColor(color.rgb);
   };
 
   const takePhoto = () => {
-    const canvas = mapRef.current.querySelector('canvas');
-    const src = canvas.toDataURL('image/jpeg');
+    const canvas = mapRef.current.querySelector("canvas");
+    const src = canvas.toDataURL("image/jpeg");
     let img = mapRef1.current;
     img.src = src;
   };
 
+  const refreshTraits = async () => {
+    const traits = getTraits();
+    const clamDir =
+      "clam-models/" +
+      traits.shellShape.replace(/\s+/g, "-").toLowerCase() +
+      "/";
+    setTraits(traits);
+    setClamDir(clamDir);
+
+    scene.clear();
+    await loadModels(scene, clamDir, traits);
+    const layers = await loadAllTextures(traits, clamDir);
+    setLayers(layers);
+    setScene(scene);
+    updateShellTextures(scene, layers, traits, takePhoto);
+  };
+
   return (
     <>
-      <Button onClick={takePhoto}>Take Photo</Button>
-      <div className="three-container" ref={mapRef} style={{width: '500px', height: '500px'}} />
-      <div style={{position: 'absolute', right: '50px', top: '50px'}}>
-        <PhotoshopPicker
-          style={{}}
-          color={ color }
-          onChangeComplete={ handleChangeComplete }
+      <div>
+        <Button className="mr-4" onClick={takePhoto}>Take Photo</Button>
+        <Button onClick={refreshTraits}>Refresh Traits</Button>
+        <div
+          className="three-container mt-4 mb-4"
+          ref={mapRef}
+          style={{ width: props.width, height: props.height }}
         />
       </div>
+      {/* <div>
+        <PhotoshopPicker
+          style={{}}
+          color={color}
+          onChangeComplete={handleChangeComplete}
+        />
+      </div> */}
 
-      <img src="" ref={mapRef1} style={{ width: '200px', height: '200px', position: 'absolute', right: '150px', top: '400px'}} />
+      <img src="" ref={mapRef1} style={{ width: "200px", height: "200px" }} />
+      <div>
+          {JSON.stringify(traits, null, 4)}
+      </div>
     </>
   );
 };
 
-const traits = getTraits();
-const clamDir = 'clam-models/' + traits.shellShape.replace(/\s+/g, '-').toLowerCase() + '/';
+// const traits = getTraits();
+// const clamDir =
+//   "clam-models/" + traits.shellShape.replace(/\s+/g, "-").toLowerCase() + "/";
 
 // CREATE A 3D SCENE
-const create3DScene = async (element, setLayers, setScene, setRenderer) => {
+const create3DScene = async (
+  element,
+  setLayers,
+  setScene,
+  setRenderer,
+  traits,
+  clamDir,
+  takePhoto
+) => {
   // create a 3d renderer
   const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true,
-      preserveDrawingBuffer: true
+    antialias: true,
+    alpha: true,
+    preserveDrawingBuffer: true,
   });
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
   renderer.gammaOutput = true;
-  renderer.setSize(500, 500);
+  renderer.setSize(element.offsetWidth, element.offsetHeight);
 
   element.appendChild(renderer.domElement);
 
@@ -117,24 +172,23 @@ const create3DScene = async (element, setLayers, setScene, setRenderer) => {
   camera.position.y = 0.9;
   camera.position.x = -0.4;
   camera.zoom = 7;
-  camera.updateProjectionMatrix()
+  camera.updateProjectionMatrix();
 
   // orbit controls to pan and zoom
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 0, 0);
-  controls.update();;
+  controls.update();
 
   const txloader = new THREE.TextureLoader();
-  const bgTexture = txloader.load('clam-models/clam-template-bg-3.png');
+  const bgTexture = txloader.load("clam-models/clam-template-bg-3.png");
   const scene = new THREE.Scene();
   scene.background = bgTexture;
 
-  await loadModels(scene);
-  const layers = await loadAllTextures();
+  await loadModels(scene, clamDir, traits);
+  const layers = await loadAllTextures(traits, clamDir);
   setLayers(layers);
   setScene(scene);
- 
-  updateShellTextures(scene, layers);
+  updateShellTextures(scene, layers, traits, takePhoto);
 
   // load animation after models load
   animate({
@@ -145,74 +199,76 @@ const create3DScene = async (element, setLayers, setScene, setRenderer) => {
   });
 };
 
-const loadModels = async (scene) => {
+const loadModels = async (scene, clamDir, traits) => {
   // load lighting
   // const sc = await loadObj("./config/lighting-setup-2.json");
   const loader = new THREE.ObjectLoader();
-  const sc = loader.parse( lighting );
+  const sc = loader.parse(lighting);
   let objs = sc.children;
   do {
-      scene.add(objs[0]);
+    scene.add(objs[0]);
   } while (objs.length > 0);
 
   const rotator = new THREE.Object3D();
   const clamGroup = new THREE.Group();
 
   // load clam model
-  const clamModel = await loadGLTF(clamDir + 'clam.glb');
+  const clamModel = await loadGLTF(clamDir + "clam.glb");
   const clamRoot = clamModel.scene;
-  clamRoot.traverse(n => {
-      if (n.isMesh) {
-          n.castShadow = true;
-          n.receiveShadow = true;
-          if (n.material.map) n.material.map.anisotropy = 16;
-      }
+  clamRoot.traverse((n) => {
+    if (n.isMesh) {
+      n.castShadow = true;
+      n.receiveShadow = true;
+      if (n.material.map) n.material.map.anisotropy = 16;
+    }
   });
   clamRoot.name = "shell";
   clamGroup.add(clamRoot);
 
   // load tongue model
   const tongueTex = await loadTexture("clam-models/tongue-normal.png");
-  const tongueModel = await loadGLTF(clamDir + 'Tongues/' + traits.tongue.toLowerCase() + '.glb');
+  const tongueModel = await loadGLTF(
+    clamDir + "Tongues/" + traits.tongue.toLowerCase() + ".glb"
+  );
   const tongueRoot = tongueModel.scene;
-  tongueRoot.traverse(n => {
-      if (n.isMesh) {
-          n.castShadow = true;
-          n.receiveShadow = true;
-          n.material.normalMap = tongueTex;
-          //n.material.map.anisotropy = 16;
-      }
+  tongueRoot.traverse((n) => {
+    if (n.isMesh) {
+      n.castShadow = true;
+      n.receiveShadow = true;
+      n.material.normalMap = tongueTex;
+      //n.material.map.anisotropy = 16;
+    }
   });
   tongueRoot.name = "tongue";
   clamGroup.add(tongueRoot);
 
   switch (traits.shellShape) {
-      case "Three Lipped":
-          clamGroup.rotation.y += 3;
-          clamGroup.scale.set(1.7, 1.7, 1.7);
-          break;
-      case "Big Mouth":
-          clamGroup.scale.set(1.75, 1.75, 1.75);
-          break;
-      case "Fan":
-          clamGroup.scale.set(0.2, 0.2, 0.2);
-          break;
-      case "Common":
-          clamGroup.rotation.set(-0.2, 0, 0.1);
-          break;
-      case "Spade":
-          clamGroup.scale.set(1.25, 1.25, 1.25);
-          break;
-      case "Heart":
-          clamGroup.rotation.set(0.1, -0.1, 0);
-          break;
-      case "Sharp Tooth":
-          clamGroup.rotation.set(0.1, 0, 0);
-          clamGroup.scale.set(1.35, 1.35, 1.35);
-          clamGroup.position.y += 0.05;
-          break;
-      default:
-          break;
+    case "Three Lipped":
+      clamGroup.rotation.y += 3;
+      clamGroup.scale.set(1.7, 1.7, 1.7);
+      break;
+    case "Big Mouth":
+      clamGroup.scale.set(1.75, 1.75, 1.75);
+      break;
+    case "Fan":
+      clamGroup.scale.set(0.2, 0.2, 0.2);
+      break;
+    case "Common":
+      clamGroup.rotation.set(-0.2, 0, 0.1);
+      break;
+    case "Spade":
+      clamGroup.scale.set(1.25, 1.25, 1.25);
+      break;
+    case "Heart":
+      clamGroup.rotation.set(0.1, -0.1, 0);
+      break;
+    case "Sharp Tooth":
+      clamGroup.rotation.set(0.1, 0, 0);
+      clamGroup.scale.set(1.35, 1.35, 1.35);
+      clamGroup.position.y += 0.05;
+      break;
+    default:
+      break;
   }
 
   rotator.add(clamGroup);
@@ -222,130 +278,152 @@ const loadModels = async (scene) => {
 };
 
 const setKonvaLayerTexture = (layer, color) => {
-    layer.hue(color.h);
-    layer.saturation(color.s);
-    layer.value(color.v);
-    layer.batchDraw();
+  //   layer.hue(parseFloat(color.h));
+  //   layer.saturation(parseFloat(color.s));
+  //   layer.value(parseFloat(color.v));
+  layer.hue(parseFloat(color[0]));
+  layer.saturation(parseFloat(color[1]));
+  layer.value(parseFloat(color[2]));
+  layer.batchDraw();
 };
 
 // const loadTextureKonva = async function (obj, textureFile) {
 const loadTextureKonva = async (object, texture, base) => {
-    const obj = object.type;
-    const img = texture.image;
-    const sliders = ['hue', 'saturation', 'value'];
+  const obj = object.type;
+  const img = texture.image;
+  const sliders = ["hue", "saturation", "value"];
 
-    const div = document.createElement('div');
+  const div = document.createElement("div");
 
-    const stage = new Konva.Stage({
-        container: div, // obj + '-canvas',
-        width: 1024,
-        height: 1024,
+  const stage = new Konva.Stage({
+    container: div, // obj + '-canvas',
+    width: 1024,
+    height: 1024,
+  });
+  const layer = new Konva.Layer();
+
+  imageArray[obj] = new Konva.Image({
+    x: 0,
+    y: 0,
+    image: img,
+    width: 1024,
+    height: 1024,
+  });
+  layer.add(imageArray[obj]);
+
+  if (obj === "os") {
+    const pattern = new Konva.Image({
+      x: 0,
+      y: 0,
+      image: base.image,
+      width: 1024,
+      height: 1024,
     });
-    const layer = new Konva.Layer();
+    layer.add(pattern);
+  }
 
-    imageArray[obj] = new Konva.Image({
-        x: 0,
-        y: 0,
-        image: img,
-        width: 1024,
-        height: 1024,
-    });
-    layer.add(imageArray[obj]);
+  layer.cache();
+  layer.filters([Konva.Filters.HSV]);
+  stage.add(layer);
 
-    if (obj === "os") {
-        const pattern = new Konva.Image({
-            x: 0,
-            y: 0,
-            image: base.image,
-            width: 1024,
-            height: 1024,
-        });
-        layer.add(pattern);
-    }
+  setKonvaLayerTexture(layer, object.color);
 
-    layer.cache();
-    layer.filters([Konva.Filters.HSV]);
-    stage.add(layer);
-
-    setKonvaLayerTexture(layer, sliderValues);
-
-    return layer;
+  return layer;
 };
 
-const loadAllTextures = async () => {
-    const textures = [
-        { type: 'os', img: 'outerPBS_basecolor.png' },
-        { type: 'is', img: 'innerPBS_basecolor.png' },
-        { type: 'lip', img: 'lip_basecolor.png' },
-        { type: 'tongue', img: 'tongue_BaseColor.png' }
-    ];
+const loadAllTextures = async (traits, clamDir) => {
+  const textures = [
+    {
+      type: "os",
+      img: "outerPBS_basecolor.png",
+      color: traits.shellColour.HSVadj,
+    },
+    {
+      type: "is",
+      img: "innerPBS_basecolor.png",
+      color: traits.innerColour.HSVadj,
+    },
+    { type: "lip", img: "lip_basecolor.png", color: traits.lipColour.HSVadj },
+    {
+      type: "tongue",
+      img: "tongue_BaseColor.png",
+      color: traits.tongueColour.HSVadj,
+    },
+  ];
 
-    const loaded = await Promise.all(textures.map(k => loadTexture(clamDir + k.img)));
-    const base = await loadTexture(
-        'clam-models/patterns/' + traits.pattern.toLowerCase() + '_basecolor.png'
-    );
+  const loaded = await Promise.all(
+    textures.map((k) => loadTexture(clamDir + k.img))
+  );
+  const base = await loadTexture(
+    "clam-models/patterns/" + traits.pattern.toLowerCase() + "_basecolor.png"
+  );
 
-    return Promise.all(textures.map((k, i) => loadTextureKonva(k, loaded[i], base)));
+  return Promise.all(
+    textures.map((k, i) => loadTextureKonva(k, loaded[i], base))
+  );
 };
 
-const updateShellTextures = (scene, containers) => {
-    // const osCanvas = containers[0].querySelectorAll('div canvas')[0]; 
-    // const isCanvas = containers[1].querySelectorAll('div canvas')[0]; 
-    // const lipCanvas = containers[2].querySelectorAll('div canvas')[0];
-    // const tongueCanvas = containers[3].querySelectorAll('div canvas')[0];
+const updateShellTextures = (scene, containers, traits, takePhoto) => {
+  const osCanvas = containers[0].toCanvas();
+  const isCanvas = containers[1].toCanvas();
+  const lipCanvas = containers[2].toCanvas();
+  const tongueCanvas = containers[3].toCanvas();
 
+  let shell = 0;
+  let tongue = 0;
 
-    const osCanvas = containers[0].toCanvas(); 
-    const isCanvas = containers[1].toCanvas(); 
-    const lipCanvas = containers[2].toCanvas();
-    const tongueCanvas = containers[3].toCanvas();
+  if (osCanvas && isCanvas && lipCanvas && tongueCanvas) {
+    const osTexture = new THREE.CanvasTexture(osCanvas);
+    const isTexture = new THREE.CanvasTexture(isCanvas);
+    const lipTexture = new THREE.CanvasTexture(lipCanvas);
+    const tongueTexture = new THREE.CanvasTexture(tongueCanvas);
 
-    let shell = 0;
-    let tongue = 0;
+    tongueTexture.rotation = Math.random() * Math.PI;
 
-    if(osCanvas && isCanvas && lipCanvas && tongueCanvas) {
+    tongueTexture.flipY = false;
+    osTexture.flipY = false;
+    isTexture.flipY = false;
+    lipTexture.flipY = false;
 
-        const osTexture = new THREE.CanvasTexture(osCanvas);
-        const isTexture = new THREE.CanvasTexture(isCanvas);
-        const lipTexture = new THREE.CanvasTexture(lipCanvas);
-        const tongueTexture = new THREE.CanvasTexture(tongueCanvas);
-
-        tongueTexture.rotation = Math.random() * Math.PI;
-
-        tongueTexture.flipY = false;
-        osTexture.flipY = false;
-        isTexture.flipY = false;
-        lipTexture.flipY = false;
-
-        if (scene.children[3].children[0].children[0].name == "shell") {
-            shell = scene.children[3].children[0].children[0];
-            tongue = scene.children[3].children[0].children[1];
-        } else {
-            shell = scene.children[3].children[0].children[1];
-            tongue = scene.children[3].children[0].children[0];
-        }
-
-        shell.children[0].children.forEach(half => {
-            half.children[1].material.map = osTexture;
-            (traits.shellShape == "Fan" || traits.shellShape == "Heart") ?
-                half.children[0].material.map = lipTexture
-                : half.children[2].material.map = lipTexture;
-            (traits.shellShape == "Fan" || traits.shellShape == "Heart") ?
-                half.children[2].material.map = isTexture
-                : half.children[0].material.map = isTexture;
-        });
-
-        if(["Forked", "Heart"].indexOf(traits.tongue) !== -1 && traits.shellShape == "Common") {
-            tongue.children[0].material.map = tongueTexture;
-        } else {
-            tongue.children[0].children[0].material.map = tongueTexture;
-        }
-
-        osTexture.needsUpdate = true;
-        isTexture.needsUpdate = true;
-        lipTexture.needsUpdate = true;
-        tongueTexture.needsUpdate = true;
+    if (scene.children[3].children[0].children[0].name == "shell") {
+      shell = scene.children[3].children[0].children[0];
+      tongue = scene.children[3].children[0].children[1];
+    } else {
+      shell = scene.children[3].children[0].children[1];
+      tongue = scene.children[3].children[0].children[0];
     }
+
+    shell.children[0].children.forEach((half) => {
+      if (half.children[1]) {
+        half.children[1].material.map = osTexture;
+        traits.shellShape == "Fan" || traits.shellShape == "Heart"
+          ? (half.children[0].material.map = lipTexture)
+          : (half.children[2].material.map = lipTexture);
+        traits.shellShape == "Fan" || traits.shellShape == "Heart"
+          ? (half.children[2].material.map = isTexture)
+          : (half.children[0].material.map = isTexture);
+      }
+    });
+
+    if (tongue.children[0]) {
+      if (
+        ["Forked", "Heart"].indexOf(traits.tongue) !== -1 &&
+        traits.shellShape == "Common"
+      ) {
+        tongue.children[0].material.map = tongueTexture;
+      } else {
+        tongue.children[0].children[0].material.map = tongueTexture;
+      }
+    }
+
+    osTexture.needsUpdate = true;
+    isTexture.needsUpdate = true;
+    lipTexture.needsUpdate = true;
+    tongueTexture.needsUpdate = true;
+    setTimeout(() => {
+        takePhoto();
+    }, 1000)
+  }
 };
 
 // CALL ANIMATE EVERY SECOND TO DISPLAY
