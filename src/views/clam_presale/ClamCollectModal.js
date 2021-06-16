@@ -51,7 +51,7 @@ const ClamCollectModal = ({
       });
   };
 
-  useAsync(() => {
+  useAsync(async () => {
     updateCharacter({
       name: "diego",
       action: "clam_presale.conllection.text",
@@ -79,7 +79,6 @@ const ClamCollectModal = ({
             </a>
           </div>
 
-          {/* input */}
           <div className="bg-white flex-1 justify-center  md:flex items-center">
             <img src={ClamUnknown} />
           </div>
