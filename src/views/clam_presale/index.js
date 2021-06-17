@@ -24,20 +24,9 @@ const ClamPresale = ({
     if (isStarted) {
       updateCharacter({
         name: "diego",
-        action: "clam_presale.welcome.text",
+        action: "clam_presale.connect.text",
         button: {
-          text: "Show me how",
-          alt: {
-            action: "cb",
-            destination: () =>
-              updateCharacter({
-                name: "diego",
-                action: "clam_presale.connect.text",
-                // button: {
-                //   text: "Ok",
-                // },
-              }),
-          },
+          text: undefined,
         },
       });
     } else {
@@ -78,7 +67,9 @@ const ClamPresale = ({
 
         {/* modal   -top-0 md:-top-64 */}
         <div className="flex-1 justify-center min-h-full min-w-full  md:flex items-center absolute z-30 -top-36 md:-top-42">
-          {clamBalance === "0" && isStarted && !rng && <ClamMintModal />}
+          {clamBalance === "0" && isStarted && address && !rng && (
+            <ClamMintModal />
+          )}
           {clamBalance === "0" && rng && hasPurchasedClam && (
             <ClamCollectModal />
           )}

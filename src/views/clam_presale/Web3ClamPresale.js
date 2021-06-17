@@ -15,7 +15,7 @@ import { store, actions } from "../../store/redux";
 const Web3ClamPresale = ({
   updatePresale,
   account,
-  presale: { progressm, isStarted },
+  presale: { progress, isStarted },
 }) => {
   const fetchPresaleData = async () => {
     try {
@@ -71,11 +71,9 @@ const Web3ClamPresale = ({
   };
 
   useAsync(async () => {
-    // TODO -- add loading
-
     setInterval(async () => {
       await fetchPresaleData();
-    }, 3000); //3s
+    }, 1000); //1s
   });
 
   return (
