@@ -96,7 +96,7 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
               <button
                 disabled={isLoading}
                 type="submit"
-                className="flex justify-content-center items-center block uppercase text-center shadow bg-yellow-200 text-yellow-600 text-white text-xl py-3 px-10 rounded-xl cursor-not-allowed"
+                className="flex justify-content-center items-center block uppercase text-center shadow bg-yellow-200 text-yellow-600 text-xl py-3 px-10 rounded-xl cursor-not-allowed"
               >
                 <svg
                   className="animate-spin -ml-1 mr-3 h-5 w-5 text-yellow-600"
