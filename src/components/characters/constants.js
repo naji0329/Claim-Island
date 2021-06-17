@@ -328,8 +328,15 @@ export const SPEECHES = {
       skip: `purchase`,
     },
 
+    connected: {
+      text: `Welcome, traveller! My shop is not open yet, but I do have a batch of Clams that I can sell to you early. Due to limited stock, there's a limit of one Clam per customer. Would you like to buy one?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: `purchase`,
+    },
+
     purchase: {
-      text: `Great! Now you can press "Buy Shell" in the top right of the screen to purchase $CLAM. Remember that you can buy a maximum of 15 $SHELL!`,
+      text: `Excellent, please follow the prompts above to purchase a Clam.`,
       next: `processing`,
       dismiss: false,
       skip: false,
