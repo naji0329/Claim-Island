@@ -12,7 +12,7 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
   const character = get(CHARACTERS, "diego");
   const speech = get(SPEECHES, action, action);
 
-  console.log({ action, character, speech, button });
+  // console.log({ action, character, speech, button });
 
   const [showBubble, setShowBubble] = useState(true);
   const [stateSpeech, setStateSpeech] = useState();

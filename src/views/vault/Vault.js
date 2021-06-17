@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-import Clams3D from '../../components/three/3DClams/3DClams';
+import Clams3D from "../../components/three/3DClams/3DClams";
 
 import { useParams } from "react-router-dom";
 import { getClamData } from "../../web3/clam";
-
 
 // import AddClam from "../../assets/img/add_clam.png";
 
@@ -36,7 +35,7 @@ import "./Vault.scss";
 import { PEARLS, CLAMS } from "../../constants";
 
 const Vault = () => {
-  const [clamDna, setClamDna] = useState('');
+  const [clamDna, setClamDna] = useState("");
   // const [clams, setClams] = useState([]);
 
   // const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -55,7 +54,7 @@ const Vault = () => {
     if (tokenId) {
       async function getClamDna() {
         const clamData = await getClamData(tokenId);
-        if (clamData.dna.length > 1 ) {
+        if (clamData.dna.length > 1) {
           setClamDna(clamData.dna);
         }
       }
@@ -68,13 +67,12 @@ const Vault = () => {
     <div className="App">
       <h2 className="header">Your Vault</h2>
       <div className="min-w-screen min-h-screen flex space-x-4 items-center relative">
-      { clamDna && <Clams3D width={500} height={500} clamDna={clamDna} /> }
-      { !clamDna && (
+        {clamDna && <Clams3D width={500} height={500} clamDna={clamDna} />}
+        {!clamDna && (
           <Card>
             <CardText tag="h5">There is no Clam to see :-(</CardText>
           </Card>
-        )
-      }
+        )}
       </div>
       {/* <div style={{ textAlign: "#left" }}>
         <h3>Clams</h3>

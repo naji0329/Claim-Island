@@ -16,11 +16,17 @@ const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
   const fetchPresaleData = async () => {
     try {
       const {
-        account: { isBSChain, address },
+        account: { isBSChain, address, clamBalance },
+        presale,
       } = store.getState();
 
-      console.log("fetch presale data", { isBSChain, address });
-      if (isBSChain) {
+      // if has purchase then hasRequest is not empty then no need to keep pulling data
+      if (
+        isBSChain &&
+        clamBalance === "0" &&
+        presale.hashRequest === undefined
+      ) {
+        console.log("fetch presale data", { isBSChain, address, presale });
         const [
           hasSaleStarted,
           cap,
@@ -64,8 +70,6 @@ const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
     // TODO -- add loading
 
     setInterval(async () => {
-      // update every 10s
-      console.log("setInterval call", { account });
       await fetchPresaleData();
     }, 3000); //3s
   });

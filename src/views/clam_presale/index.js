@@ -10,11 +10,11 @@ import { SPEECHES } from "../../components/characters/constants";
 
 import ClamMintModal from "./ClamMintModal";
 import ClamCollectModal from "./ClamCollectModal";
-
+import ClamShowModal from "./ClamShowModal";
 import Web3ClamPresale from "./Web3ClamPresale";
-import { get } from "react-hook-form";
 
 const ClamPresale = ({
+  account: { clamBalance, address },
   presale: { isStarted, rng, hasPurchasedClam },
   updateCharacter,
 }) => {
@@ -75,8 +75,11 @@ const ClamPresale = ({
 
         {/* modal   -top-0 md:-top-64 */}
         <div className="flex-1 justify-center min-h-full min-w-full  md:flex items-center absolute z-30 -top-36 md:-top-42">
-          {isStarted && !rng && <ClamMintModal />}
-          {rng && hasPurchasedClam && <ClamCollectModal />}
+          {clamBalance === "0" && isStarted && !rng && <ClamMintModal />}
+          {clamBalance === "0" && rng && hasPurchasedClam && (
+            <ClamCollectModal />
+          )}
+          {clamBalance === "1" && address && <ClamShowModal />}
         </div>
       </div>
     </>
