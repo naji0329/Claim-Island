@@ -43,7 +43,7 @@ const sliderValues = {
   b: 100,
 };
 
-const Clams3D = ({ width, height, clamDna }) => {
+const Clams3D = ({ width, height, clamDna, decodedDna }) => {
   const mapRef = useRef(null);
   const mapRef1 = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -52,9 +52,9 @@ const Clams3D = ({ width, height, clamDna }) => {
   const [scene, setScene] = useState("");
   const [renderer, setRenderer] = useState("");
   const [traits, setTraits] = useState({});
-  const [clamDir, setClamDir] = useState('');
+  const [clamDir, setClamDir] = useState("");
 
-  if (!clamDna)  return (<div>No Clam to see!</div>);
+  if (!clamDna) return <div>No Clam to see!</div>;
 
   useEffect(() => {
     const defaultTraits = getTraits(clamDna);
@@ -62,16 +62,8 @@ const Clams3D = ({ width, height, clamDna }) => {
     setTraits(defaultTraits);
     setClamDir(defaultClamDir);
 
-    if(defaultClamDir) {
-      create3DScene(
-        mapRef.current,
-        setLayers,
-        setScene,
-        setRenderer,
-        defaultTraits,
-        defaultClamDir,
-        takePhoto
-      );
+    if (defaultClamDir) {
+      create3DScene(mapRef.current, setLayers, setScene, setRenderer, defaultTraits, defaultClamDir, takePhoto);
     }
   }, [mapRef]);
 
@@ -94,10 +86,7 @@ const Clams3D = ({ width, height, clamDna }) => {
 
   const refreshTraits = async () => {
     const traits = getTraits(clamDna);
-    const clamDir =
-      "/clam-models/" +
-      traits.shellShape.replace(/\s+/g, "-").toLowerCase() +
-      "/";
+    const clamDir = "/clam-models/" + traits.shellShape.replace(/\s+/g, "-").toLowerCase() + "/";
     setTraits(traits);
     setClamDir(clamDir);
 
@@ -110,22 +99,22 @@ const Clams3D = ({ width, height, clamDna }) => {
   };
 
   return (
-    <div className="flex flex-col w-full justify-center bg-gray-50">
+    <>
+      {/* <div className="flex flex-col w-full justify-center bg-gray-50"> */}
+        {/* <div className="flex items-center justify-between w-full">
+          <Button className="flex flex-col items-center h-18 py-2" onClick={takePhoto}>
+            Take Photo
+          </Button>
+          <Button className="flex flex-col items-center h-18 py-2" onClick={refreshTraits}>
+            Refresh Traits
+          </Button>
+        </div> */}
 
-      <div className="flex items-center justify-between w-full">
-        <Button className="flex flex-col items-center h-18 py-2" onClick={takePhoto}>Take Photo</Button>
-        <Button className="flex flex-col items-center h-18 py-2" onClick={refreshTraits}>Refresh Traits</Button>
-      </div>
+        {/* <div className="flex justify-between"> */}
+          <div className="three-container mt-4 mb-4" ref={mapRef} style={{ width, height }}></div>
+        {/* </div> */}
 
-      <div className="flex justify-between">
-        <div
-            className="three-container mt-4 mb-4"
-            ref={mapRef}
-            style={{ width, height }}
-          ></div>
-      </div>
-
-      {/* <div>
+        {/* <div>
         <PhotoshopPicker
           style={{}}
           color={color}
@@ -133,11 +122,12 @@ const Clams3D = ({ width, height, clamDna }) => {
         />
       </div> */}
 
-      <img className="hidden" src="" ref={mapRef1}  style={{ width, height }} />
-      {/* <div>
-          {JSON.stringify(traits, null, 4)}
-      </div> */}
-    </div>
+        {/* <img className="hidden" src="" ref={mapRef1} style={{ width, height }} /> */}
+      {/* </div> */}
+      <div classeName="mt-4 mb-4">JS Interpreter: {JSON.stringify(traits, null, 4)}</div>
+      <br />
+      <div classeName="mt-4 mb-4">SC Interpreter: {JSON.stringify(decodedDna, null, 4)}</div>
+    </>
   );
 };
 
@@ -146,15 +136,7 @@ const Clams3D = ({ width, height, clamDna }) => {
 //   "clam-models/" + traits.shellShape.replace(/\s+/g, "-").toLowerCase() + "/";
 
 // CREATE A 3D SCENE
-const create3DScene = async (
-  element,
-  setLayers,
-  setScene,
-  setRenderer,
-  traits,
-  clamDir,
-  takePhoto
-) => {
+const create3DScene = async (element, setLayers, setScene, setRenderer, traits, clamDir, takePhoto) => {
   // create a 3d renderer
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -235,9 +217,7 @@ const loadModels = async (scene, clamDir, traits) => {
 
   // load tongue model
   const tongueTex = await loadTexture("/clam-models/tongue-normal.png");
-  const tongueModel = await loadGLTF(
-    clamDir + "Tongues/" + (traits.tongue || 'Common').toLowerCase() + ".glb"
-  );
+  const tongueModel = await loadGLTF(clamDir + "Tongues/" + (traits.tongue || "Common").toLowerCase() + ".glb");
   const tongueRoot = tongueModel.scene;
   tongueRoot.traverse((n) => {
     if (n.isMesh) {
@@ -359,16 +339,10 @@ const loadAllTextures = async (traits, clamDir) => {
     },
   ];
 
-  const loaded = await Promise.all(
-    textures.map((k) => loadTexture(clamDir + k.img))
-  );
-  const base = await loadTexture(
-    "/clam-models/patterns/" + traits.pattern.toLowerCase() + "_basecolor.png"
-  );
+  const loaded = await Promise.all(textures.map((k) => loadTexture(clamDir + k.img)));
+  const base = await loadTexture("/clam-models/patterns/" + traits.pattern.toLowerCase() + "_basecolor.png");
 
-  return Promise.all(
-    textures.map((k, i) => loadTextureKonva(k, loaded[i], base))
-  );
+  return Promise.all(textures.map((k, i) => loadTextureKonva(k, loaded[i], base)));
 };
 
 const updateShellTextures = (scene, containers, traits, takePhoto) => {
@@ -414,10 +388,7 @@ const updateShellTextures = (scene, containers, traits, takePhoto) => {
     });
 
     if (tongue.children[0]) {
-      if (
-        ["Forked", "Heart"].indexOf(traits.tongue) !== -1 &&
-        traits.shellShape == "Common"
-      ) {
+      if (["Forked", "Heart"].indexOf(traits.tongue) !== -1 && traits.shellShape == "Common") {
         tongue.children[0].material.map = tongueTexture;
       } else {
         tongue.children[0].children[0].material.map = tongueTexture;
@@ -428,9 +399,9 @@ const updateShellTextures = (scene, containers, traits, takePhoto) => {
     isTexture.needsUpdate = true;
     lipTexture.needsUpdate = true;
     tongueTexture.needsUpdate = true;
-    setTimeout(() => {
-        takePhoto();
-    }, 1000)
+    // setTimeout(() => {
+    //   takePhoto();
+    // }, 1000);
   }
 };
 

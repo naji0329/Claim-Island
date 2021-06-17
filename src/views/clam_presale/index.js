@@ -54,7 +54,6 @@ const ClamPresale = ({
 
   return (
     <>
-      {console.log({ isStarted })}
       <Web3Navbar />
       <Web3ClamPresale />
       {/* container */}
