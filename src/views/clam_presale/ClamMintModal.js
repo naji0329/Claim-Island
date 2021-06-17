@@ -41,7 +41,7 @@ const ClamMintModal = ({
       name: "diego",
       action: "clam_presale.processing.text",
       button: {
-        text: "Ok",
+        text: undefined,
       },
     });
 

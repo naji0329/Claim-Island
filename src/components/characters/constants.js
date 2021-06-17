@@ -350,8 +350,8 @@ export const SPEECHES = {
     },
 
     congrats: {
-      text: `Congratulations on being one of our first customers! You must now collect your $CLAM to reveal it!`,
-      next: false,
+      text: `Thank you for your purchase! Let me just go fetch your Clam. I'll just be a minute.`,
+      next: "conllection",
       dismiss: true,
       skip: false,
     },
@@ -363,8 +363,15 @@ export const SPEECHES = {
       skip: false,
     },
 
+    conllectionProcessing: {
+      text: `One moment, just let me just unbox this Clam for you. Did you know that no one knows what Clam is inside until you collect it, not even me?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
     congratsConllection: {
-      text: `You Got a CLAM! You can see your $CLAM balance at the top right of the screen. Remember they are not transferable until Clam Island opens!`,
+      text: `Congratulations, here's your Clam! Since the Saferoom isn't open yet, I will hold on to this for you for now. Come back to my shop any time to see your Clam.`,
       next: false,
       dismiss: true,
       skip: false,

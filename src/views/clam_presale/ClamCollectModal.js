@@ -24,9 +24,9 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
 
     updateCharacter({
       name: "diego",
-      action: "clam_presale.processing.text",
+      action: "clam_presale.conllectionProcessing.text",
       button: {
-        text: "Ok",
+        text: undefined,
       },
     });
 
@@ -38,7 +38,7 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
           name: "diego",
           action: "clam_presale.congratsConllection.text",
           button: {
-            text: "Dismiss",
+            text: undefined,
             // alt: {
             //   action: "internal",
             //   destination: "/vault",
@@ -53,7 +53,7 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
           name: "diego",
           action: "clam_presale.error.text",
           button: {
-            text: "Dismiss",
+            text: undefined,
           },
         });
       });
@@ -64,7 +64,7 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
       name: "diego",
       action: "clam_presale.conllection.text",
       button: {
-        text: "Dismiss",
+        text: undefined,
       },
     });
   });
