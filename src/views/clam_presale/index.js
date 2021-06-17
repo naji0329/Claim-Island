@@ -26,7 +26,7 @@ const ClamPresale = ({
         name: "diego",
         action: "clam_presale.connect.text",
         button: {
-          text: undefined,
+          text: null,
         },
       });
     } else {
