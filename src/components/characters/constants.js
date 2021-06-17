@@ -343,7 +343,7 @@ export const SPEECHES = {
     },
 
     processing: {
-      text: `Please hold while we process your transaction...`,
+      text: `Hold on while we process your transaction...`,
       next: `congrats`,
       dismiss: false,
       skip: false,
