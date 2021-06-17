@@ -18,7 +18,6 @@ const ClamPresale = ({
   presale: { isStarted, rng, hasPurchasedClam },
   updateCharacter,
 }) => {
-  isStarted = true;
   useEffect(() => {
     console.log("useEffect", { isStarted });
 
@@ -46,7 +45,11 @@ const ClamPresale = ({
         name: "diego",
         action: "clam_presale_not_started.welcome.text",
         button: {
-          text: "Ok",
+          text: "Back to Island",
+          alt: {
+            action: "internal",
+            destination: "/",
+          },
         },
       });
     }
