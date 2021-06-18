@@ -105,397 +105,877 @@ export const traits = {
     tongueColour: {
         len: 3,
         colours: {
-            red: {
-                val: [360, 205, -130],
-                minAdj: [0, -20, -70],
-                maxAdj: [0, 45, 20],
-                dropRate: 0.07,
-                pearlBoost: false
-            },
-            blue: {
-                val: [142, 170, -120],
-                minAdj: [-12, -100, -100],
-                maxAdj: [18, 80, 100],
-                dropRate: 0.04,
-                pearlBoost: {
-                    bodycolour: 'blue',
-                    boost: 0.2
-                }
-            },
-            green: {
-                val: [215, 170, -120],
-                minAdj: [-25, -130, -80],
-                maxAdj: [60, 80, 90],
-                dropRate: 0.12,
-                pearlBoost: {
-                    bodycolour: 'green',
-                    boost: 0.2
-                }
-            },
-            yellow: {
-                val: [300, 170, 0],
-                minAdj: [-10, -170, -75],
-                maxAdj: [15, 45, 40],
-                dropRate: 0.15,
-                pearlBoost: {
-                    bodycolour: 'gold',
-                    boost: 0.2
-                }
-            },
-            white: {
-                val: [0, -200, 20],
-                minAdj: [0, 0, -20],
-                maxAdj: [0, 0, 30],
-                dropRate: 0.2,
-                pearlBoost: {
-                    bodycolour: 'white',
-                    boost: 0.2
-                }
-            },
-            black: {
-                val: [0, -300, -330],
-                minAdj: [0, 0, -70],
-                maxAdj: [0, 0, 50],
-                dropRate: 0.01,
-                pearlBoost: {
-                    bodycolour: 'black',
-                    boost: 0.2
-                }
-            },
-            purple: {
-                val: [80, 170, -120],
-                minAdj: [-20, -120, -80],
-                maxAdj: [15, 50, 120],
-                dropRate: 0.05,
-                pearlBoost: {
-                    bodycolour: 'aubergine',
-                    boost: 0.2
-                }
-            },
-            pink: {
-                val: [15, 80, 0],
-                minAdj: [-15, -30, -100],
-                maxAdj: [15, 35, 20],
-                dropRate: 0.09,
-                pearlBoost: {
-                    bodycolour: 'pink',
-                    boost: 0.2
-                }
-            },
-            orange: {
-                val: [340, 170, -70],
-                minAdj: [-15, -40, -60],
-                maxAdj: [5, 30, 20],
-                dropRate: 0.12,
-                pearlBoost: false
-            },
-            brown: {
-                val: [360, 150, -270],
-                minAdj: [-30, -50, -50],
-                maxAdj: [5, 50, 70],
-                dropRate: 0.15,
-                pearlBoost: {
-                    bodycolour: 'brown',
-                    boost: 0.2
-                }
-            }
+          "red": {
+              "val": [
+                  360,
+                  0,
+                  0
+              ],
+              "minAdj": [
+                  0,
+                  -40,
+                  -20
+              ],
+              "maxAdj": [
+                  0,
+                  25,
+                  20
+              ],
+              "dropRate": 0.07,
+              "pearlBoost": false
+          },
+          "blue": {
+              "val": [
+                  142,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -12,
+                  -100,
+                  -100
+              ],
+              "maxAdj": [
+                  18,
+                  80,
+                  100
+              ],
+              "dropRate": 0.04,
+              "pearlBoost": {
+                  "bodycolour": "blue",
+                  "boost": 0.2
+              }
+          },
+          "green": {
+              "val": [
+                  215,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -25,
+                  -130,
+                  -80
+              ],
+              "maxAdj": [
+                  60,
+                  80,
+                  30
+              ],
+              "dropRate": 0.12,
+              "pearlBoost": {
+                  "bodycolour": "green",
+                  "boost": 0.2
+              }
+          },
+          "yellow": {
+              "val": [
+                  300,
+                  -55,
+                  120
+              ],
+              "minAdj": [
+                  -4,
+                  -170,
+                  -75
+              ],
+              "maxAdj": [
+                  5,
+                  20,
+                  20
+              ],
+              "dropRate": 0.15,
+              "pearlBoost": {
+                  "bodycolour": "gold",
+                  "boost": 0.2
+              }
+          },
+          "white": {
+              "val": [
+                  0,
+                  -625,
+                  160
+              ],
+              "minAdj": [
+                  0,
+                  0,
+                  -20
+              ],
+              "maxAdj": [
+                  0,
+                  0,
+                  10
+              ],
+              "dropRate": 0.2,
+              "pearlBoost": {
+                  "bodycolour": "white",
+                  "boost": 0.2
+              }
+          },
+          "black": {
+              "val": [
+                  0,
+                  -525,
+                  -40
+              ],
+              "minAdj": [
+                  0,
+                  0,
+                  -30
+              ],
+              "maxAdj": [
+                  0,
+                  0,
+                  30
+              ],
+              "dropRate": 0.01,
+              "pearlBoost": {
+                  "bodycolour": "black",
+                  "boost": 0.2
+              }
+          },
+          "purple": {
+              "val": [
+                  70,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -20,
+                  -120,
+                  -80
+              ],
+              "maxAdj": [
+                  15,
+                  50,
+                  50
+              ],
+              "dropRate": 0.05,
+              "pearlBoost": {
+                  "bodycolour": "aubergine",
+                  "boost": 0.2
+              }
+          },
+          "pink": {
+              "val": [
+                  15,
+                  -145,
+                  110
+              ],
+              "minAdj": [
+                  -15,
+                  -30,
+                  -60
+              ],
+              "maxAdj": [
+                  15,
+                  35,
+                  20
+              ],
+              "dropRate": 0.09,
+              "pearlBoost": {
+                  "bodycolour": "pink",
+                  "boost": 0.2
+              }
+          },
+          "orange": {
+              "val": [
+                  340,
+                  -20,
+                  40
+              ],
+              "minAdj": [
+                  -15,
+                  -30,
+                  -10
+              ],
+              "maxAdj": [
+                  5,
+                  30,
+                  20
+              ],
+              "dropRate": 0.12,
+              "pearlBoost": false
+          },
+          "brown": {
+              "val": [
+                  360,
+                  -75,
+                  -90
+              ],
+              "minAdj": [
+                  -30,
+                  -50,
+                  -70
+              ],
+              "maxAdj": [
+                  5,
+                  50,
+                  30
+              ],
+              "dropRate": 0.15,
+              "pearlBoost": {
+                  "bodycolour": "brown",
+                  "boost": 0.2
+              }
+          }
         }
     },
     shellColour: {
         len: 3,
         colours: {
-            red: {
-                val: [360, 205, -130],
-                minAdj: [0, -20, -70],
-                maxAdj: [0, 45, 20],
-                dropRate: 0.07,
-                pearlBoost: false
-            },
-            blue: {
-                val: [142, 170, -120],
-                minAdj: [-12, -100, -100],
-                maxAdj: [18, 80, 100],
-                dropRate: 0.04,
-                pearlBoost: {
-                    bodycolour: 'blue',
-                    boost: 0.2
-                }
-            },
-            green: {
-                val: [215, 170, -120],
-                minAdj: [-25, -130, -80],
-                maxAdj: [60, 80, 90],
-                dropRate: 0.12,
-                pearlBoost: {
-                    bodycolour: 'green',
-                    boost: 0.2
-                }
-            },
-            yellow: {
-                val: [300, 170, 0],
-                minAdj: [-10, -170, -75],
-                maxAdj: [15, 45, 40],
-                dropRate: 0.15,
-                pearlBoost: {
-                    bodycolour: 'gold',
-                    boost: 0.2
-                }
-            },
-            white: {
-                val: [0, -200, 20],
-                minAdj: [0, 0, -20],
-                maxAdj: [0, 0, 30],
-                dropRate: 0.2,
-                pearlBoost: {
-                    bodycolour: 'white',
-                    boost: 0.2
-                }
-            },
-            black: {
-                val: [0, -300, -330],
-                minAdj: [0, 0, -70],
-                maxAdj: [0, 0, 50],
-                dropRate: 0.01,
-                pearlBoost: {
-                    bodycolour: 'black',
-                    boost: 0.2
-                }
-            },
-            purple: {
-                val: [80, 170, -120],
-                minAdj: [-20, -120, -80],
-                maxAdj: [15, 50, 120],
-                dropRate: 0.05,
-                pearlBoost: {
-                    bodycolour: 'aubergine',
-                    boost: 0.2
-                }
-            },
-            pink: {
-                val: [15, 80, 0],
-                minAdj: [-15, -30, -100],
-                maxAdj: [15, 35, 20],
-                dropRate: 0.09,
-                pearlBoost: {
-                    bodycolour: 'pink',
-                    boost: 0.2
-                }
-            },
-            orange: {
-                val: [340, 170, -70],
-                minAdj: [-15, -40, -60],
-                maxAdj: [5, 30, 20],
-                dropRate: 0.12,
-                pearlBoost: false
-            },
-            brown: {
-                val: [360, 150, -270],
-                minAdj: [-30, -50, -50],
-                maxAdj: [5, 50, 70],
-                dropRate: 0.15,
-                pearlBoost: {
-                    bodycolour: 'brown',
-                    boost: 0.2
-                }
-            }
+          "red": {
+              "val": [
+                  360,
+                  0,
+                  0
+              ],
+              "minAdj": [
+                  0,
+                  -40,
+                  -20
+              ],
+              "maxAdj": [
+                  0,
+                  25,
+                  20
+              ],
+              "dropRate": 0.07,
+              "pearlBoost": false
+          },
+          "blue": {
+              "val": [
+                  142,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -12,
+                  -100,
+                  -100
+              ],
+              "maxAdj": [
+                  18,
+                  80,
+                  100
+              ],
+              "dropRate": 0.04,
+              "pearlBoost": {
+                  "bodycolour": "blue",
+                  "boost": 0.2
+              }
+          },
+          "green": {
+              "val": [
+                  215,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -25,
+                  -130,
+                  -80
+              ],
+              "maxAdj": [
+                  60,
+                  80,
+                  30
+              ],
+              "dropRate": 0.12,
+              "pearlBoost": {
+                  "bodycolour": "green",
+                  "boost": 0.2
+              }
+          },
+          "yellow": {
+              "val": [
+                  300,
+                  -55,
+                  120
+              ],
+              "minAdj": [
+                  -4,
+                  -170,
+                  -75
+              ],
+              "maxAdj": [
+                  5,
+                  20,
+                  20
+              ],
+              "dropRate": 0.15,
+              "pearlBoost": {
+                  "bodycolour": "gold",
+                  "boost": 0.2
+              }
+          },
+          "white": {
+              "val": [
+                  0,
+                  -625,
+                  160
+              ],
+              "minAdj": [
+                  0,
+                  0,
+                  -20
+              ],
+              "maxAdj": [
+                  0,
+                  0,
+                  10
+              ],
+              "dropRate": 0.2,
+              "pearlBoost": {
+                  "bodycolour": "white",
+                  "boost": 0.2
+              }
+          },
+          "black": {
+              "val": [
+                  0,
+                  -525,
+                  -40
+              ],
+              "minAdj": [
+                  0,
+                  0,
+                  -30
+              ],
+              "maxAdj": [
+                  0,
+                  0,
+                  30
+              ],
+              "dropRate": 0.01,
+              "pearlBoost": {
+                  "bodycolour": "black",
+                  "boost": 0.2
+              }
+          },
+          "purple": {
+              "val": [
+                  70,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -20,
+                  -120,
+                  -80
+              ],
+              "maxAdj": [
+                  15,
+                  50,
+                  50
+              ],
+              "dropRate": 0.05,
+              "pearlBoost": {
+                  "bodycolour": "aubergine",
+                  "boost": 0.2
+              }
+          },
+          "pink": {
+              "val": [
+                  15,
+                  -145,
+                  110
+              ],
+              "minAdj": [
+                  -15,
+                  -30,
+                  -60
+              ],
+              "maxAdj": [
+                  15,
+                  35,
+                  20
+              ],
+              "dropRate": 0.09,
+              "pearlBoost": {
+                  "bodycolour": "pink",
+                  "boost": 0.2
+              }
+          },
+          "orange": {
+              "val": [
+                  340,
+                  -20,
+                  40
+              ],
+              "minAdj": [
+                  -15,
+                  -30,
+                  -10
+              ],
+              "maxAdj": [
+                  5,
+                  30,
+                  20
+              ],
+              "dropRate": 0.12,
+              "pearlBoost": false
+          },
+          "brown": {
+              "val": [
+                  360,
+                  -75,
+                  -90
+              ],
+              "minAdj": [
+                  -30,
+                  -50,
+                  -70
+              ],
+              "maxAdj": [
+                  5,
+                  50,
+                  30
+              ],
+              "dropRate": 0.15,
+              "pearlBoost": {
+                  "bodycolour": "brown",
+                  "boost": 0.2
+              }
+          }
         }
     },
     innerColour: {
         len: 3,
         colours: {
-            red: {
-                val: [360, 205, -130],
-                minAdj: [0, -20, -70],
-                maxAdj: [0, 45, 20],
-                dropRate: 0.07,
-                pearlBoost: false
-            },
-            blue: {
-                val: [142, 170, -120],
-                minAdj: [-12, -100, -100],
-                maxAdj: [18, 80, 100],
-                dropRate: 0.04,
-                pearlBoost: {
-                    bodycolour: 'blue',
-                    boost: 0.3
-                }
-            },
-            green: {
-                val: [215, 170, -120],
-                minAdj: [-25, -130, -80],
-                maxAdj: [60, 80, 90],
-                dropRate: 0.12,
-                pearlBoost: {
-                    bodycolour: 'green',
-                    boost: 0.3
-                }
-            },
-            yellow: {
-                val: [300, 170, 0],
-                minAdj: [-10, -170, -75],
-                maxAdj: [15, 45, 40],
-                dropRate: 0.15,
-                pearlBoost: {
-                    bodycolour: 'gold',
-                    boost: 0.3
-                }
-            },
-            white: {
-                val: [0, -200, 20],
-                minAdj: [0, 0, -20],
-                maxAdj: [0, 0, 30],
-                dropRate: 0.2,
-                pearlBoost: {
-                    bodycolour: 'white',
-                    boost: 0.3
-                }
-            },
-            black: {
-                val: [0, -300, -330],
-                minAdj: [0, 0, -70],
-                maxAdj: [0, 0, 50],
-                dropRate: 0.01,
-                pearlBoost: {
-                    bodycolour: 'black',
-                    boost: 0.3
-                }
-            },
-            purple: {
-                val: [80, 170, -120],
-                minAdj: [-20, -120, -80],
-                maxAdj: [15, 50, 120],
-                dropRate: 0.05,
-                pearlBoost: {
-                    bodycolour: 'aubergine',
-                    boost: 0.3
-                }
-            },
-            pink: {
-                val: [15, 80, 0],
-                minAdj: [-15, -30, -100],
-                maxAdj: [15, 35, 20],
-                dropRate: 0.09,
-                pearlBoost: {
-                    bodycolour: 'pink',
-                    boost: 0.3
-                }
-            },
-            orange: {
-                val: [340, 170, -70],
-                minAdj: [-15, -40, -60],
-                maxAdj: [5, 30, 20],
-                dropRate: 0.12,
-                pearlBoost: false
-            },
-            brown: {
-                val: [360, 150, -270],
-                minAdj: [-30, -50, -50],
-                maxAdj: [5, 50, 70],
-                dropRate: 0.15,
-                pearlBoost: {
-                    bodycolour: 'brown',
-                    boost: 0.3
-                }
-            }
+          "red": {
+              "val": [
+                  360,
+                  0,
+                  0
+              ],
+              "minAdj": [
+                  0,
+                  -40,
+                  -20
+              ],
+              "maxAdj": [
+                  0,
+                  25,
+                  20
+              ],
+              "dropRate": 0.07,
+              "pearlBoost": false
+          },
+          "blue": {
+              "val": [
+                  142,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -12,
+                  -100,
+                  -100
+              ],
+              "maxAdj": [
+                  18,
+                  80,
+                  100
+              ],
+              "dropRate": 0.04,
+              "pearlBoost": {
+                  "bodycolour": "blue",
+                  "boost": 0.3
+              }
+          },
+          "green": {
+              "val": [
+                  215,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -25,
+                  -130,
+                  -80
+              ],
+              "maxAdj": [
+                  60,
+                  80,
+                  30
+              ],
+              "dropRate": 0.12,
+              "pearlBoost": {
+                  "bodycolour": "green",
+                  "boost": 0.3
+              }
+          },
+          "yellow": {
+              "val": [
+                  300,
+                  -55,
+                  120
+              ],
+              "minAdj": [
+                  -4,
+                  -170,
+                  -75
+              ],
+              "maxAdj": [
+                  5,
+                  20,
+                  20
+              ],
+              "dropRate": 0.15,
+              "pearlBoost": {
+                  "bodycolour": "gold",
+                  "boost": 0.3
+              }
+          },
+          "white": {
+              "val": [
+                  0,
+                  -625,
+                  160
+              ],
+              "minAdj": [
+                  0,
+                  0,
+                  -20
+              ],
+              "maxAdj": [
+                  0,
+                  0,
+                  10
+              ],
+              "dropRate": 0.2,
+              "pearlBoost": {
+                  "bodycolour": "white",
+                  "boost": 0.3
+              }
+          },
+          "black": {
+              "val": [
+                  0,
+                  -525,
+                  -40
+              ],
+              "minAdj": [
+                  0,
+                  0,
+                  -30
+              ],
+              "maxAdj": [
+                  0,
+                  0,
+                  30
+              ],
+              "dropRate": 0.01,
+              "pearlBoost": {
+                  "bodycolour": "black",
+                  "boost": 0.3
+              }
+          },
+          "purple": {
+              "val": [
+                  70,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -20,
+                  -120,
+                  -80
+              ],
+              "maxAdj": [
+                  15,
+                  50,
+                  50
+              ],
+              "dropRate": 0.05,
+              "pearlBoost": {
+                  "bodycolour": "aubergine",
+                  "boost": 0.3
+              }
+          },
+          "pink": {
+              "val": [
+                  15,
+                  -145,
+                  110
+              ],
+              "minAdj": [
+                  -15,
+                  -30,
+                  -60
+              ],
+              "maxAdj": [
+                  15,
+                  35,
+                  20
+              ],
+              "dropRate": 0.09,
+              "pearlBoost": {
+                  "bodycolour": "pink",
+                  "boost": 0.3
+              }
+          },
+          "orange": {
+              "val": [
+                  340,
+                  -20,
+                  40
+              ],
+              "minAdj": [
+                  -15,
+                  -30,
+                  -10
+              ],
+              "maxAdj": [
+                  5,
+                  30,
+                  20
+              ],
+              "dropRate": 0.12,
+              "pearlBoost": false
+          },
+          "brown": {
+              "val": [
+                  360,
+                  -75,
+                  -90
+              ],
+              "minAdj": [
+                  -30,
+                  -50,
+                  -70
+              ],
+              "maxAdj": [
+                  5,
+                  50,
+                  30
+              ],
+              "dropRate": 0.15,
+              "pearlBoost": {
+                  "bodycolour": "brown",
+                  "boost": 0.3
+              }
+          }
         }
     },
     lipColour: {
         len: 3,
         colours: {
-            red: {
-                val: [360, 205, -130],
-                minAdj: [0, -20, -70],
-                maxAdj: [0, 45, 20],
-                dropRate: 0.07,
-                pearlBoost: false
-            },
-            blue: {
-                val: [142, 170, -120],
-                minAdj: [-12, -100, -100],
-                maxAdj: [18, 80, 100],
-                dropRate: 0.04,
-                pearlBoost: {
-                    bodycolour: 'blue',
-                    boost: 0.1
-                }
-            },
-            green: {
-                val: [215, 170, -120],
-                minAdj: [-25, -130, -80],
-                maxAdj: [60, 80, 90],
-                dropRate: 0.12,
-                pearlBoost: {
-                    bodycolour: 'green',
-                    boost: 0.1
-                }
-            },
-            yellow: {
-                val: [300, 170, 0],
-                minAdj: [-10, -170, -75],
-                maxAdj: [15, 45, 40],
-                dropRate: 0.15,
-                pearlBoost: {
-                    bodycolour: 'gold',
-                    boost: 0.1
-                }
-            },
-            white: {
-                val: [0, -200, 20],
-                minAdj: [0, 0, -20],
-                maxAdj: [0, 0, 30],
-                dropRate: 0.2,
-                pearlBoost: {
-                    bodycolour: 'white',
-                    boost: 0.1
-                }
-            },
-            black: {
-                val: [0, -300, -330],
-                minAdj: [0, 0, -70],
-                maxAdj: [0, 0, 50],
-                dropRate: 0.01,
-                pearlBoost: {
-                    bodycolour: 'black',
-                    boost: 0.1
-                }
-            },
-            purple: {
-                val: [80, 170, -120],
-                minAdj: [-20, -120, -80],
-                maxAdj: [15, 50, 120],
-                dropRate: 0.05,
-                pearlBoost: {
-                    bodycolour: 'aubergine',
-                    boost: 0.1
-                }
-            },
-            pink: {
-                val: [15, 80, 0],
-                minAdj: [-15, -30, -100],
-                maxAdj: [15, 35, 20],
-                dropRate: 0.09,
-                pearlBoost: {
-                    bodycolour: 'pink',
-                    boost: 0.1
-                }
-            },
-            orange: {
-                val: [340, 170, -70],
-                minAdj: [-15, -40, -60],
-                maxAdj: [5, 30, 20],
-                dropRate: 0.12,
-                pearlBoost: false
-            },
-            brown: {
-                val: [360, 150, -270],
-                minAdj: [-30, -50, -50],
-                maxAdj: [5, 50, 70],
-                dropRate: 0.15,
-                pearlBoost: {
-                    bodycolour: 'brown',
-                    boost: 0.1
-                }
-            }
+          "red": {
+              "val": [
+                  360,
+                  0,
+                  0
+              ],
+              "minAdj": [
+                  0,
+                  -40,
+                  -20
+              ],
+              "maxAdj": [
+                  0,
+                  25,
+                  20
+              ],
+              "dropRate": 0.07,
+              "pearlBoost": false
+          },
+          "blue": {
+              "val": [
+                  142,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -12,
+                  -100,
+                  -100
+              ],
+              "maxAdj": [
+                  18,
+                  80,
+                  100
+              ],
+              "dropRate": 0.04,
+              "pearlBoost": {
+                  "bodycolour": "blue",
+                  "boost": 0.1
+              }
+          },
+          "green": {
+              "val": [
+                  215,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -25,
+                  -130,
+                  -80
+              ],
+              "maxAdj": [
+                  60,
+                  80,
+                  30
+              ],
+              "dropRate": 0.12,
+              "pearlBoost": {
+                  "bodycolour": "green",
+                  "boost": 0.1
+              }
+          },
+          "yellow": {
+              "val": [
+                  300,
+                  -55,
+                  120
+              ],
+              "minAdj": [
+                  -4,
+                  -170,
+                  -75
+              ],
+              "maxAdj": [
+                  5,
+                  20,
+                  20
+              ],
+              "dropRate": 0.15,
+              "pearlBoost": {
+                  "bodycolour": "gold",
+                  "boost": 0.1
+              }
+          },
+          "white": {
+              "val": [
+                  0,
+                  -625,
+                  160
+              ],
+              "minAdj": [
+                  0,
+                  0,
+                  -20
+              ],
+              "maxAdj": [
+                  0,
+                  0,
+                  10
+              ],
+              "dropRate": 0.2,
+              "pearlBoost": {
+                  "bodycolour": "white",
+                  "boost": 0.1
+              }
+          },
+          "black": {
+              "val": [
+                  0,
+                  -525,
+                  -40
+              ],
+              "minAdj": [
+                  0,
+                  0,
+                  -30
+              ],
+              "maxAdj": [
+                  0,
+                  0,
+                  30
+              ],
+              "dropRate": 0.01,
+              "pearlBoost": {
+                  "bodycolour": "black",
+                  "boost": 0.1
+              }
+          },
+          "purple": {
+              "val": [
+                  70,
+                  -55,
+                  -10
+              ],
+              "minAdj": [
+                  -20,
+                  -120,
+                  -80
+              ],
+              "maxAdj": [
+                  15,
+                  50,
+                  50
+              ],
+              "dropRate": 0.05,
+              "pearlBoost": {
+                  "bodycolour": "aubergine",
+                  "boost": 0.1
+              }
+          },
+          "pink": {
+              "val": [
+                  15,
+                  -145,
+                  110
+              ],
+              "minAdj": [
+                  -15,
+                  -30,
+                  -60
+              ],
+              "maxAdj": [
+                  15,
+                  35,
+                  20
+              ],
+              "dropRate": 0.09,
+              "pearlBoost": {
+                  "bodycolour": "pink",
+                  "boost": 0.1
+              }
+          },
+          "orange": {
+              "val": [
+                  340,
+                  -20,
+                  40
+              ],
+              "minAdj": [
+                  -15,
+                  -30,
+                  -10
+              ],
+              "maxAdj": [
+                  5,
+                  30,
+                  20
+              ],
+              "dropRate": 0.12,
+              "pearlBoost": false
+          },
+          "brown": {
+              "val": [
+                  360,
+                  -75,
+                  -90
+              ],
+              "minAdj": [
+                  -30,
+                  -50,
+                  -70
+              ],
+              "maxAdj": [
+                  5,
+                  50,
+                  30
+              ],
+              "dropRate": 0.15,
+              "pearlBoost": {
+                  "bodycolour": "brown",
+                  "boost": 0.1
+              }
+          }
         }
     },
     pattern: {

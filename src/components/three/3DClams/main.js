@@ -181,19 +181,19 @@ let sliderValues = {
         min: 0,
         max: 360,
         step: 1,
-        default: 0
+        default: 360
     },
     saturation: {
         min: -10,
         max: 2.5,
         step: 0.01,
-        default: 1
+        default: 0
     },
     value: {
         min: -4,
-        max: 1.5,
+        max: 2.0,
         step: 0.01,
-        default: -1.6
+        default: 0
     }
 }
 
@@ -249,7 +249,3 @@ let sliderValues = {
 //     adjusters.appendChild(adjustContainer);
 //     document.body.prepend(adjusters);
 // }
-
-
-
-
