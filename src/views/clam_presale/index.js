@@ -87,7 +87,7 @@ const ClamPresale = ({
         </video>
 
         {/* chat character   */}
-        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
+        <div className="flex-1 min-h-full min-w-full  md:flex items-center">
           <CharacterDiego />
         </div>
 
