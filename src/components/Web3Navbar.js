@@ -42,13 +42,14 @@ const ErrorAlert = ({ title, description }) => (
 const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
 const formatClam = (value) => (value ? formatUnits(value, 0) : "0");
 
-const Web3Navbar = ({ updateAccount }) => {
+const Web3Navbar = ({ updateAccount, ...state }) => {
   //  is called several times thus need a state to lower the renders
   const [activateError, setActivateError] = useState("");
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
   const [activateClamBalance, setActivateClamBalance] = useState("0");
+  const [activateChainId, setActivateChainId] = useState();
 
-  const { activateBrowserWallet, account, chainId, error } = useEthers();
+  const { activateBrowserWallet, account, error } = useEthers();
   const clamBalance = useTokenBalance(clamNFTAddress, account); // TODO - not working
   const bnbBalance = useEtherBalance(account);
 
@@ -56,20 +57,30 @@ const Web3Navbar = ({ updateAccount }) => {
     console.log("loaded");
   });
 
-  useEffect(() => {
+  if (window.ethereum) {
+    window.ethereum.on("chainChanged", (networkId) => {
+      const newChainId = parseInt(networkId);
+      console.log("chainChanged", newChainId);
+      if (newChainId !== activateChainId) {
+        setActivateChainId(newChainId);
+      }
+    });
+  }
+
+  useEffect(async () => {
     console.log("useEffect updateAccount");
 
     updateAccount({
       bnbBalance: activateBnbBalance,
       clamBalance: activateClamBalance,
       error: activateError,
-      isConnected: account ? true : false,
-      isBSChain: chainId === ChainId.BSC,
       address: account,
+      isConnected: account ? true : false,
+      isBSChain: activateChainId === ChainId.BSC,
     });
   }, [
     account,
-    chainId,
+    activateChainId,
     activateError,
     activateBnbBalance,
     activateClamBalance,
@@ -106,7 +117,7 @@ const Web3Navbar = ({ updateAccount }) => {
       {activateError && (
         <ErrorAlert title="Something Wrong" description={activateError} />
       )}
-      {chainId !== ChainId.BSC && (
+      {!state.account.isBSChain && (
         <ErrorAlert
           title="Wrong Network"
           description={
