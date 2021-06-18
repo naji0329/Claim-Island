@@ -23,7 +23,7 @@ const ClamPresale = ({
     console.log("useEffect", { isStarted });
 
     if (isStarted) {
-      if (address) {
+      if (address && !hasPurchasedClam) {
         updateCharacter({
           name: "diego",
           action: "clam_presale.connected.text",
@@ -44,7 +44,9 @@ const ClamPresale = ({
             },
           },
         });
-      } else {
+      }
+
+      if (!address && !hasPurchasedClam) {
         updateCharacter({
           name: "diego",
           action: "clam_presale.connect.text",
