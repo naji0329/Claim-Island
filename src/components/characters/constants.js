@@ -703,7 +703,7 @@ function showPresaleCountdown() {
 }
 
 function clamPresaleDate() {
-  return "Tue June 18 2021 09:00:00 GMT+0000";
+  return "Sun June 20 2021 09:00:00 GMT+0000";
 }
 
 function clamPresaleCountdown() {
