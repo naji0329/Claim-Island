@@ -13,6 +13,7 @@ import { actions } from "../store/redux";
 import { formatUnits } from "@ethersproject/units";
 
 import { clamNFTAddress } from "../web3/constants.js";
+import getWeb3 from "../web3/getWeb3";
 
 import Web3Avatar from "./Web3Avatar";
 
@@ -52,9 +53,15 @@ const Web3Navbar = ({ updateAccount, ...state }) => {
   const { activateBrowserWallet, account, error } = useEthers();
   const clamBalance = useTokenBalance(clamNFTAddress, account); // TODO - not working
   const bnbBalance = useEtherBalance(account);
+  const web3 = getWeb3();
 
   useAsync(async () => {
     console.log("loaded");
+
+    const netId = await web3.eth.net.getId();
+    if (netId !== activateChainId) {
+      setActivateChainId(netId);
+    }
   });
 
   if (window.ethereum) {
@@ -68,7 +75,8 @@ const Web3Navbar = ({ updateAccount, ...state }) => {
   }
 
   useEffect(async () => {
-    console.log("useEffect updateAccount");
+    const netId = await web3.eth.net.getId();
+    console.log("useEffect updateAccount", { activateChainId, netId });
 
     updateAccount({
       bnbBalance: activateBnbBalance,
