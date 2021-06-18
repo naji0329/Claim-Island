@@ -43,7 +43,7 @@ const ErrorAlert = ({ title, description }) => (
 const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
 const formatClam = (value) => (value ? formatUnits(value, 0) : "0");
 
-const Web3Navbar = ({ updateAccount, ...state }) => {
+const Web3Navbar = ({ updateAccount, ...redux }) => {
   //  is called several times thus need a state to lower the renders
   const [activateError, setActivateError] = useState("");
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
@@ -122,10 +122,10 @@ const Web3Navbar = ({ updateAccount, ...state }) => {
 
   return (
     <>
-      {activateError && (
-        <ErrorAlert title="Something Wrong" description={activateError} />
+      {redux.account.error && (
+        <ErrorAlert title="Something Wrong" description={redux.account.error} />
       )}
-      {!state.account.isBSChain && (
+      {!redux.account.isBSChain && (
         <ErrorAlert
           title="Wrong Network"
           description={

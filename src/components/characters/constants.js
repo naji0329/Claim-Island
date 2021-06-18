@@ -378,7 +378,7 @@ export const SPEECHES = {
     },
 
     error: {
-      text: `I'm sorry, something seems to have gone wrong with your purchase. Please try again, or try contacting our support staff in <a href="https://t.me/clamisland">Telegram</a>.`,
+      text: `I'm sorry, something went wrong. Please try again.`,
       next: false,
       dismiss: false,
       skip: false,
