@@ -14,7 +14,11 @@ import { clamPresaleAddress } from "../../web3/constants";
 import ClamUnknown from "../../assets/img/clam_unknown.png";
 import { actions } from "../../store/redux";
 
-const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
+const ClamCollectModal = ({
+  account: { address },
+  updateCharacter,
+  updateAccount,
+}) => {
   const { handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,6 +53,7 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
       .catch((e) => {
         console.error(e);
         setIsLoading(false);
+        updateAccount({ error: e.message });
         updateCharacter({
           name: "diego",
           action: "clam_presale.error.text",
