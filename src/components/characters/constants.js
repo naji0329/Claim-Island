@@ -266,7 +266,7 @@ export const SPEECHES = {
 
   clam_presale_not_started: {
     welcome: {
-      text: `Welcome, traveller! You're early! $CLAM 1st round of presale starts in ${clamPresaleCountdown()}. Please check back in then.`,
+      text: `Welcome, traveller! My shop is not open yet, but I do have a batch of Clams that I can sell to you early. However, they won't arrive until ${clamPresaleDate()}, which is ${clamPresaleCountdown()} from now.`,
       next: false,
       dismiss: true,
       skip: false,
@@ -328,23 +328,30 @@ export const SPEECHES = {
       skip: `purchase`,
     },
 
+    connected: {
+      text: `Welcome, traveller! My shop is not open yet, but I do have a batch of Clams that I can sell to you early. Due to limited stock, there's a limit of one Clam per customer. Would you like to buy one?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: `purchase`,
+    },
+
     purchase: {
-      text: `Great! Now you can press "Buy Shell" in the top right of the screen to purchase $CLAM. Remember that you can buy a maximum of 15 $SHELL!`,
+      text: `Excellent, please follow the prompts above to purchase a Clam.`,
       next: `processing`,
       dismiss: false,
       skip: false,
     },
 
     processing: {
-      text: `Please hold while we process your transaction...`,
+      text: `Hold on while we process your transaction...`,
       next: `congrats`,
       dismiss: false,
       skip: false,
     },
 
     congrats: {
-      text: `Congratulations on being one of our first customers! You must now collect your $CLAM to reveal it!`,
-      next: false,
+      text: `Thank you for your purchase! Let me just go fetch your Clam. I'll just be a minute.`,
+      next: "conllection",
       dismiss: true,
       skip: false,
     },
@@ -356,15 +363,22 @@ export const SPEECHES = {
       skip: false,
     },
 
+    conllectionProcessing: {
+      text: `One moment, just let me just unbox this Clam for you. Did you know that no one knows what Clam is inside until you collect it, not even me?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
     congratsConllection: {
-      text: `You Got a CLAM! You can see your $CLAM balance at the top right of the screen. Remember they are not transferable until Clam Island opens!`,
+      text: `Congratulations, here's your Clam! Since the Saferoom isn't open yet, I will hold on to this for you for now. Come back to my shop any time to see your Clam.`,
       next: false,
       dismiss: true,
       skip: false,
     },
 
     error: {
-      text: `I'm sorry, something seems to have gone wrong with your purchase. Please try again, or try contacting our support staff in <a href="https://t.me/clamisland">Telegram</a>.`,
+      text: `I'm sorry, something went wrong. Please try again.`,
       next: false,
       dismiss: false,
       skip: false,
@@ -688,10 +702,12 @@ function showPresaleCountdown() {
   } minutes`;
 }
 
+function clamPresaleDate() {
+  return "Sun June 20 2021 09:00:00 GMT+0000";
+}
+
 function clamPresaleCountdown() {
-  const total =
-    Date.parse("Tue June 18 2021 09:00:00 GMT+0000") -
-    Date.parse(String(new Date()));
+  const total = Date.parse(clamPresaleDate()) - Date.parse(String(new Date()));
   const minutes = Math.floor((total / 1000 / 60) % 60);
   const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
   const days = Math.floor(total / (1000 * 60 * 60 * 24));

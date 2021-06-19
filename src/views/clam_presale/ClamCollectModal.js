@@ -14,7 +14,11 @@ import { clamPresaleAddress } from "../../web3/constants";
 import ClamUnknown from "../../assets/img/clam_unknown.png";
 import { actions } from "../../store/redux";
 
-const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
+const ClamCollectModal = ({
+  account: { address },
+  updateCharacter,
+  updateAccount,
+}) => {
   const { handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,9 +28,9 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
 
     updateCharacter({
       name: "diego",
-      action: "clam_presale.processing.text",
+      action: "clam_presale.conllectionProcessing.text",
       button: {
-        text: "Ok",
+        text: undefined,
       },
     });
 
@@ -38,7 +42,7 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
           name: "diego",
           action: "clam_presale.congratsConllection.text",
           button: {
-            text: "Dismiss",
+            text: undefined,
             // alt: {
             //   action: "internal",
             //   destination: "/vault",
@@ -49,11 +53,12 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
       .catch((e) => {
         console.error(e);
         setIsLoading(false);
+        updateAccount({ error: e.message });
         updateCharacter({
           name: "diego",
           action: "clam_presale.error.text",
           button: {
-            text: "Dismiss",
+            text: undefined,
           },
         });
       });
@@ -64,7 +69,7 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
       name: "diego",
       action: "clam_presale.conllection.text",
       button: {
-        text: "Dismiss",
+        text: undefined,
       },
     });
   });
@@ -96,7 +101,7 @@ const ClamCollectModal = ({ account: { address }, updateCharacter }) => {
               <button
                 disabled={isLoading}
                 type="submit"
-                className="flex justify-content-center items-center block uppercase text-center shadow bg-yellow-200 text-yellow-600 text-white text-xl py-3 px-10 rounded-xl cursor-not-allowed"
+                className="flex justify-content-center items-center block uppercase text-center shadow bg-yellow-200 text-yellow-600 text-xl py-3 px-10 rounded-xl cursor-not-allowed"
               >
                 <svg
                   className="animate-spin -ml-1 mr-3 h-5 w-5 text-yellow-600"

@@ -64,7 +64,7 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
         showBubble ? "character-bubble" : "character-bubble hide-bubble"
       }
     >
-      <div className="character-container flex items-end">
+      <div className="character-container flex items-end cursor-pointer">
         <img
           className="w-screen max-w-none"
           src={character.charImg}
@@ -89,13 +89,15 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
         </div>
         {/* todo */}
         <div className="buttons">
-          <Button
-            className="btn"
-            id="btn-next"
-            onClick={button.alt ? handleClickButtonAlt : handleClickButton}
-          >
-            {button.text}
-          </Button>
+          {button.text && (
+            <Button
+              className="btn"
+              id="btn-next"
+              onClick={button.alt ? handleClickButtonAlt : handleClickButton}
+            >
+              {button.text}
+            </Button>
+          )}
         </div>
       </div>
     </div>
