@@ -58,19 +58,23 @@ const Clams3D = ({ width, height, clamDna, decodedDna }) => {
   if (!clamDna) return <div>No Clam to see!</div>;
 
   useEffect(() => {
-    if(decodedDna) {
-      // const defaultTraits = getTraits(clamDna);
-      const defaultTraits = decodeDna(decodedDna);
-      const defaultClamDir = `/clam-models/${defaultTraits.shellShape.replace(/\s+/g, "-").toLowerCase()}/`;
-      setTraits(defaultTraits);
-      setClamDir(defaultClamDir);
+    const defaultTraits = getTraits(clamDna);
+    // const defaultTraits = decodeDna(decodedDna);
+    const defaultClamDir = `/clam-models/${defaultTraits.shellShape.replace(/\s+/g, "-").toLowerCase()}/`;
+    setTraits(defaultTraits);
+    setClamDir(defaultClamDir);
 
-      if (defaultClamDir) {
-        console.log('set up renderer', decodedDna)
-        create3DScene(mapRef.current, setLayers, setScene, setRenderer, defaultTraits, defaultClamDir, takePhoto);
-      }
+    if (defaultClamDir) {
+      console.log('set up renderer', decodedDna)
+      create3DScene(mapRef.current, setLayers, setScene, setRenderer, defaultTraits, defaultClamDir, takePhoto);
     }
-  }, [mapRef, decodedDna]);
+  }, [mapRef]);
+
+  useEffect(() => {
+    if(decodedDna && scene) {
+      refreshTraits();
+    }
+  }, [decodedDna, scene]);
 
   const handleChangeComplete = (color) => {
     // console.log(color);
@@ -90,7 +94,8 @@ const Clams3D = ({ width, height, clamDna, decodedDna }) => {
   };
 
   const refreshTraits = async () => {
-    const traits = getTraits(clamDna);
+    // const traits = getTraits(clamDna);
+    const traits = decodeDna(decodedDna);
     console.log(traits);
     const clamDir =
       "/clam-models/" +
@@ -183,11 +188,11 @@ const create3DScene = async (element, setLayers, setScene, setRenderer, traits, 
   const scene = new THREE.Scene();
   scene.background = bgTexture;
 
-  await loadModels(scene, clamDir, traits);
-  const layers = await loadAllTextures(traits, clamDir);
-  setLayers(layers);
+  // await loadModels(scene, clamDir, traits);
+  // const layers = await loadAllTextures(traits, clamDir);
+  // setLayers(layers);
   setScene(scene);
-  updateShellTextures(scene, layers, traits, takePhoto);
+  // updateShellTextures(scene, layers, traits, takePhoto);
 
   // load animation after models load
   animate({
