@@ -11,8 +11,6 @@ import Clams3D from "../../components/three/3DClams/3DClams";
 
 import { clamNFTAddress } from "../../web3/constants";
 import clamContract from "../../web3/clam";
-
-import ClamUnknown from "../../assets/img/clam_unknown.png";
 import { actions } from "../../store/redux";
 
 const ClamShowModal = ({
@@ -42,7 +40,7 @@ const ClamShowModal = ({
               name: "diego",
               action: "clam_presale.congratsConllection.text",
               button: {
-                text: "Dismiss",
+                text: undefined,
               },
             });
           }

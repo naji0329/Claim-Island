@@ -12,7 +12,11 @@ import clamContract from "../../web3/clam";
 
 import { store, actions } from "../../store/redux";
 
-const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
+const Web3ClamPresale = ({
+  updatePresale,
+  account,
+  presale: { progress, isStarted },
+}) => {
   const fetchPresaleData = async () => {
     try {
       const {
@@ -67,18 +71,18 @@ const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
   };
 
   useAsync(async () => {
-    // TODO -- add loading
-
     setInterval(async () => {
       await fetchPresaleData();
-    }, 3000); //3s
+    }, 1000); //1s
   });
 
   return (
     <>
-      <Progress striped color="success" value={progress}>
-        {progress}% of Clams Purchased
-      </Progress>
+      {isStarted && (
+        <Progress striped color="success" value={progress}>
+          {progress}% of Clams Purchased
+        </Progress>
+      )}
     </>
   );
 };
