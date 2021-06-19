@@ -86,7 +86,11 @@ const Clams3D = ({ width, height, clamDna, decodedDna }) => {
 
   const refreshTraits = async () => {
     const traits = getTraits(clamDna);
-    const clamDir = "/clam-models/" + traits.shellShape.replace(/\s+/g, "-").toLowerCase() + "/";
+    console.log(traits);
+    const clamDir =
+      "/clam-models/" +
+      traits.shellShape.replace(/\s+/g, "-").toLowerCase() +
+      "/";
     setTraits(traits);
     setClamDir(clamDir);
 
@@ -230,7 +234,7 @@ const loadModels = async (scene, clamDir, traits) => {
   tongueRoot.name = "tongue";
   clamGroup.add(tongueRoot);
 
-  switch (traits.shellShape) {
+/*  switch (traits.shellShape) {
     case "Three Lipped":
       clamGroup.rotation.y += 3;
       clamGroup.scale.set(1.7, 1.7, 1.7);
@@ -258,7 +262,7 @@ const loadModels = async (scene, clamDir, traits) => {
     default:
       break;
   }
-
+*/
   rotator.add(clamGroup);
   scene.add(rotator);
   rotator.position.z = -0.05;
@@ -270,8 +274,8 @@ const setKonvaLayerTexture = (layer, color) => {
   //   layer.saturation(parseFloat(color.s));
   //   layer.value(parseFloat(color.v));
   layer.hue(parseFloat(color[0]));
-  layer.saturation(parseFloat(color[1]));
-  layer.value(parseFloat(color[2]));
+  layer.saturation(parseFloat(color[1] / 100));
+  layer.value(parseFloat(color[2] / 100));
   layer.batchDraw();
 };
 
@@ -375,24 +379,31 @@ const updateShellTextures = (scene, containers, traits, takePhoto) => {
       tongue = scene.children[3].children[0].children[0];
     }
 
-    shell.children[0].children.forEach((half) => {
-      if (half.children[1]) {
-        half.children[1].material.map = osTexture;
-        traits.shellShape == "Fan" || traits.shellShape == "Heart"
-          ? (half.children[0].material.map = lipTexture)
-          : (half.children[2].material.map = lipTexture);
-        traits.shellShape == "Fan" || traits.shellShape == "Heart"
-          ? (half.children[2].material.map = isTexture)
-          : (half.children[0].material.map = isTexture);
-      }
+    shell.children[0].children.forEach(half => {
+
+        if(half.name == "crown") {
+          half.material.map = osTexture;
+        } else if (half.name == "lips") {
+          half.material.map = lipTexture;
+        } else {
+
+          half.children[1].material.map = osTexture;
+          if (traits.shellShape == "Fan" || traits.shellShape == "Heart" || traits.shellShape == "Sharp Tooth" || traits.shellShape == "Hamburger") {
+            half.children[0].material.map = lipTexture
+          } else {
+            if (traits.shellShape != "Maxima") {
+              half.children[2].material.map = lipTexture;
+            }
+          }
+
+          (traits.shellShape == "Fan" || traits.shellShape == "Heart" || traits.shellShape == "Sharp Tooth" || traits.shellShape == "Hamburger") ?
+              half.children[2].material.map = isTexture
+              : half.children[0].material.map = isTexture;
+        }
     });
 
     if (tongue.children[0]) {
-      if (["Forked", "Heart"].indexOf(traits.tongue) !== -1 && traits.shellShape == "Common") {
-        tongue.children[0].material.map = tongueTexture;
-      } else {
-        tongue.children[0].children[0].material.map = tongueTexture;
-      }
+      tongue.children[0].children[0].material.map = tongueTexture;
     }
 
     osTexture.needsUpdate = true;
