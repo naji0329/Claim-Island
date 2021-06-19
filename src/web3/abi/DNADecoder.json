@@ -1,10 +1,40 @@
 [
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rng",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isMaxima",
+        "type": "bool"
+      }
+    ],
+    "name": "DnaDecoded",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "rng",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isMaxima",
+        "type": "bool"
       }
     ],
     "name": "decodeTraitsFromDNA",
@@ -17,6 +47,80 @@
       {
         "internalType": "uint256",
         "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "dnaToTraits",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "tongueShape",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "tongueColor",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "shellShape",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "shellColor",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "innerColor",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "lipColor",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "pattern",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "size",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lifespan",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "glow",
+        "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "rarity",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rarityValue",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_rng",
         "type": "uint256"
       }
     ],
@@ -80,6 +184,11 @@
             "type": "string"
           },
           {
+            "internalType": "uint256",
+            "name": "rarityValue",
+            "type": "uint256"
+          },
+          {
             "internalType": "uint8[10]",
             "name": "pearlBodyColorNumber",
             "type": "uint8[10]"
@@ -90,17 +199,17 @@
             "type": "uint8[6]"
           },
           {
-            "internalType": "int256[3][4]",
+            "internalType": "uint256[3][4]",
             "name": "defaultHSV",
-            "type": "int256[3][4]"
+            "type": "uint256[3][4]"
           },
           {
-            "internalType": "int256[3][4]",
+            "internalType": "uint256[3][4]",
             "name": "adjHSV",
-            "type": "int256[3][4]"
+            "type": "uint256[3][4]"
           }
         ],
-        "internalType": "struct IDNADecoder.Traits",
+        "internalType": "struct DNADecoder.Traits",
         "name": "",
         "type": "tuple"
       },
@@ -125,17 +234,37 @@
         "type": "uint8[6]"
       },
       {
-        "internalType": "int256[3][4]",
+        "internalType": "uint256[3][4]",
         "name": "",
-        "type": "int256[3][4]"
+        "type": "uint256[3][4]"
       },
       {
-        "internalType": "int256[3][4]",
+        "internalType": "uint256[3][4]",
         "name": "",
-        "type": "int256[3][4]"
+        "type": "uint256[3][4]"
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRarityInString",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

@@ -65,6 +65,25 @@
         "type": "uint256"
       }
     ],
+    "name": "ClamMaximaMinted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
     "name": "CommunityRewardedClam",
     "type": "event"
   },
@@ -340,6 +359,11 @@
     "outputs": [
       {
         "internalType": "bool",
+        "name": "isMaxima",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
         "name": "isAlive",
         "type": "bool"
       },
@@ -374,6 +398,32 @@
   },
   {
     "inputs": [],
+    "name": "clamMaximaMintedThisMonth",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamMaximaMonthlyCap",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "clamPriceForShell",
     "outputs": [
       {
@@ -393,6 +443,19 @@
         "internalType": "contract IDNADecoder",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "endMaximaMonthTimeStamp",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -666,6 +729,24 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rand",
+        "type": "uint256"
+      }
+    ],
+    "name": "mintMaxima",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "name",
     "outputs": [
@@ -820,6 +901,24 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_clamPriceForShell",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_pearlPriceForShell",
+        "type": "uint256"
+      }
+    ],
+    "name": "sePriceForShell",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "operator",
         "type": "address"
@@ -831,6 +930,19 @@
       }
     ],
     "name": "setApprovalForAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_clamMaximaMonthlyCap",
+        "type": "uint256"
+      }
+    ],
+    "name": "setClamMaximaMonthlyCap",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
