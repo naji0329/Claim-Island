@@ -25,6 +25,7 @@ const ClamMintModal = ({
   account: { bnbBalance, address },
   presale: { salePrice, hasPurchasedClam },
   updateCharacter,
+  updateAccount,
 }) => {
   const INDIVIDUAL_CAP = 1;
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +42,7 @@ const ClamMintModal = ({
       name: "diego",
       action: "clam_presale.processing.text",
       button: {
-        text: "Ok",
+        text: undefined,
       },
     });
 
@@ -58,11 +59,12 @@ const ClamMintModal = ({
       })
       .catch((e) => {
         setIsLoading(false);
+        updateAccount({ error: e.message });
         updateCharacter({
           name: "diego",
-          action: e.message,
+          action: "clam_presale.error.text",
           button: {
-            text: "Dismiss",
+            text: undefined,
           },
         });
       });

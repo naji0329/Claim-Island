@@ -18,39 +18,57 @@ const ClamPresale = ({
   presale: { isStarted, rng, hasPurchasedClam },
   updateCharacter,
 }) => {
-  isStarted = true;
+  const [showMintModal, setShowMintModal] = useState(false);
   useEffect(() => {
     console.log("useEffect", { isStarted });
 
     if (isStarted) {
-      updateCharacter({
-        name: "diego",
-        action: "clam_presale.welcome.text",
-        button: {
-          text: "Show me how",
-          alt: {
-            action: "cb",
-            destination: () =>
-              updateCharacter({
-                name: "diego",
-                action: "clam_presale.connect.text",
-                // button: {
-                //   text: "Ok",
-                // },
-              }),
+      if (address && !hasPurchasedClam) {
+        updateCharacter({
+          name: "diego",
+          action: "clam_presale.connected.text",
+          button: {
+            text: "Yes",
+            alt: {
+              action: "cb",
+              destination: () => {
+                setShowMintModal(true);
+                updateCharacter({
+                  name: "diego",
+                  action: "clam_presale.purchase.text",
+                  button: {
+                    text: null,
+                  },
+                });
+              },
+            },
           },
-        },
-      });
+        });
+      }
+
+      if (!address && !hasPurchasedClam) {
+        updateCharacter({
+          name: "diego",
+          action: "clam_presale.connect.text",
+          button: {
+            text: null,
+          },
+        });
+      }
     } else {
       updateCharacter({
         name: "diego",
         action: "clam_presale_not_started.welcome.text",
         button: {
-          text: "Ok",
+          text: "Back to Island",
+          alt: {
+            action: "internal",
+            destination: "/",
+          },
         },
       });
     }
-  }, [isStarted]);
+  }, [isStarted, address]);
 
   return (
     <>
@@ -69,13 +87,18 @@ const ClamPresale = ({
         </video>
 
         {/* chat character   */}
-        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
+        <div className="flex-1 min-h-full min-w-full  md:flex items-center">
           <CharacterDiego />
         </div>
 
         {/* modal   -top-0 md:-top-64 */}
         <div className="flex-1 justify-center min-h-full min-w-full  md:flex items-center absolute z-30 -top-36 md:-top-42">
-          {clamBalance === "0" && isStarted && !rng && <ClamMintModal />}
+          {clamBalance === "0" && // has not purchase any clam
+            isStarted && // pre sale has started
+            address && // wallet is connected
+            showMintModal && // user has agreed clicked Yes
+            !rng && <ClamMintModal />}
+          {/* !rng = did not have clams to collect */}
           {clamBalance === "0" && rng && hasPurchasedClam && (
             <ClamCollectModal />
           )}
