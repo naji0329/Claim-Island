@@ -82,9 +82,9 @@ export const getTraits = (dna) => {
                             }
                         };
                         let HSV = traitValue.val;
-                        let adjH = HSV[0] + traitValue.minAdj[0] + Math.round((traitValue.maxAdj[0] - traitValue.minAdj[0]) * Math.random());
-                        let adjS = HSV[1] + traitValue.minAdj[1] + Math.round((traitValue.maxAdj[1] - traitValue.minAdj[1]) * Math.random());
-                        let adjV = HSV[2] + traitValue.minAdj[2] + Math.round((traitValue.maxAdj[2] - traitValue.minAdj[2]) * Math.random());
+                        let adjH = HSV[0] + traitValue.minAdj[0] + Math.round((traitValue.maxAdj[0] - traitValue.minAdj[0]) * 1);
+                        let adjS = HSV[1] + traitValue.minAdj[1] + Math.round((traitValue.maxAdj[1] - traitValue.minAdj[1]) * 3);
+                        let adjV = HSV[2] + traitValue.minAdj[2] + Math.round((traitValue.maxAdj[2] - traitValue.minAdj[2]) * 5);
                         finalTraits[key] = {
                             HSV: HSV,
                             HSVadj: [adjH, adjS, adjV],
@@ -181,19 +181,19 @@ let sliderValues = {
         min: 0,
         max: 360,
         step: 1,
-        default: 0
+        default: 360
     },
     saturation: {
         min: -10,
         max: 2.5,
         step: 0.01,
-        default: 1
+        default: 0
     },
     value: {
         min: -4,
-        max: 1.5,
+        max: 2.0,
         step: 0.01,
-        default: -1.6
+        default: 0
     }
 }
 
@@ -249,7 +249,3 @@ let sliderValues = {
 //     adjusters.appendChild(adjustContainer);
 //     document.body.prepend(adjusters);
 // }
-
-
-
-
