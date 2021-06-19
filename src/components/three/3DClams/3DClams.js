@@ -4,6 +4,7 @@ import Konva from "konva";
 import { PhotoshopPicker } from "react-color";
 
 import { getTraits } from "./main";
+import decodeDna from "./decodeDna";
 
 import { OrbitControls, MapControls } from "../../../loaders/OrbitControls";
 import GLTFLoader from "../../../loaders/GLTFLoader";
@@ -57,15 +58,19 @@ const Clams3D = ({ width, height, clamDna, decodedDna }) => {
   if (!clamDna) return <div>No Clam to see!</div>;
 
   useEffect(() => {
-    const defaultTraits = getTraits(clamDna);
-    const defaultClamDir = `/clam-models/${defaultTraits.shellShape.replace(/\s+/g, "-").toLowerCase()}/`;
-    setTraits(defaultTraits);
-    setClamDir(defaultClamDir);
+    if(decodedDna) {
+      // const defaultTraits = getTraits(clamDna);
+      const defaultTraits = decodeDna(decodedDna);
+      const defaultClamDir = `/clam-models/${defaultTraits.shellShape.replace(/\s+/g, "-").toLowerCase()}/`;
+      setTraits(defaultTraits);
+      setClamDir(defaultClamDir);
 
-    if (defaultClamDir) {
-      create3DScene(mapRef.current, setLayers, setScene, setRenderer, defaultTraits, defaultClamDir, takePhoto);
+      if (defaultClamDir) {
+        console.log('set up renderer', decodedDna)
+        create3DScene(mapRef.current, setLayers, setScene, setRenderer, defaultTraits, defaultClamDir, takePhoto);
+      }
     }
-  }, [mapRef]);
+  }, [mapRef, decodedDna]);
 
   const handleChangeComplete = (color) => {
     // console.log(color);
@@ -114,9 +119,9 @@ const Clams3D = ({ width, height, clamDna, decodedDna }) => {
           </Button>
         </div> */}
 
-        {/* <div className="flex justify-between"> */}
-          <div className="three-container mt-4 mb-4" ref={mapRef} style={{ width, height }}></div>
-        {/* </div> */}
+        <div className="mt-4 mb-4">
+          <div className="three-container mt-4 mb-10" ref={mapRef} style={{ width, height }}></div>
+        </div>
 
         {/* <div>
         <PhotoshopPicker
@@ -128,9 +133,9 @@ const Clams3D = ({ width, height, clamDna, decodedDna }) => {
 
         {/* <img className="hidden" src="" ref={mapRef1} style={{ width, height }} /> */}
       {/* </div> */}
-      <div classeName="mt-4 mb-4">JS Interpreter: {JSON.stringify(traits, null, 4)}</div>
+      <div className="mt-4 mb-4">SC Converted to JS Interpreter: {JSON.stringify(traits, null, 4)}</div>
       <br />
-      <div classeName="mt-4 mb-4">SC Interpreter: {JSON.stringify(decodedDna, null, 4)}</div>
+      <div className="mt-4 mb-4">SC Interpreter: {JSON.stringify(decodedDna, null, 4)}</div>
     </>
   );
 };
