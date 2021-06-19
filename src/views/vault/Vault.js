@@ -33,7 +33,7 @@ import {
 // import logo from "../../assets/logo.svg";
 import "./Vault.scss";
 
-import { PEARLS, CLAMS } from "../../constants";
+// import { PEARLS, CLAMS } from "../../constants";
 
 const Vault = () => {
   const [clamDna, setClamDna] = useState("");
@@ -64,7 +64,7 @@ const Vault = () => {
           setClamDnaDecoded(decodedDna);
         }
       }
-      
+
       getClamDna();
     }
   }, [clamDna]);

@@ -127,7 +127,6 @@ export const rngRequestHashFromBuyersClam = async (address) => {
     const value = await clamPresale.methods
       .rngRequestHashFromBuyersClam(address)
       .call();
-    console.log("rngRequestHashFromBuyersClam", { value });
     return value ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
       ? undefined
