@@ -219,6 +219,8 @@ const loadModels = async (scene, clamDir, traits) => {
 
   const rotator = new THREE.Object3D();
   const clamGroup = new THREE.Group();
+  clamGroup.name = "clamgroup";
+  rotator.name = "rotator";
 
   // load clam model
   const clamModel = await loadGLTF(clamDir + "clam.glb");
@@ -326,6 +328,8 @@ const loadTextureKonva = async (object, texture, base) => {
       image: base.image,
       width: 1024,
       height: 1024,
+      fill: '#000',
+      stroke: '#ff0000'
     });
     layer.add(pattern);
   }
@@ -445,6 +449,12 @@ const animate = ({ scene, camera, controls, renderer }) => {
     });
   });
   controls.update();
+
+  const clamGroup = scene.getObjectByName( "clamgroup" );
+  const rotator = scene.getObjectByName( "rotator" );
+
+  if(clamGroup) clamGroup.rotation.y +=  Math.PI * 2 / (10 / clock.getDelta());
+  if(rotator) rotator.rotation.y +=  Math.PI * 2 / (10 / clock.getDelta());
 
   renderer.render(scene, camera);
 };
