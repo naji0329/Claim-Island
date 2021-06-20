@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import Konva from "konva";
-import { PhotoshopPicker } from "react-color";
 
 import { getTraits } from "./main";
 import decodeDna from "./decodeDna";
 
-import { OrbitControls, MapControls } from "../../../loaders/OrbitControls";
+import { OrbitControls } from "../../../loaders/OrbitControls";
 import GLTFLoader from "../../../loaders/GLTFLoader";
 import lighting from "./config/lighting-setup-2.json";
 import { Button } from "react-bootstrap";
@@ -27,46 +26,29 @@ const loadGLTF = (url) => {
   });
 };
 
-const loadObj = (url) => {
-  return new Promise((resolve) => {
-    new THREE.ObjectLoader().load(url, resolve);
-  });
-};
+// const loadObj = (url) => {
+//   return new Promise((resolve) => {
+//     new THREE.ObjectLoader().load(url, resolve);
+//   });
+// };
 
 const imageArray = [];
-let containers = [];
-const sliderValues = {
-  //   h: 150,
-  //   s: -2,
-  //   v: -2,
-  r: 100,
-  g: 100,
-  b: 100,
-};
 
-const Clams3D = ({ width, height, clamDna, decodedDna }) => {
+const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, rgb, showSCTraits=false, showTraitsTable=false }) => {
   const mapRef = useRef(null);
   const mapRef1 = useRef(null);
-  const [loading, setLoading] = useState(true);
-  const [color, setColor] = useState(sliderValues);
-  const [layers, setLayers] = useState([]);
   const [scene, setScene] = useState("");
-  const [renderer, setRenderer] = useState("");
   const [traits, setTraits] = useState({});
-  const [clamDir, setClamDir] = useState("");
 
-  if (!clamDna) return <div>No Clam to see!</div>;
+  if (!clamDna && !clamViewer) return <div>No Clam to see!</div>;
 
   useEffect(() => {
-    const defaultTraits = getTraits(clamDna);
-    // const defaultTraits = decodeDna(decodedDna);
-    const defaultClamDir = `/clam-models/${defaultTraits.shellShape.replace(/\s+/g, "-").toLowerCase()}/`;
+    const defaultTraits = clamTraits ? clamTraits : getTraits();
+    const defaultClamDir = `/clam-models/${defaultTraits.shellShape.toLowerCase()}/`;
     setTraits(defaultTraits);
-    setClamDir(defaultClamDir);
 
     if (defaultClamDir) {
-      console.log('set up renderer', decodedDna)
-      create3DScene(mapRef.current, setLayers, setScene, setRenderer, defaultTraits, defaultClamDir, takePhoto);
+      create3DScene(mapRef.current, setScene, defaultTraits, defaultClamDir, takePhoto, clamViewer, rgb);
     }
   }, [mapRef]);
 
@@ -76,16 +58,6 @@ const Clams3D = ({ width, height, clamDna, decodedDna }) => {
     }
   }, [decodedDna, scene]);
 
-  const handleChangeComplete = (color) => {
-    // console.log(color);
-    // setKonvaLayerTexture(layers[0], color.rgb);
-    // setKonvaLayerTexture(layers[1], color.rgb);
-    // setKonvaLayerTexture(layers[2], color.rgb);
-    // setKonvaLayerTexture(layers[3], color.rgb);
-    // updateShellTextures(scene, layers);
-    // setColor(color.rgb);
-  };
-
   const takePhoto = () => {
     const canvas = mapRef.current.querySelector("canvas");
     const src = canvas.toDataURL("image/jpeg");
@@ -93,23 +65,28 @@ const Clams3D = ({ width, height, clamDna, decodedDna }) => {
     img.src = src;
   };
 
+  useEffect(() => {
+    if(scene) {
+      refreshTraits();
+    }
+  }, [clamTraits])
+
   const refreshTraits = async () => {
     // const traits = getTraits(clamDna);
-    const traits = decodeDna(decodedDna);
-    console.log(traits);
+    const traits = clamViewer ? clamTraits : decodeDna(decodedDna);
     const clamDir =
       "/clam-models/" +
-      traits.shellShape.replace(/\s+/g, "-").toLowerCase() +
+      traits.shellShape.toLowerCase() +
       "/";
     setTraits(traits);
-    setClamDir(clamDir);
 
     scene.clear();
     await loadModels(scene, clamDir, traits);
-    const layers = await loadAllTextures(traits, clamDir);
-    setLayers(layers);
+    const layers = await loadAllTextures(traits, clamDir, rgb);
     setScene(scene);
-    updateShellTextures(scene, layers, traits, takePhoto);
+    setTimeout(() => {
+      updateShellTextures(scene, layers, traits, takePhoto);
+    }, 500);
   };
 
   return (
@@ -124,23 +101,70 @@ const Clams3D = ({ width, height, clamDna, decodedDna }) => {
           </Button>
         </div> */}
 
-        <div className="mt-4 mb-4">
-          <div className="three-container mt-4 mb-10" ref={mapRef} style={{ width, height }}></div>
-        </div>
 
-        {/* <div>
-        <PhotoshopPicker
-          style={{}}
-          color={color}
-          onChangeComplete={handleChangeComplete}
-        />
-      </div> */}
+        <div className="mt-4 flex flex-1 flex-column" style={{marginBottom: '20px'}}>
+          <div className="three-container mt-4 mb-10" ref={mapRef} style={{ width, height }}></div>
+          {showTraitsTable?
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Trait</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Rarity</td>
+                  <td>{traits.rarity}</td>
+                </tr>
+                <tr>
+                  <td>Shape</td>
+                  <td>{traits.shellShape}</td>
+                </tr>
+                <tr>
+                  <td>Pattern</td>
+                  <td>{traits.pattern}</td>
+                </tr>
+                <tr>
+                  <td>Tongue</td>
+                  <td>{traits.tongue}</td>
+                </tr>
+                <tr>
+                  <td>Size</td>
+                  <td>{traits.size}</td>
+                </tr>
+                <tr>
+                  <td>LifeSpan</td>
+                  <td>{traits.lifespan}</td>
+                </tr>
+                <tr>
+                  <td>Shell Colour</td>
+                  <td>{JSON.stringify(traits.shellColour, null, 4)}</td>
+                </tr>
+                <tr>
+                  <td>Inner Colour</td>
+                  <td>{JSON.stringify(traits.innerColour, null, 4)}</td>
+                </tr>
+                <tr>
+                  <td>Lip Colour</td>
+                  <td>{JSON.stringify(traits.lipColour, null, 4)}</td>
+                </tr>
+                <tr>
+                  <td>Tongue Colour</td>
+                  <td>{JSON.stringify(traits.tongueColour, null, 4)}</td>
+                </tr>
+              </tbody>
+            </table>: ''}
+        </div>
 
         {/* <img className="hidden" src="" ref={mapRef1} style={{ width, height }} /> */}
       {/* </div> */}
-      <div className="mt-4 mb-4">SC Converted to JS Interpreter: {JSON.stringify(traits, null, 4)}</div>
-      <br />
-      <div className="mt-4 mb-4">SC Interpreter: {JSON.stringify(decodedDna, null, 4)}</div>
+      {showSCTraits ? 
+      <>
+        <div className="mt-4 mb-4 flex-1">SC Converted to JS Interpreter: {JSON.stringify(traits, null, 4)}</div>
+        <br />
+        <div className="mt-4 mb-4 flex-1">SC Interpreter: {JSON.stringify(decodedDna, null, 4)}</div>
+      </> : '' }
     </>
   );
 };
@@ -150,7 +174,7 @@ const Clams3D = ({ width, height, clamDna, decodedDna }) => {
 //   "clam-models/" + traits.shellShape.replace(/\s+/g, "-").toLowerCase() + "/";
 
 // CREATE A 3D SCENE
-const create3DScene = async (element, setLayers, setScene, setRenderer, traits, clamDir, takePhoto) => {
+const create3DScene = async (element, setScene, traits, clamDir, takePhoto, clamViewer, rgb) => {
   // create a 3d renderer
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -163,8 +187,6 @@ const create3DScene = async (element, setLayers, setScene, setRenderer, traits, 
   renderer.setSize(element.offsetWidth, element.offsetHeight);
 
   element.appendChild(renderer.domElement);
-
-  setRenderer(renderer);
 
   // create a camera
   const fov = 75;
@@ -185,18 +207,19 @@ const create3DScene = async (element, setLayers, setScene, setRenderer, traits, 
   controls.maxAzimuthAngle = -2.8632929945846817;
   controls.enablePan = false;
   controls.update();
-  console.log(controls);
 
   const txloader = new THREE.TextureLoader();
   const bgTexture = txloader.load("/clam-models/clam-template-bg-3.png");
   const scene = new THREE.Scene();
   scene.background = bgTexture;
 
-  // await loadModels(scene, clamDir, traits);
-  // const layers = await loadAllTextures(traits, clamDir);
-  // setLayers(layers);
+  if(clamViewer) {
+    await loadModels(scene, clamDir, traits);
+    const layers = await loadAllTextures(traits, clamDir, rgb);
+    updateShellTextures(scene, layers, traits, takePhoto);
+  }
+
   setScene(scene);
-  // updateShellTextures(scene, layers, traits, takePhoto);
 
   // load animation after models load
   animate({
@@ -237,7 +260,8 @@ const loadModels = async (scene, clamDir, traits) => {
 
   // load tongue model
   const tongueTex = await loadTexture("/clam-models/tongue-normal.png");
-  const tongueModel = await loadGLTF(clamDir + "Tongues/" + (traits.tongue || "Common").toLowerCase() + ".glb");
+  const tongueUrl = clamDir + "Tongues/" + traits.tongue.toLowerCase() + ".glb";
+  const tongueModel = await loadGLTF(tongueUrl);
   const tongueRoot = tongueModel.scene;
   tongueRoot.traverse((n) => {
     if (n.isMesh) {
@@ -283,22 +307,26 @@ const loadModels = async (scene, clamDir, traits) => {
   scene.add(rotator);
   rotator.position.z = -0.05;
   clamGroup.position.z = 0.05;
-  console.log(scene);
-
 };
 
-const setKonvaLayerTexture = (layer, color) => {
+const setKonvaLayerTexture = (layer, color, rgb) => {
   //   layer.hue(parseFloat(color.h));
   //   layer.saturation(parseFloat(color.s));
   //   layer.value(parseFloat(color.v));
-  layer.hue(parseFloat(color[0]));
-  layer.saturation(parseFloat(color[1] / 100));
-  layer.value(parseFloat(color[2] / 100));
+  if(rgb) {
+    layer.red(color.r);
+    layer.green(color.g);
+    layer.blue(color.b);
+  } else {
+    layer.hue(parseFloat(color[0]));
+    layer.saturation(parseFloat(color[1] / 100));
+    layer.value(parseFloat(color[2] / 100));
+  }
   layer.batchDraw();
 };
 
 // const loadTextureKonva = async function (obj, textureFile) {
-const loadTextureKonva = async (object, texture, base) => {
+const loadTextureKonva = async (object, texture, base, rgb) => {
   const obj = object.type;
   const img = texture.image;
   const sliders = ["hue", "saturation", "value"];
@@ -335,38 +363,42 @@ const loadTextureKonva = async (object, texture, base) => {
   }
 
   layer.cache();
-  layer.filters([Konva.Filters.HSV]);
+  if(rgb) {
+    layer.filters([Konva.Filters.RGBA]);
+  } else {
+    layer.filters([Konva.Filters.HSV]);
+  }
   stage.add(layer);
 
-  setKonvaLayerTexture(layer, object.color);
+  setKonvaLayerTexture(layer, object.color, rgb);
 
   return layer;
 };
 
-const loadAllTextures = async (traits, clamDir) => {
+const loadAllTextures = async (traits, clamDir, rgb) => {
   const textures = [
     {
       type: "os",
       img: "outerPBS_basecolor.png",
-      color: traits.shellColour.HSVadj,
+      color: traits.shellColour.HSVadj || traits.shellColour,
     },
     {
       type: "is",
       img: "innerPBS_basecolor.png",
-      color: traits.innerColour.HSVadj,
+      color: traits.innerColour.HSVadj || traits.innerColour,
     },
-    { type: "lip", img: "lip_basecolor.png", color: traits.lipColour.HSVadj },
+    { type: "lip", img: "lip_basecolor.png", color: traits.lipColour.HSVadj || traits.lipColour },
     {
       type: "tongue",
       img: "tongue_BaseColor.png",
-      color: traits.tongueColour.HSVadj,
+      color: traits.tongueColour.HSVadj || traits.tongueColour,
     },
   ];
   //console.log(textures);
   const loaded = await Promise.all(textures.map((k) => loadTexture(clamDir + k.img)));
   const base = await loadTexture("/clam-models/patterns/" + traits.pattern.toLowerCase() + "_basecolor.png");
 
-  return Promise.all(textures.map((k, i) => loadTextureKonva(k, loaded[i], base)));
+  return Promise.all(textures.map((k, i) => loadTextureKonva(k, loaded[i], base, rgb)));
 };
 
 const updateShellTextures = (scene, containers, traits, takePhoto) => {
