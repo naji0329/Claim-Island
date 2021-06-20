@@ -103,15 +103,9 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
 
 
         <div className="mt-4 flex flex-1 flex-column" style={{marginBottom: '20px'}}>
-          <div className="three-container mt-4 mb-10" ref={mapRef} style={{ width, height }}></div>
+          <div className="three-container mt-4 mb-10 " ref={mapRef} style={{ width, height }}></div>
           {showTraitsTable?
             <table className="table">
-              <thead>
-                <tr>
-                  <th>Trait</th>
-                  <th>Value</th>
-                </tr>
-              </thead>
               <tbody>
                 <tr>
                   <td>Rarity</td>
@@ -135,23 +129,23 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
                 </tr>
                 <tr>
                   <td>LifeSpan</td>
-                  <td>{traits.lifespan}</td>
+                  <td>{traits.lifespan} pearls</td>
                 </tr>
                 <tr>
                   <td>Shell Colour</td>
-                  <td>{JSON.stringify(traits.shellColour, null, 4)}</td>
+                  <td>{ traits.shellColour && traits.shellColour.colour }</td>
                 </tr>
                 <tr>
                   <td>Inner Colour</td>
-                  <td>{JSON.stringify(traits.innerColour, null, 4)}</td>
+                  <td>{traits.innerColour && traits.innerColour.colour}</td>
                 </tr>
                 <tr>
                   <td>Lip Colour</td>
-                  <td>{JSON.stringify(traits.lipColour, null, 4)}</td>
+                  <td>{traits.lipColour && traits.lipColour.colour}</td>
                 </tr>
                 <tr>
                   <td>Tongue Colour</td>
-                  <td>{JSON.stringify(traits.tongueColour, null, 4)}</td>
+                  <td>{traits.tongueColour && traits.tongueColour.colour}</td>
                 </tr>
               </tbody>
             </table>: ''}
@@ -159,7 +153,7 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
 
         {/* <img className="hidden" src="" ref={mapRef1} style={{ width, height }} /> */}
       {/* </div> */}
-      {showSCTraits ? 
+      {showSCTraits ?
       <>
         <div className="mt-4 mb-4 flex-1">SC Converted to JS Interpreter: {JSON.stringify(traits, null, 4)}</div>
         <br />
@@ -184,7 +178,7 @@ const create3DScene = async (element, setScene, traits, clamDir, takePhoto, clam
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
   renderer.gammaOutput = true;
-  renderer.setSize(element.offsetWidth, element.offsetHeight);
+  renderer.setSize(400, 400); // previouly element.offsetWidth, element.offsetHeight
 
   element.appendChild(renderer.domElement);
 

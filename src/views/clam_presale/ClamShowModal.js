@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useAsync } from "react-use";
+// import { useForm } from "react-hook-form";
+// import { useAsync } from "react-use";
 import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 
@@ -12,12 +12,14 @@ import Clams3D from "../../components/three/3DClams/3DClams";
 import { clamNFTAddress } from "../../web3/constants";
 import clamContract from "../../web3/clam";
 import { actions } from "../../store/redux";
+import { getDNADecoded } from "../../web3/dnaDecoder";
 
 const ClamShowModal = ({
   account: { address, clamBalance },
   updateCharacter,
 }) => {
   const [clamDna, setClamDna] = useState("");
+  const [clamDnaDecoded, setClamDnaDecoded] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(async () => {
@@ -32,9 +34,11 @@ const ClamShowModal = ({
 
         if (tokenId) {
           const clamData = await clamContract.getClamData(tokenId);
-          console.log({ clamData });
           if (clamData.dna.length > 1) {
             setClamDna(clamData.dna);
+
+            const decodedDna = await getDNADecoded(clamData.dna);
+            setClamDnaDecoded(decodedDna);
 
             updateCharacter({
               name: "diego",
@@ -70,8 +74,8 @@ const ClamShowModal = ({
           </a>
         </div>
 
-        <div className="bg-white flex-1 justify-center  md:flex items-center">
-          {clamDna && <Clams3D width={"100%"} height={350} clamDna={clamDna} showTraitsTable={true} />}
+        <div className="bg-white flex-1 justify-center md:flex items-center">
+          {clamDna && <Clams3D width={400} height={350} clamDna={clamDna} decodedDna={clamDnaDecoded} showTraitsTable={true} />}
           {isLoading && (
             <>
               <svg
