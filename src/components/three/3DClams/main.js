@@ -5,14 +5,14 @@ export const getTraits = (dna) => {
 
     //generate random number - will be replaced with function to get RNG from smart contract
 
-    // let rng = "";
-    // while (rng.length < 77) {
-    //     rng += Math.floor(Math.random() * 10).toString(); //string is required, otherwise JS will apply scientific notation
-    // }
+    let rng = "";
+    while (rng.length < 77) {
+        rng += Math.floor(Math.random() * 10).toString(); //string is required, otherwise JS will apply scientific notation
+    }
 
     // const rng = GET_FROM_SMART_CONTRACT (needs to be passed as string, not number);
 
-    const paddedRng = dna.padStart(77, '0'); //pads the number string with leading zeros
+    const paddedRng = (dna || rng).padStart(77, '0'); //pads the number string with leading zeros
 
     let rngPosition = paddedRng.length; //to track position in the RNG
 
