@@ -181,7 +181,11 @@ const create3DScene = async (element, setLayers, setScene, setRenderer, traits, 
   // orbit controls to pan and zoom
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 0, 0);
+  controls.minAzimuthAngle = -2.8632929945846817;
+  controls.maxAzimuthAngle = -2.8632929945846817;
+  controls.enablePan = false;
   controls.update();
+  console.log(controls);
 
   const txloader = new THREE.TextureLoader();
   const bgTexture = txloader.load("/clam-models/clam-template-bg-3.png");
@@ -279,6 +283,8 @@ const loadModels = async (scene, clamDir, traits) => {
   scene.add(rotator);
   rotator.position.z = -0.05;
   clamGroup.position.z = 0.05;
+  console.log(scene);
+
 };
 
 const setKonvaLayerTexture = (layer, color) => {
@@ -356,7 +362,7 @@ const loadAllTextures = async (traits, clamDir) => {
       color: traits.tongueColour.HSVadj,
     },
   ];
-
+  //console.log(textures);
   const loaded = await Promise.all(textures.map((k) => loadTexture(clamDir + k.img)));
   const base = await loadTexture("/clam-models/patterns/" + traits.pattern.toLowerCase() + "_basecolor.png");
 
@@ -445,7 +451,7 @@ const animate = ({ scene, camera, controls, renderer }) => {
   const clamGroup = scene.getObjectByName( "clamgroup" );
   const rotator = scene.getObjectByName( "rotator" );
 
-  if(clamGroup) clamGroup.rotation.y +=  Math.PI * 2 / (10 / clock.getDelta());
+  //if(clamGroup) clamGroup.rotation.y +=  Math.PI * 2 / (10 / clock.getDelta());
   if(rotator) rotator.rotation.y +=  Math.PI * 2 / (10 / clock.getDelta());
 
   renderer.render(scene, camera);

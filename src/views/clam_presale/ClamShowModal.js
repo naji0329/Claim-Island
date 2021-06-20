@@ -38,7 +38,7 @@ const ClamShowModal = ({
 
             updateCharacter({
               name: "diego",
-              action: "clam_presale.congratsConllection.text",
+              action: "clam_presale.congratsCollection.text",
               button: {
                 text: undefined,
               },

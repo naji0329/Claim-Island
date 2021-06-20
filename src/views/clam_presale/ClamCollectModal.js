@@ -28,7 +28,7 @@ const ClamCollectModal = ({
 
     updateCharacter({
       name: "diego",
-      action: "clam_presale.conllectionProcessing.text",
+      action: "clam_presale.collectionProcessing.text",
       button: {
         text: undefined,
       },
@@ -40,7 +40,7 @@ const ClamCollectModal = ({
         setIsLoading(false);
         updateCharacter({
           name: "diego",
-          action: "clam_presale.congratsConllection.text",
+          action: "clam_presale.congratsCollection.text",
           button: {
             text: undefined,
             // alt: {
@@ -67,7 +67,7 @@ const ClamCollectModal = ({
   useAsync(async () => {
     updateCharacter({
       name: "diego",
-      action: "clam_presale.conllection.text",
+      action: "clam_presale.collection.text",
       button: {
         text: undefined,
       },

@@ -21,9 +21,10 @@ const ClamPresale = ({
   const [showMintModal, setShowMintModal] = useState(false);
   useEffect(() => {
     console.log("useEffect", { isStarted });
-
+    isStarted = true;
     if (isStarted) {
-      if (address && !hasPurchasedClam) {
+      if (address) {
+
         updateCharacter({
           name: "diego",
           action: "clam_presale.connected.text",
@@ -44,14 +45,13 @@ const ClamPresale = ({
             },
           },
         });
-      }
-
-      if (!address && !hasPurchasedClam) {
+      } else {
         updateCharacter({
           name: "diego",
-          action: "clam_presale.connect.text",
+          action: "clam_presale.welcome_notConnected.text",
           button: {
-            text: null,
+            text: "Yes",
+            next: "clam_presale.connect.text"
           },
         });
       }
@@ -72,21 +72,22 @@ const ClamPresale = ({
 
   return (
     <>
+      {console.log({ isStarted })}
       <Web3Navbar />
       <Web3ClamPresale />
       {/* container */}
-      <div className="min-w-screen min-h-screen flex items-center overflow-hidden relative bg-gradient-to-t from-blue-400 to-green-500">
+      <div className="w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
         <video
           autoPlay
           muted
           loop
-          className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-10"
+          className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
         >
           <source src={Shop} type="video/mp4" />
         </video>
 
         {/* chat character   */}
-        <div className="flex-1 min-h-full min-w-full  md:flex items-center">
+        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
           <CharacterDiego />
         </div>
 

@@ -282,26 +282,18 @@ export const SPEECHES = {
     },
 
     first: {
-      text: `Sorry, you're a bit late! the $CLAM presale has finished. But you can read more on Clam Island and what will happen here. Would you like that?`,
-      next: "second",
+      text: `Sorry, you're a bit late! I did have some Clams available for presale, but they're all gone now.`,
+      next: false,
       dismiss: false,
       skip: false,
-    },
+    }
 
-    second: {
-      text: `Ok, let me know if you change your mind!`,
-      next: "first",
-      dismiss: true,
-      skip: false,
-    },
   },
 
   clam_presale: {
-    welcome: {
-      text: `Welcome, traveller! You're early! Clam Island Shop isn't open yet.
-        But since you already made this trip here, I can offer you some $CLAM tokens ahead of our grand opening.
-        How does that sound?`,
-      next: `notice`,
+    welcome_notConnected: {
+      text: `Welcome, traveller! My shop is not open yet, but I do have a batch of Clams that I can sell to you early. Due to limited stock, there's a limit of one Clam per customer. Would you like to buy one?`,
+      next: `connect`,
       dismiss: false,
       skip: false,
     },
@@ -322,13 +314,13 @@ export const SPEECHES = {
     },
 
     connect: {
-      text: `First, let's get your wallet connected. You will need to do this in order to purchase $CLAM. Press the "Connect Wallet" button in the top right of the screen.`,
+      text: `Excellent! First, let's get your wallet connected. You will need to do this in order to purchase a Clam. Press the "Connect Wallet" button in the top right of the screen.`,
       next: `purchase`,
       dismiss: false,
       skip: `purchase`,
     },
 
-    connected: {
+    welcome_connected: {
       text: `Welcome, traveller! My shop is not open yet, but I do have a batch of Clams that I can sell to you early. Due to limited stock, there's a limit of one Clam per customer. Would you like to buy one?`,
       next: `purchase`,
       dismiss: false,
@@ -351,26 +343,26 @@ export const SPEECHES = {
 
     congrats: {
       text: `Thank you for your purchase! Let me just go fetch your Clam. I'll just be a minute.`,
-      next: "conllection",
+      next: "collection",
       dismiss: true,
       skip: false,
     },
 
-    conllection: {
-      text: `You Clam is ready for collection! Click in the button to send the transaction.`,
+    collection: {
+      text: `You Clam is ready for collection!`,
       next: false,
       dismiss: true,
       skip: false,
     },
 
-    conllectionProcessing: {
+    collectionProcessing: {
       text: `One moment, just let me just unbox this Clam for you. Did you know that no one knows what Clam is inside until you collect it, not even me?`,
       next: false,
       dismiss: true,
       skip: false,
     },
 
-    congratsConllection: {
+    congratsCollection: {
       text: `Congratulations, here's your Clam! Since the Saferoom isn't open yet, I will hold on to this for you for now. Come back to my shop any time to see your Clam.`,
       next: false,
       dismiss: true,
@@ -703,7 +695,7 @@ function showPresaleCountdown() {
 }
 
 function clamPresaleDate() {
-  return "Sun June 20 2021 09:00:00 GMT+0000";
+  return "June 18 2021 09:00:00 GMT+0000";
 }
 
 function clamPresaleCountdown() {

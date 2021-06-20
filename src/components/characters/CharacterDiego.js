@@ -66,7 +66,7 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
     >
       <div className="character-container flex items-end cursor-pointer">
         <img
-          className="w-screen max-w-none"
+          className="max-h-full"
           src={character.charImg}
           onClick={handleClickCharacter}
         />
