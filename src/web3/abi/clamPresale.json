@@ -1,247 +1,57 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_clam",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_rng",
+        "type": "address"
+      },
+      {
+        "internalType": "address payable",
+        "name": "_treasury",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_beginSale",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "rng",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "isMaxima",
-        "type": "bool"
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
       }
     ],
-    "name": "DnaDecoded",
+    "name": "OwnershipTransferred",
     "type": "event"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "rng",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "isMaxima",
-        "type": "bool"
-      }
-    ],
-    "name": "decodeTraitsFromDNA",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "dnaToTraits",
+    "inputs": [],
+    "name": "MAX_SUPPLY",
     "outputs": [
       {
-        "internalType": "string",
-        "name": "tongueShape",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "tongueColor",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "shellShape",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "shellColor",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "innerColor",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "lipColor",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "pattern",
-        "type": "string"
-      },
-      {
         "internalType": "uint256",
-        "name": "size",
+        "name": "",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lifespan",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "glow",
-        "type": "bool"
-      },
-      {
-        "internalType": "string",
-        "name": "rarity",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "rarityValue",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_rng",
-        "type": "uint256"
-      }
-    ],
-    "name": "getDNADecoded",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "tongueShape",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "tongueColor",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "shellShape",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "shellColor",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "innerColor",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "lipColor",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "pattern",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "size",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "lifespan",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "glow",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "rarity",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarityValue",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8[10]",
-            "name": "pearlBodyColorNumber",
-            "type": "uint8[10]"
-          },
-          {
-            "internalType": "uint8[6]",
-            "name": "pearlShapeNumber",
-            "type": "uint8[6]"
-          },
-          {
-            "internalType": "uint256[3][4]",
-            "name": "defaultHSV",
-            "type": "uint256[3][4]"
-          },
-          {
-            "internalType": "uint256[3][4]",
-            "name": "adjHSV",
-            "type": "uint256[3][4]"
-          }
-        ],
-        "internalType": "struct DNADecoder.Traits",
-        "name": "",
-        "type": "tuple"
-      },
-      {
-        "internalType": "string[10]",
-        "name": "",
-        "type": "string[10]"
-      },
-      {
-        "internalType": "uint8[10]",
-        "name": "",
-        "type": "uint8[10]"
-      },
-      {
-        "internalType": "string[6]",
-        "name": "",
-        "type": "string[6]"
-      },
-      {
-        "internalType": "uint8[6]",
-        "name": "",
-        "type": "uint8[6]"
-      },
-      {
-        "internalType": "uint256[3][4]",
-        "name": "",
-        "type": "uint256[3][4]"
-      },
-      {
-        "internalType": "uint256[3][4]",
-        "name": "",
-        "type": "uint256[3][4]"
       }
     ],
     "stateMutability": "view",
@@ -249,12 +59,12 @@
   },
   {
     "inputs": [],
-    "name": "getRarityInString",
+    "name": "beginSale",
     "outputs": [
       {
-        "internalType": "string",
+        "internalType": "uint256",
         "name": "",
-        "type": "string"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -262,9 +72,189 @@
   },
   {
     "inputs": [],
-    "name": "initialize",
+    "name": "buyClam",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clam",
+    "outputs": [
+      {
+        "internalType": "contract IClam",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collectClam",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNFTPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "hasPurchasedClam",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "hasSaleStarted",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_beginSale",
+        "type": "uint256"
+      }
+    ],
+    "name": "modifyBeginSale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "rng",
+    "outputs": [
+      {
+        "internalType": "contract IRNG",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "rngRequestHashFromBuyersClam",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "togglePauseSale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "treasury",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   }
 ]
