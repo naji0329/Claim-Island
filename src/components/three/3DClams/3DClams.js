@@ -322,8 +322,8 @@ const loadTextureKonva = async (object, texture, base) => {
       image: base.image,
       width: 1024,
       height: 1024,
-      fill: '#000',
-      stroke: '#ff0000'
+      // fill: '#000',
+      // stroke: '#ff0000'
     });
     layer.add(pattern);
   }

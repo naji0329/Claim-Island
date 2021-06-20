@@ -34,13 +34,13 @@ const decodeDna = (dna) => {
 
     traits.tongueColour.HSV = dna[5][0].map(k => +k - 1000);
     traits.shellColour.HSV = dna[5][1].map(k => +k - 1000);
-    traits.innerColour.HSV = dna[5][2].map(k => +k - 1000);
-    traits.lipColour.HSV = dna[5][3].map(k => +k - 1000);
+    traits.innerColour.HSV = dna[5][3].map(k => +k - 1000);
+    traits.lipColour.HSV = dna[5][2].map(k => +k - 1000);
 
     traits.tongueColour.HSVadj = dna[6][0].map(k => +k - 1000);
     traits.shellColour.HSVadj = dna[6][1].map(k => +k - 1000);
-    traits.innerColour.HSVadj = dna[6][2].map(k => +k - 1000);
-    traits.lipColour.HSVadj = dna[6][3].map(k => +k - 1000);
+    traits.innerColour.HSVadj = dna[6][3].map(k => +k - 1000);
+    traits.lipColour.HSVadj = dna[6][2].map(k => +k - 1000);
 
     dna[1].forEach((pearlBodyColour, index) => {
         if(pearlBodyColour !== 'default') {
