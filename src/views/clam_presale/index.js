@@ -27,7 +27,7 @@ const ClamPresale = ({
 
         updateCharacter({
           name: "diego",
-          action: "clam_presale.connected.text",
+          action: "clam_presale.welcome_connected.text",
           button: {
             text: "Yes",
             alt: {
