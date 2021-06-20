@@ -191,6 +191,7 @@ const ClamViewer = () => {
             clamViewer={true}
             clamTraits={traits}
             rgb={true}
+            showSCTraits={true}
           />
         }
       </div>

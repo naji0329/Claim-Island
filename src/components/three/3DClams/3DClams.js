@@ -34,7 +34,7 @@ const loadGLTF = (url) => {
 
 const imageArray = [];
 
-const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, rgb }) => {
+const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, rgb, showSCTraits=false, showTraitsTable=false }) => {
   const mapRef = useRef(null);
   const mapRef1 = useRef(null);
   const [scene, setScene] = useState("");
@@ -102,15 +102,69 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
         </div> */}
 
 
-        <div className="mt-4 mb-4 flex flex-1 flex-column">
+        <div className="mt-4 flex flex-1 flex-column" style={{marginBottom: '20px'}}>
           <div className="three-container mt-4 mb-10" ref={mapRef} style={{ width, height }}></div>
+          {showTraitsTable?
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Trait</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Rarity</td>
+                  <td>{traits.rarity}</td>
+                </tr>
+                <tr>
+                  <td>Shape</td>
+                  <td>{traits.shellShape}</td>
+                </tr>
+                <tr>
+                  <td>Pattern</td>
+                  <td>{traits.pattern}</td>
+                </tr>
+                <tr>
+                  <td>Tongue</td>
+                  <td>{traits.tongue}</td>
+                </tr>
+                <tr>
+                  <td>Size</td>
+                  <td>{traits.size}</td>
+                </tr>
+                <tr>
+                  <td>LifeSpan</td>
+                  <td>{traits.lifespan}</td>
+                </tr>
+                <tr>
+                  <td>Shell Colour</td>
+                  <td>{JSON.stringify(traits.shellColour, null, 4)}</td>
+                </tr>
+                <tr>
+                  <td>Inner Colour</td>
+                  <td>{JSON.stringify(traits.innerColour, null, 4)}</td>
+                </tr>
+                <tr>
+                  <td>Lip Colour</td>
+                  <td>{JSON.stringify(traits.lipColour, null, 4)}</td>
+                </tr>
+                <tr>
+                  <td>Tongue Colour</td>
+                  <td>{JSON.stringify(traits.tongueColour, null, 4)}</td>
+                </tr>
+              </tbody>
+            </table>: ''}
         </div>
 
         {/* <img className="hidden" src="" ref={mapRef1} style={{ width, height }} /> */}
       {/* </div> */}
-      <div className="mt-4 mb-4 flex-1">SC Converted to JS Interpreter: {JSON.stringify(traits, null, 4)}</div>
-      <br />
-      <div className="mt-4 mb-4 flex-1">SC Interpreter: {JSON.stringify(decodedDna, null, 4)}</div>
+      {showSCTraits ? 
+      <>
+        <div className="mt-4 mb-4 flex-1">SC Converted to JS Interpreter: {JSON.stringify(traits, null, 4)}</div>
+        <br />
+        <div className="mt-4 mb-4 flex-1">SC Interpreter: {JSON.stringify(decodedDna, null, 4)}</div>
+      </> : '' }
     </>
   );
 };

@@ -60,7 +60,7 @@ const Vault = () => {
         if (dna.length > 1 && dna !== clamDna) {
           setClamDna(dna);
 
-          const decodedDna = await getDNADecoded(dna)
+          const decodedDna = await getDNADecoded(dna);
           setClamDnaDecoded(decodedDna);
         }
       }
@@ -73,7 +73,15 @@ const Vault = () => {
     <div className="App">
       <h2 className="header">Your Vault</h2>
       <div className="min-w-screen min-h-screen flex space-x-4 items-center relative">
-        {clamDna && <Clams3D width={500} height={500} clamDna={clamDna} decodedDna={clamDnaDecoded} />}
+        {clamDna && (
+          <Clams3D
+            width={500}
+            height={500}
+            clamDna={clamDna}
+            decodedDna={clamDnaDecoded}
+            showSCTraits={true}
+          />
+        )}
         {!clamDna && (
           <Card>
             <CardText tag="h5">There is no Clam to see :-(</CardText>

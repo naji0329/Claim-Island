@@ -20,7 +20,11 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
   let history = useHistory();
 
   const handleClickButton = () => {
-    setShowBubble(false);
+    const speech = get(SPEECHES, button.next, button.next);
+    setStateSpeech(speech);
+    if(speech.dismiss) {
+      setShowBubble(false);
+    }
     if (onClickButton) {
       onClickButton();
     }
