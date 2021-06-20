@@ -16,7 +16,7 @@ const initialState = {
     totalSupply: "0",
     progress: undefined,
     salePrice: "0",
-    isStarted: false,
+    isStarted: undefined,
     hasPurchasedClam: false,
     rng: undefined, // from call rngRequestHashFromBuyersClam
     hashRequest: undefined,

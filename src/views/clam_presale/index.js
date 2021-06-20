@@ -6,7 +6,7 @@ import Web3Navbar from "../../components/Web3Navbar";
 import Shop from "../../assets/locations/shop_animated.mp4";
 
 import { actions } from "../../store/redux";
-import { SPEECHES } from "../../components/characters/constants";
+// import { SPEECHES } from "../../components/characters/constants";
 
 import ClamMintModal from "./ClamMintModal";
 import ClamCollectModal from "./ClamCollectModal";
@@ -21,7 +21,7 @@ const ClamPresale = ({
   const [showMintModal, setShowMintModal] = useState(false);
   useEffect(() => {
     console.log("useEffect", { isStarted });
-    isStarted = true;
+
     if (isStarted) {
       if (address) {
 
@@ -87,9 +87,13 @@ const ClamPresale = ({
         </video>
 
         {/* chat character   */}
-        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
-          <CharacterDiego />
-        </div>
+        {
+         isStarted != undefined &&
+          <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
+            <CharacterDiego />
+          </div>
+
+        }
 
         {/* modal   -top-0 md:-top-64 */}
         <div className="flex-1 justify-center min-h-full min-w-full  md:flex items-center absolute z-30 -top-36 md:-top-42">

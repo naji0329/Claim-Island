@@ -73,7 +73,7 @@ const Web3ClamPresale = ({
   useAsync(async () => {
     setInterval(async () => {
       await fetchPresaleData();
-    }, 5000); //1s
+    }, 3000); // 3s
   });
 
   return (
