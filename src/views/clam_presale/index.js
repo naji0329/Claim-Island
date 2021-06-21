@@ -96,7 +96,7 @@ const ClamPresale = ({
         }
 
         {/* modal   -top-0 md:-top-64 */}
-        <div className="flex-1 justify-center min-h-full min-w-full  md:flex items-center absolute z-30 -top-36 md:-top-42">
+        <div className="flex-1 justify-center min-h-full min-w-full flex items-center absolute z-30 pointer-events-none pb-60">
           {clamBalance === "0" && // has not purchase any clam
             isStarted && // pre sale has started
             address && // wallet is connected

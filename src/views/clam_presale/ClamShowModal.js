@@ -61,7 +61,7 @@ const ClamShowModal = ({
     <>
       <Card>
         <div className="flex flex-col my-3">
-          <h2 className="text-blue-700 font-semibold text-2xl tracking-wide mb-2">
+          <h2 className="text-blue-700 font-semibold text-2xl mb-2">
             You got a Clam!
           </h2>
           <a
@@ -74,7 +74,7 @@ const ClamShowModal = ({
           </a>
         </div>
 
-        <div className="bg-white flex-1 justify-center md:flex items-center">
+        <div className="bg-white flex-1 justify-center md:flex items-center h-full">
           {clamDna && <Clams3D width={400} height={350} clamDna={clamDna} decodedDna={clamDnaDecoded} showTraitsTable={true} />}
           {isLoading && (
             <>
