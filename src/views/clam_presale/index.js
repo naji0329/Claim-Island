@@ -24,42 +24,27 @@ const ClamPresale = ({
 
     if (isStarted) {
       if (address) {
-        if (rng) {
-          updateCharacter({
-            name: "diego",
-            action: "clam_presale.collection.text",
-            button: false,
-          });
-        } else if (hasPurchasedClam) {
-          updateCharacter({
-            name: "diego",
-            action: "clam_presale.congratCollection.text",
-            button: false,
-          });
-        } else {
-          updateCharacter({
-            name: "diego",
-            action: "clam_presale.welcome_connected.text",
-            button: {
-              text: "Yes",
-              alt: {
-                action: "cb",
-                destination: () => {
-                  setShowMintModal(true);
-                  updateCharacter({
-                    name: "diego",
-                    action: "clam_presale.purchase.text",
-                    button: {
-                      text: null,
-                    },
-                  });
-                },
+
+        updateCharacter({
+          name: "diego",
+          action: "clam_presale.welcome_connected.text",
+          button: {
+            text: "Yes",
+            alt: {
+              action: "cb",
+              destination: () => {
+                setShowMintModal(true);
+                updateCharacter({
+                  name: "diego",
+                  action: "clam_presale.purchase.text",
+                  button: {
+                    text: null,
+                  },
+                });
               },
             },
-          });
-
-        }
-
+          },
+        });
       } else {
         updateCharacter({
           name: "diego",
