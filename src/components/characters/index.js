@@ -198,6 +198,11 @@ const CharacterSpeak = (props) => {
   const onClickAlt = (e) => {
     let destination = btnTrack[trackCount].alt.destination;
     switch (btnTrack[trackCount].alt.action) {
+
+      case "url_internal":
+        window.location.href = destination;
+        break;
+
       case "url":
         window.open(destination, "_blank");
         break;

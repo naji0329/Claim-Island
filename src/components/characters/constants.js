@@ -31,21 +31,21 @@ export const SPEECHES = {
       skip: false,
     },
     first: {
-      text: `The island isn't open yet, but Tanja just finished a presale for $SHELL tokens. I hear Diego will have some Clams available for presale soon...`,
+      text: `The island isn't open yet, but I hear Diego has some Clams available for presale ahead of grand opening. Do you want to check it out?`,
       next: "second",
       dismiss: false,
       skip: false,
     },
     second: {
-      text: `I'll be sure to let you know when that becomes available. In the meantime, feel free to look around. You won't be able to go inside any buildings though.`,
+      text: `Ok, just let me know if you change your mind. In the meantime, feel free to look around.`,
       next: "third",
       dismiss: true,
       skip: false,
     },
     third: {
-      text: `Nice place, isn't it? Dunno about you, but I'm looking forward to the grand opening.`,
-      next: false,
-      dismiss: true,
+      text: `Hello again, did you want to check out Diego's Clam presale now?`,
+      next: "second",
+      dismiss: false,
       skip: false,
     },
   },
@@ -392,16 +392,24 @@ export const BUTTONS = {
       alt: false,
     },
     first: {
-      next: "▶",
-      alt: false,
+      next: "No thanks",
+      alt: {
+        action: "url_internal",
+        destination: "/clam-presale",
+        text: "Sure!",
+      },
     },
     second: {
       next: "OK",
       alt: false,
     },
     third: {
-      next: "Keep exploring",
-      alt: false,
+      next: "No thanks",
+      alt: {
+        action: "url_internal",
+        destination: "/clam-presale",
+        text: "Sure!",
+      },
     },
   },
 
