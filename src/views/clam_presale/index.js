@@ -15,7 +15,7 @@ import Web3ClamPresale from "./Web3ClamPresale";
 
 const ClamPresale = ({
   account: { clamBalance, address },
-  presale: { isStarted, rng, hasPurchasedClam },
+  presale: { isStarted, isEnded, rng, hasPurchasedClam },
   updateCharacter,
 }) => {
   const [showMintModal, setShowMintModal] = useState(false);
@@ -55,6 +55,18 @@ const ClamPresale = ({
           },
         });
       }
+    } else if (isEnded) {
+      updateCharacter({
+        name: "diego",
+        action: "clam_presale_finished.welcome.text",
+        button: {
+          text: "Back to Island",
+          alt: {
+            action: "internal",
+            destination: "/",
+          },
+        },
+      });
     } else {
       updateCharacter({
         name: "diego",
