@@ -397,8 +397,8 @@ const loadAllTextures = async (traits, clamDir, rgb) => {
 
 const updateShellTextures = (scene, containers, traits, takePhoto) => {
   const osCanvas = containers[0].toCanvas();
-  const isCanvas = containers[1].toCanvas();
-  const lipCanvas = containers[2].toCanvas();
+  const isCanvas = containers[2].toCanvas();
+  const lipCanvas = containers[1].toCanvas();
   const tongueCanvas = containers[3].toCanvas();
 
   let shell = 0;
@@ -432,10 +432,26 @@ const updateShellTextures = (scene, containers, traits, takePhoto) => {
         } else if (half.name == "lips") {
           half.material.map = lipTexture;
         } else {
+          /*
+          half.children.forEach(texture => {
+            console.log(texture.material.name);
+            switch(texture.material.name) {
+              case "lip":
+                texture.material.map = lipTexture;
+                break;
+              case "outter_shell":
+                texture.material.map = osTexture;
+                break;
+              default:
+                texture.material.map = isTexture;
+                break;
+            }
+          })
+*/
 
           half.children[1].material.map = osTexture;
           console.log(traits.shellShape.toLowerCase());
-          if (traits.shellShape.toLowerCase() == "heart" || traits.shellShape.toLowerCase() == "sharpTooth" || traits.shellShape.toLowerCase() == "hamburger" || traits.shellShape.toLowerCase() == "octo") {
+          if (traits.shellShape.toLowerCase() == "heart" || traits.shellShape.toLowerCase() == "sharptooth" || traits.shellShape.toLowerCase() == "hamburger" || traits.shellShape.toLowerCase() == "fan") {
             console.log('test');
             half.children[0].material.map = lipTexture;
             half.children[2].material.map = isTexture;
@@ -449,6 +465,7 @@ const updateShellTextures = (scene, containers, traits, takePhoto) => {
         //  (traits.shellShape == "fan" || traits.shellShape == "heart" || traits.shellShape == "sharpTooth" || traits.shellShape == "hamburger") ?
         //      half.children[2].material.map = isTexture
         //      : half.children[0].material.map = isTexture;
+
         }
     });
 
