@@ -426,7 +426,7 @@ const updateShellTextures = (scene, containers, traits, takePhoto) => {
     }
 
     shell.children[0].children.forEach(half => {
-
+      console.log(half);
         if(half.name == "crown") {
           half.material.map = osTexture;
         } else if (half.name == "lips") {
@@ -434,17 +434,21 @@ const updateShellTextures = (scene, containers, traits, takePhoto) => {
         } else {
 
           half.children[1].material.map = osTexture;
-          if (traits.shellShape == "Fan" || traits.shellShape == "Heart" || traits.shellShape == "Sharp Tooth" || traits.shellShape == "Hamburger") {
-            half.children[0].material.map = lipTexture
+          console.log(traits.shellShape.toLowerCase());
+          if (traits.shellShape.toLowerCase() == "heart" || traits.shellShape.toLowerCase() == "sharpTooth" || traits.shellShape.toLowerCase() == "hamburger" || traits.shellShape.toLowerCase() == "octo") {
+            console.log('test');
+            half.children[0].material.map = lipTexture;
+            half.children[2].material.map = isTexture;
           } else {
-            if (traits.shellShape != "Maxima") {
+            if (traits.shellShape != "maxima") {
               half.children[2].material.map = lipTexture;
             }
+            half.children[0].material.map = isTexture;
           }
 
-          (traits.shellShape == "Fan" || traits.shellShape == "Heart" || traits.shellShape == "Sharp Tooth" || traits.shellShape == "Hamburger") ?
-              half.children[2].material.map = isTexture
-              : half.children[0].material.map = isTexture;
+        //  (traits.shellShape == "fan" || traits.shellShape == "heart" || traits.shellShape == "sharpTooth" || traits.shellShape == "hamburger") ?
+        //      half.children[2].material.map = isTexture
+        //      : half.children[0].material.map = isTexture;
         }
     });
 
@@ -456,6 +460,9 @@ const updateShellTextures = (scene, containers, traits, takePhoto) => {
     isTexture.needsUpdate = true;
     lipTexture.needsUpdate = true;
     tongueTexture.needsUpdate = true;
+
+    console.log(traits);
+    console.log(scene);
     // setTimeout(() => {
     //   takePhoto();
     // }, 1000);
