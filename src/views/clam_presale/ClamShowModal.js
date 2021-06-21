@@ -60,6 +60,7 @@ const ClamShowModal = ({
   return (
     <>
       <Card>
+        <div className="overflow-x-hidden overflow-y-scroll max-h-159">
         <div className="flex flex-col my-3">
           <h2 className="text-blue-700 font-semibold text-2xl mb-2">
             You got a Clam!
@@ -100,6 +101,7 @@ const ClamShowModal = ({
               </svg>
             </>
           )}
+        </div>
         </div>
       </Card>
     </>
