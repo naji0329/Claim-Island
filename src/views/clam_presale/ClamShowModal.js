@@ -76,7 +76,7 @@ const ClamShowModal = ({
         </div>
 
         <div className="bg-white flex-1 justify-center md:flex items-center h-full">
-          {clamDna && <Clams3D width={400} height={350} clamDna={clamDna} decodedDna={clamDnaDecoded} showTraitsTable={true} />}
+          {clamDna && <Clams3D width={400} height={400} clamDna={clamDna} decodedDna={clamDnaDecoded} showTraitsTable={true} />}
           {isLoading && (
             <>
               <svg
