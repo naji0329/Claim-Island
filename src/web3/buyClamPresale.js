@@ -64,7 +64,7 @@ export const collectClam = async (account, callback, errCallback) => {
       from: account,
       gas: gasEstimation,
     })
-    .once("confirmation", async () => {
+    .once("confirmation", async (res) => {
       try {
         console.log("Success", { res }); // add a toaster here
         // return "sale_success";
@@ -97,12 +97,32 @@ export const presaleCap = async () => {
   return value;
 };
 
+export const clamsPurchased = async () => {
+  const clamPresale = contractFactory({
+    abi: clamPresaleAbi,
+    address: clamPresaleAddress,
+  });
+  const value = await clamPresale.methods.clamsPurchased().call();
+
+  return value;
+};
+
 export const hasSaleStarted = async () => {
   const clamPresale = contractFactory({
     abi: clamPresaleAbi,
     address: clamPresaleAddress,
   });
   const value = await clamPresale.methods.hasSaleStarted().call();
+
+  return value;
+};
+
+export const hasSaleEnded = async () => {
+  const clamPresale = contractFactory({
+    abi: clamPresaleAbi,
+    address: clamPresaleAddress,
+  });
+  const value = await clamPresale.methods.hasSaleEnded().call();
 
   return value;
 };
@@ -127,7 +147,6 @@ export const rngRequestHashFromBuyersClam = async (address) => {
     const value = await clamPresale.methods
       .rngRequestHashFromBuyersClam(address)
       .call();
-    console.log("rngRequestHashFromBuyersClam", { value });
     return value ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
       ? undefined
@@ -141,6 +160,8 @@ export default {
   getClamPrice,
   presaleCap,
   hasSaleStarted,
+  hasSaleEnded,
+  clamsPurchased,
   hasPurchasedClam,
   rngRequestHashFromBuyersClam,
 };

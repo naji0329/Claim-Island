@@ -25,8 +25,10 @@ const ClamMintModal = ({
   account: { bnbBalance, address },
   presale: { salePrice, hasPurchasedClam },
   updateCharacter,
+  updateAccount,
 }) => {
   const INDIVIDUAL_CAP = 1;
+  const [isLoading, setIsLoading] = useState(false);
   //  disableButton = hasPurchasedClam > INDIVIDUAL_CAP;
 
   const { register, handleSubmit, setValue, reset, formState, getValues } =
@@ -34,9 +36,19 @@ const ClamMintModal = ({
 
   const onSubmit = async (data) => {
     console.log({ data, address });
+    setIsLoading(true);
+
+    updateCharacter({
+      name: "diego",
+      action: "clam_presale.processing.text",
+      button: {
+        text: undefined,
+      },
+    });
 
     await buyClamPresale(address)
       .then((res) => {
+        setIsLoading(false);
         updateCharacter({
           name: "diego",
           action: "clam_presale.congrats.text",
@@ -46,11 +58,13 @@ const ClamMintModal = ({
         });
       })
       .catch((e) => {
+        setIsLoading(false);
+        updateAccount({ error: e.message });
         updateCharacter({
           name: "diego",
-          action: e.message,
+          action: "clam_presale.error.text",
           button: {
-            text: "Dismiss",
+            text: undefined,
           },
         });
       });
@@ -61,7 +75,7 @@ const ClamMintModal = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
           <div className="flex flex-col mb-4">
-            <h2 className="text-blue-700 text-center font-semibold text-3xl tracking-wide mb-2">
+            <h2 className="text-blue-700 text-center font-semibold text-3xl mb-2">
               Get Clams on BSC
             </h2>
             {address ? (
@@ -177,12 +191,44 @@ const ClamMintModal = ({
                 Already purchased
               </button>
             ) : (
-              <button
-                type="submit"
-                className="block uppercase text-center shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl"
-              >
-                Buy 1 Clam
-              </button>
+              <>
+                {isLoading ? (
+                  <button
+                    disabled={isLoading}
+                    type="submit"
+                    className="flex justify-content-center items-center block uppercase text-center shadow bg-yellow-200 text-yellow-600 text-xl py-3 px-10 rounded-xl cursor-not-allowed"
+                  >
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-yello-600"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>{" "}
+                    Sending transaction...
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="block uppercase text-center shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl"
+                  >
+                    Buy 1 Clam
+                  </button>
+                )}
+              </>
             )}
           </div>
         </Card>

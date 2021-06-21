@@ -12,26 +12,38 @@ import clamContract from "../../web3/clam";
 
 import { store, actions } from "../../store/redux";
 
-const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
+const Web3ClamPresale = ({
+  updatePresale,
+  account,
+  presale: { progress, isStarted },
+}) => {
   const fetchPresaleData = async () => {
     try {
       const {
-        account: { isBSChain, address },
+        account: { isBSChain, address, clamBalance },
+        presale,
       } = store.getState();
 
-      console.log("fetch presale data", { isBSChain, address });
-      if (isBSChain) {
+      // if has purchase then hasRequest is not empty then no need to keep pulling data
+      if (
+        isBSChain &&
+        clamBalance === "0" &&
+        presale.hashRequest === undefined
+      ) {
+        console.log("fetch presale data", { isBSChain, address, presale });
         const [
           hasSaleStarted,
+          hasSaleEnded,
           cap,
-          totalSupply,
+          clamsPurchased,
           salePrice,
           hasPurchasedClam,
           hashRequest,
         ] = await Promise.all([
           presaleContract.hasSaleStarted(),
+          presaleContract.hasSaleEnded(),
           presaleContract.presaleCap(),
-          clamContract.totalClamSupply(),
+          presaleContract.clamsPurchased(),
           presaleContract.getClamPrice(),
           presaleContract.hasPurchasedClam(address),
           presaleContract.rngRequestHashFromBuyersClam(address),
@@ -46,10 +58,11 @@ const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
 
         updatePresale({
           cap, // max will be minted tokens
-          totalSupply, // current minted tokens
+          clamsPurchased, // current minted tokens
           salePrice: formatUnits(salePrice, 18),
-          progress: (Number(totalSupply) / cap) * 100,
+          progress: (Number(clamsPurchased) / cap) * 100,
           isStarted: hasSaleStarted,
+          isEnded: hasSaleEnded,
           hasPurchasedClam,
           hashRequest,
           rng,
@@ -61,20 +74,18 @@ const Web3ClamPresale = ({ updatePresale, account, presale: { progress } }) => {
   };
 
   useAsync(async () => {
-    // TODO -- add loading
-
     setInterval(async () => {
-      // update every 10s
-      console.log("setInterval call", { account });
       await fetchPresaleData();
-    }, 3000); //3s
+    }, 2000); // 2s
   });
 
   return (
     <>
-      <Progress striped color="success" value={progress}>
-        {progress}% of Clams Purchased
-      </Progress>
+      {isStarted && (
+        <Progress striped color="success" value={progress}>
+          {progress}% of Clams Purchased
+        </Progress>
+      )}
     </>
   );
 };

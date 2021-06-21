@@ -12,7 +12,6 @@ import { web3 } from "../../web3";
 
 import { hasAccountedVoted } from "../../web3/communityVoting";
 
-
 const COUNTDOWN_END_TIME = 1623488400000;
 
 // const hasNotStarted = Date.parse(String(new Date())) < Date.parse("Tue May 25 2021 09:00:00 GMT+0000");
@@ -67,7 +66,8 @@ const ShellVoting = () => {
             backgroundSize: "1rem 1rem",
           }}
         >
-          Voting Ends In {days} days {hours} hours {minutes} minutes {seconds} seconds
+          Voting Ends In {days} days {hours} hours {minutes} minutes {seconds}{" "}
+          seconds
         </p>
       );
     }

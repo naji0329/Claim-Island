@@ -1,7 +1,7 @@
 //declare traits object with values specifying the digits required to determine trait value
 import { traits } from './config/traits.js';
 
-export const getTraits = () => {
+export const getTraits = (dna) => {
 
     //generate random number - will be replaced with function to get RNG from smart contract
 
@@ -12,7 +12,7 @@ export const getTraits = () => {
 
     // const rng = GET_FROM_SMART_CONTRACT (needs to be passed as string, not number);
 
-    const paddedRng = rng.padStart(77, '0'); //pads the number string with leading zeros
+    const paddedRng = (dna || rng).padStart(77, '0'); //pads the number string with leading zeros
 
     let rngPosition = paddedRng.length; //to track position in the RNG
 
@@ -26,12 +26,14 @@ export const getTraits = () => {
     let rarity = 1;
 
     //replace the traits object values with corresponding random numbers
+    const finalTraits = {};
 
     for (let key in traits) {
-        let num = paddedRng.substring(rngPosition - traits[key].length, rngPosition);
-        rngPosition -= traits[key].length;
+        let num = paddedRng.substring(rngPosition - traits[key].len, rngPosition);
+        rngPosition -= traits[key].len;
         //console.log(rngPosition);
         let position = 0;
+        // console.log(num, traits[key], traits[key].len)
 
         switch (key) {
 
@@ -52,10 +54,9 @@ export const getTraits = () => {
                                 pearlBoost.shape[traitValue.pearlBoost.shape] = boostValue;
                             }
                         };
-                        console.log(pearlBoost);
                         let result = shape.replace(/([A-Z])/g, " $1");
                         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-                        traits[key] = finalResult;
+                        finalTraits[key] = finalResult;
                         break;
                     }
                     position = upper + 1;
@@ -81,12 +82,10 @@ export const getTraits = () => {
                             }
                         };
                         let HSV = traitValue.val;
-                        console.log(traits);
-                        console.log(traitValue.val + ' ' + colour + ' ' + key + ' ' + num + ' ' + HSV);
-                        let adjH = HSV[0] + traitValue.minAdj[0] + Math.round((traitValue.maxAdj[0] - traitValue.minAdj[0]) * Math.random());
-                        let adjS = HSV[1] + traitValue.minAdj[1] + Math.round((traitValue.maxAdj[1] - traitValue.minAdj[1]) * Math.random());
-                        let adjV = HSV[2] + traitValue.minAdj[2] + Math.round((traitValue.maxAdj[2] - traitValue.minAdj[2]) * Math.random());
-                        traits[key] = {
+                        let adjH = HSV[0] + traitValue.minAdj[0] + Math.round((traitValue.maxAdj[0] - traitValue.minAdj[0]) * 1);
+                        let adjS = HSV[1] + traitValue.minAdj[1] + Math.round((traitValue.maxAdj[1] - traitValue.minAdj[1]) * 3);
+                        let adjV = HSV[2] + traitValue.minAdj[2] + Math.round((traitValue.maxAdj[2] - traitValue.minAdj[2]) * 5);
+                        finalTraits[key] = {
                             HSV: HSV,
                             HSVadj: [adjH, adjS, adjV],
                             colour: colour.charAt(0).toUpperCase() + colour.slice(1)
@@ -112,8 +111,7 @@ export const getTraits = () => {
                                 pearlBoost.shape[traitValue.pearlBoost.shape] = boostValue;
                             }
                         };
-                        console.log(pearlBoost);
-                        traits[key] = style.charAt(0).toUpperCase() + style.slice(1);
+                        finalTraits[key] = style.charAt(0).toUpperCase() + style.slice(1);
                         break;
                     }
                     position = upper + 1;
@@ -122,33 +120,33 @@ export const getTraits = () => {
 
             case "size":
             case "lifespan":
-                traits[key] = traits[key].min + Math.round((traits[key].max - traits[key].min) * num / 99);
+                finalTraits[key] = traits[key].min + Math.round((traits[key].max - traits[key].min) * num / 99);
                 break;
 
             case "glow":
                 let upper = traits[key].yes * 1000 + position - 1;
                 if (num <= upper) {
                     rarity = rarity * traits[key].yes;
-                    traits[key] = true;
+                    finalTraits[key] = true;
                 } else {
-                    traits[key] = false;
+                    finalTraits[key] = false;
                 }
                 break;
         }
 
     }
-    if (rarity < (1.5 / Math.pow(10, 9))) { traits.rarity = "Legendary" } else //~0.01%
-        if (rarity < (7.25 / Math.pow(10, 9))) { traits.rarity = "Epic" } else //~0.5%
-            if (rarity < (3 / Math.pow(10, 8))) { traits.rarity = "Ultra Rare" } else //~2.5%
-                if (rarity < (1.02 / Math.pow(10, 7))) { traits.rarity = "Rare" } else //~8%
-                    if (rarity < (3.23 / Math.pow(10, 7))) { traits.rarity = "Uncommon" } else { //~18%
-                        traits.rarity = "Common";
+    if (rarity < (1.5 / Math.pow(10, 9))) { finalTraits.rarity = "Legendary" } else //~0.01%
+        if (rarity < (7.25 / Math.pow(10, 9))) { finalTraits.rarity = "Epic" } else //~0.5%
+            if (rarity < (3 / Math.pow(10, 8))) { finalTraits.rarity = "Ultra Rare" } else //~2.5%
+                if (rarity < (1.02 / Math.pow(10, 7))) { finalTraits.rarity = "Rare" } else //~8%
+                    if (rarity < (3.23 / Math.pow(10, 7))) { finalTraits.rarity = "Uncommon" } else { //~18%
+                        finalTraits.rarity = "Common";
                     }
 
-    traits.rarityValue = rarity;
-    traits.pearlBoost = pearlBoost;
+    finalTraits.rarityValue = rarity;
+    finalTraits.pearlBoost = pearlBoost;
 
-    return traits;
+    return finalTraits;
 }
 
 // console.log(rarity);
@@ -183,19 +181,19 @@ let sliderValues = {
         min: 0,
         max: 360,
         step: 1,
-        default: 0
+        default: 360
     },
     saturation: {
         min: -10,
         max: 2.5,
         step: 0.01,
-        default: 1
+        default: 0
     },
     value: {
         min: -4,
-        max: 1.5,
+        max: 2.0,
         step: 0.01,
-        default: -1.6
+        default: 0
     }
 }
 
@@ -251,7 +249,3 @@ let sliderValues = {
 //     adjusters.appendChild(adjustContainer);
 //     document.body.prepend(adjusters);
 // }
-
-
-
-

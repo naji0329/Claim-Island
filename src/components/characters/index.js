@@ -198,6 +198,11 @@ const CharacterSpeak = (props) => {
   const onClickAlt = (e) => {
     let destination = btnTrack[trackCount].alt.destination;
     switch (btnTrack[trackCount].alt.action) {
+
+      case "url_internal":
+        window.location.href = destination;
+        break;
+
       case "url":
         window.open(destination, "_blank");
         break;
@@ -249,11 +254,17 @@ const CharacterSpeak = (props) => {
         <div className="speech">
           <p className="speech-text">{speech}</p>
         </div>
-        {
-          (
-            votingWalletConnected &&
-            ['shell_voting', 'shell_voted_already', 'shell_voting_complete'].indexOf(props.speech) !== -1
-          ) || ['shell_voting', 'shell_voted_already', 'shell_voting_complete'].indexOf(props.speech) === -1 ? (
+        {(votingWalletConnected &&
+          [
+            "shell_voting",
+            "shell_voted_already",
+            "shell_voting_complete",
+          ].indexOf(props.speech) !== -1) ||
+        [
+          "shell_voting",
+          "shell_voted_already",
+          "shell_voting_complete",
+        ].indexOf(props.speech) === -1 ? (
           <div className="buttons">
             <Button className="btn" id="btn-alt" onClick={onClickAlt}>
               {buttonAltText}

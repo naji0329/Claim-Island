@@ -13,12 +13,14 @@ const initialState = {
   },
   presale: {
     cap: "0",
-    totalSupply: "0",
+    clamsPurchased: "0",
     progress: undefined,
     salePrice: "0",
-    isStarted: false,
+    isStarted: undefined,
+    isEnded: false,
     hasPurchasedClam: false,
     rng: undefined, // from call rngRequestHashFromBuyersClam
+    hashRequest: undefined,
   },
   character: {
     name: undefined,

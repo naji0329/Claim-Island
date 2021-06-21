@@ -12,7 +12,7 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
   const character = get(CHARACTERS, "diego");
   const speech = get(SPEECHES, action, action);
 
-  console.log({ action, character, speech, button });
+  // console.log({ action, character, speech, button });
 
   const [showBubble, setShowBubble] = useState(true);
   const [stateSpeech, setStateSpeech] = useState();
@@ -20,7 +20,11 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
   let history = useHistory();
 
   const handleClickButton = () => {
-    setShowBubble(false);
+    const speech = get(SPEECHES, button.next, button.next);
+    setStateSpeech(speech);
+    if(speech.dismiss) {
+      setShowBubble(false);
+    }
     if (onClickButton) {
       onClickButton();
     }
@@ -64,9 +68,9 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
         showBubble ? "character-bubble" : "character-bubble hide-bubble"
       }
     >
-      <div className="character-container flex items-end">
+      <div className="character-container flex items-end cursor-pointer">
         <img
-          className="w-screen max-w-none"
+          className="max-h-full"
           src={character.charImg}
           onClick={handleClickCharacter}
         />
@@ -89,13 +93,15 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
         </div>
         {/* todo */}
         <div className="buttons">
-          <Button
-            className="btn"
-            id="btn-next"
-            onClick={button.alt ? handleClickButtonAlt : handleClickButton}
-          >
-            {button.text}
-          </Button>
+          {button.text && (
+            <Button
+              className="btn"
+              id="btn-next"
+              onClick={button.alt ? handleClickButtonAlt : handleClickButton}
+            >
+              {button.text}
+            </Button>
+          )}
         </div>
       </div>
     </div>
