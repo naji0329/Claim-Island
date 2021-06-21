@@ -103,7 +103,7 @@ const ClamPresale = ({
       <Web3Navbar />
       <Web3ClamPresale />
       {/* container */}
-      <div className="w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
+      <div className="shop-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
         <video
           autoPlay
           muted
