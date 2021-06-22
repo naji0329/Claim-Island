@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useAsync } from "react-use";
+// import { useForm } from "react-hook-form";
+// import { useAsync } from "react-use";
 import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 
@@ -12,12 +12,14 @@ import Clams3D from "../../components/three/3DClams/3DClams";
 import { clamNFTAddress } from "../../web3/constants";
 import clamContract from "../../web3/clam";
 import { actions } from "../../store/redux";
+import { getDNADecoded } from "../../web3/dnaDecoder";
 
 const ClamShowModal = ({
   account: { address, clamBalance },
   updateCharacter,
 }) => {
   const [clamDna, setClamDna] = useState("");
+  const [clamDnaDecoded, setClamDnaDecoded] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(async () => {
@@ -32,13 +34,15 @@ const ClamShowModal = ({
 
         if (tokenId) {
           const clamData = await clamContract.getClamData(tokenId);
-          console.log({ clamData });
           if (clamData.dna.length > 1) {
             setClamDna(clamData.dna);
 
+            const decodedDna = await getDNADecoded(clamData.dna);
+            setClamDnaDecoded(decodedDna);
+
             updateCharacter({
               name: "diego",
-              action: "clam_presale.congratsConllection.text",
+              action: "clam_presale.congratsCollection.text",
               button: {
                 text: undefined,
               },
@@ -56,8 +60,9 @@ const ClamShowModal = ({
   return (
     <>
       <Card>
+        <div className="overflow-x-hidden overflow-y-scroll max-h-159">
         <div className="flex flex-col my-3">
-          <h2 className="text-blue-700 font-semibold text-2xl tracking-wide mb-2">
+          <h2 className="text-blue-700 font-semibold text-2xl mb-2">
             You got a Clam!
           </h2>
           <a
@@ -70,8 +75,8 @@ const ClamShowModal = ({
           </a>
         </div>
 
-        <div className="bg-white flex-1 justify-center  md:flex items-center">
-          {clamDna && <Clams3D width={"100%"} height={350} clamDna={clamDna} />}
+        <div className="bg-white flex-1 justify-center md:flex items-center h-full">
+          {clamDna && <Clams3D width={400} height={400} clamDna={clamDna} decodedDna={clamDnaDecoded} showTraitsTable={true} />}
           {isLoading && (
             <>
               <svg
@@ -96,6 +101,7 @@ const ClamShowModal = ({
               </svg>
             </>
           )}
+        </div>
         </div>
       </Card>
     </>

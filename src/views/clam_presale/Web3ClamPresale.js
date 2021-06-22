@@ -33,15 +33,17 @@ const Web3ClamPresale = ({
         console.log("fetch presale data", { isBSChain, address, presale });
         const [
           hasSaleStarted,
+          hasSaleEnded,
           cap,
-          totalSupply,
+          clamsPurchased,
           salePrice,
           hasPurchasedClam,
           hashRequest,
         ] = await Promise.all([
           presaleContract.hasSaleStarted(),
+          presaleContract.hasSaleEnded(),
           presaleContract.presaleCap(),
-          clamContract.totalClamSupply(),
+          presaleContract.clamsPurchased(),
           presaleContract.getClamPrice(),
           presaleContract.hasPurchasedClam(address),
           presaleContract.rngRequestHashFromBuyersClam(address),
@@ -56,10 +58,11 @@ const Web3ClamPresale = ({
 
         updatePresale({
           cap, // max will be minted tokens
-          totalSupply, // current minted tokens
+          clamsPurchased, // current minted tokens
           salePrice: formatUnits(salePrice, 18),
-          progress: (Number(totalSupply) / cap) * 100,
+          progress: (Number(clamsPurchased) / cap) * 100,
           isStarted: hasSaleStarted,
+          isEnded: hasSaleEnded,
           hasPurchasedClam,
           hashRequest,
           rng,
@@ -73,7 +76,7 @@ const Web3ClamPresale = ({
   useAsync(async () => {
     setInterval(async () => {
       await fetchPresaleData();
-    }, 5000); //1s
+    }, 2000); // 2s
   });
 
   return (

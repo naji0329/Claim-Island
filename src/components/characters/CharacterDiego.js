@@ -20,7 +20,11 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
   let history = useHistory();
 
   const handleClickButton = () => {
-    setShowBubble(false);
+    const speech = get(SPEECHES, button.next, button.next);
+    setStateSpeech(speech);
+    if(speech.dismiss) {
+      setShowBubble(false);
+    }
     if (onClickButton) {
       onClickButton();
     }
@@ -66,7 +70,7 @@ const CharacterDiego = ({ action, button, onClickButton }) => {
     >
       <div className="character-container flex items-end cursor-pointer">
         <img
-          className="w-screen max-w-none"
+          className="max-h-full"
           src={character.charImg}
           onClick={handleClickCharacter}
         />

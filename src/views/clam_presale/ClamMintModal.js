@@ -75,7 +75,7 @@ const ClamMintModal = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
           <div className="flex flex-col mb-4">
-            <h2 className="text-blue-700 text-center font-semibold text-3xl tracking-wide mb-2">
+            <h2 className="text-blue-700 text-center font-semibold text-3xl mb-2">
               Get Clams on BSC
             </h2>
             {address ? (

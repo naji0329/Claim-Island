@@ -97,12 +97,32 @@ export const presaleCap = async () => {
   return value;
 };
 
+export const clamsPurchased = async () => {
+  const clamPresale = contractFactory({
+    abi: clamPresaleAbi,
+    address: clamPresaleAddress,
+  });
+  const value = await clamPresale.methods.clamsPurchased().call();
+
+  return value;
+};
+
 export const hasSaleStarted = async () => {
   const clamPresale = contractFactory({
     abi: clamPresaleAbi,
     address: clamPresaleAddress,
   });
   const value = await clamPresale.methods.hasSaleStarted().call();
+
+  return value;
+};
+
+export const hasSaleEnded = async () => {
+  const clamPresale = contractFactory({
+    abi: clamPresaleAbi,
+    address: clamPresaleAddress,
+  });
+  const value = await clamPresale.methods.hasSaleEnded().call();
 
   return value;
 };
@@ -140,6 +160,8 @@ export default {
   getClamPrice,
   presaleCap,
   hasSaleStarted,
+  hasSaleEnded,
+  clamsPurchased,
   hasPurchasedClam,
   rngRequestHashFromBuyersClam,
 };

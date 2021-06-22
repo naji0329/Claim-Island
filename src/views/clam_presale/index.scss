@@ -10,6 +10,12 @@
     //background-position: center, center;
 }
 
+.shop-bg {
+  background-image: url('../../assets/locations/shop_static.jpg') !important;
+  background-size: cover;
+  background-position: center bottom;
+}
+
 #env-wrapper-clam-presale {
   overflow: hidden;
   position: fixed;

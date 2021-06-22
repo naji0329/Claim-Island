@@ -130,6 +130,19 @@
   },
   {
     "inputs": [],
+    "name": "clamsPurchased",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "collectClam",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -157,6 +170,19 @@
       }
     ],
     "name": "hasPurchasedClam",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "hasSaleEnded",
     "outputs": [
       {
         "internalType": "bool",
