@@ -3,6 +3,7 @@ import { Button } from "reactstrap";
 import { connect } from "redux-zero/react";
 import { get } from "lodash";
 import { useHistory } from "react-router-dom";
+import classNames from "classnames";
 import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 
 import "./index.scss";
@@ -31,6 +32,10 @@ const CharacterWrapper = ({ name, action, button, onClickButton }) => {
   };
 
   const handleClickButtonAlt = (e) => {
+    if (button.alt && button.alt.dismiss === true) {
+      setShowBubble(false);
+    }
+
     switch (button.alt.action) {
       case "url":
         window.open(button.alt.destination, "_blank");
@@ -64,44 +69,53 @@ const CharacterWrapper = ({ name, action, button, onClickButton }) => {
 
   return (
     <div
-      className={
-        showBubble ? "character-bubble" : "character-bubble hide-bubble"
-      }
+      className={classNames(
+        "flex-1 min-h-full min-w-full  md:flex items-center absolute",
+        { "z-30": showBubble },
+        { "z-0": !showBubble }
+      )}
     >
-      <div className="character-container flex items-end cursor-pointer">
-        <img
-          className="max-h-full"
-          src={character.charImg}
-          onClick={handleClickCharacter}
-        />
-      </div>
-      <Button
-        className="btn character-container-round"
-        onClick={handleClickCharacter}
+      {console.log({ showBubble })}
+      <div
+        className={
+          showBubble ? "character-bubble" : "character-bubble hide-bubble"
+        }
       >
-        <img src={character.charImg} className="character" />
-      </Button>
-      <div className="text-bubble">
-        <div className="name px-10">{character.name}</div>
-        <div className="speech">
-          <div
-            className="speech-text"
-            dangerouslySetInnerHTML={{
-              __html: stateSpeech ? stateSpeech : speech,
-            }}
+        <div className="character-container flex items-end cursor-pointer">
+          <img
+            className="max-h-full"
+            src={character.charImg}
+            onClick={handleClickCharacter}
           />
         </div>
-        {/* todo */}
-        <div className="buttons">
-          {button.text && (
-            <Button
-              className="btn"
-              id="btn-next"
-              onClick={button.alt ? handleClickButtonAlt : handleClickButton}
-            >
-              {button.text}
-            </Button>
-          )}
+        <Button
+          className="btn character-container-round"
+          onClick={handleClickCharacter}
+        >
+          <img src={character.charImg} className="character" />
+        </Button>
+        <div className="text-bubble">
+          <div className="name px-10">{character.name}</div>
+          <div className="speech">
+            <div
+              className="speech-text"
+              dangerouslySetInnerHTML={{
+                __html: stateSpeech ? stateSpeech : speech,
+              }}
+            />
+          </div>
+          {/* todo */}
+          <div className="buttons">
+            {button.text && (
+              <Button
+                className="btn"
+                id="btn-next"
+                onClick={button.alt ? handleClickButtonAlt : handleClickButton}
+              >
+                {button.text}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>

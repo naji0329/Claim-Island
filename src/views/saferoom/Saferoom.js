@@ -104,15 +104,9 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
         text: "Ok",
         alt: {
           action: "cb",
+          dismiss: true,
           destination: () => {
             setShowClams(true);
-            updateCharacter({
-              name: "tanja",
-              action: "saferoom.connected.text",
-              button: {
-                text: null,
-              },
-            });
           },
         },
       },
@@ -138,9 +132,7 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
         </video>
 
         {/* chat character   */}
-        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-30">
-          <Character name="tanja" />
-        </div>
+        <Character name="tanja" />
 
         {/* modal   -top-0 md:-top-64 */}
         {showClams && (
@@ -166,7 +158,10 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
               </div>
 
               {/* clams and pears grid */}
-              <div className="w-full my-4">
+              <div
+                className="w-full my-4 overflow-auto"
+                style={{ height: "50rem" }}
+              >
                 <div className="grid grid-cols-5 gap-4">
                   {CLAMS &&
                     CLAMS.map((clam, i) => <ClamItem key={i} clam={clam} />)}

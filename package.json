@@ -16,6 +16,7 @@
     "bignumber.js": "^9.0.1",
     "bootstrap": "^4.6.0",
     "camera-controls": "^1.28.2",
+    "classnames": "^2.3.1",
     "konva": "^8.0.4",
     "leaflet": "^1.7.1",
     "lodash": "^4.17.21",
