@@ -153,12 +153,8 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
       )}
 
       <nav className="flex-1 min-h-48 min-w-full  md:flex items-center absolute top-10 z-40">
-        {/* <nav className="flex items-center justify-between flex-wrap bg-white py-4 lg:px-12 shadow border-solid border-b-4 border-blue-200"> */}
-        <div className="flex justify-between lg:w-auto w-full lg:border-b-0 pl-6 pr-2 border-solid border-b-2 border-gray-300 pb-0 lg:pb-2">
-          <div className="flex items-center flex-shrink-0 text-gray-800 mr-16">
-            {/* <span className="font-semibold text-xl tracking-tight">$CLAM</span> */}
-          </div>
-        </div>
+        {/* this push menu to right side */}
+        <div className="flex justify-between lg:w-auto w-full  pl-6 pr-2 pb-0 lg:pb-2"></div>
 
         <div className="menu w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
           <div className="lg:flex-grow"></div>

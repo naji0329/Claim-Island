@@ -200,14 +200,14 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
             <div className="w-4/5 flex flex-col">
               {/* navbar */}
               <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
-                <div className="w-1/3 px-3 py-2">
+                <div className="px-3 py-2">
                   <h2 className="text-blue-700 font-semibold text-4xl mb-2">
                     My Saferoom
                   </h2>
                   <p className="text-yellow-700">All you minted NFTs</p>
                 </div>
 
-                <div className="w-1/4 px-3 py-2 flex justify-between">
+                <div className="px-3 py-2 flex justify-between">
                   <button className="text-blue-700 hover:underline px-5">
                     All
                   </button>
@@ -223,7 +223,7 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
                 style={{ height: "50rem" }}
               >
                 {clams.length > 0 ? (
-                  <div className="grid grid-cols-5 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
                     {clams &&
                       clams.map((clam, i) => <ClamItem key={i} {...clam} />)}
 
