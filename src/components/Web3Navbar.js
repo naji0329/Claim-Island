@@ -75,6 +75,9 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   }
 
   useEffect(async () => {
+    if (!web3) {
+      return updateAccount({ error: "Metamask not installed" });
+    }
     const netId = await web3.eth.net.getId();
     console.log("useEffect updateAccount", { activateChainId, netId });
 
@@ -122,27 +125,30 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
 
   return (
     <>
-      {redux.account.error && (
+      {redux.account.error ? (
         <ErrorAlert title="Something Wrong" description={redux.account.error} />
-      )}
-      {!redux.account.isBSChain && (
-        <ErrorAlert
-          title="Wrong Network"
-          description={
-            <>
-              You must be connected to{" "}
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href="https://docs.binance.org/smart-chain/wallet/metamask.html"
-                className="underline"
-              >
-                Binance Smart Chain
-              </a>{" "}
-              network.
-            </>
-          }
-        />
+      ) : (
+        <>
+          {!redux.account.isBSChain && (
+            <ErrorAlert
+              title="Wrong Network"
+              description={
+                <>
+                  You must be connected to{" "}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://docs.binance.org/smart-chain/wallet/metamask.html"
+                    className="underline"
+                  >
+                    Binance Smart Chain
+                  </a>{" "}
+                  network.
+                </>
+              }
+            />
+          )}
+        </>
       )}
 
       <nav className="flex-1 min-h-48 min-w-full  md:flex items-center absolute top-10 z-40">
