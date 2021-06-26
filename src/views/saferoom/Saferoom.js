@@ -137,7 +137,6 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
   };
 
   useEffect(async () => {
-    console.log("saferoom useEffect", { address, clamBalance });
     // wallet is connected and has clams
     if (address && clamBalance !== "0") {
       try {
@@ -176,7 +175,6 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
 
   return (
     <>
-      {console.log({ clams })}
       <Web3Navbar />
       {/* container */}
       <div className="shop-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">

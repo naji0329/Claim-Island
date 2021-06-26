@@ -75,7 +75,6 @@ const CharacterWrapper = ({ name, action, button, onClickButton }) => {
         { "z-0": !showBubble }
       )}
     >
-      {console.log({ showBubble })}
       <div
         className={
           showBubble ? "character-bubble" : "character-bubble hide-bubble"
