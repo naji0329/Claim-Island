@@ -103,7 +103,7 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
 
 
         <div className="flex flex-1 flex-column">
-          <div className="three-container" ref={mapRef} style={{ width, height }}></div>
+          <div className="three-container" ref={mapRef} ></div>
           {showTraitsTable?
             <table className="table">
               <tbody>
