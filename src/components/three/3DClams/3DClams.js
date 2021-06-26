@@ -48,7 +48,7 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
     setTraits(defaultTraits);
 
     if (defaultClamDir) {
-      create3DScene(mapRef.current, setScene, defaultTraits, defaultClamDir, takePhoto, clamViewer, rgb);
+      create3DScene(mapRef.current, setScene, defaultTraits, defaultClamDir, takePhoto, clamViewer, rgb, width, height);
     }
   }, [mapRef]);
 
@@ -102,8 +102,8 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
         </div> */}
 
 
-        <div className="mt-4 flex flex-1 flex-column" style={{marginBottom: '20px'}}>
-          <div className="three-container mt-4 mb-10 " ref={mapRef} style={{ width, height }}></div>
+        <div className="flex flex-1 flex-column">
+          <div className="three-container" ref={mapRef} style={{ width, height }}></div>
           {showTraitsTable?
             <table className="table">
               <tbody>
@@ -168,7 +168,7 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
 //   "clam-models/" + traits.shellShape.replace(/\s+/g, "-").toLowerCase() + "/";
 
 // CREATE A 3D SCENE
-const create3DScene = async (element, setScene, traits, clamDir, takePhoto, clamViewer, rgb) => {
+const create3DScene = async (element, setScene, traits, clamDir, takePhoto, clamViewer, rgb, width, height) => {
   // create a 3d renderer
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -178,7 +178,7 @@ const create3DScene = async (element, setScene, traits, clamDir, takePhoto, clam
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
   renderer.gammaOutput = true;
-  renderer.setSize(400, 400); // previouly element.offsetWidth, element.offsetHeight
+  renderer.setSize(width, height); // previouly element.offsetWidth, element.offsetHeight
 
   element.appendChild(renderer.domElement);
 
