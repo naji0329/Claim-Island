@@ -7,10 +7,12 @@ import Bank from "./views/bank/Bank";
 import ShellPresale from "./views/shell_presale";
 import ShellVoting from "./views/shell_voting";
 import ClamPresale from "./views/clam_presale";
+import Saferoom from "./views/saferoom/Saferoom";
 
 const ROUTES = [
   { title: "Home", url: "/", component: Home },
   { title: "Farms", url: "/farms", component: Farms },
+  { title: "Saferoom", url: "/saferoom", component: Saferoom },
   { title: "Vault", url: "/vault/", component: Vault },
   { title: "Vault", url: "/vault/:tokenId", component: Vault },
   { title: "Clam Viewer", url: "/clam-viewer", component: ClamViewer },

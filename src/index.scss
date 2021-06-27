@@ -55,3 +55,9 @@ body {
   overflow: hidden;
   height: 100%;
 }
+
+
+canvas {
+  height: auto;
+  width: 100% !important; //overwrite 3dcam width canva 
+}

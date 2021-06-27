@@ -8,7 +8,7 @@ const initialState = {
     clamBalance: "0",
     error: undefined,
     isConnected: undefined,
-    isBSChain: undefined,
+    isBSChain: true,
     address: undefined,
   },
   presale: {
