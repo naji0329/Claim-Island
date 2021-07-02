@@ -9,6 +9,7 @@ import {
 } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { actions } from "../store/redux";
+import { Link } from "react-router-dom";
 
 import { formatUnits } from "@ethersproject/units";
 
@@ -178,6 +179,11 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                     {activateClamBalance} CLAM
                   </span>
                 </div>
+                { Number(activateClamBalance) > 0 && <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
+                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                    <Link to="/saferoom">My Clams</Link>
+                  </span>
+                </div>}
 
                 <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black bg-opacity-80">
                   <div className="p-1 text-sm text-gray-200">
