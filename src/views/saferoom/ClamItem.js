@@ -12,17 +12,8 @@ export default ({ dna, dnaDecoded }) => {
   };
   return (
     <>
-      <div className="bg-white rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 flex flex-col justify-between hover:cursor-pointer">
-        {/*  */}
-        {/* <Clams3D
-            width={270}
-            height={300}
-            clamDna={dna}
-            decodedDna={dnaDecoded}
-            showTraitsTable={showTraits}
-          /> */}
-
-        <div className="bg-white flex-1 justify-center  md:flex items-center p-5">
+      <div className="bg-white hover:border hover:border-blue-200 rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 flex flex-col justify-between cursor-pointer">
+        <div className=" flex-1 justify-center  md:flex items-center p-5">
           <img src={ClamUnknown} />
         </div>
 
@@ -34,13 +25,6 @@ export default ({ dna, dnaDecoded }) => {
 
         <div className="px-4 md:px-6 py-2">
           <div className="text-sm flex flex-row justify-between">
-            <div className="text-sm block">
-              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-                Lifespan
-              </p>
-              <p className="font-bold leading-none">{clam.lifespan}</p>
-            </div>
-
             <div className="text-sm block">
               <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                 Rarity
