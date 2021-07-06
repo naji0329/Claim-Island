@@ -9,7 +9,7 @@ export default ({ data, className }) => {
       <ul className={`${className} flex flex-col`}>
         {data &&
           data.map((row, i) => (
-            <li key={`accordion-${i}`} className="bg-white my-2">
+            <li key={`accordion-${i}`} className="bg-white mb-2">
               <h2
                 className="flex flex-row justify-between items-center font-semibold p-3 cursor-pointer rounded-xl border border-gray-400"
                 onClick={() => {
@@ -30,10 +30,12 @@ export default ({ data, className }) => {
 
               <div
                 className={classNames(
-                  "overflow-hidden duration-500 transition-all",
-                  { "h-full": i === tab },
-                  { "h-0": i !== tab }
+                  "overflow-hidden transition-all duration-500"
                 )}
+                style={{
+                  maxHeight: i === tab ? "100%" : "0",
+                  opacity: i === tab ? "1" : "0",
+                }}
               >
                 <p className="p-3 text-gray-900">{row.description}</p>
               </div>
