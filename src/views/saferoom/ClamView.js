@@ -28,7 +28,6 @@ export default ({ dna, dnaDecoded }) => {
           <RowStat label="Rarity" value={get(dnaDecoded, "[0].rarity")} />
           <RowStat label="Lifespan" value={get(dnaDecoded, "[0].lifespan")} />
           <RowStat label="Size" value={get(dnaDecoded, "[0].size")} />
-          <RowStat label="Pattern" value={get(dnaDecoded, "[0].pattern")} />
         </div>
       ),
     },
@@ -37,7 +36,16 @@ export default ({ dna, dnaDecoded }) => {
       description: (
         <div>
           <RowStat label="Shape" value={get(dnaDecoded, "[0].shellShape")} />
-          <RowStat label="Color" value={get(dnaDecoded, "[0].shellColor")} />
+          <RowStat
+            label="Shell Color"
+            value={get(dnaDecoded, "[0].shellColor")}
+          />
+          <RowStat
+            label="Inner Color"
+            value={get(dnaDecoded, "[0].innerColor")}
+          />
+          <RowStat label="Lip Color" value={get(dnaDecoded, "[0].lipColor")} />
+          <RowStat label="Pattern" value={get(dnaDecoded, "[0].pattern")} />
         </div>
       ),
     },
@@ -56,23 +64,29 @@ export default ({ dna, dnaDecoded }) => {
       <div className="flex flex-col justify-between hover:cursor-pointer">
         <div className="flex justify-between">
           <Clams3D
-            width={270}
-            height={300}
+            width={400}
+            height={400}
             clamDna={dna}
             decodedDna={dnaDecoded}
             showTraitsTable={showTraits}
           />
 
-          <div className="w-full md:w-1/2 px-4 md:px-6 py-2">
+          <div className="w-full md:w-1/2 px-4 md:px-6">
             <Accordion data={accordionData} />
           </div>
         </div>
 
-        <div className="flex justify-between pt-2 space-x-14">
-          <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
+        <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
+          <button
+            disabled
+            className="disabled:opacity-50 cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
+          >
             Stake in Farm
           </button>
-          <button className="px-4 p-3 shadown-xl   text-red-700 font-semibold border-2 border-red-500 rounded-xl hover:text-white hover:bg-red-500 bg-transparent">
+          <button
+            disabled
+            className="disabled:opacity-50 cursor-not-allowed px-4 p-3 shadown-xl   text-red-700 font-semibold border-2 border-red-500 rounded-xl hover:text-white hover:bg-red-500 bg-transparent"
+          >
             Sell
           </button>
         </div>
