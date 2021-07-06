@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
-import { get } from "lodash";
 
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
 import LoaderSpinner from "../../components/LoaderSpinner";
-import Clams3D from "../../components/three/3DClams/3DClams";
+import { Modal, useModal } from "../../components/Modal";
+import ClamItem from "./ClamItem";
+import ClamView from "./ClamView";
 
 import video from "../../assets/locations/saferoom_animated.mp4";
 import videoImage from "../../assets/locations/clam_island_saferoom.png";
@@ -19,65 +20,6 @@ import { getDNADecoded } from "../../web3/dnaDecoder";
 
 const getPearlImage = (p) =>
   require(`../../assets/img/clamjam/${p.src}`).default;
-
-const ClamItem = ({ dna, dnaDecoded }) => {
-  const [showTraits, setShowTraits] = useState(false);
-  const clam = {
-    lifespan: get(dnaDecoded, "[0].lifespan"),
-    rarity: get(dnaDecoded, "[0].rarity"),
-    rarityValue: get(dnaDecoded, "[0].rarityValue", 1e10) / 1e10,
-  };
-  return (
-    <>
-      {console.log({ dnaDecoded })}
-      <div className="bg-white rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 flex flex-col justify-between">
-        {/* <img
-          src={getClamImage(clam)}
-          alt="People"
-          className="w-full object-cover h-32 sm:h-48 md:h-64"
-        /> */}
-        <Clams3D
-          width={270}
-          height={300}
-          clamDna={dna}
-          decodedDna={dnaDecoded}
-          showTraitsTable={showTraits}
-        />
-        {/* <div className="p-4 md:p-6">
-          <h3 className="font-semibold mb-2 text-xl leading-tight sm:leading-normal">
-            some title
-          </h3>
-        </div> */}
-        <div className="px-4 md:px-6 py-2">
-          <div className="text-sm flex flex-row justify-between">
-            <div className="text-sm block">
-              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-                Lifespan
-              </p>
-              <p className="font-bold leading-none">{clam.lifespan}</p>
-            </div>
-
-            <div className="text-sm block">
-              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-                Rarity
-              </p>
-              <p className="font-bold leading-none">{clam.rarity}</p>
-              <p className="font-bold leading-none">{clam.rarityValue}%</p>
-            </div>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className="text-xs uppercase font-bold text-gray-600 tracking-wide p-3 border-t border-gray-300 bg-gray-100 hover:bg-gray-200 text-center"
-          onClick={() => setShowTraits(!showTraits)}
-        >
-          {showTraits ? `Hide info` : ` Show more info`}
-        </button>
-      </div>
-    </>
-  );
-};
 
 const PearlItem = ({ pearl }) => {
   return (
@@ -119,6 +61,9 @@ const PearlItem = ({ pearl }) => {
 
 const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
   const [clams, setClams] = useState([]);
+  const [selectedClam, setSelectedClam] = useState();
+
+  const { isShowing, toggle } = useModal();
 
   // const addClamToFarm = (clam) => {
   //   // clams.push(clam);
@@ -194,7 +139,9 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
         {/* chat character   */}
         {!address && <Character name="tanja" />}
 
-        {/* modal   -top-0 md:-top-64 */}
+        <Modal isShowing={isShowing} onClose={toggle}>
+          <ClamView {...selectedClam} />
+        </Modal>
         {address && (
           <div className="flex-1 min-h-full min-w-full flex absolute z-20  justify-center items-start mt-64">
             <div className="w-4/5 flex flex-col">
@@ -225,7 +172,17 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
                 {clams.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
                     {clams &&
-                      clams.map((clam, i) => <ClamItem key={i} {...clam} />)}
+                      clams.map((clam, i) => (
+                        <div
+                          onClick={() => {
+                            setSelectedClam(clam);
+                            toggle();
+                          }}
+                          key={i}
+                        >
+                          <ClamItem {...clam} />
+                        </div>
+                      ))}
 
                     {/* {PEARLS &&
                      PEARLS.map((pearl, i) => (
