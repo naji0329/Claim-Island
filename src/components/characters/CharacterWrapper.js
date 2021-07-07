@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "reactstrap";
 import { connect } from "redux-zero/react";
 import { get } from "lodash";
 import { useHistory } from "react-router-dom";
@@ -87,12 +86,12 @@ const CharacterWrapper = ({ name, action, button, onClickButton }) => {
             onClick={handleClickCharacter}
           />
         </div>
-        <Button
+        <button
           className="btn character-container-round"
           onClick={handleClickCharacter}
         >
           <img src={character.charImg} className="character" />
-        </Button>
+        </button>
         <div className="text-bubble">
           <div className="name px-10">{character.name}</div>
           <div className="speech">
@@ -106,13 +105,13 @@ const CharacterWrapper = ({ name, action, button, onClickButton }) => {
           {/* todo */}
           <div className="buttons">
             {button.text && (
-              <Button
+              <button
                 className="btn"
                 id="btn-next"
                 onClick={button.alt ? handleClickButtonAlt : handleClickButton}
               >
                 {button.text}
-              </Button>
+              </button>
             )}
           </div>
         </div>
