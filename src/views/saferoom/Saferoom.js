@@ -43,14 +43,14 @@ const PearlItem = ({ pearl }) => {
               <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                 Power
               </p>
-              <p className="font-bold leading-none">Boost yield by 5x</p>
+              <p className="font-bold text-black">Boost yield by 5x</p>
             </div>
 
             <div className="text-sm block">
               <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                 Rarity
               </p>
-              <p className="font-bold leading-none">50.03</p>
+              <p className="font-bold text-black">50.03</p>
             </div>
           </div>
         </div>
@@ -190,9 +190,8 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
                      ))} */}
                   </div>
                 ) : (
-                  <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5">
+                  <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
                     There is nothing to see :-(
-                      <button className="btn btn-primary">DaisyUI Button</button>
                   </div>
                 )}
               </div>
