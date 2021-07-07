@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import "./index.scss";
-import CharacterDiego from "../../components/characters/CharacterDiego";
+import CharacterWrapper from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
 import Shop from "../../assets/locations/shop_animated.mp4";
 
@@ -102,14 +102,19 @@ const ClamPresale = ({
       <Web3ClamPresale />
       {/* container */}
       <div className="shop-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
-        <video autoPlay muted loop className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center">
+        <video
+          autoPlay
+          muted
+          loop
+          className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
+        >
           <source src={Shop} type="video/mp4" />
         </video>
 
         {/* chat character   */}
         {isStarted != undefined && (
           <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
-            <CharacterDiego />
+            <CharacterWrapper name="diego" />
           </div>
         )}
 
@@ -121,7 +126,9 @@ const ClamPresale = ({
             showMintModal && // user has agreed clicked Yes
             !rng && <ClamMintModal />}
           {/* !rng = did not have clams to collect */}
-          {clamBalance === "0" && rng && hasPurchasedClam && <ClamCollectModal />}
+          {clamBalance === "0" && rng && hasPurchasedClam && (
+            <ClamCollectModal />
+          )}
           {clamBalance === "1" && address && <ClamShowModal />}
         </div>
       </div>

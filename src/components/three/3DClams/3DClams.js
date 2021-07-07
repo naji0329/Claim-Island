@@ -8,7 +8,6 @@ import decodeDna from "./decodeDna";
 import { OrbitControls } from "../../../loaders/OrbitControls";
 import GLTFLoader from "../../../loaders/GLTFLoader";
 import lighting from "./config/lighting-setup-2.json";
-import { Button } from "react-bootstrap";
 
 const clock = new THREE.Clock();
 
