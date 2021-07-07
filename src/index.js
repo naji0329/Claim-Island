@@ -16,7 +16,6 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 // import library css
-import "bootstrap/dist/css/bootstrap.min.css";
 import "leaflet/dist/leaflet.css";
 import "./index.scss";
 

@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { SketchPicker } from "react-color";
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap";
+// import {
+//   Dropdown,
+//   DropdownToggle,
+//   DropdownMenu,
+//   DropdownItem,
+// } from "reactstrap";
 import { traits } from "../../components/three/3DClams/config/traits";
 import { getTraits } from "../../components/three/3DClams/main";
 
+// import ModelViewer from 'react-model-viewer';
+
 import Clams3D from "../../components/three/3DClams/3DClams";
 import "./ClamViewer.scss";
+
+const MODEL_PATH = 'https://gateway.pinata.cloud/ipfs/QmWH8GRzBEefLHyJzYZHnHdiLxdUmqVjreCR32XFqUydaQ';
 
 const SHELL_SHAPES = Object.keys(traits.shellShape.shapes);
 const TONGUE_SHAPES = Object.keys(traits.tongue.shapes);
@@ -38,6 +42,8 @@ const ClamViewer = () => {
   const [innerColour, setInnerColor] = useState(DEFAULT_COLOR);
   const [lipColour, setLipColor] = useState(DEFAULT_COLOR);
   const [tongueColour, setTongueColor] = useState(DEFAULT_COLOR);
+
+  const [modelPath, setModelPath] = useState(MODEL_PATH);
 
   const [shellShape, setShellShape] = useState(DEFAULT_TRAITS.shellShape);
   const [tongueShape, setTongueShape] = useState(DEFAULT_TRAITS.tongue);
@@ -72,10 +78,26 @@ const ClamViewer = () => {
     pattern,
   ]);
 
+  const modelUrlChange = (e) => {
+    console.log(e);
+    setModelPath(e.target.value);
+  }
+
   return (
     <div className="Clam-Viewer min-w-screen min-h-screen flex flex-column space-x-4 items-center relative">
       <h2 className="header mt-4">Clam Viewer</h2>
       <div className="flex-1 mt-4">
+        <h4>IPFS Viewer</h4>
+        <input className="form-input" type="text" value={modelPath} onChange={modelUrlChange}/>
+        <model-viewer
+          src={modelPath}
+          alt="A 3D model"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+          environment-image="neutral"
+          auto-rotate
+          camera-controls
+        ></model-viewer>
         <div className="grid grid-cols-4 gap-4">
           <div>
             <h2>Shell Colour</h2>
@@ -184,16 +206,16 @@ const ClamViewer = () => {
         </div>
       </div>
       <div className="flex flex-row">
-        {
-          <Clams3D
-            width={500}
-            height={500}
-            clamViewer={true}
-            clamTraits={traits}
-            rgb={true}
-            showSCTraits={true}
-          />
-        }
+        <Clams3D
+          width={500}
+          height={500}
+          clamViewer={true}
+          setModelPath={setModelPath}
+          clamTraits={traits}
+          rgb={true}
+          showSCTraits={true}
+        />
+
       </div>
     </div>
   );
