@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { Button } from "reactstrap";
-
 import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -198,7 +196,6 @@ const CharacterSpeak = (props) => {
   const onClickAlt = (e) => {
     let destination = btnTrack[trackCount].alt.destination;
     switch (btnTrack[trackCount].alt.action) {
-
       case "url_internal":
         window.location.href = destination;
         break;
@@ -243,12 +240,12 @@ const CharacterSpeak = (props) => {
           <img src={charImg} className="character" onClick={onClickCharacter} />
         </div>
       </div>
-      <Button
+      <button
         className="btn character-container-round"
         onClick={onClickCharacter}
       >
         <img src={charImg} className="character" />
-      </Button>
+      </button>
       <div className="text-bubble">
         <div className="name">{charName}</div>
         <div className="speech">
@@ -266,16 +263,16 @@ const CharacterSpeak = (props) => {
           "shell_voting_complete",
         ].indexOf(props.speech) === -1 ? (
           <div className="buttons">
-            <Button className="btn" id="btn-alt" onClick={onClickAlt}>
+            <button className="btn" id="btn-alt" onClick={onClickAlt}>
               {buttonAltText}
-            </Button>
-            <Button
+            </button>
+            <button
               className="btn"
               id="btn-next"
               onClick={(e) => onClickNext()}
             >
               {buttonNextText}
-            </Button>
+            </button>
           </div>
         ) : (
           ""

@@ -1,6 +1,5 @@
 import React from "react";
 import { useAsync } from "react-use";
-import { Progress } from "reactstrap";
 import { formatUnits } from "@ethersproject/units";
 import { connect } from "redux-zero/react";
 
@@ -82,9 +81,14 @@ const Web3ClamPresale = ({
   return (
     <>
       {isStarted && (
-        <Progress striped color="success" value={progress}>
-          {progress}% of Clams Purchased
-        </Progress>
+        <div className="shadow w-full bg-green-100">
+          <div
+            className="bg-green-600 leading-none py-1 text-center text-white uppercase text-sm rounded"
+            style={{ width: `${progress}%` }}
+          >
+            ${progress}% of Clams Purchased
+          </div>
+        </div>
       )}
     </>
   );

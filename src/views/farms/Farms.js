@@ -2,28 +2,6 @@ import React, { useState } from "react";
 
 import AddClam from "../../assets/img/add_clam.png";
 
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap";
-import { Popover, PopoverHeader, PopoverBody } from "reactstrap";
-
-import {
-  Card,
-  CardImg,
-  CardText,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  Button,
-  Container,
-  Row,
-  Col,
-  CardColumns,
-} from "reactstrap";
-
 import "./Farm.css";
 
 import { FARMS, CLAMS } from "../../constants";
@@ -47,35 +25,33 @@ const Farms = () => {
   return (
     <div className="Farm">
       <h2 className="headers">Clam Farm</h2>
-      <CardColumns>
-        <Card>
-          <CardImg
+      <div>
+        <div>
+          <img
             top
             style={{ width: "200px", height: "200px" }}
             src={AddClam}
-            alt="Card image cap"
+            alt="div image cap"
           />
-          <CardBody style={{ height: "200px" }}>
-            <CardTitle tag="h5">Deposit Clams</CardTitle>
-            <CardSubtitle tag="h6" className="mb-2 text-muted">
+          <div style={{ height: "200px" }}>
+            <div tag="h5">Deposit Clams</div>
+            <div tag="h6" className="mb-2 text-muted">
               A place to select and deposit Clams
-            </CardSubtitle>
-            <CardText>
-              Choose Clams from your Vault to deposit into the Farm
-            </CardText>
+            </div>
+            <div>Choose Clams from your Vault to deposit into the Farm</div>
 
-            <Dropdown
+            <div
               isOpen={dropdownOpen}
               toggle={toggle}
               style={{ marginTop: "10px" }}
             >
-              <DropdownToggle caret style={{ backgroundColor: "#0072E3" }}>
+              <div caret style={{ backgroundColor: "#0072E3" }}>
                 Select Clams
-              </DropdownToggle>
-              <DropdownMenu>
+              </div>
+              <div>
                 {CLAMS.map((k, i) => {
                   return (
-                    <DropdownItem key={i} onClick={() => addClamToFarm(k)}>
+                    <div key={i} onClick={() => addClamToFarm(k)}>
                       <img
                         style={{ width: "50px", height: "50px" }}
                         src={
@@ -90,33 +66,33 @@ const Farms = () => {
                       >
                         {k.title}
                       </span>
-                    </DropdownItem>
+                    </div>
                   );
                 })}
-              </DropdownMenu>
-            </Dropdown>
-          </CardBody>
-        </Card>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {clams.map((clam, index) => {
           const src = require(`../../assets/img/clamjam/${clam.src}`).default;
           return (
-            <Card key={index}>
-              <CardImg
+            <div key={index}>
+              <img
                 top
                 style={{ width: "200px", height: "200px" }}
                 src={src}
-                alt="Card image cap"
+                alt="div image cap"
               />
-              <CardBody style={{ height: "200px" }}>
-                <CardTitle tag="h5">{clam.title}</CardTitle>
-                <CardSubtitle tag="h6" className="mb-2 text-muted">
+              <div style={{ height: "200px" }}>
+                <div tag="h5">{clam.title}</div>
+                <div tag="h6" className="mb-2 text-muted">
                   This clam is in the farm
-                </CardSubtitle>
-                <CardText>This Clam has been selected for farming.</CardText>
-                <Button style={{ marginTop: "10px" }}>Withdraw</Button>
+                </div>
+                <div>This Clam has been selected for farming.</div>
+                <button style={{ marginTop: "10px" }}>Withdraw</button>
 
-                <Button
+                <button
                   id={clam.value}
                   type="button"
                   style={{
@@ -126,7 +102,7 @@ const Farms = () => {
                   }}
                 >
                   Info
-                </Button>
+                </button>
                 {/* <Popover placement="bottom" isOpen={popoverOpen} target={clam.value} toggle={togglePop}>
                             <PopoverHeader>
                                 <h4 style={{fontFamily: "AristotelicaBold", fontSize: "16px"}}>{clam.title}</h4>
@@ -136,11 +112,11 @@ const Farms = () => {
                                 <p>{clam.description}</p>
                             </PopoverBody>
                         </Popover> */}
-              </CardBody>
-            </Card>
+              </div>
+            </div>
           );
         })}
-      </CardColumns>
+      </div>
     </div>
   );
 };

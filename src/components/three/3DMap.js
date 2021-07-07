@@ -14,8 +14,6 @@ import "./3d_map.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchPlus, faSearchMinus } from "@fortawesome/free-solid-svg-icons";
 
-import { Button } from "react-bootstrap";
-
 const clock = new THREE.Clock();
 
 THREE.Cache.enabled = true;
@@ -45,12 +43,12 @@ const Map3D = (props) => {
           <p>Taking you to Clam Island...</p>
         </div>
       </div>
-      <Button variant="link" className="zoom-btn zoom-in" onClick={zoomIn}>
+      <button className="zoom-btn zoom-in text-blue-500" onClick={zoomIn}>
         <FontAwesomeIcon icon={faSearchPlus} />
-      </Button>
-      <Button variant="link" className="zoom-btn zoom-out" onClick={zoomOut}>
+      </button>
+      <button className="zoom-btn zoom-out text-blue-500" onClick={zoomOut}>
         <FontAwesomeIcon icon={faSearchMinus} />
-      </Button>
+      </button>
       <div className="three-container" ref={mapRef}></div>
     </div>
   );

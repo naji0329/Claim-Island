@@ -3,10 +3,6 @@ import { useWallet } from "@binance-chain/bsc-use-wallet";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-// import { ResetCSS } from '@pancakeswap-libs/uikit'
-
-import { Container, Row, Col } from "reactstrap";
-
 import ROUTES from "./router";
 
 // import {  getClamTokenContract, getContract, httpProvider } from './services/web3';
@@ -29,26 +25,20 @@ const App = (props) => {
 
   return (
     <Router>
-      {/* <ResetCSS /> */}
-      {/* <NavbarComp /> */}
-      <Container fluid={true} className="p-0">
-        <Row className="no-gutters">
-          <Col sm={{ size: 12 }}>
-            <Switch>
-              {ROUTES.map((k, i) => {
-                return (
-                  <Route
-                    key={i}
-                    path={k.url}
-                    exact={true}
-                    component={k.component}
-                  />
-                );
-              })}
-            </Switch>
-          </Col>
-        </Row>
-      </Container>
+      <div className="p-0">
+        <Switch>
+          {ROUTES.map((k, i) => {
+            return (
+              <Route
+                key={i}
+                path={k.url}
+                exact={true}
+                component={k.component}
+              />
+            );
+          })}
+        </Switch>
+      </div>
     </Router>
   );
 };
