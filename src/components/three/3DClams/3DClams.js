@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import Konva from "konva";
+import axios from 'axios';
 
 import { getTraits } from "./main";
 import decodeDna from "./decodeDna";
@@ -9,6 +10,8 @@ import { OrbitControls } from "../../../loaders/OrbitControls";
 import GLTFLoader from "../../../loaders/GLTFLoader";
 import lighting from "./config/lighting-setup-2.json";
 import { Button } from "react-bootstrap";
+
+import GLTFExporter from "../../../loaders/GLTFExporter";
 
 const clock = new THREE.Clock();
 
@@ -26,6 +29,88 @@ const loadGLTF = (url) => {
   });
 };
 
+const convertFileToBase64 = blob => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+
+    reader.onload = () => {
+      console.log('#####')
+      return resolve({
+          fileName: 'scene.glb',
+          base64: reader.result
+      });
+    };
+    reader.onerror = reject;
+});
+
+const save = async (blob, filename, img, traits, setModelPath) => {
+  // const href = URL.createObjectURL(blob);
+  // console.log(href);
+  // const link = document.createElement('a');
+  // link.href = URL.createObjectURL(blob);
+  // link.download = filename;
+  // link.click();
+  // URL.revokeObjectURL( url ); breaks Firefox...
+
+  // console.log(blob)
+  // const file = await convertFileToBase64(blob);
+  // console.log(file)
+
+  const data = new FormData()
+  data.append('img', img);
+  data.append('traits', JSON.stringify(traits));
+  data.append('file', blob, 'scene.glb');
+  // console.log(data.get('file'));
+  // console.log(data.get('img'))
+  
+  const result = await axios.post("http://localhost:4000/upload", data, { 
+      // receive two    parameter endpoint url ,form data
+  })
+  console.log(result)
+  const glbUrl = `https://gateway.pinata.cloud/ipfs/${result.jsonIpfs.glbHash}`;
+  setModelPath(glbUrl)
+
+};
+
+const saveArrayBuffer = (buffer, filename, img, traits, setModelPath) => {
+  save(
+    new Blob([buffer], { type: "application/octet-stream" }),
+    filename,
+    img,
+    traits,
+    setModelPath
+  );
+};
+
+const exportGLTF = (input, mapRef, traits, setModelPath) => {
+  const canvas = mapRef.current.querySelector("canvas");
+  const img = canvas.toDataURL("image/jpeg");
+
+  const gltfExporter = new GLTFExporter();
+
+  const options = {
+    trs: false,
+    onlyVisible: true,
+    truncateDrawRange: true,
+    binary: true,
+    embedImages: true,
+    maxTextureSize: Infinity, // To prevent NaN value
+  };
+  gltfExporter.parse(
+    input,
+    (result) => {
+      if (result instanceof ArrayBuffer) {
+        saveArrayBuffer(result, "scene.glb", img, traits, setModelPath);
+      } else {
+        const output = JSON.stringify(result, null, 2);
+        console.log(output);
+        saveString(output, "scene.gltf");
+      }
+    },
+    options
+  );
+};
+
 // const loadObj = (url) => {
 //   return new Promise((resolve) => {
 //     new THREE.ObjectLoader().load(url, resolve);
@@ -34,7 +119,18 @@ const loadGLTF = (url) => {
 
 const imageArray = [];
 
-const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, rgb, showSCTraits=false, showTraitsTable=false }) => {
+const Clams3D = ({
+  width,
+  height,
+  clamDna,
+  decodedDna,
+  clamViewer,
+  clamTraits,
+  setModelPath,
+  rgb,
+  showSCTraits = false,
+  showTraitsTable = false,
+}) => {
   const mapRef = useRef(null);
   const mapRef1 = useRef(null);
   const [scene, setScene] = useState("");
@@ -48,12 +144,22 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
     setTraits(defaultTraits);
 
     if (defaultClamDir) {
-      create3DScene(mapRef.current, setScene, defaultTraits, defaultClamDir, takePhoto, clamViewer, rgb, width, height);
+      create3DScene(
+        mapRef.current,
+        setScene,
+        defaultTraits,
+        defaultClamDir,
+        takePhoto,
+        clamViewer,
+        rgb,
+        width,
+        height
+      );
     }
   }, [mapRef]);
 
   useEffect(() => {
-    if(decodedDna && scene) {
+    if (decodedDna && scene) {
       refreshTraits();
     }
   }, [decodedDna, scene]);
@@ -66,18 +172,15 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
   };
 
   useEffect(() => {
-    if(scene) {
+    if (scene) {
       refreshTraits();
     }
-  }, [clamTraits])
+  }, [clamTraits]);
 
   const refreshTraits = async () => {
     // const traits = getTraits(clamDna);
     const traits = clamViewer ? clamTraits : decodeDna(decodedDna);
-    const clamDir =
-      "/clam-models/" +
-      traits.shellShape.toLowerCase() +
-      "/";
+    const clamDir = "/clam-models/" + traits.shellShape.toLowerCase() + "/";
     setTraits(traits);
 
     scene.clear();
@@ -89,10 +192,15 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
     }, 500);
   };
 
+  const download = () => {
+    // console.log(traits)
+    exportGLTF(scene, mapRef, traits, setModelPath);
+  };
+
   return (
     <>
       {/* <div className="flex flex-col w-full justify-center bg-gray-50"> */}
-        {/* <div className="flex items-center justify-between w-full">
+      {/* <div className="flex items-center justify-between w-full">
           <Button className="flex flex-col items-center h-18 py-2" onClick={takePhoto}>
             Take Photo
           </Button>
@@ -101,64 +209,75 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
           </Button>
         </div> */}
 
+      <Button onClick={download}>Download</Button>
 
-        <div className="flex flex-1 flex-column">
-          <div className="three-container" ref={mapRef} ></div>
-          {showTraitsTable?
-            <table className="table">
-              <tbody>
-                <tr>
-                  <td>Rarity</td>
-                  <td>{traits.rarity}</td>
-                </tr>
-                <tr>
-                  <td>Shape</td>
-                  <td>{traits.shellShape}</td>
-                </tr>
-                <tr>
-                  <td>Pattern</td>
-                  <td>{traits.pattern}</td>
-                </tr>
-                <tr>
-                  <td>Tongue</td>
-                  <td>{traits.tongue}</td>
-                </tr>
-                <tr>
-                  <td>Size</td>
-                  <td>{traits.size}</td>
-                </tr>
-                <tr>
-                  <td>LifeSpan</td>
-                  <td>{traits.lifespan} pearls</td>
-                </tr>
-                <tr>
-                  <td>Shell Colour</td>
-                  <td>{ traits.shellColour && traits.shellColour.colour }</td>
-                </tr>
-                <tr>
-                  <td>Inner Colour</td>
-                  <td>{traits.innerColour && traits.innerColour.colour}</td>
-                </tr>
-                <tr>
-                  <td>Lip Colour</td>
-                  <td>{traits.lipColour && traits.lipColour.colour}</td>
-                </tr>
-                <tr>
-                  <td>Tongue Colour</td>
-                  <td>{traits.tongueColour && traits.tongueColour.colour}</td>
-                </tr>
-              </tbody>
-            </table>: ''}
-        </div>
+      <div className="flex flex-1 flex-column">
+        <div className="three-container" ref={mapRef}></div>
+        {showTraitsTable ? (
+          <table className="table">
+            <tbody>
+              <tr>
+                <td>Rarity</td>
+                <td>{traits.rarity}</td>
+              </tr>
+              <tr>
+                <td>Shape</td>
+                <td>{traits.shellShape}</td>
+              </tr>
+              <tr>
+                <td>Pattern</td>
+                <td>{traits.pattern}</td>
+              </tr>
+              <tr>
+                <td>Tongue</td>
+                <td>{traits.tongue}</td>
+              </tr>
+              <tr>
+                <td>Size</td>
+                <td>{traits.size}</td>
+              </tr>
+              <tr>
+                <td>LifeSpan</td>
+                <td>{traits.lifespan} pearls</td>
+              </tr>
+              <tr>
+                <td>Shell Colour</td>
+                <td>{traits.shellColour && traits.shellColour.colour}</td>
+              </tr>
+              <tr>
+                <td>Inner Colour</td>
+                <td>{traits.innerColour && traits.innerColour.colour}</td>
+              </tr>
+              <tr>
+                <td>Lip Colour</td>
+                <td>{traits.lipColour && traits.lipColour.colour}</td>
+              </tr>
+              <tr>
+                <td>Tongue Colour</td>
+                <td>{traits.tongueColour && traits.tongueColour.colour}</td>
+              </tr>
+            </tbody>
+          </table>
+        ) : (
+          ""
+        )}
+      </div>
 
-        {/* <img className="hidden" src="" ref={mapRef1} style={{ width, height }} /> */}
+      {/* <img className="hidden" src="" ref={mapRef1} style={{ width, height }} /> */}
       {/* </div> */}
-      {showSCTraits ?
-      <>
-        <div className="mt-4 mb-4 flex-1">SC Converted to JS Interpreter: {JSON.stringify(traits, null, 4)}</div>
-        <br />
-        <div className="mt-4 mb-4 flex-1">SC Interpreter: {JSON.stringify(decodedDna, null, 4)}</div>
-      </> : '' }
+      {showSCTraits ? (
+        <>
+          <div className="mt-4 mb-4 flex-1">
+            SC Converted to JS Interpreter: {JSON.stringify(traits, null, 4)}
+          </div>
+          <br />
+          <div className="mt-4 mb-4 flex-1">
+            SC Interpreter: {JSON.stringify(decodedDna, null, 4)}
+          </div>
+        </>
+      ) : (
+        ""
+      )}
     </>
   );
 };
@@ -168,7 +287,17 @@ const Clams3D = ({ width, height, clamDna, decodedDna, clamViewer, clamTraits, r
 //   "clam-models/" + traits.shellShape.replace(/\s+/g, "-").toLowerCase() + "/";
 
 // CREATE A 3D SCENE
-const create3DScene = async (element, setScene, traits, clamDir, takePhoto, clamViewer, rgb, width, height) => {
+const create3DScene = async (
+  element,
+  setScene,
+  traits,
+  clamDir,
+  takePhoto,
+  clamViewer,
+  rgb,
+  width,
+  height
+) => {
   // create a 3d renderer
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -207,7 +336,7 @@ const create3DScene = async (element, setScene, traits, clamDir, takePhoto, clam
   const scene = new THREE.Scene();
   scene.background = bgTexture;
 
-  if(clamViewer) {
+  if (clamViewer) {
     await loadModels(scene, clamDir, traits);
     const layers = await loadAllTextures(traits, clamDir, rgb);
     updateShellTextures(scene, layers, traits, takePhoto);
@@ -268,7 +397,7 @@ const loadModels = async (scene, clamDir, traits) => {
   tongueRoot.name = "tongue";
   clamGroup.add(tongueRoot);
 
-/*  switch (traits.shellShape) {
+  /*  switch (traits.shellShape) {
     case "Three Lipped":
       clamGroup.rotation.y += 3;
       clamGroup.scale.set(1.7, 1.7, 1.7);
@@ -307,7 +436,7 @@ const setKonvaLayerTexture = (layer, color, rgb) => {
   //   layer.hue(parseFloat(color.h));
   //   layer.saturation(parseFloat(color.s));
   //   layer.value(parseFloat(color.v));
-  if(rgb) {
+  if (rgb) {
     layer.red(color.r);
     layer.green(color.g);
     layer.blue(color.b);
@@ -357,7 +486,7 @@ const loadTextureKonva = async (object, texture, base, rgb) => {
   }
 
   layer.cache();
-  if(rgb) {
+  if (rgb) {
     layer.filters([Konva.Filters.RGBA]);
   } else {
     layer.filters([Konva.Filters.HSV]);
@@ -381,7 +510,11 @@ const loadAllTextures = async (traits, clamDir, rgb) => {
       img: "innerPBS_basecolor.png",
       color: traits.innerColour.HSVadj || traits.innerColour,
     },
-    { type: "lip", img: "lip_basecolor.png", color: traits.lipColour.HSVadj || traits.lipColour },
+    {
+      type: "lip",
+      img: "lip_basecolor.png",
+      color: traits.lipColour.HSVadj || traits.lipColour,
+    },
     {
       type: "tongue",
       img: "tongue_BaseColor.png",
@@ -389,10 +522,16 @@ const loadAllTextures = async (traits, clamDir, rgb) => {
     },
   ];
   //console.log(textures);
-  const loaded = await Promise.all(textures.map((k) => loadTexture(clamDir + k.img)));
-  const base = await loadTexture("/clam-models/patterns/" + traits.pattern.toLowerCase() + "_basecolor.png");
+  const loaded = await Promise.all(
+    textures.map((k) => loadTexture(clamDir + k.img))
+  );
+  const base = await loadTexture(
+    "/clam-models/patterns/" + traits.pattern.toLowerCase() + "_basecolor.png"
+  );
 
-  return Promise.all(textures.map((k, i) => loadTextureKonva(k, loaded[i], base, rgb)));
+  return Promise.all(
+    textures.map((k, i) => loadTextureKonva(k, loaded[i], base, rgb))
+  );
 };
 
 const updateShellTextures = (scene, containers, traits, takePhoto) => {
@@ -425,14 +564,14 @@ const updateShellTextures = (scene, containers, traits, takePhoto) => {
       tongue = scene.children[3].children[0].children[0];
     }
 
-    shell.children[0].children.forEach(half => {
+    shell.children[0].children.forEach((half) => {
       console.log(half);
-        if(half.name == "crown") {
-          half.material.map = osTexture;
-        } else if (half.name == "lips") {
-          half.material.map = lipTexture;
-        } else {
-          /*
+      if (half.name == "crown") {
+        half.material.map = osTexture;
+      } else if (half.name == "lips") {
+        half.material.map = lipTexture;
+      } else {
+        /*
           half.children.forEach(texture => {
             console.log(texture.material.name);
             switch(texture.material.name) {
@@ -449,24 +588,28 @@ const updateShellTextures = (scene, containers, traits, takePhoto) => {
           })
 */
 
-          half.children[1].material.map = osTexture;
-          console.log(traits.shellShape.toLowerCase());
-          if (traits.shellShape.toLowerCase() == "heart" || traits.shellShape.toLowerCase() == "sharptooth" || traits.shellShape.toLowerCase() == "hamburger" || traits.shellShape.toLowerCase() == "fan") {
-            console.log('test');
-            half.children[0].material.map = lipTexture;
-            half.children[2].material.map = isTexture;
-          } else {
-            if (traits.shellShape != "maxima") {
-              half.children[2].material.map = lipTexture;
-            }
-            half.children[0].material.map = isTexture;
+        half.children[1].material.map = osTexture;
+        console.log(traits.shellShape.toLowerCase());
+        if (
+          traits.shellShape.toLowerCase() == "heart" ||
+          traits.shellShape.toLowerCase() == "sharptooth" ||
+          traits.shellShape.toLowerCase() == "hamburger" ||
+          traits.shellShape.toLowerCase() == "fan"
+        ) {
+          console.log("test");
+          half.children[0].material.map = lipTexture;
+          half.children[2].material.map = isTexture;
+        } else {
+          if (traits.shellShape != "maxima") {
+            half.children[2].material.map = lipTexture;
           }
+          half.children[0].material.map = isTexture;
+        }
 
         //  (traits.shellShape == "fan" || traits.shellShape == "heart" || traits.shellShape == "sharpTooth" || traits.shellShape == "hamburger") ?
         //      half.children[2].material.map = isTexture
         //      : half.children[0].material.map = isTexture;
-
-        }
+      }
     });
 
     if (tongue.children[0]) {
@@ -498,11 +641,11 @@ const animate = ({ scene, camera, controls, renderer }) => {
   });
   controls.update();
 
-  const clamGroup = scene.getObjectByName( "clamgroup" );
-  const rotator = scene.getObjectByName( "rotator" );
+  const clamGroup = scene.getObjectByName("clamgroup");
+  const rotator = scene.getObjectByName("rotator");
 
   //if(clamGroup) clamGroup.rotation.y +=  Math.PI * 2 / (10 / clock.getDelta());
-  if(rotator) rotator.rotation.y +=  Math.PI * 2 / (10 / clock.getDelta());
+  if (rotator) rotator.rotation.y += (Math.PI * 2) / (10 / clock.getDelta());
 
   renderer.render(scene, camera);
 };
