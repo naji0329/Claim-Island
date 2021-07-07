@@ -156,7 +156,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
         {/* this push menu to right side */}
         <div className="flex justify-between lg:w-auto w-full  pl-6 pr-2 pb-0 lg:pb-2"></div>
 
-        <div className="menu w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
+        <div className="w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
           <div className="lg:flex-grow"></div>
 
           <div className="flex">
