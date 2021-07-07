@@ -192,6 +192,7 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
                 ) : (
                   <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5">
                     There is nothing to see :-(
+                      <button className="btn btn-primary">DaisyUI Button</button>
                   </div>
                 )}
               </div>

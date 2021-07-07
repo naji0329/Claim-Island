@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { SketchPicker } from "react-color";
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap";
+// import {
+//   Dropdown,
+//   DropdownToggle,
+//   DropdownMenu,
+//   DropdownItem,
+// } from "reactstrap";
 import { traits } from "../../components/three/3DClams/config/traits";
 import { getTraits } from "../../components/three/3DClams/main";
 

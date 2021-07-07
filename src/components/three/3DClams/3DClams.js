@@ -208,7 +208,9 @@ const Clams3D = ({
           </Button>
         </div> */}
 
-      <Button onClick={download}>Download</Button>
+      {clamViewer ? 
+        <button className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5" onClick={download}>Download</button>
+        : ''}
 
       <div className="flex flex-1 flex-column">
         <div className="three-container" ref={mapRef}></div>
