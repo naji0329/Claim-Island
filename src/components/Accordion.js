@@ -16,7 +16,7 @@ export default ({ data, className }) => {
                   i === tab ? setTab(-1) : setTab(i);
                 }}
               >
-                <span>{row.title}</span>
+                <span className="text-black">{row.title}</span>
                 <svg
                   className={classNames(
                     "fill-current text-blue-700 h-6 w-6 transform transition-transform duration-500",
@@ -29,12 +29,10 @@ export default ({ data, className }) => {
               </h2>
 
               <div
-                className={classNames(
-                  "overflow-hidden transition-all duration-500"
-                )}
                 style={{
-                  maxHeight: i === tab ? "100%" : "0",
-                  opacity: i === tab ? "1" : "0",
+                  overflow: "hidden",
+                  transition: "all 0.5s ease-out",
+                  maxHeight: i === tab ? "200px" : "0",
                 }}
               >
                 <p className="p-3 text-gray-900">{row.description}</p>
