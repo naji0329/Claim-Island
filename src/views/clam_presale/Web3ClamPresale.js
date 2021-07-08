@@ -85,7 +85,7 @@ const Web3ClamPresale = ({
             className="bg-green-600 leading-none py-1 text-center text-white uppercase text-sm rounded"
             style={{ width: `${progress}%` }}
           >
-            ${progress}% of Clams Purchased
+            {progress}% of Clams Purchased
           </div>
         </div>
       )}
