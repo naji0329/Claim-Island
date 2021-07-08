@@ -362,7 +362,7 @@ export const SPEECHES = {
     },
 
     congratsCollection: {
-      text: `Congratulations, here's your Clam! Since the Saferoom isn't open yet, I will hold on to this for you for now. Come back to my shop any time to see your Clam.`,
+      text: `Congratulations, here's your Clam! You may go to the Saferoom to see your Clam.`,
       next: false,
       dismiss: true,
       skip: false,
@@ -427,7 +427,7 @@ export const SPEECHES = {
     },
 
     congratsCollection: {
-      text: `Congratulations, here's your Clam! Since the Saferoom isn't open yet, I will hold on to this for you for now. Come back to my shop any time to see your Clam.`,
+      text: `Congratulations, here's your Clam! You may go to the Saferoom to see your Clam.`,
       next: false,
       dismiss: true,
       skip: false,

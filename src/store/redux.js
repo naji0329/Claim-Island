@@ -18,7 +18,7 @@ const initialState = {
     salePrice: "0",
     isStarted: undefined,
     isEnded: false,
-    hasPurchasedClam: false,
+    usersPurchasedClam: "0",
     rng: undefined, // from call rngRequestHashFromBuyersClam
     hashRequest: undefined,
   },

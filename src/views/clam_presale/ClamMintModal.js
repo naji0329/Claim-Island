@@ -23,13 +23,13 @@ const Divider = () => (
 
 const ClamMintModal = ({
   account: { bnbBalance, address },
-  presale: { salePrice, hasPurchasedClam },
+  presale: { salePrice, usersPurchasedClam },
   updateCharacter,
   updateAccount,
 }) => {
-  const INDIVIDUAL_CAP = 1;
+  const INDIVIDUAL_CAP = 5;
   const [isLoading, setIsLoading] = useState(false);
-  //  disableButton = hasPurchasedClam > INDIVIDUAL_CAP;
+  const disableButton = usersPurchasedClam >= INDIVIDUAL_CAP;
 
   const { register, handleSubmit, setValue, reset, formState, getValues } =
     useForm();
@@ -78,6 +78,7 @@ const ClamMintModal = ({
             <h2 className="text-blue-700 text-center font-semibold text-3xl mb-2">
               Get Clams on BSC
             </h2>
+            <p>You&apos;ve bought {usersPurchasedClam} out of {INDIVIDUAL_CAP} Clams allowed per address</p>
             {address ? (
               <a
                 className="text-gray-500 text-base underline"
@@ -182,7 +183,7 @@ const ClamMintModal = ({
           </div>
 
           <div className="py-2 flex flex-col">
-            {hasPurchasedClam ? (
+            {disableButton ? (
               <button
                 disabled
                 type="submit"

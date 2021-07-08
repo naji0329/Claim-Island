@@ -7,15 +7,14 @@ import Shop from "../../assets/locations/shop_animated.mp4";
 
 import { actions } from "../../store/redux";
 // import { SPEECHES } from "../../components/characters/constants";
-
 import ClamMintModal from "./ClamMintModal";
 import ClamCollectModal from "./ClamCollectModal";
-import ClamShowModal from "./ClamShowModal";
+// import ClamShowModal from "./ClamShowModal";
 import Web3ClamPresale from "./Web3ClamPresale";
 
 const ClamPresale = ({
   account: { clamBalance, address },
-  presale: { isStarted, isEnded, rng, hasPurchasedClam },
+  presale: { isStarted, isEnded, rng, usersPurchasedClam },
   updateCharacter,
 }) => {
   const [showMintModal, setShowMintModal] = useState(false);
@@ -42,12 +41,18 @@ const ClamPresale = ({
             action: "clam_presale.collection.text",
             button: false,
           });
-        } else if (hasPurchasedClam) {
-          updateCharacter({
-            name: "diego",
-            action: "clam_presale.congratCollection.text",
-            button: false,
-          });
+        // } else if (Number(usersPurchasedClam) > 0) {
+        //   updateCharacter({
+        //     name: "diego",
+        //     action: "clam_presale.congratsCollection.text",
+        //     button: {
+        //       text: "See my Clams",
+        //       alt: {
+        //         action: "internal",
+        //         destination: "/saferoom",
+        //       },
+        //     },
+        //   });
         } else {
           updateCharacter({
             name: "diego",
@@ -120,16 +125,12 @@ const ClamPresale = ({
 
         {/* modal   -top-0 md:-top-64 */}
         <div className="flex-1 justify-center min-h-full min-w-full flex items-center absolute z-30 pointer-events-none pb-60">
-          {clamBalance === "0" && // has not purchase any clam
-            isStarted && // pre sale has started
+          {isStarted && // pre sale has started
             address && // wallet is connected
             showMintModal && // user has agreed clicked Yes
             !rng && <ClamMintModal />}
           {/* !rng = did not have clams to collect */}
-          {clamBalance === "0" && rng && hasPurchasedClam && (
-            <ClamCollectModal />
-          )}
-          {clamBalance === "1" && address && <ClamShowModal />}
+          {rng && <ClamCollectModal />}
         </div>
       </div>
     </>
