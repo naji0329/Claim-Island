@@ -106,7 +106,7 @@ const CharacterWrapper = ({ name, action, button, onClickButton }) => {
           <div className="buttons">
             {button.text && (
               <button
-                className="btn"
+                className="btn btn-info"
                 id="btn-next"
                 onClick={button.alt ? handleClickButtonAlt : handleClickButton}
               >
