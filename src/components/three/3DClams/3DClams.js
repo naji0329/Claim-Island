@@ -12,7 +12,7 @@ import lighting from "./config/lighting-setup-2.json";
 
 import GLTFExporter from "../../../loaders/GLTFExporter";
 
-const clock = new THREE.Clock();
+// const clock = new THREE.Clock();
 
 THREE.Cache.enabled = true;
 
@@ -642,11 +642,13 @@ const animate = ({ scene, camera, controls, renderer }) => {
   });
   controls.update();
 
-  const clamGroup = scene.getObjectByName("clamgroup");
+  // const clamGroup = scene.getObjectByName("clamgroup");
   const rotator = scene.getObjectByName("rotator");
 
   //if(clamGroup) clamGroup.rotation.y +=  Math.PI * 2 / (10 / clock.getDelta());
-  if (rotator) rotator.rotation.y += (Math.PI * 2) / (10 / clock.getDelta());
+  if (rotator) {
+    rotator.rotation.y += (Math.PI * 2) * 0.001;
+  }
 
   renderer.render(scene, camera);
 };
