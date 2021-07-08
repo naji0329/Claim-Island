@@ -206,7 +206,7 @@
             display: none;
           }
 
-          .btn {
+          .character-btn {
               position: relative;
               float: right;
               margin-left: 20px;
@@ -217,7 +217,8 @@
               width: 200px;
               font-size: 20px;
               font-family: AristotelicaBold;
-              padding-top: 15px;
+            //   padding-top: 15px;
+                padding-top: 5px;
               border-radius: 10px;
               pointer-events: auto;
 

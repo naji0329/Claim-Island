@@ -12,7 +12,7 @@ import lighting from "./config/lighting-setup-2.json";
 
 import GLTFExporter from "../../../loaders/GLTFExporter";
 
-const clock = new THREE.Clock();
+// const clock = new THREE.Clock();
 
 THREE.Cache.enabled = true;
 
@@ -213,9 +213,10 @@ const Clams3D = ({
         : ''}
 
       <div className="flex flex-1 flex-column">
-        <div className="three-container" ref={mapRef}></div>
+        <div className="three-container" style={{width, height}} ref={mapRef}></div>
         {showTraitsTable ? (
-          <table className="table">
+          <div className="overflow-x-auto">
+          <table className="table table-compact w-full">
             <tbody>
               <tr>
                 <td>Rarity</td>
@@ -259,6 +260,7 @@ const Clams3D = ({
               </tr>
             </tbody>
           </table>
+          </div>
         ) : (
           ""
         )}
@@ -642,11 +644,13 @@ const animate = ({ scene, camera, controls, renderer }) => {
   });
   controls.update();
 
-  const clamGroup = scene.getObjectByName("clamgroup");
+  // const clamGroup = scene.getObjectByName("clamgroup");
   const rotator = scene.getObjectByName("rotator");
 
   //if(clamGroup) clamGroup.rotation.y +=  Math.PI * 2 / (10 / clock.getDelta());
-  if (rotator) rotator.rotation.y += (Math.PI * 2) / (10 / clock.getDelta());
+  if (rotator) {
+    rotator.rotation.y += (Math.PI * 2) * 0.001;
+  }
 
   renderer.render(scene, camera);
 };

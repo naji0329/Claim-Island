@@ -263,11 +263,11 @@ const CharacterSpeak = (props) => {
           "shell_voting_complete",
         ].indexOf(props.speech) === -1 ? (
           <div className="buttons">
-            <button className="btn" id="btn-alt" onClick={onClickAlt}>
+            <button className="btn character-btn" id="btn-alt" onClick={onClickAlt}>
               {buttonAltText}
             </button>
             <button
-              className="btn"
+              className="btn character-btn"
               id="btn-next"
               onClick={(e) => onClickNext()}
             >

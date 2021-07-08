@@ -29,13 +29,13 @@ export default ({ dna, dnaDecoded }) => {
               <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                 Rarity
               </p>
-              <p className="font-bold leading-none">{clam.rarity}</p>
+              <p className="font-bold text-black">{clam.rarity}</p>
             </div>
             <div className="text-sm block">
               <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                 Shape
               </p>
-              <p className="font-bold leading-none">{clam.shellShape}</p>
+              <p className="font-bold text-black">{clam.shellShape}</p>
             </div>
           </div>
         </div>
