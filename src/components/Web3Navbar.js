@@ -18,6 +18,9 @@ import getWeb3 from "../web3/getWeb3";
 
 import Web3Avatar from "./Web3Avatar";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignInAlt} from "@fortawesome/free-solid-svg-icons";
+
 const ErrorAlert = ({ title, description }) => (
   <div className="w-full absolute">
     <div
@@ -181,7 +184,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                 </div>
                 { Number(activateClamBalance) > 0 && <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    <Link to="/saferoom">My Clams</Link>
+                    <Link to="/saferoom">SAFEROOM <FontAwesomeIcon icon={faSignInAlt} /></Link>
                   </span>
                 </div>}
 
