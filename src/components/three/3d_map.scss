@@ -24,6 +24,9 @@
 .three-container {
     background-color: #000;
 }
+.three-container.hover {
+    cursor: pointer;
+}
 
 .loading-screen {
     z-index: 99999;
