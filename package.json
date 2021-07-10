@@ -1,6 +1,6 @@
 {
   "name": "clam-mvp",
-  "version": "0.1.0",
+  "version": "7.9.0",
   "private": true,
   "dependencies": {
     "@binance-chain/bsc-use-wallet": "^0.8.1",
