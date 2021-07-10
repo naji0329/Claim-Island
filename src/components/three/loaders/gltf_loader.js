@@ -19,10 +19,9 @@ const enableShadowMap = (children) => {
   });
 };
 
-const loadGLTF = async (url, scene, type = "island", name) => {
+const loadGLTF = async (url, scene, type = "island") => {
   const gltf = await loadGLTFPromise(url);
   gltf.scene.children = enableShadowMap(gltf.scene.children);
-  if(name) gltf.scene.name = name;
 
   if (type === "island") {
     gltf.scene.scale.set(1000, 1000, 1000);
