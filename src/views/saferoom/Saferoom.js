@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
 
+import { Link, useLocation } from "react-router-dom";
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
 import LoaderSpinner from "../../components/LoaderSpinner";
@@ -158,9 +159,9 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
                   <button className="text-blue-700 hover:underline px-5">
                     All
                   </button>
-                  <button className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5">
+                  <Link to="/clam-presale" className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6">
                     Shop
-                  </button>
+                  </Link>
                 </div>
               </div>
 
@@ -170,7 +171,7 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
                 style={{ height: "50rem" }}
               >
                 {clams.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
                     {clams &&
                       clams.map((clam, i) => (
                         <div
