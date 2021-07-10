@@ -35,7 +35,7 @@ export default ({ data, className }) => {
                   maxHeight: i === tab ? "200px" : "0",
                 }}
               >
-                <p className="p-3 text-gray-900">{row.description}</p>
+                <div className="p-3 text-gray-900">{row.description}</div>
               </div>
             </li>
           ))}

@@ -213,7 +213,7 @@ const Clams3D = ({
         : ''}
 
       <div className="flex flex-1 flex-column">
-        <div className="three-container" style={{width, height}} ref={mapRef}></div>
+        <div className="three-container" style={{width: '100%', height, maxWidth: width }} ref={mapRef}></div>
         {showTraitsTable ? (
           <div className="overflow-x-auto">
           <table className="table table-compact w-full">
@@ -310,7 +310,8 @@ const create3DScene = async (
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
   renderer.gammaOutput = true;
-  renderer.setSize(width, height); // previouly element.offsetWidth, element.offsetHeight
+  // renderer.setSize(width, height); // previouly element.offsetWidth, element.offsetHeight
+  renderer.setSize(element.offsetWidth, element.offsetHeight)
 
   element.appendChild(renderer.domElement);
 
