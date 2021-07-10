@@ -9,6 +9,7 @@ import {
 } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { actions } from "../store/redux";
+import { Link, useLocation } from "react-router-dom";
 
 import { formatUnits } from "@ethersproject/units";
 
@@ -16,6 +17,9 @@ import { clamNFTAddress } from "../web3/constants.js";
 import getWeb3 from "../web3/getWeb3";
 
 import Web3Avatar from "./Web3Avatar";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignInAlt} from "@fortawesome/free-solid-svg-icons";
 
 const ErrorAlert = ({ title, description }) => (
   <div className="w-full absolute">
@@ -54,6 +58,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   const clamBalance = useTokenBalance(clamNFTAddress, account); // TODO - not working
   const bnbBalance = useEtherBalance(account);
   const web3 = getWeb3();
+  const location = useLocation();
 
   useAsync(async () => {
     console.log("loaded");
@@ -178,6 +183,12 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                     {activateClamBalance} CLAM
                   </span>
                 </div>
+                { Number(activateClamBalance) > 0 && location.pathname.indexOf('saferoom') === -1
+                  && <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
+                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                    <Link to="/saferoom">SAFEROOM <FontAwesomeIcon icon={faSignInAlt} /></Link>
+                  </span>
+                </div>}
 
                 <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black bg-opacity-80">
                   <div className="p-1 text-sm text-gray-200">

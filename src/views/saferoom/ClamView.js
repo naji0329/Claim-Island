@@ -62,7 +62,7 @@ export default ({ dna, dnaDecoded }) => {
   return (
     <>
       <div className="flex flex-col justify-between hover:cursor-pointer">
-        <div className="flex justify-between">
+        <div className="flex justify-between flex-col sm:flex-row">
           <Clams3D
             width={400}
             height={400}

@@ -20,6 +20,11 @@
         "internalType": "uint256",
         "name": "_beginSale",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_previousPresale",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -81,6 +86,19 @@
     ],
     "name": "OwnershipTransferred",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "INDIVIDUAL_CAP",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -162,25 +180,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "hasPurchasedClam",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "hasSaleEnded",
     "outputs": [
@@ -240,6 +239,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "previousPresale",
+    "outputs": [
+      {
+        "internalType": "contract IClamPresale",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -312,6 +324,25 @@
         "internalType": "address payable",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "usersPurchasedClam",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
