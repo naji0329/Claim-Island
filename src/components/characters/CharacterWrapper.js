@@ -8,7 +8,7 @@ import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 import "./index.scss";
 
 // button => obj {text, alt}
-const CharacterWrapper = ({ name, action, button, onClickButton }) => {
+const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) => {
   const character = get(CHARACTERS, name);
   const speech = get(SPEECHES, action, action);
 
@@ -19,7 +19,7 @@ const CharacterWrapper = ({ name, action, button, onClickButton }) => {
 
   let history = useHistory();
 
-  const handleClickButton = () => {
+  const handleClickButton = (button) => {
     const speech = get(SPEECHES, button.next, button.next);
     setStateSpeech(speech);
     if (speech.dismiss) {
@@ -30,7 +30,7 @@ const CharacterWrapper = ({ name, action, button, onClickButton }) => {
     }
   };
 
-  const handleClickButtonAlt = (e) => {
+  const handleClickButtonAlt = (button) => {
     if (button.alt && button.alt.dismiss === true) {
       setShowBubble(false);
     }
@@ -108,9 +108,17 @@ const CharacterWrapper = ({ name, action, button, onClickButton }) => {
               <button
                 className="btn btn-info"
                 id="btn-next"
-                onClick={button.alt ? handleClickButtonAlt : handleClickButton}
+                onClick={() => button.alt ? handleClickButtonAlt(button) : handleClickButton(button)}
               >
                 {button.text}
+              </button>
+            )}
+            {buttonAlt && buttonAlt.text && (
+              <button
+                className="btn btn-info ml-2"
+                onClick={() => buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)}
+              >
+                {buttonAlt.text}
               </button>
             )}
           </div>
@@ -120,9 +128,10 @@ const CharacterWrapper = ({ name, action, button, onClickButton }) => {
   );
 };
 
-const mapToProps = ({ character: { name, action, button } }) => ({
+const mapToProps = ({ character: { name, action, button, buttonAlt } }) => ({
   name,
   action,
   button,
+  buttonAlt
 });
 export default connect(mapToProps)(CharacterWrapper);

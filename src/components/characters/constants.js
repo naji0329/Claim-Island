@@ -291,7 +291,7 @@ export const SPEECHES = {
 
   clam_presale: {
     welcome_notConnected: {
-      text: `Welcome, traveller! My shop is not open yet, but I do have a batch of Clams that I can sell to you early. Due to limited stock, there's a limit of one Clam per customer. Would you like to buy one?`,
+      text: `Welcome, traveller! My shop is not open yet, but I do have a batch of Clams that I can sell to you early. Due to limited stock, there's a limit of five Clams per customer. Would you like to buy one?`,
       next: `connect`,
       dismiss: false,
       skip: false,
@@ -320,7 +320,7 @@ export const SPEECHES = {
     },
 
     welcome_connected: {
-      text: `Welcome, traveller! My shop is not open yet, but I do have a batch of Clams that I can sell to you early. Due to limited stock, there's a limit of one Clam per customer. Would you like to buy one?`,
+      text: `Welcome, traveller! My shop is not open yet, but I do have a batch of Clams that I can sell to you early. Due to limited stock, there's a limit of five Clams per customer. Would you like to buy one?`,
       next: `purchase`,
       dismiss: false,
       skip: `purchase`,
@@ -362,7 +362,7 @@ export const SPEECHES = {
     },
 
     congratsCollection: {
-      text: `Congratulations, here's your Clam! You may go to the Saferoom to see your Clam.`,
+      text: `Congratulations on your purchase! We send your collected clams directly to the Saferoom, so you can see them there.`,
       next: false,
       dismiss: true,
       skip: false,
@@ -749,6 +749,15 @@ export const BUTTONS = {
         action: "url",
         destination: "/",
         text: "Exit shop",
+      },
+    },
+
+    congratsCollection: {
+      next: "Buy more",
+      alt: {
+        action: "url",
+        destination: "/saferoom",
+        text: "Go to Saferoom",
       },
     },
   },

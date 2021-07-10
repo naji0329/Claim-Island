@@ -29,6 +29,10 @@ const initialState = {
       text: undefined,
       alt: undefined,
     },
+    buttonAlt: {
+      text: undefined,
+      alt: undefined,
+    },
   },
 };
 
@@ -53,12 +57,14 @@ export const actions = (store) => ({
     };
   },
   updateCharacter: (state, value) => {
-    return {
+    value.buttonAlt = value.buttonAlt ? value.buttonAlt : {};
+    const obj = {
       character: {
         ...state.character,
         ...value,
       },
     };
+    return obj;
   },
 });
 

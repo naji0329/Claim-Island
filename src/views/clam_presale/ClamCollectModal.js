@@ -15,6 +15,7 @@ import ClamUnknown from "../../assets/img/clam_unknown.png";
 import { actions } from "../../store/redux";
 
 const ClamCollectModal = ({
+  setShowMintModal,
   updatePresale,
   account: { address },
   updateCharacter,
@@ -40,16 +41,32 @@ const ClamCollectModal = ({
       .then(() => {
         setIsLoading(false);
 
-        updatePresale({ rng: undefined, hashRequest: undefined })
+        updatePresale({ rng: undefined, hashRequest: undefined });
 
         updateCharacter({
           name: "diego",
           action: "clam_presale.congratsCollection.text",
           button: {
-            text: 'See my Clam',
+            text: "Go to Saferoom",
             alt: {
               action: "internal",
               destination: "/saferoom",
+            },
+          },
+          buttonAlt: {
+            text: "Buy more",
+            alt: {
+              action: "cb",
+              destination: () => {
+                setShowMintModal(true);
+                updateCharacter({
+                  name: "diego",
+                  action: "clam_presale.purchase.text",
+                  button: {
+                    text: null,
+                  },
+                });
+              },
             },
           },
         });

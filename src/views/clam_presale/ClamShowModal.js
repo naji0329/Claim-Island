@@ -15,6 +15,7 @@ import { actions } from "../../store/redux";
 import { getDNADecoded } from "../../web3/dnaDecoder";
 
 const ClamShowModal = ({
+  setShowMintModal,
   account: { address, clamBalance },
   updateCharacter,
 }) => {
@@ -44,8 +45,28 @@ const ClamShowModal = ({
               name: "diego",
               action: "clam_presale.congratsCollection.text",
               button: {
-                text: undefined,
+                text: "Go to Saferoom",
+                alt: {
+                  action: "internal",
+                  destination: "/saferoom",
+                },
               },
+              buttonAlt: {
+                text: "Buy more",
+                alt: {
+                  action: "cb",
+                  destination: () => {
+                    setShowMintModal(true);
+                    updateCharacter({
+                      name: "diego",
+                      action: "clam_presale.purchase.text",
+                      button: {
+                        text: null,
+                      },
+                    });
+                  },
+                },
+              }
             });
           }
         }

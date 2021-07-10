@@ -21,7 +21,35 @@ const ClamPresale = ({
   useEffect(() => {
     console.log("useEffect", { isStarted });
 
-    if (isEnded) {
+    if(clamBalance > 0 && address) {
+      updateCharacter({
+        name: "diego",
+        action: "clam_presale.congratsCollection.text",
+        button: {
+          text: "Go to Saferoom",
+          alt: {
+            action: "internal",
+            destination: "/saferoom",
+          },
+        },
+        buttonAlt: {
+          text: "Buy more",
+          alt: {
+            action: "cb",
+            destination: () => {
+              setShowMintModal(true);
+              updateCharacter({
+                name: "diego",
+                action: "clam_presale.purchase.text",
+                button: {
+                  text: null,
+                },
+              });
+            },
+          },
+        }
+      });
+    } else if (isEnded) {
       updateCharacter({
         name: "diego",
         action: "clam_presale_finished.welcome.text",
@@ -128,9 +156,11 @@ const ClamPresale = ({
           {isStarted && // pre sale has started
             address && // wallet is connected
             showMintModal && // user has agreed clicked Yes
-            !rng && <ClamMintModal />}
+            !rng && <ClamMintModal setShowMintModal={setShowMintModal} />}
           {/* !rng = did not have clams to collect */}
-          {rng && <ClamCollectModal />}
+          {rng && <ClamCollectModal setShowMintModal={setShowMintModal} />}
+          {/* {clamBalance === "1" && address && <ClamShowModal />} */}
+
         </div>
       </div>
     </>
