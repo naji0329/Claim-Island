@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
+import "./index.scss";
 
 import { Link, useLocation } from "react-router-dom";
 import Character from "../../components/characters/CharacterWrapper";
@@ -11,7 +12,7 @@ import ClamItem from "./ClamItem";
 import ClamView from "./ClamView";
 
 import video from "../../assets/locations/saferoom_animated.mp4";
-import videoImage from "../../assets/locations/clam_island_saferoom.png";
+import videoImage from "../../assets/locations/saferoom_static.jpg";
 
 import { actions } from "../../store/redux";
 import { PEARLS } from "../../constants";
@@ -123,7 +124,7 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
     <>
       <Web3Navbar />
       {/* container */}
-      <div className="shop-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
+      <div className="saferoom-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
         <video
           autoPlay
           muted
