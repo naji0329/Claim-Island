@@ -11,8 +11,10 @@ import { Modal, useModal } from "../../components/Modal";
 import ClamItem from "./ClamItem";
 import ClamView from "./ClamView";
 
-import video from "../../assets/locations/saferoom_animated.mp4";
+// import video from "../../assets/locations/saferoom_animated.mp4";
+// import video from "location_vids/saferoom_animated.mp4";
 import videoImage from "../../assets/locations/saferoom_static.jpg";
+import ReactPlayer from 'react-player/lazy';
 
 import { actions } from "../../store/redux";
 import { PEARLS } from "../../constants";
@@ -131,12 +133,21 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
           loop
           className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
         >
-          <source src={video} type="video/mp4" />
+          <source src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"} type="video/mp4" />
+          <source src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated_webm.webm"} type='video/webm; codecs="vp8, vorbis"' />
           <img
             src={videoImage}
             title="Your browser does not support the video"
           ></img>
         </video>
+        {/* <ReactPlayer 
+          className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
+          width='100%'
+          height='100%'
+          playing={true}
+          muted={true}
+          loop={true}
+          url={process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"} /> */}
 
         {/* chat character   */}
         {!address && <Character name="tanja" />}
