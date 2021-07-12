@@ -21,16 +21,24 @@ import createSky from "./create_sky";
 import clamIcon from "../../assets/clam-icon.png";
 
 const clock = new THREE.Clock();
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let outlinePass;
+let hoverStr;
+let composer;
+let hotMeshArr;
+let camera;
 
 THREE.Cache.enabled = true;
 
-const Map3D = (props) => {
+const Map3D = () => {
   const mapRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [controls, setControls] = useState({});
+  const [hoverName, setHoverName] = useState('');
 
   useEffect(() => {
-    create3DScene(mapRef.current, setLoading, setControls);
+    create3DScene(mapRef.current, setLoading, setControls, setHoverName);
   }, [mapRef]);
 
   const zoomIn = () => {
@@ -55,13 +63,13 @@ const Map3D = (props) => {
       <button className="zoom-btn zoom-out text-blue-500" onClick={zoomOut}>
         <FontAwesomeIcon icon={faSearchMinus} />
       </button>
-      <div className="three-container" ref={mapRef}></div>
+      <div className={`three-container ${hoverName !== '' ? 'hover' : '' }`} ref={mapRef}></div>
     </div>
   );
 };
 
 // CREATE A 3D SCENE
-const create3DScene = async (element, setLoading, setControls) => {
+const create3DScene = async (element, setLoading, setControls, setHoverName) => {
   // create a 3d renderer
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.shadowMap.enabled = true;
@@ -71,21 +79,18 @@ const create3DScene = async (element, setLoading, setControls) => {
   element.appendChild(renderer.domElement);
 
   // create a camera
-  const camera = new THREE.PerspectiveCamera(
+  camera = new THREE.PerspectiveCamera(
     55,
     window.innerWidth / window.innerHeight,
     1,
     20000
   );
   camera.position.set(730, 380, 700);
-  camera.lookAt(0, 0, 0);
 
   // orbit controls to pan and zoom
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.minZoom = 1;
-  controls.maxZoom = 3;
-  controls.minDistance = 400;
-  controls.maxDistance = 1000;
+  controls.minDistance = 800;
+  controls.maxDistance = 1500;
   controls.maxPolarAngle = 1.5;
   controls.enablePan = false;
 
@@ -107,22 +112,30 @@ const create3DScene = async (element, setLoading, setControls) => {
   const dolphins = objects[ISLAND_OBJECTS.findIndex(k => k.type === 'dolphin')];
   const seagulls = objects[ISLAND_OBJECTS.findIndex(k => k.type === 'seagull')];
 
+  const hotModelBank = await loadGLTF("glb_files/hot_bank.glb", scene);
+  const hotModelFarm = await loadGLTF("glb_files/hot_farm.glb", scene);
+  const hotModelMarket = await loadGLTF("glb_files/hot_market.glb", scene);
+  const hotModelVault = await loadGLTF("glb_files/hot_vault.glb", scene);
+  hotMeshArr = setHotModel([hotModelBank, hotModelFarm, hotModelMarket, hotModelVault]);
+
   setLoading(false);
 
-  // const outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
-  // outlinePass.edgeStrength = 50;
-  // outlinePass.edgeThickness = 2;
-  // outlinePass.pulsePeriod = 3;
-  // outlinePass.visibleEdgeColor.set( 0xFF0000 );
-  // outlinePass.hiddenEdgeColor.set( 0xFF0000 );
+  composer = new EffectComposer( renderer );
+  const renderPass = new RenderPass( scene, camera );
+  composer.addPass( renderPass );
 
-  // const renderPass = new RenderPass( scene, camera );
+  outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
+  outlinePass.edgeStrength = 50;
+  outlinePass.edgeThickness = 2;
+  outlinePass.pulsePeriod = 3;
+  outlinePass.visibleEdgeColor.set( 0xFF0000 );
+  outlinePass.hiddenEdgeColor.set( 0xFF0000 );
+  composer.addPass( outlinePass );
+  outlinePass.selectedObjects = [hotModelBank]
 
-  // const composer = new EffectComposer( renderer );
-  // composer.addPass( outlinePass );
-  // composer.addPass( renderPass );
-
-  // renderer.domElement.addEventListener( 'mousemove', onMouseMove );
+  renderer.domElement.addEventListener( 'mousemove', (event) => {
+    onMouseMove({ event, setHoverName });
+  });
   // renderer.domElement.addEventListener( 'click', onMouseClick );
 
   // load animation after models load
@@ -135,8 +148,20 @@ const create3DScene = async (element, setLoading, setControls) => {
     seagulls,
     dolphins,
     setControls,
-    objects
+    objects,
+    hotModelBank,
+    hotModelMarket,
+    hotModelVault
   });
+};
+
+const setHotModel = (models) => {
+  const hotMeshArr = models.map(obj => {
+    const hotMesh = obj.children[0];
+    hotMesh.material = new THREE.MeshBasicMaterial({transparent:true, opacity:0});
+    return hotMesh;
+  });
+  return hotMeshArr;
 };
 
 // ADD LIGHTS
@@ -169,7 +194,10 @@ const animate = ({
   seagulls,
   dolphins,
   setControls,
-  objects
+  objects,
+  hotModelBank,
+  hotModelMarket,
+  hotModelVault
 }) => {
   window.requestAnimationFrame(() => {
     animate({
@@ -181,7 +209,10 @@ const animate = ({
       seagulls,
       dolphins,
       setControls,
-      objects
+      objects,
+      hotModelBank,
+      hotModelMarket,
+      hotModelVault
     });
   });
   controls.update();
@@ -202,6 +233,10 @@ const animate = ({
     giveBuoyancy(objects.find(k => k.name === 'sailboat'), t, 2, 38);
   }
 
+  giveBuoyancy(hotModelBank, t, 2, -5);
+  giveBuoyancy(hotModelMarket, t, 2, 2);
+  giveBuoyancy(hotModelVault, t, 2, 2);
+
   flyingSeagulls(seagulls, tdelta);
   swimmingDolphins(dolphins, t);
 
@@ -216,15 +251,15 @@ const giveBuoyancy = (obj, t, factor, init) => {
   }
 };
 
-const flyingSeagulls = (seagulls, t) => {
+const flyingSeagulls = (seagulls) => {
   if (seagulls) {
-    seagulls.forEach((seagull, i) => {
+    seagulls.forEach((seagull) => {
       seagull.pivot.rotation.y += seagull.pivot.userData.speed + 0.01;
     });
   }
 };
 
-const swimmingDolphins = (dolphins, t) => {
+const swimmingDolphins = (dolphins) => {
   if (dolphins) {
     dolphins.forEach((dolphin, i) => {
       dolphin.pivot.rotation.x += 0.02;
@@ -250,6 +285,58 @@ const swimmingDolphins = (dolphins, t) => {
         dolphin.pivot.under = false;
       }
     });
+  }
+};
+
+const onMouseMove = ({ event, setHoverName }) => {
+  if ( event.isPrimary === false ) return;
+  mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+  mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  checkIntersection(setHoverName);
+};
+
+const onMouseClick = () => {
+  let newUrlStr; 
+  switch (hoverStr) {
+    case '':
+      return;
+    case 'bank':
+      newUrlStr = 'google.com';
+      break;
+    case 'farm':
+      newUrlStr = 'github.com';
+      break;
+    case 'market':
+      newUrlStr = 'bitbucket.com';
+      break;
+    default:
+      newUrlStr = 'gmail.com'
+      break;
+  }
+  window.open('https://'+newUrlStr, '_self');
+};
+
+const checkIntersection = (setHoverName) => {
+  raycaster.setFromCamera( mouse, camera );
+  const intersect = raycaster.intersectObjects( hotMeshArr, true )[0];
+  if ( intersect ) {
+    const interObject = intersect.object;
+    if (hoverStr !== interObject.name) {
+      hoverStr = interObject.name;
+      setHoverName(hoverStr);
+      const selMeshArr = [];
+      hotMeshArr.forEach(hotMesh => {
+        if (hotMesh.name === hoverStr)
+          selMeshArr.push(hotMesh);
+      });
+      outlinePass.selectedObjects = selMeshArr;
+    }
+  } else {
+    if (hoverStr !== '') {
+      hoverStr = '';
+      outlinePass.selectedObjects = [];
+      setHoverName('');
+    }
   }
 };
 

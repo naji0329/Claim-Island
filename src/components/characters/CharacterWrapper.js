@@ -92,7 +92,7 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
         >
           <img src={character.charImg} className="character" />
         </button>
-        <div className="text-bubble">
+        <div className="text-bubble pointer-events-none">
           <div className="name px-10">{character.name}</div>
           <div className="speech">
             <div
