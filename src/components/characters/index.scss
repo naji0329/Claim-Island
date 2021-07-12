@@ -282,6 +282,8 @@
             clip-path: circle(38px at 50% 38px);
             background-color: hsla(0,0%,100%,0.7);
             padding-top: 10px;
+            position: absolute;
+            bottom: 0px;
           }
         }
 
@@ -292,5 +294,7 @@
     .text-bubble {
         top: 50%;
         opacity: 0;
+        visibility: hidden;
+        display: none;
     }
 }
