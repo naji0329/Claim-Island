@@ -1,11 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 // import { useHistory } from "react-router-dom";
 
-import { OrbitControls, MapControls } from "../../loaders/OrbitControls";
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
-
 // font awesome icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchPlus, faSearchMinus } from "@fortawesome/free-solid-svg-icons";
@@ -42,18 +37,13 @@ const Map3D = () => {
   const [loading, setLoading] = useState(true);
 
   const [hoverName, setHoverName] = useState('');
-  var renderer, scene, camera, totalGroup, controls, water;
+  var [controls, setControls] = useState({});
+  var renderer, scene, camera, totalGroup, water;
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   var bank, farm, market, vault, bridge, rocks, lilly, boats, ship, sailboat, seagulls, dolphins;
   var hotModelBank, hotModelFarm, hotModelMarket, hotModelVault;
   let composer, outlinePass, hotMeshArr = [], hoverStr = '';
-
-  useEffect(() => {
-    create3DScene(mapRef.current, setLoading);
-
-  const [controls, setControls] = useState({});
-  const [hoverName, setHoverName] = useState('');
 
   useEffect(() => {
     create3DScene(mapRef.current, setLoading, setControls, setHoverName);

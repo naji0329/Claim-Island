@@ -14,7 +14,6 @@ import ClamView from "./ClamView";
 // import video from "../../assets/locations/saferoom_animated.mp4";
 // import video from "location_vids/saferoom_animated.mp4";
 import videoImage from "../../assets/locations/saferoom_static.jpg";
-import ReactPlayer from 'react-player/lazy';
 
 import { actions } from "../../store/redux";
 import { PEARLS } from "../../constants";
