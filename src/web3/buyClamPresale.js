@@ -127,13 +127,13 @@ export const hasSaleEnded = async () => {
   return value;
 };
 
-export const hasPurchasedClam = async (address) => {
+export const usersPurchasedClam = async (address) => {
   if (address) {
     const clamPresale = contractFactory({
       abi: clamPresaleAbi,
       address: clamPresaleAddress,
     });
-    const value = await clamPresale.methods.hasPurchasedClam(address).call();
+    const value = await clamPresale.methods.usersPurchasedClam(address).call();
     return value;
   }
 };
@@ -162,6 +162,6 @@ export default {
   hasSaleStarted,
   hasSaleEnded,
   clamsPurchased,
-  hasPurchasedClam,
+  usersPurchasedClam,
   rngRequestHashFromBuyersClam,
 };

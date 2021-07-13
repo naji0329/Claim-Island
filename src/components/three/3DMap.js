@@ -1,29 +1,46 @@
 import React, { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
+// import { useHistory } from "react-router-dom";
 
 import { OrbitControls, MapControls } from "../../loaders/OrbitControls";
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
 
-import loadGLTF from "./loaders/gltf_loader";
-import createWater from "./create_water";
-import createSky from "./create_sky";
-
-import clamIcon from "../../assets/clam-icon.png";
-
-import "./3d_map.scss";
-
+// font awesome icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchPlus, faSearchMinus } from "@fortawesome/free-solid-svg-icons";
 
+
+// THREE.JS LIBRARIES
+import * as THREE from "three";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
+import { OrbitControls } from "../../loaders/OrbitControls";
+import loadGLTF from "./loaders/gltf_loader";
+
+// local file functions
+import "./3d_map.scss";
+import { ISLAND_OBJECTS } from "./constants";
+import createWater from "./create_water";
+import createSky from "./create_sky";
+import clamIcon from "../../assets/clam-icon.png";
+
 const clock = new THREE.Clock();
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let outlinePass;
+let hoverStr;
+let composer;
+let hotMeshArr;
+let camera;
 
 THREE.Cache.enabled = true;
 
-const Map3D = (props) => {
+const Map3D = () => {
   const mapRef = useRef(null);
   const [loading, setLoading] = useState(true);
+
   const [hoverName, setHoverName] = useState('');
   var renderer, scene, camera, totalGroup, controls, water;
   const raycaster = new THREE.Raycaster();
@@ -34,6 +51,13 @@ const Map3D = (props) => {
 
   useEffect(() => {
     create3DScene(mapRef.current, setLoading);
+
+  const [controls, setControls] = useState({});
+  const [hoverName, setHoverName] = useState('');
+
+  useEffect(() => {
+    create3DScene(mapRef.current, setLoading, setControls, setHoverName);
+
   }, [mapRef]);
 
   const zoomIn = () => {
@@ -268,8 +292,281 @@ const Map3D = (props) => {
         <FontAwesomeIcon icon={faSearchMinus} />
       </button>
       <div className={`three-container ${hoverName!==''?'hover':''}`} id='container' ref={mapRef}></div>
+
     </div>
   );
+};
+
+// CREATE A 3D SCENE
+const create3DScene = async (element, setLoading, setControls, setHoverName) => {
+  // create a 3d renderer
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0xe1e1e1, 1);
+  element.appendChild(renderer.domElement);
+
+  // create a camera
+  camera = new THREE.PerspectiveCamera(
+    55,
+    window.innerWidth / window.innerHeight,
+    1,
+    20000
+  );
+  camera.position.set(730, 380, 700);
+
+  // orbit controls to pan and zoom
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.minDistance = 800;
+  controls.maxDistance = 1500;
+  controls.maxPolarAngle = 1.5;
+  controls.enablePan = false;
+
+  setControls(controls);
+
+  // create a scene
+  const scene = new THREE.Scene();
+  // scene.background = new THREE.Color( 0xe1e1e1 );
+
+  const water = createWater({ scene });
+  createSky({ scene, water, renderer });
+  addLights(scene);
+
+  // LOAD ALL MODELS. URLS mentioned in constants file
+  const objects = await Promise.all(
+    ISLAND_OBJECTS.map((k) => loadGLTF(k.objectUrl, scene, k.type, k.name))
+  );
+  // dolphins and seagulls are array of objects
+  const dolphins = objects[ISLAND_OBJECTS.findIndex(k => k.type === 'dolphin')];
+  const seagulls = objects[ISLAND_OBJECTS.findIndex(k => k.type === 'seagull')];
+
+  const hotModelBank = await loadGLTF("glb_files/hot_bank.glb", scene);
+  const hotModelFarm = await loadGLTF("glb_files/hot_farm.glb", scene);
+  const hotModelMarket = await loadGLTF("glb_files/hot_market.glb", scene);
+  const hotModelVault = await loadGLTF("glb_files/hot_vault.glb", scene);
+  hotMeshArr = setHotModel([hotModelBank, hotModelFarm, hotModelMarket, hotModelVault]);
+
+  setLoading(false);
+
+  composer = new EffectComposer( renderer );
+  const renderPass = new RenderPass( scene, camera );
+  composer.addPass( renderPass );
+
+  outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
+  outlinePass.edgeStrength = 50;
+  outlinePass.edgeThickness = 2;
+  outlinePass.pulsePeriod = 3;
+  outlinePass.visibleEdgeColor.set( 0xFF0000 );
+  outlinePass.hiddenEdgeColor.set( 0xFF0000 );
+  composer.addPass( outlinePass );
+  outlinePass.selectedObjects = [hotModelBank]
+
+  renderer.domElement.addEventListener( 'mousemove', (event) => {
+    onMouseMove({ event, setHoverName });
+  });
+  // renderer.domElement.addEventListener( 'click', onMouseClick );
+
+  // load animation after models load
+  animate({
+    scene,
+    water,
+    camera,
+    controls,
+    renderer,
+    seagulls,
+    dolphins,
+    setControls,
+    objects,
+    hotModelBank,
+    hotModelMarket,
+    hotModelVault
+  });
+};
+
+const setHotModel = (models) => {
+  const hotMeshArr = models.map(obj => {
+    const hotMesh = obj.children[0];
+    hotMesh.material = new THREE.MeshBasicMaterial({transparent:true, opacity:0});
+    return hotMesh;
+  });
+  return hotMeshArr;
+};
+
+// ADD LIGHTS
+const addLights = (scene) => {
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 2.5);
+  directionalLight.position.set(500, 400, -100);
+  directionalLight.rotation.set(0, 0.3, -0.55);
+  directionalLight.castShadow = true;
+  directionalLight.shadow.camera.scale.set(150, 150, 150);
+  directionalLight.shadow.mapSize.set(2048, 2048);
+  scene.add(directionalLight);
+
+  const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+  directionalLight2.position.set(-2700, 2000, 900);
+  directionalLight2.rotation.set(0, 0.3, 0.6);
+
+  scene.add(directionalLight2);
+
+  const hemiLight = new THREE.HemisphereLight(0xffffff, 0xe0fffc, 0.4);
+  scene.add(hemiLight);
+};
+
+// CALL ANIMATE EVERY SECOND TO DISPLAY
+const animate = ({
+  scene,
+  camera,
+  water,
+  controls,
+  renderer,
+  seagulls,
+  dolphins,
+  setControls,
+  objects,
+  hotModelBank,
+  hotModelMarket,
+  hotModelVault
+}) => {
+  window.requestAnimationFrame(() => {
+    animate({
+      scene,
+      water,
+      camera,
+      controls,
+      renderer,
+      seagulls,
+      dolphins,
+      setControls,
+      objects,
+      hotModelBank,
+      hotModelMarket,
+      hotModelVault
+    });
+  });
+  controls.update();
+  setControls(controls);
+  water.material.uniforms["time"].value += 1.0 / 60.0;
+
+  let t = clock.getElapsedTime();
+  const tdelta = clock.getDelta();
+
+  if(objects) {
+    giveBuoyancy(objects.find(k => k.name === 'ship'), t, 4, 35);
+    giveBuoyancy(objects.find(k => k.name === 'bank'), t, 2, -5);
+    giveBuoyancy(objects.find(k => k.name === 'market'), t, 2, 2);
+    giveBuoyancy(objects.find(k => k.name === 'vault'), t, 2, 2);
+
+    giveBuoyancy(objects.find(k => k.name === 'bridge'), t, 2, 30);
+    giveBuoyancy(objects.find(k => k.name === 'boats'), t, 1.5, 1);
+    giveBuoyancy(objects.find(k => k.name === 'sailboat'), t, 2, 38);
+  }
+
+  giveBuoyancy(hotModelBank, t, 2, -5);
+  giveBuoyancy(hotModelMarket, t, 2, 2);
+  giveBuoyancy(hotModelVault, t, 2, 2);
+
+  flyingSeagulls(seagulls, tdelta);
+  swimmingDolphins(dolphins, t);
+
+  renderer.render(scene, camera);
+};
+
+const giveBuoyancy = (obj, t, factor, init) => {
+  if (obj) {
+    const delta = Math.sin(factor + t);
+    const newPos = delta * factor;
+    obj.position.y = init + newPos;
+  }
+};
+
+const flyingSeagulls = (seagulls) => {
+  if (seagulls) {
+    seagulls.forEach((seagull) => {
+      seagull.pivot.rotation.y += seagull.pivot.userData.speed + 0.01;
+    });
+  }
+};
+
+const swimmingDolphins = (dolphins) => {
+  if (dolphins) {
+    dolphins.forEach((dolphin, i) => {
+      dolphin.pivot.rotation.x += 0.02;
+      if (i < 2) {
+        var zpos = Math.random() * 225 - 500;
+        var xpos = Math.random() * 70 - 150;
+      } else {
+        var zpos = Math.random() * 100 + 350;
+        var xpos = Math.random() * 100 - 250;
+      }
+      if (
+        THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 > 120 &&
+        !dolphin.pivot.under
+      ) {
+        dolphin.pivot.position.z = zpos;
+        dolphin.pivot.position.x = xpos;
+        dolphin.pivot.rotation.x += THREE.Math.degToRad(Math.random() * 90);
+        dolphin.pivot.under = true;
+      } else if (
+        THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 <= 120 &&
+        THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 >= 60
+      ) {
+        dolphin.pivot.under = false;
+      }
+    });
+  }
+};
+
+const onMouseMove = ({ event, setHoverName }) => {
+  if ( event.isPrimary === false ) return;
+  mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+  mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  checkIntersection(setHoverName);
+};
+
+const onMouseClick = () => {
+  let newUrlStr; 
+  switch (hoverStr) {
+    case '':
+      return;
+    case 'bank':
+      newUrlStr = 'google.com';
+      break;
+    case 'farm':
+      newUrlStr = 'github.com';
+      break;
+    case 'market':
+      newUrlStr = 'bitbucket.com';
+      break;
+    default:
+      newUrlStr = 'gmail.com'
+      break;
+  }
+  window.open('https://'+newUrlStr, '_self');
+};
+
+const checkIntersection = (setHoverName) => {
+  raycaster.setFromCamera( mouse, camera );
+  const intersect = raycaster.intersectObjects( hotMeshArr, true )[0];
+  if ( intersect ) {
+    const interObject = intersect.object;
+    if (hoverStr !== interObject.name) {
+      hoverStr = interObject.name;
+      setHoverName(hoverStr);
+      const selMeshArr = [];
+      hotMeshArr.forEach(hotMesh => {
+        if (hotMesh.name === hoverStr)
+          selMeshArr.push(hotMesh);
+      });
+      outlinePass.selectedObjects = selMeshArr;
+    }
+  } else {
+    if (hoverStr !== '') {
+      hoverStr = '';
+      outlinePass.selectedObjects = [];
+      setHoverName('');
+    }
+  }
 };
 
 export default Map3D;

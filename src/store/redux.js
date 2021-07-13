@@ -18,7 +18,7 @@ const initialState = {
     salePrice: "0",
     isStarted: undefined,
     isEnded: false,
-    hasPurchasedClam: false,
+    usersPurchasedClam: "0",
     rng: undefined, // from call rngRequestHashFromBuyersClam
     hashRequest: undefined,
   },
@@ -26,6 +26,10 @@ const initialState = {
     name: undefined,
     action: undefined,
     button: {
+      text: undefined,
+      alt: undefined,
+    },
+    buttonAlt: {
       text: undefined,
       alt: undefined,
     },
@@ -53,12 +57,14 @@ export const actions = (store) => ({
     };
   },
   updateCharacter: (state, value) => {
-    return {
+    value.buttonAlt = value.buttonAlt ? value.buttonAlt : {};
+    const obj = {
       character: {
         ...state.character,
         ...value,
       },
     };
+    return obj;
   },
 });
 

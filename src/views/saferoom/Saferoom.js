@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
+import "./index.scss";
 
+import { Link, useLocation } from "react-router-dom";
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
 import LoaderSpinner from "../../components/LoaderSpinner";
@@ -9,8 +11,10 @@ import { Modal, useModal } from "../../components/Modal";
 import ClamItem from "./ClamItem";
 import ClamView from "./ClamView";
 
-import video from "../../assets/locations/saferoom_animated.mp4";
-import videoImage from "../../assets/locations/clam_island_saferoom.png";
+// import video from "../../assets/locations/saferoom_animated.mp4";
+// import video from "location_vids/saferoom_animated.mp4";
+import videoImage from "../../assets/locations/saferoom_static.jpg";
+import ReactPlayer from 'react-player/lazy';
 
 import { actions } from "../../store/redux";
 import { PEARLS } from "../../constants";
@@ -122,19 +126,28 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
     <>
       <Web3Navbar />
       {/* container */}
-      <div className="shop-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
+      <div className="saferoom-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
         <video
           autoPlay
           muted
           loop
           className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
         >
-          <source src={video} type="video/mp4" />
+          <source src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"} type="video/mp4" />
+          <source src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated_webm.webm"} type='video/webm; codecs="vp8, vorbis"' />
           <img
             src={videoImage}
             title="Your browser does not support the video"
           ></img>
         </video>
+        {/* <ReactPlayer 
+          className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
+          width='100%'
+          height='100%'
+          playing={true}
+          muted={true}
+          loop={true}
+          url={process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"} /> */}
 
         {/* chat character   */}
         {!address && <Character name="tanja" />}
@@ -158,9 +171,9 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
                   <button className="text-blue-700 hover:underline px-5">
                     All
                   </button>
-                  <button className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5">
+                  <Link to="/clam-presale" className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6">
                     Shop
-                  </button>
+                  </Link>
                 </div>
               </div>
 
@@ -170,7 +183,7 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
                 style={{ height: "50rem" }}
               >
                 {clams.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
                     {clams &&
                       clams.map((clam, i) => (
                         <div
