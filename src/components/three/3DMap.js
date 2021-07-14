@@ -122,6 +122,7 @@ const Map3D = () => {
     composer.addPass( outlinePass );
 
     renderer.domElement.addEventListener( 'mousemove', onMouseMove );
+    renderer.domElement.addEventListener( 'mouseup', onMouseUp );
     renderer.domElement.addEventListener( 'click', onMouseClick );
 
     animate();
@@ -231,7 +232,11 @@ const Map3D = () => {
     if ( event.isPrimary === false ) return;
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    checkIntersection();
+    checkIntersection(event);
+  }
+
+  const onMouseUp = () => {
+    controls.enabled = true;
   }
 
   const onMouseClick = () => {
@@ -243,13 +248,18 @@ const Map3D = () => {
     window.open('https://'+newUrlStr, '_self');
   }
 
-  const checkIntersection = () => {
+  const checkIntersection = (event) => {
     raycaster.setFromCamera( mouse, camera );
     const intersect = raycaster.intersectObjects( hotMeshArr, true )[0];
     if ( intersect ) {
+      controls.enabled = false;
       const interObject = intersect.object;
       if (hoverStr !== interObject.name) {
         hoverStr = interObject.name;
+        const hoverLabel = document.getElementById('hoverLabel');
+        hoverLabel.style.left = (event.clientX + 50)+'px';
+        hoverLabel.style.top = (event.clientY - 100)+'px';
+        hoverLabel.style.display='block';
         setHoverName(hoverStr);
         var selMeshArr = [];
         hotMeshArr.forEach(hotMesh => {
@@ -262,6 +272,8 @@ const Map3D = () => {
       if (hoverStr !== '') {
         hoverStr = '';
         outlinePass.selectedObjects = [];
+        const hoverLabel = document.getElementById('hoverLabel');
+        hoverLabel.style.display='none';
         setHoverName('');
       }
     }
@@ -282,7 +294,7 @@ const Map3D = () => {
         <FontAwesomeIcon icon={faSearchMinus} />
       </button>
       <div className={`three-container ${hoverName!==''?'hover':''}`} id='container' ref={mapRef}></div>
-
+      <div id='hoverLabel'>Opening Soon</div>
     </div>
   );
 };
