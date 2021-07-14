@@ -65,3 +65,15 @@
     color: #0576e2;
     font-family: AristotelicaBold;
 }
+
+#hoverLabel {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px 20px;
+    font-size: 24px;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 3px solid grey;
+    cursor: not-allowed;
+    position: absolute;
+    display: none;
+}
