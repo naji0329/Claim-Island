@@ -11,6 +11,8 @@ import * as THREE from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
 import { OrbitControls } from "../../loaders/OrbitControls";
 import loadGLTF from "./loaders/gltf_loader";
 
@@ -43,7 +45,7 @@ const Map3D = () => {
   const mouse = new THREE.Vector2();
   var bank, farm, market, vault, bridge, rocks, lilly, boats, ship, sailboat, seagulls, dolphins;
   var hotModelBank, hotModelFarm, hotModelMarket, hotModelVault;
-  let composer, outlinePass, hotMeshArr = [], hoverStr = '';
+  let composer, outlinePass, effectFXAA, hotMeshArr = [], hoverStr = '';
 
   useEffect(() => {
     create3DScene(mapRef.current, setLoading, setControls, setHoverName);
@@ -120,6 +122,10 @@ const Map3D = () => {
     outlinePass.visibleEdgeColor.set( 0xFF0000 );
     outlinePass.hiddenEdgeColor.set( 0xFF0000 );
     composer.addPass( outlinePass );
+    
+    effectFXAA = new ShaderPass( FXAAShader );
+    effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+    composer.addPass( effectFXAA );
 
     renderer.domElement.addEventListener( 'mousemove', onMouseMove );
     renderer.domElement.addEventListener( 'mouseup', onMouseUp );
