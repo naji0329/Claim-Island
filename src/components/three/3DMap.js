@@ -128,6 +128,7 @@ const Map3D = () => {
     composer.addPass( effectFXAA );
 
     renderer.domElement.addEventListener( 'mousemove', onMouseMove );
+    renderer.domElement.addEventListener( 'pointerdown', onMouseDown );
     renderer.domElement.addEventListener( 'mouseup', onMouseUp );
     renderer.domElement.addEventListener( 'click', onMouseClick );
 
@@ -241,6 +242,10 @@ const Map3D = () => {
     checkIntersection(event);
   }
 
+  const onMouseDown = ( ) => {
+    if (hoverStr !== '') controls.enabled = false;
+  }
+
   const onMouseUp = () => {
     controls.enabled = true;
   }
@@ -258,7 +263,6 @@ const Map3D = () => {
     raycaster.setFromCamera( mouse, camera );
     const intersect = raycaster.intersectObjects( hotMeshArr, true )[0];
     if ( intersect ) {
-      controls.enabled = false;
       const interObject = intersect.object;
       if (hoverStr !== interObject.name) {
         hoverStr = interObject.name;
