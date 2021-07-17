@@ -1,8 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
 import { get } from "lodash";
 import ClamUnknown from "../../assets/img/clam_unknown.png";
+import { deposit, harvest, withdraw, pendingGem } from "../../web3/masterChef";
 
-export default (pool) => {
+const PoolItem = (pool) => {
+  const [gemEarned, setGemEarned] = useState(0);
+
+  useEffect(() => {
+    async function setPendingGem() {
+      const earnedGem = await pendingGem(pool.poolId);
+      setGemEarned(earnedGem);
+    }
+
+    setPendingGem();
+  });
+
+  const handleHarvest = () => {
+    harvest(pool.poolId);
+  };
+
   return (
     <>
       <div className="bg-white rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 flex flex-col justify-between">
@@ -43,10 +59,13 @@ export default (pool) => {
               <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                 $GEM Earned
               </p>
-              <p className="font-bold text-gray-300">{pool.gemEarned}</p>
+              <p className="font-bold text-gray-300">{gemEarned}</p>
             </div>
             <div className="text-sm block">
-              <button className="bg-gray-300 hover:bg-gray-500 px-2 text-white font-semibold text-xs rounded-xl">
+              <button
+                className="bg-gray-300 hover:bg-gray-500 px-2 text-white font-semibold text-xs rounded-xl"
+                onClick={handleHarvest}
+              >
                 Harvest
               </button>
             </div>
@@ -64,3 +83,5 @@ export default (pool) => {
     </>
   );
 };
+
+export default PoolItem;
