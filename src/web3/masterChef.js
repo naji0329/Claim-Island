@@ -26,6 +26,11 @@ const eventCallback = async (res) => {
   }
 };
 
+export const getPoolInfo = async (pid) => {
+  const poolInfo = await masterChef.methods.poolInfo(pid).call();
+  return poolInfo;
+};
+
 export const deposit = async (pid, amount) => {
   const account = getAccount();
   const method = masterChef.methods.deposit(pid, amount);

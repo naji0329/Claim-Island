@@ -8,6 +8,7 @@ import videoImage from "../../assets/locations/bank_static.jpg";
 
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
+import { getPoolInfo } from "../../web3/masterChef";
 import PoolItem from "./PoolItem";
 import Swap from "./Swap";
 import "./bank.scss";
@@ -15,28 +16,48 @@ import "./bank.scss";
 const Bank = ({ account: { clamBalance, address }, updateCharacter }) => {
   const [pools, setPools] = useState([
     {
-      name: `BNB - BUSD`,
+      name: `BNB - BUSD`, // real bnb-busd
       apy: `82.3%`,
       multiplier: `40x`,
-      gemEarned: `0.0`,
       images: [
         "http://daisyui.com/tailwind-css-component-profile-1@56w.png",
         "http://daisyui.com/tailwind-css-component-profile-2@56w.png",
       ],
+      poolId: 4,
     },
     {
-      name: `$GEM`,
+      name: `BNB - SHELL`, // bnb-carapace
       apy: `82.3%`,
       multiplier: `40x`,
-      gemEarned: `0.0`,
+      images: [
+        "http://daisyui.com/tailwind-css-component-profile-1@56w.png",
+        "http://daisyui.com/tailwind-css-component-profile-2@56w.png",
+      ],
+      poolId: 2,
+    },
+    {
+      name: `BNB - GEM`, // bnb-jade
+      apy: `82.3%`,
+      multiplier: `40x`,
+      images: [
+        "http://daisyui.com/tailwind-css-component-profile-1@56w.png",
+        "http://daisyui.com/tailwind-css-component-profile-2@56w.png",
+      ],
+      poolId: 3,
+    },
+    {
+      name: `$GEM`, // jade
+      apy: `82.3%`,
+      multiplier: `40x`,
       images: ["http://daisyui.com/tailwind-css-component-profile-3@56w.png"],
+      poolId: 0,
     },
     {
-      name: `$SHELL`,
+      name: `$SHELL`, // carapace
       apy: `82.3%`,
       multiplier: `40x`,
-      gemEarned: `0.0`,
       images: ["http://daisyui.com/tailwind-css-component-profile-5@56w.png"],
+      poolId: 1,
     },
   ]);
 
