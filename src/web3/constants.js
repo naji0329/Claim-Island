@@ -12,6 +12,7 @@ export const communityVotingAddress =
 
 export const gemLockerAddress = "0x19549174Df876472040310DfD9b54e8e4eB2Ae55";
 export const masterChefAddress = "0x3334df4bB0590cf869a79Eca8cbB278d483d4e9c";
+export const multicallAddress = "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1";
 
 export const carapaceTokenAddress = // dummy for ShellToken
   "0x2db46224672c3a997f5bf51ade9c618434992c94";
