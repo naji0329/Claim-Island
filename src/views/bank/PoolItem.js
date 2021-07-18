@@ -2,21 +2,35 @@ import React, { useState, useEffect, useRef } from "react";
 import { get } from "lodash";
 import ClamUnknown from "../../assets/img/clam_unknown.png";
 import { deposit, harvest, withdraw, pendingGem } from "../../web3/masterChef";
+import { approveMasterchefForMaxUint, hasMaxUintAllowance } from "../../web3/bep20";
 
 const PoolItem = (pool) => {
+  const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
+  const [depositValue, setDepositValue] = useState(0);
 
   useEffect(() => {
-    async function setPendingGem() {
+    async function setState() {
       const earnedGem = await pendingGem(pool.poolId);
       setGemEarned(earnedGem);
+
+      const isEnabled = await hasMaxUintAllowance(pool.account, pool.lpToken);
+      setIsEnabled(isEnabled);
     }
 
-    setPendingGem();
+    setState();
   });
 
   const handleHarvest = () => {
     harvest(pool.poolId);
+  };
+
+  const handleDeposit = () => {
+    deposit(pool.poolId, web3.utils.toWei(depositValue));
+  };
+
+  const handleApprove = () => {
+    approveMasterchefForMaxUint(pool.account, pool.lpToken);
   };
 
   return (
@@ -39,26 +53,18 @@ const PoolItem = (pool) => {
         <div className="px-4 md:px-6 py-2">
           <div className="text-sm flex flex-row justify-between">
             <div className="text-sm block">
-              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-                APY
-              </p>
+              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">APY</p>
               <p className="font-bold text-black">{pool.apy}</p>
             </div>
             <div className="text-sm block">
-              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-                Multiplier
-              </p>
-              <p className="font-bold text-black text-center">
-                {pool.multiplier}
-              </p>
+              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Multiplier</p>
+              <p className="font-bold text-black text-center">{pool.multiplier}</p>
             </div>
           </div>
 
           <div className="text-sm flex flex-row justify-between my-2">
             <div className="text-sm block">
-              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-                $GEM Earned
-              </p>
+              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">$GEM Earned</p>
               <p className="font-bold text-gray-300">{gemEarned}</p>
             </div>
             <div className="text-sm block">
@@ -71,9 +77,26 @@ const PoolItem = (pool) => {
             </div>
           </div>
 
-          <div className="flex flex-col">
-            <button className="btn btn-info btn-outline">Enable Pool</button>
-          </div>
+          {!isEnabled && (
+            <div className="flex flex-col">
+              <button className="btn btn-info btn-outline" onClick={handleApprove}>
+                Enable Pool
+              </button>
+            </div>
+          )}
+
+          {isEnabled && (
+            <div className="flex flex-col">
+              <input
+                onChange={(v) => setDepositValue(v.currentTarget.value)}
+                value={depositValue}
+                className="bg-gray-100 text-center text-xl w-20  text-black p-2 font-normal rounded  border-none font-extrabold"
+              />
+              <button className="btn btn-info btn-outline" onClick={handleDeposit}>
+                Deposit
+              </button>
+            </div>
+          )}
 
           <div className="flex flex-col items-center mt-4">
             <button className="w-1/2 btn btn-ghost btn-xs">Details</button>

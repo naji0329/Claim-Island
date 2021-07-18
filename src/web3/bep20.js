@@ -1,6 +1,6 @@
 import clamNFTAbi from "./abi/ClamNFT.json";
-import shellTokenAbi from "./abi/BEP20.json";
-import { shellTokenAddress, clamNFTAddress } from "./constants";
+import BEP20ABI from "./abi/BEP20.json";
+import { shellTokenAddress, clamNFTAddress, masterChefAddress } from "./constants";
 import { contractFactory } from "./index";
 
 const balanceOf = async ({ account, abi, address }) => {
@@ -10,10 +10,36 @@ const balanceOf = async ({ account, abi, address }) => {
   return accountBalance;
 };
 
+export const approveMasterchefForMaxUint = async (account, tokenAddress) => {
+  const maxUint = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
+
+  const method = token.methods.approve(masterChefAddress, maxUint);
+
+  const gasEstimation = await method.estimateGas({
+    from: account,
+  });
+
+  await method
+    .send({
+      from: account,
+      gas: gasEstimation,
+    })
+};
+
+export const hasMaxUintAllowance = async (owner, tokenAddress) => {
+  const maxUint = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
+  const allowance = await token.methods.allowance(owner, masterChefAddress).call();
+  const allowanceAsHex = web3.utils.toHex(allowance)
+
+  return allowanceAsHex == maxUint;
+};
+
 export const accountShellBalance = async (account) => {
   const bal = await balanceOf({
     account,
-    abi: shellTokenAbi,
+    abi: BEP20ABI,
     address: shellTokenAddress,
   });
   return bal;
@@ -28,12 +54,7 @@ export const accountClamBalance = async (account) => {
   return bal;
 };
 
-export const addTokenToMetamask = async ({
-  tokenAddress,
-  tokenSymbol,
-  tokenDecimals,
-  tokenImage,
-}) => {
+export const addTokenToMetamask = async ({ tokenAddress, tokenSymbol, tokenDecimals, tokenImage }) => {
   if (!window.ethereum) {
     throw new Error("there is no wallet on browser");
   }

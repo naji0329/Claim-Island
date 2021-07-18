@@ -32,6 +32,7 @@ const Bank = ({ account: { clamBalance, address }, updateCharacter }) => {
           multiplier: poolAssets[poolInfoValues.lpToken].multiplier,
           images: poolAssets[poolInfoValues.lpToken].images,
           poolId: poolId,
+          lpToken: poolInfoValues.lpToken,
           allocPoint: poolInfoValues.allocPoint,
           depositFeeBP: poolInfoValues.depositFeeBP,
           lastRewardBlock: poolInfoValues.lastRewardBlock,
@@ -111,7 +112,7 @@ const Bank = ({ account: { clamBalance, address }, updateCharacter }) => {
                     {pools &&
                       pools.map((pool, i) => (
                         <div key={i}>
-                          <PoolItem {...pool} />
+                          <PoolItem {...pool} account={address} />
                         </div>
                       ))}
                   </div>
