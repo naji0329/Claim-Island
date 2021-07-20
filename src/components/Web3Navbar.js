@@ -19,9 +19,9 @@ import getWeb3 from "../web3/getWeb3";
 import Web3Avatar from "./Web3Avatar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignInAlt} from "@fortawesome/free-solid-svg-icons";
+import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
-const ErrorAlert = ({ title, description }) => (
+const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
     <div
       className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-50"
@@ -39,6 +39,15 @@ const ErrorAlert = ({ title, description }) => (
           <p className="font-bold">{title}</p>
           <p className="text-sm ">{description}</p>
         </div>
+
+        <svg
+          onClick={onClose}
+          className="ml-auto fill-current text-gray-700 w-6 h-6 cursor-pointer"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 18 18"
+        >
+          <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+        </svg>
       </div>
     </div>
   </div>
@@ -132,7 +141,13 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   return (
     <>
       {redux.account.error ? (
-        <ErrorAlert title="Something Wrong" description={redux.account.error} />
+        <ErrorAlert
+          title="Something Wrong"
+          description={redux.account.error}
+          onClose={() => {
+            updateAccount({ error: null });
+          }}
+        />
       ) : (
         <>
           {!redux.account.isBSChain && (
@@ -183,12 +198,16 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                     {activateClamBalance} CLAM
                   </span>
                 </div>
-                { Number(activateClamBalance) > 0 && location.pathname.indexOf('saferoom') === -1
-                  && <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
-                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    <Link to="/saferoom">SAFEROOM <FontAwesomeIcon icon={faSignInAlt} /></Link>
-                  </span>
-                </div>}
+                {Number(activateClamBalance) > 0 &&
+                  location.pathname.indexOf("saferoom") === -1 && (
+                    <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
+                      <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                        <Link to="/saferoom">
+                          SAFEROOM <FontAwesomeIcon icon={faSignInAlt} />
+                        </Link>
+                      </span>
+                    </div>
+                  )}
 
                 <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black bg-opacity-80">
                   <div className="p-1 text-sm text-gray-200">
