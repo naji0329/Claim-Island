@@ -8,14 +8,22 @@ import videoImage from "../../assets/locations/bank_static.jpg";
 
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
-import { prepGetPoolInfoForMulticall, getPoolsLength, decodePoolInfoReturnFromMulticall } from "../../web3/masterChef";
+import {
+  prepGetPoolInfoForMulticall,
+  getPoolsLength,
+  decodePoolInfoReturnFromMulticall,
+} from "../../web3/masterChef";
 import { aggregate } from "../../web3/multicall";
 import PoolItem from "./PoolItem";
 import Swap from "./Swap";
 import "./bank.scss";
 import { poolAssets } from "./poolsAssets";
 
-const Bank = ({ account: { clamBalance, address }, updateCharacter }) => {
+const Bank = ({
+  account: { clamBalance, address },
+  updateCharacter,
+  updateAccount,
+}) => {
   const [pools, setPools] = useState([]);
 
   useEffect(() => {
@@ -41,10 +49,10 @@ const Bank = ({ account: { clamBalance, address }, updateCharacter }) => {
 
       setPools(setUpPools);
     };
-    if (pools.length == 0) {
+    if (pools.length === 0 && address) {
       getPoolInfo();
     }
-  }, [pools]);
+  }, [pools, address]);
 
   useAsync(async () => {
     updateCharacter({
@@ -61,13 +69,24 @@ const Bank = ({ account: { clamBalance, address }, updateCharacter }) => {
       <Web3Navbar />
       {/* container */}
       <div className="bank-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
-        <video autoPlay muted loop className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center">
-          <source src={process.env.PUBLIC_URL + "/location_vids/bank_animated.mp4"} type="video/mp4" />
+        <video
+          autoPlay
+          muted
+          loop
+          className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
+        >
+          <source
+            src={process.env.PUBLIC_URL + "/location_vids/bank_animated.mp4"}
+            type="video/mp4"
+          />
           <source
             src={process.env.PUBLIC_URL + "/location_vids/bank_webm.webm"}
             type='video/webm; codecs="vp8, vorbis"'
           />
-          <img src={videoImage} title="Your browser does not support the video"></img>
+          <img
+            src={videoImage}
+            title="Your browser does not support the video"
+          ></img>
         </video>
 
         {/* chat character   */}
@@ -79,7 +98,9 @@ const Bank = ({ account: { clamBalance, address }, updateCharacter }) => {
             <div className="w-1/4 flex flex-col mx-4">
               <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-col justify-between">
                 <div className="w-full flex flex-col px-3 py-2">
-                  <h2 className="text-blue-700 font-semibold text-4xl mb-2">Swap</h2>
+                  <h2 className="text-blue-700 font-semibold text-4xl mb-2">
+                    Swap
+                  </h2>
                   <p className="text-yellow-700">
                     <b>Instantly</b> trade tokens.
                   </p>
@@ -94,9 +115,12 @@ const Bank = ({ account: { clamBalance, address }, updateCharacter }) => {
               {/* navbar */}
               <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
                 <div className="px-3 py-2">
-                  <h2 className="text-blue-700 font-semibold text-4xl mb-2">Invest</h2>
+                  <h2 className="text-blue-700 font-semibold text-4xl mb-2">
+                    Invest
+                  </h2>
                   <p className="text-yellow-700">
-                    Stake into <b>Liquidity Pools (LP)</b> to ear $GEM over time.
+                    Stake into <b>Liquidity Pools (LP)</b> to ear $GEM over
+                    time.
                   </p>
                 </div>
 
@@ -106,13 +130,20 @@ const Bank = ({ account: { clamBalance, address }, updateCharacter }) => {
                   </button>
                 </div>
               </div>
-              <div className="w-full my-4 overflow-auto" style={{ height: "50rem" }}>
+              <div
+                className="w-full my-4 overflow-auto py-5"
+                style={{ height: "50rem" }}
+              >
                 {pools.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
                     {pools &&
                       pools.map((pool, i) => (
                         <div key={i}>
-                          <PoolItem {...pool} account={address} />
+                          <PoolItem
+                            {...pool}
+                            account={address}
+                            updateAccount={updateAccount}
+                          />
                         </div>
                       ))}
                   </div>
