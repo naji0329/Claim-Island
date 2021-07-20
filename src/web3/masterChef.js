@@ -3,10 +3,11 @@ import { masterChefAddress } from "./constants";
 import { contractFactory } from "./index";
 import { store } from "../store/redux";
 
-const masterChef = contractFactory({
-  abi: masterChefAbi,
-  address: masterChefAddress,
-});
+const masterChef = () =>
+  contractFactory({
+    abi: masterChefAbi,
+    address: masterChefAddress,
+  });
 
 const getAccount = () => {
   const address = store.getState().account.address;
@@ -27,7 +28,7 @@ const eventCallback = async (res) => {
 };
 
 export const getPoolInfo = async (pid) => {
-  const poolInfo = await masterChef.methods.poolInfo(pid).call();
+  const poolInfo = await masterChef().methods.poolInfo(pid).call();
   return poolInfo;
 };
 
@@ -80,37 +81,43 @@ export const decodePoolInfoReturnFromMulticall = (values) => {
 };
 
 export const getPoolsLength = async () => {
-  const poolsLen = await masterChef.methods.poolLength().call();
+  const poolsLen = await masterChef().methods.poolLength().call();
   return poolsLen;
 };
 
 export const deposit = async (pid, amount) => {
   const account = getAccount();
-  const method = masterChef.methods.deposit(pid, amount);
+  const method = masterChef().methods.deposit(pid, amount);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method.send({ from: account, gas: gasEstimation }).once("Deposit", eventCallback);
+  await method
+    .send({ from: account, gas: gasEstimation })
+    .once("Deposit", eventCallback);
 };
 
 export const harvest = async (pid) => {
   const account = getAccount();
-  const method = masterChef.methods.deposit(pid, 0);
+  const method = masterChef().methods.deposit(pid, 0);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method.send({ from: account, gas: gasEstimation }).once("Deposit", eventCallback);
+  await method
+    .send({ from: account, gas: gasEstimation })
+    .once("Deposit", eventCallback);
 };
 
 export const withdraw = async (pid, amount) => {
   const account = getAccount();
-  const method = masterChef.methods.withdraw(pid, amount);
+  const method = masterChef().methods.withdraw(pid, amount);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method.send({ from: account, gas: gasEstimation }).once("Withdraw", eventCallback);
+  await method
+    .send({ from: account, gas: gasEstimation })
+    .once("Withdraw", eventCallback);
 };
 
 export const pendingGem = async (pid) => {
   const account = getAccount();
-  const gemPending = await masterChef.methods.pendingGem(pid, account).call();
+  const gemPending = await masterChef().methods.pendingGem(pid, account).call();
 
   return gemPending;
 };
