@@ -31,7 +31,7 @@ export const SPEECHES = {
       skip: false,
     },
     first: {
-      text: `The island isn't open yet, but I hear Diego has some Clams available for presale ahead of grand opening. Do you want to check it out?`,
+      text: `The island isn't open yet, although Diego just finished a presale for some Clams ahead of grand opening. If you bought some from him, you can go see them in the Saferoom.`,
       next: "second",
       dismiss: false,
       skip: false,
@@ -43,7 +43,7 @@ export const SPEECHES = {
       skip: false,
     },
     third: {
-      text: `Hello again, did you want to check out Diego's Clam presale now?`,
+      text: `Nice place, right? Did you want to go check out the Saferoom now, or do you want to keep looking around?`,
       next: "second",
       dismiss: false,
       skip: false,
@@ -456,11 +456,11 @@ export const BUTTONS = {
       alt: false,
     },
     first: {
-      next: "No thanks",
+      next: "Explore Island",
       alt: {
         action: "url_internal",
-        destination: "/clam-presale",
-        text: "Sure!",
+        destination: "/saferoom",
+        text: "Go to Saferoom",
       },
     },
     second: {
@@ -468,11 +468,11 @@ export const BUTTONS = {
       alt: false,
     },
     third: {
-      next: "No thanks",
+      next: "Keep Exploring",
       alt: {
         action: "url_internal",
-        destination: "/clam-presale",
-        text: "Sure!",
+        destination: "/saferoom",
+        text: "Go to Saferoom",
       },
     },
   },
