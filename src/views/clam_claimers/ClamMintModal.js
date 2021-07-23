@@ -6,7 +6,7 @@ import "./index.scss";
 
 import Card from "../../components/Card";
 import ClamUnknown from "../../assets/img/clam_unknown.png";
-import BNBLogo from "../../assets/img/binance-coin-bnb-logo.png";
+// import BNBLogo from "../../assets/img/binance-coin-bnb-logo.png";
 import ArrowDown from "../../assets/img/arrow-down.svg";
 
 import { claimClam } from "../../web3/clamClaimers";
@@ -31,7 +31,7 @@ const ClamMintModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const disableButton = usersClaimedClam >= INDIVIDUAL_CAP;
 
-  const { register, handleSubmit, setValue, reset, formState, getValues } =
+  const { register, handleSubmit } =
     useForm();
 
   const onSubmit = async (data) => {
@@ -95,8 +95,8 @@ const ClamMintModal = ({
                   ></path>
                 </svg>
                 <label>
-                  You&apos;ve bought {usersClaimedClam} out of{" "}
-                  {INDIVIDUAL_CAP} Clams allowed per address
+                  You&apos;ve claimed {usersClaimedClam} out of{" "}
+                  {INDIVIDUAL_CAP} Clams allowed
                 </label>
               </div>
             </div>

@@ -14,7 +14,7 @@ import Web3ClamClaimers from "./Web3ClamClaimers";
 
 const ClamPresale = ({
   account: { clamBalance, address },
-  presale: { rng, usersClaimedClam },
+  clamClaimerData: { rng, usersClaimedClam, isClamClaimer },
   updateCharacter,
 }) => {
   const isStarted = true;
@@ -22,9 +22,21 @@ const ClamPresale = ({
   const isEnded = usersClaimedClam >= cap;
   const [showMintModal, setShowMintModal] = useState(false);
   useEffect(() => {
-    console.log("useEffect", { isStarted });
 
-    if(clamBalance > 0 && address) {
+    if (!isClamClaimer) {
+      updateCharacter({
+        name: "diego",
+        action: "clam_claimer_not_allowed.first.text",
+        button: {
+          text: "Back to Island",
+          alt: {
+            action: "internal",
+            destination: "/",
+          },
+        },
+      });
+    }
+    else if(clamBalance > 0 && address) {
       updateCharacter({
         name: "diego",
         action: "clam_presale.congratsCollection.text",
@@ -129,11 +141,10 @@ const ClamPresale = ({
         },
       });
     }
-  }, [isStarted, address]);
+  }, [address]);
 
   return (
     <>
-      {console.log({ isStarted })}
       <Web3Navbar />
       <Web3ClamClaimers />
       {/* container */}
@@ -149,15 +160,13 @@ const ClamPresale = ({
         </video>
 
         {/* chat character   */}
-        {isStarted != undefined && (
           <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
             <CharacterWrapper name="diego" />
           </div>
-        )}
 
         {/* modal   -top-0 md:-top-64 */}
         <div className="flex-1 justify-center min-h-full min-w-full flex items-center absolute z-30 pointer-events-none pb-60">
-          {isStarted && // pre sale has started
+          {
             address && // wallet is connected
             showMintModal && // user has agreed clicked Yes
             !rng && <ClamMintModal setShowMintModal={setShowMintModal} />}

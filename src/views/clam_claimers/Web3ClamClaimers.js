@@ -9,11 +9,7 @@ import { getRNGFromHashRequest } from "../../web3/rng";
 
 import { store, actions } from "../../store/redux";
 
-const Web3ClamClaimers = ({
-  updateClamClaimers,
-  account,
-  clamClaimerData: { progress },
-}) => {
+const Web3ClamClaimers = ({ updateClamClaimers, account, clamClaimerData: { progress } }) => {
   const fetchPresaleData = async () => {
     try {
       const {
@@ -22,18 +18,9 @@ const Web3ClamClaimers = ({
       } = store.getState();
 
       // if has purchase then hasRequest is not empty then no need to keep pulling data
-      if (
-        isBSChain &&
-        clamClaimerData.hashRequest === undefined
-      ) {
+      if (isBSChain && clamClaimerData.hashRequest === undefined) {
         console.log("fetch presale data", { isBSChain, address, clamClaimerData });
-        const [
-          isClamClaimer,
-          individualCap,
-          clamsClaimed,
-          usersClaimedClam,
-          hashRequest,
-        ] = await Promise.all([
+        const [isClamClaimer, individualCap, clamsClaimed, usersClaimedClam, hashRequest] = await Promise.all([
           clamClaimersContract.isClamClaimer(),
           clamClaimersContract.individualCap(),
           clamClaimersContract.clamsClaimed(),
@@ -70,18 +57,14 @@ const Web3ClamClaimers = ({
       await fetchPresaleData();
     }, 2500); // 2.5s
   });
-
   return (
-    <>
-        <div className="shadow w-full bg-green-100">
-          <div
-            className="bg-green-600 leading-none py-1 text-center text-white uppercase text-sm rounded"
-            style={{ width: `${progress}%` }}
-          >
-            {progress}% of Clams Purchased
-          </div>
-        </div>
-    </>
+    <div className="shadow w-full bg-green-100">
+      <div
+        className="bg-green-600 leading-none py-1 text-center text-white uppercase text-sm rounded"
+      >
+        {progress}% clams claimed
+      </div>
+    </div>
   );
 };
 

@@ -273,6 +273,15 @@ export const SPEECHES = {
     },
   },
 
+  clam_claimer_not_allowed: {
+    first: {
+      text: `Hi there, you're not allowed to claim clams as it looks like your current address has not participated in the first clam presale. If this is a mistake try switching addresses.`,
+      next: false,
+      dismiss: false,
+      skip: false,
+    },
+  },
+
   clam_presale_finished: {
     welcome: {
       text: `Welcome, traveller!`,
