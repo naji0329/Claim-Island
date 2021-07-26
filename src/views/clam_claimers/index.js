@@ -23,7 +23,16 @@ const ClamPresale = ({
   const [showMintModal, setShowMintModal] = useState(false);
   useEffect(() => {
 
-    if (!isClamClaimer) {
+    if(!address) {
+      updateCharacter({
+        name: "diego",
+        action: "clam_claimer.welcome.text",
+        button: {
+          text: null,
+        },
+      });
+    }
+    else if (!isClamClaimer) {
       updateCharacter({
         name: "diego",
         action: "clam_claimer_not_allowed.first.text",
@@ -37,37 +46,55 @@ const ClamPresale = ({
       });
     }
     else if(clamBalance > 0 && address) {
-      updateCharacter({
-        name: "diego",
-        action: "clam_presale.congratsCollection.text",
-        button: {
-          text: "Go to Saferoom",
-          alt: {
-            action: "internal",
-            destination: "/saferoom",
-          },
-        },
-        buttonAlt: {
-          text: "Buy more",
-          alt: {
-            action: "cb",
-            destination: () => {
-              setShowMintModal(true);
-              updateCharacter({
-                name: "diego",
-                action: "clam_presale.purchase.text",
-                button: {
-                  text: null,
-                },
-              });
+      if(clamBalance < 5) {
+        updateCharacter({
+          name: "diego",
+          action: "clam_claimer.welcome_connected.text",
+          button: {
+            text: "Let's do it",
+            alt: {
+              action: "cb",
+              destination: () => {
+                setShowMintModal(true);
+                updateCharacter({
+                  name: "diego",
+                  action: "clam_claimer.claim.text",
+                  button: {
+                    text: "Back to Island",
+                    alt: {
+                      action: "internal",
+                      destination: "/",
+                    },
+                  },
+                  buttonAlt: {
+                    text: "Go to Saferoom",
+                    alt: {
+                      action: "internal",
+                      destination: "/saferoom",
+                    },
+                  },
+                });
+              },
             },
           },
-        }
-      });
+        });
+      } else {
+        updateCharacter({
+          name: "diego",
+          action: "clam_claimer_not_allowed.claimed.text",
+          button: {
+            text: "Back to Island",
+            alt: {
+              action: "internal",
+              destination: "/",
+            },
+          },
+        });
+      }
     } else if (isEnded) {
       updateCharacter({
         name: "diego",
-        action: "clam_presale_finished.welcome.text",
+        action: "clam_claimer_not_allowed.claimed.text",
         button: {
           text: "Back to Island",
           alt: {
@@ -81,7 +108,7 @@ const ClamPresale = ({
         if (rng) {
           updateCharacter({
             name: "diego",
-            action: "clam_presale.collection.text",
+            action: "clam_claimer.collection.text",
             button: false,
           });
         // } else if (Number(usersPurchasedClam) > 0) {
@@ -99,7 +126,7 @@ const ClamPresale = ({
         } else {
           updateCharacter({
             name: "diego",
-            action: "clam_presale.welcome_connected.text",
+            action: "clam_claimer.welcome_connected.text",
             button: {
               text: "Yes",
               alt: {
@@ -108,9 +135,20 @@ const ClamPresale = ({
                   setShowMintModal(true);
                   updateCharacter({
                     name: "diego",
-                    action: "clam_presale.purchase.text",
+                    action: "clam_claimer.claim.text",
                     button: {
-                      text: null,
+                      text: "Back to Island",
+                      alt: {
+                        action: "internal",
+                        destination: "/",
+                      },
+                    },
+                    buttonAlt: {
+                      text: "Go to Saferoom",
+                      alt: {
+                        action: "internal",
+                        destination: "/saferoom",
+                      },
                     },
                   });
                 },
@@ -121,10 +159,9 @@ const ClamPresale = ({
       } else {
         updateCharacter({
           name: "diego",
-          action: "clam_presale.welcome_notConnected.text",
+          action: "clam_claimer.welcome.text",
           button: {
-            text: "Yes",
-            next: "clam_presale.connect.text",
+            text: null,
           },
         });
       }

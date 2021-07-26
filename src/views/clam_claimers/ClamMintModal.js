@@ -40,7 +40,7 @@ const ClamMintModal = ({
 
     updateCharacter({
       name: "diego",
-      action: "clam_presale.processing.text",
+      action: "clam_claimer.processing.text",
       button: {
         text: undefined,
       },
@@ -51,7 +51,7 @@ const ClamMintModal = ({
         setIsLoading(false);
         updateCharacter({
           name: "diego",
-          action: "clam_presale.congrats.text",
+          action: "clam_claimer.congrats.text",
           button: {
             text: "Ok",
           },
@@ -62,7 +62,7 @@ const ClamMintModal = ({
         updateAccount({ error: e.message });
         updateCharacter({
           name: "diego",
-          action: "clam_presale.error.text",
+          action: "clam_claimer.error.text",
           button: {
             text: undefined,
           },

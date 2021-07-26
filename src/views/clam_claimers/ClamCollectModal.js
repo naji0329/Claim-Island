@@ -30,7 +30,7 @@ const ClamCollectModal = ({
 
     updateCharacter({
       name: "diego",
-      action: "clam_presale.collectionProcessing.text",
+      action: "clam_claimer.collectionProcessing.text",
       button: {
         text: undefined,
       },
@@ -45,7 +45,7 @@ const ClamCollectModal = ({
 
         updateCharacter({
           name: "diego",
-          action: "clam_presale.congratsCollection.text",
+          action: "clam_claimer.congratsCollection.text",
           button: {
             text: "Go to Saferoom",
             alt: {
@@ -54,16 +54,27 @@ const ClamCollectModal = ({
             },
           },
           buttonAlt: {
-            text: "Buy more",
+            text: "Claim more",
             alt: {
               action: "cb",
               destination: () => {
                 setShowMintModal(true);
                 updateCharacter({
                   name: "diego",
-                  action: "clam_presale.purchase.text",
+                  action: "clam_claimer.claim.text",
                   button: {
-                    text: null,
+                    text: "Back to Island",
+                    alt: {
+                      action: "internal",
+                      destination: "/",
+                    },
+                  },
+                  buttonAlt: {
+                    text: "Go to Saferoom",
+                    alt: {
+                      action: "internal",
+                      destination: "/saferoom",
+                    },
                   },
                 });
               },
@@ -77,7 +88,7 @@ const ClamCollectModal = ({
         updateAccount({ error: e.message });
         updateCharacter({
           name: "diego",
-          action: "clam_presale.error.text",
+          action: "clam_claimer.error.text",
           button: {
             text: undefined,
           },
@@ -88,7 +99,7 @@ const ClamCollectModal = ({
   useAsync(async () => {
     updateCharacter({
       name: "diego",
-      action: "clam_presale.collection.text",
+      action: "clam_claimer.collection.text",
       button: {
         text: undefined,
       },
