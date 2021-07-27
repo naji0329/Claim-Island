@@ -21,7 +21,7 @@ const Web3ClamClaimers = ({ updateClamClaimers, account, clamClaimerData: { prog
       if (isBSChain && clamClaimerData.hashRequest === undefined) {
         console.log("fetch presale data", { isBSChain, address, clamClaimerData });
         const [isClamClaimer, individualCap, clamsClaimed, usersClaimedClam, hashRequest] = await Promise.all([
-          clamClaimersContract.isClamClaimer(),
+          clamClaimersContract.isClamClaimer(address),
           clamClaimersContract.individualCap(),
           clamClaimersContract.clamsClaimed(),
           clamClaimersContract.usersClaimedClam(address),
@@ -36,7 +36,7 @@ const Web3ClamClaimers = ({ updateClamClaimers, account, clamClaimerData: { prog
         console.log("updateClamClaimers", { isClamClaimer, individualCap, rng, usersClaimedClam, clamsClaimed });
 
         const cap = 256; // 59 * 4 clams needs to be claimed from earlier purchasers
-
+        console.log("updare", isClamClaimer)
         updateClamClaimers({
           individualCap,
           isClamClaimer, // current minted tokens

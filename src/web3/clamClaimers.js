@@ -76,12 +76,12 @@ export const collectClam = async (account, callback, errCallback) => {
     });
 };
 
-export const isClamClaimer = async () => {
+export const isClamClaimer = async (account) => {
   const ClamClaimer = contractFactory({
     abi: clamClaimersAbi,
     address: clamClaimersAddress,
   });
-  const isClaimer = await ClamClaimer.methods.isClamClaimer().call();
+  const isClaimer = await ClamClaimer.methods.isClamClaimer(account).call();
 
   return isClaimer;
 };

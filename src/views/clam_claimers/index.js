@@ -178,7 +178,7 @@ const ClamPresale = ({
         },
       });
     }
-  }, [address]);
+  }, [address, isClamClaimer]);
 
   return (
     <>

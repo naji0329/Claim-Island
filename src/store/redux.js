@@ -24,7 +24,7 @@ const initialState = {
   },
   clamClaimerData: {
     individualCap: "0",
-    isClamClaimer: false, // current minted tokens
+    isClamClaimer: undefined,
     usersClaimedClam: "0",
     progress: undefined,
     clamsClaimed:"0",
