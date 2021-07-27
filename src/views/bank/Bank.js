@@ -8,6 +8,8 @@ import videoImage from "../../assets/locations/bank_static.jpg";
 
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
+import VideoBackground from "../../components/VideoBackground";
+
 import {
   prepGetPoolInfoForMulticall,
   getPoolsLength,
@@ -66,34 +68,12 @@ const Bank = ({
 
   return (
     <>
-      <Web3Navbar />
-      {/* container */}
-      <div className="bank-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
-        <video
-          autoPlay
-          muted
-          loop
-          className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
-        >
-          <source
-            src={process.env.PUBLIC_URL + "/location_vids/bank_animated.mp4"}
-            type="video/mp4"
-          />
-          <source
-            src={process.env.PUBLIC_URL + "/location_vids/bank_webm.webm"}
-            type='video/webm; codecs="vp8, vorbis"'
-          />
-          <img
-            src={videoImage}
-            title="Your browser does not support the video"
-          ></img>
-        </video>
-
-        {/* chat character   */}
-        {!address && <Character name="tanja" />}
+      <div className="bg-bank overflow-x-hidden">
+        <Web3Navbar />
+        {/* container */}
 
         {address && (
-          <div className="flex-1 min-h-full min-w-full flex absolute z-20  justify-center items-start mt-64">
+          <div className="flex justify-center items-start  w-full">
             {/* swap column */}
             <div className="w-1/4 flex flex-col mx-4">
               <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-col justify-between">
@@ -130,10 +110,7 @@ const Bank = ({
                   </button>
                 </div>
               </div>
-              <div
-                className="w-full my-4 overflow-auto py-5"
-                style={{ height: "50rem" }}
-              >
+              <div className="my-4 py-5">
                 {pools.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
                     {pools &&
@@ -156,7 +133,14 @@ const Bank = ({
             </div>
           </div>
         )}
+
+        {/* video */}
+        <VideoBackground videoImage={videoImage} />
+
+        {/* chat character   */}
       </div>
+
+      {!address && <Character name="tanja" />}
     </>
   );
 };
