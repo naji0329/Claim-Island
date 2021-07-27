@@ -35,7 +35,7 @@ const Web3ClamClaimers = ({ updateClamClaimers, account, clamClaimerData: { prog
 
         console.log("updateClamClaimers", { isClamClaimer, individualCap, rng, usersClaimedClam, clamsClaimed });
 
-        const cap = 256; // 59 * 4 clams needs to be claimed from earlier purchasers
+        const cap = 264; // 66 * 4 clams needs to be claimed from earlier purchasers
         console.log("updare", isClamClaimer)
         updateClamClaimers({
           individualCap,
@@ -62,7 +62,7 @@ const Web3ClamClaimers = ({ updateClamClaimers, account, clamClaimerData: { prog
       <div
         className="bg-green-600 leading-none py-1 text-center text-white uppercase text-sm rounded"
       >
-        {progress}% clams claimed
+        {progress}% of clams claimed
       </div>
     </div>
   );

@@ -118,14 +118,14 @@ const ClamMintModal = ({
           </div>
 
           {/* input */}
-          <div className="bg-white border-2 shadow rounded-xl">
+          {/* <div className="bg-white border-2 shadow rounded-xl">
             <div className="px-2 py-2">
               <div className="flex flex-col">
                 <div className="text-lg font-semibold my-2">Price of Clam</div>
                 <div className="flex flex-col text-sm text-gray-600">
                   <div className="flex flex-col">
                     <div className="flex flex-row items-center justify-between">
-                      {/* <div className="flex">
+                      <div className="flex">
                         <img className="w-12 mr-2" src={BNBLogo} />
                         <input
                           disabled
@@ -148,7 +148,7 @@ const ClamMintModal = ({
                         <span className="flex items-center  px-3 text-lg font-extrabold font-sans mx-1">
                           BNB
                         </span>
-                      </div> */}
+                      </div>
                       <span className="my-2">
                         {bnbBalance.slice(0, 4)} BNB available
                       </span>
@@ -159,7 +159,7 @@ const ClamMintModal = ({
             </div>
           </div>
 
-          <Divider />
+          <Divider /> */}
 
           {/* output */}
           <div className="bg-white border-2 shadow-xl rounded-xl">

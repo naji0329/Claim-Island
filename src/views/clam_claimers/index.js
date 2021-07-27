@@ -14,13 +14,14 @@ import Web3ClamClaimers from "./Web3ClamClaimers";
 
 const ClamPresale = ({
   account: { clamBalance, address },
-  clamClaimerData: { rng, usersClaimedClam, isClamClaimer },
+  clamClaimerData: { hashRequest, rng, usersClaimedClam, isClamClaimer },
   updateCharacter,
 }) => {
   const isStarted = true;
-  const cap = 256; // 59 * 4 clams needs to be claimed from earlier purchasers
+  const cap = 264; // 66 * 4 clams needs to be claimed from earlier purchasers
   const isEnded = usersClaimedClam >= cap;
   const [showMintModal, setShowMintModal] = useState(false);
+
   useEffect(() => {
 
     if(!address) {
@@ -206,9 +207,9 @@ const ClamPresale = ({
           {
             address && // wallet is connected
             showMintModal && // user has agreed clicked Yes
-            !rng && <ClamMintModal setShowMintModal={setShowMintModal} />}
+            !hashRequest && !rng && <ClamMintModal setShowMintModal={setShowMintModal} />}
           {/* !rng = did not have clams to collect */}
-          {rng && <ClamCollectModal setShowMintModal={setShowMintModal} />}
+          {hashRequest && rng && Number(rng) > 0 && <ClamCollectModal setShowMintModal={setShowMintModal} />}
           {/* {clamBalance === "1" && address && <ClamShowModal />} */}
 
         </div>
