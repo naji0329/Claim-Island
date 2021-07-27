@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 // import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
+import Select from "react-select";
 
 import BNBLogo from "../../assets/img/binance-coin-bnb-logo.png";
 import ClamLogo from "../../assets/clam-icon.png";
@@ -22,21 +23,13 @@ const Divider = () => (
   </div>
 );
 
-const showImage = (images) => {
-  return images.map((image, i) => (
-    <div className="avatar bg-white" key={i}>
-      <div className="w-12 h-12">
-        <img src={image} />
-      </div>
-    </div>
-  ));
-};
-
-const Swap = ({ account: { bnbBalance, address }, updateAccount, }) => {
+const Swap = ({ account: { bnbBalance, address }, updateAccount }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState(0);
   const [tokenAmountOutMin, setTokenAmountOutMin] = useState(0);
-  const [destToken, setDestToken] = useState('0xE26482b00781b7BA03f725719feD8Bae1d070f8e');
+  const [destToken, setDestToken] = useState(
+    "0xE26482b00781b7BA03f725719feD8Bae1d070f8e"
+  );
 
   // const { register, handleSubmit, setValue, reset, formState, getValues } =
   //   useForm();
@@ -45,18 +38,27 @@ const Swap = ({ account: { bnbBalance, address }, updateAccount, }) => {
   //   console.log({ data, address });
   // };
   const calculateTokenAmount = async (value) => {
-    if (value == '') return;
+    if (value == "") return;
     setAmount(value);
-    console.log('destToken', destToken);
+    console.log("destToken", destToken);
     const WBNB = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"; // assuming the in token is always BNB
-    const estimateAmount = await estimateSwap({ destToken, originToken: WBNB, amountIn: web3.utils.toWei(value) });
+    const estimateAmount = await estimateSwap({
+      destToken,
+      originToken: WBNB,
+      amountIn: web3.utils.toWei(value),
+    });
     console.log({ estimateAmount: estimateAmount.swapAmountOut, destToken });
     setTokenAmountOutMin(estimateAmount.swapAmountOut);
   };
 
   const handleSwap = async () => {
     try {
-      await zapBNBForLPToken({ bnbAmount: web3.utils.toWei(amount), destToken, tokenAmountOutMin, account: address });
+      await zapBNBForLPToken({
+        bnbAmount: web3.utils.toWei(amount),
+        destToken,
+        tokenAmountOutMin,
+        account: address,
+      });
     } catch (error) {
       updateAccount({ error: error.message });
     }
@@ -76,7 +78,9 @@ const Swap = ({ account: { bnbBalance, address }, updateAccount, }) => {
                   <div className="flex">
                     <img className="w-12 mr-2" src={BNBLogo} />
                     <input
-                      onChange={(v) => calculateTokenAmount(v.currentTarget.value)}
+                      onChange={(v) =>
+                        calculateTokenAmount(v.currentTarget.value)
+                      }
                       value={amount}
                       className="bg-gray-100 text-center text-xl w-20  text-black p-2 font-normal rounded  border-none font-extrabold"
                       // {...register("input", { required: true })}
@@ -106,13 +110,36 @@ const Swap = ({ account: { bnbBalance, address }, updateAccount, }) => {
 
       <Divider />
       <span className="text-gray-700">Select Output Token</span>
-      <select onChange={(v) => setDestToken(v.currentTarget.value)} className="form-select block w-full mt-1">
-        {lPTokens.map((lp, i) => (
-          <option key={i} value={lp}>
-            {showImage(poolAssets[lp].images)}
-          </option>
-        ))}
-      </select>
+
+      <Select
+        className="form-select block w-full my-2"
+        // value={selectedOption}
+        components={{
+          Option: ({ innerProps, label, data, ...rest }) => (
+            <div {...innerProps}>
+              <div className="flex items-center p-1">
+                <div className="avatar-group -space-x-6">
+                  <div className="avatar bg-white">
+                    <div className="w-12 h-12">
+                      <img src={data.image} />
+                    </div>
+                  </div>
+                </div>
+                <div className="mx-2"> {label}</div>
+              </div>
+
+              {console.log({ rest })}
+            </div>
+          ),
+        }}
+        onChange={(v) => setDestToken(v.currentTarget.value)}
+        options={lPTokens.map((lp) => ({
+          value: lp,
+          label: poolAssets[lp].name,
+          image: poolAssets[lp].images[0],
+        }))}
+      />
+
       {/* output */}
       <div className="bg-white border-2 shadow-xl rounded-xl">
         <div className="px-2 py-2">
@@ -170,7 +197,14 @@ const Swap = ({ account: { bnbBalance, address }, updateAccount, }) => {
                 fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
                 <path
                   className="opacity-75"
                   fill="currentColor"
