@@ -342,6 +342,10 @@ export const SPEECHES = {
       skip: false,
     },
 
+    claimProcessing: {
+      text: "Let me just go fetch your Clam. I'll just be a minute."
+    },
+
     collectionProcessing: {
       text: `One moment, just let me unbox this Clam for you. Did you know that no one knows what Clam is inside until you collect it, not even me?`,
       next: false,
