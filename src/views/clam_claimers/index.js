@@ -23,8 +23,7 @@ const ClamPresale = ({
   const [showMintModal, setShowMintModal] = useState(false);
 
   useEffect(() => {
-
-    if(!address) {
+    if (!address) {
       updateCharacter({
         name: "diego",
         action: "clam_claimer.welcome.text",
@@ -32,8 +31,7 @@ const ClamPresale = ({
           text: null,
         },
       });
-    }
-    else if (!isClamClaimer) {
+    } else if (!isClamClaimer) {
       updateCharacter({
         name: "diego",
         action: "clam_claimer_not_allowed.first.text",
@@ -45,9 +43,8 @@ const ClamPresale = ({
           },
         },
       });
-    }
-    else if(clamBalance > 0 && address) {
-      if(clamBalance < 5) {
+    } else if (clamBalance > 0 && address) {
+      if (clamBalance < 5) {
         updateCharacter({
           name: "diego",
           action: "clam_claimer.welcome_connected.text",
@@ -109,21 +106,21 @@ const ClamPresale = ({
         if (rng) {
           updateCharacter({
             name: "diego",
-            action: "clam_claimer.collection.text",
+            action: "clam_claimer.congratsCollection.text",
             button: false,
           });
-        // } else if (Number(usersPurchasedClam) > 0) {
-        //   updateCharacter({
-        //     name: "diego",
-        //     action: "clam_presale.congratsCollection.text",
-        //     button: {
-        //       text: "See my Clams",
-        //       alt: {
-        //         action: "internal",
-        //         destination: "/saferoom",
-        //       },
-        //     },
-        //   });
+          // } else if (Number(usersPurchasedClam) > 0) {
+          //   updateCharacter({
+          //     name: "diego",
+          //     action: "clam_presale.congratsCollection.text",
+          //     button: {
+          //       text: "See my Clams",
+          //       alt: {
+          //         action: "internal",
+          //         destination: "/saferoom",
+          //       },
+          //     },
+          //   });
         } else {
           updateCharacter({
             name: "diego",
@@ -193,25 +190,34 @@ const ClamPresale = ({
           loop
           className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
         >
-          <source src={process.env.PUBLIC_URL + "/location_vids/shop_animated.mp4"} type="video/mp4" />
-          <source src={process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"}  type='video/webm; codecs="vp8, vorbis"' />
+          <source
+            src={process.env.PUBLIC_URL + "/location_vids/shop_animated.mp4"}
+            type="video/mp4"
+          />
+          <source
+            src={
+              process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"
+            }
+            type='video/webm; codecs="vp8, vorbis"'
+          />
         </video>
 
         {/* chat character   */}
-          <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
-            <CharacterWrapper name="diego" />
-          </div>
+        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
+          <CharacterWrapper name="diego" />
+        </div>
 
         {/* modal   -top-0 md:-top-64 */}
         <div className="flex-1 justify-center min-h-full min-w-full flex items-center absolute z-30 pointer-events-none pb-60">
-          {
-            address && // wallet is connected
+          {address && // wallet is connected
             showMintModal && // user has agreed clicked Yes
-            !hashRequest && !rng && <ClamMintModal setShowMintModal={setShowMintModal} />}
+            !hashRequest &&
+            !rng && <ClamMintModal setShowMintModal={setShowMintModal} />}
           {/* !rng = did not have clams to collect */}
-          {hashRequest && rng && Number(rng) > 0 && <ClamCollectModal setShowMintModal={setShowMintModal} />}
+          {hashRequest && rng && Number(rng) > 0 && (
+            <ClamCollectModal setShowMintModal={setShowMintModal} />
+          )}
           {/* {clamBalance === "1" && address && <ClamShowModal />} */}
-
         </div>
       </div>
     </>
