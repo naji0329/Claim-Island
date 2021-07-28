@@ -9,18 +9,32 @@ import { getRNGFromHashRequest } from "../../web3/rng";
 
 import { store, actions } from "../../store/redux";
 
-const Web3ClamClaimers = ({ updateClamClaimers, account, clamClaimerData: { progress } }) => {
+const Web3ClamClaimers = ({
+  updateClamClaimers,
+  account,
+  clamClaimerData: { progress },
+}) => {
   const fetchPresaleData = async () => {
     try {
+      console.log("fetchPresaleData");
       const {
         account: { isBSChain, address },
         clamClaimerData,
       } = store.getState();
 
-      // if has purchase then hasRequest is not empty then no need to keep pulling data
-      if (isBSChain && clamClaimerData.hashRequest === undefined) {
-        console.log("fetch presale data", { isBSChain, address, clamClaimerData });
-        const [isClamClaimer, individualCap, clamsClaimed, usersClaimedClam, hashRequest] = await Promise.all([
+      if (isBSChain) {
+        console.log("fetch presale data", {
+          isBSChain,
+          address,
+          clamClaimerData,
+        });
+        const [
+          isClamClaimer,
+          individualCap,
+          clamsClaimed,
+          usersClaimedClam,
+          hashRequest,
+        ] = await Promise.all([
           clamClaimersContract.isClamClaimer(address),
           clamClaimersContract.individualCap(),
           clamClaimersContract.clamsClaimed(),
@@ -33,10 +47,16 @@ const Web3ClamClaimers = ({ updateClamClaimers, account, clamClaimerData: { prog
           rng = await getRNGFromHashRequest(hashRequest);
         }
 
-        console.log("updateClamClaimers", { isClamClaimer, individualCap, rng, usersClaimedClam, clamsClaimed });
+        console.log("updateClamClaimers", {
+          isClamClaimer,
+          individualCap,
+          rng,
+          usersClaimedClam,
+          clamsClaimed,
+        });
 
         const cap = 264; // 66 * 4 clams needs to be claimed from earlier purchasers
-        console.log("updare", isClamClaimer)
+        console.log("update", { isClamClaimer });
         updateClamClaimers({
           individualCap,
           isClamClaimer, // current minted tokens
@@ -59,9 +79,7 @@ const Web3ClamClaimers = ({ updateClamClaimers, account, clamClaimerData: { prog
   });
   return (
     <div className="shadow w-full bg-green-100">
-      <div
-        className="bg-green-600 leading-none py-1 text-center text-white uppercase text-sm rounded"
-      >
+      <div className="bg-green-600 leading-none py-1 text-center text-white uppercase text-sm rounded">
         {progress}% of clams claimed
       </div>
     </div>
