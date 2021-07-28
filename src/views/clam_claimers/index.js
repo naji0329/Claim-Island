@@ -198,7 +198,7 @@ const ClamPresale = ({
           autoPlay
           muted
           loop
-          className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
+          className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
         >
           <source
             src={process.env.PUBLIC_URL + "/location_vids/shop_animated.mp4"}
