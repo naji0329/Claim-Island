@@ -31,8 +31,7 @@ const ClamMintModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const disableButton = usersClaimedClam >= INDIVIDUAL_CAP;
 
-  const { register, handleSubmit } =
-    useForm();
+  const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
     console.log({ data, address });
@@ -51,7 +50,7 @@ const ClamMintModal = ({
         setIsLoading(false);
         updateCharacter({
           name: "diego",
-          action: "clam_claimer.congrats.text",
+          action: "clam_claimer.congratsCollection.text",
           button: {
             text: "Ok",
           },
@@ -95,8 +94,8 @@ const ClamMintModal = ({
                   ></path>
                 </svg>
                 <label>
-                  You&apos;ve claimed {usersClaimedClam} out of{" "}
-                  {INDIVIDUAL_CAP} Clams allowed
+                  You&apos;ve claimed {usersClaimedClam} out of {INDIVIDUAL_CAP}{" "}
+                  Clams allowed
                 </label>
               </div>
             </div>
@@ -218,7 +217,7 @@ const ClamMintModal = ({
                 {isLoading ? (
                   <button
                     disabled={isLoading}
-                    style={{textAlign: 'center'}}
+                    style={{ textAlign: "center" }}
                     type="submit"
                     className="flex justify-center items-center block uppercase text-center shadow bg-yellow-200 text-yellow-600 text-xl py-3 px-10 rounded-xl cursor-not-allowed"
                   >
