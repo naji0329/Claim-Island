@@ -116,6 +116,10 @@ const ClamMintModal = ({
             )}
           </div>
 
+          <div className="flex mb-4 justify-center">
+            <img className="w-2/3" src={ClamUnknown} />
+          </div>
+
           {/* input */}
           {/* <div className="bg-white border-2 shadow rounded-xl">
             <div className="px-2 py-2">
@@ -161,7 +165,7 @@ const ClamMintModal = ({
           <Divider /> */}
 
           {/* output */}
-          <div className="bg-white border-2 shadow-xl rounded-xl">
+          {/* <div className="bg-white border-2 shadow-xl rounded-xl">
             <div className="px-2 py-2">
               <div className="flex flex-col">
                 <h4 className="text-lg font-semibold mb-2">Clams to claim</h4>
@@ -191,9 +195,9 @@ const ClamMintModal = ({
                           // }}
                         />
                       </div>
-                      {/* <span className="flex items-center  px-3 text-lg font-extrabold font-sans mx-1">
+                      <span className="flex items-center  px-3 text-lg font-extrabold font-sans mx-1">
                         CLAM
-                      </span> */}
+                      </span>
 
                       <div className="mx-2">1 CLAM = {salePrice} BNB</div>
                     </div>
@@ -201,7 +205,7 @@ const ClamMintModal = ({
                 </div>
               </div>
             </div>
-          </div>
+          </div>  */}
 
           <div className="py-2 flex flex-col">
             {disableButton ? (
