@@ -132,8 +132,19 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
           loop
           className="flex-1 h-full w-full md:flex absolute z-10 object-cover object-center"
         >
-          <source src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"} type="video/mp4" />
-          <source src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated_webm.webm"} type='video/webm; codecs="vp8, vorbis"' />
+          <source
+            src={
+              process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"
+            }
+            type="video/mp4"
+          />
+          <source
+            src={
+              process.env.PUBLIC_URL +
+              "/location_vids/saferoom_animated_webm.webm"
+            }
+            type='video/webm; codecs="vp8, vorbis"'
+          />
           <img
             src={videoImage}
             title="Your browser does not support the video"
@@ -170,7 +181,10 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
                   <button className="text-blue-700 hover:underline px-5">
                     All
                   </button>
-                  <Link to="/clam-presale" className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6">
+                  <Link
+                    to="/clam-presale"
+                    className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6"
+                  >
                     Shop
                   </Link>
                 </div>
