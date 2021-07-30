@@ -78,7 +78,7 @@ const ClamWaitingOracle = () => (
 
 const ClamPresale = ({
   account: { clamBalance, address },
-  clamClaimerData: { hashRequest, rng, usersClaimedClam, isClamClaimer },
+  clamClaimerData: { hashRequest, rng, usersClaimedClam, isClamClaimer, individualCap },
   updateCharacter,
 }) => {
   const isStarted = true;
@@ -87,7 +87,7 @@ const ClamPresale = ({
   const [showMintModal, setShowMintModal] = useState(false);
 
   useEffect(() => {
-    console.log({ isEnded, isStarted, isClamClaimer, address, clamBalance });
+    console.log({ isEnded, isStarted, isClamClaimer, address, clamBalance, individualCap, usersClaimedClam });
 
     // not connected
     if (!address) {
@@ -117,73 +117,76 @@ const ClamPresale = ({
     // is connected and not claimed
     if (parseInt(clamBalance) > 0 && address) {
       // not claimed yet
-      if (parseInt(clamBalance) < 5) {
-        if (rng) {
-          if (rng === "0") {
-            //pending oracle
-            updateCharacter({
-              name: "diego",
-              action: "clam_claimer.claimProcessing.text",
-              button: false,
-            });
-          } else {
-            // user can collect
-            updateCharacter({
-              name: "diego",
-              action: "clam_claimer.collection.text",
-              button: false,
-            });
-          }
 
-          // } else if (Number(usersPurchasedClam) > 0) {
-          //   updateCharacter({
-          //     name: "diego",
-          //     action: "clam_presale.congratsCollection.text",
-          //     button: {
-          //       text: "See my Clams",
-          //       alt: {
-          //         action: "internal",
-          //         destination: "/saferoom",
-          //       },
-          //     },
-          //   });
-        } else {
-          // can claim
+      if (rng) {
+        if (rng === "0") {
+          //pending oracle
           updateCharacter({
             name: "diego",
-            action: "clam_claimer.welcome_connected.text",
-            button: {
-              text: "Yes",
-              alt: {
-                action: "cb",
-                destination: () => {
-                  setShowMintModal(true);
-                  updateCharacter({
-                    name: "diego",
-                    action: "clam_claimer.claim.text",
-                    button: {
-                      text: undefined,
-                    },
-                  });
+            action: "clam_claimer.claimProcessing.text",
+            button: false,
+          });
+        } else {
+          // user can collect
+          updateCharacter({
+            name: "diego",
+            action: "clam_claimer.collection.text",
+            button: false,
+          });
+        }
+
+        // } else if (Number(usersPurchasedClam) > 0) {
+        //   updateCharacter({
+        //     name: "diego",
+        //     action: "clam_presale.congratsCollection.text",
+        //     button: {
+        //       text: "See my Clams",
+        //       alt: {
+        //         action: "internal",
+        //         destination: "/saferoom",
+        //       },
+        //     },
+        //   });
+      }
+      else {
+
+        if (parseInt(usersClaimedClam) < parseInt(individualCap)) {
+            // can claim
+            updateCharacter({
+              name: "diego",
+              action: "clam_claimer.welcome_connected.text",
+              button: {
+                text: "Yes",
+                alt: {
+                  action: "cb",
+                  destination: () => {
+                    setShowMintModal(true);
+                    updateCharacter({
+                      name: "diego",
+                      action: "clam_claimer.claim.text",
+                      button: {
+                        text: undefined,
+                      },
+                    });
+                  },
                 },
+              },
+            });
+        }
+        // already claimed all
+        else {
+          updateCharacter({
+            name: "diego",
+            action: "clam_claimer_not_allowed.claimed.text",
+            button: {
+              text: "Back to Island",
+              alt: {
+                action: "internal",
+                destination: "/",
               },
             },
           });
         }
-      }
-      // already claimed all
-      else {
-        updateCharacter({
-          name: "diego",
-          action: "clam_claimer_not_allowed.claimed.text",
-          button: {
-            text: "Back to Island",
-            alt: {
-              action: "internal",
-              destination: "/",
-            },
-          },
-        });
       }
     }
   }, [address, isClamClaimer, rng]);
