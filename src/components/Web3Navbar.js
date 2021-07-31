@@ -172,7 +172,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
         </>
       )}
 
-      <nav className="flex min-h-48 min-w-full items-center px-6 py-4 bg-transparent">
+      <nav className="flex min-h-48 min-w-full items-center absolute px-6 py-4 bg-transparent nav-info-button">
         {/* this push menu to right side */}
         <div className="flex justify-between lg:w-auto w-full  pl-6 pr-2 pb-0 lg:pb-2"></div>
 
@@ -195,10 +195,14 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
               <>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    {activateClamBalance} CLAM
+                     Clams in Safe: {activateClamBalance}
+
+                     { Number(activateClamBalance) > 0 && location.pathname.indexOf('saferoom') === -1
+                       && <Link to="/saferoom">&nbsp; <FontAwesomeIcon icon={faSignInAlt} /></Link>
+                     }
                   </span>
                 </div>
-                {Number(activateClamBalance) > 0 &&
+                {/* {Number(activateClamBalance) > 0 &&
                   location.pathname.indexOf("saferoom") === -1 && (
                     <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                       <span className="p-1 text-sm text-gray-200 font-bold font-sans">
@@ -207,7 +211,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                         </Link>
                       </span>
                     </div>
-                  )}
+                  )} */}
 
                 <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black bg-opacity-80">
                   <div className="p-1 text-sm text-gray-200">

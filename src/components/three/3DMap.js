@@ -72,10 +72,10 @@ const Map3D = () => {
 
     document.getElementById("container").appendChild(renderer.domElement);
 		renderer.setClearColor(0xe1e1e1, 1);
-  
+
     camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 20000);
     camera.position.set(730, 380, 700);
-  
+
     controls = new OrbitControls(camera, renderer.domElement);
     // controls.minZoom = 1;
     // controls.maxZoom = 3;
@@ -83,13 +83,13 @@ const Map3D = () => {
     controls.maxDistance = 1500;
     controls.maxPolarAngle = 1.5;
     controls.enablePan = false;
-  
+
     scene = new THREE.Scene();
-  
+
     water = createWater({ scene });
     createSky({ scene, water, renderer });
     addLights();
-  
+
     bank = await loadGLTF("glb_files/Bank_Island.glb", scene);
     farm = await loadGLTF("glb_files/Farm_Island.glb", scene);
     market = await loadGLTF("glb_files/Market_Island.glb", scene);
@@ -100,7 +100,7 @@ const Map3D = () => {
     boats = await loadGLTF("glb_files/Boats.glb", scene);
     ship = await loadGLTF("glb_files/ship-2.glb", scene, "ship");
     sailboat = await loadGLTF("glb_files/sailboat.glb", scene, "sailboat");
-  
+
     seagulls = await loadGLTF("glb_files/seagull.glb", scene, "seagull");
     dolphins = await loadGLTF("glb_files/dolphin.glb", scene, "dolphin");
     hotModelBank = await loadGLTF("glb_files/hot_bank.glb", scene);
@@ -122,7 +122,7 @@ const Map3D = () => {
     outlinePass.visibleEdgeColor.set( 0xFF0000 );
     outlinePass.hiddenEdgeColor.set( 0xFF0000 );
     composer.addPass( outlinePass );
-    
+
     effectFXAA = new ShaderPass( FXAAShader );
     effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
     composer.addPass( effectFXAA );
@@ -134,7 +134,7 @@ const Map3D = () => {
 
     animate();
   };
-  
+
   const addLights = () => {
     const directionalLight = new THREE.DirectionalLight(0xffffff, 2.5);
     directionalLight.position.set(500, 400, -100);
@@ -162,7 +162,7 @@ const Map3D = () => {
       hotMeshArr.push(hotMesh);
     });
   }
-  
+
   const animate = () => {
     requestAnimationFrame(animate);
     if (water) water.material.uniforms["time"].value += 1.0 / 60.0;
@@ -252,11 +252,11 @@ const Map3D = () => {
 
   const onMouseClick = () => {
     if (hoverStr === '') return;
-    var newUrlStr = 'gmail.com'; 
-    if (hoverStr==='bank') newUrlStr = 'google.com';
-    else if (hoverStr==='farm') newUrlStr = 'github.com';
-    else if (hoverStr==='market') newUrlStr = 'bitbucket.com';
-    window.open('https://'+newUrlStr, '_self');
+    var newUrlStr = '';
+    if (hoverStr==='bank') newUrlStr = '';
+    else if (hoverStr==='farm') newUrlStr = '';
+    else if (hoverStr==='market') newUrlStr = '';
+    window.open('', '_self');
   }
 
   const checkIntersection = (event) => {
@@ -536,26 +536,6 @@ const onMouseMove = ({ event, setHoverName }) => {
   checkIntersection(setHoverName);
 };
 
-const onMouseClick = () => {
-  let newUrlStr; 
-  switch (hoverStr) {
-    case '':
-      return;
-    case 'bank':
-      newUrlStr = 'google.com';
-      break;
-    case 'farm':
-      newUrlStr = 'github.com';
-      break;
-    case 'market':
-      newUrlStr = 'bitbucket.com';
-      break;
-    default:
-      newUrlStr = 'gmail.com'
-      break;
-  }
-  window.open('https://'+newUrlStr, '_self');
-};
 
 const checkIntersection = (setHoverName) => {
   raycaster.setFromCamera( mouse, camera );

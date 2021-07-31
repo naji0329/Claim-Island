@@ -23,3 +23,4 @@ export const bnbJadeLpAddress = "0x72032eEcACF17c516dAd81298FDA8Abdc212AB06";
 export const bnbCarapaceLpAddress =
   "0xAaf0A7603b9d45c5e2BE0c1b03Cf238168334Ce4";
 export const bnbBusdLpAddress = "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16";
+export const clamClaimersAddress = "0xDaF219f41931B4833A71B9D08881491010246691";
