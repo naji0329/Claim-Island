@@ -41,8 +41,6 @@ const ClamCollectModal = ({
       .then(() => {
         setIsLoading(false);
 
-        updateClamClaimers({ rng: undefined, hashRequest: undefined });
-
         updateCharacter({
           name: "diego",
           action: "clam_claimer.congratsCollection.text",
@@ -81,6 +79,8 @@ const ClamCollectModal = ({
             },
           },
         });
+
+        updateClamClaimers({ rng: undefined, hashRequest: undefined });
       })
       .catch((e) => {
         console.error(e);
