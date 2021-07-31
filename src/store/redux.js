@@ -22,6 +22,15 @@ const initialState = {
     rng: undefined, // from call rngRequestHashFromBuyersClam
     hashRequest: undefined,
   },
+  clamClaimerData: {
+    individualCap: "0",
+    isClamClaimer: undefined,
+    usersClaimedClam: "0",
+    progress: undefined,
+    clamsClaimed:"0",
+    rng: undefined, // from call rngRequestHashFromBuyersClam
+    hashRequest: undefined,
+  },
   character: {
     name: undefined,
     action: undefined,
@@ -52,6 +61,14 @@ export const actions = (store) => ({
     return {
       presale: {
         ...state.presale,
+        ...value,
+      },
+    };
+  },
+  updateClamClaimers: (state, value) => {
+    return {
+      clamClaimerData: {
+        ...state.clamClaimerData,
         ...value,
       },
     };
