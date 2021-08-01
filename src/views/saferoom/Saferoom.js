@@ -150,6 +150,7 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
             title="Your browser does not support the video"
           ></img>
         </video>
+      </div>
         {/* <ReactPlayer
           className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
           width='100%'
@@ -166,8 +167,8 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
           <ClamView {...selectedClam} />
         </Modal>
         {address && (
-          <div className="flex-1 min-h-full min-w-full flex absolute z-20  justify-center items-start mt-64">
-            <div className="w-4/5 flex flex-col">
+          <div className="flex-1 min-h-full min-w-full flex relative z-20  justify-center items-start">
+            <div className="w-4/5 flex flex-col relative pt-24">
               {/* navbar */}
               <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
                 <div className="px-3 py-2">
@@ -224,7 +225,7 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
             </div>
           </div>
         )}
-      </div>
+
     </>
   );
 };

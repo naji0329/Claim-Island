@@ -5,6 +5,8 @@ import { useAsync } from "react-use";
 
 import { actions } from "../../store/redux";
 import videoImage from "../../assets/locations/bank_static.jpg";
+import videoMp4 from "../../assets/locations/bank_animated.mp4";
+import videoWebM from "../../assets/locations/bank_animated.webm";
 
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
@@ -71,9 +73,10 @@ const Bank = ({
       <div className="bg-bank overflow-x-hidden">
         <Web3Navbar />
         {/* container */}
-
+        {/* video */}
+        <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
         {address && (
-          <div className="flex justify-center items-start  w-full">
+          <div className="flex justify-center items-start pt-24 w-full">
             {/* swap column */}
             <div className="w-1/4 flex flex-col mx-4">
               <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-col justify-between">
@@ -134,8 +137,6 @@ const Bank = ({
           </div>
         )}
 
-        {/* video */}
-        <VideoBackground videoImage={videoImage} />
 
         {/* chat character   */}
       </div>

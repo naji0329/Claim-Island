@@ -7,6 +7,9 @@ module.exports = {
       159: "36em",
       160: "40em",
     },
+    zIndex: {
+      '-1': '-1',
+    },
     extend: {},
   },
   variants: {

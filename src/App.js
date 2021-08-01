@@ -25,7 +25,7 @@ const App = (props) => {
 
   return (
     <Router>
-      <div className="p-0">
+      <div className="p-0 overflow-y-auto h-full">
         <Switch>
           {ROUTES.map((k, i) => {
             return (
