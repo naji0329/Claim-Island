@@ -27,3 +27,5 @@ yarn-error.log*
 src/contracts
 firebase-debug.log
 firebase-debug.1.log
+
+Notes.md

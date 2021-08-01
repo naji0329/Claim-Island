@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAsync } from "react-use";
-import {
-  useEthers,
-  useTokenBalance,
-  useEtherBalance,
-  ChainId,
-  shortenAddress,
-} from "@usedapp/core";
+import { useEthers, useTokenBalance, useEtherBalance, ChainId, shortenAddress } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { actions } from "../store/redux";
 import { Link, useLocation } from "react-router-dom";
@@ -23,16 +17,9 @@ import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
-    <div
-      className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-50"
-      role="alert"
-    >
+    <div className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-50" role="alert">
       <div className="flex">
-        <svg
-          className="h-6 w-6 fill-current text-red-500 mr-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
+        <svg className="h-6 w-6 fill-current text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
           <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
         </svg>
         <div>
@@ -101,16 +88,9 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
       error: activateError,
       address: account,
       isConnected: account ? true : false,
-      isBSChain:
-        activateChainId === undefined || activateChainId === ChainId.BSC,
+      isBSChain: activateChainId === undefined || activateChainId === ChainId.BSC,
     });
-  }, [
-    account,
-    activateChainId,
-    activateError,
-    activateBnbBalance,
-    activateClamBalance,
-  ]);
+  }, [account, activateChainId, activateError, activateBnbBalance, activateClamBalance]);
 
   useEffect(() => {
     if (error) {
@@ -194,13 +174,16 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
             {account && (
               <>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
-                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                     Clams in Safe: {activateClamBalance}
-
-                     { Number(activateClamBalance) > 0 && location.pathname.indexOf('saferoom') === -1
-                       && <Link to="/saferoom">&nbsp; <FontAwesomeIcon icon={faSignInAlt} /></Link>
-                     }
-                  </span>
+                  <Link to="/saferoom">
+                    <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                      Clams in Safe: {activateClamBalance}
+                      {Number(activateClamBalance) > 0 && location.pathname.indexOf("saferoom") === -1 && (
+                        <span to="/saferoom">
+                          &nbsp; <FontAwesomeIcon icon={faSignInAlt} />
+                        </span>
+                      )}
+                    </span>
+                  </Link>
                 </div>
                 {/* {Number(activateClamBalance) > 0 &&
                   location.pathname.indexOf("saferoom") === -1 && (
@@ -214,9 +197,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                   )} */}
 
                 <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black bg-opacity-80">
-                  <div className="p-1 text-sm text-gray-200">
-                    {shortenAddress(account)}
-                  </div>
+                  <div className="p-1 text-sm text-gray-200">{shortenAddress(account)}</div>
 
                   <Web3Avatar address={account} size={30} />
                 </div>

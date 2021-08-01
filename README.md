@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Clam Island application - MVP
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -70,7 +70,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 ## Web3 setup
+
 1. connect contracts to the code
+
 ```
 cd src && ln -s ../../clamswap-contracts/build/contracts contracts
 ```
