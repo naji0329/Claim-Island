@@ -100,6 +100,16 @@ const ClamPresale = ({
       });
     }
 
+    if (!isClamClaimer) {
+      updateCharacter({
+        name: "diego",
+        action: "clam_claimer_not_allowed.first.text",
+        button: {
+          text: null,
+        },
+      });
+    }
+
     if (isEnded) {
       updateCharacter({
         name: "diego",
