@@ -19,7 +19,6 @@ import {
 } from "../../web3/masterChef";
 import { aggregate } from "../../web3/multicall";
 import PoolItem from "./PoolItem";
-import Swap from "./Swap";
 import "./bank.scss";
 import { poolAssets } from "./poolsAssets";
 
@@ -71,72 +70,31 @@ const Bank = ({
   return (
     <>
       <div className="bg-bank overflow-x-hidden">
-        <Web3Navbar />
+        <Web3Navbar title="Clam Bank" />
         {/* container */}
         {/* video */}
-        <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
+        <VideoBackground
+          videoImage={videoImage}
+          videoMp4={videoMp4}
+          videoWebM={videoWebM}
+        />
         {address && (
-          <div className="flex justify-center items-start pt-24 w-full">
-            {/* swap column */}
-            <div className="w-1/4 flex flex-col mx-4">
-              <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-col justify-between">
-                <div className="w-full flex flex-col px-3 py-2">
-                  <h2 className="text-blue-700 font-semibold text-4xl mb-2">
-                    Swap
-                  </h2>
-                  <p className="text-yellow-700">
-                    <b>Instantly</b> trade tokens.
-                  </p>
-                </div>
-
-                <div className="w-full flex flex-col px-3 py-2">
-                  <Swap />
-                </div>
+          <>
+            <div className="w-full">
+              <div className="px-8 py-4 mt-24 flex flex-col">
+                {pools &&
+                  pools.map((pool, i) => (
+                    <PoolItem
+                      key={i}
+                      {...pool}
+                      account={address}
+                      updateAccount={updateAccount}
+                    />
+                  ))}
               </div>
             </div>
-            <div className="w-3/4 flex flex-col mx-4">
-              {/* navbar */}
-              <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
-                <div className="px-3 py-2">
-                  <h2 className="text-blue-700 font-semibold text-4xl mb-2">
-                    Invest
-                  </h2>
-                  <p className="text-yellow-700">
-                    Stake into <b>Liquidity Pools (LP)</b> to ear $GEM over
-                    time.
-                  </p>
-                </div>
-
-                <div className="px-3 py-2 flex justify-between">
-                  <button className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6">
-                    Boost Pool
-                  </button>
-                </div>
-              </div>
-              <div className="my-4 py-5">
-                {pools.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
-                    {pools &&
-                      pools.map((pool, i) => (
-                        <div key={i}>
-                          <PoolItem
-                            {...pool}
-                            account={address}
-                            updateAccount={updateAccount}
-                          />
-                        </div>
-                      ))}
-                  </div>
-                ) : (
-                  <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
-                    There is nothing to see :-(
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          </>
         )}
-
 
         {/* chat character   */}
       </div>
