@@ -1,0 +1,28 @@
+import React, { useRef } from 'react';
+import { useGLTF } from '@react-three/drei';
+
+export function CommonModel(props) {
+  const group = useRef();
+  const { nodes, materials } = useGLTF('/clam-models/common/clam.glb');
+
+  return (
+      <group ref={group} {...props}>
+          <group position={[0, 0, -0.01]} scale={0.281405}>
+              <group position={[0, 0.022376, 0]}>
+                  <mesh castShadow receiveShadow geometry={nodes.top_1.geometry} material={nodes.top_1.material} />
+                  <mesh castShadow receiveShadow geometry={nodes.top_2.geometry} material={nodes.top_2.material} />
+                  <mesh castShadow receiveShadow geometry={nodes.top_3.geometry} material={nodes.top_3.material} />
+              </group>
+              <group position={[0, 0.002359, -0.001562]} rotation={[-2.114575, 0, 0]} scale={[1, 1, -1]}>
+                  <mesh castShadow receiveShadow geometry={nodes.bttm_1.geometry} material={nodes.bttm_1.material} />
+                  <mesh castShadow receiveShadow geometry={nodes.bttm_2.geometry} material={nodes.bttm_2.material} />
+                  <mesh castShadow receiveShadow geometry={nodes.bttm_3.geometry} material={nodes.bttm_3.material} />
+              </group>
+          </group>
+      </group>
+  );
+}
+
+export default CommonModel;
+
+useGLTF.preload('/clam-models/common/clam.glb');
