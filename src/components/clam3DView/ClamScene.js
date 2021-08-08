@@ -28,7 +28,11 @@ export const ClamScene = ({ children }) => {
         <ClamBackground />
       </Suspense>
       <spotLight
-        args={[0xffffff, 0.74, 28.08, 0.214, 0, 1]}
+        args={[0xffffff, 1.14, 28.08, 0.214, 0, 1]}
+        position={[-2.154, 3.356156, -4.200072]}
+      />
+      <spotLight
+        args={[0xffffff, 1.04, 28.08, 0.214, 0, 1]}
         position={[-0.5, 1.125, 1.428]}
         castShadow
       />
