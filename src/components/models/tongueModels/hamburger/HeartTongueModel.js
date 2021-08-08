@@ -1,11 +1,14 @@
 import React, { useRef } from 'react'
-import { useGLTF } from '@react-three/drei'
+import { useGLTF, useTexture } from '@react-three/drei'
 
 export default function Model(props) {
   const group = useRef()
   const { nodes } = useGLTF('/clam-models/hamburger/Tongues/heart.glb')
+  const materialProps = useTexture({ normalMap: '/clam-models/tongue-normal.png' })
+  const { tongueTexture, ...rest } = props
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={group} {...rest} dispose={null}>
       <group position={[-0.000004, -0.002924, -0.093903]} scale={0.441361}>
         <mesh
           castShadow
@@ -14,7 +17,11 @@ export default function Model(props) {
           position={[-0.008777, 0.003771, 0.120421]}
           rotation={[0.415498, 1.527166, -0.505647]}
           scale={2.834003}
-        />
+        >
+          <meshStandardMaterial attach="material" {...materialProps}>
+            <canvasTexture attach="map" args={[tongueTexture]} />
+          </meshStandardMaterial>
+        </mesh>
       </group>
     </group>
   )

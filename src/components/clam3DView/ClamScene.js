@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Text } from "@react-three/drei";
 
+import { ClamBackground } from "./ClamBackground";
+
 export const ClamScene = ({ children }) => {
   return (
     <Canvas
@@ -15,10 +17,14 @@ export const ClamScene = ({ children }) => {
       }}
       shadows
       raycaster={{enabled: true}}
-      dpr={[1, 2]}
+      pixelRatio={window.devicePixelRatio}
+      onCreated={canvasCtx => {
+        canvasCtx.gl.physicallyCorrectLights = true;
+      }}
     >
       <Suspense fallback={<Text>LOADING</Text>}>
         {children}
+        <ClamBackground />
       </Suspense>
       <spotLight
         args={[0xffffff, 0.6, 6.42, 0.171, 1, 0]}
@@ -27,12 +33,13 @@ export const ClamScene = ({ children }) => {
       <spotLight
         args={[0xffffff, 1.14, 28.08, 0.214, 0, 1]}
       />
-      <hemisphereLight args={[9538957, 0, 2.4]}/>
+      <hemisphereLight args={[0x8d8d91, 0, 2.4]} position={[0, 10, 0]} />
       <OrbitControls
         enableZoom={false}
         autoRotate={true}
-        minPolarAngle={Math.PI / 4}
-        maxPolarAngle={Math.PI / 2}
+        minPolarAngle={0}
+        maxPolarAngle={Math.PI}
+        target={[0,0.04,-0.09]}
       />
     </Canvas>
   )

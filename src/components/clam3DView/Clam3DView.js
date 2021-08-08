@@ -3,8 +3,8 @@ import { Text } from "@react-three/drei";
 
 import { ClamScene } from "./ClamScene";
 import { Clam } from "../clams/Clam";
-import { getTraits } from "../three/3DClams/main";
 import { loadAllTextures, getClamDir } from "../../utils/konva";
+import decodeDna from "../three/3DClams/decodeDna";
 
 export const Clam3DView = memo((props) => {
   const {
@@ -17,14 +17,14 @@ export const Clam3DView = memo((props) => {
     rgb,
   } = props;
   const [textures, setTextures] = useState();
-  const defaultTraits = clamTraits ? clamTraits : getTraits();
-  const clamType = defaultTraits.shellShape.toLowerCase();
-  const tongueType = defaultTraits.tongue.toLowerCase();
+  const traits = clamViewer ? clamTraits : decodeDna(decodedDna);
+  const clamType = traits.shellShape.toLowerCase();
+  const tongueType = traits.tongue.toLowerCase();
 
   useEffect(() => {
     async function loadTextures() {
-      const clamDir = getClamDir(defaultTraits);
-      const layers = await loadAllTextures(defaultTraits, clamDir, rgb);
+      const clamDir = getClamDir(traits);
+      const layers = await loadAllTextures(traits, clamDir, rgb);
 
       setTextures(layers.map(layer => layer.toCanvas()));
     }
@@ -33,11 +33,13 @@ export const Clam3DView = memo((props) => {
   }, []);
 
   return (
-    <div style={{width: '100%', height, maxWidth: width}}>
+    <div style={{width: '100%', height, maxWidth: width, position: "relative"}}>
+      {/** Put here some loading animation, it will be shown while canvas is initializing */}
+      <div style={{position: "absolute"}}>LOADING</div>
       <ClamScene>
         {textures && (
           <Clam
-            clamType={'common' || clamType}
+            clamType={clamType}
             tongueType={tongueType}
             textures={textures}
           />

@@ -3,6 +3,8 @@ import Clams3D from "../../components/three/3DClams/3DClams";
 import Accordion from "../../components/Accordion";
 import { get } from "lodash";
 
+import { Clam3DView } from "../../components/clam3DView";
+
 export default ({ dna, dnaDecoded }) => {
   const [showTraits, setShowTraits] = useState(false);
 
@@ -63,14 +65,21 @@ export default ({ dna, dnaDecoded }) => {
     <>
       <div className="flex flex-col justify-between">
         <div className="flex justify-between flex-col sm:flex-row">
-          <Clams3D
+          {/*<Clams3D
+            width={400}
+            height={400}
+            clamDna={dna}
+            decodedDna={dnaDecoded}
+            showTraitsTable={showTraits}
+          />*/}
+          {/** 3D Clam with react three fiber */}
+          <Clam3DView
             width={400}
             height={400}
             clamDna={dna}
             decodedDna={dnaDecoded}
             showTraitsTable={showTraits}
           />
-
           <div className="w-full md:w-1/2 px-4 md:px-6">
             <Accordion data={accordionData} />
           </div>

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import {useGLTF, useTexture} from '@react-three/drei'
+import { useGLTF, useTexture } from '@react-three/drei'
 
 export default function Model(props) {
   const group = useRef()
