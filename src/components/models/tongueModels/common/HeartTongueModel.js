@@ -18,9 +18,12 @@ export default function Model(props) {
           rotation={[1.787917, 1.415384, -1.672362]}
           scale={4.492414}
         >
-          <meshStandardMaterial attach="material" {...materialProps}>
-            <canvasTexture attach="map" args={[tongueTexture]} />
-          </meshStandardMaterial>
+          <meshStandardMaterial
+            attach="material"
+            {...nodes.cc_t_heart.material}
+            {...materialProps}
+            map={tongueTexture}
+          />
         </mesh>
       </group>
     </group>

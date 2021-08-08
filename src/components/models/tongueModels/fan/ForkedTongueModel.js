@@ -18,9 +18,12 @@ export default function Model(props) {
           rotation={[0.402456, 0.004836, 0.007651]}
           scale={36.896427}
         >
-          <meshStandardMaterial attach="material" {...materialProps}>
-            <canvasTexture attach="map" args={[tongueTexture]} />
-          </meshStandardMaterial>
+          <meshStandardMaterial
+            attach="material"
+            {...nodes.cs_forked4.material}
+            {...materialProps}
+            map={tongueTexture}
+          />
         </mesh>
       </group>
     </group>

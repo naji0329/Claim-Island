@@ -9,33 +9,23 @@ export function MaximaModel(props) {
   return (
     <group ref={group} {...rest}>
       <group scale={1.283419}>
-        <mesh castShadow receiveShadow geometry={nodes.lips.geometry} material={materials.lip} scale={0.779169}>
-          <meshStandardMaterial attach="material">
-            <canvasTexture attach="map" args={[lipTexture]} />
-          </meshStandardMaterial>
+        <mesh castShadow receiveShadow geometry={nodes.lips.geometry} scale={0.779169}>
+          <meshStandardMaterial attach="material" {...materials.lip} map={lipTexture} />
         </mesh>
         <group scale={0.779169}>
-          <mesh castShadow receiveShadow geometry={nodes.bttm_1.geometry} material={nodes.bttm_1.material}>
-            <meshStandardMaterial attach="material">
-              <canvasTexture attach="map" args={[innerTexture]} />
-            </meshStandardMaterial>
+          <mesh castShadow receiveShadow geometry={nodes.bttm_1.geometry}>
+            <meshStandardMaterial attach="material" {...nodes.bttm_1.material} map={innerTexture} />
           </mesh>
           <mesh castShadow receiveShadow geometry={nodes.bttm_2.geometry} material={nodes.bttm_2.material}>
-            <meshStandardMaterial attach="material">
-              <canvasTexture attach="map" args={[outerTexture]} />
-            </meshStandardMaterial>
+            <meshStandardMaterial attach="material" {...nodes.bttm_2.material} map={outerTexture} />
           </mesh>
         </group>
         <group scale={0.779169}>
-          <mesh castShadow receiveShadow geometry={nodes.top_1.geometry} material={nodes.top_1.material}>
-            <meshStandardMaterial attach="material">
-              <canvasTexture attach="map" args={[innerTexture]} />
-            </meshStandardMaterial>
+          <mesh castShadow receiveShadow geometry={nodes.top_1.geometry}>
+            <meshStandardMaterial attach="material" {...nodes.top_1.material} map={innerTexture} />
           </mesh>
-          <mesh castShadow receiveShadow geometry={nodes.top_2.geometry} material={nodes.top_2.material}>
-            <meshStandardMaterial attach="material">
-              <canvasTexture attach="map" args={[outerTexture]} />
-            </meshStandardMaterial>
+          <mesh castShadow receiveShadow geometry={nodes.top_2.geometry}>
+            <meshStandardMaterial attach="material" {...nodes.top_2.material} map={outerTexture} />
           </mesh>
         </group>
       </group>

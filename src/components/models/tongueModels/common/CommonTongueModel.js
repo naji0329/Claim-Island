@@ -16,9 +16,12 @@ export default function Model(props) {
           geometry={nodes.cc_t_common.geometry}
           position={[0.004268, -0.009083, 0.012868]}
         >
-          <meshStandardMaterial attach="material" {...materialProps}>
-            <canvasTexture attach="map" args={[tongueTexture]} />
-          </meshStandardMaterial>
+          <meshStandardMaterial
+            attach="material"
+            {...nodes.cc_t_common.material}
+            {...materialProps}
+            map={tongueTexture}
+          />
         </mesh>
       </group>
     </group>

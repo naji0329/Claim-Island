@@ -10,37 +10,25 @@ export function HeartModel(props) {
     <group ref={group} {...rest}>
       <group scale={0.244673}>
         <group scale={4.08708}>
-          <mesh castShadow receiveShadow geometry={nodes.top_1.geometry} material={nodes.top_1.material}>
-            <meshStandardMaterial attach="material">
-              <canvasTexture attach="map" args={[innerTexture]} />
-            </meshStandardMaterial>
+          <mesh castShadow receiveShadow geometry={nodes.top_1.geometry}>
+            <meshStandardMaterial attach="material" {...nodes.top_1.material} map={lipTexture} />
           </mesh>
-          <mesh castShadow receiveShadow geometry={nodes.top_2.geometry} material={nodes.top_2.material}>
-            <meshStandardMaterial attach="material">
-              <canvasTexture attach="map" args={[outerTexture]} />
-            </meshStandardMaterial>
+          <mesh castShadow receiveShadow geometry={nodes.top_2.geometry}>
+            <meshStandardMaterial attach="material" {...nodes.top_2.material} map={outerTexture} />
           </mesh>
-          <mesh castShadow receiveShadow geometry={nodes.top_3.geometry} material={nodes.top_3.material}>
-            <meshStandardMaterial attach="material">
-              <canvasTexture attach="map" args={[lipTexture]} />
-            </meshStandardMaterial>
+          <mesh castShadow receiveShadow geometry={nodes.top_3.geometry}>
+            <meshStandardMaterial attach="material" {...nodes.top_3.material} map={innerTexture} />
           </mesh>
         </group>
         <group scale={4.08708}>
-          <mesh castShadow receiveShadow geometry={nodes.bttm_1.geometry} material={nodes.bttm_1.material}>
-            <meshStandardMaterial attach="material">
-              <canvasTexture attach="map" args={[innerTexture]} />
-            </meshStandardMaterial>
+          <mesh castShadow receiveShadow geometry={nodes.bttm_1.geometry}>
+            <meshStandardMaterial attach="material" {...nodes.bttm_1.material} map={lipTexture} />
           </mesh>
-          <mesh castShadow receiveShadow geometry={nodes.bttm_2.geometry} material={nodes.bttm_2.material}>
-            <meshStandardMaterial attach="material">
-              <canvasTexture attach="map" args={[outerTexture]} />
-            </meshStandardMaterial>
+          <mesh castShadow receiveShadow geometry={nodes.bttm_2.geometry}>
+            <meshStandardMaterial attach="material" {...nodes.bttm_2.material} map={outerTexture} />
           </mesh>
-          <mesh castShadow receiveShadow geometry={nodes.bttm_3.geometry} material={nodes.bttm_3.material}>
-            <meshStandardMaterial attach="material">
-              <canvasTexture attach="map" args={[lipTexture]} />
-            </meshStandardMaterial>
+          <mesh castShadow receiveShadow geometry={nodes.bttm_3.geometry}>
+            <meshStandardMaterial attach="material" {...nodes.bttm_3.material} map={innerTexture} />
           </mesh>
         </group>
       </group>

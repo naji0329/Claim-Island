@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import { Text } from "@react-three/drei";
+import * as THREE from "three";
 
 import { ClamScene } from "./ClamScene";
 import { Clam } from "../clams/Clam";
@@ -26,7 +27,11 @@ export const Clam3DView = memo((props) => {
       const clamDir = getClamDir(traits);
       const layers = await loadAllTextures(traits, clamDir, rgb);
 
-      setTextures(layers.map(layer => layer.toCanvas()));
+      setTextures(layers.map(layer => new THREE.CanvasTexture(layer.toCanvas())));
+
+      return () => {
+        textures.forEach((texture) => {texture.dispose()});
+      };
     }
 
     loadTextures();

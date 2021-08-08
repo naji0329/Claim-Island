@@ -17,9 +17,12 @@ export default function Model(props) {
           position={[0, 0.000269, 0.000046]}
           rotation={[0.040947, 0, 0]}
         >
-          <meshStandardMaterial attach="material" {...materialProps}>
-            <canvasTexture attach="map" args={[tongueTexture]} />
-          </meshStandardMaterial>
+          <meshStandardMaterial
+            attach="material"
+            {...nodes.c3_tong.material}
+            {...materialProps}
+            map={tongueTexture}
+          />
         </mesh>
       </group>
     </group>
