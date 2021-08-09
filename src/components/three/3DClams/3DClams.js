@@ -330,8 +330,8 @@ const create3DScene = async (
   // orbit controls to pan and zoom
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 0, 0);
-  controls.minAzimuthAngle = -2.8632929945846817;
-  controls.maxAzimuthAngle = -2.8632929945846817;
+  //controls.minAzimuthAngle = -2.8632929945846817;
+  //controls.maxAzimuthAngle = -2.8632929945846817;
   controls.enablePan = false;
   controls.update();
 

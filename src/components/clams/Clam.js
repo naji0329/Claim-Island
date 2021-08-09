@@ -67,8 +67,8 @@ export const Clam = (props) => {
         autoRotateSpeed={3}
         minPolarAngle={0}
         maxPolarAngle={Math.PI}
-        minAzimuthAngle={Math.PI}
-        maxAzimuthAngle={Math.PI}
+        //minAzimuthAngle={Math.PI}
+        //maxAzimuthAngle={Math.PI}
         target={[0,0,-0.05]}
         enablePan={false}
         enableRotate={true}
