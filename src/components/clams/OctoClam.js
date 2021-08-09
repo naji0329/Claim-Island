@@ -21,14 +21,14 @@ export const OctoClam = (props) => {
   const [outerTexture, innerTexture, lipTexture, tongueTexture] = textures;
   const TongueComponent = TONGUE_COMPONENTS[tongueType] || DefaultTongue;
   return (
-    <>
+    <group position={[0, 0, -0.012]}>
       <OctoModel
         outerTexture={outerTexture}
         innerTexture={innerTexture}
         lipTexture={lipTexture}
       />
       <TongueComponent tongueTexture={tongueTexture} />
-    </>
+    </group>
   );
 };
 

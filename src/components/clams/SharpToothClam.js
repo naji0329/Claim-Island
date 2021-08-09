@@ -21,14 +21,14 @@ export const SharpToothClam = (props) => {
   const [outerTexture, innerTexture, lipTexture, tongueTexture] = textures;
   const TongueComponent = TONGUE_COMPONENTS[tongueType] || DefaultTongue;
   return (
-    <>
+    <group position={[0, 0.04, -0.01]}>
       <SharpToothModel
         outerTexture={outerTexture}
         innerTexture={innerTexture}
         lipTexture={lipTexture}
       />
       <TongueComponent tongueTexture={tongueTexture} />
-    </>
+    </group>
   );
 };
 

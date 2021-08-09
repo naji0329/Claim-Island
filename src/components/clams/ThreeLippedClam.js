@@ -22,14 +22,14 @@ export const ThreeLippedClam = (props) => {
   const TongueComponent = TONGUE_COMPONENTS[tongueType] || DefaultTongue;
 
   return (
-    <>
+    <group position={[0.028, 0, -0.022]}>
       <ThreeLippedModel
         outerTexture={outerTexture}
         innerTexture={innerTexture}
         lipTexture={lipTexture}
       />
       <TongueComponent tongueTexture={tongueTexture} />
-    </>
+    </group>
   );
 };
 

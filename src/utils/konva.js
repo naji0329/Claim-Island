@@ -24,30 +24,22 @@ const loadTexture = (url) => {
   });
 };
 
-const imageArray = [];
-
-const loadTextureKonva = async (object, texture, base, rgb) => {
+const loadTextureKonva = async (object, texture, base, rgb, addKonvaObject) => {
   const obj = object.type;
   const img = texture.image;
   const sliders = ["hue", "saturation", "value"];
 
-  const div = document.createElement("div");
-
-  const stage = new Konva.Stage({
-    container: div, // obj + '-canvas',
-    width: 1024,
-    height: 1024,
-  });
   const layer = new Konva.Layer();
 
-  imageArray[obj] = new Konva.Image({
+  const konvaImage = new Konva.Image({
     x: 0,
     y: 0,
     image: img,
     width: 1024,
     height: 1024,
   });
-  layer.add(imageArray[obj]);
+  addKonvaObject(konvaImage)
+  layer.add(konvaImage);
 
   if (obj === "os") {
     const pattern = new Konva.Image({
@@ -59,6 +51,7 @@ const loadTextureKonva = async (object, texture, base, rgb) => {
       // fill: '#000',
       // stroke: '#ff0000'
     });
+    addKonvaObject(pattern);
     layer.add(pattern);
   }
 
@@ -68,14 +61,13 @@ const loadTextureKonva = async (object, texture, base, rgb) => {
   } else {
     layer.filters([Konva.Filters.HSV]);
   }
-  stage.add(layer);
 
   setKonvaLayerTexture(layer, object.color, rgb);
 
   return layer;
 };
 
-export const loadAllTextures = async (traits, clamDir, rgb) => {
+export const loadAllTextures = async (traits, clamDir, rgb, addKonvaObject) => {
   const textures = [
     {
       type: "os",
@@ -107,7 +99,7 @@ export const loadAllTextures = async (traits, clamDir, rgb) => {
   );
 
   return Promise.all(
-    textures.map((k, i) => loadTextureKonva(k, loaded[i], base, rgb))
+    textures.map((k, i) => loadTextureKonva(k, loaded[i], base, rgb, addKonvaObject))
   );
 };
 

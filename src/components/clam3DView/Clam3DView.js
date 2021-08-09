@@ -7,8 +7,10 @@ import { Clam } from "../clams/Clam";
 import { ClamLoading } from "./ClamLoading";
 import { loadAllTextures, getClamDir } from "../../utils/konva";
 import decodeDna from "../three/3DClams/decodeDna";
+import {connect} from "redux-zero/react";
+import {actions} from "../../store/redux";
 
-export const Clam3DView = memo((props) => {
+const Clam3DViewComponent = memo((props) => {
   const {
     width,
     height,
@@ -17,6 +19,8 @@ export const Clam3DView = memo((props) => {
     clamViewer,
     clamTraits,
     rgb,
+    addKonvaObject,
+    destroyKonvaObjects,
   } = props;
   const [textures, setTextures] = useState();
   const traits = clamViewer ? clamTraits : decodeDna(decodedDna);
@@ -26,16 +30,15 @@ export const Clam3DView = memo((props) => {
   useEffect(() => {
     async function loadTextures() {
       const clamDir = getClamDir(traits);
-      const layers = await loadAllTextures(traits, clamDir, rgb);
-
+      const layers = await loadAllTextures(traits, clamDir, rgb, addKonvaObject);
       setTextures(layers.map(layer => new THREE.CanvasTexture(layer.toCanvas())));
-
-      return () => {
-        textures.forEach((texture) => {texture.dispose()});
-      };
     }
 
     loadTextures();
+
+    return () => {
+      destroyKonvaObjects()
+    }
   }, []);
 
   return (
@@ -59,5 +62,8 @@ export const Clam3DView = memo((props) => {
     </div>
   )
 });
-
-export default Clam3DView;
+const mapToProps = (store) => ({ konvaObjects: store.konvaObjects });
+export const Clam3DView = connect(mapToProps, {
+  addKonvaObject: actions().addKonvaObject,
+  destroyKonvaObjects: actions().destroyKonvaObjects,
+})(Clam3DViewComponent);

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { BarnacleClam } from './BarnacleClam';
@@ -40,6 +40,11 @@ export const Clam = (props) => {
 
   const ClamComponent = CLAM_COMPONENTS[clamType] || DefaultClam;
   const groupMesh = useRef();
+  useEffect(() => {
+    return () => {
+      textures.forEach((texture) => {texture.dispose()});
+    }
+  }, [])
 
   useFrame(() => {
     if (groupMesh.current) {
@@ -49,8 +54,8 @@ export const Clam = (props) => {
 
   return (
     <>
-      <group ref={groupMesh} position={[0, 0, -0.05]}>
-        <group position={[0, 0, 0.05]}>
+      <group ref={groupMesh} position={[0, 0, -0.1]}>
+        <group position={[0, 0, 0.1]}>
           <ClamComponent
             tongueType={tongueType}
             textures={textures} />

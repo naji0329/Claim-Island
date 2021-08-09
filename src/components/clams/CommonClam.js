@@ -21,14 +21,14 @@ export const CommonClam = (props) => {
   const [outerTexture, innerTexture, lipTexture, tongueTexture] = textures;
   const TongueComponent = TONGUE_COMPONENTS[tongueType] || DefaultTongue;
   return (
-    <>
+    <group position={[0.01, 0, -0.05]}>
       <CommonModel
         outerTexture={outerTexture}
         innerTexture={innerTexture}
         lipTexture={lipTexture}
       />
       <TongueComponent tongueTexture={tongueTexture} />
-    </>
+    </group>
   );
 };
 

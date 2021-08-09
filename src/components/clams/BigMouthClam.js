@@ -5,7 +5,6 @@ import HeartTongueModel from "../models/tongueModels/bigMouth/HeartTongueModel";
 import SpiralTongueModel from "../models/tongueModels/bigMouth/SpiralTongueModel";
 import StarTongueModel from "../models/tongueModels/bigMouth/StarTongueModel";
 import { TONGUE_TYPES } from "../../constants/clams";
-import {BarnacleModel} from "../models/calmModels/BarnacleModel";
 
 const TONGUE_COMPONENTS = {
   [TONGUE_TYPES.common]: CommonTongueModel,
@@ -22,14 +21,14 @@ export const BigmouthClam = (props) => {
   const [outerTexture, innerTexture, lipTexture, tongueTexture] = textures;
   const TongueComponent = TONGUE_COMPONENTS[tongueType] || DefaultTongue;
   return (
-    <>
+    <group position={[0.005, 0, -0.01]}>
       <BigmouthModel
         outerTexture={outerTexture}
         innerTexture={innerTexture}
         lipTexture={lipTexture}
       />
       <TongueComponent tongueTexture={tongueTexture} />
-    </>
+    </group>
   );
 };
 
