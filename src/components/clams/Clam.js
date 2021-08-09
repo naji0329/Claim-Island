@@ -1,3 +1,6 @@
+import { useRef } from 'react';
+import { useFrame } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 import { BarnacleClam } from './BarnacleClam';
 import { BigmouthClam } from './BigMouthClam';
 import { CommonClam } from './CommonClam';
@@ -36,10 +39,35 @@ export const Clam = (props) => {
   } = props;
 
   const ClamComponent = CLAM_COMPONENTS[clamType] || DefaultClam;
+  const groupMesh = useRef();
+
+  useFrame(() => {
+    if (groupMesh.current) {
+      groupMesh.current.rotation.y += (Math.PI * 2) * 0.001
+    }
+  });
 
   return (
-    <ClamComponent
-      tongueType={tongueType}
-      textures={textures} />
+    <>
+      <group ref={groupMesh} position={[0, 0, -0.05]}>
+        <group position={[0, 0, 0.05]}>
+          <ClamComponent
+            tongueType={tongueType}
+            textures={textures} />
+        </group>
+      </group>
+      <OrbitControls
+        enableZoom={true}
+        autoRotate={true}
+        autoRotateSpeed={3}
+        minPolarAngle={0}
+        maxPolarAngle={Math.PI}
+        minAzimuthAngle={Math.PI}
+        maxAzimuthAngle={Math.PI}
+        target={[0,0,-0.05]}
+        enablePan={false}
+        enableRotate={true}
+      />
+  </>
   );
 };

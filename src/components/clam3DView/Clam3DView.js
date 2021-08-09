@@ -1,9 +1,10 @@
 import { memo, useEffect, useState } from "react";
-import { Text } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import * as THREE from "three";
 
 import { ClamScene } from "./ClamScene";
 import { Clam } from "../clams/Clam";
+import { ClamLoading } from "./ClamLoading";
 import { loadAllTextures, getClamDir } from "../../utils/konva";
 import decodeDna from "../three/3DClams/decodeDna";
 
@@ -50,7 +51,9 @@ export const Clam3DView = memo((props) => {
           />
         ) }
         {!textures && (
-          <Text>Loading</Text>
+          <Html>
+            <ClamLoading />
+          </Html>
         )}
       </ClamScene>
     </div>

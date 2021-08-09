@@ -8,7 +8,7 @@ export default function Model(props) {
   const { tongueTexture, ...rest } = props
 
   return (
-    <group ref={group} {...rest} dispose={null}>
+    <group ref={group} {...rest}>
       <group position={[-0.004353, -0.00009, -0.007789]} rotation={[-0.868151, 0.171459, -2.942771]} scale={1.778416}>
         <mesh
           castShadow
