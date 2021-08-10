@@ -54,7 +54,7 @@ export const Clam = (props) => {
 
   return (
     <>
-      <group ref={groupMesh} position={[0, 0, -0.1]}>
+      <group ref={groupMesh} position={[0, -0.02, -0.05]}>
         <group position={[0, 0, 0.1]}>
           <ClamComponent
             tongueType={tongueType}

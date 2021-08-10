@@ -15,7 +15,7 @@ export const ClamScene = ({ children }) => {
         near: 0.1,
         far: 1000,
         position: [-0.4, 0.9, -1.4],
-        zoom: 7,
+        zoom: 9,
       }}
       shadows
       raycaster={{enabled: true}}
