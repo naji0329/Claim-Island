@@ -31,7 +31,11 @@ const Clam3DViewComponent = memo((props) => {
     async function loadTextures() {
       const clamDir = getClamDir(traits);
       const layers = await loadAllTextures(traits, clamDir, rgb, addKonvaObject);
-      setTextures(layers.map(layer => new THREE.CanvasTexture(layer.toCanvas())));
+      setTextures(layers.map(layer => {
+        let texture = new THREE.CanvasTexture(layer.toCanvas());
+        texture.flipY = false;
+        return texture;
+      }));
     }
 
     loadTextures();
