@@ -62,7 +62,16 @@ const Bank = ({
       name: "tanja",
       action: "bank.connect.text",
       button: {
-        text: undefined,
+        text: "Dismiss",
+        alt: {
+          action: "cb",
+          destination: () => {
+            updateCharacter({
+              name: "tanja",
+              action: undefined,
+            });
+          },
+        },
       },
     });
   });
@@ -80,8 +89,8 @@ const Bank = ({
         />
         {address && (
           <>
-            <div className="w-full">
-              <div className="px-8 py-4 mt-24 flex flex-col">
+            <div className="w-full md:w-3/4 mx-auto relative z-10">
+              <div className="px-2 md:px-8 py-4 mt-24 flex flex-col">
                 {pools &&
                   pools.map((pool, i) => (
                     <PoolItem
@@ -99,7 +108,7 @@ const Bank = ({
         {/* chat character   */}
       </div>
 
-      {!address && <Character name="tanja" />}
+      <Character name="tanja" />
     </>
   );
 };
