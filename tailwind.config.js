@@ -7,10 +7,11 @@ module.exports = {
       159: "36em",
       160: "40em",
     },
-    zIndex: {
-      '-1': '-1',
+    extend: {
+      minWidth: {
+        xs: "15rem",
+      },
     },
-    extend: {},
   },
   variants: {
     extend: {
