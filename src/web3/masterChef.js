@@ -80,6 +80,57 @@ export const decodePoolInfoReturnFromMulticall = (values) => {
   return result;
 };
 
+export const prepGetUserInfoForMulticall = (len, account) => {
+  const contractCalls = [];
+  for (let index = 0; index < Number(len); index++) {
+    contractCalls.push([
+      masterChefAddress,
+      web3.eth.abi.encodeFunctionCall(
+        {
+          name: "userInfo",
+          type: "function",
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "pid",
+              type: "uint256"
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address"
+            }
+          ],
+        },
+        [index, account]
+      ),
+    ]);
+  }
+
+  return contractCalls;
+};
+
+export const decodeUserInfoReturnFromMulticall = (values) => {
+  const result = [];
+
+  for (let index = 0; index < values.length; index++) {
+    result.push({
+      poolId: index,
+      userValues: web3.eth.abi.decodeParameter(
+        {
+          user: {
+            amount: "uint256",
+            rewardDebt: "uint256",
+          },
+        },
+        values[index]
+      ),
+    });
+  }
+
+  return result;
+};
+
 export const getPoolsLength = async () => {
   const poolsLen = await masterChef().methods.poolLength().call();
   return poolsLen;

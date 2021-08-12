@@ -13,9 +13,11 @@ import Web3Navbar from "../../components/Web3Navbar";
 import VideoBackground from "../../components/VideoBackground";
 
 import {
-  prepGetPoolInfoForMulticall,
   getPoolsLength,
+  prepGetPoolInfoForMulticall,
   decodePoolInfoReturnFromMulticall,
+  prepGetUserInfoForMulticall,
+  decodeUserInfoReturnFromMulticall,
 } from "../../web3/masterChef";
 import { aggregate } from "../../web3/multicall";
 import PoolItem from "./PoolItem";
@@ -32,11 +34,15 @@ const Bank = ({
   useEffect(() => {
     const getPoolInfo = async () => {
       const poolLength = await getPoolsLength();
-      const calls = prepGetPoolInfoForMulticall(poolLength);
-      const { returnData } = await aggregate(calls);
-      const values = decodePoolInfoReturnFromMulticall(returnData);
+      const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
+      const { returnData } = await aggregate(poolInfocalls);
+      const poolInfoValues = decodePoolInfoReturnFromMulticall(returnData);
 
-      const setUpPools = values.map(({ poolInfoValues, poolId }) => {
+      const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
+      const result = await aggregate(userInfocalls);
+      const userInfovalues = decodeUserInfoReturnFromMulticall(result.returnData);
+
+      let setUpPools = poolInfoValues.map(({ poolInfoValues, poolId }, index) => {
         return {
           name: poolAssets[poolInfoValues.lpToken].name,
           apy: poolAssets[poolInfoValues.lpToken].apy,
@@ -47,6 +53,8 @@ const Bank = ({
           allocPoint: poolInfoValues.allocPoint,
           depositFeeBP: poolInfoValues.depositFeeBP,
           lastRewardBlock: poolInfoValues.lastRewardBlock,
+          userDepositAmountInPool: userInfovalues[index].userValues.amount,
+          userRewardAmountInPool: userInfovalues[index].userValues.rewardDebt,
         };
       });
 

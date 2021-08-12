@@ -50,6 +50,15 @@ export const SPEECHES = {
     },
   },
 
+  bank: {
+    connect: {
+      text: "Welcome to the bank!",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+  },
+
   shell_voting_complete: {
     welcome: {
       text: `Welcome, traveller! Unfortunately you're rather late. $SHELL voting is over.`,

@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
-import { get } from "lodash";
+// import { get } from "lodash";
 import classnames from "classnames";
 
-import ClamUnknown from "../../assets/img/clam_unknown.png";
 import { deposit, harvest, withdraw, pendingGem } from "../../web3/masterChef";
 import {
   approveMasterchefForMaxUint,
   hasMaxUintAllowance,
 } from "../../web3/bep20";
+import { masterChefAddress } from "../../web3/constants";
+import { formatFromWei } from "../../web3/shared";
 import { useAsync } from "react-use";
 
-const PoolData = () => {
+import { useEthers } from "@usedapp/core";
+
+
+
+const PoolData = ({ depositFee }) => {
   return (
     <div className="w-full px-2">
       <div className="flex flex-row justify-between">
@@ -19,10 +24,10 @@ const PoolData = () => {
       </div>
       <div className="flex flex-row justify-between">
         <p className="text-gray-500 font-semibold">Deposit fee:</p>
-        <p className="font-bold text-black text-center">5%</p>
+        <p className="font-bold text-black text-center">{depositFee}%</p>
       </div>
       <div className="flex">
-        <a href="#" className="text-gray-500 font-semibold underline">
+        <a href={`https://bscscan.com/address/${masterChefAddress}`} target="_blank" className="text-gray-500 font-semibold underline" rel="noreferrer">
           BSC Scan
         </a>
       </div>
@@ -229,11 +234,14 @@ const PoolHarvest = () => {
 };
 
 const PoolItem = ({ account, updateAccount, ...pool }) => {
+  const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
   const [depositValue, setDepositValue] = useState(0);
+
+  const { activateBrowserWallet } = useEthers();
 
   useAsync(async () => {
     const earnedGem = await pendingGem(pool.poolId);
@@ -309,14 +317,14 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
               Deposited
             </p>
-            <p className="font-bold text-gray-300">0.00</p>
+            <p className="font-bold text-gray-300">{formatFromWei(pool.userDepositAmountInPool)}</p>
           </div>
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
               To Harvest
             </p>
-            <p className="font-bold text-gray-300">0.00</p>
+            <p className="font-bold text-gray-300">{formatFromWei(pool.userRewardAmountInPool)}</p>
           </div>
 
           <div className="text-sm block">
@@ -333,7 +341,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
                 </svg>
               </button>
             ) : (
-              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
+              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none" onClick={() => activateBrowserWallet()}>
                 Connect Wallet
               </p>
             )}
@@ -343,7 +351,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
         {isOpen && (
           <div className="flex justify-between items-start p-4 border-t-2 border-gray-700">
             <div className="flex w-1/5">
-              <PoolData />
+              <PoolData depositFee={depositFee} />
             </div>
 
             <div className="flex w-2/5">
