@@ -34,6 +34,7 @@ const initialState = {
   character: {
     name: undefined,
     action: undefined,
+    show: undefined, // true or false
     button: {
       text: undefined,
       alt: undefined,

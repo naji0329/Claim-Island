@@ -3,14 +3,15 @@ import { connect } from "redux-zero/react";
 import { get } from "lodash";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
+import { actions } from "../../store/redux";
 import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 
 import "./index.scss";
 
 // button => obj {text, alt}
-const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) => {
+const CharacterWrapper = ({ name, action, show, button, buttonAlt, onClickButton, updateCharacter }) => {
   const character = get(CHARACTERS, name);
-  const speech = get(SPEECHES, action, action);
+  let speech;
 
   // console.log({ action, character, speech, button });
 
@@ -24,6 +25,7 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
     setStateSpeech(speech);
     if (speech.dismiss) {
       setShowBubble(false);
+      updateCharacter({ action: 'dismissBubble'})
     }
     if (onClickButton) {
       onClickButton();
@@ -63,8 +65,24 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
       //   "22rem";
     } else {
       setShowBubble(false);
+      updateCharacter({ action: 'dismissBubble'})
     }
   };
+
+  useEffect(() => {
+    console.log('@@', action)
+    if(['dismissBubble', 'showBubble'].indexOf(action) === -1) {
+      const speech = get(SPEECHES, action, action);
+      setStateSpeech(speech);
+      if(show) {
+        setShowBubble(true);
+      }
+    } else if (action === 'dismissBubble') {
+      setShowBubble(false);
+    } else  if (action === 'showBubble'){
+      setShowBubble(true);
+    }
+  }, [action]);
 
   return (
     <div
@@ -128,10 +146,11 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
   );
 };
 
-const mapToProps = ({ character: { name, action, button, buttonAlt } }) => ({
+const mapToProps = ({ character: { name, action, show, button, buttonAlt } }) => ({
   name,
   action,
+  show,
   button,
   buttonAlt
 });
-export default connect(mapToProps)(CharacterWrapper);
+export default connect(mapToProps, actions)(CharacterWrapper);

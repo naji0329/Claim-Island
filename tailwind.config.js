@@ -1,3 +1,5 @@
+const FARM_WITHDRAW_COLOR = "#FF4B47";
+
 module.exports = {
   mode: "jit",
   purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
@@ -8,9 +10,32 @@ module.exports = {
       160: "40em",
     },
     zIndex: {
-      '-1': '-1',
+      "-1": "-1",
+      10: 10,
+      20: 20,
+      30: 30,
+      40: 40,
+      50: 50,
     },
-    extend: {},
+    borderColor: (theme) => ({
+      ...theme("colors"),
+      withdraw: FARM_WITHDRAW_COLOR,
+    }),
+    textColor: (theme) => ({
+      ...theme("colors"),
+      withdraw: FARM_WITHDRAW_COLOR,
+    }),
+    fontFamily: {
+      avenir: ["AvenirBlack"],
+      montserrat: ["Montserrat-Medium"],
+      aristotelica: ["AristotelicaBold"],
+    },
+    extend: {
+      gridTemplateColumns: {
+        // Simple 16 column grid
+        16: "repeat(16, minmax(0, 1fr))",
+      },
+    },
   },
   variants: {
     extend: {
