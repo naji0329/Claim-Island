@@ -1,10 +1,9 @@
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
 import * as THREE from "three";
 
 import { ClamBackground } from "./ClamBackground";
-import { ClamLoading } from "./ClamLoading";
+import { Loading3DView } from "../Loading3DView";
 
 export const ClamScene = ({ children }) => {
   return (
@@ -24,7 +23,7 @@ export const ClamScene = ({ children }) => {
         canvasCtx.gl.toneMapping = THREE.NoToneMapping;
       }}
     >
-      <Suspense fallback={<Html><ClamLoading /></Html>}>
+      <Suspense fallback={<Loading3DView />}>
         {children}
         <ClamBackground />
       </Suspense>
