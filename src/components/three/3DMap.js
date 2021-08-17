@@ -72,6 +72,7 @@ const Map3D = () => {
 
     document.getElementById("container").appendChild(renderer.domElement);
 		renderer.setClearColor(0xe1e1e1, 1);
+    //renderer.physicallyCorrectLights = true;
 
     camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 20000);
     camera.position.set(650, 350, 500);
@@ -138,7 +139,7 @@ const Map3D = () => {
   };
 
   const addLights = () => {
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);
     directionalLight.position.set(500, 400, -100);
     directionalLight.rotation.set(0, 0.3, -0.55);
     directionalLight.castShadow = true;
