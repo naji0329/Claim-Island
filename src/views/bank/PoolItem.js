@@ -13,8 +13,6 @@ import { useAsync } from "react-use";
 
 import { useEthers } from "@usedapp/core";
 
-
-
 const PoolData = ({ depositFee }) => {
   return (
     <div className="w-full px-2">
@@ -27,7 +25,12 @@ const PoolData = ({ depositFee }) => {
         <p className="font-bold text-black text-center">{depositFee}%</p>
       </div>
       <div className="flex">
-        <a href={`https://bscscan.com/address/${masterChefAddress}`} target="_blank" className="text-gray-500 font-semibold underline" rel="noreferrer">
+        <a
+          href={`https://bscscan.com/address/${masterChefAddress}`}
+          target="_blank"
+          className="text-gray-500 font-semibold underline"
+          rel="noreferrer"
+        >
           BSC Scan
         </a>
       </div>
@@ -295,7 +298,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
             </div>
           </div>
 
-          <div className="badge badge-warning">Medium risk</div>
+          {/* <div className="badge badge-warning">Medium risk</div> */}
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
@@ -317,14 +320,18 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
               Deposited
             </p>
-            <p className="font-bold text-gray-300">{formatFromWei(pool.userDepositAmountInPool)}</p>
+            <p className="font-bold text-gray-300">
+              {formatFromWei(pool.userDepositAmountInPool)}
+            </p>
           </div>
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
               To Harvest
             </p>
-            <p className="font-bold text-gray-300">{formatFromWei(pool.userRewardAmountInPool)}</p>
+            <p className="font-bold text-gray-300">
+              {formatFromWei(pool.userRewardAmountInPool)}
+            </p>
           </div>
 
           <div className="text-sm block">
@@ -341,7 +348,10 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
                 </svg>
               </button>
             ) : (
-              <p className="text-gray-500 font-semibold text-xs mb-1 leading-none" onClick={() => activateBrowserWallet()}>
+              <p
+                className="text-gray-500 font-semibold text-xs mb-1 leading-none"
+                onClick={() => activateBrowserWallet()}
+              >
                 Connect Wallet
               </p>
             )}
