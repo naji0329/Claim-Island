@@ -35,24 +35,32 @@ const Bank = ({
     const getPoolInfo = async () => {
       const poolLength = await getPoolsLength();
       const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
-      const { returnData } = await aggregate(poolInfocalls);
-      const poolInfoValues = decodePoolInfoReturnFromMulticall(returnData);
-
       const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
-      const result = await aggregate(userInfocalls);
-      const userInfovalues = decodeUserInfoReturnFromMulticall(result.returnData);
 
-      let setUpPools = poolInfoValues.map(({ poolInfoValues, poolId }, index) => {
+      const [poolInfo, userInfo] = await Promise.all([
+        aggregate(poolInfocalls),
+        aggregate(userInfocalls),
+      ]);
+
+      const poolInfoValues = decodePoolInfoReturnFromMulticall(
+        poolInfo.returnData
+      );
+      const userInfovalues = decodeUserInfoReturnFromMulticall(
+        userInfo.returnData
+      );
+
+      let setUpPools = poolInfoValues.map((pool, index) => {
+        console.log({ pool, index });
         return {
-          name: poolAssets[poolInfoValues.lpToken].name,
-          apy: poolAssets[poolInfoValues.lpToken].apy,
-          multiplier: poolAssets[poolInfoValues.lpToken].multiplier,
-          images: poolAssets[poolInfoValues.lpToken].images,
-          poolId: poolId,
-          lpToken: poolInfoValues.lpToken,
-          allocPoint: poolInfoValues.allocPoint,
-          depositFeeBP: poolInfoValues.depositFeeBP,
-          lastRewardBlock: poolInfoValues.lastRewardBlock,
+          name: poolAssets[pool.poolInfoValues.lpToken].name,
+          apy: poolAssets[pool.poolInfoValues.lpToken].apy,
+          multiplier: poolAssets[pool.poolInfoValues.lpToken].multiplier,
+          images: poolAssets[pool.poolInfoValues.lpToken].images,
+          poolId: pool.poolId,
+          lpToken: pool.poolInfoValues.lpToken,
+          allocPoint: pool.poolInfoValues.allocPoint,
+          depositFeeBP: pool.poolInfoValues.depositFeeBP,
+          lastRewardBlock: pool.poolInfoValues.lastRewardBlock,
           userDepositAmountInPool: userInfovalues[index].userValues.amount,
           userRewardAmountInPool: userInfovalues[index].userValues.rewardDebt,
         };
