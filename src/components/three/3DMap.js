@@ -43,9 +43,10 @@ const Map3D = () => {
   var renderer, scene, camera, totalGroup, water;
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
-  var bank, farm, market, vault, lighthouse, bridge, rocks, lilly, boats, ship, sailboat, seagulls, dolphins;
-  var hotModelBank, hotModelFarm, hotModelMarket, hotModelVault;
+  let bank, farm, market, vault, lighthouse, bridge, rocks, lilly, boats, ship, sailboat, seagulls, dolphins;
+  let hotModelBank, hotModelFarm, hotModelMarket, hotModelVault;
   let composer, outlinePass, effectFXAA, hotMeshArr = [], hoverStr = '';
+  let bankSign, farmSign, marketSign, safeSign;
 
   useEffect(() => {
     create3DScene(mapRef.current, setLoading, setControls, setHoverName);
@@ -102,6 +103,11 @@ const Map3D = () => {
     boats = await loadGLTF("glb_files/Boats.glb", scene);
     ship = await loadGLTF("glb_files/ship-2.glb", scene, "ship");
     sailboat = await loadGLTF("glb_files/sailboat.glb", scene, "sailboat");
+
+    bankSign = await loadGLTF("glb_files/bank_sign.glb", scene, "island", "bank_sign");
+    farmSign = await loadGLTF("glb_files/farm_sign.glb", scene, "island", "farm_sign");
+    marketSign = await loadGLTF("glb_files/market_sign.glb", scene, "island", "market_sign");
+    safeSign = await loadGLTF("glb_files/safe_sign.glb", scene, "island", "safe_sign");
 
     seagulls = await loadGLTF("glb_files/seagull.glb", scene, "seagull");
     dolphins = await loadGLTF("glb_files/dolphin.glb", scene, "dolphin");
@@ -174,8 +180,12 @@ const Map3D = () => {
     const tdelta = clock.getDelta();
     giveBuoyancy(ship, t, 4, 35);
     giveBuoyancy(bank, t, 2, -5);
+    giveBuoyancy(bankSign, t, 2, -5);
     giveBuoyancy(market, t, 2, 2);
+    giveBuoyancy(marketSign, t, 2, 2);
     giveBuoyancy(vault, t, 2, 2);
+    giveBuoyancy(safeSign, t, 2, 2);
+    giveBuoyancy(lighthouse, t, 2, 2);
 
     giveBuoyancy(hotModelBank, t, 2, -5);
     giveBuoyancy(hotModelMarket, t, 2, 2);
