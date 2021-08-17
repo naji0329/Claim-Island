@@ -43,7 +43,7 @@ const Map3D = () => {
   var renderer, scene, camera, totalGroup, water;
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
-  var bank, farm, market, vault, bridge, rocks, lilly, boats, ship, sailboat, seagulls, dolphins;
+  var bank, farm, market, vault, lighthouse, bridge, rocks, lilly, boats, ship, sailboat, seagulls, dolphins;
   var hotModelBank, hotModelFarm, hotModelMarket, hotModelVault;
   let composer, outlinePass, effectFXAA, hotMeshArr = [], hoverStr = '';
 
@@ -74,7 +74,8 @@ const Map3D = () => {
 		renderer.setClearColor(0xe1e1e1, 1);
 
     camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 20000);
-    camera.position.set(730, 380, 700);
+    camera.position.set(650, 350, 500);
+    console.log(camera);
 
     controls = new OrbitControls(camera, renderer.domElement);
     // controls.minZoom = 1;
@@ -97,6 +98,7 @@ const Map3D = () => {
     bridge = await loadGLTF("glb_files/Bridges.glb", scene, "bridge");
     rocks = await loadGLTF("glb_files/Rocks.glb", scene, "rocks");
     //lilly = await loadGLTF('glb_files/LillyPads.glb', scene, 'lillies');
+    lighthouse = await loadGLTF("glb_files/Info_Island.glb", scene, "island", "lighthouse");
     boats = await loadGLTF("glb_files/Boats.glb", scene);
     ship = await loadGLTF("glb_files/ship-2.glb", scene, "ship");
     sailboat = await loadGLTF("glb_files/sailboat.glb", scene, "sailboat");
@@ -152,6 +154,7 @@ const Map3D = () => {
 
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0xe0fffc, 0.4);
     scene.add(hemiLight);
+    console.log(scene);
   };
 
   const setHotModel = () => {
