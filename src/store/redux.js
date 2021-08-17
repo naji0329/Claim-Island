@@ -43,6 +43,7 @@ const initialState = {
       alt: undefined,
     },
   },
+  konvaObjects: [],
 };
 
 const middlewares = connect ? applyMiddleware(connect(initialState)) : [];
@@ -83,6 +84,17 @@ export const actions = (store) => ({
     };
     return obj;
   },
+  addKonvaObject: (state, value) => {
+    return {
+      konvaObjects: [...state.konvaObjects, value],
+    }
+  },
+  destroyKonvaObjects: (state) => {
+    state.konvaObjects.forEach((obj) => { obj.destroy(); });
+      return {
+        konvaObjects: [],
+      };
+  }
 });
 
 export default { store, actions };
