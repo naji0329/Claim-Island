@@ -88,7 +88,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
       error: activateError,
       address: account,
       isConnected: account ? true : false,
-      isBSChain: activateChainId === undefined || activateChainId === ChainId.BSC,
+      isBSChain: activateChainId === ChainId.BSC,
     });
   }, [account, activateChainId, activateError, activateBnbBalance, activateClamBalance]);
 
