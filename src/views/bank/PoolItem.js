@@ -1,17 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
-// import { get } from "lodash";
+import { get } from "lodash";
 import classnames from "classnames";
 
 import { deposit, harvest, withdraw, pendingGem } from "../../web3/masterChef";
+import pancake from "../../web3/pancake";
 import {
   approveMasterchefForMaxUint,
   hasMaxUintAllowance,
+  balanceOf,
 } from "../../web3/bep20";
 import { masterChefAddress } from "../../web3/constants";
-import { formatFromWei } from "../../web3/shared";
-import { useAsync } from "react-use";
+import { formatFromWei, formatToWei } from "../../web3/shared";
+import { useAsync, createStateContext } from "react-use";
 
 import { useEthers } from "@usedapp/core";
+import { useForm } from "react-hook-form";
+
+// shared state across all pool copoments - to avoid passing too much props down to children
+const [useSharedState, SharedStateProvider] = createStateContext({
+  balances: [null, null, null],
+});
 
 const PoolData = ({ depositFee }) => {
   return (
@@ -44,17 +52,40 @@ const PoolData = ({ depositFee }) => {
 };
 
 const DepositTab = () => {
-  return (
-    <div className="flex flex-col w-full">
-      <div className="flex items-center justify-between opacity-40 text-xl">
-        <div className="">Wallet(BNB):</div>
-        <div className="flex items-center">
-          <div className="mx-2">68.99</div>
-          <div className="text-sm">($15.01) </div>
-        </div>
-      </div>
+  const [state] = useSharedState();
+  const { register, handleSubmit, formState } = useForm();
+  const { errors, isValid } = formState;
+  console.log({ state });
 
-      <div className="flex items-center  my-4">
+  const handleDeposit = async (data) => {
+    try {
+      console.log({ data, pool: state.pool });
+
+      await approveMasterchefForMaxUint(state.account, state.pool.lpToken);
+
+      await deposit(state.pool.poolId, formatToWei(data.depositAmount));
+    } catch (error) {
+      alert("Error! Please try again");
+      console.log({ error });
+      // updateAccount({ error: error.message });
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(handleDeposit)}>
+      <div className="flex flex-col w-full">
+        <div className="flex items-center justify-between opacity-40 text-xl">
+          <div className="">Wallet:</div>
+          <div className="flex items-center">
+            <div className="mx-2">
+              {Number(get(state, "balances[0]", "0.0")).toFixed(4)}
+            </div>
+            {/* <div className="text-sm">($15.01) </div> */}
+          </div>
+        </div>
+
+        {/* bank 2.0 feature */}
+        {/* <div className="flex items-center  my-4">
         <div className="text-xl mr-4">Deposit with</div>
 
         <div className="flex items-center">
@@ -76,37 +107,87 @@ const DepositTab = () => {
             />
           </svg>
         </div>
-      </div>
+      </div> */}
 
-      <div className="flex flex-col px-8 py-4">
-        <div className="w-full flex justify-between items-center ">
-          <div className="text-4xl"> 15.16 </div>
-          <div className="text-md opacity-40"> ($7.01) </div>
-        </div>
-        <div className="my-2">
-          <input type="range" max="100" value="4" className="range range-xs" />
-        </div>
-      </div>
+        <div className="flex flex-col px-8 py-4">
+          <div className="w-full flex justify-between items-center ">
+            <input
+              {...register("depositAmount", {
+                required: true,
+                max: get(state, "balances[0]", "0.0"),
+              })}
+              placeholder="Amount"
+              defaultValue={Number("0.0").toFixed(6)}
+              className="text-4xl p-2 w-full rounded border-2 border-gray-500 bg-transparent"
+            />
 
-      <button className="w-full text-white bg-gray-500 hover:bg-gray-400 rounded-xl shadow-xl p-2 text-center text-2xl">
-        Deposit now
-      </button>
-    </div>
+            {/* TODO convert to dolar */}
+            {/* <div className="text-md opacity-40"> ($7.01) </div> */}
+          </div>
+
+          {/* TODO apply range */}
+          {/* <div className="my-2">
+            <input
+              type="range"
+              max="100"
+              value="4"
+              className="range range-xs"
+            />
+          </div> */}
+
+          {/* TODO better validation with Yulp */}
+          {errors.depositAmount && (
+            <div className="my-2 text-error">Validation Error</div>
+          )}
+        </div>
+
+        <button
+          // disabled={!isValid}
+          type="submit"
+          className="w-full text-white bg-green-500 hover:bg-green-400 rounded-xl shadow-xl p-2 text-center text-2xl"
+        >
+          Deposit {get(state, "pool.name")}
+        </button>
+      </div>
+    </form>
   );
 };
 
 const WithdrawTab = () => {
-  return (
-    <div className="flex flex-col w-full">
-      <div className="flex items-center justify-between opacity-40 text-xl">
-        <div className="">Vault ($GEM):</div>
-        <div className="flex items-center">
-          <div className="mx-2">68.99</div>
-          <div className="text-sm">($15.01) </div>
-        </div>
-      </div>
+  const [state] = useSharedState();
 
-      <div className="flex items-center  my-4">
+  const { register, handleSubmit, formState } = useForm();
+  const { errors, isValid } = formState;
+  console.log({ state });
+
+  const handleWithdraw = async (data) => {
+    try {
+      console.log({ data, pool: state.pool });
+
+      await withdraw(state.pool.poolId, formatToWei(data.withdrawAmount));
+    } catch (error) {
+      alert("Error! Please try again");
+      console.log({ error });
+      // updateAccount({ error: error.message });
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(handleWithdraw)}>
+      <div className="flex flex-col w-full">
+        <div className="flex items-center justify-between opacity-40 text-xl">
+          <div className="">Vault:</div>
+          <div className="flex items-center">
+            <div className="mx-2">
+              {get(state, "pool.userDepositAmountInPool")}
+            </div>
+            {/* TODO convert LP to dolar */}
+            {/* <div className="text-sm">($15.01) </div> */}
+          </div>
+        </div>
+
+        {/* TODO */}
+        {/* <div className="flex items-center  my-4">
         <div className="text-xl mr-4">Withdraw to</div>
 
         <div className="flex items-center">
@@ -128,22 +209,42 @@ const WithdrawTab = () => {
             />
           </svg>
         </div>
-      </div>
+      </div> */}
 
-      <div className="flex flex-col px-8 py-4">
-        <div className="w-full flex justify-between items-center ">
-          <div className="text-4xl"> 15.16 </div>
-          <div className="text-md opacity-40"> ($7.01) </div>
-        </div>
-        <div className="my-2">
+        <div className="flex flex-col px-8 py-4">
+          <div className="w-full flex justify-between items-center ">
+            <input
+              {...register("withdrawAmount", {
+                required: true,
+                max: get(state, "pool.userDepositAmountInPool"),
+              })}
+              placeholder="Amount"
+              defaultValue={Number("0.0").toFixed(6)}
+              className="text-4xl p-2 w-full rounded border-2 border-gray-500 bg-transparent"
+            />
+
+            {/* TODO convert to dolar */}
+            {/* <div className="text-md opacity-40"> ($7.01) </div> */}
+          </div>
+
+          {/* TODO RANGE values change */}
+          {/* <div className="my-2">
           <input type="range" max="100" value="4" className="range range-xs" />
-        </div>
-      </div>
+        </div> */}
 
-      <button className="w-full text-white bg-gray-500 hover:bg-gray-400 rounded-xl shadow-xl p-2 text-center text-2xl">
-        Withdraw now
-      </button>
-    </div>
+          {errors.withdrawAmount && (
+            <div className="my-2 text-error">Validation Error</div>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full text-white bg-red-500 hover:bg-red-400 rounded-xl shadow-xl p-2 text-center text-2xl"
+        >
+          Withdraw {get(state, "pool.name")}
+        </button>
+      </div>
+    </form>
   );
 };
 
@@ -154,8 +255,8 @@ const PoolDepositWithdraw = () => {
     <button
       {...rest}
       className={classnames("w-full p-4 text-center", {
-        "text-white bg-gray-300 rounded-t-xl": isActive,
-        "text-gray-800": !isActive,
+        "font-aristotelica-bold text-xl bg-gray-300 rounded-t-xl": isActive,
+        "font-aristotelica text-xl text-gray-800": !isActive,
       })}
     >
       {children}
@@ -193,12 +294,23 @@ const PoolDepositWithdraw = () => {
 };
 
 const PoolHarvest = () => {
+  const [state] = useSharedState();
+
+  const handleHarvest = async () => {
+    try {
+      await harvest(state.pool.poolId);
+    } catch (error) {
+      alert("Error! Try later");
+      // updateAccount({ error: error.message });
+    }
+  };
+
   return (
     <div className="w-full flex flex-col px-2 bg-gray-200 rounded-xl p-4">
       <div className="w-full flex flex-row justify-between items-center">
         <p className="font-aristotelica-bold text-2xl">Harvest</p>
 
-        <button className="btn btn-info">
+        <button className="btn btn-info disabled" disabled>
           Boost Yield
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -224,11 +336,18 @@ const PoolHarvest = () => {
             </div>
           </div>
 
-          <div className="mx-2 text-6xl">12.00</div>
-          <div className="mx-2 text-xs">($12.00)</div>
+          <div className="mx-2 text-6xl">
+            {get(state, "pool.userRewardAmountInPool", 0.0)}
+          </div>
+          <div className="mx-2 text-xl">GEM</div>
+          {/* TODO convert GEM to dola */}
+          {/* <div className="mx-2 text-xs">($12.00)</div> */}
         </div>
 
-        <button className="w-full text-white bg-gray-500 hover:bg-gray-400 rounded-xl shadow-xl p-2 text-center text-2xl">
+        <button
+          onClick={handleHarvest}
+          className="w-full text-white bg-blue-500 hover:bg-blue-400 rounded-xl shadow-xl p-2 text-center text-2xl"
+        >
           Harvest
         </button>
       </div>
@@ -237,12 +356,14 @@ const PoolHarvest = () => {
 };
 
 const PoolItem = ({ account, updateAccount, ...pool }) => {
+  // console.log({ pool });
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
   const [depositValue, setDepositValue] = useState(0);
+  const [, setSharedState] = useSharedState();
 
   const { activateBrowserWallet } = useEthers();
 
@@ -254,29 +375,23 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
     setIsEnabled(isEnabled);
   });
 
-  const handleHarvest = async () => {
-    try {
-      await harvest(pool.poolId);
-    } catch (error) {
-      updateAccount({ error: error.message });
-    }
+  const handleOpen = async () => {
+    setIsOpen(true);
+
+    // load balances when open pool item
+    const [token0, token1] = await pancake.getLPTokens(pool.lpToken);
+
+    const balancesFormated = await Promise.all([
+      balanceOf(pool.lpToken, account), // lp token
+      balanceOf(token0, account), // token0
+      balanceOf(token1, account), // token1
+    ]).then((balancesWei) => balancesWei.map((b) => formatFromWei(b)));
+    console.log({ balancesFormated });
+
+    setSharedState({ account, pool, balances: balancesFormated });
   };
 
-  const handleDeposit = async () => {
-    try {
-      await deposit(pool.poolId, web3.utils.toWei(depositValue));
-    } catch (error) {
-      updateAccount({ error: error.message });
-    }
-  };
-
-  const handleApprove = async () => {
-    try {
-      await approveMasterchefForMaxUint(pool.account, pool.lpToken);
-    } catch (error) {
-      updateAccount({ error: error.message });
-    }
-  };
+  const handleClose = () => setIsOpen(false);
 
   return (
     <>
@@ -321,7 +436,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
               Deposited
             </p>
             <p className="font-bold text-gray-300">
-              {formatFromWei(pool.userDepositAmountInPool)}
+              {pool.userDepositAmountInPool}
             </p>
           </div>
 
@@ -330,13 +445,13 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
               To Harvest
             </p>
             <p className="font-bold text-gray-300">
-              {formatFromWei(pool.userRewardAmountInPool)}
+              {pool.userRewardAmountInPool}
             </p>
           </div>
 
           <div className="text-sm block">
             {account ? (
-              <button onClick={() => setIsOpen(!isOpen)}>
+              <button onClick={() => (isOpen ? handleClose() : handleOpen())}>
                 <svg
                   className={classnames(
                     "fill-current text-blue-700 h-6 w-6 transform transition-transform duration-500",
@@ -378,4 +493,12 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
   );
 };
 
-export default PoolItem;
+const PoolItemWrapper = (props) => {
+  return (
+    <SharedStateProvider>
+      <PoolItem {...props} />
+    </SharedStateProvider>
+  );
+};
+
+export default PoolItemWrapper;
