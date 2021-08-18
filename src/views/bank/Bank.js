@@ -20,6 +20,7 @@ import {
   decodeUserInfoReturnFromMulticall,
 } from "../../web3/masterChef";
 import { aggregate } from "../../web3/multicall";
+import { formatFromWei } from "../../web3/shared";
 import PoolItem from "./PoolItem";
 import "./bank.scss";
 import { poolAssets } from "./poolsAssets";
@@ -50,7 +51,6 @@ const Bank = ({
       );
 
       let setUpPools = poolInfoValues.map((pool, index) => {
-        console.log({ pool, index });
         return {
           name: poolAssets[pool.poolInfoValues.lpToken].name,
           apy: poolAssets[pool.poolInfoValues.lpToken].apy,
@@ -61,8 +61,12 @@ const Bank = ({
           allocPoint: pool.poolInfoValues.allocPoint,
           depositFeeBP: pool.poolInfoValues.depositFeeBP,
           lastRewardBlock: pool.poolInfoValues.lastRewardBlock,
-          userDepositAmountInPool: userInfovalues[index].userValues.amount,
-          userRewardAmountInPool: userInfovalues[index].userValues.rewardDebt,
+          userDepositAmountInPool: formatFromWei(
+            userInfovalues[index].userValues.amount
+          ),
+          userRewardAmountInPool: formatFromWei(
+            userInfovalues[index].userValues.rewardDebt
+          ),
         };
       });
 
