@@ -125,11 +125,12 @@ const Map3D = () => {
     composer.addPass( renderPass );
 
     outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
-    outlinePass.edgeStrength = 50;
+    outlinePass.edgeStrength = 10;
     outlinePass.edgeThickness = 2;
-    outlinePass.pulsePeriod = 3;
-    outlinePass.visibleEdgeColor.set( 0xFF0000 );
-    outlinePass.hiddenEdgeColor.set( 0xFF0000 );
+    outlinePass.pulsePeriod = 2;
+    outlinePass.edgeGlow = 0.2;
+    outlinePass.visibleEdgeColor.set( 0x38dcdc );
+    outlinePass.hiddenEdgeColor.set( 0x38dcdc );
     composer.addPass( outlinePass );
 
     effectFXAA = new ShaderPass( FXAAShader );
@@ -321,93 +322,6 @@ const Map3D = () => {
       <div id='hoverLabel'>Opening Soon</div>
     </div>
   );
-};
-
-// CREATE A 3D SCENE
-const create3DScene = async (element, setLoading, setControls, setHoverName) => {
-  // create a 3d renderer
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0xe1e1e1, 1);
-  element.appendChild(renderer.domElement);
-
-  // create a camera
-  camera = new THREE.PerspectiveCamera(
-    55,
-    window.innerWidth / window.innerHeight,
-    1,
-    20000
-  );
-  camera.position.set(730, 380, 700);
-
-  // orbit controls to pan and zoom
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.minDistance = 800;
-  controls.maxDistance = 1500;
-  controls.maxPolarAngle = 1.5;
-  controls.enablePan = false;
-
-  setControls(controls);
-
-  // create a scene
-  const scene = new THREE.Scene();
-  // scene.background = new THREE.Color( 0xe1e1e1 );
-
-  const water = createWater({ scene });
-  createSky({ scene, water, renderer });
-  addLights(scene);
-
-  // LOAD ALL MODELS. URLS mentioned in constants file
-  const objects = await Promise.all(
-    ISLAND_OBJECTS.map((k) => loadGLTF(k.objectUrl, scene, k.type, k.name))
-  );
-  // dolphins and seagulls are array of objects
-  const dolphins = objects[ISLAND_OBJECTS.findIndex(k => k.type === 'dolphin')];
-  const seagulls = objects[ISLAND_OBJECTS.findIndex(k => k.type === 'seagull')];
-
-  const hotModelBank = await loadGLTF("glb_files/hot_bank.glb", scene);
-  const hotModelFarm = await loadGLTF("glb_files/hot_farm.glb", scene);
-  const hotModelMarket = await loadGLTF("glb_files/hot_market.glb", scene);
-  const hotModelVault = await loadGLTF("glb_files/hot_vault.glb", scene);
-  hotMeshArr = setHotModel([hotModelBank, hotModelFarm, hotModelMarket, hotModelVault]);
-
-  setLoading(false);
-
-  composer = new EffectComposer( renderer );
-  const renderPass = new RenderPass( scene, camera );
-  composer.addPass( renderPass );
-
-  outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
-  outlinePass.edgeStrength = 50;
-  outlinePass.edgeThickness = 2;
-  outlinePass.pulsePeriod = 3;
-  outlinePass.visibleEdgeColor.set( 0xFF0000 );
-  outlinePass.hiddenEdgeColor.set( 0xFF0000 );
-  composer.addPass( outlinePass );
-  outlinePass.selectedObjects = [hotModelBank]
-
-  renderer.domElement.addEventListener( 'mousemove', (event) => {
-    onMouseMove({ event, setHoverName });
-  });
-  // renderer.domElement.addEventListener( 'click', onMouseClick );
-
-  // load animation after models load
-  animate({
-    scene,
-    water,
-    camera,
-    controls,
-    renderer,
-    seagulls,
-    dolphins,
-    setControls,
-    objects,
-    hotModelBank,
-    hotModelMarket,
-    hotModelVault
-  });
 };
 
 const setHotModel = (models) => {
