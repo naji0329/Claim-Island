@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { get } from "lodash";
 import classnames from "classnames";
 
-import { deposit, harvest, withdraw, pendingGem } from "../../web3/masterChef";
+import { deposit, harvest, withdraw, pendingGem } from "../../web3/bank";
 import pancake from "../../web3/pancake";
 
 import {
   hasMaxUintAllowance,
   balanceOf,
 } from "../../web3/bep20";
-import { masterChefAddress } from "../../web3/constants";
+import { bankAddress } from "../../web3/constants";
 import { formatFromWei, formatToWei } from "../../web3/shared";
 import { useAsync, createStateContext } from "react-use";
 
@@ -34,7 +34,7 @@ const PoolData = ({ depositFee }) => {
       </div>
       <div className="flex">
         <a
-          href={`https://bscscan.com/address/${masterChefAddress}`}
+          href={`https://bscscan.com/address/${bankAddress}`}
           target="_blank"
           className="text-gray-500 font-semibold underline"
           rel="noreferrer"
