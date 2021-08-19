@@ -101,8 +101,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
       error: activateError,
       address: account,
       isConnected: account ? true : false,
-      isBSChain:
-        activateChainId === undefined || activateChainId === ChainId.BSC,
+      isBSChain: activateChainId === ChainId.BSC,
     });
   }, [
     account,
