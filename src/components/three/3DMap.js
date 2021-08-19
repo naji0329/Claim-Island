@@ -46,7 +46,7 @@ const Map3D = () => {
   let bank, farm, market, vault, lighthouse, bridge, rocks, lilly, boats, ship, sailboat, seagulls, dolphins;
   let hotModelBank, hotModelFarm, hotModelMarket, hotModelVault;
   let composer, outlinePass, effectFXAA, hotMeshArr = [], hoverStr = '';
-  let bankSign, farmSign, marketSign, safeSign;
+  let bankSign, farmSign, marketSign, safeSign, infoSign, shopSign;
 
   useEffect(() => {
     create3DScene(mapRef.current, setLoading, setControls, setHoverName);
@@ -107,8 +107,10 @@ const Map3D = () => {
 
     bankSign = await loadGLTF("glb_files/bank_sign.glb", scene, "island", "bank_sign");
     farmSign = await loadGLTF("glb_files/farm_sign.glb", scene, "island", "farm_sign");
-    marketSign = await loadGLTF("glb_files/market_sign.glb", scene, "island", "market_sign");
+    // marketSign = await loadGLTF("glb_files/market_sign.glb", scene, "island", "market_sign");
     safeSign = await loadGLTF("glb_files/safe_sign.glb", scene, "island", "safe_sign");
+    infoSign = await loadGLTF("glb_files/info_sign.glb", scene, "island", "info_sign");
+    shopSign = await loadGLTF("glb_files/shop_sign.glb", scene, "island", "shop_sign");
 
     seagulls = await loadGLTF("glb_files/seagull.glb", scene, "seagull");
     dolphins = await loadGLTF("glb_files/dolphin.glb", scene, "dolphin");
@@ -184,7 +186,7 @@ const Map3D = () => {
     giveBuoyancy(bank, t, 2, -5);
     giveBuoyancy(bankSign, t, 2, -5);
     giveBuoyancy(market, t, 2, 2);
-    giveBuoyancy(marketSign, t, 2, 2);
+    giveBuoyancy(shopSign, t, 2, 2);
     giveBuoyancy(vault, t, 2, 2);
     giveBuoyancy(safeSign, t, 2, 2);
     giveBuoyancy(lighthouse, t, 2, 2);
