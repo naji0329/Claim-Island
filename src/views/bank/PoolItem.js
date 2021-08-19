@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { get } from "lodash";
 import ClamUnknown from "../../assets/img/clam_unknown.png";
-import { deposit, harvest, withdraw, pendingGem } from "../../web3/masterChef";
+import { deposit, harvest, withdraw, pendingGem } from "../../web3/bank";
 import {
-  approveMasterchefForMaxUint,
+  approveBankForMaxUint,
   hasMaxUintAllowance,
 } from "../../web3/bep20";
 import { useAsync } from "react-use";
@@ -39,7 +39,7 @@ const PoolItem = ({ updateAccount, ...pool }) => {
 
   const handleApprove = async () => {
     try {
-      await approveMasterchefForMaxUint(pool.account, pool.lpToken);
+      await approveBankForMaxUint(pool.account, pool.lpToken);
     } catch (error) {
       updateAccount({ error: error.message });
     }

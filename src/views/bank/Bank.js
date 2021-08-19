@@ -16,7 +16,7 @@ import {
   prepGetPoolInfoForMulticall,
   getPoolsLength,
   decodePoolInfoReturnFromMulticall,
-} from "../../web3/masterChef";
+} from "../../web3/bank";
 import { aggregate } from "../../web3/multicall";
 import PoolItem from "./PoolItem";
 import Swap from "./Swap";
