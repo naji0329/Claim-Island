@@ -18,7 +18,8 @@ import {
   decodePoolInfoReturnFromMulticall,
   prepGetUserInfoForMulticall,
   decodeUserInfoReturnFromMulticall,
-} from "../../web3/masterChef";
+} from "../../web3/bank";
+
 import { aggregate } from "../../web3/multicall";
 import { formatFromWei } from "../../web3/shared";
 import PoolItem from "./PoolItem";
@@ -26,7 +27,7 @@ import "./bank.scss";
 import { poolAssets } from "./poolsAssets";
 
 const Bank = ({
-  account: { clamBalance, address },
+  account: { address },
   updateCharacter,
   updateAccount,
 }) => {

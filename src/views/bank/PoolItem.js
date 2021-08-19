@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { get } from "lodash";
 import classnames from "classnames";
 
 import { deposit, harvest, withdraw, pendingGem } from "../../web3/masterChef";
 import pancake from "../../web3/pancake";
+
 import {
-  approveMasterchefForMaxUint,
   hasMaxUintAllowance,
   balanceOf,
 } from "../../web3/bep20";
