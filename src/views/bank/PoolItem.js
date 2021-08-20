@@ -18,9 +18,7 @@ import { useEthers } from "@usedapp/core";
 import { useForm } from "react-hook-form";
 
 // shared state across all pool copoments - to avoid passing too much props down to children
-const [useSharedState, SharedStateProvider] = createStateContext({
-  balances: [null, null, null],
-});
+const [useSharedState, SharedStateProvider] = createStateContext();
 
 const PoolData = ({ depositFee }) => {
   return (
@@ -66,9 +64,7 @@ const DepositTab = () => {
 
       await deposit(state.pool.poolId, formatToWei(data.depositAmount));
     } catch (error) {
-      alert("Error! Please try again");
-      console.log({ error });
-      // updateAccount({ error: error.message });
+      state.updateAccount({ error: error.message });
     }
   };
 
@@ -167,9 +163,7 @@ const WithdrawTab = () => {
 
       await withdraw(state.pool.poolId, formatToWei(data.withdrawAmount));
     } catch (error) {
-      alert("Error! Please try again");
-      console.log({ error });
-      // updateAccount({ error: error.message });
+      state.updateAccount({ error: error.message });
     }
   };
 
@@ -301,8 +295,7 @@ const PoolHarvest = () => {
     try {
       await harvest(state.pool.poolId);
     } catch (error) {
-      alert("Error! Try later");
-      // updateAccount({ error: error.message });
+      state.updateAccount({ error: error.message });
     }
   };
 
@@ -364,7 +357,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
   const [depositValue, setDepositValue] = useState(0);
-  const [, setSharedState] = useSharedState();
+  const [state, setSharedState] = useSharedState();
 
   const { activateBrowserWallet } = useEthers();
 
@@ -383,7 +376,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
       const balance = await balanceOf(pool.lpToken, account);
       const balances = [formatFromWei(balance), null, null];
 
-      setSharedState({ account, pool, balances });
+      setSharedState({ ...state, account, pool, balances });
     } else {
       // load balances when open pool item
       const [token0, token1] = await pancake.getLPTokens(pool.lpToken);
@@ -394,7 +387,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
         balanceOf(token1, account), // token1
       ]).then((balancesWei) => balancesWei.map((b) => formatFromWei(b)));
 
-      setSharedState({ account, pool, balances: balancesFormated });
+      setSharedState({ ...state, account, pool, balances: balancesFormated });
     }
   };
 
@@ -502,7 +495,12 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
 
 const PoolItemWrapper = (props) => {
   return (
-    <SharedStateProvider>
+    <SharedStateProvider
+      initialValue={{
+        updateAccount: props.updateAccount,
+        balances: [null, null, null],
+      }}
+    >
       <PoolItem {...props} />
     </SharedStateProvider>
   );
