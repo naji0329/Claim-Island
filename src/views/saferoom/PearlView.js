@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Accordion from "../../components/Accordion";
 import { get } from "lodash";
 
@@ -7,7 +7,7 @@ import { Pearl3DView } from "../../components/pearl3DView";
 export default ({ dna, dnaDecoded }) => {
   const [showTraits, setShowTraits] = useState(false);
 
-  console.log({ dnaDecoded });
+  console.log({ dna, dnaDecoded });
 
   const RowStat = ({ label, value }) => (
     <div className="text-sm flex flex-row justify-between my-1">
@@ -23,28 +23,13 @@ export default ({ dna, dnaDecoded }) => {
 
   const accordionData = [
     {
-      title: "General Stats",
+      title: "Traits",
       description: (
         <div>
-          <RowStat label="Shape" value={get(dnaDecoded, "[0].shape")} />
-          <RowStat label="color" value={get(dnaDecoded, "[0].color")} />
-          <RowStat label="Size" value={get(dnaDecoded, "[0].size")} />
-        </div>
-      ),
-    },
-    {
-      title: "Qualities",
-      description: (
-        <div>
-          <RowStat label="Lustre" value={get(dnaDecoded, "[0].lustre")} />
-          <RowStat
-            label="Nacre"
-            value={get(dnaDecoded, "[0].nacreQuality")}
-          />
-          <RowStat
-            label="Surface"
-            value={get(dnaDecoded, "[0].surface")}
-          />
+          <RowStat label="Shape" value={get(dnaDecoded, "shape")} />
+          <RowStat label="Color" value={get(dnaDecoded, "color")} />
+          <RowStat label="Overtone" value={get(dnaDecoded, "overtone")} />
+          <RowStat label="Rarity" value={get(dnaDecoded, "rarity").toLowerCase()} />
         </div>
       ),
     },

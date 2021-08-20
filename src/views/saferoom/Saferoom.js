@@ -168,8 +168,8 @@ const Saferoom = ({ account: { clamBalance, pearlBalance_, address }, updateChar
                 <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
                   {clams &&
                     clams.map((clam, i) => {
-                      const rarity = get(clam.dnaDecoded, "[0].rarity");
-                      const shape = get(clam.dnaDecoded, "[0].shellShape");
+                      const rarity = get(clam.dnaDecoded, "rarity");
+                      const shape = get(clam.dnaDecoded, "shellShape");
 
                       return (
                         <div
@@ -190,8 +190,8 @@ const Saferoom = ({ account: { clamBalance, pearlBalance_, address }, updateChar
                 <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
                   {pearls &&
                     pearls.map((pearl, i) => {
-                      const rarity = get(pearl.dnaDecoded, "[0].rarity");
-                      const shape = get(pearl.dnaDecoded, "[0].shape");
+                      const rarity = get(pearl.dnaDecoded, "rarity");
+                      const shape = get(pearl.dnaDecoded, "shape");
 
                       return (
                         <div
