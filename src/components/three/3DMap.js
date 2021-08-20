@@ -22,6 +22,8 @@ import { ISLAND_OBJECTS } from "./constants";
 import createWater from "./create_water";
 import createSky from "./create_sky";
 import clamIcon from "../../assets/clam-icon.png";
+import { lighthouseOutlineModels, OUTLINE_MODEL_NAMES } from "../../constants/outline-models";
+import { isNeedOutlineModel } from "../../utils/outline";
 
 const clock = new THREE.Clock();
 const raycaster = new THREE.Raycaster();
@@ -44,7 +46,7 @@ const Map3D = () => {
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   let bank, farm, market, vault, lighthouse, bridge, rocks, lilly, boats, ship, sailboat, seagulls, dolphins;
-  let hotModelBank, hotModelFarm, hotModelMarket, hotModelVault;
+  let hotModelBank, hotModelFarm, hotModelMarket, hotModelVault, lighthouseOutlineMeshes;
   let composer, outlinePass, effectFXAA, hotMeshArr = [], hoverStr = '';
   let bankSign, farmSign, marketSign, safeSign;
 
@@ -172,6 +174,14 @@ const Map3D = () => {
       hotMesh.material = new THREE.MeshBasicMaterial({transparent:true, opacity:0});
       hotMeshArr.push(hotMesh);
     });
+    /** Lighthouse meshes that provoke Lighthouse outline */
+    lighthouseOutlineMeshes = lighthouse.children[0].children.reduce((acc, mesh) => {
+      if (lighthouseOutlineModels.has(mesh.name)) {
+        acc.push(mesh);
+      }
+      return acc;
+    }, [])
+    hotMeshArr.push(...lighthouseOutlineMeshes);
   }
 
   const animate = () => {
@@ -273,25 +283,32 @@ const Map3D = () => {
     else if (hoverStr==='market') newUrlStr = '';
     window.open('', '_self');
   }
-
+  /** TODO refactor when get rid of hot models */
   const checkIntersection = (event) => {
     raycaster.setFromCamera( mouse, camera );
     const intersect = raycaster.intersectObjects( hotMeshArr, true )[0];
     if ( intersect ) {
       const interObject = intersect.object;
-      if (hoverStr !== interObject.name) {
-        hoverStr = interObject.name;
-        const hoverLabel = document.getElementById('hoverLabel');
-        hoverLabel.style.left = (event.clientX + 50)+'px';
-        hoverLabel.style.top = (event.clientY - 100)+'px';
-        hoverLabel.style.display='block';
-        setHoverName(hoverStr);
-        var selMeshArr = [];
-        hotMeshArr.forEach(hotMesh => {
-          if (hotMesh.name === hoverStr)
-            selMeshArr.push(hotMesh);
-        });
-        outlinePass.selectedObjects = selMeshArr;
+      if (isNeedOutlineModel(lighthouseOutlineModels, interObject)) {
+        if (hoverStr !== OUTLINE_MODEL_NAMES.lighthouse) {
+          hoverStr = OUTLINE_MODEL_NAMES.lighthouse;
+          const hoverLabel = document.getElementById('hoverLabel');
+          hoverLabel.style.left = (event.clientX + 50)+'px';
+          hoverLabel.style.top = (event.clientY - 100)+'px';
+          hoverLabel.style.display='block';
+          setHoverName(hoverStr);
+          outlinePass.selectedObjects = [...lighthouseOutlineMeshes];
+        }
+      } else {
+        if (hoverStr !== interObject.name) {
+          hoverStr = interObject.name;
+          const hoverLabel = document.getElementById('hoverLabel');
+          hoverLabel.style.left = (event.clientX + 50)+'px';
+          hoverLabel.style.top = (event.clientY - 100)+'px';
+          hoverLabel.style.display='block';
+          setHoverName(hoverStr);
+          outlinePass.selectedObjects = [intersect.object];
+        }
       }
     } else {
       if (hoverStr !== '') {
