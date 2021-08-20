@@ -14,6 +14,7 @@ import { store } from "./store/redux";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { multicallAddress } from "./web3/constants";
 
 // import library css
 import "leaflet/dist/leaflet.css";
@@ -23,9 +24,12 @@ const chainId = 56;
 const rpcUrl = "https://bsc-dataseed.binance.org";
 
 const config = {
+  supportedChains: [1337, 56],
   readOnlyChainId: ChainId.BSC,
+  multicallAddresses: { 1337: multicallAddress },
   readOnlyUrls: {
     [ChainId.BSC]: "https://bsc-dataseed.binance.org",
+    [1337]: "http://127.0.0.1:8545/",
   },
 };
 
