@@ -70,6 +70,7 @@ const Bank = ({
             userRewardAmountInPool: formatFromWei(
               userInfovalues[index].userValues.rewardDebt
             ),
+            isSingleStake: poolAsset.isSingleStake,
           };
         }
       });

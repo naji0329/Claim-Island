@@ -6,6 +6,7 @@ import { deposit, harvest, withdraw, pendingGem } from "../../web3/bank";
 import pancake from "../../web3/pancake";
 
 import {
+  approveBankForMaxUint,
   hasMaxUintAllowance,
   balanceOf,
 } from "../../web3/bep20";
@@ -61,7 +62,7 @@ const DepositTab = () => {
     try {
       console.log({ data, pool: state.pool });
 
-      await approveMasterchefForMaxUint(state.account, state.pool.lpToken);
+      await approveBankForMaxUint(state.account, state.pool.lpToken);
 
       await deposit(state.pool.poolId, formatToWei(data.depositAmount));
     } catch (error) {
@@ -356,7 +357,7 @@ const PoolHarvest = () => {
 };
 
 const PoolItem = ({ account, updateAccount, ...pool }) => {
-  // console.log({ pool });
+  console.log({ pool });
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -378,17 +379,23 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
   const handleOpen = async () => {
     setIsOpen(true);
 
-    // load balances when open pool item
-    const [token0, token1] = await pancake.getLPTokens(pool.lpToken);
+    if (pool.isSingleStake) {
+      const balance = await balanceOf(pool.lpToken, account);
+      const balances = [formatFromWei(balance), null, null];
 
-    const balancesFormated = await Promise.all([
-      balanceOf(pool.lpToken, account), // lp token
-      balanceOf(token0, account), // token0
-      balanceOf(token1, account), // token1
-    ]).then((balancesWei) => balancesWei.map((b) => formatFromWei(b)));
-    console.log({ balancesFormated });
+      setSharedState({ account, pool, balances });
+    } else {
+      // load balances when open pool item
+      const [token0, token1] = await pancake.getLPTokens(pool.lpToken);
 
-    setSharedState({ account, pool, balances: balancesFormated });
+      const balancesFormated = await Promise.all([
+        balanceOf(pool.lpToken, account), // lp token
+        balanceOf(token0, account), // token0
+        balanceOf(token1, account), // token1
+      ]).then((balancesWei) => balancesWei.map((b) => formatFromWei(b)));
+
+      setSharedState({ account, pool, balances: balancesFormated });
+    }
   };
 
   const handleClose = () => setIsOpen(false);
