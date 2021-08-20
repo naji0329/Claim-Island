@@ -27,7 +27,7 @@ import "./bank.scss";
 import { poolAssets } from "./poolsAssets";
 
 const Bank = ({
-  account: { address },
+  account: { address, isBSChain },
   updateCharacter,
   updateAccount,
 }) => {
@@ -51,32 +51,37 @@ const Bank = ({
         userInfo.returnData
       );
 
-      let setUpPools = poolInfoValues.map((pool, index) => {
-        return {
-          name: poolAssets[pool.poolInfoValues.lpToken].name,
-          apy: poolAssets[pool.poolInfoValues.lpToken].apy,
-          multiplier: poolAssets[pool.poolInfoValues.lpToken].multiplier,
-          images: poolAssets[pool.poolInfoValues.lpToken].images,
-          poolId: pool.poolId,
-          lpToken: pool.poolInfoValues.lpToken,
-          allocPoint: pool.poolInfoValues.allocPoint,
-          depositFeeBP: pool.poolInfoValues.depositFeeBP,
-          lastRewardBlock: pool.poolInfoValues.lastRewardBlock,
-          userDepositAmountInPool: formatFromWei(
-            userInfovalues[index].userValues.amount
-          ),
-          userRewardAmountInPool: formatFromWei(
-            userInfovalues[index].userValues.rewardDebt
-          ),
-        };
+      const pools = poolInfoValues.map((pool, index) => {
+        const poolAsset = poolAssets[pool.poolInfoValues.lpToken];
+        if (poolAsset) {
+          return {
+            name: poolAsset.name,
+            apy: poolAsset.apy,
+            multiplier: poolAsset.multiplier,
+            images: poolAsset.images,
+            poolId: pool.poolId,
+            lpToken: pool.poolInfoValues.lpToken,
+            allocPoint: pool.poolInfoValues.allocPoint,
+            depositFeeBP: pool.poolInfoValues.depositFeeBP,
+            lastRewardBlock: pool.poolInfoValues.lastRewardBlock,
+            userDepositAmountInPool: formatFromWei(
+              userInfovalues[index].userValues.amount
+            ),
+            userRewardAmountInPool: formatFromWei(
+              userInfovalues[index].userValues.rewardDebt
+            ),
+          };
+        }
       });
+
+      const setUpPools = pools.filter((p) => p);
 
       setPools(setUpPools);
     };
     if (pools.length === 0 && address) {
       getPoolInfo();
     }
-  }, [pools, address]);
+  }, [pools, address, isBSChain]);
 
   useAsync(async () => {
     updateCharacter({
