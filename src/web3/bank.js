@@ -84,7 +84,7 @@ export const prepGetUserInfoForMulticall = (len, account) => {
   const contractCalls = [];
   for (let index = 0; index < Number(len); index++) {
     contractCalls.push([
-      masterChefAddress,
+      bankAddress,
       web3.eth.abi.encodeFunctionCall(
         {
           name: "userInfo",
@@ -93,13 +93,13 @@ export const prepGetUserInfoForMulticall = (len, account) => {
             {
               internalType: "uint256",
               name: "pid",
-              type: "uint256"
+              type: "uint256",
             },
             {
               internalType: "address",
               name: "account",
-              type: "address"
-            }
+              type: "address",
+            },
           ],
         },
         [index, account]
