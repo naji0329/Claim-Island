@@ -24,7 +24,16 @@ import { getPearlDNADecoded } from "../../web3/pearlDnaDecoder";
 
 import { get } from "lodash";
 
-const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateCharacter }) => {
+// NOTE: need to add pealBalance to Redux state before merging
+const Saferoom = ({ account: { clamBalance, pearlBalance_, address }, updateCharacter }) => {
+  //mock
+  const pearlBalance = "2"
+  const data = [
+    {dna: "106263555867044407210905764109178880717300343929753535897385840933720887753893"},
+    {dna: "4950147845460536209036342682678653456974139723447270198043081388542794866348"},
+  ]
+
+
   const [clams, setClams] = useState([]);
   const [pearls, setPearls] = useState([]);
   const [selectedAsset, setSelectedAsset] = useState();
@@ -34,9 +43,12 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
   const { isShowing, toggle } = useModal();
 
   const getDna = async (nftContract, account, index, getDecodedDNA) => {
-    const tokenId = await nftContract.getClamByIndex(account, index);
-    const clamData = await nftContract.getClamData(tokenId);
-    const { dna } = clamData;
+    // const tokenId = await nftContract.getClamByIndex(account, index);
+    // const data = await nftContract.getClamData(tokenId);
+    // const { dna } = data;
+
+    const dna = data[index].dna; // used for testing only
+
     if (dna.length > 1) {
       const dnaDecoded = await getDecodedDNA(dna);
       return { dna, dnaDecoded };
@@ -59,10 +71,14 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
         };
 
         // parallel call to speed up
-        const clams = await getNFTs(clamContract, clamBalance, getDNADecoded);
-        const pearls = await getNFTs(pearlContract, pearlBalance, getPearlDNADecoded);
-        setClams(clams);
-        setPearls(pearls);
+        if (+clamBalance > 0 ) {
+          const clams = await getNFTs(clamContract, clamBalance, getDNADecoded);
+          setClams(clams);
+        }
+        if(+pearlBalance > 0) {
+          const pearls = await getNFTs(pearlContract, pearlBalance, getPearlDNADecoded);
+          setPearls(pearls);
+        }
 
         setLoading(false);
       } catch (error) {
