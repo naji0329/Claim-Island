@@ -84,7 +84,7 @@ const CharacterWrapper = ({
         className={
           showBubble ? "character-bubble" : "character-bubble hide-bubble"
         }
-        style={{ zIndex: speech ? undefined : 0 }}
+        style={{ zIndex: speech ? undefined : 0, position: "fixed" }}
       >
         <div className="character-container flex items-end cursor-pointer">
           <img
