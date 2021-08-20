@@ -25,10 +25,26 @@ const loadGLTF = async (url, scene, type = "island", name) => {
   if(name) gltf.scene.name = name;
 
   if (type === "island") {
-    gltf.scene.scale.set(1000, 1000, 1000);
-    gltf.scene.position.x = 0; //Position (x = right+ left-)
-    gltf.scene.position.y = 2; //Position (y = up+, down-)
-    gltf.scene.position.z = 0;
+    if(name === "lighthouse") {
+      gltf.scene.scale.set(1750, 1750, 1750);
+      gltf.scene.position.set(-750, 2, 750);
+      gltf.scene.rotation.y = 0.8;
+    } else if (name === 'info_sign') {
+      gltf.scene.scale.set(1000, 1000, 1000);
+      gltf.scene.position.set(-550, 80, 300);
+      gltf.scene.rotation.y = 0.8;
+    } else {
+      gltf.scene.scale.set(1000, 1000, 1000);
+      gltf.scene.position.x = 0; //Position (x = right+ left-)
+      gltf.scene.position.y = 2; //Position (y = up+, down-)
+      gltf.scene.position.z = 0;
+      if(name === 'shop_sign') {
+        gltf.scene.rotation.y = -1.2;
+        gltf.scene.position.z = 150;
+        gltf.scene.position.x = 200;
+        gltf.scene.position.y = -20;
+      }
+    }
   } else if (type === "bridge") {
     gltf.scene.scale.set(1250, 1000, 1250);
     gltf.scene.position.x = -10; //Position (x = right+ left-)
@@ -127,9 +143,8 @@ const loadGLTF = async (url, scene, type = "island", name) => {
     return dolphins;
   } else if (type === "ship") {
     gltf.scene.scale.set(20, 20, 20);
-    gltf.scene.position.x = -220;
-    gltf.scene.position.y = 0;
-    gltf.scene.position.z = 20;
+    gltf.scene.position.set(-380, 0, 120);
+    gltf.scene.rotation.y = 0.6;
   }
 
   if (["dolphin", "seagull"].indexOf(type) === -1) {
