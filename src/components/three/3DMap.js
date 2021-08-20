@@ -18,7 +18,6 @@ import loadGLTF from "./loaders/gltf_loader";
 
 // local file functions
 import "./3d_map.scss";
-import { ISLAND_OBJECTS } from "./constants";
 import createWater from "./create_water";
 import createSky from "./create_sky";
 import clamIcon from "../../assets/clam-icon.png";
@@ -26,13 +25,6 @@ import { lighthouseOutlineModels, OUTLINE_MODEL_NAMES } from "../../constants/ou
 import { isNeedOutlineModel } from "../../utils/outline";
 
 const clock = new THREE.Clock();
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-let outlinePass;
-let hoverStr;
-let composer;
-let hotMeshArr;
-let camera;
 
 THREE.Cache.enabled = true;
 
@@ -279,10 +271,6 @@ const Map3D = () => {
 
   const onMouseClick = () => {
     if (hoverStr === '') return;
-    var newUrlStr = '';
-    if (hoverStr==='bank') newUrlStr = '';
-    else if (hoverStr==='farm') newUrlStr = '';
-    else if (hoverStr==='market') newUrlStr = '';
     window.open('', '_self');
   }
   /** TODO refactor when get rid of hot models */
@@ -341,171 +329,6 @@ const Map3D = () => {
       <div id='hoverLabel'>Opening Soon</div>
     </div>
   );
-};
-
-const setHotModel = (models) => {
-  const hotMeshArr = models.map(obj => {
-    const hotMesh = obj.children[0];
-    hotMesh.material = new THREE.MeshBasicMaterial({transparent:true, opacity:0});
-    return hotMesh;
-  });
-  return hotMeshArr;
-};
-
-// ADD LIGHTS
-const addLights = (scene) => {
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 2.5);
-  directionalLight.position.set(500, 400, -100);
-  directionalLight.rotation.set(0, 0.3, -0.55);
-  directionalLight.castShadow = true;
-  directionalLight.shadow.camera.scale.set(150, 150, 150);
-  directionalLight.shadow.mapSize.set(2048, 2048);
-  scene.add(directionalLight);
-
-  const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
-  directionalLight2.position.set(-2700, 2000, 900);
-  directionalLight2.rotation.set(0, 0.3, 0.6);
-
-  scene.add(directionalLight2);
-
-  const hemiLight = new THREE.HemisphereLight(0xffffff, 0xe0fffc, 0.4);
-  scene.add(hemiLight);
-};
-
-// CALL ANIMATE EVERY SECOND TO DISPLAY
-const animate = ({
-  scene,
-  camera,
-  water,
-  controls,
-  renderer,
-  seagulls,
-  dolphins,
-  setControls,
-  objects,
-  hotModelBank,
-  hotModelMarket,
-  hotModelVault
-}) => {
-  window.requestAnimationFrame(() => {
-    animate({
-      scene,
-      water,
-      camera,
-      controls,
-      renderer,
-      seagulls,
-      dolphins,
-      setControls,
-      objects,
-      hotModelBank,
-      hotModelMarket,
-      hotModelVault
-    });
-  });
-  controls.update();
-  setControls(controls);
-  water.material.uniforms["time"].value += 1.0 / 60.0;
-
-  let t = clock.getElapsedTime();
-  const tdelta = clock.getDelta();
-
-  if(objects) {
-    giveBuoyancy(objects.find(k => k.name === 'ship'), t, 4, 35);
-    giveBuoyancy(objects.find(k => k.name === 'bank'), t, 2, -5);
-    giveBuoyancy(objects.find(k => k.name === 'market'), t, 2, 2);
-    giveBuoyancy(objects.find(k => k.name === 'vault'), t, 2, 2);
-
-    giveBuoyancy(objects.find(k => k.name === 'bridge'), t, 2, 30);
-    giveBuoyancy(objects.find(k => k.name === 'boats'), t, 1.5, 1);
-    giveBuoyancy(objects.find(k => k.name === 'sailboat'), t, 2, 38);
-  }
-
-  giveBuoyancy(hotModelBank, t, 2, -5);
-  giveBuoyancy(hotModelMarket, t, 2, 2);
-  giveBuoyancy(hotModelVault, t, 2, 2);
-
-  flyingSeagulls(seagulls, tdelta);
-  swimmingDolphins(dolphins, t);
-
-  renderer.render(scene, camera);
-};
-
-const giveBuoyancy = (obj, t, factor, init) => {
-  if (obj) {
-    const delta = Math.sin(factor + t);
-    const newPos = delta * factor;
-    obj.position.y = init + newPos;
-  }
-};
-
-const flyingSeagulls = (seagulls) => {
-  if (seagulls) {
-    seagulls.forEach((seagull) => {
-      seagull.pivot.rotation.y += seagull.pivot.userData.speed + 0.01;
-    });
-  }
-};
-
-const swimmingDolphins = (dolphins) => {
-  if (dolphins) {
-    dolphins.forEach((dolphin, i) => {
-      dolphin.pivot.rotation.x += 0.02;
-      if (i < 2) {
-        var zpos = Math.random() * 225 - 500;
-        var xpos = Math.random() * 70 - 150;
-      } else {
-        var zpos = Math.random() * 100 + 350;
-        var xpos = Math.random() * 100 - 250;
-      }
-      if (
-        THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 > 120 &&
-        !dolphin.pivot.under
-      ) {
-        dolphin.pivot.position.z = zpos;
-        dolphin.pivot.position.x = xpos;
-        dolphin.pivot.rotation.x += THREE.Math.degToRad(Math.random() * 90);
-        dolphin.pivot.under = true;
-      } else if (
-        THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 <= 120 &&
-        THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 >= 60
-      ) {
-        dolphin.pivot.under = false;
-      }
-    });
-  }
-};
-
-const onMouseMove = ({ event, setHoverName }) => {
-  if ( event.isPrimary === false ) return;
-  mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-  mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-  checkIntersection(setHoverName);
-};
-
-
-const checkIntersection = (setHoverName) => {
-  raycaster.setFromCamera( mouse, camera );
-  const intersect = raycaster.intersectObjects( hotMeshArr, true )[0];
-  if ( intersect ) {
-    const interObject = intersect.object;
-    if (hoverStr !== interObject.name) {
-      hoverStr = interObject.name;
-      setHoverName(hoverStr);
-      const selMeshArr = [];
-      hotMeshArr.forEach(hotMesh => {
-        if (hotMesh.name === hoverStr)
-          selMeshArr.push(hotMesh);
-      });
-      outlinePass.selectedObjects = selMeshArr;
-    }
-  } else {
-    if (hoverStr !== '') {
-      hoverStr = '';
-      outlinePass.selectedObjects = [];
-      setHoverName('');
-    }
-  }
 };
 
 export default Map3D;
