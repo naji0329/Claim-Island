@@ -18,7 +18,7 @@ export const accountClamBalance = async (account) => {
   return bal;
 };
 
-export const totalClamSupply = async (account) => {
+export const totalClamSupply = async () => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
   const totalSupply = await clamNft.methods.totalSupply().call();
   return totalSupply;
