@@ -264,8 +264,8 @@ const PoolDepositWithdraw = () => {
   };
 
   return (
-    <div className="w-full px-2">
-      <div className="flex flex-row justify-between">
+    <div className="w-full px-4">
+      <div className="flex flex-row justify-between" style={{ height: "20%" }}>
         <StateButton isActive={tab === 0} onClick={() => handleSelect(0)}>
           Deposit
         </StateButton>
@@ -279,6 +279,7 @@ const PoolDepositWithdraw = () => {
           "rounded-b-xl rounded-tr-xl": tab === 0,
           "rounded-b-xl rounded-tl-xl": tab === 1,
         })}
+        style={{ height: "80%" }}
       >
         {tab === 0 && <DepositTab />}
 
@@ -300,42 +301,44 @@ const PoolHarvest = () => {
   };
 
   return (
-    <div className="w-full flex flex-col px-2 bg-gray-200 rounded-xl p-4">
-      <div className="w-full flex flex-row justify-between items-center">
-        <p className="font-aristotelica-bold text-2xl">Harvest</p>
+    <div className="w-full px-4">
+      <div className="flex flex-col justify-between h-full px-4 py-4 rounded-xl bg-gray-200">
+        <div className="w-full flex flex-row justify-between items-center">
+          <p className="font-aristotelica-bold text-2xl">Harvest</p>
 
-        <button className="btn btn-info disabled" disabled>
-          Boost Yield
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="inline-block w-6 h-6 ml-2 stroke-current"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-            />
-          </svg>
-        </button>
-      </div>
-      <div className="flew flex-col">
-        <div className="flex flex-row items-center justify-center my-20">
-          <div className="avatar">
-            <div className="mx-2 rounded-full w-12 h-12">
-              <img src="https://clamisland.fi/favicon/android-chrome-192x192.png" />
+          <button className="btn btn-info disabled" disabled>
+            Boost Yield
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="inline-block w-6 h-6 ml-2 stroke-current"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="flew flex-col">
+          <div className="flex flex-row items-center justify-center">
+            <div className="avatar">
+              <div className="mx-2 rounded-full w-12 h-12">
+                <img src="https://clamisland.fi/favicon/android-chrome-192x192.png" />
+              </div>
             </div>
-          </div>
 
-          <div className="mx-2 text-6xl">
-            {get(state, "pool.userRewardAmountInPool", 0.0)}
+            <div className="mx-2 text-6xl">
+              {get(state, "pool.userRewardAmountInPool", 0.0)}
+            </div>
+            <div className="mx-2 text-xl">GEM</div>
+            {/* TODO convert GEM to dola */}
+            {/* <div className="mx-2 text-xs">($12.00)</div> */}
           </div>
-          <div className="mx-2 text-xl">GEM</div>
-          {/* TODO convert GEM to dola */}
-          {/* <div className="mx-2 text-xs">($12.00)</div> */}
         </div>
 
         <button
@@ -352,7 +355,7 @@ const PoolHarvest = () => {
 const PoolItem = ({ account, updateAccount, ...pool }) => {
   console.log({ pool });
   const depositFee = pool.depositFeeBP / 100;
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
@@ -424,12 +427,12 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
             </p>
           </div>
 
-          <div className="text-sm block">
+          {/* <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
               APR
             </p>
             <p className="font-bold text-black">{pool.apy}</p>
-          </div>
+          </div> */}
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
@@ -474,16 +477,19 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
         </div>
 
         {isOpen && (
-          <div className="flex justify-between items-start p-4 border-t-2 border-gray-700">
+          <div
+            className="flex justify-between items-start p-4 border-t-2 border-gray-700"
+            style={{ height: "18rem" }}
+          >
             <div className="flex w-1/5">
               <PoolData depositFee={depositFee} />
             </div>
 
-            <div className="flex w-2/5">
+            <div className="flex w-2/5 h-full">
               <PoolDepositWithdraw />
             </div>
 
-            <div className="flex w-2/5">
+            <div className="flex w-2/5 h-full">
               <PoolHarvest />
             </div>
           </div>
