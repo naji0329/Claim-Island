@@ -172,3 +172,7 @@ export const pendingGem = async (pid) => {
 
   return gemPending;
 };
+
+export const totalAllocPoint = async () => {
+  return bank().methods.totalAllocPoint().call();
+};

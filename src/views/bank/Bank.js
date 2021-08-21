@@ -18,6 +18,7 @@ import {
   decodePoolInfoReturnFromMulticall,
   prepGetUserInfoForMulticall,
   decodeUserInfoReturnFromMulticall,
+  totalAllocPoint,
 } from "../../web3/bank";
 
 import { aggregate } from "../../web3/multicall";
@@ -38,6 +39,7 @@ const Bank = ({
       const poolLength = await getPoolsLength();
       const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
       const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
+      const totalAlloc = await totalAllocPoint();
 
       const [poolInfo, userInfo] = await Promise.all([
         aggregate(poolInfocalls),
@@ -53,17 +55,18 @@ const Bank = ({
 
       const pools = poolInfoValues.map((pool, index) => {
         const poolAsset = poolAssets[pool.poolInfoValues.lpToken];
+        const poolInfo = pool.poolInfoValues;
         if (poolAsset) {
           return {
             name: poolAsset.name,
             apy: poolAsset.apy,
-            multiplier: poolAsset.multiplier,
+            multiplier: ((poolInfo.allocPoint / totalAlloc) * 100).toFixed(1),
             images: poolAsset.images,
             poolId: pool.poolId,
-            lpToken: pool.poolInfoValues.lpToken,
-            allocPoint: pool.poolInfoValues.allocPoint,
-            depositFeeBP: pool.poolInfoValues.depositFeeBP,
-            lastRewardBlock: pool.poolInfoValues.lastRewardBlock,
+            lpToken: poolInfo.lpToken,
+            allocPoint: poolInfo.allocPoint,
+            depositFeeBP: poolInfo.depositFeeBP,
+            lastRewardBlock: poolInfo.lastRewardBlock,
             userDepositAmountInPool: formatFromWei(
               userInfovalues[index].userValues.amount
             ),
