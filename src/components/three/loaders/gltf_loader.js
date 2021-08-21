@@ -39,10 +39,10 @@ const loadGLTF = async (url, scene, type = "island", name) => {
       gltf.scene.position.y = 2; //Position (y = up+, down-)
       gltf.scene.position.z = 0;
       if(name === 'shop_sign') {
-        gltf.scene.rotation.y = -1.2;
-        gltf.scene.position.z = 150;
-        gltf.scene.position.x = 200;
-        gltf.scene.position.y = -20;
+        gltf.scene.rotation.y = -0.1;
+        gltf.scene.position.z = 0;
+        gltf.scene.position.x = 30;
+        gltf.scene.position.y = -50;
       }
     }
   } else if (type === "bridge") {
