@@ -50,32 +50,77 @@ const PoolData = ({ depositFee }) => {
   );
 };
 
+const SliderWithPercentages = ({ isDeposit }) => {
+  const [state, setState] = useSharedState();
+  const [slideValue, setSlideValue] = useState(0);
+  const stateProp = isDeposit ? "depositAmount" : "withdrawAmount";
+
+  const handleDepositeSlide = (value) => {
+    setSlideValue(value);
+    setDepositPercentage(value);
+  };
+
+  const setDepositPercentage = (percentage) => {
+    const balance = get(state, "balances[0]", "0");
+    const absolute = (percentage / 100) * +balance + "";
+    setState({ ...state, [stateProp]: absolute });
+  };
+
+  const percentages = [25, 50, 75, 100];
+  return (
+    <div className="my-2">
+      <input
+        type="range"
+        max="100"
+        value={slideValue}
+        className="range range-xs"
+        onChange={(e) => handleDepositeSlide(e.target.value)}
+      />
+      <div className="flex w-full justify-between">
+        {percentages.map((percentage) => (
+          <button
+            className="btn btn-secondary btn-xs"
+            key={percentage}
+            onClick={(e) => {
+              e.preventDefault();
+              handleDepositeSlide(percentage);
+              setDepositPercentage(percentage);
+            }}
+          >
+            {percentage}%
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
 const DepositTab = () => {
-  const [state] = useSharedState();
-  const { register, handleSubmit, formState } = useForm();
+  const [state, setState] = useSharedState();
+  const { handleSubmit, formState } = useForm();
   const { errors, isValid } = formState;
-  console.log({ state });
 
-  const handleDeposit = async (data) => {
+  const handleDepositChange = (e) => {
+    setState({ ...state, depositAmount: e.target.value });
+  };
+
+  const handleDeposit = async () => {
     try {
-      console.log({ data, pool: state.pool });
-
       await approveBankForMaxUint(state.account, state.pool.lpToken);
 
-      await deposit(state.pool.poolId, formatToWei(data.depositAmount));
+      await deposit(state.pool.poolId, formatToWei(state.depositAmount));
     } catch (error) {
       state.updateAccount({ error: error.message });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(handleDeposit)}>
-      <div className="flex flex-col w-full">
+    <form onSubmit={handleSubmit(handleDeposit)} className="w-full">
+      <div className="flex flex-col w-full h-full justify-between">
         <div className="flex items-center justify-between opacity-40 text-xl">
           <div className="">Wallet:</div>
           <div className="flex items-center">
             <div className="mx-2">
-              {Number(get(state, "balances[0]", "0.0")).toFixed(4)}
+              {Number(get(state, "balances[0]", "0")).toFixed(4)}
             </div>
             {/* <div className="text-sm">($15.01) </div> */}
           </div>
@@ -109,30 +154,19 @@ const DepositTab = () => {
         <div className="flex flex-col px-8 py-4">
           <div className="w-full flex justify-between items-center">
             <input
-              {...register("depositAmount", {
-                required: true,
-                max: get(state, "balances[0]", "0.0"),
-              })}
+              className="text-4xl text-right pt-2 w-full rounded bg-transparent"
               placeholder="Amount"
-              defaultValue={Number("0.0").toFixed(6)}
-              className="text-4xl p-2 w-full rounded border-2 border-gray-500 bg-transparent"
               type="number"
-              style={{ textAlign: "right" }}
+              max={get(state, "balances[0]", "0")}
+              value={(+state.depositAmount).toFixed(6)}
+              onChange={handleDepositChange}
             />
 
             {/* TODO convert to dolar */}
             {/* <div className="text-md opacity-40"> ($7.01) </div> */}
           </div>
 
-          {/* TODO apply range */}
-          {/* <div className="my-2">
-            <input
-              type="range"
-              max="100"
-              value="4"
-              className="range range-xs"
-            />
-          </div> */}
+          <SliderWithPercentages isDeposit />
 
           {/* TODO better validation with Yulp */}
           {errors.depositAmount && (
@@ -141,7 +175,7 @@ const DepositTab = () => {
         </div>
 
         <button
-          // disabled={!isValid}
+          disabled={!isValid}
           type="submit"
           className="w-full text-white bg-green-500 hover:bg-green-400 rounded-xl shadow-xl p-2 text-center text-2xl"
         >
@@ -155,30 +189,31 @@ const DepositTab = () => {
 const WithdrawTab = () => {
   const [state] = useSharedState();
 
-  const { register, handleSubmit, formState } = useForm();
-  const { errors, isValid } = formState;
-  console.log({ state });
+  const { handleSubmit, formState } = useForm();
+  const { errors } = formState;
 
-  const handleWithdraw = async (data) => {
+  const handleWithdrawChange = (e) => {
+    setState({ ...state, withdrawAmount: e.target.value });
+  };
+
+  const handleWithdraw = async () => {
     try {
-      console.log({ data, pool: state.pool });
-
-      await withdraw(state.pool.poolId, formatToWei(data.withdrawAmount));
+      await withdraw(state.pool.poolId, formatToWei(state.withdrawAmount));
     } catch (error) {
       state.updateAccount({ error: error.message });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(handleWithdraw)}>
-      <div className="flex flex-col w-full">
+    <form onSubmit={handleSubmit(handleWithdraw)} className="w-full">
+      <div className="flex flex-col w-full h-full justify-between">
         <div className="flex items-center justify-between opacity-40 text-xl">
           <div className="">Vault:</div>
           <div className="flex items-center">
             <div className="mx-2">
-              {Number(
-                get(state, "pool.userDepositAmountInPool", "0.0")
-              ).toFixed(4)}
+              {Number(get(state, "pool.userDepositAmountInPool", "0")).toFixed(
+                4
+              )}
             </div>
             {/* TODO convert LP to dolar */}
             {/* <div className="text-sm">($15.01) </div> */}
@@ -213,25 +248,19 @@ const WithdrawTab = () => {
         <div className="flex flex-col px-8 py-4">
           <div className="w-full flex justify-between items-center ">
             <input
-              {...register("withdrawAmount", {
-                required: true,
-                max: get(state, "pool.userDepositAmountInPool"),
-              })}
+              className="text-4xl text-right pt-2 w-full rounded bg-transparent"
               placeholder="Amount"
-              defaultValue={Number("0.0").toFixed(6)}
-              className="text-4xl p-2 w-full rounded border-2 border-gray-500 bg-transparent"
               type="number"
-              style={{ textAlign: "right" }}
+              max={get(state, "pool.userDepositAmountInPool")}
+              value={(+state.withdrawAmount).toFixed(6)}
+              onChange={handleWithdrawChange}
             />
 
             {/* TODO convert to dolar */}
             {/* <div className="text-md opacity-40"> ($7.01) </div> */}
           </div>
 
-          {/* TODO RANGE values change */}
-          {/* <div className="my-2">
-          <input type="range" max="100" value="4" className="range range-xs" />
-        </div> */}
+          <SliderWithPercentages />
 
           {errors.withdrawAmount && (
             <div className="my-2 text-error">Validation Error</div>
@@ -271,7 +300,7 @@ const PoolDepositWithdraw = () => {
 
   return (
     <div className="w-full px-4">
-      <div className="flex flex-row justify-between" style={{ height: "20%" }}>
+      <div className="flex flex-row justify-between h-1/5">
         <StateButton isActive={tab === 0} onClick={() => handleSelect(0)}>
           Deposit
         </StateButton>
@@ -281,11 +310,10 @@ const PoolDepositWithdraw = () => {
       </div>
 
       <div
-        className={classnames("flex w-full bg-gray-200 p-4", {
+        className={classnames("flex w-full bg-gray-200 p-4 h-4/5", {
           "rounded-b-xl rounded-tr-xl": tab === 0,
           "rounded-b-xl rounded-tl-xl": tab === 1,
         })}
-        style={{ height: "80%" }}
       >
         {tab === 0 && <DepositTab />}
 
@@ -339,7 +367,7 @@ const PoolHarvest = () => {
             </div>
 
             <div className="mx-2 text-6xl">
-              {get(state, "pool.userRewardAmountInPool", 0.0)}
+              {get(state, "pool.userRewardAmountInPool", "0.0")}
             </div>
             <div className="mx-2 text-xl">GEM</div>
             {/* TODO convert GEM to dola */}
@@ -483,10 +511,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
         </div>
 
         {isOpen && (
-          <div
-            className="flex justify-between items-start p-4 border-t-2 border-gray-700"
-            style={{ height: "18rem" }}
-          >
+          <div className="flex justify-between items-start p-4 border-t-2 border-gray-700 h-96">
             <div className="flex w-1/5">
               <PoolData depositFee={depositFee} />
             </div>
@@ -511,6 +536,8 @@ const PoolItemWrapper = (props) => {
       initialValue={{
         updateAccount: props.updateAccount,
         balances: [null, null, null],
+        depositAmount: "0",
+        withdrawAmount: "0",
       }}
     >
       <PoolItem {...props} />

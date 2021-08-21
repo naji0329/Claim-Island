@@ -119,7 +119,7 @@ const Bank = ({
         />
         {address && (
           <>
-            <div className="w-full md:w-3/4 mx-auto relative z-10">
+            <div className="w-full lg:w-4/5 mx-auto relative z-10">
               <div className="px-2 md:px-8 py-4 mt-24 flex flex-col">
                 {pools &&
                   pools.map((pool, i) => (
