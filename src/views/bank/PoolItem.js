@@ -107,7 +107,7 @@ const DepositTab = () => {
       </div> */}
 
         <div className="flex flex-col px-8 py-4">
-          <div className="w-full flex justify-between items-center ">
+          <div className="w-full flex justify-between items-center">
             <input
               {...register("depositAmount", {
                 required: true,
@@ -116,6 +116,8 @@ const DepositTab = () => {
               placeholder="Amount"
               defaultValue={Number("0.0").toFixed(6)}
               className="text-4xl p-2 w-full rounded border-2 border-gray-500 bg-transparent"
+              type="number"
+              style={{ textAlign: "right" }}
             />
 
             {/* TODO convert to dolar */}
@@ -174,7 +176,9 @@ const WithdrawTab = () => {
           <div className="">Vault:</div>
           <div className="flex items-center">
             <div className="mx-2">
-              {get(state, "pool.userDepositAmountInPool")}
+              {Number(
+                get(state, "pool.userDepositAmountInPool", "0.0")
+              ).toFixed(4)}
             </div>
             {/* TODO convert LP to dolar */}
             {/* <div className="text-sm">($15.01) </div> */}
@@ -216,6 +220,8 @@ const WithdrawTab = () => {
               placeholder="Amount"
               defaultValue={Number("0.0").toFixed(6)}
               className="text-4xl p-2 w-full rounded border-2 border-gray-500 bg-transparent"
+              type="number"
+              style={{ textAlign: "right" }}
             />
 
             {/* TODO convert to dolar */}
@@ -355,7 +361,7 @@ const PoolHarvest = () => {
 const PoolItem = ({ account, updateAccount, ...pool }) => {
   console.log({ pool });
   const depositFee = pool.depositFeeBP / 100;
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
