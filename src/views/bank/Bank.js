@@ -49,7 +49,7 @@ const Bank = ({
       const poolInfoValues = decodePoolInfoReturnFromMulticall(
         poolInfo.returnData
       );
-      const userInfovalues = decodeUserInfoReturnFromMulticall(
+      const userInfoValues = decodeUserInfoReturnFromMulticall(
         userInfo.returnData
       );
 
@@ -68,10 +68,10 @@ const Bank = ({
             depositFeeBP: poolInfo.depositFeeBP,
             lastRewardBlock: poolInfo.lastRewardBlock,
             userDepositAmountInPool: formatFromWei(
-              userInfovalues[index].userValues.amount
+              userInfoValues[index].userValues.amount
             ),
             userRewardAmountInPool: formatFromWei(
-              userInfovalues[index].userValues.rewardDebt
+              userInfoValues[index].userValues.rewardDebt
             ),
             isSingleStake: poolAsset.isSingleStake,
           };

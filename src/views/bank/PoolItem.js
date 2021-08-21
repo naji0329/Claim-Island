@@ -16,17 +16,40 @@ import { useAsync, createStateContext } from "react-use";
 
 import { useEthers } from "@usedapp/core";
 import { useForm } from "react-hook-form";
+import BigNumber from "bignumber.js";
 
 // shared state across all pool copoments - to avoid passing too much props down to children
 const [useSharedState, SharedStateProvider] = createStateContext();
 
+// prevent rounding up
+const formatNumber = (number, decimals) => {
+  const n = number.toFixed(decimals);
+  return n > number ? n - 1 / Math.pow(10, decimals) + "" : n;
+};
+
+const getBalancesFormatted = async (account, lpToken, isSingleStake) => {
+  if (isSingleStake) {
+    const balance = await balanceOf(lpToken, account);
+    return [formatFromWei(balance), null, null];
+  } else {
+    // load balances when open pool item
+    const [token0, token1] = await pancake.getLPTokens(lpToken);
+
+    return await Promise.all([
+      balanceOf(lpToken, account), // lp token
+      balanceOf(token0, account), // token0
+      balanceOf(token1, account), // token1
+    ]).then((balancesWei) => balancesWei.map((b) => formatFromWei(b)));
+  }
+};
+
 const PoolData = ({ depositFee }) => {
   return (
     <div className="w-full px-2">
-      <div className="flex flex-row justify-between">
+      {/* <div className="flex flex-row justify-between">
         <p className="text-gray-500 font-semibold">TVL:</p>
         <p className="font-bold text-black text-center">$5,006,710</p>
-      </div>
+      </div> */}
       <div className="flex flex-row justify-between">
         <p className="text-gray-500 font-semibold">Deposit fee:</p>
         <p className="font-bold text-black text-center">{depositFee}%</p>
@@ -51,22 +74,27 @@ const PoolData = ({ depositFee }) => {
 };
 
 const SliderWithPercentages = ({ isDeposit }) => {
-  const [state, setState] = useSharedState();
+  const [state, setSharedState] = useSharedState();
   const [slideValue, setSlideValue] = useState(0);
   const stateProp = isDeposit ? "depositAmount" : "withdrawAmount";
 
-  const handleDepositeSlide = (value) => {
-    setSlideValue(value);
-    setDepositPercentage(value);
+  const setPercentage = (percentage) => {
+    const balance = get(
+      state,
+      isDeposit ? "balances[0]" : "pool.userDepositAmountInPool",
+      "0"
+    );
+    const absolute = formatNumber((percentage / 100) * +balance, 6);
+    setSharedState({ ...state, [stateProp]: absolute });
   };
 
-  const setDepositPercentage = (percentage) => {
-    const balance = get(state, "balances[0]", "0");
-    const absolute = (percentage / 100) * +balance + "";
-    setState({ ...state, [stateProp]: absolute });
+  const handleSlide = (value) => {
+    setSlideValue(value);
+    setPercentage(value);
   };
 
   const percentages = [25, 50, 75, 100];
+
   return (
     <div className="my-2">
       <input
@@ -74,7 +102,7 @@ const SliderWithPercentages = ({ isDeposit }) => {
         max="100"
         value={slideValue}
         className="range range-xs"
-        onChange={(e) => handleDepositeSlide(e.target.value)}
+        onChange={(e) => handleSlide(e.target.value)}
       />
       <div className="flex w-full justify-between">
         {percentages.map((percentage) => (
@@ -83,8 +111,8 @@ const SliderWithPercentages = ({ isDeposit }) => {
             key={percentage}
             onClick={(e) => {
               e.preventDefault();
-              handleDepositeSlide(percentage);
-              setDepositPercentage(percentage);
+              handleSlide(percentage);
+              setPercentage(percentage);
             }}
           >
             {percentage}%
@@ -95,21 +123,40 @@ const SliderWithPercentages = ({ isDeposit }) => {
   );
 };
 const DepositTab = () => {
-  const [state, setState] = useSharedState();
+  const [state, setSharedState] = useSharedState();
+  const { pool, account, depositAmount, updateAccount } = state;
   const { handleSubmit, formState } = useForm();
   const { errors, isValid } = formState;
 
   const handleDepositChange = (e) => {
-    setState({ ...state, depositAmount: e.target.value });
+    setSharedState({ ...state, depositAmount: e.target.value });
   };
 
   const handleDeposit = async () => {
     try {
-      await approveBankForMaxUint(state.account, state.pool.lpToken);
+      await approveBankForMaxUint(account, pool.lpToken);
+      await deposit(pool.poolId, formatToWei(depositAmount));
 
-      await deposit(state.pool.poolId, formatToWei(state.depositAmount));
+      const balances = await getBalancesFormatted(
+        account,
+        pool.lpToken,
+        pool.isSingleStake
+      );
+      const currentDepositBN = new BigNumber(pool.userDepositAmountInPool);
+      const depositBN = new BigNumber(depositAmount);
+      const newDepositBN = currentDepositBN.plus(depositBN).toString();
+
+      setSharedState({
+        ...state,
+        balances,
+        depositAmount: "0",
+        pool: {
+          ...pool,
+          userDepositAmountInPool: newDepositBN,
+        },
+      });
     } catch (error) {
-      state.updateAccount({ error: error.message });
+      updateAccount({ error: error.message });
     }
   };
 
@@ -117,10 +164,10 @@ const DepositTab = () => {
     <form onSubmit={handleSubmit(handleDeposit)} className="w-full">
       <div className="flex flex-col w-full h-full justify-between">
         <div className="flex items-center justify-between opacity-40 text-xl">
-          <div className="">Wallet:</div>
+          <div className="">Wallet:</div> {/* TODO: update after deposit */}
           <div className="flex items-center">
             <div className="mx-2">
-              {Number(get(state, "balances[0]", "0")).toFixed(4)}
+              {formatNumber(+get(state, "balances[0]", "0"), 4)}
             </div>
             {/* <div className="text-sm">($15.01) </div> */}
           </div>
@@ -158,7 +205,7 @@ const DepositTab = () => {
               placeholder="Amount"
               type="number"
               max={get(state, "balances[0]", "0")}
-              value={(+state.depositAmount).toFixed(6)}
+              value={formatNumber(+state.depositAmount, 6)}
               onChange={handleDepositChange}
             />
 
@@ -187,20 +234,40 @@ const DepositTab = () => {
 };
 
 const WithdrawTab = () => {
-  const [state] = useSharedState();
+  const [state, setSharedState] = useSharedState();
+  const { pool, account, withdrawAmount, updateAccount } = state;
 
   const { handleSubmit, formState } = useForm();
   const { errors } = formState;
 
   const handleWithdrawChange = (e) => {
-    setState({ ...state, withdrawAmount: e.target.value });
+    setSharedState({ ...state, withdrawAmount: e.target.value });
   };
 
   const handleWithdraw = async () => {
     try {
-      await withdraw(state.pool.poolId, formatToWei(state.withdrawAmount));
+      await withdraw(pool.poolId, formatToWei(withdrawAmount));
+      const balances = await getBalancesFormatted(
+        account,
+        pool.lpToken,
+        pool.isSingleStake
+      );
+
+      const currentDepositBN = new BigNumber(pool.userDepositAmountInPool);
+      const depositBN = new BigNumber(withdrawAmount);
+      const newDepositBN = currentDepositBN.minus(depositBN).toString();
+
+      setSharedState({
+        ...state,
+        balances,
+        withdrawAmount: "0",
+        pool: {
+          ...pool,
+          userDepositAmountInPool: newDepositBN,
+        },
+      });
     } catch (error) {
-      state.updateAccount({ error: error.message });
+      updateAccount({ error: error.message });
     }
   };
 
@@ -211,7 +278,8 @@ const WithdrawTab = () => {
           <div className="">Vault:</div>
           <div className="flex items-center">
             <div className="mx-2">
-              {Number(get(state, "pool.userDepositAmountInPool", "0")).toFixed(
+              {formatNumber(
+                +get(state, "pool.userDepositAmountInPool", "0"),
                 4
               )}
             </div>
@@ -252,7 +320,7 @@ const WithdrawTab = () => {
               placeholder="Amount"
               type="number"
               max={get(state, "pool.userDepositAmountInPool")}
-              value={(+state.withdrawAmount).toFixed(6)}
+              value={formatNumber(+state.withdrawAmount, 6)}
               onChange={handleWithdrawChange}
             />
 
@@ -294,12 +362,11 @@ const PoolDepositWithdraw = () => {
   );
 
   const handleSelect = (i) => {
-    console.log({ i });
     setTab(i);
   };
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full" style={{ padding: "0 2%" }}>
       <div className="flex flex-row justify-between h-1/5">
         <StateButton isActive={tab === 0} onClick={() => handleSelect(0)}>
           Deposit
@@ -335,7 +402,7 @@ const PoolHarvest = () => {
   };
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full" style={{ padding: "0 2%" }}>
       <div className="flex flex-col justify-between h-full px-4 py-4 rounded-xl bg-gray-200">
         <div className="w-full flex flex-row justify-between items-center">
           <p className="font-aristotelica-bold text-2xl">Harvest</p>
@@ -387,7 +454,6 @@ const PoolHarvest = () => {
 };
 
 const PoolItem = ({ account, updateAccount, ...pool }) => {
-  console.log({ pool });
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -409,23 +475,13 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
   const handleOpen = async () => {
     setIsOpen(true);
 
-    if (pool.isSingleStake) {
-      const balance = await balanceOf(pool.lpToken, account);
-      const balances = [formatFromWei(balance), null, null];
+    const balances = await getBalancesFormatted(
+      account,
+      pool.lpToken,
+      pool.isSingleStake
+    );
 
-      setSharedState({ ...state, account, pool, balances });
-    } else {
-      // load balances when open pool item
-      const [token0, token1] = await pancake.getLPTokens(pool.lpToken);
-
-      const balancesFormated = await Promise.all([
-        balanceOf(pool.lpToken, account), // lp token
-        balanceOf(token0, account), // token0
-        balanceOf(token1, account), // token1
-      ]).then((balancesWei) => balancesWei.map((b) => formatFromWei(b)));
-
-      setSharedState({ ...state, account, pool, balances: balancesFormated });
-    }
+    setSharedState({ ...state, account, pool, balances });
   };
 
   const handleClose = () => setIsOpen(false);
@@ -472,7 +528,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
               Deposited
             </p>
-            <p className="font-bold text-gray-300">
+            <p className="font-bold text-gray-300 text-center">
               {pool.userDepositAmountInPool}
             </p>
           </div>
@@ -481,7 +537,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
               To Harvest
             </p>
-            <p className="font-bold text-gray-300">
+            <p className="font-bold text-gray-300 text-center">
               {pool.userRewardAmountInPool}
             </p>
           </div>
