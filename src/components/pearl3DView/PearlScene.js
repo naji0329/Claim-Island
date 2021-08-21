@@ -25,6 +25,7 @@ export const PearlScene = (props) => {
         canvasCtx.gl.physicallyCorrectLights = true;
       }}
     >
+      <CameraControls />
       <Suspense fallback={Loading3DView}>
         {children}
         <PearlBackground />
@@ -32,7 +33,6 @@ export const PearlScene = (props) => {
       <ambientLight
         args={[0xffffff, 2]}
       />
-      <CameraControls />
     </Canvas>
   );
 };
