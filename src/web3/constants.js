@@ -6,9 +6,9 @@ export const gemLockerAddress = "0x50E571Db905936163775325f3d4B1Eb4ADfFf206"
 export const pearlProductionTimeReductionAddress = "0x8Fd9d0c0f49956c0d87Dda967ce45fe7c3b6b10B"
 export const bankAddress = "0x2e4D3DA54a450daB0dE53DEE2D3516CaaBcf1656"
 
-export const pearlDnaDecoderAddress = "0xE488518E37991609734193D8390853a46377c210"
-export const pearlNFTAddress = "0xcafF2fCa8c57F85eCC3cEf0218f151F304F715fC"
-export const rngAddress = "0x4Ec6F62aC16ACaCb1e74a132Dd02a9De056B7f3B"
+export const pearlDnaDecoderAddress = "0x1D2Bf28AC38f70E410e0Eb66701259384d392591"
+export const pearlNFTAddress = "0x890d3cF395bA77371636E82a3b987d5eead11a69"
+export const rngAddress = "0xaF9fd41a7B16A2D1e69906c4Ef99cD5080B09fc6"
 
 export const dnaDecoderAddress = "0xa931f40e73F094f9AEB4c8549833Ff1aB5DDEd17"
 export const clamBonusAddress = "0x5B71fc3FE3e3C299fd5713F0E5Fbf5611BD152b5"
