@@ -176,3 +176,11 @@ export const pendingGem = async (pid) => {
 export const totalAllocPoint = async () => {
   return bank().methods.totalAllocPoint().call();
 };
+
+export const getStartBlock = async () => {
+  return bank().methods.startBlock().call();
+};
+
+export const updatePool = async (poolId) => {
+  return bank().methods.updatePool(poolId).call();
+};

@@ -129,7 +129,7 @@ const DepositTab = () => {
   };
 
   const handleDeposit = async () => {
-    setInTx(true)
+    setInTx(true);
 
     try {
       await approveBankForMaxUint(account, pool.lpToken);
@@ -153,9 +153,9 @@ const DepositTab = () => {
           userDepositAmountInPool: newDepositBN,
         },
       });
-      setInTx(false)
+      setInTx(false);
     } catch (error) {
-      setInTx(false)
+      setInTx(false);
       updateAccount({ error: error.message });
     }
   };
@@ -246,7 +246,7 @@ const WithdrawTab = () => {
   };
 
   const handleWithdraw = async () => {
-    setInTx(true)
+    setInTx(true);
     try {
       await withdraw(pool.poolId, formatToWei(withdrawAmount));
       const balances = await getBalancesFormatted(
@@ -268,9 +268,9 @@ const WithdrawTab = () => {
           userDepositAmountInPool: newDepositBN,
         },
       });
-      setInTx(false)
+      setInTx(false);
     } catch (error) {
-      setInTx(false)
+      setInTx(false);
       updateAccount({ error: error.message });
     }
   };
@@ -438,8 +438,11 @@ const PoolHarvest = () => {
               </div>
             </div>
 
-            <div className="mx-2 text-6xl">
-              {get(state, "pool.userRewardAmountInPool", "0.0")}
+            <div className="mx-2 text-4xl">
+              {formatNumber(
+                +get(state, "pool.userRewardAmountInPool", "0.0"),
+                4
+              )}
             </div>
             <div className="mx-2 text-xl">GEM</div>
             {/* TODO convert GEM to dola */}
