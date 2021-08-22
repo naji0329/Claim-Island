@@ -64,11 +64,7 @@ const PoolData = ({ depositFee }) => {
           BSC Scan
         </a>
       </div>
-      <div className="flex">
-        <a href="#" className="text-gray-500 font-semibold underline">
-          Read Documents
-        </a>
-      </div>
+      
     </div>
   );
 };
