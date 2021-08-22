@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { get } from "lodash";
-import ClamUnknown from "../../assets/img/clam_unknown.png";
 
-export default ({ dna, dnaDecoded }) => {
+export default ({ dna, dnaDecoded, img }) => {
   //   const [showTraits, setShowTraits] = useState(false);
   console.log({ dnaDecoded });
   const clam = {
@@ -10,11 +9,12 @@ export default ({ dna, dnaDecoded }) => {
     rarity: get(dnaDecoded, "[0].rarity"),
     shellShape: get(dnaDecoded, "[0].shellShape"),
   };
+
   return (
     <>
       <div className="bg-white hover:border hover:border-blue-200 rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 flex flex-col justify-between cursor-pointer">
         <div className=" flex-1 justify-center  md:flex items-center p-5">
-          <img src={ClamUnknown} />
+          <img src={img} />
         </div>
 
         {/* <img

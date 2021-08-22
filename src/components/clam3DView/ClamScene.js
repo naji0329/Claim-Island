@@ -1,11 +1,13 @@
-import { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Suspense, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
 import { ClamBackground } from "./ClamBackground";
 import { Loading3DView } from "../Loading3DView";
 
-export const ClamScene = ({ children }) => {
+export const ClamScene = (props) => {
+  const { children, setCanvasCtx } = props;
+
   return (
     <Canvas
       camera={{
@@ -21,6 +23,7 @@ export const ClamScene = ({ children }) => {
       pixelRatio={window.devicePixelRatio}
       onCreated={canvasCtx => {
         canvasCtx.gl.toneMapping = THREE.NoToneMapping;
+        setCanvasCtx(canvasCtx);
       }}
     >
       <Suspense fallback={<Loading3DView />}>

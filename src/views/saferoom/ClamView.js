@@ -5,8 +5,11 @@ import { get } from "lodash";
 import { Clam3DView } from "../../components/clam3DView";
 import { Pearl3DView } from "../../components/pearl3DView";
 
+// import { getTraits } from "../../components/three/3DClams/main";
+
 export default ({ dna, dnaDecoded }) => {
   const [showTraits, setShowTraits] = useState(false);
+  // const clamTraits = getTraits();
 
   console.log({ dnaDecoded });
 
@@ -71,6 +74,7 @@ export default ({ dna, dnaDecoded }) => {
             height={400}
             clamDna={dna}
             decodedDna={dnaDecoded}
+            // clamTraits={clamTraits}
             showTraitsTable={showTraits}
           />
           {/** 3D Clam with react three fiber */}

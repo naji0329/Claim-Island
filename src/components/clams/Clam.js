@@ -36,6 +36,8 @@ export const Clam = (props) => {
     clamType,
     tongueType,
     textures,
+    canvasCtx,
+    clamDna
   } = props;
 
   const ClamComponent = CLAM_COMPONENTS[clamType] || DefaultClam;
@@ -46,7 +48,19 @@ export const Clam = (props) => {
     }
   }, [])
 
-  useFrame(() => {
+  const renderImg = (canvasCtx) => {
+    const clamImg = localStorage.getItem(clamDna);
+    if(!clamImg && canvasCtx) {
+      const img = canvasCtx.gl.domElement.toDataURL();
+      localStorage.setItem(
+        props.clamDna,
+        img
+      );
+    }   
+  };
+
+  useFrame((state, delta) => {
+    renderImg(canvasCtx);
     if (groupMesh.current) {
       groupMesh.current.rotation.y += (Math.PI * 2) * 0.001
     }

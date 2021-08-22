@@ -10,6 +10,7 @@ import clamIcon from "../../assets/clam-icon.png";
 import { Modal, useModal } from "../../components/Modal";
 import ClamItem from "./ClamItem";
 import ClamView from "./ClamView";
+import ClamUnknown from "../../assets/img/clam_unknown.png";
 
 import videoImage from "../../assets/locations/saferoom_static.jpg";
 
@@ -48,6 +49,15 @@ const PearlItem = ({ pearl }) => {
     </>
   );
 };
+
+// const TEST_CLAMS = [{
+//   dna: "testing",
+//   dnaDecoded: {
+//     lifespan: "1",
+//     rarity: "rare",
+//     shellShape: "common"
+//   }
+// }];
 
 const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
   const [clams, setClams] = useState([]);
@@ -110,6 +120,13 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
       },
     });
   });
+
+  useEffect(() => {
+    clams.forEach((clam) => {
+      const clamImg = localStorage.getItem(clam.dna);
+      clam.img = clamImg || ClamUnknown;
+    });
+  }, [isShowing]);
 
   return (
     <>
