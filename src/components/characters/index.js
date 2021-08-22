@@ -235,18 +235,8 @@ const CharacterSpeak = (props) => {
         showBubble ? "character-bubble" : "character-bubble hide-bubble"
       }
     >
-      <div className="character-container">
-        <div className="character-wrap">
-          <img src={charImg} className="character" onClick={onClickCharacter} />
-        </div>
-      </div>
-      <button
-        className="btn character-container-round"
-        onClick={onClickCharacter}
-      >
-        <img src={charImg} className="character" />
-      </button>
       <div className="text-bubble">
+      <div className="text-wrapper">
         <div className="name">{charName}</div>
         <div className="speech">
           <p className="speech-text">{speech}</p>
@@ -277,8 +267,23 @@ const CharacterSpeak = (props) => {
         ) : (
           ""
         )}
+        </div>
       </div>
+
+      <div className="character-container">
+        <div className="character-wrap">
+          <img src={charImg} className="character" onClick={onClickCharacter} />
+        </div>
+      </div>
+      <button
+        className="btn character-container-round"
+        onClick={onClickCharacter}
+      >
+        <img src={charImg} className="character" />
+      </button>
+
       <ToastContainer />
+
     </div>
   );
 };

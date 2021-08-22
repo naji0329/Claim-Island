@@ -28,6 +28,13 @@ export const ISLAND_OBJECTS = [
     url: "/saferoom",
   },
   {
+    objectUrl: "glb_files/Info_Island.glb",
+    type: "island",
+    name: "lighthouse",
+    clickable: true,
+    url: "/info",
+  },
+  {
     objectUrl: "glb_files/Bridges.glb",
     type: "bridge",
     name: "bridge",
