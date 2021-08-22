@@ -20,11 +20,12 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
   let history = useHistory();
 
   const handleClickButton = (button) => {
+    if (button.dismiss ) {
+      setShowBubble(false);
+      return;
+    }
     const speech = get(SPEECHES, button.next, button.next);
     setStateSpeech(speech);
-    if (speech.dismiss) {
-      setShowBubble(false);
-    }
     if (onClickButton) {
       onClickButton();
     }
@@ -65,6 +66,10 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
       setShowBubble(false);
     }
   };
+
+  useEffect(()=> {
+      setShowBubble(!!action)
+  }, [action]);
 
   return (
     <div

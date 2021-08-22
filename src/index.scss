@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.flex-col {
+  flex-direction: column;
+}
 @font-face {
   font-family: AristotelicaBold;
   src: url(./assets/fonts/aristotelicaText_bold.otf) format("opentype");

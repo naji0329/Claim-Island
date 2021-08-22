@@ -13,7 +13,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import { formatUnits } from "@ethersproject/units";
 
-import { clamNFTAddress } from "../web3/constants.js";
+import { clamNFTAddress, gemTokenAddress } from "../web3/constants.js";
 import getWeb3 from "../web3/getWeb3";
 
 import Web3Avatar from "./Web3Avatar";
@@ -54,6 +54,7 @@ const ErrorAlert = ({ title, description, onClose }) => (
 );
 
 const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
+const formatGem = (value) => (value ? formatUnits(value, 18) : "0");
 const formatClam = (value) => (value ? formatUnits(value, 0) : "0");
 
 const Web3Navbar = ({ title, updateAccount, ...redux }) => {
@@ -61,10 +62,13 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
   const [activateError, setActivateError] = useState("");
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
   const [activateClamBalance, setActivateClamBalance] = useState("0");
+  const [activateGemBalance, setActivateGemBalance] = useState("0");
+  
   const [activateChainId, setActivateChainId] = useState();
 
   const { activateBrowserWallet, account, error } = useEthers();
   const clamBalance = useTokenBalance(clamNFTAddress, account); // TODO - not working
+  const gemBalance = useTokenBalance(gemTokenAddress, account);
   const bnbBalance = useEtherBalance(account);
   const web3 = getWeb3();
   const location = useLocation();
@@ -99,6 +103,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
 
     updateAccount({
       bnbBalance: activateBnbBalance,
+      gemBalance: activateGemBalance,
       clamBalance: activateClamBalance,
       error: isBSChain ? null : activateError,
       address: account,
@@ -138,6 +143,16 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
       setActivateClamBalance(balance);
     }
   }, [clamBalance]);
+
+  useEffect(() => {
+    // gemBalance is bignumber
+    const balance = formatGem(gemBalance);
+    // console.log("useEffect", { balance });
+    if (balance !== activateGemBalance) {
+      // balance is string
+      setActivateGemBalance(balance);
+    }
+  }, [gemBalance]);
 
   return (
     <>
