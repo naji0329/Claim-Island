@@ -6,6 +6,7 @@ const initialState = {
   account: {
     bnbBalance: "0",
     clamBalance: "0",
+    gemBalance: "0",
     error: undefined,
     isConnected: undefined,
     isBSChain: true,

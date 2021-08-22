@@ -461,7 +461,26 @@ export const SPEECHES = {
       skip: false,
     },
   },
-
+  clam_shop: {
+    welcome: {
+      text: `Howdy friend. My name is Diego the Shopkeeper. Welcome to my Clam Shop! Here you can buy Clams for $GEM and trade them for $SHELL. Let me show you around...`,
+      next: 'connect',
+      dismiss: false,
+      skip: false,
+    },
+    connect: {
+      text: `Oh I've noticed that you've not connected your blockchain wallet yet. Before you can buy or trade any Clams, you need to enable that...`,
+      next: false,
+      dismiss: false,
+      skip: false,
+    },
+    choose_path: {
+      text: `Now that everything is set up, tell me what led you to my Shop?`,
+      next: false,
+      dismiss: false,
+      skip: false,
+    },
+  },
   saferoom: {
     connect: {
       text: `Excellent! First, let's get your wallet connected. You will need to do this in order to see your Clams. Press the "Connect Wallet" button in the top right of the screen.`,
@@ -840,6 +859,12 @@ export const BUTTONS = {
       },
     },
   },
+  clam_shop: {
+    welcome: {
+      next: "Let's go!",
+      alt: false,
+    },
+  }
 };
 
 function showPresaleCountdown() {

@@ -1,18 +1,18 @@
 //// add test contracts here
-export const shellTokenAddress = "0xF95169aAA982956a84d2941f280743A7D9Fc2C52";
-export const clamNFTAddress = "0xFA8BD8A0bC3530a16E934D8856C25fC730a9aD72";
-export const gemTokenAddress = "0x0Fb74d9EBc7A9dd24376Cc7e3bc250AFbFDed2d6";
-export const gemLockerAddress = "0xcD325E1E68D3585D7aD53EED07A9A6DF1C8AD255";
-export const pearlProductionTimeReductionAddress = "0x069636EB2ba147eF61801384C2859140e3ec8d6C";
-export const bankAddress = "0x73Ee45E9355f394642a823caB12425A93D092bEe";
-export const pearlDnaDecoderAddress = "0x4adf02F3E7ce8f3A0a675a5DE764BcD2869210D9";
-export const pearlNFTAddress = "0x70f56e89d98ad2Fb1aB35A6F99577a21242D857F";
-export const pearlBurnerAddress = "0x9ef44408A4F6c7bEb574A419E2408E3f9351FCB8";
-export const rngAddress = "0x912DAc3B968b989D7D8BE2c02631322299245ee2";
-export const dnaDecoderAddress = "0x35697Fb6a100AcD29BD6739f5a3D512510aef58D";
-export const clamBonusAddress = "0xEc07911687e7276d2eAeb76F94ADE1900265116f";
-export const clamShopAddress = "0xC48C19E15C8b6B70043288EcF360AB703A9e4e0f";
-export const pearlFarmAddress = "0xae222d5F4194F7F2a51a9D370B9f36015c850a0d";
+export const shellTokenAddress = "0x4adf02F3E7ce8f3A0a675a5DE764BcD2869210D9"
+export const clamNFTAddress = "0x9ef44408A4F6c7bEb574A419E2408E3f9351FCB8"
+export const gemTokenAddress = "0x912DAc3B968b989D7D8BE2c02631322299245ee2"
+export const gemLockerAddress = "0xEc07911687e7276d2eAeb76F94ADE1900265116f"
+export const pearlProductionTimeReductionAddress = "0xae222d5F4194F7F2a51a9D370B9f36015c850a0d"
+export const bankAddress = "0x716B084181C39091605006120301AEC42B3473F4"
+export const pearlDnaDecoderAddress = "0x177D9b886f519Ba5c2Be1DDc979a8008FD1d0B1d"
+export const pearlNFTAddress = "0xea2D6D9ec7aE49b068E025A9675B923035Ce8995"
+export const pearlBurnerAddress = "0x248eB7B9f038FA2bCec4E72342CCc3C1148aC459"
+export const rngAddress = "0xa13c31fF968afB82051e9377450BD9B855cdaC17"
+export const dnaDecoderAddress = "0x70f56e89d98ad2Fb1aB35A6F99577a21242D857F"
+export const clamBonusAddress = "0x2Ef64683270f8F6291216c3EF4bb87E3a7e56c98"
+export const clamShopAddress = "0x098a345B8bB2112B36e11Ee25c96eD7bEe385813"
+export const pearlFarmAddress = "0xE379EF912A091B6826A1822002D020E859Bc21A5"
 //// end of test contracts
 
 
