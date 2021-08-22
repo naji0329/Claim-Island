@@ -8,13 +8,7 @@ import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 import "./index.scss";
 
 // button => obj {text, alt}
-const CharacterWrapper = ({
-  name,
-  action,
-  button,
-  buttonAlt,
-  onClickButton,
-}) => {
+const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) => {
   const character = get(CHARACTERS, name);
   const speech = get(SPEECHES, action, action);
 
@@ -82,11 +76,12 @@ const CharacterWrapper = ({
     >
       <div
         className={
-          showBubble ? "character-bubble fixed z-999 bottom-8 h-screen pointer-events-none w-screen" : "character-bubble hide-bubble"
+          showBubble
+            ? "character-bubble fixed z-999 bottom-8 h-screen pointer-events-none w-screen"
+            : "character-bubble hide-bubble"
         }
         style={{ zIndex: speech ? undefined : 0, position: "fixed" }}
       >
-
         <div className="text-bubble flex-col justify-end pointer-events-none">
           <div className="text-wrapper">
             <div className="name px-10">{character.name}</div>
@@ -104,7 +99,7 @@ const CharacterWrapper = ({
                 <button
                   className="btn character-btn"
                   id="btn-next"
-                  onClick={() => button.alt ? handleClickButtonAlt(button) : handleClickButton(button)}
+                  onClick={() => (button.alt ? handleClickButtonAlt(button) : handleClickButton(button))}
                 >
                   {button.text}
                 </button>
@@ -112,7 +107,7 @@ const CharacterWrapper = ({
               {buttonAlt && buttonAlt.text && (
                 <button
                   className="btn character-btn"
-                  onClick={() => buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)}
+                  onClick={() => (buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt))}
                 >
                   {buttonAlt.text}
                 </button>
@@ -121,16 +116,9 @@ const CharacterWrapper = ({
           </div>
         </div>
         <div className="character-container flex items-end cursor-pointer">
-          <img
-            className="max-h-full"
-            src={character.charImg}
-            onClick={handleClickCharacter}
-          />
+          <img className="max-h-full" src={character.charImg} onClick={handleClickCharacter} />
         </div>
-        <button
-          className="btn character-container-round"
-          onClick={handleClickCharacter}
-        >
+        <button className="btn character-container-round" onClick={handleClickCharacter}>
           <img src={character.charImg} className="character" />
         </button>
 
@@ -151,11 +139,7 @@ const CharacterWrapper = ({
                 <button
                   className="btn character-btn"
                   id="btn-next"
-                  onClick={() =>
-                    button.alt
-                      ? handleClickButtonAlt(button)
-                      : handleClickButton(button)
-                  }
+                  onClick={() => (button.alt ? handleClickButtonAlt(button) : handleClickButton(button))}
                 >
                   {button.text}
                 </button>
@@ -163,11 +147,7 @@ const CharacterWrapper = ({
               {buttonAlt && buttonAlt.text && (
                 <button
                   className="btn character-btn ml-2"
-                  onClick={() =>
-                    buttonAlt.alt
-                      ? handleClickButtonAlt(buttonAlt)
-                      : handleClickButton(buttonAlt)
-                  }
+                  onClick={() => (buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt))}
                 >
                   {buttonAlt.text}
                 </button>

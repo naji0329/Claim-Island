@@ -28,9 +28,6 @@ module.exports = {
       height: {
         canvas: '400px',
       },
-    zIndex: {
-      '-1': '-1',
-      999: 999,
     },
   },
   variants: {
