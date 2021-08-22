@@ -20,23 +20,27 @@ import { multicallAddress } from "./web3/constants";
 import "leaflet/dist/leaflet.css";
 import "./index.scss";
 
-const chainId = 56;
+const bscMainnetChainId = 56;
 const rpcUrl = "https://bsc-dataseed.binance.org";
 
+const ganacheChainId = 1337;
+const hardHatChainId = 31337;
+
 const config = {
-  supportedChains: [1337, 56],
+  supportedChains: [ChainId.BSC, ganacheChainId, hardHatChainId],
   readOnlyChainId: ChainId.BSC,
-  multicallAddresses: { 1337: multicallAddress },
+  multicallAddresses: { [ganacheChainId]: multicallAddress, [hardHatChainId]: multicallAddress },
   readOnlyUrls: {
     [ChainId.BSC]: "https://bsc-dataseed.binance.org",
-    [1337]: "http://127.0.0.1:8545/",
+    [ganacheChainId]: "http://127.0.0.1:8545/",
+    [hardHatChainId]: "http://127.0.0.1:8545/",
   },
 };
 
 ReactDOM.render(
   <Provider store={store}>
     <bsc.UseWalletProvider
-      chainId={chainId}
+      chainId={bscMainnetChainId}
       connectors={{
         walletconnect: { rpcUrl },
         bsc,

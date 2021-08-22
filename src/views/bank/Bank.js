@@ -13,57 +13,101 @@ import Web3Navbar from "../../components/Web3Navbar";
 import VideoBackground from "../../components/VideoBackground";
 
 import {
-  prepGetPoolInfoForMulticall,
   getPoolsLength,
+  prepGetPoolInfoForMulticall,
   decodePoolInfoReturnFromMulticall,
+  prepGetUserInfoForMulticall,
+  decodeUserInfoReturnFromMulticall,
+  totalAllocPoint,
+  pendingGem,
+  updatePool,
+  getStartBlock,
 } from "../../web3/bank";
+
 import { aggregate } from "../../web3/multicall";
+import { formatFromWei } from "../../web3/shared";
 import PoolItem from "./PoolItem";
-import Swap from "./Swap";
 import "./bank.scss";
 import { poolAssets } from "./poolsAssets";
+import { web3 } from "../../web3";
+import { ChainId, useEthers } from "@usedapp/core";
 
 const Bank = ({
-  account: { clamBalance, address },
+  account: { address, isBSChain },
   updateCharacter,
   updateAccount,
 }) => {
   const [pools, setPools] = useState([]);
 
+  const { chainId } = useEthers();
+
   useEffect(() => {
     const getPoolInfo = async () => {
       const poolLength = await getPoolsLength();
-      const calls = prepGetPoolInfoForMulticall(poolLength);
-      const { returnData } = await aggregate(calls);
-      const values = decodePoolInfoReturnFromMulticall(returnData);
+      const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
+      const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
+      const totalAlloc = await totalAllocPoint();
 
-      const setUpPools = values.map(({ poolInfoValues, poolId }) => {
-        return {
-          name: poolAssets[poolInfoValues.lpToken].name,
-          apy: poolAssets[poolInfoValues.lpToken].apy,
-          multiplier: poolAssets[poolInfoValues.lpToken].multiplier,
-          images: poolAssets[poolInfoValues.lpToken].images,
-          poolId: poolId,
-          lpToken: poolInfoValues.lpToken,
-          allocPoint: poolInfoValues.allocPoint,
-          depositFeeBP: poolInfoValues.depositFeeBP,
-          lastRewardBlock: poolInfoValues.lastRewardBlock,
-        };
+      const [poolInfo, userInfo] = await Promise.all([
+        aggregate(poolInfocalls),
+        aggregate(userInfocalls),
+      ]);
+
+      const poolInfoValues = decodePoolInfoReturnFromMulticall(
+        poolInfo.returnData
+      );
+      const userInfoValues = decodeUserInfoReturnFromMulticall(
+        userInfo.returnData
+      );
+
+      const pools = poolInfoValues.map(async (pool, index) => {
+        const poolAsset = poolAssets[pool.poolInfoValues.lpToken];
+        const poolInfo = pool.poolInfoValues;
+        const pending = await pendingGem(index);
+        if (poolAsset) {
+          return {
+            name: poolAsset.name,
+            apy: poolAsset.apy,
+            multiplier: ((poolInfo.allocPoint / totalAlloc) * 100).toFixed(1),
+            images: poolAsset.images,
+            poolId: pool.poolId,
+            lpToken: poolInfo.lpToken,
+            allocPoint: poolInfo.allocPoint,
+            depositFeeBP: poolInfo.depositFeeBP,
+            lastRewardBlock: poolInfo.lastRewardBlock,
+            userDepositAmountInPool: formatFromWei(
+              userInfoValues[index].userValues.amount
+            ),
+            userRewardAmountInPool: formatFromWei(pending),
+            isSingleStake: poolAsset.isSingleStake,
+          };
+        }
       });
+
+      const setUpPools = await Promise.all(pools.filter((p) => p));
 
       setPools(setUpPools);
     };
     if (pools.length === 0 && address) {
       getPoolInfo();
     }
-  }, [pools, address]);
+  }, [pools, address, isBSChain]);
 
   useAsync(async () => {
     updateCharacter({
       name: "tanja",
       action: "bank.connect.text",
       button: {
-        text: undefined,
+        text: "Dismiss",
+        alt: {
+          action: "cb",
+          destination: () => {
+            updateCharacter({
+              name: "tanja",
+              action: undefined,
+            });
+          },
+        },
       },
     });
   });
@@ -71,77 +115,64 @@ const Bank = ({
   return (
     <>
       <div className="bg-bank overflow-x-hidden">
-        <Web3Navbar />
+        <Web3Navbar title="Clam Bank" />
         {/* container */}
         {/* video */}
-        <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
+        <VideoBackground
+          videoImage={videoImage}
+          videoMp4={videoMp4}
+          videoWebM={videoWebM}
+        />
         {address && (
-          <div className="flex justify-center items-start pt-24 w-full">
-            {/* swap column */}
-            <div className="w-1/4 flex flex-col mx-4">
-              <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-col justify-between">
-                <div className="w-full flex flex-col px-3 py-2">
-                  <h2 className="text-blue-700 font-semibold text-4xl mb-2">
-                    Swap
-                  </h2>
-                  <p className="text-yellow-700">
-                    <b>Instantly</b> trade tokens.
-                  </p>
-                </div>
+          <>
+            <div className="w-full lg:w-4/5 mx-auto relative z-10">
+              <div className="px-2 md:px-8 py-4 mt-24 flex flex-col">
+                {chainId === ChainId.Localhost && (
+                  <button
+                    // only works if web3.setProvider("ws://localhost:8545"); in getWeb3.js
+                    className="btn mb-2"
+                    onClick={async () => {
+                      await updatePool(0);
 
-                <div className="w-full flex flex-col px-3 py-2">
-                  <Swap />
-                </div>
-              </div>
-            </div>
-            <div className="w-3/4 flex flex-col mx-4">
-              {/* navbar */}
-              <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
-                <div className="px-3 py-2">
-                  <h2 className="text-blue-700 font-semibold text-4xl mb-2">
-                    Invest
-                  </h2>
-                  <p className="text-yellow-700">
-                    Stake into <b>Liquidity Pools (LP)</b> to ear $GEM over
-                    time.
-                  </p>
-                </div>
-
-                <div className="px-3 py-2 flex justify-between">
-                  <button className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6">
-                    Boost Pool
+                      console.log(
+                        "current block",
+                        await web3.eth.getBlockNumber()
+                      );
+                      await web3.currentProvider.send(
+                        {
+                          jsonrpc: "2.0",
+                          method: "evm_mine",
+                          id: new Date().getTime(),
+                        },
+                        (err, result) => {
+                          console.log(`err`, err);
+                          console.log(`result`, result);
+                        }
+                      );
+                      console.log("bank start block", await getStartBlock());
+                    }}
+                  >
+                    Advance block + update pool 0
                   </button>
-                </div>
-              </div>
-              <div className="my-4 py-5">
-                {pools.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
-                    {pools &&
-                      pools.map((pool, i) => (
-                        <div key={i}>
-                          <PoolItem
-                            {...pool}
-                            account={address}
-                            updateAccount={updateAccount}
-                          />
-                        </div>
-                      ))}
-                  </div>
-                ) : (
-                  <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
-                    There is nothing to see :-(
-                  </div>
                 )}
+                {pools &&
+                  pools.map((pool, i) => (
+                    <PoolItem
+                      key={i}
+                      {...pool}
+                      account={address}
+                      updateAccount={updateAccount}
+                    />
+                  ))}
               </div>
             </div>
-          </div>
+          </>
         )}
-
 
         {/* chat character   */}
       </div>
 
-      {!address && <Character name="tanja" />}
+      <Character name="tanja" />
     </>
   );
 };

@@ -18,16 +18,17 @@ module.exports = {
       159: "36em",
       160: "40em",
     },
-    maxWidth: {
-      canvas: '400px',
+    extend: {
+      minWidth: {
+        xs: "15rem",
+      },
+      maxWidth: {
+        canvas: '400px',
+      },
+      height: {
+        canvas: '400px',
+      },
     },
-    height: {
-      canvas: '400px',
-    },
-    zIndex: {
-      '-1': '-1',
-    },
-    extend: {},
   },
   variants: {
     extend: {

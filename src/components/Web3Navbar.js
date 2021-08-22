@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useAsync } from "react-use";
-import { useEthers, useTokenBalance, useEtherBalance, ChainId, shortenAddress } from "@usedapp/core";
+import {
+  useEthers,
+  useTokenBalance,
+  useEtherBalance,
+  ChainId,
+  shortenAddress,
+} from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { actions } from "../store/redux";
 import { Link, useLocation } from "react-router-dom";
@@ -17,9 +23,16 @@ import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
-    <div className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-50" role="alert">
+    <div
+      className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-50"
+      role="alert"
+    >
       <div className="flex">
-        <svg className="h-6 w-6 fill-current text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+        <svg
+          className="h-6 w-6 fill-current text-red-500 mr-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
           <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
         </svg>
         <div>
@@ -44,7 +57,7 @@ const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
 const formatGem = (value) => (value ? formatUnits(value, 18) : "0");
 const formatClam = (value) => (value ? formatUnits(value, 0) : "0");
 
-const Web3Navbar = ({ updateAccount, ...redux }) => {
+const Web3Navbar = ({ title, updateAccount, ...redux }) => {
   //  is called several times thus need a state to lower the renders
   const [activateError, setActivateError] = useState("");
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
@@ -85,17 +98,25 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
     }
     const netId = await web3.eth.net.getId();
     console.log("useEffect updateAccount", { activateChainId, netId });
+    const isBSChain =
+      activateChainId === ChainId.BSC || activateChainId === ChainId.Localhost;
 
     updateAccount({
       bnbBalance: activateBnbBalance,
       gemBalance: activateGemBalance,
       clamBalance: activateClamBalance,
-      error: activateError,
+      error: isBSChain ? null : activateError,
       address: account,
       isConnected: account ? true : false,
-      isBSChain: activateChainId === ChainId.BSC,
+      isBSChain,
     });
-  }, [account, activateChainId, activateError, activateBnbBalance, activateClamBalance]);
+  }, [
+    account,
+    activateChainId,
+    activateError,
+    activateBnbBalance,
+    activateClamBalance,
+  ]);
 
   useEffect(() => {
     if (error) {
@@ -167,19 +188,25 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
         </>
       )}
 
-      <nav className="flex min-h-48 min-w-full items-center fixed px-6 py-4 bg-transparent nav-info-button">
+      <nav className="flex min-h-48 min-w-full items-center fixed px-6 py-4 bg-transparent mt-2 z-10">
         {/* this push menu to right side */}
         <div className="flex justify-between lg:w-auto w-full  pl-6 pr-2 pb-0 lg:pb-2"></div>
 
         <div className="w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
-          <div className="lg:flex-grow"></div>
+          <div className="flex-grow">
+            {title && (
+              <h1 className="text-6xl text-shadow font-extrabold font-aristotelica-bold text-white">
+                {title}
+              </h1>
+            )}
+          </div>
 
           <div className="flex">
             {!account && (
               <button
                 // style={{ fontFamily: "AristotelicaBold", lineHeight: "0.7rem" }}
                 type="button"
-                className="focus:outline-none block text-md px-4 ml-2 py-2 rounded-xl border-2 border-white  bg-blue-600 text-white font-bold hover:text-white hover:bg-blue-400"
+                className="focus:outline-none block text-md px-4 ml-2 py-2 rounded-xl bg-gray-800 text-white font-bold hover:text-white hover:bg-gray-700"
                 onClick={() => activateBrowserWallet()}
               >
                 Connect Wallet
@@ -188,19 +215,29 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
 
             {account && (
               <>
-
-              <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
-                <Link to="/saferoom" className="flex" style={Number(activateClamBalance) > 0 && location.pathname.indexOf('saferoom') === -1 ? null : {pointerEvents: "none"}}>
-                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                     Clams in Safe: {activateClamBalance}
-
-                     { Number(activateClamBalance) > 0 && location.pathname.indexOf('saferoom') === -1
-                       && <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
-                     }
-                  </span>
-
-                </Link>
-              </div>
+                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
+                  <Link
+                    to="/saferoom"
+                    className="flex"
+                    style={
+                      Number(activateClamBalance) > 0 &&
+                      location.pathname.indexOf("saferoom") === -1
+                        ? null
+                        : { pointerEvents: "none" }
+                    }
+                  >
+                    <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                      Clams in Safe: {activateClamBalance}
+                      {Number(activateClamBalance) > 0 &&
+                        location.pathname.indexOf("saferoom") === -1 && (
+                          <FontAwesomeIcon
+                            icon={faSignInAlt}
+                            className="ml-1"
+                          />
+                        )}
+                    </span>
+                  </Link>
+                </div>
                 {/* {Number(activateClamBalance) > 0 &&
                   location.pathname.indexOf("saferoom") === -1 && (
                     <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
@@ -213,7 +250,9 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                   )} */}
 
                 <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black bg-opacity-80">
-                  <div className="p-1 text-sm text-gray-200">{shortenAddress(account)}</div>
+                  <div className="p-1 text-sm text-gray-200">
+                    {shortenAddress(account)}
+                  </div>
 
                   <Web3Avatar address={account} size={30} />
                 </div>
