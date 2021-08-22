@@ -78,7 +78,7 @@ const Bank = ({
             userDepositAmountInPool: formatFromWei(
               userInfoValues[index].userValues.amount
             ),
-            userRewardAmountInPool: pending,
+            userRewardAmountInPool: formatFromWei(pending),
             isSingleStake: poolAsset.isSingleStake,
           };
         }
