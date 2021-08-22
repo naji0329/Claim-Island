@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAsync } from "react-use";
 import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
+import { collectClam } from "../../web3/clam";
 
 import "./index.scss";
 
 import Card from "../../components/Card";
 
-import presaleContract from "../../web3/buyClamPresale";
+import { collect } from "../../web3/clam";
 import { clamPresaleAddress } from "../../web3/constants";
 
-import ClamUnknown from "../../assets/img/clam_unknown.png";
+import ClamPic from "../../assets/collect-clam.png";
 import { actions } from "../../store/redux";
+import { truncate } from "lodash";
 
 const ClamCollectModal = ({
-  setShowMintModal,
-  updatePresale,
+  setModalToShow,
   account: { address },
   updateCharacter,
   updateAccount,
@@ -28,48 +28,21 @@ const ClamCollectModal = ({
     console.log({ data, address });
     setIsLoading(true);
 
-    updateCharacter({
-      name: "diego",
-      action: "clam_presale.collectionProcessing.text",
-      button: {
-        text: undefined,
-      },
-    });
-
-    await presaleContract
-      .collectClam(address)
+    await collectClam(address)
       .then(() => {
         setIsLoading(false);
 
-        updatePresale({ rng: undefined, hashRequest: undefined });
+        updateAccount({ clamToCollect: null });
 
         updateCharacter({
           name: "diego",
-          action: "clam_presale.congratsCollection.text",
+          action: "clam_shop.collect_congrats.text",
           button: {
-            text: "Go to Saferoom",
-            alt: {
-              action: "internal",
-              destination: "/saferoom",
-            },
-          },
-          buttonAlt: {
-            text: "Buy more",
-            alt: {
-              action: "cb",
-              destination: () => {
-                setShowMintModal(true);
-                updateCharacter({
-                  name: "diego",
-                  action: "clam_presale.purchase.text",
-                  button: {
-                    text: null,
-                  },
-                });
-              },
-            },
+            text: "Gotcha",
+            dismiss: truncate
           },
         });
+        setModalToShow('display');
       })
       .catch((e) => {
         console.error(e);
@@ -85,36 +58,12 @@ const ClamCollectModal = ({
       });
   };
 
-  useAsync(async () => {
-    updateCharacter({
-      name: "diego",
-      action: "clam_presale.collection.text",
-      button: {
-        text: undefined,
-      },
-    });
-  });
-
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
-          <div className="flex flex-col mb-1">
-            <h2 className="text-blue-700 font-semibold text-2xl mb-2">
-              Get Clams on BSC
-            </h2>
-            <a
-              className="text-gray-500 text-base underline"
-              href={getExplorerAddressLink(clamPresaleAddress, ChainId.BSC)}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {clamPresaleAddress}
-            </a>
-          </div>
-
           <div className="bg-white flex-1 justify-center  md:flex items-center">
-            <img src={ClamUnknown} />
+            <img src={ClamPic} width="300" />
           </div>
 
           <div className="py-2 flex flex-col">
@@ -151,7 +100,7 @@ const ClamCollectModal = ({
                 type="submit"
                 className="block font-extrabold text-center shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-2xl"
               >
-                Collect your Clam
+                Collect Clam
               </button>
             )}
           </div>

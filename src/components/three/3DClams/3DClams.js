@@ -212,7 +212,7 @@ const Clams3D = ({
         <button className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5" onClick={download}>Download</button>
         : ''}
 
-      <div className="flex flex-1 flex-column">
+      <div className="flex flex-1 w-full">
         <div className="three-container" style={{width: '100%', height, maxWidth: width }} ref={mapRef}></div>
         {showTraitsTable ? (
           <div className="overflow-x-auto">

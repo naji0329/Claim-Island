@@ -1,18 +1,18 @@
 //// add test contracts here
-export const shellTokenAddress = "0x4adf02F3E7ce8f3A0a675a5DE764BcD2869210D9"
-export const clamNFTAddress = "0x9ef44408A4F6c7bEb574A419E2408E3f9351FCB8"
-export const gemTokenAddress = "0x912DAc3B968b989D7D8BE2c02631322299245ee2"
-export const gemLockerAddress = "0xEc07911687e7276d2eAeb76F94ADE1900265116f"
-export const pearlProductionTimeReductionAddress = "0xae222d5F4194F7F2a51a9D370B9f36015c850a0d"
-export const bankAddress = "0x716B084181C39091605006120301AEC42B3473F4"
-export const pearlDnaDecoderAddress = "0x177D9b886f519Ba5c2Be1DDc979a8008FD1d0B1d"
-export const pearlNFTAddress = "0xea2D6D9ec7aE49b068E025A9675B923035Ce8995"
-export const pearlBurnerAddress = "0x248eB7B9f038FA2bCec4E72342CCc3C1148aC459"
-export const rngAddress = "0xa13c31fF968afB82051e9377450BD9B855cdaC17"
-export const dnaDecoderAddress = "0x70f56e89d98ad2Fb1aB35A6F99577a21242D857F"
-export const clamBonusAddress = "0x2Ef64683270f8F6291216c3EF4bb87E3a7e56c98"
-export const clamShopAddress = "0x098a345B8bB2112B36e11Ee25c96eD7bEe385813"
-export const pearlFarmAddress = "0xE379EF912A091B6826A1822002D020E859Bc21A5"
+export const shellTokenAddress = "0xf8Ed54228872bD01ba683BC36B5a6B446D7bA728"
+export const clamNFTAddress = "0x94CB6a98604f02492efAd9717eBe17646821E3Af"
+export const gemTokenAddress = "0xe4a9A29A8742b5485D3361550E8B76B1CbF1bF95"
+export const gemLockerAddress = "0xbBF88D3c1acE6BFBfB586e5e17aC27c6fc2e369b"
+export const pearlProductionTimeReductionAddress = "0x1cf96Da2B90Dd96bF1e9136a0F72d87d99EEb927"
+export const bankAddress = "0x1430f74081d725094800cD8278937a20c9fE944B"
+export const pearlDnaDecoderAddress = "0x8FDA230928ECf1edF256bE03D7f936b9358901D6"
+export const pearlNFTAddress = "0xe17bBf720262663138a15b35B4f93a7b115a1694"
+export const pearlBurnerAddress = "0x9d2736485B4a9483a6620F4569367649E4D72e55"
+export const rngAddress = "0x839bAfD5a12e757ab30562741F6D299dC45027F4"
+export const dnaDecoderAddress = "0x5aEe8EC009e7d315211Bc6b5a3E07da72B0C974d"
+export const clamBonusAddress = "0x18791a5201317C0FEB89e13a850d4497Ea83CD47"
+export const clamShopAddress = "0x193D84c2b65a37aabF5534EE1118b7eC70ce5B06"
+export const pearlFarmAddress = "0xA26b11E38F8f71A1ad53d681213c2A8228c20666"
 //// end of test contracts
 
 
@@ -31,3 +31,5 @@ export const clamPresaleAddress = "0xAAEB1Ea585DbeF06349ac371EBBA54efa0713D1D";
 export const shellPresaleAddress = "0x28D51F0E6CC2138fB134986423cb7429E713763E";
 export const communityVotingAddress = "0x000F56780E4DC3f619A08EDf84948780be5C83Cf";
 export const clamClaimersAddress = "0xDaF219f41931B4833A71B9D08881491010246691";
+
+export const zeroHash = "0x0000000000000000000000000000000000000000000000000000000000000000";

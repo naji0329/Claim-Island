@@ -4,21 +4,25 @@ import { useEthers } from "@usedapp/core";
 import "./index.scss";
 import CharacterWrapper from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
-import Shop from "../../assets/locations/shop_animated.mp4";
 
 import { actions } from "../../store/redux";
 // import { SPEECHES } from "../../components/characters/constants";
 import ClamBuyModal from "./ClamBuyModal";
 import ClamCollectModal from "./ClamCollectModal";
-// import ClamShowModal from "./ClamShowModal";
+import ClamDisplayModal from "./ClamDisplayModal";
+import { checkHasClamToCollect } from '../../web3/clam'
+import { zeroHash } from '../../web3/constants'
 
-const ClamPresale = ({
-  account: { clamBalance, address },
-  presale: { isStarted, isEnded, rng, usersPurchasedClam },
+const Shop = ({
+  account: { address, clamToCollect },
   updateCharacter,
+  updateAccount,
 }) => {
-  const [showBuyModal, setShowBuyModal] = useState(false);
+  const [modalToShow, setModalToShow] = useState(null) 
+  const [userReady, setUserReady] = useState(false);
+  
   const { activateBrowserWallet } = useEthers();
+
   useEffect(() => {
     updateCharacter({
       name: "diego",
@@ -64,14 +68,27 @@ const ClamPresale = ({
                   alt: {
                     action: "cb",
                     destination: () => {
-                      setShowBuyModal(true);
-                      updateCharacter({
-                        name: "diego",
-                        action: "clam_presale.purchase.text",
-                        button: {
-                          text: null,
-                        },
-                      });
+                      setUserReady(true)
+                      
+                      console.log('clamToCollect', clamToCollect);
+                      if (clamToCollect) {
+                        updateCharacter({
+                          name: "diego",
+                          action: "clam_shop.collect.text",
+                          button: {
+                            text: "Got it, Boss",
+                            dismiss: true
+                          },
+                        });
+                        setModalToShow('collect')
+                      } else {
+                        updateCharacter({
+                          name: "diego",
+                          action: null,
+                        });
+                        setModalToShow('buy')
+                      }
+                      
                     },
                   },
                 },
@@ -94,8 +111,15 @@ const ClamPresale = ({
         },
       },
     });
-    
-  }, [address]);
+  }, [address])
+
+  useEffect(() => {
+    if (address) {
+      checkHasClamToCollect(address).then(clamToCollect => {
+        updateAccount({ clamToCollect: clamToCollect === zeroHash ? null : clamToCollect })
+      })
+    }
+  }, [address, modalToShow]);
 
   return (
     <>
@@ -121,12 +145,18 @@ const ClamPresale = ({
         <div className="flex-1 justify-center min-h-full min-w-full flex items-center absolute z-30 pointer-events-none pb-60">
           {
             address && // wallet is connected
-            showBuyModal && // user has agreed clicked Yes
-            !rng && <ClamBuyModal setShowBuyModal={setShowBuyModal} />}
-          {/* !rng = did not have clams to collect */}
-          {rng && <ClamCollectModal setShowBuyModal={setShowBuyModal} />}
-          {/* {clamBalance === "1" && address && <ClamShowModal />} */}
-
+            userReady &&
+            modalToShow === 'collect' && clamToCollect ? <ClamCollectModal setModalToShow={setModalToShow} /> :
+              modalToShow === 'buy' ? <ClamBuyModal setModalToShow={setModalToShow}  />  :
+                modalToShow === 'display' ? <ClamDisplayModal setModalToShow={setModalToShow} /> :
+                  null
+                  
+            // showBuyModal ? // user has agreed clicked Yes
+            //   clamToCollect && !showClamDisplayModal ? 
+            //     <ClamCollectModal setShowClamDisplayModal={setShowClamDisplayModal} /> :
+            //     <ClamBuyModal setShowBuyModal={setShowBuyModal}  />
+            // : showClamDisplayModal && <ClamDisplayModal setShowBuyModal={setShowBuyModal} />
+          }
         </div>
       </div>
     </>
@@ -134,4 +164,4 @@ const ClamPresale = ({
 };
 
 const mapToProps = (state) => state;
-export default connect(mapToProps, actions)(ClamPresale);
+export default connect(mapToProps, actions)(Shop);

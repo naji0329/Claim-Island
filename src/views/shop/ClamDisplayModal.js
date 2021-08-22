@@ -14,9 +14,9 @@ import clamContract from "../../web3/clam";
 import { actions } from "../../store/redux";
 import { getDNADecoded } from "../../web3/dnaDecoder";
 
-const ClamShowModal = ({
-  setShowMintModal,
-  account: { address, clamBalance },
+const ClamDisplayModal = ({
+  setModalToShow,
+  account: { address, clamToCollect },
   updateCharacter,
 }) => {
   const [clamDna, setClamDna] = useState("");
@@ -24,9 +24,7 @@ const ClamShowModal = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(async () => {
-    console.log({ clamBalance });
-    // clamBalance > 0 means already collected the clam
-    if (clamBalance !== "0" && address) {
+    if (!clamToCollect && address) {
       try {
         setIsLoading(true);
 
@@ -41,33 +39,33 @@ const ClamShowModal = ({
             const decodedDna = await getDNADecoded(clamData.dna);
             setClamDnaDecoded(decodedDna);
 
-            updateCharacter({
-              name: "diego",
-              action: "clam_presale.congratsCollection.text",
-              button: {
-                text: "Go to Saferoom",
-                alt: {
-                  action: "internal",
-                  destination: "/saferoom",
-                },
-              },
-              buttonAlt: {
-                text: "Buy more",
-                alt: {
-                  action: "cb",
-                  destination: () => {
-                    setShowMintModal(true);
-                    updateCharacter({
-                      name: "diego",
-                      action: "clam_presale.purchase.text",
-                      button: {
-                        text: null,
-                      },
-                    });
-                  },
-                },
-              }
-            });
+            // updateCharacter({
+            //   name: "diego",
+            //   action: "clam_presale.congratsCollection.text",
+            //   button: {
+            //     text: "Go to Saferoom",
+            //     alt: {
+            //       action: "internal",
+            //       destination: "/saferoom",
+            //     },
+            //   },
+            //   buttonAlt: {
+            //     text: "Buy more",
+            //     alt: {
+            //       action: "cb",
+            //       destination: () => {
+            //         setShowBuyModal(true);
+            //         updateCharacter({
+            //           name: "diego",
+            //           action: "clam_shop.purchase.text",
+            //           button: {
+            //             text: null,
+            //           },
+            //         });
+            //       },
+            //     },
+            //   }
+            // });
           }
         }
 
@@ -81,23 +79,11 @@ const ClamShowModal = ({
   return (
     <>
       <Card>
-        <div className="overflow-x-hidden overflow-y-scroll max-h-159">
-          <div className="flex flex-col my-3">
-            <h2 className="text-blue-700 font-semibold text-2xl mb-2">
-              You got a Clam!
-            </h2>
-            <a
-              className="text-gray-500 text-base underline"
-              href={getExplorerAddressLink(clamNFTAddress, ChainId.BSC)}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {clamNFTAddress}
-            </a>
-          </div>
+        <div className="overflow-x-hidden overflow-y-scroll max-h-159" style={{minWidth: '700px'}}>
 
-          <div className="bg-white flex-1 justify-center md:flex items-center h-full">
+          <div className="bg-white flex-1 justify-center md:flex items-center h-full flex-col w-full">
             {clamDna && (
+              <>
               <Clams3D
                 width={400}
                 height={400}
@@ -105,6 +91,21 @@ const ClamShowModal = ({
                 decodedDna={clamDnaDecoded}
                 showTraitsTable={true}
               />
+              <div className="flex flex-row my-3">
+                <button
+                  className="btn character-btn ml-2"
+                  onClick={() => setModalToShow('buy')}
+                >
+                  Buy More
+                </button>
+                <button
+                  className="btn character-btn ml-2"
+                  onClick={() => setModalToShow('harvest')}
+                >
+                  Harvest
+                </button>
+              </div>
+              </>
             )}
             {isLoading && (
               <>
@@ -138,4 +139,4 @@ const ClamShowModal = ({
 };
 
 const mapToProps = (store) => store;
-export default connect(mapToProps, actions)(ClamShowModal);
+export default connect(mapToProps, actions)(ClamDisplayModal);

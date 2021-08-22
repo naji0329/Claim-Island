@@ -90,6 +90,45 @@ export const getPrice = async () => {
   return value;
 };
 
+export const checkHasClamToCollect = async (address) => {
+
+  const clamShop = contractFactory({
+    abi: clamShopAbi,
+    address: clamShopAddress,
+  });
+
+  const value = await clamShop.methods
+    .rngRequestHashForFarmedClam(address)
+    .call();
+  return value;
+
+}
+
+export const collectClam = async (account) => {
+
+  if (!account) {
+    throw new Error("There is no account connected!");
+  }
+
+  const clamShop = contractFactory({
+    abi: clamShopAbi,
+    address: clamShopAddress,
+  });
+
+  const method = clamShop.methods.collectClam();
+
+  const gasEstimation = await method.estimateGas({
+    from: account,
+  });
+
+  return await method
+    .send({
+      from: account,
+      gas: gasEstimation,
+    })
+
+
+};
 
 export default {
   balanceOf,
@@ -98,5 +137,7 @@ export default {
   getClamData,
   getClamByIndex,
   buyClam,
-  getPrice
+  getPrice,
+  checkHasClamToCollect,
+  collectClam
 };

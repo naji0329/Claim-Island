@@ -474,6 +474,18 @@ export const SPEECHES = {
       dismiss: false,
       skip: false,
     },
+    collect: {
+      text: `Looks like you still have a clam to collect from last time you visited. Please do so before you proceed.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    collect_congrats: {
+      text: `Congrats on your Clam! You can take your time to savour your luck. If you still feel like buying, click "Buy more" button and I will be able to assist you.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
     choose_path: {
       text: `Now that everything is set up, tell me what led you to my Shop?`,
       next: false,
