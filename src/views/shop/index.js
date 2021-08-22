@@ -24,94 +24,97 @@ const Shop = ({
   const { activateBrowserWallet } = useEthers();
 
   useEffect(() => {
-    updateCharacter({
-      name: "diego",
-      action: "clam_shop.welcome.text",
-      button: {
-        text: "Let's go!",
-        alt: {
-          action: "cb",
-          destination: () => {
-            if (address) {
-              updateCharacter({
-                name: "diego",
-                action: "clam_shop.choose_path.text",
-                buttonAlt: {
-                  text: "Harvest Clams",
-                  // alt: {
-                  //   action: "cb",
-                  //   destination: () => {
-                  //     setShowBuyModal(true);
-                  //     updateCharacter({
-                  //       name: "diego",
-                  //       action: "clam_claimer.claim.text",
-                  //       button: {
-                  //         text: "Back to Island",
-                  //         alt: {
-                  //           action: "internal",
-                  //           destination: "/",
-                  //         },
-                  //       },
-                  //       buttonAlt: {
-                  //         text: "Go to Saferoom",
-                  //         alt: {
-                  //           action: "internal",
-                  //           destination: "/saferoom",
-                  //         },
-                  //       },
-                  //     });
-                  //   },
-                  // },
-                },
-                button: {
-                  text: "Buy Clams",
-                  alt: {
-                    action: "cb",
-                    destination: () => {
-                      setUserReady(true)
-                      
-                      console.log('clamToCollect', clamToCollect);
-                      if (clamToCollect) {
-                        updateCharacter({
-                          name: "diego",
-                          action: "clam_shop.collect.text",
-                          button: {
-                            text: "Got it, Boss",
-                            dismiss: true
-                          },
-                        });
-                        setModalToShow('collect')
-                      } else {
-                        updateCharacter({
-                          name: "diego",
-                          action: null,
-                        });
-                        setModalToShow('buy')
-                      }
-                      
+    if (!userReady) {
+      updateCharacter({
+        name: "diego",
+        action: "clam_shop.welcome.text",
+        button: {
+          text: "Let's go!",
+          alt: {
+            action: "cb",
+            destination: () => {
+              if (address) {
+                updateCharacter({
+                  name: "diego",
+                  action: "clam_shop.choose_path.text",
+                  buttonAlt: {
+                    text: "Harvest Clams",
+                    // alt: {
+                    //   action: "cb",
+                    //   destination: () => {
+                    //     setShowBuyModal(true);
+                    //     updateCharacter({
+                    //       name: "diego",
+                    //       action: "clam_claimer.claim.text",
+                    //       button: {
+                    //         text: "Back to Island",
+                    //         alt: {
+                    //           action: "internal",
+                    //           destination: "/",
+                    //         },
+                    //       },
+                    //       buttonAlt: {
+                    //         text: "Go to Saferoom",
+                    //         alt: {
+                    //           action: "internal",
+                    //           destination: "/saferoom",
+                    //         },
+                    //       },
+                    //     });
+                    //   },
+                    // },
+                  },
+                  button: {
+                    text: "Buy Clams",
+                    alt: {
+                      action: "cb",
+                      destination: () => {
+                        setUserReady(true)
+                        
+                        console.log('clamToCollect', clamToCollect);
+                        if (clamToCollect) {
+                          updateCharacter({
+                            name: "diego",
+                            action: "clam_shop.collect.text",
+                            button: {
+                              text: "Got it, Boss",
+                              dismiss: true
+                            },
+                          });
+                          setModalToShow('collect')
+                        } else {
+                          updateCharacter({
+                            name: "diego",
+                            action: null,
+                          });
+                          setModalToShow('buy')
+                        }
+                        
+                      },
                     },
                   },
-                },
-              });
-            } else {
-              updateCharacter({
-                name: "diego",
-                action: "clam_presale.connect.text",
-                button: {
-                  text: 'Connect',
-                  alt: {
-                    action: "cb",
-                    destination: activateBrowserWallet
-                  }
-                },
-              });
-            }
-            
+                });
+              } else {
+                updateCharacter({
+                  name: "diego",
+                  action: "clam_presale.connect.text",
+                  button: {
+                    text: 'Connect',
+                    alt: {
+                      action: "cb",
+                      destination: activateBrowserWallet
+                    }
+                  },
+                });
+              }
+              
+            },
           },
         },
-      },
-    });
-  }, [address])
+      });
+    }
+    
+  }, [address, userReady, clamToCollect])
 
   useEffect(() => {
     if (address) {
