@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.flex-col {
+  flex-direction: column;
+}
 @font-face {
   font-family: AristotelicaBold;
   src: url(./assets/fonts/aristotelicaText_bold.otf) format("opentype");
@@ -56,10 +59,6 @@ body {
   height: 100%;
 }
 
-.nav-info-button {
-  z-index: 9999;
-  margin-top: 1rem;
-}
 
 
 canvas {
@@ -124,4 +123,12 @@ canvas {
   .video-container {
     height: 155%;
   }
+}
+
+.text-shadow{
+  text-shadow: 1px 3px 4px black;
+}
+
+.font-aristotelica-bold {
+  font-family: "AristotelicaBold";
 }

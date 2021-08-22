@@ -7,6 +7,8 @@ const initialState = {
     bnbBalance: "0",
     clamBalance: "0",
     pearlBalance: "0",
+    gemBalance: "0",
+    clamToCollect: null,
     error: undefined,
     isConnected: undefined,
     isBSChain: true,
