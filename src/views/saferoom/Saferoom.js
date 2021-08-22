@@ -19,37 +19,25 @@ import { actions } from "../../store/redux";
 import clamContract from "../../web3/clam";
 import { getDNADecoded } from "../../web3/dnaDecoder";
 
-import pearlContract from "../../web3/clam";
+import pearlContract from "../../web3/pearl";
 import { getPearlDNADecoded } from "../../web3/pearlDnaDecoder";
 
 import { get } from "lodash";
 
-// NOTE: need to add pealBalance to Redux state before merging
-const Saferoom = ({ account: { clamBalance, pearlBalance_, address }, updateCharacter }) => {
-  //mock
-  const pearlBalance = "4"
-  const data = [
-    {dna: "27275199627321558493285187368226483994199718768386264339419408142607915469610"},
-    {dna: "34052004352949769574632307472796316296867229723823229106332776512577688929417"},
-    {dna: "77285787309315082076593480305805121296313306117707773042761749750465449813888"},
-    {dna: "77265858044110342230453397372976872664318208074499939817022337540162638343441"},
-  ]
-
+const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateCharacter }) => {
 
   const [clams, setClams] = useState([]);
   const [pearls, setPearls] = useState([]);
   const [selectedAsset, setSelectedAsset] = useState();
-  const [tab, setTab] = useState("Clam");
+  const [tab, setTab] = useState(clamBalance !== "0" ? "Clam" : "Pearl");
   const [loading, setLoading] = useState(false);
 
   const { isShowing, toggle } = useModal();
 
-  const getDna = async (nftContract, account, index, getDecodedDNA) => {
-    // const tokenId = await nftContract.getClamByIndex(account, index);
-    // const data = await nftContract.getClamData(tokenId);
-    // const { dna } = data;
-
-    const dna = data[index].dna; // used for testing only
+  const getDna = async (getByNFTIndex, getNFTData, account, index, getDecodedDNA) => {
+    const tokenId = await getByNFTIndex(account, index);
+    const data = await getNFTData(tokenId);
+    const { dna } = data;
 
     if (dna.length > 1) {
       const dnaDecoded = await getDecodedDNA(dna);
@@ -63,10 +51,10 @@ const Saferoom = ({ account: { clamBalance, pearlBalance_, address }, updateChar
       try {
         setLoading(true);
 
-        const getNFTs = async (nftContract, nftBalance, getDecodedDNA) => {
+        const getNFTs = async (getByNFTIndex, getNFTData, nftBalance, getDecodedDNA) => {
           let promises = [];
-          for (let i = 0; i < parseInt(nftBalance); i++) {
-            promises.push(getDna(nftContract, address, i, getDecodedDNA));
+          for (let i = 0; i < Number(nftBalance); i++) {
+            promises.push(getDna(getByNFTIndex, getNFTData, address, i, getDecodedDNA));
           }
 
           return await Promise.all(promises);
@@ -74,11 +62,11 @@ const Saferoom = ({ account: { clamBalance, pearlBalance_, address }, updateChar
 
         // parallel call to speed up
         if (+clamBalance > 0 ) {
-          const clams = await getNFTs(clamContract, clamBalance, getDNADecoded);
+          const clams = await getNFTs(clamContract.getClamByIndex, clamContract.getClamData, clamBalance, getDNADecoded);
           setClams(clams);
         }
         if(+pearlBalance > 0) {
-          const pearls = await getNFTs(pearlContract, pearlBalance, getPearlDNADecoded);
+          const pearls = await getNFTs(pearlContract.getPearlByIndex, pearlContract.getPearlData, pearlBalance, getPearlDNADecoded);
           setPearls(pearls);
         }
 
@@ -149,10 +137,10 @@ const Saferoom = ({ account: { clamBalance, pearlBalance_, address }, updateChar
               </div>
 
               <div className="px-3 py-2 flex justify-between">
-                <button className="text-blue-700 hover:underline px-5" onClick={() => setTab("Clam")}>
+                <button className={`px-5 ${tab === "Clam" ? "bg-blue-700 text-white" : "text-blue-700" }`} onClick={() => setTab("Clam")}>
                   Clams
                 </button>
-                <button className="text-blue-700 hover:underline px-5" onClick={() => setTab("Pearl")}>
+                <button className={`px-5 ${tab === "Pearl" ? "bg-blue-700 text-white" : "text-blue-700" }`} onClick={() => setTab("Pearl")}>
                   Pearls
                 </button>
                 <Link

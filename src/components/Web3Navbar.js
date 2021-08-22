@@ -7,7 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import { formatUnits } from "@ethersproject/units";
 
-import { clamNFTAddress } from "../web3/constants.js";
+import { clamNFTAddress, pearlNFTAddress } from "../web3/constants.js";
 import getWeb3 from "../web3/getWeb3";
 
 import Web3Avatar from "./Web3Avatar";
@@ -41,17 +41,19 @@ const ErrorAlert = ({ title, description, onClose }) => (
 );
 
 const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
-const formatClam = (value) => (value ? formatUnits(value, 0) : "0");
+const formatNFT = (value) => (value ? formatUnits(value, 0) : "0");
 
 const Web3Navbar = ({ updateAccount, ...redux }) => {
   //  is called several times thus need a state to lower the renders
   const [activateError, setActivateError] = useState("");
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
   const [activateClamBalance, setActivateClamBalance] = useState("0");
+  const [activatePearlBalance, setActivatePearlBalance] = useState("0");
   const [activateChainId, setActivateChainId] = useState();
 
   const { activateBrowserWallet, account, error } = useEthers();
-  const clamBalance = useTokenBalance(clamNFTAddress, account); // TODO - not working
+  const clamBalance = useTokenBalance(clamNFTAddress, account);
+  const pearlBalance = useTokenBalance(pearlNFTAddress, account);
   const bnbBalance = useEtherBalance(account);
   const web3 = getWeb3();
   const location = useLocation();
@@ -85,12 +87,13 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
     updateAccount({
       bnbBalance: activateBnbBalance,
       clamBalance: activateClamBalance,
+      pearlBalance: activatePearlBalance,
       error: activateError,
       address: account,
       isConnected: account ? true : false,
       isBSChain: activateChainId === ChainId.BSC,
     });
-  }, [account, activateChainId, activateError, activateBnbBalance, activateClamBalance]);
+  }, [account, activateChainId, activateError, activateBnbBalance, activateClamBalance, activatePearlBalance]);
 
   useEffect(() => {
     if (error) {
@@ -110,13 +113,17 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
 
   useEffect(() => {
     // clamBalance is bignumber
-    const balance = formatClam(clamBalance);
-    // console.log("useEffect", { balance });
-    if (balance !== activateClamBalance) {
-      // balance is string
-      setActivateClamBalance(balance);
+    const balanceOfClams = formatNFT(clamBalance);
+    if (balanceOfClams !== activateClamBalance) {
+      // balanceOfClams is string
+      setActivateClamBalance(balanceOfClams);
     }
-  }, [clamBalance]);
+
+    const balanceOfPearls = formatNFT(pearlBalance);
+    if (balanceOfPearls !== activatePearlBalance) {
+      setActivatePearlBalance(balanceOfPearls);
+    }
+  }, [clamBalance, pearlBalance]);
 
   return (
     <>
@@ -186,16 +193,18 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
 
                 </Link>
               </div>
-                {/* {Number(activateClamBalance) > 0 &&
-                  location.pathname.indexOf("saferoom") === -1 && (
-                    <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
-                      <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                        <Link to="/saferoom">
-                          SAFEROOM <FontAwesomeIcon icon={faSignInAlt} />
-                        </Link>
-                      </span>
-                    </div>
-                  )} */}
+              <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
+                <Link to="/saferoom" className="flex" style={Number(activatePearlBalance) > 0 && location.pathname.indexOf('saferoom') === -1 ? null : {pointerEvents: "none"}}>
+                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                     Pearls in Safe: {activatePearlBalance}
+
+                     { Number(activatePearlBalance) > 0 && location.pathname.indexOf('saferoom') === -1
+                       && <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
+                     }
+                  </span>
+
+                </Link>
+              </div>
 
                 <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black bg-opacity-80">
                   <div className="p-1 text-sm text-gray-200">{shortenAddress(account)}</div>
