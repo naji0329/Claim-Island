@@ -3,7 +3,7 @@ import Accordion from "../../components/Accordion";
 import { get } from "lodash";
 
 import { Clam3DView } from "../../components/clam3DView";
-import { Pearl3DView } from "../../components/pearl3DView";
+// import { Pearl3DView } from "../../components/pearl3DView";
 
 export default ({ dna, dnaDecoded }) => {
   const [showTraits, setShowTraits] = useState(false);

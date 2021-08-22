@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useAsync } from "react-use";
-import {
-  useEthers,
-  useTokenBalance,
-  useEtherBalance,
-  ChainId,
-  shortenAddress,
-} from "@usedapp/core";
+import { useEthers, useTokenBalance, useEtherBalance, ChainId, shortenAddress } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { actions } from "../store/redux";
 import { Link, useLocation } from "react-router-dom";
 
 import { formatUnits } from "@ethersproject/units";
 
-import { clamNFTAddress, gemTokenAddress } from "../web3/constants.js";
+import { clamNFTAddress, pearlNFTAddress, gemTokenAddress } from "../web3/constants.js";
+
 import getWeb3 from "../web3/getWeb3";
 
 import Web3Avatar from "./Web3Avatar";
@@ -23,16 +18,9 @@ import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
-    <div
-      className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-50"
-      role="alert"
-    >
+    <div className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-50" role="alert">
       <div className="flex">
-        <svg
-          className="h-6 w-6 fill-current text-red-500 mr-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
+        <svg className="h-6 w-6 fill-current text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
           <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
         </svg>
         <div>
@@ -54,8 +42,8 @@ const ErrorAlert = ({ title, description, onClose }) => (
 );
 
 const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
+const formatNFT = (value) => (value ? formatUnits(value, 0) : "0");
 const formatGem = (value) => (value ? formatUnits(value, 18) : "0");
-const formatClam = (value) => (value ? formatUnits(value, 0) : "0");
 
 const Web3Navbar = ({ title, updateAccount, ...redux }) => {
   //  is called several times thus need a state to lower the renders
@@ -63,11 +51,12 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
   const [activateClamBalance, setActivateClamBalance] = useState("0");
   const [activateGemBalance, setActivateGemBalance] = useState("0");
-  
+  const [activatePearlBalance, setActivatePearlBalance] = useState("0");
   const [activateChainId, setActivateChainId] = useState();
 
   const { activateBrowserWallet, account, error } = useEthers();
-  const clamBalance = useTokenBalance(clamNFTAddress, account); // TODO - not working
+  const clamBalance = useTokenBalance(clamNFTAddress, account);
+  const pearlBalance = useTokenBalance(pearlNFTAddress, account);
   const gemBalance = useTokenBalance(gemTokenAddress, account);
   const bnbBalance = useEtherBalance(account);
   const web3 = getWeb3();
@@ -98,25 +87,19 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     }
     const netId = await web3.eth.net.getId();
     console.log("useEffect updateAccount", { activateChainId, netId });
-    const isBSChain =
-      activateChainId === ChainId.BSC || activateChainId === ChainId.Localhost;
+    const isBSChain = activateChainId === ChainId.BSC || activateChainId === ChainId.Localhost;
 
     updateAccount({
       bnbBalance: activateBnbBalance,
       gemBalance: activateGemBalance,
       clamBalance: activateClamBalance,
+      pearlBalance: activatePearlBalance,
       error: isBSChain ? null : activateError,
       address: account,
       isConnected: account ? true : false,
       isBSChain,
     });
-  }, [
-    account,
-    activateChainId,
-    activateError,
-    activateBnbBalance,
-    activateClamBalance,
-  ]);
+  }, [account, activateChainId, activateError, activateBnbBalance, activateClamBalance, activatePearlBalance]);
 
   useEffect(() => {
     if (error) {
@@ -136,13 +119,17 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
 
   useEffect(() => {
     // clamBalance is bignumber
-    const balance = formatClam(clamBalance);
-    // console.log("useEffect", { balance });
-    if (balance !== activateClamBalance) {
-      // balance is string
-      setActivateClamBalance(balance);
+    const balanceOfClams = formatNFT(clamBalance);
+    if (balanceOfClams !== activateClamBalance) {
+      // balanceOfClams is string
+      setActivateClamBalance(balanceOfClams);
     }
-  }, [clamBalance]);
+
+    const balanceOfPearls = formatNFT(pearlBalance);
+    if (balanceOfPearls !== activatePearlBalance) {
+      setActivatePearlBalance(balanceOfPearls);
+    }
+  }, [clamBalance, pearlBalance]);
 
   useEffect(() => {
     // gemBalance is bignumber
@@ -195,9 +182,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
         <div className="w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
           <div className="flex-grow">
             {title && (
-              <h1 className="text-6xl text-shadow font-extrabold font-aristotelica-bold text-white">
-                {title}
-              </h1>
+              <h1 className="text-6xl text-shadow font-extrabold font-aristotelica-bold text-white">{title}</h1>
             )}
           </div>
 
@@ -220,39 +205,40 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                     to="/saferoom"
                     className="flex"
                     style={
-                      Number(activateClamBalance) > 0 &&
-                      location.pathname.indexOf("saferoom") === -1
+                      Number(activateClamBalance) > 0 && location.pathname.indexOf("saferoom") === -1
                         ? null
                         : { pointerEvents: "none" }
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
                       Clams in Safe: {activateClamBalance}
-                      {Number(activateClamBalance) > 0 &&
-                        location.pathname.indexOf("saferoom") === -1 && (
-                          <FontAwesomeIcon
-                            icon={faSignInAlt}
-                            className="ml-1"
-                          />
-                        )}
+                      {Number(activateClamBalance) > 0 && location.pathname.indexOf("saferoom") === -1 && (
+                        <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
+                      )}
                     </span>
                   </Link>
                 </div>
-                {/* {Number(activateClamBalance) > 0 &&
-                  location.pathname.indexOf("saferoom") === -1 && (
-                    <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
-                      <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                        <Link to="/saferoom">
-                          SAFEROOM <FontAwesomeIcon icon={faSignInAlt} />
-                        </Link>
-                      </span>
-                    </div>
-                  )} */}
+                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
+                  <Link
+                    to="/saferoom"
+                    className="flex"
+                    style={
+                      Number(activatePearlBalance) > 0 && location.pathname.indexOf("saferoom") === -1
+                        ? null
+                        : { pointerEvents: "none" }
+                    }
+                  >
+                    <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                      Pearls in Safe: {activatePearlBalance}
+                      {Number(activatePearlBalance) > 0 && location.pathname.indexOf("saferoom") === -1 && (
+                        <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
+                      )}
+                    </span>
+                  </Link>
+                </div>
 
                 <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black bg-opacity-80">
-                  <div className="p-1 text-sm text-gray-200">
-                    {shortenAddress(account)}
-                  </div>
+                  <div className="p-1 text-sm text-gray-200">{shortenAddress(account)}</div>
 
                   <Web3Avatar address={account} size={30} />
                 </div>
