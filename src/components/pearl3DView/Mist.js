@@ -23,7 +23,7 @@ export const Mist = () => {
         <planeGeometry args={[0.15, 0.15]} />
       </mesh>
     ))
-  }, [smokeParticles])
+  }, [smokeParticles]);
 
   useFrame(({ camera }) => {
     if (groupRef.current) {
@@ -42,7 +42,7 @@ export const Mist = () => {
         }
       });
     }
-  })
+  });
 
   return (
     <group ref={groupRef}>
