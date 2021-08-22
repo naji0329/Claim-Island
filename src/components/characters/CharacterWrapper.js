@@ -69,17 +69,19 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
   return (
     <div
       className={classNames(
-        "flex-1 min-h-full min-w-full  md:flex items-center absolute",
+        "flex-1 min-h-full min-w-full  md:flex items-center ",
         { "z-30": showBubble },
         { "z-0": !showBubble }
       )}
     >
       <div
         className={
-          showBubble ? "character-bubble fixed z-999 bottom-8 h-screen pointer-events-none w-screen" : "character-bubble hide-bubble"
+          showBubble
+            ? "character-bubble fixed z-999 bottom-8 h-screen pointer-events-none w-screen"
+            : "character-bubble hide-bubble"
         }
+        style={{ zIndex: speech ? undefined : 0, position: "fixed" }}
       >
-
         <div className="text-bubble flex-col justify-end pointer-events-none">
           <div className="text-wrapper">
             <div className="name px-10">{character.name}</div>
@@ -97,7 +99,7 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
                 <button
                   className="btn character-btn"
                   id="btn-next"
-                  onClick={() => button.alt ? handleClickButtonAlt(button) : handleClickButton(button)}
+                  onClick={() => (button.alt ? handleClickButtonAlt(button) : handleClickButton(button))}
                 >
                   {button.text}
                 </button>
@@ -105,7 +107,7 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
               {buttonAlt && buttonAlt.text && (
                 <button
                   className="btn character-btn"
-                  onClick={() => buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)}
+                  onClick={() => (buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt))}
                 >
                   {buttonAlt.text}
                 </button>
@@ -114,18 +116,45 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
           </div>
         </div>
         <div className="character-container flex items-end cursor-pointer">
-          <img
-            className="max-h-full"
-            src={character.charImg}
-            onClick={handleClickCharacter}
-          />
+          <img className="max-h-full" src={character.charImg} onClick={handleClickCharacter} />
         </div>
-        <button
-          className="btn character-container-round"
-          onClick={handleClickCharacter}
-        >
+        <button className="btn character-container-round" onClick={handleClickCharacter}>
           <img src={character.charImg} className="character" />
         </button>
+
+        {speech && (
+          <div className="text-bubble pointer-events-none">
+            <div className="name px-10">{character.name}</div>
+            <div className="speech">
+              <div
+                className="speech-text"
+                dangerouslySetInnerHTML={{
+                  __html: stateSpeech ? stateSpeech : speech,
+                }}
+              />
+            </div>
+            {/* todo */}
+            <div className="buttons">
+              {button.text && (
+                <button
+                  className="btn character-btn"
+                  id="btn-next"
+                  onClick={() => (button.alt ? handleClickButtonAlt(button) : handleClickButton(button))}
+                >
+                  {button.text}
+                </button>
+              )}
+              {buttonAlt && buttonAlt.text && (
+                <button
+                  className="btn character-btn ml-2"
+                  onClick={() => (buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt))}
+                >
+                  {buttonAlt.text}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -135,6 +164,6 @@ const mapToProps = ({ character: { name, action, button, buttonAlt } }) => ({
   name,
   action,
   button,
-  buttonAlt
+  buttonAlt,
 });
 export default connect(mapToProps)(CharacterWrapper);
