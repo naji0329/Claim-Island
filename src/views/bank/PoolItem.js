@@ -64,7 +64,6 @@ const PoolData = ({ depositFee }) => {
           BSC Scan
         </a>
       </div>
-      
     </div>
   );
 };
@@ -120,6 +119,7 @@ const SliderWithPercentages = ({ isDeposit }) => {
 };
 const DepositTab = () => {
   const [state, setSharedState] = useSharedState();
+  const [inTx, setInTx] = useState(false);
   const { pool, account, depositAmount, updateAccount } = state;
   const { handleSubmit, formState } = useForm();
   const { errors, isValid } = formState;
@@ -129,6 +129,8 @@ const DepositTab = () => {
   };
 
   const handleDeposit = async () => {
+    setInTx(true)
+
     try {
       await approveBankForMaxUint(account, pool.lpToken);
       await deposit(pool.poolId, formatToWei(depositAmount));
@@ -151,7 +153,9 @@ const DepositTab = () => {
           userDepositAmountInPool: newDepositBN,
         },
       });
+      setInTx(false)
     } catch (error) {
+      setInTx(false)
       updateAccount({ error: error.message });
     }
   };
@@ -218,7 +222,7 @@ const DepositTab = () => {
         </div>
 
         <button
-          disabled={!isValid}
+          disabled={!isValid || inTx}
           type="submit"
           className="w-full text-white bg-green-500 hover:bg-green-400 rounded-xl shadow-xl p-2 text-center text-2xl"
         >
@@ -232,6 +236,7 @@ const DepositTab = () => {
 const WithdrawTab = () => {
   const [state, setSharedState] = useSharedState();
   const { pool, account, withdrawAmount, updateAccount } = state;
+  const [inTx, setInTx] = useState(false);
 
   const { handleSubmit, formState } = useForm();
   const { errors } = formState;
@@ -241,6 +246,7 @@ const WithdrawTab = () => {
   };
 
   const handleWithdraw = async () => {
+    setInTx(true)
     try {
       await withdraw(pool.poolId, formatToWei(withdrawAmount));
       const balances = await getBalancesFormatted(
@@ -262,7 +268,9 @@ const WithdrawTab = () => {
           userDepositAmountInPool: newDepositBN,
         },
       });
+      setInTx(false)
     } catch (error) {
+      setInTx(false)
       updateAccount({ error: error.message });
     }
   };
@@ -332,6 +340,7 @@ const WithdrawTab = () => {
         </div>
 
         <button
+          disabled={inTx}
           type="submit"
           className="w-full text-white bg-red-500 hover:bg-red-400 rounded-xl shadow-xl p-2 text-center text-2xl"
         >
@@ -470,7 +479,6 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
 
   const handleOpen = async () => {
     setIsOpen(true);
-
     const balances = await getBalancesFormatted(
       account,
       pool.lpToken,

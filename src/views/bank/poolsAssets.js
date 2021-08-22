@@ -6,12 +6,14 @@ export const poolAssets = {
     apy: `82.3%`,
     multiplier: `40x`,
     images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
+    isSingleStake: true,
   },
   [shellTokenAddress]: {
     name: `$SHELL`,
     apy: `82.3%`,
     multiplier: `40x`,
     images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
+    isSingleStake: true,
   },
   "0xAaf0A7603b9d45c5e2BE0c1b03Cf238168334Ce4": {
     name: `SHELL - BNB`, // dummy bnb - carapace
