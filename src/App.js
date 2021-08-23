@@ -28,14 +28,7 @@ const App = (props) => {
       <div className="p-0 h-full">
         <Switch>
           {ROUTES.map((k, i) => {
-            return (
-              <Route
-                key={i}
-                path={k.url}
-                exact={true}
-                component={k.component}
-              />
-            );
+            return <Route key={i} path={k.url} exact={true} component={k.component} />;
           })}
         </Switch>
       </div>

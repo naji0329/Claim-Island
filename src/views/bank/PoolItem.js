@@ -71,7 +71,12 @@ const PoolData = ({ depositFee, urlForExchange }) => {
         </a>
       </div>
       <div className="flex">
-        <a href={urlForExchange} target="_blank" className="text-gray-500 font-semibold underline" rel="noreferrer">
+        <a
+          href={urlForExchange}
+          target="_blank"
+          className="text-gray-500 font-semibold underline"
+          rel="noreferrer"
+        >
           Get Token
         </a>
       </div>
@@ -276,7 +281,9 @@ const WithdrawTab = () => {
         <div className="flex items-center justify-between opacity-40 text-xl">
           <div className="">Vault:</div>
           <div className="flex items-center">
-            <div className="mx-2">{formatNumber(+get(state, "pool.userDepositAmountInPool", "0"), 4)}</div>
+            <div className="mx-2">
+              {formatNumber(+get(state, "pool.userDepositAmountInPool", "0"), 4)}
+            </div>
             {/* TODO convert LP to dolar */}
             {/* <div className="text-sm">($15.01) </div> */}
           </div>
@@ -409,7 +416,12 @@ const PoolHarvest = () => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+              />
             </svg>
           </button>
         </div>
@@ -421,7 +433,9 @@ const PoolHarvest = () => {
               </div>
             </div>
 
-            <div className="mx-2 text-4xl">{formatNumber(+get(state, "pool.userRewardAmountInPool", "0.0"), 4)}</div>
+            <div className="mx-2 text-4xl">
+              {formatNumber(+get(state, "pool.userRewardAmountInPool", "0.0"), 4)}
+            </div>
             <div className="mx-2 text-xl">GEM</div>
             {/* TODO convert GEM to dola */}
             {/* <div className="mx-2 text-xs">($12.00)</div> */}
@@ -445,7 +459,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
-  const [urlForExchange, setUrlForExchange] = useState('');
+  const [urlForExchange, setUrlForExchange] = useState("");
   const [state, setSharedState] = useSharedState();
 
   const { activateBrowserWallet } = useEthers();
@@ -462,8 +476,11 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
     setIsOpen(true);
     const balances = await getBalancesFormatted(account, pool.lpToken, pool.isSingleStake);
 
-    const url = await exchangeUrl({ tokenAddress: pool.lpToken, isSingleStake: pool.isSingleStake });
-    console.log({url})
+    const url = await exchangeUrl({
+      tokenAddress: pool.lpToken,
+      isSingleStake: pool.isSingleStake,
+    });
+    console.log({ url });
     setUrlForExchange(url);
 
     setSharedState({ ...state, account, pool, balances });

@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useImperativeHandle,
-  useState,
-  forwardRef,
-  useCallback,
-} from "react";
+import React, { useEffect, useImperativeHandle, useState, forwardRef, useCallback } from "react";
 import ReactDOM from "react-dom";
 
 export const useModal = () => {

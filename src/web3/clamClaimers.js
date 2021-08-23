@@ -123,11 +123,8 @@ export const rngRequestHashFromBuyersClam = async (address) => {
       abi: clamClaimersAbi,
       address: clamClaimersAddress,
     });
-    const value = await ClamClaimer.methods
-      .rngRequestHashFromBuyersClam(address)
-      .call();
-    return value ===
-      "0x0000000000000000000000000000000000000000000000000000000000000000"
+    const value = await ClamClaimer.methods.rngRequestHashFromBuyersClam(address).call();
+    return value === "0x0000000000000000000000000000000000000000000000000000000000000000"
       ? undefined
       : value;
   }

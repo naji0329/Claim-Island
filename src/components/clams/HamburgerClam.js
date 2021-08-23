@@ -31,4 +31,3 @@ export const HamburgerClam = (props) => {
     </group>
   );
 };
-

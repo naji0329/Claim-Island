@@ -11,11 +11,7 @@ import { getRNGFromHashRequest } from "../../web3/rng";
 
 import { store, actions } from "../../store/redux";
 
-const Web3ClamPresale = ({
-  updatePresale,
-  account,
-  presale: { progress, isStarted },
-}) => {
+const Web3ClamPresale = ({ updatePresale, account, presale: { progress, isStarted } }) => {
   const fetchPresaleData = async () => {
     try {
       const {
@@ -24,10 +20,7 @@ const Web3ClamPresale = ({
       } = store.getState();
 
       // if has purchase then hasRequest is not empty then no need to keep pulling data
-      if (
-        isBSChain &&
-        presale.hashRequest === undefined
-      ) {
+      if (isBSChain && presale.hashRequest === undefined) {
         console.log("fetch presale data", { isBSChain, address, presale });
         const [
           hasSaleStarted,

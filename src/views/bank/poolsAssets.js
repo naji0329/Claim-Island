@@ -1,4 +1,4 @@
-import {gemTokenAddress, shellTokenAddress} from "../../web3/constants";
+import { gemTokenAddress, shellTokenAddress } from "../../web3/constants";
 
 export const poolAssets = {
   [gemTokenAddress]: {

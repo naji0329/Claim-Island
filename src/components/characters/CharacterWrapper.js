@@ -127,9 +127,7 @@ const CharacterWrapper = ({
                   className="btn character-btn"
                   id="btn-next"
                   onClick={() =>
-                    button.alt
-                      ? handleClickButtonAlt(button)
-                      : handleClickButton(button)
+                    button.alt ? handleClickButtonAlt(button) : handleClickButton(button)
                   }
                 >
                   {button.text}
@@ -139,9 +137,7 @@ const CharacterWrapper = ({
                 <button
                   className="btn character-btn"
                   onClick={() =>
-                    buttonAlt.alt
-                      ? handleClickButtonAlt(buttonAlt)
-                      : handleClickButton(buttonAlt)
+                    buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)
                   }
                 >
                   {buttonAlt.text}
@@ -151,16 +147,9 @@ const CharacterWrapper = ({
           </div>
         </div>
         <div className="character-container flex items-end cursor-pointer">
-          <img
-            className="max-h-full"
-            src={character.charImg}
-            onClick={handleClickCharacter}
-          />
+          <img className="max-h-full" src={character.charImg} onClick={handleClickCharacter} />
         </div>
-        <button
-          className="btn character-container-round"
-          onClick={handleClickCharacter}
-        >
+        <button className="btn character-container-round" onClick={handleClickCharacter}>
           <img src={character.charImg} className="character" />
         </button>
 
@@ -182,9 +171,7 @@ const CharacterWrapper = ({
                   className="btn character-btn"
                   id="btn-next"
                   onClick={() =>
-                    button.alt
-                      ? handleClickButtonAlt(button)
-                      : handleClickButton(button)
+                    button.alt ? handleClickButtonAlt(button) : handleClickButton(button)
                   }
                 >
                   {button.text}
@@ -194,9 +181,7 @@ const CharacterWrapper = ({
                 <button
                   className="btn character-btn ml-2"
                   onClick={() =>
-                    buttonAlt.alt
-                      ? handleClickButtonAlt(buttonAlt)
-                      : handleClickButton(buttonAlt)
+                    buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)
                   }
                 >
                   {buttonAlt.text}
@@ -210,9 +195,7 @@ const CharacterWrapper = ({
   );
 };
 
-const mapToProps = ({
-  character: { name, action, show, button, buttonAlt },
-}) => ({
+const mapToProps = ({ character: { name, action, show, button, buttonAlt } }) => ({
   name,
   action,
   show,

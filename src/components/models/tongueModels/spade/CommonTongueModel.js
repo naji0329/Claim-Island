@@ -1,11 +1,11 @@
-import React, { useRef } from 'react'
-import { useGLTF, useTexture } from '@react-three/drei'
+import React, { useRef } from "react";
+import { useGLTF, useTexture } from "@react-three/drei";
 
 export default function Model(props) {
-  const group = useRef()
-  const { nodes } = useGLTF('/clam-models/spade/Tongues/common.glb')
-  const materialProps = useTexture({ normalMap: '/clam-models/tongue-normal.png' })
-  const { tongueTexture, ...rest } = props
+  const group = useRef();
+  const { nodes } = useGLTF("/clam-models/spade/Tongues/common.glb");
+  const materialProps = useTexture({ normalMap: "/clam-models/tongue-normal.png" });
+  const { tongueTexture, ...rest } = props;
 
   return (
     <group ref={group} {...rest}>
@@ -20,7 +20,7 @@ export default function Model(props) {
         </mesh>
       </group>
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/clam-models/spade/Tongues/common.glb')
+useGLTF.preload("/clam-models/spade/Tongues/common.glb");

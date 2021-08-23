@@ -697,8 +697,7 @@ export const BUTTONS = {
       next: "No thanks",
       alt: {
         action: "url",
-        destination:
-          "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
+        destination: "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
         text: "Sure!",
       },
     },
@@ -719,8 +718,7 @@ export const BUTTONS = {
       next: "I understand",
       alt: {
         action: "url",
-        destination:
-          "https://clamisland.medium.com/clam-island-presale-30090591d4f",
+        destination: "https://clamisland.medium.com/clam-island-presale-30090591d4f",
         text: "More information",
       },
     },
@@ -802,8 +800,7 @@ export const BUTTONS = {
       next: "No thanks",
       alt: {
         action: "url",
-        destination:
-          "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
+        destination: "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
         text: "Sure!",
       },
     },
@@ -824,8 +821,7 @@ export const BUTTONS = {
       next: "I understand",
       alt: {
         action: "url",
-        destination:
-          "https://clamisland.medium.com/clam-island-presale-30090591d4f",
+        destination: "https://clamisland.medium.com/clam-island-presale-30090591d4f",
         text: "More information",
       },
     },
@@ -915,15 +911,11 @@ export const BUTTONS = {
 };
 
 function showPresaleCountdown() {
-  const total =
-    Date.parse("Tue May 25 2021 09:00:00 GMT+0000") -
-    Date.parse(String(new Date()));
+  const total = Date.parse("Tue May 25 2021 09:00:00 GMT+0000") - Date.parse(String(new Date()));
   const minutes = Math.floor((total / 1000 / 60) % 60);
   const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
 
-  return `${hours} hours and ${
-    minutes > 9 ? minutes : "0" + minutes.toString()
-  } minutes`;
+  return `${hours} hours and ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes`;
 }
 
 function clamPresaleDate() {

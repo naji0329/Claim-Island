@@ -31,4 +31,3 @@ export const CommonClam = (props) => {
     </group>
   );
 };
-

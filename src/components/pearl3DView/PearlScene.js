@@ -4,7 +4,7 @@ import * as THREE from "three";
 
 import { PearlBackground } from "./PearlBackground";
 import { Loading3DView } from "../Loading3DView";
-import { CameraControls } from './PearlCameraControls';
+import { CameraControls } from "./PearlCameraControls";
 
 export const PearlScene = (props) => {
   const { children } = props;
@@ -20,7 +20,7 @@ export const PearlScene = (props) => {
         zoom: 5,
       }}
       dpr={window.devicePixelRatio}
-      onCreated={canvasCtx => {
+      onCreated={(canvasCtx) => {
         canvasCtx.gl.toneMapping = THREE.NoToneMapping;
         canvasCtx.gl.physicallyCorrectLights = true;
       }}
@@ -30,9 +30,7 @@ export const PearlScene = (props) => {
         {children}
         <PearlBackground />
       </Suspense>
-      <ambientLight
-        args={[0xffffff, 2]}
-      />
+      <ambientLight args={[0xffffff, 2]} />
     </Canvas>
   );
 };

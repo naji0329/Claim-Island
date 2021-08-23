@@ -10,17 +10,13 @@ import { actions } from "../../store/redux";
 import ClamBuyModal from "./ClamBuyModal";
 import ClamCollectModal from "./ClamCollectModal";
 import ClamDisplayModal from "./ClamDisplayModal";
-import { checkHasClamToCollect } from '../../web3/clam'
-import { zeroHash } from '../../web3/constants'
+import { checkHasClamToCollect } from "../../web3/clam";
+import { zeroHash } from "../../web3/constants";
 
-const Shop = ({
-  account: { address, clamToCollect },
-  updateCharacter,
-  updateAccount,
-}) => {
-  const [modalToShow, setModalToShow] = useState(null) 
+const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAccount }) => {
+  const [modalToShow, setModalToShow] = useState(null);
   const [userReady, setUserReady] = useState(false);
-  
+
   const { activateBrowserWallet } = useEthers();
 
   useEffect(() => {
@@ -69,27 +65,26 @@ const Shop = ({
                     alt: {
                       action: "cb",
                       destination: () => {
-                        setUserReady(true)
-                        
-                        console.log('clamToCollect', clamToCollect);
+                        setUserReady(true);
+
+                        console.log("clamToCollect", clamToCollect);
                         if (clamToCollect) {
                           updateCharacter({
                             name: "diego",
                             action: "clam_shop.collect.text",
                             button: {
                               text: "Got it, Boss",
-                              dismiss: true
+                              dismiss: true,
                             },
                           });
-                          setModalToShow('collect')
+                          setModalToShow("collect");
                         } else {
                           updateCharacter({
                             name: "diego",
                             action: null,
                           });
-                          setModalToShow('buy')
+                          setModalToShow("buy");
                         }
-                        
                       },
                     },
                   },
@@ -99,28 +94,26 @@ const Shop = ({
                   name: "diego",
                   action: "clam_presale.connect.text",
                   button: {
-                    text: 'Connect',
+                    text: "Connect",
                     alt: {
                       action: "cb",
-                      destination: activateBrowserWallet
-                    }
+                      destination: activateBrowserWallet,
+                    },
                   },
                 });
               }
-              
             },
           },
         },
       });
     }
-    
-  }, [address, userReady, clamToCollect])
+  }, [address, userReady, clamToCollect]);
 
   useEffect(() => {
     if (address) {
-      checkHasClamToCollect(address).then(clamToCollect => {
-        updateAccount({ clamToCollect: clamToCollect === zeroHash ? null : clamToCollect })
-      })
+      checkHasClamToCollect(address).then((clamToCollect) => {
+        updateAccount({ clamToCollect: clamToCollect === zeroHash ? null : clamToCollect });
+      });
     }
   }, [address, modalToShow]);
 
@@ -135,8 +128,14 @@ const Shop = ({
           loop
           className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
         >
-          <source src={process.env.PUBLIC_URL + "/location_vids/shop_animated.mp4"} type="video/mp4" />
-          <source src={process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"}  type='video/webm; codecs="vp8, vorbis"' />
+          <source
+            src={process.env.PUBLIC_URL + "/location_vids/shop_animated.mp4"}
+            type="video/mp4"
+          />
+          <source
+            src={process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"}
+            type='video/webm; codecs="vp8, vorbis"'
+          />
         </video>
 
         {/* chat character   */}
@@ -149,13 +148,17 @@ const Shop = ({
           {
             address && // wallet is connected
             userReady &&
-            modalToShow === 'collect' && clamToCollect ? <ClamCollectModal setModalToShow={setModalToShow} /> :
-              modalToShow === 'buy' ? <ClamBuyModal setModalToShow={setModalToShow}  />  :
-                modalToShow === 'display' ? <ClamDisplayModal setModalToShow={setModalToShow} /> :
-                  null
-                  
+            modalToShow === "collect" &&
+            clamToCollect ? (
+              <ClamCollectModal setModalToShow={setModalToShow} />
+            ) : modalToShow === "buy" ? (
+              <ClamBuyModal setModalToShow={setModalToShow} />
+            ) : modalToShow === "display" ? (
+              <ClamDisplayModal setModalToShow={setModalToShow} />
+            ) : null
+
             // showBuyModal ? // user has agreed clicked Yes
-            //   clamToCollect && !showClamDisplayModal ? 
+            //   clamToCollect && !showClamDisplayModal ?
             //     <ClamCollectModal setShowClamDisplayModal={setShowClamDisplayModal} /> :
             //     <ClamBuyModal setShowBuyModal={setShowBuyModal}  />
             // : showClamDisplayModal && <ClamDisplayModal setShowBuyModal={setShowBuyModal} />

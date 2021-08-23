@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useAsync } from "react-use";
-import { useEthers, useTokenBalance, useEtherBalance, ChainId, shortenAddress } from "@usedapp/core";
+import {
+  useEthers,
+  useTokenBalance,
+  useEtherBalance,
+  ChainId,
+  shortenAddress,
+} from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { actions } from "../store/redux";
 import { Link, useLocation } from "react-router-dom";
@@ -18,9 +24,16 @@ import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
-    <div className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-50" role="alert">
+    <div
+      className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-50"
+      role="alert"
+    >
       <div className="flex">
-        <svg className="h-6 w-6 fill-current text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+        <svg
+          className="h-6 w-6 fill-current text-red-500 mr-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
           <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
         </svg>
         <div>
@@ -99,7 +112,14 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
       isConnected: account ? true : false,
       isBSChain,
     });
-  }, [account, activateChainId, activateError, activateBnbBalance, activateClamBalance, activatePearlBalance]);
+  }, [
+    account,
+    activateChainId,
+    activateError,
+    activateBnbBalance,
+    activateClamBalance,
+    activatePearlBalance,
+  ]);
 
   useEffect(() => {
     if (error) {
@@ -182,7 +202,9 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
         <div className="w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
           <div className="flex-grow">
             {title && (
-              <h1 className="text-6xl text-shadow font-extrabold font-aristotelica-bold text-white">{title}</h1>
+              <h1 className="text-6xl text-shadow font-extrabold font-aristotelica-bold text-white">
+                {title}
+              </h1>
             )}
           </div>
 
@@ -205,16 +227,18 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                     to="/saferoom"
                     className="flex"
                     style={
-                      Number(activateClamBalance) > 0 && location.pathname.indexOf("saferoom") === -1
+                      Number(activateClamBalance) > 0 &&
+                      location.pathname.indexOf("saferoom") === -1
                         ? null
                         : { pointerEvents: "none" }
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
                       Clams in Safe: {activateClamBalance}
-                      {Number(activateClamBalance) > 0 && location.pathname.indexOf("saferoom") === -1 && (
-                        <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
-                      )}
+                      {Number(activateClamBalance) > 0 &&
+                        location.pathname.indexOf("saferoom") === -1 && (
+                          <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
+                        )}
                     </span>
                   </Link>
                 </div>
@@ -223,16 +247,18 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                     to="/saferoom"
                     className="flex"
                     style={
-                      Number(activatePearlBalance) > 0 && location.pathname.indexOf("saferoom") === -1
+                      Number(activatePearlBalance) > 0 &&
+                      location.pathname.indexOf("saferoom") === -1
                         ? null
                         : { pointerEvents: "none" }
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
                       Pearls in Safe: {activatePearlBalance}
-                      {Number(activatePearlBalance) > 0 && location.pathname.indexOf("saferoom") === -1 && (
-                        <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
-                      )}
+                      {Number(activatePearlBalance) > 0 &&
+                        location.pathname.indexOf("saferoom") === -1 && (
+                          <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
+                        )}
                     </span>
                   </Link>
                 </div>

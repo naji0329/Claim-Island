@@ -1,9 +1,9 @@
-import React, {useRef} from 'react';
-import {useGLTF} from '@react-three/drei';
+import React, { useRef } from "react";
+import { useGLTF } from "@react-three/drei";
 
 export function CommonModel(props) {
   const group = useRef();
-  const { nodes } = useGLTF('/clam-models/common/clam.glb');
+  const { nodes } = useGLTF("/clam-models/common/clam.glb");
   const { outerTexture, innerTexture, lipTexture, ...rest } = props;
 
   return (
@@ -38,4 +38,4 @@ export function CommonModel(props) {
 
 export default CommonModel;
 
-useGLTF.preload('/clam-models/common/clam.glb');
+useGLTF.preload("/clam-models/common/clam.glb");

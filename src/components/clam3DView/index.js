@@ -1,1 +1,1 @@
-export * from './Clam3DView';
+export * from "./Clam3DView";

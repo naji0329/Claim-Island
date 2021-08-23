@@ -161,24 +161,14 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
         </div>
       )}
       <Web3Navbar />
-      <VideoBackground
-        videoImage={videoImage}
-        videoMp4={videoMp4}
-        videoWebM={videoWebM}
-      />
+      <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
       {<Character name="al" />}
 
       <Modal isShowing={isShowing} onClose={toggleModal}>
         {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
-          <PearlDetails
-            pearl={selectedPearl}
-            onWithdrawPearl={onWithdrawPearl}
-          ></PearlDetails>
+          <PearlDetails pearl={selectedPearl} onWithdrawPearl={onWithdrawPearl}></PearlDetails>
         ) : (
-          <ClamDeposit
-            setSelectedClam={setSelectedClam}
-            clams={clams}
-          ></ClamDeposit>
+          <ClamDeposit setSelectedClam={setSelectedClam} clams={clams}></ClamDeposit>
         )}
       </Modal>
 

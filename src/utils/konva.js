@@ -38,7 +38,7 @@ const loadTextureKonva = async (object, texture, base, rgb, addKonvaObject) => {
     width: 1024,
     height: 1024,
   });
-  addKonvaObject(konvaImage)
+  addKonvaObject(konvaImage);
   layer.add(konvaImage);
 
   if (obj === "os") {
@@ -91,9 +91,7 @@ export const loadAllTextures = async (traits, clamDir, rgb, addKonvaObject) => {
     },
   ];
   //console.log(textures);
-  const loaded = await Promise.all(
-    textures.map((k) => loadTexture(clamDir + k.img))
-  );
+  const loaded = await Promise.all(textures.map((k) => loadTexture(clamDir + k.img)));
   const base = await loadTexture(
     "/clam-models/patterns/" + traits.pattern.toLowerCase() + "_basecolor.png"
   );
@@ -103,6 +101,4 @@ export const loadAllTextures = async (traits, clamDir, rgb, addKonvaObject) => {
   );
 };
 
-export const getClamDir = (traits) =>
-  "/clam-models/" + traits.shellShape.toLowerCase() + "/";
-
+export const getClamDir = (traits) => "/clam-models/" + traits.shellShape.toLowerCase() + "/";
