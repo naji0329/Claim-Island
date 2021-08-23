@@ -31,4 +31,3 @@ export const BigmouthClam = (props) => {
     </group>
   );
 };
-

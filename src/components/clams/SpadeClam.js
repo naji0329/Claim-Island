@@ -22,13 +22,8 @@ export const SpadeClam = (props) => {
   const TongueComponent = TONGUE_COMPONENTS[tongueType] || DefaultTongue;
   return (
     <group position={[0.005, 0, -0.04]}>
-      <SpadeModel
-        outerTexture={outerTexture}
-        innerTexture={innerTexture}
-        lipTexture={lipTexture}
-      />
+      <SpadeModel outerTexture={outerTexture} innerTexture={innerTexture} lipTexture={lipTexture} />
       <TongueComponent tongueTexture={tongueTexture} />
     </group>
   );
 };
-

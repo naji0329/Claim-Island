@@ -38,14 +38,8 @@ export default ({ dna, dnaDecoded }) => {
       description: (
         <div>
           <RowStat label="Shape" value={get(dnaDecoded, "[0].shellShape")} />
-          <RowStat
-            label="Shell Color"
-            value={get(dnaDecoded, "[0].shellColor")}
-          />
-          <RowStat
-            label="Inner Color"
-            value={get(dnaDecoded, "[0].innerColor")}
-          />
+          <RowStat label="Shell Color" value={get(dnaDecoded, "[0].shellColor")} />
+          <RowStat label="Inner Color" value={get(dnaDecoded, "[0].innerColor")} />
           <RowStat label="Lip Color" value={get(dnaDecoded, "[0].lipColor")} />
           <RowStat label="Pattern" value={get(dnaDecoded, "[0].pattern")} />
         </div>

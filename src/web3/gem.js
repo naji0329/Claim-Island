@@ -5,20 +5,17 @@ import { contractFactory } from "./index";
 
 export const getAllowance = async (ownerAddress, spenderAddress) => {
   const gem = contractFactory({ abi: gemAbi, address: gemTokenAddress });
-  const value = await gem.methods
-    .allowance(ownerAddress, spenderAddress)
-    .call();
+  const value = await gem.methods.allowance(ownerAddress, spenderAddress).call();
   return value;
 };
 
 export const approveSpending = async (ownerAddress, spenderAddress, amount) => {
-  console.log('amount', amount);
-  const allowance = await getAllowance(ownerAddress, spenderAddress)
-  console.log('allowance', allowance);
+  console.log("amount", amount);
+  const allowance = await getAllowance(ownerAddress, spenderAddress);
+  console.log("allowance", allowance);
 
-  if (new BigNumber(allowance).gte(new BigNumber(amount)) ) return;
+  if (new BigNumber(allowance).gte(new BigNumber(amount))) return;
   const gem = contractFactory({ abi: gemAbi, address: gemTokenAddress });
-
 
   const method = gem.methods.approve(spenderAddress, amount);
 

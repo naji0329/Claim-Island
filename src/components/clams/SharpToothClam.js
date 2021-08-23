@@ -31,4 +31,3 @@ export const SharpToothClam = (props) => {
     </group>
   );
 };
-

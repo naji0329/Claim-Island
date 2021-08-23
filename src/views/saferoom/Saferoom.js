@@ -25,7 +25,6 @@ import { getPearlDNADecoded } from "../../web3/pearlDnaDecoder";
 import { get } from "lodash";
 
 const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateCharacter }) => {
-
   const [clams, setClams] = useState([]);
   const [pearls, setPearls] = useState([]);
   const [selectedAsset, setSelectedAsset] = useState();
@@ -61,12 +60,22 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
         };
 
         // parallel call to speed up
-        if (+clamBalance > 0 ) {
-          const clams = await getNFTs(clamContract.getClamByIndex, clamContract.getClamData, clamBalance, getDNADecoded);
+        if (+clamBalance > 0) {
+          const clams = await getNFTs(
+            clamContract.getClamByIndex,
+            clamContract.getClamData,
+            clamBalance,
+            getDNADecoded
+          );
           setClams(clams);
         }
-        if(+pearlBalance > 0) {
-          const pearls = await getNFTs(pearlContract.getPearlByIndex, pearlContract.getPearlData, pearlBalance, getPearlDNADecoded);
+        if (+pearlBalance > 0) {
+          const pearls = await getNFTs(
+            pearlContract.getPearlByIndex,
+            pearlContract.getPearlData,
+            pearlBalance,
+            getPearlDNADecoded
+          );
           setPearls(pearls);
         }
 
@@ -109,8 +118,16 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
       <Web3Navbar />
       {/* container */}
       <div className="saferoom-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
-        <video autoPlay muted loop className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center">
-          <source src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"} type="video/mp4" />
+        <video
+          autoPlay
+          muted
+          loop
+          className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
+        >
+          <source
+            src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"}
+            type="video/mp4"
+          />
           <source
             src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated_webm.webm"}
             type='video/webm; codecs="vp8, vorbis"'
@@ -123,8 +140,8 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
       {!address && <Character name="tanja" />}
 
       <Modal isShowing={isShowing} onClose={toggle}>
-        { tab === "Clam" && <ClamView {...selectedAsset} /> }
-        { tab === "Pearl" && <PearlView {...selectedAsset} /> }
+        {tab === "Clam" && <ClamView {...selectedAsset} />}
+        {tab === "Pearl" && <PearlView {...selectedAsset} />}
       </Modal>
       {address && (
         <div className="flex-1 min-h-full min-w-full flex relative z-20  justify-center items-start">
@@ -137,10 +154,16 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
               </div>
 
               <div className="px-3 py-2 flex justify-between">
-                <button className={`px-5 ${tab === "Clam" ? "bg-blue-700 text-white" : "text-blue-700" }`} onClick={() => setTab("Clam")}>
+                <button
+                  className={`px-5 ${tab === "Clam" ? "bg-blue-700 text-white" : "text-blue-700"}`}
+                  onClick={() => setTab("Clam")}
+                >
                   Clams
                 </button>
-                <button className={`px-5 ${tab === "Pearl" ? "bg-blue-700 text-white" : "text-blue-700" }`} onClick={() => setTab("Pearl")}>
+                <button
+                  className={`px-5 ${tab === "Pearl" ? "bg-blue-700 text-white" : "text-blue-700"}`}
+                  onClick={() => setTab("Pearl")}
+                >
                   Pearls
                 </button>
                 <Link

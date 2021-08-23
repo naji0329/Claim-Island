@@ -22,13 +22,8 @@ export const HeartClam = (props) => {
   const TongueComponent = TONGUE_COMPONENTS[tongueType] || DefaultTongue;
   return (
     <group position={[0, 0, -0.01]}>
-      <HeartModel
-        outerTexture={outerTexture}
-        innerTexture={innerTexture}
-        lipTexture={lipTexture}
-      />
+      <HeartModel outerTexture={outerTexture} innerTexture={innerTexture} lipTexture={lipTexture} />
       <TongueComponent tongueTexture={tongueTexture} />
     </group>
   );
 };
-

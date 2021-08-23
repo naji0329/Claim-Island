@@ -10,7 +10,7 @@ export const estimateSwap = async ({ destToken, originToken, amountIn }) => {
 };
 
 export const zapBNBForLPToken = async ({ bnbAmount, destToken, tokenAmountOutMin, account }) => {
-  console.log({  bnbAmount })
+  console.log({ bnbAmount });
   const zap = contractFactory({ abi: zapAbi, address: zapAddress });
 
   const method = zap.methods.zapInETH(destToken, tokenAmountOutMin);

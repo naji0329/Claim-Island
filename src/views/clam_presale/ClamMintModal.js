@@ -31,8 +31,7 @@ const ClamMintModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const disableButton = usersPurchasedClam >= INDIVIDUAL_CAP;
 
-  const { register, handleSubmit, setValue, reset, formState, getValues } =
-    useForm();
+  const { register, handleSubmit, setValue, reset, formState, getValues } = useForm();
 
   const onSubmit = async (data) => {
     console.log({ data, address });
@@ -95,8 +94,8 @@ const ClamMintModal = ({
                   ></path>
                 </svg>
                 <label>
-                  You&apos;ve bought {usersPurchasedClam} out of{" "}
-                  {INDIVIDUAL_CAP} Clams allowed per address
+                  You&apos;ve bought {usersPurchasedClam} out of {INDIVIDUAL_CAP} Clams allowed per
+                  address
                 </label>
               </div>
             </div>
@@ -111,9 +110,7 @@ const ClamMintModal = ({
                 {clamPresaleAddress}
               </a>
             ) : (
-              <span className="text-yellow-400 text-center">
-                Wallet not connected
-              </span>
+              <span className="text-yellow-400 text-center">Wallet not connected</span>
             )}
           </div>
 
@@ -149,9 +146,7 @@ const ClamMintModal = ({
                           BNB
                         </span>
                       </div>
-                      <span className="my-2">
-                        {bnbBalance.slice(0, 4)} BNB available
-                      </span>
+                      <span className="my-2">{bnbBalance.slice(0, 4)} BNB available</span>
                     </div>
                   </div>
                 </div>
@@ -218,7 +213,7 @@ const ClamMintModal = ({
                 {isLoading ? (
                   <button
                     disabled={isLoading}
-                    style={{textAlign: 'center'}}
+                    style={{ textAlign: "center" }}
                     type="submit"
                     className="flex justify-center items-center block uppercase text-center shadow bg-yellow-200 text-yellow-600 text-xl py-3 px-10 rounded-xl cursor-not-allowed"
                   >

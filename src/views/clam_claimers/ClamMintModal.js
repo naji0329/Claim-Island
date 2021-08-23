@@ -94,8 +94,7 @@ const ClamMintModal = ({
                   ></path>
                 </svg>
                 <label>
-                  You&apos;ve claimed {usersClaimedClam} out of {INDIVIDUAL_CAP}{" "}
-                  Clams allowed
+                  You&apos;ve claimed {usersClaimedClam} out of {INDIVIDUAL_CAP} Clams allowed
                 </label>
               </div>
             </div>
@@ -110,9 +109,7 @@ const ClamMintModal = ({
                 {clamClaimersAddress}
               </a>
             ) : (
-              <span className="text-yellow-400 text-center">
-                Wallet not connected
-              </span>
+              <span className="text-yellow-400 text-center">Wallet not connected</span>
             )}
           </div>
 

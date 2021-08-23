@@ -17,9 +17,7 @@ import Web3ClamClaimers from "./Web3ClamClaimers";
 const ClamWaitingOracle = () => (
   <Card>
     <div className="flex flex-col mb-1">
-      <h2 className="text-blue-700 font-semibold text-2xl mb-2">
-        Get Clams on BSC
-      </h2>
+      <h2 className="text-blue-700 font-semibold text-2xl mb-2">Get Clams on BSC</h2>
 
       <div className="alert alert-warning">
         <div className="flex-1">
@@ -87,7 +85,15 @@ const ClamPresale = ({
   const [showMintModal, setShowMintModal] = useState(false);
 
   useEffect(() => {
-    console.log({ isEnded, isStarted, isClamClaimer, address, clamBalance, individualCap, usersClaimedClam });
+    console.log({
+      isEnded,
+      isStarted,
+      isClamClaimer,
+      address,
+      clamBalance,
+      individualCap,
+      usersClaimedClam,
+    });
 
     // not connected
     if (!address) {
@@ -157,31 +163,29 @@ const ClamPresale = ({
         //       },
         //     },
         //   });
-      }
-      else {
-
+      } else {
         if (parseInt(usersClaimedClam) < parseInt(individualCap)) {
-            // can claim
-            updateCharacter({
-              name: "diego",
-              action: "clam_claimer.welcome_connected.text",
-              button: {
-                text: "Yes",
-                alt: {
-                  action: "cb",
-                  destination: () => {
-                    setShowMintModal(true);
-                    updateCharacter({
-                      name: "diego",
-                      action: "clam_claimer.claim.text",
-                      button: {
-                        text: undefined,
-                      },
-                    });
-                  },
+          // can claim
+          updateCharacter({
+            name: "diego",
+            action: "clam_claimer.welcome_connected.text",
+            button: {
+              text: "Yes",
+              alt: {
+                action: "cb",
+                destination: () => {
+                  setShowMintModal(true);
+                  updateCharacter({
+                    name: "diego",
+                    action: "clam_claimer.claim.text",
+                    button: {
+                      text: undefined,
+                    },
+                  });
                 },
               },
-            });
+            },
+          });
         }
         // already claimed all
         else {
@@ -218,9 +222,7 @@ const ClamPresale = ({
             type="video/mp4"
           />
           <source
-            src={
-              process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"
-            }
+            src={process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"}
             type='video/webm; codecs="vp8, vorbis"'
           />
         </video>

@@ -27,11 +27,10 @@ export const approveBankForMaxUint = async (account, tokenAddress) => {
 };
 
 export const hasMaxUintAllowance = async (owner, tokenAddress) => {
-  const maxUint =
-    "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  const maxUint = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
   const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
   const allowance = await token.methods.allowance(owner, bankAddress).call();
-  const allowanceAsHex = web3.utils.toHex(allowance)
+  const allowanceAsHex = web3.utils.toHex(allowance);
 
   return allowanceAsHex == maxUint;
 };
