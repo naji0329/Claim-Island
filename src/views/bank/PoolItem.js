@@ -5,18 +5,15 @@ import classnames from "classnames";
 import { deposit, harvest, withdraw, pendingGem } from "../../web3/bank";
 import pancake from "../../web3/pancake";
 
-import {
-  approveBankForMaxUint,
-  hasMaxUintAllowance,
-  balanceOf,
-} from "../../web3/bep20";
-import { bankAddress } from "../../web3/constants";
+import { approveBankForMaxUint, hasMaxUintAllowance, balanceOf } from "../../web3/bep20";
+import { bankAddress, wBNB } from "../../web3/constants";
 import { formatFromWei, formatToWei } from "../../web3/shared";
 import { useAsync, createStateContext } from "react-use";
 
 import { useEthers } from "@usedapp/core";
 import { useForm } from "react-hook-form";
 import BigNumber from "bignumber.js";
+import { LoopOnce } from "three";
 
 // shared state across all pool copoments - to avoid passing too much props down to children
 const [useSharedState, SharedStateProvider] = createStateContext();
@@ -25,6 +22,15 @@ const [useSharedState, SharedStateProvider] = createStateContext();
 const formatNumber = (number, decimals) => {
   const n = number.toFixed(decimals);
   return n > number ? n - 1 / Math.pow(10, decimals) + "" : n;
+};
+
+const exchangeUrl = async ({ isSingleStake, tokenAddress }) => {
+  if (isSingleStake) return `https://pancakeswap.finance/swap?outputCurrency=${tokenAddress}`;
+
+  let [token0, token1] = await pancake.getLPTokens(tokenAddress);
+  token0 = token0 === wBNB ? "BNB" : token0;
+  token1 = token1 === wBNB ? "BNB" : token1;
+  return `https://pancakeswap.finance/add/${token0}/${token1}`;
 };
 
 const getBalancesFormatted = async (account, lpToken, isSingleStake) => {
@@ -43,7 +49,7 @@ const getBalancesFormatted = async (account, lpToken, isSingleStake) => {
   }
 };
 
-const PoolData = ({ depositFee }) => {
+const PoolData = ({ depositFee, urlForExchange }) => {
   return (
     <div className="w-full px-2">
       {/* <div className="flex flex-row justify-between">
@@ -64,6 +70,11 @@ const PoolData = ({ depositFee }) => {
           BSC Scan
         </a>
       </div>
+      <div className="flex">
+        <a href={urlForExchange} target="_blank" className="text-gray-500 font-semibold underline" rel="noreferrer">
+          Get Token
+        </a>
+      </div>
     </div>
   );
 };
@@ -74,11 +85,7 @@ const SliderWithPercentages = ({ isDeposit }) => {
   const stateProp = isDeposit ? "depositAmount" : "withdrawAmount";
 
   const setPercentage = (percentage) => {
-    const balance = get(
-      state,
-      isDeposit ? "balances[0]" : "pool.userDepositAmountInPool",
-      "0"
-    );
+    const balance = get(state, isDeposit ? "balances[0]" : "pool.userDepositAmountInPool", "0");
     const absolute = formatNumber((percentage / 100) * +balance, 6);
     setSharedState({ ...state, [stateProp]: absolute });
   };
@@ -135,11 +142,7 @@ const DepositTab = () => {
       await approveBankForMaxUint(account, pool.lpToken);
       await deposit(pool.poolId, formatToWei(depositAmount));
 
-      const balances = await getBalancesFormatted(
-        account,
-        pool.lpToken,
-        pool.isSingleStake
-      );
+      const balances = await getBalancesFormatted(account, pool.lpToken, pool.isSingleStake);
       const currentDepositBN = new BigNumber(pool.userDepositAmountInPool);
       const depositBN = new BigNumber(depositAmount);
       const newDepositBN = currentDepositBN.plus(depositBN).toString();
@@ -166,9 +169,7 @@ const DepositTab = () => {
         <div className="flex items-center justify-between opacity-40 text-xl">
           <div className="">Wallet:</div> {/* TODO: update after deposit */}
           <div className="flex items-center">
-            <div className="mx-2">
-              {formatNumber(+get(state, "balances[0]", "0"), 4)}
-            </div>
+            <div className="mx-2">{formatNumber(+get(state, "balances[0]", "0"), 4)}</div>
             {/* <div className="text-sm">($15.01) </div> */}
           </div>
         </div>
@@ -216,9 +217,7 @@ const DepositTab = () => {
           <SliderWithPercentages isDeposit />
 
           {/* TODO better validation with Yulp */}
-          {errors.depositAmount && (
-            <div className="my-2 text-error">Validation Error</div>
-          )}
+          {errors.depositAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
 
         <button
@@ -249,11 +248,7 @@ const WithdrawTab = () => {
     setInTx(true);
     try {
       await withdraw(pool.poolId, formatToWei(withdrawAmount));
-      const balances = await getBalancesFormatted(
-        account,
-        pool.lpToken,
-        pool.isSingleStake
-      );
+      const balances = await getBalancesFormatted(account, pool.lpToken, pool.isSingleStake);
 
       const currentDepositBN = new BigNumber(pool.userDepositAmountInPool);
       const depositBN = new BigNumber(withdrawAmount);
@@ -281,12 +276,7 @@ const WithdrawTab = () => {
         <div className="flex items-center justify-between opacity-40 text-xl">
           <div className="">Vault:</div>
           <div className="flex items-center">
-            <div className="mx-2">
-              {formatNumber(
-                +get(state, "pool.userDepositAmountInPool", "0"),
-                4
-              )}
-            </div>
+            <div className="mx-2">{formatNumber(+get(state, "pool.userDepositAmountInPool", "0"), 4)}</div>
             {/* TODO convert LP to dolar */}
             {/* <div className="text-sm">($15.01) </div> */}
           </div>
@@ -334,9 +324,7 @@ const WithdrawTab = () => {
 
           <SliderWithPercentages />
 
-          {errors.withdrawAmount && (
-            <div className="my-2 text-error">Validation Error</div>
-          )}
+          {errors.withdrawAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
 
         <button
@@ -421,12 +409,7 @@ const PoolHarvest = () => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
           </button>
         </div>
@@ -438,12 +421,7 @@ const PoolHarvest = () => {
               </div>
             </div>
 
-            <div className="mx-2 text-4xl">
-              {formatNumber(
-                +get(state, "pool.userRewardAmountInPool", "0.0"),
-                4
-              )}
-            </div>
+            <div className="mx-2 text-4xl">{formatNumber(+get(state, "pool.userRewardAmountInPool", "0.0"), 4)}</div>
             <div className="mx-2 text-xl">GEM</div>
             {/* TODO convert GEM to dola */}
             {/* <div className="mx-2 text-xs">($12.00)</div> */}
@@ -467,7 +445,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
-  const [depositValue, setDepositValue] = useState(0);
+  const [urlForExchange, setUrlForExchange] = useState('');
   const [state, setSharedState] = useSharedState();
 
   const { activateBrowserWallet } = useEthers();
@@ -482,11 +460,11 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
 
   const handleOpen = async () => {
     setIsOpen(true);
-    const balances = await getBalancesFormatted(
-      account,
-      pool.lpToken,
-      pool.isSingleStake
-    );
+    const balances = await getBalancesFormatted(account, pool.lpToken, pool.isSingleStake);
+
+    const url = await exchangeUrl({ tokenAddress: pool.lpToken, isSingleStake: pool.isSingleStake });
+    console.log({url})
+    setUrlForExchange(url);
 
     setSharedState({ ...state, account, pool, balances });
   };
@@ -508,20 +486,14 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
                   </div>
                 ))}
             </div>
-            <div className="mx-2 font-aristotelica-bold text-xl">
-              {pool.name}
-            </div>
+            <div className="mx-2 font-aristotelica-bold text-xl">{pool.name}</div>
           </div>
 
           {/* <div className="badge badge-warning">Medium risk</div> */}
 
           <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-              Reward Share
-            </p>
-            <p className="font-bold text-black text-center">
-              {pool.multiplier}%
-            </p>
+            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Reward Share</p>
+            <p className="font-bold text-black text-center">{pool.multiplier}%</p>
           </div>
 
           {/* <div className="text-sm block">
@@ -532,21 +504,13 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
           </div> */}
 
           <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-              Deposited
-            </p>
-            <p className="font-bold text-gray-300 text-center">
-              {pool.userDepositAmountInPool}
-            </p>
+            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Deposited</p>
+            <p className="font-bold text-gray-300 text-center">{pool.userDepositAmountInPool}</p>
           </div>
 
           <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-              To Harvest
-            </p>
-            <p className="font-bold text-gray-300 text-center">
-              {pool.userRewardAmountInPool}
-            </p>
+            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">To Harvest</p>
+            <p className="font-bold text-gray-300 text-center">{pool.userRewardAmountInPool}</p>
           </div>
 
           <div className="text-sm block">
@@ -576,7 +540,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
         {isOpen && (
           <div className="flex justify-between items-start p-4 border-t-2 border-gray-700 h-96">
             <div className="flex w-1/5">
-              <PoolData depositFee={depositFee} />
+              <PoolData depositFee={depositFee} urlForExchange={urlForExchange} />
             </div>
 
             <div className="flex w-2/5 h-full">
