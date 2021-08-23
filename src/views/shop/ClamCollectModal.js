@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { collectClam } from "../../web3/clam";
 
@@ -8,10 +7,7 @@ import "./index.scss";
 
 import Card from "../../components/Card";
 
-import { collect } from "../../web3/clam";
-import { clamPresaleAddress } from "../../web3/constants";
-
-import ClamPic from "../../assets/collect-clam.png";
+import ClamPic from "../../assets/img/clam_unknown.png";
 import { actions } from "../../store/redux";
 import { truncate } from "lodash";
 
