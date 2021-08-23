@@ -27,7 +27,12 @@ const ClamDisplayModal = ({
 
         const index = Number(clamBalance);
         console.log({ clamBalance, index });
-        const tokenId = await clamContract.getClamByIndex(address, index);
+        const tokenId = await clamContract
+          .getClamByIndex(address, index)
+          .catch(async () => {
+            //fallback
+            return clamContract.getClamByIndex(address, index - 1);
+          });
         console.log({ tokenId });
 
         if (tokenId) {
@@ -79,61 +84,54 @@ const ClamDisplayModal = ({
   }, [address]);
 
   return (
-    <>
-      <Card>
-        <div
-          className="overflow-x-hidden overflow-y-scroll max-h-159"
-          style={{ minWidth: "700px" }}
-        >
-          <div className="bg-white flex-1 justify-center md:flex items-center h-full flex-col w-full">
-            {clamDna && clamDnaDecoded && (
-              <>
-                <ClamView dna={clamData.dna} dnaDecoded={clamDnaDecoded} />
+    <div className="w-4/5 mx-auto">
+      <div className="bg-white shadow-md rounded-xl p-5 flex-1 justify-center md:flex items-center h-full flex-col w-full">
+        {clamDna && clamDnaDecoded && (
+          <>
+            <ClamView dna={clamDna} dnaDecoded={clamDnaDecoded} />
 
-                <div className="flex flex-row my-3">
-                  <button
-                    className="btn character-btn ml-2"
-                    onClick={() => setModalToShow("buy")}
-                  >
-                    Buy More
-                  </button>
-                  <button
-                    className="btn character-btn ml-2"
-                    onClick={() => setModalToShow("harvest")}
-                  >
-                    Harvest
-                  </button>
-                </div>
-              </>
-            )}
-            {isLoading && (
-              <>
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-yello-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              </>
-            )}
-          </div>
-        </div>
-      </Card>
-    </>
+            <div className="flex flex-row my-3">
+              <button
+                className="btn character-btn ml-2"
+                onClick={() => setModalToShow("buy")}
+              >
+                Buy More
+              </button>
+              <button
+                className="btn character-btn ml-2"
+                onClick={() => setModalToShow("harvest")}
+              >
+                Harvest
+              </button>
+            </div>
+          </>
+        )}
+        {isLoading && (
+          <>
+            <svg
+              className="animate-spin -ml-1 mr-3 h-5 w-5 text-yello-600"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
