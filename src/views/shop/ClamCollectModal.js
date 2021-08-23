@@ -39,10 +39,10 @@ const ClamCollectModal = ({
           action: "clam_shop.collect_congrats.text",
           button: {
             text: "Gotcha",
-            dismiss: truncate
+            dismiss: truncate,
           },
         });
-        setModalToShow('display');
+        setModalToShow("display");
       })
       .catch((e) => {
         console.error(e);

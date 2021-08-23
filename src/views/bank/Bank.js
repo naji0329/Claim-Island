@@ -32,11 +32,7 @@ import { poolAssets } from "./poolsAssets";
 import { web3 } from "../../web3";
 import { ChainId, useEthers } from "@usedapp/core";
 
-const Bank = ({
-  account: { address, isBSChain },
-  updateCharacter,
-  updateAccount,
-}) => {
+const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount }) => {
   const [pools, setPools] = useState([]);
 
   const { chainId } = useEthers();
@@ -53,12 +49,8 @@ const Bank = ({
         aggregate(userInfocalls),
       ]);
 
-      const poolInfoValues = decodePoolInfoReturnFromMulticall(
-        poolInfo.returnData
-      );
-      const userInfoValues = decodeUserInfoReturnFromMulticall(
-        userInfo.returnData
-      );
+      const poolInfoValues = decodePoolInfoReturnFromMulticall(poolInfo.returnData);
+      const userInfoValues = decodeUserInfoReturnFromMulticall(userInfo.returnData);
 
       const pools = poolInfoValues.map(async (pool, index) => {
         const poolAsset = poolAssets[pool.poolInfoValues.lpToken];
@@ -75,9 +67,7 @@ const Bank = ({
             allocPoint: poolInfo.allocPoint,
             depositFeeBP: poolInfo.depositFeeBP,
             lastRewardBlock: poolInfo.lastRewardBlock,
-            userDepositAmountInPool: formatFromWei(
-              userInfoValues[index].userValues.amount
-            ),
+            userDepositAmountInPool: formatFromWei(userInfoValues[index].userValues.amount),
             userRewardAmountInPool: formatFromWei(pending),
             isSingleStake: poolAsset.isSingleStake,
           };
@@ -118,11 +108,7 @@ const Bank = ({
         <Web3Navbar title="Clam Bank" />
         {/* container */}
         {/* video */}
-        <VideoBackground
-          videoImage={videoImage}
-          videoMp4={videoMp4}
-          videoWebM={videoWebM}
-        />
+        <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
         {address && (
           <>
             <div className="w-full lg:w-4/5 mx-auto relative z-10">
@@ -134,10 +120,7 @@ const Bank = ({
                     onClick={async () => {
                       await updatePool(0);
 
-                      console.log(
-                        "current block",
-                        await web3.eth.getBlockNumber()
-                      );
+                      console.log("current block", await web3.eth.getBlockNumber());
                       await web3.currentProvider.send(
                         {
                           jsonrpc: "2.0",
@@ -157,12 +140,7 @@ const Bank = ({
                 )}
                 {pools &&
                   pools.map((pool, i) => (
-                    <PoolItem
-                      key={i}
-                      {...pool}
-                      account={address}
-                      updateAccount={updateAccount}
-                    />
+                    <PoolItem key={i} {...pool} account={address} updateAccount={updateAccount} />
                   ))}
               </div>
             </div>

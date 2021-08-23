@@ -79,32 +79,31 @@ const ClamDisplayModal = ({
   return (
     <>
       <Card>
-        <div className="overflow-x-hidden overflow-y-scroll max-h-159" style={{minWidth: '700px'}}>
-
+        <div
+          className="overflow-x-hidden overflow-y-scroll max-h-159"
+          style={{ minWidth: "700px" }}
+        >
           <div className="bg-white flex-1 justify-center md:flex items-center h-full flex-col w-full">
             {clamDna && (
               <>
-              <Clams3D
-                width={400}
-                height={400}
-                clamDna={clamDna}
-                decodedDna={clamDnaDecoded}
-                showTraitsTable={true}
-              />
-              <div className="flex flex-row my-3">
-                <button
-                  className="btn character-btn ml-2"
-                  onClick={() => setModalToShow('buy')}
-                >
-                  Buy More
-                </button>
-                <button
-                  className="btn character-btn ml-2"
-                  onClick={() => setModalToShow('harvest')}
-                >
-                  Harvest
-                </button>
-              </div>
+                <Clams3D
+                  width={400}
+                  height={400}
+                  clamDna={clamDna}
+                  decodedDna={clamDnaDecoded}
+                  showTraitsTable={true}
+                />
+                <div className="flex flex-row my-3">
+                  <button className="btn character-btn ml-2" onClick={() => setModalToShow("buy")}>
+                    Buy More
+                  </button>
+                  <button
+                    className="btn character-btn ml-2"
+                    onClick={() => setModalToShow("harvest")}
+                  >
+                    Harvest
+                  </button>
+                </div>
               </>
             )}
             {isLoading && (

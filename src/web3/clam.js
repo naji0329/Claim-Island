@@ -33,14 +33,11 @@ export const getClamData = async (tokenId) => {
 
 export const getClamByIndex = async (account, index) => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
-  const value = await clamNft.methods
-    .tokenOfOwnerByIndex(account, index)
-    .call();
+  const value = await clamNft.methods.tokenOfOwnerByIndex(account, index).call();
   return value;
 };
 
 export const buyClam = async (account) => {
-
   if (!account) {
     throw new Error("There is no account connected!");
   }
@@ -78,34 +75,25 @@ export const buyClam = async (account) => {
         return error;
       }
     });
-
-
 };
 
 export const getPrice = async () => {
   const clamShop = contractFactory({ abi: clamShopAbi, address: clamShopAddress });
-  const value = await clamShop.methods
-    .getUpdatedPrice()
-    .call();
+  const value = await clamShop.methods.getUpdatedPrice().call();
   return value;
 };
 
 export const checkHasClamToCollect = async (address) => {
-
   const clamShop = contractFactory({
     abi: clamShopAbi,
     address: clamShopAddress,
   });
 
-  const value = await clamShop.methods
-    .rngRequestHashForFarmedClam(address)
-    .call();
+  const value = await clamShop.methods.rngRequestHashForFarmedClam(address).call();
   return value;
-
-}
+};
 
 export const collectClam = async (account) => {
-
   if (!account) {
     throw new Error("There is no account connected!");
   }
@@ -121,13 +109,10 @@ export const collectClam = async (account) => {
     from: account,
   });
 
-  return await method
-    .send({
-      from: account,
-      gas: gasEstimation,
-    })
-
-
+  return await method.send({
+    from: account,
+    gas: gasEstimation,
+  });
 };
 
 export default {
@@ -139,5 +124,5 @@ export default {
   buyClam,
   getPrice,
   checkHasClamToCollect,
-  collectClam
+  collectClam,
 };

@@ -96,12 +96,14 @@ float snoise(vec4 v)
   m1 = m1 * m1;
   return 49.0 * ( dot(m0*m0, vec3( dot( p0, x0 ), dot( p1, x1 ), dot( p2, x2 )))
     + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
-  }`
+  }`;
 };
 
 export const getSnoiseVertexShader = (amplitude, frequency) => {
   return `vNormal = normalMatrix * normalize(normal);
-    float distortion = snoise(vec4(normal * ${frequency.toFixed(4)}, 1.0)) * ${amplitude.toFixed(4)};
+    float distortion = snoise(vec4(normal * ${frequency.toFixed(4)}, 1.0)) * ${amplitude.toFixed(
+    4
+  )};
     vec3 transformed = position + (normal * distortion);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);`
-}
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);`;
+};

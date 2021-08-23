@@ -20,7 +20,7 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
   let history = useHistory();
 
   const handleClickButton = (button) => {
-    if (button.dismiss ) {
+    if (button.dismiss) {
       setShowBubble(false);
       return;
     }
@@ -67,8 +67,8 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
     }
   };
 
-  useEffect(()=> {
-      setShowBubble(!!action)
+  useEffect(() => {
+    setShowBubble(!!action);
   }, [action]);
 
   return (
@@ -104,7 +104,9 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
                 <button
                   className="btn character-btn"
                   id="btn-next"
-                  onClick={() => (button.alt ? handleClickButtonAlt(button) : handleClickButton(button))}
+                  onClick={() =>
+                    button.alt ? handleClickButtonAlt(button) : handleClickButton(button)
+                  }
                 >
                   {button.text}
                 </button>
@@ -112,7 +114,9 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
               {buttonAlt && buttonAlt.text && (
                 <button
                   className="btn character-btn"
-                  onClick={() => (buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt))}
+                  onClick={() =>
+                    buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)
+                  }
                 >
                   {buttonAlt.text}
                 </button>
@@ -144,7 +148,9 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
                 <button
                   className="btn character-btn"
                   id="btn-next"
-                  onClick={() => (button.alt ? handleClickButtonAlt(button) : handleClickButton(button))}
+                  onClick={() =>
+                    button.alt ? handleClickButtonAlt(button) : handleClickButton(button)
+                  }
                 >
                   {button.text}
                 </button>
@@ -152,7 +158,9 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
               {buttonAlt && buttonAlt.text && (
                 <button
                   className="btn character-btn ml-2"
-                  onClick={() => (buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt))}
+                  onClick={() =>
+                    buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)
+                  }
                 >
                   {buttonAlt.text}
                 </button>

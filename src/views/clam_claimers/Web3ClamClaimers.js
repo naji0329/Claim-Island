@@ -9,11 +9,7 @@ import { getRNGFromHashRequest } from "../../web3/rng";
 
 import { store, actions } from "../../store/redux";
 
-const Web3ClamClaimers = ({
-  updateClamClaimers,
-  account,
-  clamClaimerData: { progress },
-}) => {
+const Web3ClamClaimers = ({ updateClamClaimers, account, clamClaimerData: { progress } }) => {
   const fetchPresaleData = async () => {
     try {
       console.log("fetchPresaleData");
@@ -28,19 +24,14 @@ const Web3ClamClaimers = ({
           address,
           clamClaimerData,
         });
-        const [
-          isClamClaimer,
-          individualCap,
-          clamsClaimed,
-          usersClaimedClam,
-          hashRequest,
-        ] = await Promise.all([
-          clamClaimersContract.isClamClaimer(address),
-          clamClaimersContract.individualCap(),
-          clamClaimersContract.clamsClaimed(),
-          clamClaimersContract.usersClaimedClam(address),
-          clamClaimersContract.rngRequestHashFromBuyersClam(address),
-        ]);
+        const [isClamClaimer, individualCap, clamsClaimed, usersClaimedClam, hashRequest] =
+          await Promise.all([
+            clamClaimersContract.isClamClaimer(address),
+            clamClaimersContract.individualCap(),
+            clamClaimersContract.clamsClaimed(),
+            clamClaimersContract.usersClaimedClam(address),
+            clamClaimersContract.rngRequestHashFromBuyersClam(address),
+          ]);
 
         let rng;
         if (hashRequest) {

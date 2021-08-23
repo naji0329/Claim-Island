@@ -50,11 +50,13 @@ export default ({ dna, dnaDecoded }) => {
   useEffect(() => {
     if (dnaDecoded.length) {
       const grade_ = calculateGrade(
-        Number(get(dnaDecoded, "lustre")) + Number(get(dnaDecoded, "surface")) + Number(get(dnaDecoded, "nacreQuality"))
+        Number(get(dnaDecoded, "lustre")) +
+          Number(get(dnaDecoded, "surface")) +
+          Number(get(dnaDecoded, "nacreQuality"))
       );
       setGrade(grade_);
 
-      const size_ = calculateSize(Number(get(dnaDecoded, "size")))
+      const size_ = calculateSize(Number(get(dnaDecoded, "size")));
       setSize(size_);
     }
   }, [dnaDecoded]);
@@ -111,7 +113,13 @@ export default ({ dna, dnaDecoded }) => {
       <div className="flex flex-col justify-between">
         <div className="flex justify-between flex-col sm:flex-row">
           {/** 3D Pearl with react three fiber */}
-          <Pearl3DView width={400} height={400} pearlDna={dna} decodedDna={dnaDecoded} showTraitsTable={showTraits} />
+          <Pearl3DView
+            width={400}
+            height={400}
+            pearlDna={dna}
+            decodedDna={dnaDecoded}
+            showTraitsTable={showTraits}
+          />
           {/*<Pearl3DView />*/}
           <div className="w-full md:w-1/2 px-4 md:px-6">
             <Accordion data={accordionData} />

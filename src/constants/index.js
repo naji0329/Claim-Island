@@ -1,7 +1,6 @@
 export const FARMS = [
   {
-    src: require("../assets/img/clamjam/clam_bigmouth_pink_nopearl.png")
-      .default,
+    src: require("../assets/img/clamjam/clam_bigmouth_pink_nopearl.png").default,
     title: "Farm 1",
   },
   {

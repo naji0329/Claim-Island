@@ -1,9 +1,9 @@
-import React, { useRef } from 'react'
-import { useGLTF } from '@react-three/drei'
+import React, { useRef } from "react";
+import { useGLTF } from "@react-three/drei";
 
 export default function Model(props) {
   const group = useRef();
-  const { nodes, materials } = useGLTF('/pearl-models/Pearl_round.glb');
+  const { nodes, materials } = useGLTF("/pearl-models/Pearl_round.glb");
   const {
     map,
     envMap,
@@ -36,4 +36,4 @@ export default function Model(props) {
       </group>
     </group>
   );
-};
+}

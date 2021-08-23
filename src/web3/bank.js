@@ -141,9 +141,7 @@ export const deposit = async (pid, amount) => {
   const method = bank().methods.deposit(pid, amount);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method
-    .send({ from: account, gas: gasEstimation })
-    .once("Deposit", eventCallback);
+  await method.send({ from: account, gas: gasEstimation }).once("Deposit", eventCallback);
 };
 
 export const harvest = async (pid) => {
@@ -151,9 +149,7 @@ export const harvest = async (pid) => {
   const method = bank().methods.deposit(pid, 0);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method
-    .send({ from: account, gas: gasEstimation })
-    .once("Deposit", eventCallback);
+  await method.send({ from: account, gas: gasEstimation }).once("Deposit", eventCallback);
 };
 
 export const withdraw = async (pid, amount) => {
@@ -161,9 +157,7 @@ export const withdraw = async (pid, amount) => {
   const method = bank().methods.withdraw(pid, amount);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method
-    .send({ from: account, gas: gasEstimation })
-    .once("Withdraw", eventCallback);
+  await method.send({ from: account, gas: gasEstimation }).once("Withdraw", eventCallback);
 };
 
 export const pendingGem = async (pid) => {

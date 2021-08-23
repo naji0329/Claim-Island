@@ -21,7 +21,7 @@ const ClamPresale = ({
   useEffect(() => {
     console.log("useEffect", { isStarted });
 
-    if(clamBalance > 0 && address) {
+    if (clamBalance > 0 && address) {
       updateCharacter({
         name: "diego",
         action: "clam_presale.congratsCollection.text",
@@ -47,7 +47,7 @@ const ClamPresale = ({
               });
             },
           },
-        }
+        },
       });
     } else if (isEnded) {
       updateCharacter({
@@ -69,18 +69,18 @@ const ClamPresale = ({
             action: "clam_presale.collection.text",
             button: false,
           });
-        // } else if (Number(usersPurchasedClam) > 0) {
-        //   updateCharacter({
-        //     name: "diego",
-        //     action: "clam_presale.congratsCollection.text",
-        //     button: {
-        //       text: "See my Clams",
-        //       alt: {
-        //         action: "internal",
-        //         destination: "/saferoom",
-        //       },
-        //     },
-        //   });
+          // } else if (Number(usersPurchasedClam) > 0) {
+          //   updateCharacter({
+          //     name: "diego",
+          //     action: "clam_presale.congratsCollection.text",
+          //     button: {
+          //       text: "See my Clams",
+          //       alt: {
+          //         action: "internal",
+          //         destination: "/saferoom",
+          //       },
+          //     },
+          //   });
         } else {
           updateCharacter({
             name: "diego",
@@ -141,8 +141,14 @@ const ClamPresale = ({
           loop
           className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
         >
-          <source src={process.env.PUBLIC_URL + "/location_vids/shop_animated.mp4"} type="video/mp4" />
-          <source src={process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"}  type='video/webm; codecs="vp8, vorbis"' />
+          <source
+            src={process.env.PUBLIC_URL + "/location_vids/shop_animated.mp4"}
+            type="video/mp4"
+          />
+          <source
+            src={process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"}
+            type='video/webm; codecs="vp8, vorbis"'
+          />
         </video>
 
         {/* chat character   */}
@@ -161,7 +167,6 @@ const ClamPresale = ({
           {/* !rng = did not have clams to collect */}
           {rng && <ClamCollectModal setShowMintModal={setShowMintModal} />}
           {/* {clamBalance === "1" && address && <ClamShowModal />} */}
-
         </div>
       </div>
     </>

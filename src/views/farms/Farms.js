@@ -27,12 +27,7 @@ const Farms = () => {
       <h2 className="headers">Clam Farm</h2>
       <div>
         <div>
-          <img
-            top
-            style={{ width: "200px", height: "200px" }}
-            src={AddClam}
-            alt="div image cap"
-          />
+          <img top style={{ width: "200px", height: "200px" }} src={AddClam} alt="div image cap" />
           <div style={{ height: "200px" }}>
             <div tag="h5">Deposit Clams</div>
             <div tag="h6" className="mb-2 text-muted">
@@ -40,11 +35,7 @@ const Farms = () => {
             </div>
             <div>Choose Clams from your Vault to deposit into the Farm</div>
 
-            <div
-              isOpen={dropdownOpen}
-              toggle={toggle}
-              style={{ marginTop: "10px" }}
-            >
+            <div isOpen={dropdownOpen} toggle={toggle} style={{ marginTop: "10px" }}>
               <div caret style={{ backgroundColor: "#0072E3" }}>
                 Select Clams
               </div>
@@ -54,9 +45,7 @@ const Farms = () => {
                     <div key={i} onClick={() => addClamToFarm(k)}>
                       <img
                         style={{ width: "50px", height: "50px" }}
-                        src={
-                          require(`../../assets/img/clamjam/${k.src}`).default
-                        }
+                        src={require(`../../assets/img/clamjam/${k.src}`).default}
                       />
                       <span
                         style={{
@@ -78,12 +67,7 @@ const Farms = () => {
           const src = require(`../../assets/img/clamjam/${clam.src}`).default;
           return (
             <div key={index}>
-              <img
-                top
-                style={{ width: "200px", height: "200px" }}
-                src={src}
-                alt="div image cap"
-              />
+              <img top style={{ width: "200px", height: "200px" }} src={src} alt="div image cap" />
               <div style={{ height: "200px" }}>
                 <div tag="h5">{clam.title}</div>
                 <div tag="h6" className="mb-2 text-muted">
