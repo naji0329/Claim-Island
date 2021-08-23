@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -7,9 +7,10 @@ import { Loading3DView } from "../Loading3DView";
 
 export const ClamScene = (props) => {
   const { children, setCanvasCtx } = props;
-
+  
   return (
     <Canvas
+      gl={{ preserveDrawingBuffer: true }}
       camera={{
         fov: 75,
         aspect: 1,

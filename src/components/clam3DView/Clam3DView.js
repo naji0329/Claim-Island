@@ -50,7 +50,7 @@ const Clam3DViewComponent = memo((props) => {
     <div style={{width: '100%', height, maxWidth: width, position: "relative"}}>
       {/** Put here some loading animation, it will be shown while canvas is initializing */}
       <div style={{position: "absolute"}}>LOADING</div>
-      <ClamScene clamDna={clamDna} setCanvasCtx={setCanvasCtx}>
+      <ClamScene setCanvasCtx={setCanvasCtx}>
         {textures && (
           <Clam
             clamDna={clamDna}

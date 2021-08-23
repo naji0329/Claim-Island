@@ -20,6 +20,11 @@ import { actions } from "../../store/redux";
 import clamContract from "../../web3/clam";
 import { getDNADecoded } from "../../web3/dnaDecoder";
 
+let cache;
+caches.open('clam-island').then(result => {
+  cache = result;
+})
+
 const getPearlImage = (p) => require(`../../assets/img/clamjam/${p.src}`).default;
 
 const PearlItem = ({ pearl }) => {
@@ -61,6 +66,7 @@ const PearlItem = ({ pearl }) => {
 
 const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
   const [clams, setClams] = useState([]);
+  // const [clams, setClams] = useState(TEST_CLAMS);
   const [selectedClam, setSelectedClam] = useState();
   const [loading, setLoading] = useState(false);
 

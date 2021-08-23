@@ -49,14 +49,17 @@ export const Clam = (props) => {
   }, [])
 
   const renderImg = (canvasCtx) => {
-    const clamImg = localStorage.getItem(clamDna);
-    if(!clamImg && canvasCtx) {
-      const img = canvasCtx.gl.domElement.toDataURL();
-      localStorage.setItem(
-        props.clamDna,
-        img
-      );
-    }   
+    // const clamImg = localStorage.getItem(clamDna);
+    setTimeout(() => {
+      if(canvasCtx) {
+        const img = canvasCtx.gl.domElement.toDataURL();
+        localStorage.setItem(
+          props.clamDna,
+          img
+        );
+      }  
+    }, 2000);
+ 
   };
 
   useFrame((state, delta) => {
