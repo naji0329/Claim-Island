@@ -24,7 +24,10 @@ import { getPearlDNADecoded } from "../../web3/pearlDnaDecoder";
 
 import { get } from "lodash";
 
-const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateCharacter }) => {
+const Saferoom = ({
+  account: { clamBalance, pearlBalance, address },
+  updateCharacter,
+}) => {
   const [clams, setClams] = useState([]);
   const [pearls, setPearls] = useState([]);
   const [selectedAsset, setSelectedAsset] = useState();
@@ -33,7 +36,13 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
 
   const { isShowing, toggle } = useModal();
 
-  const getDna = async (getByNFTIndex, getNFTData, account, index, getDecodedDNA) => {
+  const getDna = async (
+    getByNFTIndex,
+    getNFTData,
+    account,
+    index,
+    getDecodedDNA
+  ) => {
     const tokenId = await getByNFTIndex(account, index);
     const data = await getNFTData(tokenId);
     const { dna } = data;
@@ -50,10 +59,17 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
       try {
         setLoading(true);
 
-        const getNFTs = async (getByNFTIndex, getNFTData, nftBalance, getDecodedDNA) => {
+        const getNFTs = async (
+          getByNFTIndex,
+          getNFTData,
+          nftBalance,
+          getDecodedDNA
+        ) => {
           let promises = [];
           for (let i = 0; i < Number(nftBalance); i++) {
-            promises.push(getDna(getByNFTIndex, getNFTData, address, i, getDecodedDNA));
+            promises.push(
+              getDna(getByNFTIndex, getNFTData, address, i, getDecodedDNA)
+            );
           }
 
           return await Promise.all(promises);
@@ -125,14 +141,22 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
           className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
         >
           <source
-            src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"}
+            src={
+              process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"
+            }
             type="video/mp4"
           />
           <source
-            src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated_webm.webm"}
+            src={
+              process.env.PUBLIC_URL +
+              "/location_vids/saferoom_animated_webm.webm"
+            }
             type='video/webm; codecs="vp8, vorbis"'
           />
-          <img src={videoImage} title="Your browser does not support the video"></img>
+          <img
+            src={videoImage}
+            title="Your browser does not support the video"
+          ></img>
         </video>
       </div>
 
@@ -149,26 +173,36 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
             {/* navbar */}
             <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
               <div className="px-3 py-2">
-                <h2 className="text-blue-700 font-semibold text-4xl mb-2">My Saferoom</h2>
+                <h2 className="text-blue-700 font-semibold text-4xl mb-2">
+                  My Saferoom
+                </h2>
                 <p className="text-yellow-700">All you minted NFTs</p>
               </div>
 
               <div className="px-3 py-2 flex justify-between">
                 <button
-                  className={`px-5 ${tab === "Clam" ? "bg-blue-700 text-white" : "text-blue-700"}`}
+                  className={`mx-2 px-5 ${
+                    tab === "Clam"
+                      ? "rounded-xl bg-blue-400 text-white"
+                      : "text-blue-700"
+                  }`}
                   onClick={() => setTab("Clam")}
                 >
                   Clams
                 </button>
                 <button
-                  className={`px-5 ${tab === "Pearl" ? "bg-blue-700 text-white" : "text-blue-700"}`}
+                  className={`mx-2 px-5 ${
+                    tab === "Pearl"
+                      ? "rounded-xl bg-blue-400 text-white"
+                      : "text-blue-700"
+                  }`}
                   onClick={() => setTab("Pearl")}
                 >
                   Pearls
                 </button>
                 <Link
-                  to="/clam-presale"
-                  className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6"
+                  to="/shop"
+                  className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6 mx-2"
                 >
                   Shop
                 </Link>
@@ -176,7 +210,10 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
             </div>
 
             {/* clams and pears grid */}
-            <div className="w-full my-4 overflow-auto" style={{ height: "50rem" }}>
+            <div
+              className="w-full my-4 overflow-auto"
+              style={{ height: "50rem" }}
+            >
               {tab === "Clam" && clams && clams.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
                   {clams &&
