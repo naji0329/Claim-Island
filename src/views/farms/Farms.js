@@ -17,11 +17,15 @@ import VideoBackground from "../../components/VideoBackground";
 import clamIcon from "../../assets/clam-icon.png";
 
 import clamContract from "../../web3/clam";
-import { getDNADecoded } from "../../web3/dnaDecoder";
+import {
+  prepGetDnaDecodedMulticall,
+  decodeGetDnaDecodedFromMulticall,
+} from "../../web3/dnaDecoder";
 
 import FarmItem from "./FarmItem";
 import PearlDetails from "./PearlDetails";
 import ClamDeposit from "./ClamDeposit";
+import { aggregate } from "../../web3/multicall";
 
 const MODAL_OPTS = {
   DEPOSIT_CLAM: "depositClam",
@@ -91,37 +95,56 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
     });
   };
 
-  // get the list of owned clams
-  const getClamDna = async (account, index) => {
-    // console.log("getClamDna", { index });
-    const tokenId = await clamContract.getClamByIndex(account, index);
-    const clamData = await clamContract.getClamData(tokenId);
-    const { dna } = clamData;
-    if (dna.length > 1) {
-      const dnaDecoded = await getDNADecoded(dna);
-      return { dna, dnaDecoded };
-    }
-  };
-
-  useEffect(async () => {
+  useEffect(() => {
     // wallet is connected and has clams
     if (address && clamBalance !== "0") {
-      try {
-        setLoading(true);
+      const initClams = async () => {
+        try {
+          setLoading(true);
 
-        let promises = [];
-        for (let i = 0; i < parseInt(clamBalance); i++) {
-          promises.push(getClamDna(address, i));
+          const tokenIdsCalls = clamContract.prepTokenOfOwnerByIndexMulticall(
+            address,
+            +clamBalance
+          );
+          const tokenIdsResult = await aggregate(tokenIdsCalls);
+          const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
+            tokenIdsResult.returnData
+          );
+
+          const clamDataCalls = clamContract.prepClamDataMulticall(tokenIdsDecoded);
+          const clamDataResult = await aggregate(clamDataCalls);
+          const clamDataDecoded = clamContract.decodeClamDataFromMulticall(
+            clamDataResult.returnData,
+            tokenIdsDecoded
+          );
+          const clamDnas = clamDataDecoded.map((clamData) => clamData.clamDataValues.dna);
+
+          const dnaDecodedCalls = prepGetDnaDecodedMulticall(clamDnas);
+          const dnaDecodedResult = await aggregate(dnaDecodedCalls);
+          const dnaDecoded = decodeGetDnaDecodedFromMulticall(
+            dnaDecodedResult.returnData,
+            tokenIdsDecoded
+          );
+
+          const clams = clamDataDecoded.map((clam) => {
+            const sameClam = dnaDecoded.find(({ clamId }) => clamId === clam.clamId);
+            if (sameClam) {
+              const dnaDecoded = sameClam.dnaDecoded;
+              return { ...clam, dnaDecoded };
+            }
+            return clam;
+          });
+
+          setClams(clams);
+          setLoading(false);
+          updateCharacter({ action: "dismissBubble" });
+        } catch (error) {
+          setLoading(false);
+          console.log({ error });
         }
-        // parallel call to speed up
-        const clams = await Promise.all(promises);
-        setClams(clams);
-        setLoading(false);
-        updateCharacter({ action: "dismissBubble" });
-      } catch (error) {
-        setLoading(false);
-        console.log({ error });
-      }
+      };
+
+      initClams();
     }
   }, [address, clamBalance]);
 
@@ -160,9 +183,9 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
           </div>
         </div>
       )}
-      <Web3Navbar />
+      <Web3Navbar title="Clam Farm" />
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
-      {<Character name="al" />}
+      <Character name="al" />
 
       <Modal isShowing={isShowing} onClose={toggleModal}>
         {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
@@ -176,11 +199,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
         <div className="flex-1 min-h-full min-w-full flex relative z-20 justify-center items-center flex-col">
           <div className="w-4/5 flex flex-col relative pt-24">
             {/* navbar */}
-            <div className="w-full rounded-xl mx-auto flex flex-row justify-between">
-              <div className="px-3 py-2">
-                <h2 className="farm-heading">Clam Farm</h2>
-              </div>
-
+            <div className="w-full rounded-xl mx-auto flex flex-row justify-end">
               <div className="px-3 py-2 flex justify-between">
                 <button className="deposit-clam-btn" onClick={onDepositClam}>
                   Deposit Clam

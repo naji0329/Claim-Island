@@ -115,6 +115,102 @@ export const collectClam = async (account) => {
   });
 };
 
+export const ownerOf = async (tokenId) => {
+  const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
+  const owner = await clamNft.methods.ownerOf(tokenId).call();
+
+  return owner;
+};
+
+export const prepTokenOfOwnerByIndexMulticall = (address, length) => {
+  const contractCalls = [];
+  for (let index = 0; index < Number(length); index++) {
+    contractCalls.push([
+      clamNFTAddress,
+      web3.eth.abi.encodeFunctionCall(
+        {
+          name: "tokenOfOwnerByIndex",
+          type: "function",
+          inputs: [
+            {
+              type: "address",
+              name: "owner",
+            },
+            {
+              type: "uint256",
+              name: "index",
+            },
+          ],
+        },
+        [address, index]
+      ),
+    ]);
+  }
+
+  return contractCalls;
+};
+
+export const prepClamDataMulticall = (tokenIds) => {
+  const contractCalls = [];
+  for (let index = 0; index < tokenIds.length; index++) {
+    contractCalls.push([
+      clamNFTAddress,
+      web3.eth.abi.encodeFunctionCall(
+        {
+          name: "clamData",
+          type: "function",
+          inputs: [
+            {
+              type: "uint256",
+              name: "",
+            },
+          ],
+        },
+        [tokenIds[index]]
+      ),
+    ]);
+  }
+
+  return contractCalls;
+};
+
+export const decodeTokenOfOwnerByIndexFromMulticall = (values) => {
+  const result = [];
+
+  for (let index = 0; index < values.length; index++) {
+    result.push(web3.eth.abi.decodeParameter("uint256", values[index]));
+  }
+
+  return result;
+};
+
+export const decodeClamDataFromMulticall = (values, tokenIds) => {
+  const result = [];
+
+  for (let index = 0; index < values.length; index++) {
+    result.push({
+      clamId: tokenIds[index],
+      clamDataValues: web3.eth.abi.decodeParameter(
+        {
+          clamData: {
+            isMaxima: "bool",
+            isAlive: "bool",
+            birthTime: "uint256",
+            pearlsProduced: "uint256",
+            pearlProductionDelay: "uint256",
+            pearlProductionCapacity: "uint256",
+            dna: "uint256",
+            pearlProductionStart: "uint256",
+          },
+        },
+        values[index]
+      ),
+    });
+  }
+
+  return result;
+};
+
 export default {
   balanceOf,
   accountClamBalance,
@@ -125,4 +221,8 @@ export default {
   getPrice,
   checkHasClamToCollect,
   collectClam,
+  prepTokenOfOwnerByIndexMulticall,
+  decodeTokenOfOwnerByIndexFromMulticall,
+  prepClamDataMulticall,
+  decodeClamDataFromMulticall,
 };
