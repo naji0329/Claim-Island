@@ -209,52 +209,33 @@
             "type": "uint256[3][4]"
           }
         ],
-        "internalType": "struct DNADecoder.Traits",
+        "internalType": "struct IDNADecoder.Traits",
         "name": "",
         "type": "tuple"
-      },
-      {
-        "internalType": "string[10]",
-        "name": "",
-        "type": "string[10]"
-      },
-      {
-        "internalType": "uint8[10]",
-        "name": "",
-        "type": "uint8[10]"
-      },
-      {
-        "internalType": "string[6]",
-        "name": "",
-        "type": "string[6]"
-      },
-      {
-        "internalType": "uint8[6]",
-        "name": "",
-        "type": "uint8[6]"
-      },
-      {
-        "internalType": "uint256[3][4]",
-        "name": "",
-        "type": "uint256[3][4]"
-      },
-      {
-        "internalType": "uint256[3][4]",
-        "name": "",
-        "type": "uint256[3][4]"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getRarityInString",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_rng",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPearlTraits",
     "outputs": [
       {
-        "internalType": "string",
+        "internalType": "uint8[10]",
         "name": "",
-        "type": "string"
+        "type": "uint8[10]"
+      },
+      {
+        "internalType": "uint8[6]",
+        "name": "",
+        "type": "uint8[6]"
       }
     ],
     "stateMutability": "view",
