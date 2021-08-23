@@ -27,9 +27,9 @@ export default ({ dna, dnaDecoded }) => {
       title: "General Stats",
       description: (
         <div>
-          <RowStat label="Rarity" value={get(dnaDecoded, "[0].rarity")} />
-          <RowStat label="Lifespan" value={get(dnaDecoded, "[0].lifespan")} />
-          <RowStat label="Size" value={get(dnaDecoded, "[0].size")} />
+          <RowStat label="Rarity" value={get(dnaDecoded, "rarity")} />
+          <RowStat label="Lifespan" value={get(dnaDecoded, "lifespan")} />
+          <RowStat label="Size" value={get(dnaDecoded, "size")} />
         </div>
       ),
     },
@@ -37,11 +37,11 @@ export default ({ dna, dnaDecoded }) => {
       title: "Body",
       description: (
         <div>
-          <RowStat label="Shape" value={get(dnaDecoded, "[0].shellShape")} />
-          <RowStat label="Shell Color" value={get(dnaDecoded, "[0].shellColor")} />
-          <RowStat label="Inner Color" value={get(dnaDecoded, "[0].innerColor")} />
-          <RowStat label="Lip Color" value={get(dnaDecoded, "[0].lipColor")} />
-          <RowStat label="Pattern" value={get(dnaDecoded, "[0].pattern")} />
+          <RowStat label="Shape" value={get(dnaDecoded, "shellShape")} />
+          <RowStat label="Shell Color" value={get(dnaDecoded, "shellColor")} />
+          <RowStat label="Inner Color" value={get(dnaDecoded, "innerColor")} />
+          <RowStat label="Lip Color" value={get(dnaDecoded, "lipColor")} />
+          <RowStat label="Pattern" value={get(dnaDecoded, "pattern")} />
         </div>
       ),
     },
@@ -49,8 +49,8 @@ export default ({ dna, dnaDecoded }) => {
       title: "Tongue",
       description: (
         <div>
-          <RowStat label="Shape" value={get(dnaDecoded, "[0].tongueShape")} />
-          <RowStat label="Color" value={get(dnaDecoded, "[0].tongueColor")} />
+          <RowStat label="Shape" value={get(dnaDecoded, "tongueShape")} />
+          <RowStat label="Color" value={get(dnaDecoded, "tongueColor")} />
         </div>
       ),
     },
