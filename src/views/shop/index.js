@@ -151,7 +151,7 @@ const Shop = ({
 
       {/* wallet is connected */}
       {address && userReady && (
-        <div className="flex relative z-20  justify-center items-start top-40">
+        <div className="flex relative z-20  justify-center items-start top-40 w-full">
           <div className="">
             {/* step 1 */}
             {modalToShow === "buy" && (
