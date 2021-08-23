@@ -9,7 +9,7 @@ const VideoBackground = ({ videoMp4, videoWebM, videoImage }) => {
         autoPlay
         muted
         loop
-        className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
+        className="flex-1 h-screen w-full md:flex relative z-10 object-cover object-center"
       >
         <source
           src={videoMp4}

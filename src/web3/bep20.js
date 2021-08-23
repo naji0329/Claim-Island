@@ -1,36 +1,36 @@
 import clamNFTAbi from "./abi/ClamNFT.json";
 import BEP20ABI from "./abi/BEP20.json";
-import { shellTokenAddress, clamNFTAddress, masterChefAddress } from "./constants";
+import { shellTokenAddress, clamNFTAddress, bankAddress } from "./constants";
 import { contractFactory } from "./index";
 
-const balanceOf = async ({ account, abi, address }) => {
-  const token = contractFactory({ abi, address });
+export const balanceOf = async (address, account) => {
+  const token = contractFactory({ abi: BEP20ABI, address });
   const accountBalance = await token.methods.balanceOf(account).call();
 
   return accountBalance;
 };
 
-export const approveMasterchefForMaxUint = async (account, tokenAddress) => {
+export const approveBankForMaxUint = async (account, tokenAddress) => {
   const maxUint = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
   const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
 
-  const method = token.methods.approve(masterChefAddress, maxUint);
+  const method = token.methods.approve(bankAddress, maxUint);
 
   const gasEstimation = await method.estimateGas({
     from: account,
   });
 
-  await method
-    .send({
-      from: account,
-      gas: gasEstimation,
-    })
+  await method.send({
+    from: account,
+    gas: gasEstimation,
+  });
 };
 
 export const hasMaxUintAllowance = async (owner, tokenAddress) => {
-  const maxUint = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  const maxUint =
+    "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
   const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
-  const allowance = await token.methods.allowance(owner, masterChefAddress).call();
+  const allowance = await token.methods.allowance(owner, bankAddress).call();
   const allowanceAsHex = web3.utils.toHex(allowance)
 
   return allowanceAsHex == maxUint;
@@ -54,7 +54,12 @@ export const accountClamBalance = async (account) => {
   return bal;
 };
 
-export const addTokenToMetamask = async ({ tokenAddress, tokenSymbol, tokenDecimals, tokenImage }) => {
+export const addTokenToMetamask = async ({
+  tokenAddress,
+  tokenSymbol,
+  tokenDecimals,
+  tokenImage,
+}) => {
   if (!window.ethereum) {
     throw new Error("there is no wallet on browser");
   }
