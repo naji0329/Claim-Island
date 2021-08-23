@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-// import { useForm } from "react-hook-form";
-// import { useAsync } from "react-use";
-import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 
 import "./index.scss";
 
 import Card from "../../components/Card";
-import Clams3D from "../../components/three/3DClams/3DClams";
+import ClamView from "../saferoom/ClamView";
 
 import { clamNFTAddress } from "../../web3/constants";
 import clamContract from "../../web3/clam";
@@ -16,7 +13,7 @@ import { getDNADecoded } from "../../web3/dnaDecoder";
 
 const ClamDisplayModal = ({
   setModalToShow,
-  account: { address, clamToCollect },
+  account: { address, clamToCollect, clamBalance },
   updateCharacter,
 }) => {
   const [clamDna, setClamDna] = useState("");
@@ -28,7 +25,9 @@ const ClamDisplayModal = ({
       try {
         setIsLoading(true);
 
-        const tokenId = await clamContract.getClamByIndex(address, 0);
+        const index = Number(clamBalance);
+        console.log({ clamBalance, index });
+        const tokenId = await clamContract.getClamByIndex(address, index);
         console.log({ tokenId });
 
         if (tokenId) {
@@ -36,7 +35,10 @@ const ClamDisplayModal = ({
           if (clamData.dna.length > 1) {
             setClamDna(clamData.dna);
 
-            const decodedDna = await getDNADecoded(clamData.dna);
+            const decodedDna = await getDNADecoded(clamData.dna).catch(
+              console.log
+            );
+            console.log({ decodedDna });
             setClamDnaDecoded(decodedDna);
 
             // updateCharacter({
@@ -84,17 +86,15 @@ const ClamDisplayModal = ({
           style={{ minWidth: "700px" }}
         >
           <div className="bg-white flex-1 justify-center md:flex items-center h-full flex-col w-full">
-            {clamDna && (
+            {clamDna && clamDnaDecoded && (
               <>
-                <Clams3D
-                  width={400}
-                  height={400}
-                  clamDna={clamDna}
-                  decodedDna={clamDnaDecoded}
-                  showTraitsTable={true}
-                />
+                <ClamView dna={clamData.dna} dnaDecoded={clamDnaDecoded} />
+
                 <div className="flex flex-row my-3">
-                  <button className="btn character-btn ml-2" onClick={() => setModalToShow("buy")}>
+                  <button
+                    className="btn character-btn ml-2"
+                    onClick={() => setModalToShow("buy")}
+                  >
                     Buy More
                   </button>
                   <button
