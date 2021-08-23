@@ -1,6 +1,9 @@
 {
   "parser": "babel-eslint",
-  "extends": ["plugin:react/recommended"],
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": 8,
     "sourceType": "module",
@@ -12,6 +15,7 @@
     "browser": true
   },
   "rules": {
+    "prettier/prettier": "warn",
     "react/react-in-jsx-scope": "off",
     "max-len": "off",
     "no-unused-vars": "warn",
