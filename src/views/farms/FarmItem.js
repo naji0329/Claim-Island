@@ -2,23 +2,45 @@ import { get } from "lodash";
 import { useState } from "react";
 import FarmPearl from "../../assets/img/farm_pearl.png";
 
-const FarmItem = ({ dna, dnaDecoded, onViewPearlDetails, onWithdrawPearl, onViewPearl }) => {
+const FarmItem = ({
+  clamId,
+  dnaDecoded,
+  clamDataValues,
+  onViewPearlDetails,
+  onWithdrawPearl,
+  onViewPearl,
+}) => {
   const [viewPearlText, setViewPearltext] = useState("View Pearl");
-  const pearl = {
-    remainingTime: "24h 13min",
-    progress: "71%",
-    processing: false, // to see the 2 views... processed and processing
-    dna,
+
+  const {
+    pearlProductionDelay,
+    pearlProductionStart,
+    birthTime,
+    pearlProductionCapacity,
+    pearlsProduced,
+  } = clamDataValues;
+  const clamStartTime = +pearlProductionStart > 0 ? +pearlProductionStart : +birthTime;
+  const currentTimeInSeconds = new Date().getTime() / 1000;
+  const clamNextPearlTime = clamStartTime + +pearlProductionDelay;
+  const etaSeconds = clamNextPearlTime - currentTimeInSeconds;
+
+  const clam = {
+    remainingTime: new Date(+etaSeconds * 1000).toISOString().substr(11, 8),
+    progress: +(
+      ((currentTimeInSeconds - clamStartTime) / (clamNextPearlTime - clamStartTime)) *
+      100
+    ).toFixed(2),
+    processing: false, // to see the 2 views... processed and processing TODO: implement logic for this
     dnaDecoded,
-    heading: "Somewhat Rare",
-    harvestableShell: "15",
-    remainingLifeSpan: "15h 13min",
+    heading: dnaDecoded.rarity,
+    harvestableShell: pearlProductionCapacity,
+    remainingLifeSpan: pearlProductionCapacity - pearlsProduced,
   };
 
   const onClickViewPearl = () => {
     console.log("##########");
     setViewPearltext("Hold On ...");
-    onViewPearl(pearl);
+    onViewPearl(clam);
   };
 
   return (
@@ -27,12 +49,12 @@ const FarmItem = ({ dna, dnaDecoded, onViewPearlDetails, onWithdrawPearl, onView
         <img className="w-auto" src={FarmPearl} />
       </div>
 
-      {pearl.processing ? (
+      {clam.processing ? (
         <>
           {/* Progress Bar */}
           <div className="progress-bar">
             <div className="base-bar">
-              <div style={{ width: pearl.progress }} className="completion-bar"></div>
+              <div style={{ width: clam.progress }} className="completion-bar"></div>
               <span>Processing</span>
             </div>
           </div>
@@ -44,11 +66,11 @@ const FarmItem = ({ dna, dnaDecoded, onViewPearlDetails, onWithdrawPearl, onView
                 <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                   Remaining Time
                 </p>
-                <p className="font-bold text-black">{pearl.remainingTime}</p>
+                <p className="font-bold text-black">{clam.remainingTime}</p>
               </div>
               <div className="text-sm block">
                 <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Progress</p>
-                <p className="font-bold text-black">{pearl.progress}</p>
+                <p className="font-bold text-black">{clam.progress}</p>
               </div>
             </div>
           </div>
@@ -57,7 +79,7 @@ const FarmItem = ({ dna, dnaDecoded, onViewPearlDetails, onWithdrawPearl, onView
             <button
               className="withdraw-btn"
               onClick={() => {
-                onWithdrawPearl(pearl);
+                onWithdrawPearl(clam);
               }}
             >
               Withdraw
@@ -68,7 +90,7 @@ const FarmItem = ({ dna, dnaDecoded, onViewPearlDetails, onWithdrawPearl, onView
             <a
               className="view-details"
               onClick={() => {
-                onViewPearlDetails(pearl);
+                onViewPearlDetails(clam);
               }}
             >
               View Details
