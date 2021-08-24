@@ -117,7 +117,16 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
         const clams = await Promise.all(promises);
         setClams(clams);
         setLoading(false);
-        updateCharacter({ action: "dismissBubble" });
+        updateCharacter({
+          name: "al",
+          action: "saferoom.connect.text",
+          button: {
+            text: "Ok",
+            alt: {
+              dismiss: true,
+            },
+          },
+        });
       } catch (error) {
         setLoading(false);
         console.log({ error });
