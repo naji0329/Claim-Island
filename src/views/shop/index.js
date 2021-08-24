@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { useEthers } from "@usedapp/core";
 import "./index.scss";
-import CharacterWrapper from "../../components/characters/CharacterWrapper";
+import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
 
 import { actions } from "../../store/redux";
@@ -13,7 +13,11 @@ import ClamDisplayModal from "./ClamDisplayModal";
 import { checkHasClamToCollect } from "../../web3/clam";
 import { zeroHash } from "../../web3/constants";
 
-const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAccount }) => {
+const Shop = ({
+  account: { address, clamToCollect },
+  updateCharacter,
+  updateAccount,
+}) => {
   const [modalToShow, setModalToShow] = useState(null);
   const [userReady, setUserReady] = useState(false);
 
@@ -112,7 +116,9 @@ const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAcco
   useEffect(() => {
     if (address) {
       checkHasClamToCollect(address).then((clamToCollect) => {
-        updateAccount({ clamToCollect: clamToCollect === zeroHash ? null : clamToCollect });
+        updateAccount({
+          clamToCollect: clamToCollect === zeroHash ? null : clamToCollect,
+        });
       });
     }
   }, [address, modalToShow]);
@@ -133,38 +139,41 @@ const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAcco
             type="video/mp4"
           />
           <source
-            src={process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"}
+            src={
+              process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"
+            }
             type='video/webm; codecs="vp8, vorbis"'
           />
         </video>
-
-        {/* chat character   */}
-        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
-          <CharacterWrapper name="diego" />
-        </div>
-
-        {/* modal   -top-0 md:-top-64 */}
-        <div className="flex-1 justify-center min-h-full min-w-full flex items-center absolute z-30 pointer-events-none pb-60">
-          {
-            address && // wallet is connected
-            userReady &&
-            modalToShow === "collect" &&
-            clamToCollect ? (
-              <ClamCollectModal setModalToShow={setModalToShow} />
-            ) : modalToShow === "buy" ? (
-              <ClamBuyModal setModalToShow={setModalToShow} />
-            ) : modalToShow === "display" ? (
-              <ClamDisplayModal setModalToShow={setModalToShow} />
-            ) : null
-
-            // showBuyModal ? // user has agreed clicked Yes
-            //   clamToCollect && !showClamDisplayModal ?
-            //     <ClamCollectModal setShowClamDisplayModal={setShowClamDisplayModal} /> :
-            //     <ClamBuyModal setShowBuyModal={setShowBuyModal}  />
-            // : showClamDisplayModal && <ClamDisplayModal setShowBuyModal={setShowBuyModal} />
-          }
-        </div>
       </div>
+      {/* chat character   */}
+      <Character name="diego" />
+
+      {/* wallet is connected */}
+      {address && userReady && (
+        <div className="flex relative z-20  justify-center items-start top-40 w-full">
+          <div className="">
+            {/* step 1 */}
+            {modalToShow === "buy" && (
+              <ClamBuyModal setModalToShow={setModalToShow} />
+            )}
+            {/* step 2 */}
+            {modalToShow === "collect" && clamToCollect && (
+              <ClamCollectModal setModalToShow={setModalToShow} />
+            )}
+            {/* step 3 */}
+            {modalToShow === "display" && (
+              <ClamDisplayModal setModalToShow={setModalToShow} />
+            )}
+
+            {/* // showBuyModal ? // user has agreed clicked Yes
+                //   clamToCollect && !showClamDisplayModal ?
+                //     <ClamCollectModal setShowClamDisplayModal={setShowClamDisplayModal} /> :
+                //     <ClamBuyModal setShowBuyModal={setShowBuyModal}  />
+                // : showClamDisplayModal && <ClamDisplayModal setShowBuyModal={setShowBuyModal} /> */}
+          </div>
+        </div>
+      )}
     </>
   );
 };
