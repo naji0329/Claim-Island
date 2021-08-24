@@ -1,5 +1,9 @@
 export const OUTLINE_MODEL_NAMES = {
   lighthouse: "lighthouse",
+  farm: "farm",
+  vault: "vault",
+  market: "market",
+  bank: "bank",
 };
 
 export const lighthouseOutlineModels = new Set([
@@ -50,3 +54,17 @@ export const lighthouseOutlineModels = new Set([
   "info_1_82",
   "info_1_83",
 ]);
+
+export const farmOutlineModels = new Set([
+  "mesh_0",
+  "mesh_0_4",
+  "mesh_0_5",
+  "mesh_0_6",
+  "mesh_0_8",
+]);
+
+export const vaultOutlineModels = new Set(["mesh_0_1", "mesh_0_2", "mesh_0_3"]);
+
+export const marketOutlineModels = new Set(["mesh_0_1", "mesh_0_5", "mesh_0_7", "mesh_0_13"]);
+
+export const bankOutlineModels = new Set(["mesh_0_3", "mesh_0_13"]);
