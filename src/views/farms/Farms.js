@@ -26,6 +26,7 @@ import FarmItem from "./FarmItem";
 import PearlDetails from "./PearlDetails";
 import ClamDeposit from "./ClamDeposit";
 import { aggregate } from "../../web3/multicall";
+import { stakeClam } from "../../web3/pearlFarm";
 
 const MODAL_OPTS = {
   DEPOSIT_CLAM: "depositClam",
@@ -40,7 +41,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
 
   const [modalSelected, setModal] = useState("");
   const [selectedPearl, setSelectedPearl] = useState({});
-  const [selectedClam, setSelectedClam] = useState({});
+  const [selectedClam, setSelectedClam] = useState();
 
   // When Deposit Clam Butto is clicked - open the modal to show list of clams
   const onDepositClam = () => {
@@ -71,7 +72,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
       show: true,
       button: {
         // text: undefined,
-        text: "WithDraw",
+        text: "Withdraw",
         alt: {
           action: "cb",
           dismiss: true,
@@ -121,21 +122,23 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
 
           const dnaDecodedCalls = prepGetDnaDecodedMulticall(clamDnas);
           const dnaDecodedResult = await aggregate(dnaDecodedCalls);
-          const dnaDecoded = decodeGetDnaDecodedFromMulticall(
+          const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(
             dnaDecodedResult.returnData,
             tokenIdsDecoded
           );
 
           const clams = clamDataDecoded.map((clam) => {
-            const sameClam = dnaDecoded.find(({ clamId }) => clamId === clam.clamId);
+            const sameClam = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
             if (sameClam) {
-              const dnaDecoded = sameClam.dnaDecoded;
+              const dnaDecoded = sameClam.dnaDecodedValues;
               return { ...clam, dnaDecoded };
             }
-            return clam;
+            console.error(`Clam ${clam.clamId} from ${address} not found`);
           });
 
-          setClams(clams);
+          const clamsFiltered = clams.filter((c) => c);
+
+          setClams(clamsFiltered);
           setLoading(false);
           updateCharacter({ action: "dismissBubble" });
         } catch (error) {
@@ -169,7 +172,11 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
 
   // On deposit clam
   useEffect(() => {
-    if (selectedClam && selectedClam.dna) {
+    if (selectedClam) {
+      const stake = async () => {
+        await stakeClam(selectedClam.clamId);
+      };
+      stake();
     }
   }, [selectedClam]);
 
@@ -196,7 +203,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
       </Modal>
 
       {address && (
-        <div className="flex-1 min-h-full min-w-full flex relative z-20 justify-center items-center flex-col">
+        <div className="flex-1 min-w-full flex justify-center items-center flex-col">
           <div className="w-4/5 flex flex-col relative pt-24">
             {/* navbar */}
             <div className="w-full rounded-xl mx-auto flex flex-row justify-end">
@@ -212,15 +219,20 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
           <div className="w-4/5 my-4 overflow-auto" style={{ height: "50rem" }}>
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
               {clams &&
-                clams.map((clam, i) => (
-                  <FarmItem
-                    key={i}
-                    {...clam}
-                    onViewPearlDetails={onViewPearlDetails}
-                    onWithdrawPearl={onWithdrawPearl}
-                    onViewPearl={onViewPearl}
-                  />
-                ))}
+                clams.map((clam, i) => {
+                  const isStaking = +clam.pearlProductionStart > 0;
+                  return (
+                    isStaking && (
+                      <FarmItem
+                        key={i}
+                        {...clam}
+                        onViewPearlDetails={onViewPearlDetails}
+                        onWithdrawPearl={onWithdrawPearl}
+                        onViewPearl={onViewPearl}
+                      />
+                    )
+                  );
+                })}
 
               {/* {PEARLS &&
                   PEARLS.map((pearl, i) => (
