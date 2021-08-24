@@ -4,36 +4,36 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     cursor: {
-      auto: 'auto',
-      default: 'default',
-      pointer: 'pointer',
-      wait: 'wait',
-      text: 'text',
-      move: 'move',
-      'not-allowed': 'not-allowed',
-      grab: 'grab',
-      grabbing: 'grabbing',
+      auto: "auto",
+      default: "default",
+      pointer: "pointer",
+      wait: "wait",
+      text: "text",
+      move: "move",
+      "not-allowed": "not-allowed",
+      grab: "grab",
+      grabbing: "grabbing",
     },
     maxHeight: {
       159: "36em",
       160: "40em",
     },
-    maxWidth: {
-      canvas: '400px',
+    extend: {
+      minWidth: {
+        xs: "15rem",
+      },
+      maxWidth: {
+        canvas: "400px",
+      },
+      height: {
+        canvas: "400px",
+      },
     },
-    height: {
-      canvas: '400px',
-    },
-    zIndex: {
-      '-1': '-1',
-      999: 999,
-    },
-    extend: {},
   },
   variants: {
     extend: {
       opacity: ["disabled"],
-      cursor: ['active'],
+      cursor: ["active"],
     },
   },
   plugins: [require("daisyui")],

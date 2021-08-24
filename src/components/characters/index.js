@@ -31,12 +31,8 @@ const CharacterSpeak = (props) => {
   // console.log(trackCount);
 
   const [speech, setSpeech] = useState(speechTrack[trackCount].text);
-  const [buttonNextText, setButtonNextText] = useState(
-    btnTrack[trackCount].next
-  );
-  const [buttonAltText, setButtonAltText] = useState(
-    btnTrack[trackCount].alt.text
-  );
+  const [buttonNextText, setButtonNextText] = useState(btnTrack[trackCount].next);
+  const [buttonAltText, setButtonAltText] = useState(btnTrack[trackCount].alt.text);
   /*
     useEffect(()=>{
       if(!props.web3) {
@@ -60,10 +56,8 @@ const CharacterSpeak = (props) => {
           characterImg.style.paddingLeft = "5px";
           break;
       }
-      document.querySelector(".character-wrap .character").style.pointerEvents =
-        "auto";
-      document.querySelector(".character-wrap .character").style.cursor =
-        "pointer";
+      document.querySelector(".character-wrap .character").style.pointerEvents = "auto";
+      document.querySelector(".character-wrap .character").style.cursor = "pointer";
       timeOut = 1000;
     }
     if (speechTrack[trackCount].next) {
@@ -111,10 +105,7 @@ const CharacterSpeak = (props) => {
       props.setConnect(true);
     }
 
-    if (
-      speechTrack[trackCount].next == "vote" ||
-      speechTrack[trackCount].showVote
-    ) {
+    if (speechTrack[trackCount].next == "vote" || speechTrack[trackCount].showVote) {
       props.setVote(true);
     }
   };
@@ -223,50 +214,36 @@ const CharacterSpeak = (props) => {
       //setButtonText(btnTrack[trackCount+1]);
       //const newCount = trackCount + 1;
       //setTrackCount(newCount);
-      document.querySelector(".character-wrap .character").style.marginTop =
-        "0px";
+      document.querySelector(".character-wrap .character").style.marginTop = "0px";
     } else {
     }
   };
 
   return (
-    <div
-      className={
-        showBubble ? "character-bubble" : "character-bubble hide-bubble"
-      }
-    >
+    <div className={showBubble ? "character-bubble" : "character-bubble hide-bubble"}>
       <div className="text-bubble">
-      <div className="text-wrapper">
-        <div className="name">{charName}</div>
-        <div className="speech">
-          <p className="speech-text">{speech}</p>
-        </div>
-        {(votingWalletConnected &&
-          [
-            "shell_voting",
-            "shell_voted_already",
-            "shell_voting_complete",
-          ].indexOf(props.speech) !== -1) ||
-        [
-          "shell_voting",
-          "shell_voted_already",
-          "shell_voting_complete",
-        ].indexOf(props.speech) === -1 ? (
-          <div className="buttons">
-            <button className="btn character-btn" id="btn-alt" onClick={onClickAlt}>
-              {buttonAltText}
-            </button>
-            <button
-              className="btn character-btn"
-              id="btn-next"
-              onClick={(e) => onClickNext()}
-            >
-              {buttonNextText}
-            </button>
+        <div className="text-wrapper">
+          <div className="name">{charName}</div>
+          <div className="speech">
+            <p className="speech-text">{speech}</p>
           </div>
-        ) : (
-          ""
-        )}
+          {(votingWalletConnected &&
+            ["shell_voting", "shell_voted_already", "shell_voting_complete"].indexOf(
+              props.speech
+            ) !== -1) ||
+          ["shell_voting", "shell_voted_already", "shell_voting_complete"].indexOf(props.speech) ===
+            -1 ? (
+            <div className="buttons">
+              <button className="btn character-btn" id="btn-alt" onClick={onClickAlt}>
+                {buttonAltText}
+              </button>
+              <button className="btn character-btn" id="btn-next" onClick={(e) => onClickNext()}>
+                {buttonNextText}
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
 
@@ -275,15 +252,11 @@ const CharacterSpeak = (props) => {
           <img src={charImg} className="character" onClick={onClickCharacter} />
         </div>
       </div>
-      <button
-        className="btn character-container-round"
-        onClick={onClickCharacter}
-      >
+      <button className="btn character-container-round" onClick={onClickCharacter}>
         <img src={charImg} className="character" />
       </button>
 
       <ToastContainer />
-
     </div>
   );
 };

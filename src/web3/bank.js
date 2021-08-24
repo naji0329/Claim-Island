@@ -80,6 +80,57 @@ export const decodePoolInfoReturnFromMulticall = (values) => {
   return result;
 };
 
+export const prepGetUserInfoForMulticall = (len, account) => {
+  const contractCalls = [];
+  for (let index = 0; index < Number(len); index++) {
+    contractCalls.push([
+      bankAddress,
+      web3.eth.abi.encodeFunctionCall(
+        {
+          name: "userInfo",
+          type: "function",
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "pid",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+        },
+        [index, account]
+      ),
+    ]);
+  }
+
+  return contractCalls;
+};
+
+export const decodeUserInfoReturnFromMulticall = (values) => {
+  const result = [];
+
+  for (let index = 0; index < values.length; index++) {
+    result.push({
+      poolId: index,
+      userValues: web3.eth.abi.decodeParameter(
+        {
+          user: {
+            amount: "uint256",
+            rewardDebt: "uint256",
+          },
+        },
+        values[index]
+      ),
+    });
+  }
+
+  return result;
+};
+
 export const getPoolsLength = async () => {
   const poolsLen = await bank().methods.poolLength().call();
   return poolsLen;
@@ -90,9 +141,7 @@ export const deposit = async (pid, amount) => {
   const method = bank().methods.deposit(pid, amount);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method
-    .send({ from: account, gas: gasEstimation })
-    .once("Deposit", eventCallback);
+  await method.send({ from: account, gas: gasEstimation }).once("Deposit", eventCallback);
 };
 
 export const harvest = async (pid) => {
@@ -100,9 +149,7 @@ export const harvest = async (pid) => {
   const method = bank().methods.deposit(pid, 0);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method
-    .send({ from: account, gas: gasEstimation })
-    .once("Deposit", eventCallback);
+  await method.send({ from: account, gas: gasEstimation }).once("Deposit", eventCallback);
 };
 
 export const withdraw = async (pid, amount) => {
@@ -110,9 +157,7 @@ export const withdraw = async (pid, amount) => {
   const method = bank().methods.withdraw(pid, amount);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method
-    .send({ from: account, gas: gasEstimation })
-    .once("Withdraw", eventCallback);
+  await method.send({ from: account, gas: gasEstimation }).once("Withdraw", eventCallback);
 };
 
 export const pendingGem = async (pid) => {
@@ -120,4 +165,16 @@ export const pendingGem = async (pid) => {
   const gemPending = await bank().methods.pendingGem(pid, account).call();
 
   return gemPending;
+};
+
+export const totalAllocPoint = async () => {
+  return bank().methods.totalAllocPoint().call();
+};
+
+export const getStartBlock = async () => {
+  return bank().methods.startBlock().call();
+};
+
+export const updatePool = async (poolId) => {
+  return bank().methods.updatePool(poolId).call();
 };

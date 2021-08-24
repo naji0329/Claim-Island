@@ -20,9 +20,9 @@ export const ClamScene = (props) => {
         zoom: 9,
       }}
       shadows
-      raycaster={{enabled: true}}
+      raycaster={{ enabled: true }}
       pixelRatio={window.devicePixelRatio}
-      onCreated={canvasCtx => {
+      onCreated={(canvasCtx) => {
         canvasCtx.gl.toneMapping = THREE.NoToneMapping;
       }}
     >
@@ -41,5 +41,5 @@ export const ClamScene = (props) => {
       />
       <hemisphereLight args={[0x8d8d91, 0, 2.4]} position={[0, 10, 0]} />
     </Canvas>
-  )
+  );
 };

@@ -14,7 +14,8 @@ import { getTraits } from "../../components/three/3DClams/main";
 import Clams3D from "../../components/three/3DClams/3DClams";
 import "./ClamViewer.scss";
 
-const MODEL_PATH = 'https://gateway.pinata.cloud/ipfs/QmWH8GRzBEefLHyJzYZHnHdiLxdUmqVjreCR32XFqUydaQ';
+const MODEL_PATH =
+  "https://gateway.pinata.cloud/ipfs/QmWH8GRzBEefLHyJzYZHnHdiLxdUmqVjreCR32XFqUydaQ";
 
 const SHELL_SHAPES = Object.keys(traits.shellShape.shapes);
 const TONGUE_SHAPES = Object.keys(traits.tongue.shapes);
@@ -68,27 +69,19 @@ const ClamViewer = () => {
         tongueColour,
       },
     });
-  }, [
-    shellColour,
-    innerColour,
-    lipColour,
-    tongueColour,
-    shellShape,
-    tongueShape,
-    pattern,
-  ]);
+  }, [shellColour, innerColour, lipColour, tongueColour, shellShape, tongueShape, pattern]);
 
   const modelUrlChange = (e) => {
     console.log(e);
     setModelPath(e.target.value);
-  }
+  };
 
   return (
     <div className="Clam-Viewer min-w-screen min-h-screen flex flex-column space-x-4 items-center relative">
       <h2 className="header mt-4">Clam Viewer</h2>
       <div className="flex-1 mt-4">
         <h4>IPFS Viewer</h4>
-        <input className="form-input" type="text" value={modelPath} onChange={modelUrlChange}/>
+        <input className="form-input" type="text" value={modelPath} onChange={modelUrlChange} />
         <model-viewer
           src={modelPath}
           alt="A 3D model"
@@ -215,7 +208,6 @@ const ClamViewer = () => {
           rgb={true}
           showSCTraits={true}
         />
-
       </div>
     </div>
   );

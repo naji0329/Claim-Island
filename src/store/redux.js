@@ -6,6 +6,9 @@ const initialState = {
   account: {
     bnbBalance: "0",
     clamBalance: "0",
+    pearlBalance: "0",
+    gemBalance: "0",
+    clamToCollect: null,
     error: undefined,
     isConnected: undefined,
     isBSChain: true,
@@ -27,7 +30,7 @@ const initialState = {
     isClamClaimer: undefined,
     usersClaimedClam: "0",
     progress: undefined,
-    clamsClaimed:"0",
+    clamsClaimed: "0",
     rng: undefined, // from call rngRequestHashFromBuyersClam
     hashRequest: undefined,
   },
@@ -87,14 +90,16 @@ export const actions = (store) => ({
   addKonvaObject: (state, value) => {
     return {
       konvaObjects: [...state.konvaObjects, value],
-    }
+    };
   },
   destroyKonvaObjects: (state) => {
-    state.konvaObjects.forEach((obj) => { obj.destroy(); });
-      return {
-        konvaObjects: [],
-      };
-  }
+    state.konvaObjects.forEach((obj) => {
+      obj.destroy();
+    });
+    return {
+      konvaObjects: [],
+    };
+  },
 });
 
 export default { store, actions };

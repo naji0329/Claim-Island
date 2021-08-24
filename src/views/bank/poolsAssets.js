@@ -1,17 +1,19 @@
+import { gemTokenAddress, shellTokenAddress } from "../../web3/constants";
+
 export const poolAssets = {
-  "0xE26482b00781b7BA03f725719feD8Bae1d070f8e": {
-    // dummy jade
+  [gemTokenAddress]: {
     name: `$GEM`,
     apy: `82.3%`,
     multiplier: `40x`,
     images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
+    isSingleStake: true,
   },
-  "0x2DB46224672C3a997F5Bf51aDE9C618434992c94": {
-    // dummy carapace
+  [shellTokenAddress]: {
     name: `$SHELL`,
     apy: `82.3%`,
     multiplier: `40x`,
     images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
+    isSingleStake: true,
   },
   "0xAaf0A7603b9d45c5e2BE0c1b03Cf238168334Ce4": {
     name: `SHELL - BNB`, // dummy bnb - carapace

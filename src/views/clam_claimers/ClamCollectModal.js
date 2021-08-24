@@ -111,9 +111,7 @@ const ClamCollectModal = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
           <div className="flex flex-col mb-1">
-            <h2 className="text-blue-700 font-semibold text-2xl mb-2">
-              Get Clams on BSC
-            </h2>
+            <h2 className="text-blue-700 font-semibold text-2xl mb-2">Get Clams on BSC</h2>
             <a
               className="text-gray-500 text-base underline"
               href={getExplorerAddressLink(clamClaimersAddress, ChainId.BSC)}

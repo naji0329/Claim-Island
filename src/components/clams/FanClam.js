@@ -22,13 +22,8 @@ export const FanClam = (props) => {
   const TongueComponent = TONGUE_COMPONENTS[tongueType] || DefaultTongue;
   return (
     <>
-      <FanModel
-        outerTexture={outerTexture}
-        innerTexture={innerTexture}
-        lipTexture={lipTexture}
-      />
+      <FanModel outerTexture={outerTexture} innerTexture={innerTexture} lipTexture={lipTexture} />
       <TongueComponent tongueTexture={tongueTexture} />
     </>
   );
 };
-

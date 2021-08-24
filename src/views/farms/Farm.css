@@ -4,21 +4,21 @@
   padding: 5%;
   font-family: TrioGrotesk;
 }
-  
-.blackColor{
+
+.blackColor {
   color: black;
 }
 
-h2{
+h2 {
   margin-bottom: 30px;
   font-family: "AristotelicaBold";
 }
 
-.card-img-top{
-  height: 60px; 
+.card-img-top {
+  height: 60px;
   width: 60px;
 }
 
-.card-body{
-  background-color: #F6F3D8;
+.card-body {
+  background-color: #f6f3d8;
 }

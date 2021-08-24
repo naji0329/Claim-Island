@@ -144,11 +144,8 @@ export const rngRequestHashFromBuyersClam = async (address) => {
       abi: clamPresaleAbi,
       address: clamPresaleAddress,
     });
-    const value = await clamPresale.methods
-      .rngRequestHashFromBuyersClam(address)
-      .call();
-    return value ===
-      "0x0000000000000000000000000000000000000000000000000000000000000000"
+    const value = await clamPresale.methods.rngRequestHashFromBuyersClam(address).call();
+    return value === "0x0000000000000000000000000000000000000000000000000000000000000000"
       ? undefined
       : value;
   }

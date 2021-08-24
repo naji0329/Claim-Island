@@ -2,14 +2,7 @@ import React from "react";
 import Color from "color";
 import MersenneTwister from "mersenne-twister";
 
-const Canvas = ({
-  children,
-  color,
-  size,
-  className = "",
-  style = {},
-  ...rest
-}) => (
+const Canvas = ({ children, color, size, className = "", style = {}, ...rest }) => (
   <div
     className={className}
     style={{
@@ -29,14 +22,7 @@ const Canvas = ({
   </div>
 );
 
-const Avatar = ({
-  size,
-  seed,
-  className = "",
-  style = {},
-  svgStyle = {},
-  ...rest
-}) => {
+const Avatar = ({ size, seed, className = "", style = {}, svgStyle = {}, ...rest }) => {
   const avatarColors = [
     "#f5555a", //'red-500'
     "#e8933c", //'orange-500'
@@ -78,8 +64,7 @@ const Avatar = ({
     // Third random is a shape rotation on top of all of that.
     const secondRot = generator.random();
     const rot = firstRot * 360 + secondRot * 180;
-    const rotate =
-      "rotate(" + rot.toFixed(1) + " " + center + " " + center + ")";
+    const rotate = "rotate(" + rot.toFixed(1) + " " + center + " " + center + ")";
     const transform = translate + " " + rotate;
     const fill = genColor(remainingColors);
 
@@ -118,9 +103,7 @@ const Avatar = ({
         width={size}
         style={svgStyle}
       >
-        {shapesArr.map((s, i) =>
-          genShape(remainingColors, size, i, shapeCount - 1)
-        )}
+        {shapesArr.map((s, i) => genShape(remainingColors, size, i, shapeCount - 1))}
       </svg>
     </Canvas>
   );

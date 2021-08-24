@@ -27,9 +27,7 @@ const Swap = ({ account: { bnbBalance, address }, updateAccount }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState(0);
   const [tokenAmountOutMin, setTokenAmountOutMin] = useState(0);
-  const [destToken, setDestToken] = useState(
-    "0xE26482b00781b7BA03f725719feD8Bae1d070f8e"
-  );
+  const [destToken, setDestToken] = useState("0xE26482b00781b7BA03f725719feD8Bae1d070f8e");
 
   // const { register, handleSubmit, setValue, reset, formState, getValues } =
   //   useForm();
@@ -78,9 +76,7 @@ const Swap = ({ account: { bnbBalance, address }, updateAccount }) => {
                   <div className="flex">
                     <img className="w-12 mr-2" src={BNBLogo} />
                     <input
-                      onChange={(v) =>
-                        calculateTokenAmount(v.currentTarget.value)
-                      }
+                      onChange={(v) => calculateTokenAmount(v.currentTarget.value)}
                       value={amount}
                       className="bg-gray-100 text-center text-xl w-20  text-black p-2 font-normal rounded  border-none font-extrabold"
                       // {...register("input", { required: true })}

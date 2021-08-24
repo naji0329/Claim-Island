@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.flex-col {
+  flex-direction: column;
+}
 @font-face {
   font-family: AristotelicaBold;
   src: url(./assets/fonts/aristotelicaText_bold.otf) format("opentype");
@@ -56,17 +59,10 @@ body {
   height: 100%;
 }
 
-.nav-info-button {
-  z-index: 9999;
-  margin-top: 1rem;
-}
-
-
 canvas {
   height: auto;
   width: 100% !important; //overwrite 3dcam width canva
 }
-
 
 .video-container {
   position: absolute;
@@ -86,8 +82,6 @@ canvas {
   }
 }
 
-
-
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   .video-container {
@@ -102,14 +96,12 @@ canvas {
   }
 }
 
-
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
   .video-container {
     height: 100%;
   }
 }
-
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
@@ -118,10 +110,17 @@ canvas {
   }
 }
 
-
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
   .video-container {
     height: 155%;
   }
+}
+
+.text-shadow {
+  text-shadow: 1px 3px 4px black;
+}
+
+.font-aristotelica-bold {
+  font-family: "AristotelicaBold";
 }

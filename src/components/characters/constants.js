@@ -50,6 +50,15 @@ export const SPEECHES = {
     },
   },
 
+  bank: {
+    connect: {
+      text: "Welcome to the bank!",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+  },
+
   shell_voting_complete: {
     welcome: {
       text: `Welcome, traveller! Unfortunately you're rather late. $SHELL voting is over.`,
@@ -343,7 +352,7 @@ export const SPEECHES = {
     },
 
     claimProcessing: {
-      text: "Let me just go fetch your Clam. I'll just be a minute."
+      text: "Let me just go fetch your Clam. I'll just be a minute.",
     },
 
     collectionProcessing: {
@@ -461,7 +470,38 @@ export const SPEECHES = {
       skip: false,
     },
   },
-
+  clam_shop: {
+    welcome: {
+      text: `Howdy friend. My name is Diego the Shopkeeper. Welcome to my Clam Shop! Here you can buy Clams for $GEM and trade them for $SHELL. Let me show you around...`,
+      next: "connect",
+      dismiss: false,
+      skip: false,
+    },
+    connect: {
+      text: `Oh I've noticed that you've not connected your blockchain wallet yet. Before you can buy or trade any Clams, you need to enable that...`,
+      next: false,
+      dismiss: false,
+      skip: false,
+    },
+    collect: {
+      text: `Looks like you still have a clam to collect from last time you visited. Please do so before you proceed.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    collect_congrats: {
+      text: `Congrats on your Clam! You can take your time to savour your luck. If you still feel like buying, click "Buy more" button and I will be able to assist you.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    choose_path: {
+      text: `Now that everything is set up, tell me what led you to my Shop?`,
+      next: false,
+      dismiss: false,
+      skip: false,
+    },
+  },
   saferoom: {
     connect: {
       text: `Excellent! First, let's get your wallet connected. You will need to do this in order to see your Clams. Press the "Connect Wallet" button in the top right of the screen.`,
@@ -643,8 +683,7 @@ export const BUTTONS = {
       next: "No thanks",
       alt: {
         action: "url",
-        destination:
-          "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
+        destination: "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
         text: "Sure!",
       },
     },
@@ -665,8 +704,7 @@ export const BUTTONS = {
       next: "I understand",
       alt: {
         action: "url",
-        destination:
-          "https://clamisland.medium.com/clam-island-presale-30090591d4f",
+        destination: "https://clamisland.medium.com/clam-island-presale-30090591d4f",
         text: "More information",
       },
     },
@@ -748,8 +786,7 @@ export const BUTTONS = {
       next: "No thanks",
       alt: {
         action: "url",
-        destination:
-          "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
+        destination: "https://clamisland.medium.com/introducing-clam-island-ad424aba1733",
         text: "Sure!",
       },
     },
@@ -770,8 +807,7 @@ export const BUTTONS = {
       next: "I understand",
       alt: {
         action: "url",
-        destination:
-          "https://clamisland.medium.com/clam-island-presale-30090591d4f",
+        destination: "https://clamisland.medium.com/clam-island-presale-30090591d4f",
         text: "More information",
       },
     },
@@ -840,18 +876,20 @@ export const BUTTONS = {
       },
     },
   },
+  clam_shop: {
+    welcome: {
+      next: "Let's go!",
+      alt: false,
+    },
+  },
 };
 
 function showPresaleCountdown() {
-  const total =
-    Date.parse("Tue May 25 2021 09:00:00 GMT+0000") -
-    Date.parse(String(new Date()));
+  const total = Date.parse("Tue May 25 2021 09:00:00 GMT+0000") - Date.parse(String(new Date()));
   const minutes = Math.floor((total / 1000 / 60) % 60);
   const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
 
-  return `${hours} hours and ${
-    minutes > 9 ? minutes : "0" + minutes.toString()
-  } minutes`;
+  return `${hours} hours and ${minutes > 9 ? minutes : "0" + minutes.toString()} minutes`;
 }
 
 function clamPresaleDate() {

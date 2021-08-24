@@ -8,7 +8,13 @@ import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 import "./index.scss";
 
 // button => obj {text, alt}
-const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) => {
+const CharacterWrapper = ({
+  name,
+  action,
+  button,
+  buttonAlt,
+  onClickButton,
+}) => {
   const character = get(CHARACTERS, name);
   const speech = get(SPEECHES, action, action);
 
@@ -20,11 +26,12 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
   let history = useHistory();
 
   const handleClickButton = (button) => {
+    if (button.dismiss) {
+      setShowBubble(false);
+      return;
+    }
     const speech = get(SPEECHES, button.next, button.next);
     setStateSpeech(speech);
-    if (speech.dismiss) {
-      setShowBubble(false);
-    }
     if (onClickButton) {
       onClickButton();
     }
@@ -66,53 +73,69 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
     }
   };
 
+  useEffect(() => {
+    setShowBubble(!!action);
+  }, [action]);
+
   return (
     <div
       className={classNames(
-        "flex-1 min-h-full min-w-full  md:flex items-center absolute",
+        "flex-1 min-h-full min-w-full  md:flex items-center ",
         { "z-30": showBubble },
         { "z-0": !showBubble }
       )}
     >
       <div
         className={
-          showBubble ? "character-bubble fixed z-999 bottom-8 h-screen pointer-events-none w-screen" : "character-bubble hide-bubble"
+          showBubble
+            ? "character-bubble fixed z-999 bottom-8 h-screen pointer-events-none w-screen"
+            : "character-bubble hide-bubble"
         }
+        style={{ zIndex: speech ? undefined : 0, position: "fixed" }}
       >
-
-        <div className="text-bubble flex-col justify-end pointer-events-none">
-          <div className="text-wrapper">
-            <div className="name px-10">{character.name}</div>
-            <div className="speech">
-              <div
-                className="speech-text"
-                dangerouslySetInnerHTML={{
-                  __html: stateSpeech ? stateSpeech : speech,
-                }}
-              />
-            </div>
-            {/* todo */}
-            <div className="buttons">
-              {button.text && (
-                <button
-                  className="btn character-btn"
-                  id="btn-next"
-                  onClick={() => button.alt ? handleClickButtonAlt(button) : handleClickButton(button)}
-                >
-                  {button.text}
-                </button>
-              )}
-              {buttonAlt && buttonAlt.text && (
-                <button
-                  className="btn character-btn"
-                  onClick={() => buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)}
-                >
-                  {buttonAlt.text}
-                </button>
-              )}
+        {speech && (
+          <div className="text-bubble flex-col justify-end pointer-events-none">
+            <div className="text-wrapper">
+              <div className="name px-10">{character.name}</div>
+              <div className="speech">
+                <div
+                  className="speech-text"
+                  dangerouslySetInnerHTML={{
+                    __html: stateSpeech ? stateSpeech : speech,
+                  }}
+                />
+              </div>
+              {/* todo */}
+              <div className="buttons">
+                {button.text && (
+                  <button
+                    className="btn character-btn"
+                    id="btn-next"
+                    onClick={() =>
+                      button.alt
+                        ? handleClickButtonAlt(button)
+                        : handleClickButton(button)
+                    }
+                  >
+                    {button.text}
+                  </button>
+                )}
+                {buttonAlt && buttonAlt.text && (
+                  <button
+                    className="btn character-btn"
+                    onClick={() =>
+                      buttonAlt.alt
+                        ? handleClickButtonAlt(buttonAlt)
+                        : handleClickButton(buttonAlt)
+                    }
+                  >
+                    {buttonAlt.text}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
         <div className="character-container flex items-end cursor-pointer">
           <img
             className="max-h-full"
@@ -135,6 +158,6 @@ const mapToProps = ({ character: { name, action, button, buttonAlt } }) => ({
   name,
   action,
   button,
-  buttonAlt
+  buttonAlt,
 });
 export default connect(mapToProps)(CharacterWrapper);

@@ -1,1 +1,1 @@
-export { Pearl3DView } from './Pearl3DView';
+export { Pearl3DView } from "./Pearl3DView";
