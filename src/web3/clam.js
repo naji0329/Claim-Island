@@ -25,6 +25,12 @@ export const totalClamSupply = async () => {
   return totalSupply;
 };
 
+export const getClamIncubationTime = async () => {
+  const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
+  const value = await clamNft.methods.incubationTime().call();
+  return value;
+};
+
 export const getClamData = async (tokenId) => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
   const value = await clamNft.methods.clamData(tokenId).call();
@@ -114,6 +120,7 @@ export const collectClam = async (account) => {
     gas: gasEstimation,
   });
 };
+
 export const getClamValueInShellToken = () => {
   const clamNft = contractFactory({
     abi: clamNFTAbi,
@@ -121,7 +128,7 @@ export const getClamValueInShellToken = () => {
   });
 
   return clamNft.methods.clamPriceForShell().call();
-}
+};
 
 export const harvestClamForShell = async (tokenId, account) => {
   if (!account) {

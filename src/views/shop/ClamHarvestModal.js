@@ -8,7 +8,11 @@ import {
   getClamData,
   getClamValueInShellToken,
   harvestClamForShell,
+  getClamIncubationTime,
 } from "../../web3/clam";
+
+import { getCurrentBlockTimestamp } from "../../web3";
+
 import { getDNADecoded } from "../../web3/dnaDecoder";
 
 import "./index.scss";
@@ -31,10 +35,12 @@ const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
       </div>
       <div className="w-full">
         <div>$SHELL value: {formatShell(clamValueInShellToken)}</div>
-        <div>Lifespan: {get(dnaDecoded, "lifespan")}h</div>
-        <Link to="/saferoom" className="block">
-          View in Saferoom V{" "}
-        </Link>
+        <div>Lifespan: {get(dnaDecoded, "lifespan")} pearls</div>
+        <div>
+          <Link to="/saferoom" className="block">
+            View in Saferoom{" "}
+          </Link>
+        </div>
 
         <div className="underline cursor-pointer" onClick={() => harvestClam(tokenId)}>
           Harvest
@@ -46,11 +52,11 @@ const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
 
 const getUserClamDnaByIndex = async (account, index) => {
   const tokenId = await getClamByIndex(account, index);
-  const { dna } = await getClamData(tokenId);
+  const { dna, birthTime } = await getClamData(tokenId);
 
   if (dna.length > 1) {
     const dnaDecoded = await getDNADecoded(dna);
-    return { dna, dnaDecoded, tokenId };
+    return { dna, dnaDecoded, tokenId, birthTime };
   }
 };
 
@@ -62,6 +68,7 @@ const ClamHarvestModal = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [clams, setClams] = useState([]);
+  const [message, setMessage] = useState("Loading...");
   const [clamValueInShellToken, setClamValueInShellToken] = useState("");
 
   const harvestClam = async (tokenId) => {
@@ -121,14 +128,43 @@ const ClamHarvestModal = ({
         promises.push(getUserClamDnaByIndex(address, index));
       }
       const clams = await Promise.all(promises);
-      setClams(clams.filter(({ dnaDecoded }) => get(dnaDecoded, "lifespan") !== "0"));
+
+      const currentBlockTimestamp = await getCurrentBlockTimestamp();
+      const incubationtime = await getClamIncubationTime();
+
+      const filteredClams = clams.filter(
+        ({ dnaDecoded, birthTime }) =>
+          get(dnaDecoded, "lifespan") !== "0" &&
+          currentBlockTimestamp > +birthTime + +incubationtime
+      );
+
+      if (filteredClams.length > 0) {
+        setMessage(`Choose a Clam`);
+      } else {
+        const formatDuration = (totalSeconds) => {
+          const hours = Math.floor(totalSeconds / 3600);
+          const minutes = Math.floor((totalSeconds % 3600) / 60);
+          const seconds = totalSeconds - hours * 3600 - minutes * 60;
+
+          return [`${hours}h`, `${minutes}m`, `${seconds}s`]
+            .filter((item) => item[0] !== "0")
+            .join(" ");
+        };
+
+        const hours = formatDuration(+incubationtime);
+        setMessage(
+          `None of your clams are able to produce pearls. They must be either alive or be past the ${hours} incubation period once they have been farmed.`
+        );
+      }
+
+      setClams(filteredClams);
     }
     setClamValueInShellToken(await getClamValueInShellToken());
   }, [address, clamBalance]);
 
   return (
     <Card className="p-2">
-      <h1 className="flex justify-center font-bold">Choose a Clam</h1>
+      <h1 className="flex justify-center font-bold">{message}</h1>
       <div className="bg-white flex-1 justify-center  md:flex items-center flex-col overflow-scroll">
         {clams.length &&
           clams.map((clam, i) => (
