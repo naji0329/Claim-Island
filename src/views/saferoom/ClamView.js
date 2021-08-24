@@ -11,7 +11,7 @@ export default ({ dna, dnaDecoded }) => {
   const [showTraits, setShowTraits] = useState(false);
   // const clamTraits = getTraits();
 
-  console.log({ dnaDecoded });
+  // console.log({ dnaDecoded });
 
   const RowStat = ({ label, value }) => (
     <div className="text-sm flex flex-row justify-between my-1">

@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { BarnacleClam } from './BarnacleClam';
 import { BigmouthClam } from './BigMouthClam';
@@ -36,34 +36,46 @@ export const Clam = (props) => {
     clamType,
     tongueType,
     textures,
-    canvasCtx,
     clamDna
   } = props;
 
   const ClamComponent = CLAM_COMPONENTS[clamType] || DefaultClam;
   const groupMesh = useRef();
+  const { gl: canvasGl } = useThree();
+
   useEffect(() => {
     return () => {
       textures.forEach((texture) => {texture.dispose()});
+      renderImg();
     }
-  }, [])
+  }, []);
 
-  const renderImg = (canvasCtx) => {
-    // const clamImg = localStorage.getItem(clamDna);
-    setTimeout(() => {
-      if(canvasCtx) {
-        const img = canvasCtx.gl.domElement.toDataURL();
-        localStorage.setItem(
-          props.clamDna,
-          img
-        );
-      }  
-    }, 2000);
- 
+  // check if cache api image exists
+  const checkImgExists = async () => {
+    const response = await cache.match(clamDna);
+    if(response) {
+      let clamImg = await response.json();
+      clamImg = clamImg ? clamImg.img : clamImg;
+      return clamImg ? true : false;
+    } else {
+      return false;
+    }
+  };
+
+  const renderImg = async () => {
+    const img = canvasGl.domElement.toDataURL();
+    const cache = await caches.open('clam-island');
+    let imgExists = false;
+    // imgExists = await checkImgExists();
+
+    if(!imgExists) {
+      cache.put(clamDna, new Response(
+        JSON.stringify({ img })
+      ));
+    }
   };
 
   useFrame((state, delta) => {
-    renderImg(canvasCtx);
     if (groupMesh.current) {
       groupMesh.current.rotation.y += (Math.PI * 2) * 0.001
     }

@@ -3,7 +3,7 @@ import { get } from "lodash";
 
 export default ({ dna, dnaDecoded, img }) => {
   //   const [showTraits, setShowTraits] = useState(false);
-  console.log({ dnaDecoded });
+  // console.log({ dnaDecoded });
   const clam = {
     lifespan: get(dnaDecoded, "[0].lifespan"),
     rarity: get(dnaDecoded, "[0].rarity"),

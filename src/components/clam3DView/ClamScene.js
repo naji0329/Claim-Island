@@ -6,7 +6,7 @@ import { ClamBackground } from "./ClamBackground";
 import { Loading3DView } from "../Loading3DView";
 
 export const ClamScene = (props) => {
-  const { children, setCanvasCtx } = props;
+  const { children } = props;
   
   return (
     <Canvas
@@ -24,7 +24,6 @@ export const ClamScene = (props) => {
       pixelRatio={window.devicePixelRatio}
       onCreated={canvasCtx => {
         canvasCtx.gl.toneMapping = THREE.NoToneMapping;
-        setCanvasCtx(canvasCtx);
       }}
     >
       <Suspense fallback={<Loading3DView />}>

@@ -20,11 +20,6 @@ import { actions } from "../../store/redux";
 import clamContract from "../../web3/clam";
 import { getDNADecoded } from "../../web3/dnaDecoder";
 
-let cache;
-caches.open('clam-island').then(result => {
-  cache = result;
-})
-
 const getPearlImage = (p) => require(`../../assets/img/clamjam/${p.src}`).default;
 
 const PearlItem = ({ pearl }) => {
@@ -127,11 +122,20 @@ const Saferoom = ({ account: { clamBalance, address }, updateCharacter }) => {
     });
   });
 
-  useEffect(() => {
-    clams.forEach((clam) => {
-      const clamImg = localStorage.getItem(clam.dna);
+  // on modal open/close check for cache api image and set it if exists
+  useEffect(async () => {
+    const cache = await caches.open('clam-island');
+    const promises = await Promise.all(clams.map(clam => cache.match(clam.dna)));
+    const images = await Promise.all(promises.map(resp => {
+      return resp ? resp.json() : '';
+    }));
+    const clamsUptd = clams.map((clam, index) => {
+      let clamImg = images[index];
+      clamImg = clamImg ? clamImg.img : clamImg;
       clam.img = clamImg || ClamUnknown;
+      return clam;
     });
+    setClams(clamsUptd);
   }, [isShowing]);
 
   return (
