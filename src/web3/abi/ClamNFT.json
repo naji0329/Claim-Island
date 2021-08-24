@@ -55,17 +55,17 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "recipient",
+        "name": "user",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "clamId",
         "type": "uint256"
       }
     ],
-    "name": "ClamMaximaMinted",
+    "name": "ClamHarvested",
     "type": "event"
   },
   {
@@ -80,11 +80,69 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "dna",
+        "type": "uint256"
+      }
+    ],
+    "name": "ClamMaximaMinted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newCap",
+        "type": "uint256"
+      }
+    ],
+    "name": "ClamMaximaMonthlyCapSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "dna",
         "type": "uint256"
       }
     ],
     "name": "CommunityRewardedClam",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newDnaDecoder",
+        "type": "address"
+      }
+    ],
+    "name": "DNADecoderSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "incubationTime",
+        "type": "uint256"
+      }
+    ],
+    "name": "IncubationTimeSet",
     "type": "event"
   },
   {
@@ -98,6 +156,108 @@
       }
     ],
     "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "clamId",
+        "type": "uint256"
+      }
+    ],
+    "name": "PearlCounterIncremented",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "clamPriceForShell",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "pearlPriceForShell",
+        "type": "uint256"
+      }
+    ],
+    "name": "PriceForShellSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minPearlProductionCapacity",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maxPearlProductionCapacity",
+        "type": "uint256"
+      }
+    ],
+    "name": "ProductionCapacitySet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minPearlProductionDelay",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maxPearlProductionDelay",
+        "type": "uint256"
+      }
+    ],
+    "name": "ProductionDelayRangeSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "clamId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ProductionDelaySet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "clamId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "ProductionStartSet",
     "type": "event"
   },
   {
@@ -319,7 +479,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "_tokenId",
         "type": "uint256"
       }
     ],
@@ -336,7 +496,7 @@
         "type": "uint256"
       }
     ],
-    "name": "canProducePearl",
+    "name": "canCurrentlyProducePearl",
     "outputs": [
       {
         "internalType": "bool",
@@ -345,6 +505,25 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "canStillProducePearls",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -379,7 +558,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "pearlProductionTime",
+        "name": "pearlProductionDelay",
         "type": "uint256"
       },
       {
@@ -390,6 +569,11 @@
       {
         "internalType": "uint256",
         "name": "dna",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pearlProductionStart",
         "type": "uint256"
       }
     ],
@@ -475,6 +659,68 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPearlProductionDelay",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPearlProductionStart",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPearlTraits",
+    "outputs": [
+      {
+        "internalType": "uint8[10]",
+        "name": "",
+        "type": "uint8[10]"
+      },
+      {
+        "internalType": "uint8[6]",
+        "name": "",
+        "type": "uint8[6]"
       }
     ],
     "stateMutability": "view",
@@ -576,25 +822,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "harvestClamForShellReturnAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -619,28 +846,34 @@
   {
     "inputs": [
       {
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      },
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "incrementPearlCounter",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "incubationTime",
+    "outputs": [
       {
-        "internalType": "string",
-        "name": "symbol",
-        "type": "string"
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
-        "internalType": "string",
-        "name": "baseURI",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "_shellToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_dnaDecoder",
+        "internalType": "contract IPearlFarm",
+        "name": "_pearlFarm",
         "type": "address"
       }
     ],
@@ -674,19 +907,52 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "maxPearlProductionCapacity",
+    "outputs": [
       {
         "internalType": "uint256",
-        "name": "_tokenId",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "name": "isPearlProductionTimeYet",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxPearlProductionDelay",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minPearlProductionCapacity",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minPearlProductionDelay",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -701,8 +967,13 @@
       },
       {
         "internalType": "uint256",
-        "name": "rand",
+        "name": "dna",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isMaxima",
+        "type": "bool"
       }
     ],
     "name": "mint",
@@ -719,8 +990,13 @@
       },
       {
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "dna",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isMaxima",
+        "type": "bool"
       }
     ],
     "name": "mintCommunityReward",
@@ -737,7 +1013,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "rand",
+        "name": "dna",
         "type": "uint256"
       }
     ],
@@ -793,6 +1069,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pearlFarm",
+    "outputs": [
+      {
+        "internalType": "contract IPearlFarm",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -901,24 +1190,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_clamPriceForShell",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_pearlPriceForShell",
-        "type": "uint256"
-      }
-    ],
-    "name": "sePriceForShell",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "operator",
         "type": "address"
@@ -964,16 +1235,101 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "_incubationTime",
+        "type": "uint256"
+      }
+    ],
+    "name": "setIncubationTime",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "_tokenId",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "rand",
+        "name": "dna",
         "type": "uint256"
       }
     ],
-    "name": "setNewProductionTime",
+    "name": "setNewProductionDelay",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "setNewProductionStart",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_clamPriceForShell",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_pearlPriceForShell",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPriceForShell",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_minPearlProductionCapacity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxPearlProductionCapacity",
+        "type": "uint256"
+      }
+    ],
+    "name": "setProductionCapacity",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_minPearlProductionDelay",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxPearlProductionDelay",
+        "type": "uint256"
+      }
+    ],
+    "name": "setProductionDelayRange",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

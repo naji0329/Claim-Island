@@ -10,14 +10,11 @@ import { actions } from "../../store/redux";
 import ClamBuyModal from "./ClamBuyModal";
 import ClamCollectModal from "./ClamCollectModal";
 import ClamDisplayModal from "./ClamDisplayModal";
+import ClamHarvestModal from "./ClamHarvestModal";
 import { checkHasClamToCollect } from "../../web3/clam";
 import { zeroHash } from "../../web3/constants";
 
-const Shop = ({
-  account: { address, clamToCollect },
-  updateCharacter,
-  updateAccount,
-}) => {
+const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAccount }) => {
   const [modalToShow, setModalToShow] = useState(null);
   const [userReady, setUserReady] = useState(false);
 
@@ -39,30 +36,17 @@ const Shop = ({
                   action: "clam_shop.choose_path.text",
                   buttonAlt: {
                     text: "Harvest Clams",
-                    // alt: {
-                    //   action: "cb",
-                    //   destination: () => {
-                    //     setShowBuyModal(true);
-                    //     updateCharacter({
-                    //       name: "diego",
-                    //       action: "clam_claimer.claim.text",
-                    //       button: {
-                    //         text: "Back to Island",
-                    //         alt: {
-                    //           action: "internal",
-                    //           destination: "/",
-                    //         },
-                    //       },
-                    //       buttonAlt: {
-                    //         text: "Go to Saferoom",
-                    //         alt: {
-                    //           action: "internal",
-                    //           destination: "/saferoom",
-                    //         },
-                    //       },
-                    //     });
-                    //   },
-                    // },
+                    alt: {
+                      action: "cb",
+                      destination: () => {
+                        setUserReady(true);
+                        updateCharacter({
+                          name: "diego",
+                          action: null,
+                        });
+                        setModalToShow("harvest");
+                      },
+                    },
                   },
                   button: {
                     text: "Buy Clams",
@@ -139,9 +123,7 @@ const Shop = ({
             type="video/mp4"
           />
           <source
-            src={
-              process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"
-            }
+            src={process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"}
             type='video/webm; codecs="vp8, vorbis"'
           />
         </video>
@@ -154,23 +136,16 @@ const Shop = ({
         <div className="flex relative z-20  justify-center items-start top-40 w-full">
           <div className="">
             {/* step 1 */}
-            {modalToShow === "buy" && (
-              <ClamBuyModal setModalToShow={setModalToShow} />
-            )}
+            {modalToShow === "buy" && <ClamBuyModal setModalToShow={setModalToShow} />}
             {/* step 2 */}
             {modalToShow === "collect" && clamToCollect && (
               <ClamCollectModal setModalToShow={setModalToShow} />
             )}
             {/* step 3 */}
-            {modalToShow === "display" && (
-              <ClamDisplayModal setModalToShow={setModalToShow} />
-            )}
+            {modalToShow === "display" && <ClamDisplayModal setModalToShow={setModalToShow} />}
+            {/* step 4 */}
+            {modalToShow === "harvest" && <ClamHarvestModal setModalToShow={setModalToShow} />}
 
-            {/* // showBuyModal ? // user has agreed clicked Yes
-                //   clamToCollect && !showClamDisplayModal ?
-                //     <ClamCollectModal setShowClamDisplayModal={setShowClamDisplayModal} /> :
-                //     <ClamBuyModal setShowBuyModal={setShowBuyModal}  />
-                // : showClamDisplayModal && <ClamDisplayModal setShowBuyModal={setShowBuyModal} /> */}
           </div>
         </div>
       )}
