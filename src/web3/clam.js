@@ -114,6 +114,36 @@ export const collectClam = async (account) => {
     gas: gasEstimation,
   });
 };
+export const getClamValueInShellToken = () => {
+  const clamNft = contractFactory({
+    abi: clamNFTAbi,
+    address: clamNFTAddress,
+  });
+
+  return clamNft.methods.clamPriceForShell().call();
+}
+
+export const harvestClamForShell = async (tokenId, account) => {
+  if (!account) {
+    throw new Error("There is no account connected!");
+  }
+
+  const clamNft = contractFactory({
+    abi: clamNFTAbi,
+    address: clamNFTAddress,
+  });
+
+  const method = clamNft.methods.harvestClamForShell(tokenId);
+
+  const gasEstimation = await method.estimateGas({
+    from: account,
+  });
+
+  return method.send({
+    from: account,
+    gas: gasEstimation,
+  });
+};
 
 export default {
   balanceOf,
@@ -125,4 +155,6 @@ export default {
   getPrice,
   checkHasClamToCollect,
   collectClam,
+  getClamValueInShellToken,
+  harvestClamForShell,
 };
