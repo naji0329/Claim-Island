@@ -501,6 +501,18 @@ export const SPEECHES = {
       dismiss: false,
       skip: false,
     },
+    harvest_warn: {
+      text: `WARNING!!! This action will destroy your Clam for $SHELL tokens and it is not reversible. Click proceed to finish harvesting your chosen Clam.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    harvest_congrats: {
+      text: `Big Decision. We have added $SHELL to your wallet`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    }
   },
   saferoom: {
     connect: {
