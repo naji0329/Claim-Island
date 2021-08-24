@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-// import { useForm } from "react-hook-form";
-// import { useAsync } from "react-use";
-import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 
 import "./index.scss";
 
 import Card from "../../components/Card";
-import Clams3D from "../../components/three/3DClams/3DClams";
+import ClamView from "../saferoom/ClamView";
 
 import { clamNFTAddress } from "../../web3/constants";
 import clamContract from "../../web3/clam";
@@ -16,7 +13,7 @@ import { getDNADecoded } from "../../web3/dnaDecoder";
 
 const ClamDisplayModal = ({
   setModalToShow,
-  account: { address, clamToCollect },
+  account: { address, clamToCollect, clamBalance },
   updateCharacter,
 }) => {
   const [clamDna, setClamDna] = useState("");
@@ -28,7 +25,14 @@ const ClamDisplayModal = ({
       try {
         setIsLoading(true);
 
-        const tokenId = await clamContract.getClamByIndex(address, 0);
+        const index = Number(clamBalance);
+        console.log({ clamBalance, index });
+        const tokenId = await clamContract
+          .getClamByIndex(address, index)
+          .catch(async () => {
+            //fallback
+            return clamContract.getClamByIndex(address, index - 1);
+          });
         console.log({ tokenId });
 
         if (tokenId) {
@@ -36,7 +40,10 @@ const ClamDisplayModal = ({
           if (clamData.dna.length > 1) {
             setClamDna(clamData.dna);
 
-            const decodedDna = await getDNADecoded(clamData.dna);
+            const decodedDna = await getDNADecoded(clamData.dna).catch(
+              console.log
+            );
+            console.log({ decodedDna });
             setClamDnaDecoded(decodedDna);
 
             // updateCharacter({
@@ -77,63 +84,52 @@ const ClamDisplayModal = ({
   }, [address]);
 
   return (
-    <>
-      <Card>
-        <div
-          className="overflow-x-hidden overflow-y-scroll max-h-159"
-          style={{ minWidth: "700px" }}
-        >
-          <div className="bg-white flex-1 justify-center md:flex items-center h-full flex-col w-full">
-            {clamDna && (
-              <>
-                <Clams3D
-                  width={400}
-                  height={400}
-                  clamDna={clamDna}
-                  decodedDna={clamDnaDecoded}
-                  showTraitsTable={true}
-                />
-                <div className="flex flex-row my-3">
-                  <button className="btn character-btn ml-2" onClick={() => setModalToShow("buy")}>
-                    Buy More
-                  </button>
-                  <button
-                    className="btn character-btn ml-2"
-                    onClick={() => setModalToShow("harvest")}
-                  >
-                    Harvest
-                  </button>
-                </div>
-              </>
-            )}
-            {isLoading && (
-              <>
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-yello-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              </>
-            )}
+    <div className="bg-white shadow-md rounded-xl p-5 flex-1 justify-center md:flex items-center h-full flex-col w-full">
+      {clamDna && clamDnaDecoded && (
+        <>
+          <ClamView dna={clamDna} dnaDecoded={clamDnaDecoded} />
+
+          <div className="flex flex-row my-3">
+            <button
+              className="btn character-btn ml-2"
+              onClick={() => setModalToShow("buy")}
+            >
+              Buy More
+            </button>
+            <button
+              className="btn character-btn ml-2"
+              onClick={() => setModalToShow("harvest")}
+            >
+              Harvest
+            </button>
           </div>
-        </div>
-      </Card>
-    </>
+        </>
+      )}
+      {isLoading && (
+        <>
+          <svg
+            className="animate-spin -ml-1 mr-3 h-5 w-5 text-yello-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+        </>
+      )}
+    </div>
   );
 };
 
