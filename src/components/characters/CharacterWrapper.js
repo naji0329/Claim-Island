@@ -3,12 +3,21 @@ import { connect } from "redux-zero/react";
 import { get } from "lodash";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
-import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
+import { actions } from "../../store/redux";
+import { SPEECHES, CHARACTERS } from "./constants";
 
 import "./index.scss";
 
 // button => obj {text, alt}
-const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) => {
+const CharacterWrapper = ({
+  name,
+  action,
+  button,
+  buttonAlt,
+  onClickButton,
+  updateCharacter,
+  show,
+}) => {
   const character = get(CHARACTERS, name);
   const speech = get(SPEECHES, action, action);
 
@@ -20,12 +29,13 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
   let history = useHistory();
 
   const handleClickButton = (button) => {
-    if (button.dismiss) {
-      setShowBubble(false);
-      return;
-    }
     const speech = get(SPEECHES, button.next, button.next);
     setStateSpeech(speech);
+    if (button.dismiss) {
+      setShowBubble(false);
+      updateCharacter({ action: "dismissBubble" });
+      return;
+    }
     if (onClickButton) {
       onClickButton();
     }
@@ -64,17 +74,29 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
       //   "22rem";
     } else {
       setShowBubble(false);
+      updateCharacter({ action: "dismissBubble" });
     }
   };
 
   useEffect(() => {
-    setShowBubble(!!action);
+    console.log("@@", action);
+    if (["dismissBubble", "showBubble"].indexOf(action) === -1) {
+      const speech = get(SPEECHES, action, action);
+      setStateSpeech(speech);
+      if (show) {
+        setShowBubble(true);
+      }
+    } else if (action === "dismissBubble") {
+      setShowBubble(false);
+    } else if (action === "showBubble") {
+      setShowBubble(true);
+    }
   }, [action]);
 
   return (
     <div
       className={classNames(
-        "flex-1 min-h-full min-w-full  md:flex items-center ",
+        "flex-1 min-h-full min-w-full md:flex items-center",
         { "z-30": showBubble },
         { "z-0": !showBubble }
       )}
@@ -137,10 +159,11 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
   );
 };
 
-const mapToProps = ({ character: { name, action, button, buttonAlt } }) => ({
+const mapToProps = ({ character: { name, action, button, buttonAlt, show } }) => ({
   name,
   action,
   button,
   buttonAlt,
+  show,
 });
 export default connect(mapToProps)(CharacterWrapper);
