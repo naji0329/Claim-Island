@@ -26,7 +26,7 @@ export const stakeClam = async (clamId) => {
   const account = getAccount();
   const gemBal = await getBalance(account);
   const pearlPrice = await stakePrice();
-  if (gemBal >= pearlPrice)
+  if (gemBal <= pearlPrice)
     throw new Error(`You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`);
 
   await approveContractForMaxUintErc721(account, clamNFTAddress, pearlFarmAddress, clamId);
