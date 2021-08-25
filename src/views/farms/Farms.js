@@ -26,7 +26,6 @@ import FarmItem from "./FarmItem";
 import PearlDetails from "./PearlDetails";
 import ClamDeposit from "./ClamDeposit";
 import { aggregate } from "../../web3/multicall";
-import { stakeClam } from "../../web3/pearlFarm";
 
 const MODAL_OPTS = {
   DEPOSIT_CLAM: "depositClam",
@@ -42,7 +41,6 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
 
   const [modalSelected, setModal] = useState("");
   const [selectedPearl, setSelectedPearl] = useState({});
-  const [selectedClam, setSelectedClam] = useState();
 
   // When Deposit Clam Butto is clicked - open the modal to show list of clams
   const onDepositClam = () => {
@@ -180,16 +178,6 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
     });
   });
 
-  // On deposit clam
-  useEffect(() => {
-    if (selectedClam) {
-      const stake = async () => {
-        await stakeClam(selectedClam.clamId);
-      };
-      stake();
-    }
-  }, [selectedClam]);
-
   return (
     <div className="overflow-x-hidden">
       {loading && (
@@ -214,10 +202,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
             onWithdrawPearl={onWithdrawPearl}
           ></PearlDetails>
         ) : (
-          <ClamDeposit
-            setSelectedClam={setSelectedClam}
-            clams={clams}
-          ></ClamDeposit>
+          <ClamDeposit clams={clams}></ClamDeposit>
         )}
       </Modal>
 
