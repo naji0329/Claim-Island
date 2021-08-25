@@ -57,3 +57,12 @@ export const unstakeClam = async (clamId) => {
 
   await method.send({ from: account, gas: gasEstimation });
 };
+
+export const prepareReclaiming = async (clamId) => {
+  const account = getAccount();
+
+  const method = pearlFarm().methods.prepareReclaiming(clamId);
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation });
+};
