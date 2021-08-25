@@ -22,6 +22,10 @@ const stakePrice = async () => {
   return await pearlFarm().methods.pearlPrice().call();
 };
 
+export const getStakedClamIds = async (account) => {
+  return await pearlFarm().methods.getStakedClamIds(account).call();
+};
+
 export const stakeClam = async (clamId) => {
   const account = getAccount();
   const gemBal = await getBalance(account);
