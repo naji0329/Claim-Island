@@ -4,9 +4,9 @@ import { useAsync } from "react-use";
 // import { Link } from "react-router-dom";
 
 import { actions } from "../../store/redux";
-import videoImage from "../../assets/locations/bank_static.jpg";
-import videoMp4 from "../../assets/locations/bank_animated.mp4";
-import videoWebM from "../../assets/locations/bank_animated.webm";
+import videoImage from "../../assets/locations/Bank.jpg";
+import videoMp4 from "../../assets/locations/Bank.mp4";
+import videoWebM from "../../assets/locations/Bank.webm";
 
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";

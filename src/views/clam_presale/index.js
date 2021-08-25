@@ -3,7 +3,11 @@ import { connect } from "redux-zero/react";
 import "./index.scss";
 import CharacterWrapper from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
-import Shop from "../../assets/locations/shop_animated.mp4";
+
+import videoImage from "../../assets/locations/Shop.jpg";
+import videoMp4 from "../../assets/locations/Shop.mp4";
+import videoWebM from "../../assets/locations/Shop.webm";
+import VideoBackground from "../../components/VideoBackground";
 
 import { actions } from "../../store/redux";
 // import { SPEECHES } from "../../components/characters/constants";
@@ -134,22 +138,8 @@ const ClamPresale = ({
       <Web3Navbar />
       <Web3ClamPresale />
       {/* container */}
-      <div className="shop-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
-        <video
-          autoPlay
-          muted
-          loop
-          className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
-        >
-          <source
-            src={process.env.PUBLIC_URL + "/location_vids/shop_animated.mp4"}
-            type="video/mp4"
-          />
-          <source
-            src={process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"}
-            type='video/webm; codecs="vp8, vorbis"'
-          />
-        </video>
+
+      <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
         {/* chat character   */}
         {isStarted != undefined && (
@@ -168,7 +158,6 @@ const ClamPresale = ({
           {rng && <ClamCollectModal setShowMintModal={setShowMintModal} />}
           {/* {clamBalance === "1" && address && <ClamShowModal />} */}
         </div>
-      </div>
     </>
   );
 };

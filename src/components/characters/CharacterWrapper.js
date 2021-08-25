@@ -3,8 +3,7 @@ import { connect } from "redux-zero/react";
 import { get } from "lodash";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
-import { actions } from "../../store/redux";
-import { SPEECHES, CHARACTERS } from "./constants";
+import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 
 import "./index.scss";
 
@@ -15,8 +14,6 @@ const CharacterWrapper = ({
   button,
   buttonAlt,
   onClickButton,
-  updateCharacter,
-  show,
 }) => {
   const character = get(CHARACTERS, name);
   const speech = get(SPEECHES, action, action);
@@ -29,13 +26,12 @@ const CharacterWrapper = ({
   let history = useHistory();
 
   const handleClickButton = (button) => {
-    const speech = get(SPEECHES, button.next, button.next);
-    setStateSpeech(speech);
     if (button.dismiss) {
       setShowBubble(false);
-      updateCharacter({ action: "dismissBubble" });
       return;
     }
+    const speech = get(SPEECHES, button.next, button.next);
+    setStateSpeech(speech);
     if (onClickButton) {
       onClickButton();
     }
@@ -74,29 +70,17 @@ const CharacterWrapper = ({
       //   "22rem";
     } else {
       setShowBubble(false);
-      updateCharacter({ action: "dismissBubble" });
     }
   };
 
   useEffect(() => {
-    console.log("@@", action);
-    if (["dismissBubble", "showBubble"].indexOf(action) === -1) {
-      const speech = get(SPEECHES, action, action);
-      setStateSpeech(speech);
-      if (show) {
-        setShowBubble(true);
-      }
-    } else if (action === "dismissBubble") {
-      setShowBubble(false);
-    } else if (action === "showBubble") {
-      setShowBubble(true);
-    }
+    setShowBubble(!!action);
   }, [action]);
 
   return (
     <div
       className={classNames(
-        "flex-1 min-h-full min-w-full md:flex items-center",
+        "flex-1 min-h-full min-w-full  md:flex items-center ",
         { "z-30": showBubble },
         { "z-0": !showBubble }
       )}
@@ -128,7 +112,9 @@ const CharacterWrapper = ({
                     className="btn character-btn"
                     id="btn-next"
                     onClick={() =>
-                      button.alt ? handleClickButtonAlt(button) : handleClickButton(button)
+                      button.alt
+                        ? handleClickButtonAlt(button)
+                        : handleClickButton(button)
                     }
                   >
                     {button.text}
@@ -138,7 +124,9 @@ const CharacterWrapper = ({
                   <button
                     className="btn character-btn"
                     onClick={() =>
-                      buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)
+                      buttonAlt.alt
+                        ? handleClickButtonAlt(buttonAlt)
+                        : handleClickButton(buttonAlt)
                     }
                   >
                     {buttonAlt.text}
@@ -148,10 +136,17 @@ const CharacterWrapper = ({
             </div>
           </div>
         )}
-        <div className="character-container flex items-end cursor-pointer">
-          <img className="max-h-full" src={character.charImg} onClick={handleClickCharacter} />
+        <div className="character-container flex items-end">
+          <img
+            className="max-h-full cursor-pointer"
+            src={character.charImg}
+            onClick={handleClickCharacter}
+          />
         </div>
-        <button className="btn character-container-round" onClick={handleClickCharacter}>
+        <button
+          className="btn character-container-round"
+          onClick={handleClickCharacter}
+        >
           <img src={character.charImg} className="character" />
         </button>
       </div>
@@ -159,11 +154,10 @@ const CharacterWrapper = ({
   );
 };
 
-const mapToProps = ({ character: { name, action, button, buttonAlt, show } }) => ({
+const mapToProps = ({ character: { name, action, button, buttonAlt } }) => ({
   name,
   action,
   button,
   buttonAlt,
-  show,
 });
 export default connect(mapToProps)(CharacterWrapper);
