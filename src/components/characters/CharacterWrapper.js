@@ -83,9 +83,9 @@ const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) =>
         className={
           showBubble
             ? "character-bubble fixed z-999 bottom-8 h-1/3 pointer-events-none w-screen"
-            : "character-bubble hide-bubble"
+            : "character-bubble h-1/3 hide-bubble fixed justify-end"
         }
-        style={{ zIndex: speech ? undefined : 0, position: "fixed" }}
+        style={{ zIndex: speech ? undefined : 0 }}
       >
         {speech && (
           <div className="text-bubble flex-col justify-end pointer-events-none">

@@ -4,6 +4,7 @@ import { clamNFTAddress, pearlFarmAddress } from "./constants";
 import { store } from "../store/redux";
 import { approveContractForMaxUintErc721 } from "./bep20";
 import { getBalance, approveSpending } from "./gem";
+import { formatFromWei } from "./shared";
 
 const pearlFarm = () =>
   contractFactory({
@@ -25,7 +26,8 @@ export const stakeClam = async (clamId) => {
   const account = getAccount();
   const gemBal = await getBalance(account);
   const pearlPrice = await stakePrice();
-  if (gemBal <= pearlPrice) throw new Error("You need at least 50 GEM to stake Clam");
+  if (gemBal >= pearlPrice)
+    throw new Error(`You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`);
 
   await approveContractForMaxUintErc721(account, clamNFTAddress, pearlFarmAddress, clamId);
   await approveSpending(account, pearlFarmAddress, pearlPrice);
