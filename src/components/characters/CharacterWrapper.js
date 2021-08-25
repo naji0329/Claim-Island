@@ -136,9 +136,9 @@ const CharacterWrapper = ({
             </div>
           </div>
         )}
-        <div className="character-container flex items-end cursor-pointer">
+        <div className="character-container flex items-end">
           <img
-            className="max-h-full"
+            className="max-h-full cursor-pointer"
             src={character.charImg}
             onClick={handleClickCharacter}
           />
