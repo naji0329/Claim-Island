@@ -140,7 +140,6 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
           setClamsStaked(staking);
           setClams(clamsFiltered);
           setLoading(false);
-          updateCharacter({ action: "dismissBubble" });
         } catch (error) {
           setLoading(false);
           console.log({ error });

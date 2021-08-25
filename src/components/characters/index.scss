@@ -7,6 +7,7 @@
   height: 100vh;
   pointer-events: none;
   padding-left: 5rem;
+  justify-content: flex-end;
 
   @media screen and (max-width: 1440px) {
     //height: 35em;
