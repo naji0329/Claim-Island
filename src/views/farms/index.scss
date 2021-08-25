@@ -59,27 +59,22 @@
 
 .ClamDeposit {
 @apply w-full;
-.heading {
-  @apply text-black font-bold font-aristotelica;
-}
-.clam-details {
-  @apply flex flex-row;
-  @apply border-4 border-blue-200 rounded-xl p-4 mt-4;
-  .clam-img {
-    @apply w-1/12 flex flex-1;
-    img {
-      @apply w-1/3;
+  .heading {
+    @apply text-black font-bold font-aristotelica text-2xl;
+  }
+  .clam-details {
+    @apply flex flex-row;
+    @apply border-4 border-blue-200 rounded-xl p-4 my-4;
+    
+    .details {
+      @apply flex flex-1 flex-col;
+      .grid-value {
+        @apply text-black font-bold text-right text-xl font-montserrat;
+      }
+      .grid-title {
+        @apply font-montserrat text-left;
+        color: #757575;
+      }
     }
   }
-  .details {
-    @apply flex flex-1 flex-col;
-    .grid-value {
-      @apply text-black font-bold text-right text-xl font-montserrat;
-    }
-    .grid-title {
-      @apply font-montserrat text-left;
-      color: #757575;
-    }
-  }
-}
 }

@@ -3,10 +3,11 @@ import FarmPearl from "../../assets/img/farm_pearl.png";
 
 const ClamDeposit = ({ setSelectedClam, clams }) => {
   return (
-    <div className="ClamDeposit">
+    <div className="ClamDeposit max-h-160">
       <h3 className="heading">Choose a Clam</h3>
       {clams.map((clam, i) => {
-        const { birthTime, pearlProductionDelay, pearlProductionStart } = clam.clamDataValues;
+        const { birthTime, pearlProductionDelay, pearlProductionStart } =
+          clam.clamDataValues;
         const etaSeconds =
           +pearlProductionDelay +
           (+pearlProductionStart > 0 ? +pearlProductionStart : +birthTime) -
@@ -14,8 +15,8 @@ const ClamDeposit = ({ setSelectedClam, clams }) => {
 
         return (
           <div key={i} className="clam-details">
-            <div className="clam-img">
-              <img src={FarmPearl} />
+            <div className="w-1/2">
+              <img className="w-full p-4" src={FarmPearl} />
             </div>
             <div className="details">
               <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
@@ -24,7 +25,9 @@ const ClamDeposit = ({ setSelectedClam, clams }) => {
                   {new Date(etaSeconds * 1000).toISOString().substr(11, 8)}
                 </div>
                 <div className="grid-title">Lifespan</div>
-                <div className="grid-value">{clam.dnaDecoded.lifespan} pearls</div>
+                <div className="grid-value">
+                  {clam.dnaDecoded.lifespan} pearls
+                </div>
               </div>
               <div className="flex flex-col">
                 <Link
@@ -35,8 +38,7 @@ const ClamDeposit = ({ setSelectedClam, clams }) => {
                   View in saferoom
                 </Link>
                 <a
-                  className="font-montserrat underline font-bold"
-                  style={{ color: "#0072E3", cursor: "pointer" }}
+                  className="btn btn-info mt-4 font-montserrat font-bold"
                   onClick={() => {
                     setSelectedClam(clam);
                   }}
