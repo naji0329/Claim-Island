@@ -9,9 +9,9 @@ import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
 import { Modal, useModal } from "../../components/Modal";
 
-import videoImage from "../../assets/locations/bank_static.jpg";
-import videoMp4 from "../../assets/locations/bank_animated.mp4";
-import videoWebM from "../../assets/locations/bank_animated.webm";
+import videoImage from "../../assets/locations/Farm.jpg";
+import videoMp4 from "../../assets/locations/Farm.mp4";
+import videoWebM from "../../assets/locations/Farm.webm";
 import VideoBackground from "../../components/VideoBackground";
 
 import clamIcon from "../../assets/clam-icon.png";
@@ -36,6 +36,7 @@ const MODAL_OPTS = {
 const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
   let history = useHistory();
   const [clams, setClams] = useState([]);
+  const [clamsStaked, setClamsStaked] = useState([]);
   const [loading, setLoading] = useState(false);
   const { isShowing, toggle: toggleModal } = useModal();
 
@@ -108,17 +109,21 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
             +clamBalance
           );
           const tokenIdsResult = await aggregate(tokenIdsCalls);
-          const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
-            tokenIdsResult.returnData
-          );
+          const tokenIdsDecoded =
+            clamContract.decodeTokenOfOwnerByIndexFromMulticall(
+              tokenIdsResult.returnData
+            );
 
-          const clamDataCalls = clamContract.prepClamDataMulticall(tokenIdsDecoded);
+          const clamDataCalls =
+            clamContract.prepClamDataMulticall(tokenIdsDecoded);
           const clamDataResult = await aggregate(clamDataCalls);
           const clamDataDecoded = clamContract.decodeClamDataFromMulticall(
             clamDataResult.returnData,
             tokenIdsDecoded
           );
-          const clamDnas = clamDataDecoded.map((clamData) => clamData.clamDataValues.dna);
+          const clamDnas = clamDataDecoded.map(
+            (clamData) => clamData.clamDataValues.dna
+          );
 
           const dnaDecodedCalls = prepGetDnaDecodedMulticall(clamDnas);
           const dnaDecodedResult = await aggregate(dnaDecodedCalls);
@@ -128,7 +133,9 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
           );
 
           const clams = clamDataDecoded.map((clam) => {
-            const sameClam = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
+            const sameClam = dnaDecodedDecoded.find(
+              ({ clamId }) => clamId === clam.clamId
+            );
             if (sameClam) {
               const dnaDecoded = sameClam.dnaDecodedValues;
               return { ...clam, dnaDecoded };
@@ -137,7 +144,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
           });
 
           const clamsFiltered = clams.filter((c) => c);
-
+          const staking = clams.filter(
+            (clam) => +clam.pearlProductionStart > 0
+          );
+          setClamsStaked(staking);
           setClams(clamsFiltered);
           setLoading(false);
           updateCharacter({ action: "dismissBubble" });
@@ -156,16 +166,16 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
       name: "al",
       action: "saferoom.connect.text",
       button: {
-        // text: undefined,
-        // text: "Ok",
-        // alt: {
-        //   action: "cb",
-        //   dismiss: true,
-        //   destination: () => {
-        //     // toggleModal();
-        //     // setShowClams(true);
-        //   },
-        // },
+        text: "Dismiss",
+        alt: {
+          action: "cb",
+          destination: () => {
+            updateCharacter({
+              name: "al",
+              action: undefined,
+            });
+          },
+        },
       },
     });
   });
@@ -181,7 +191,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
   }, [selectedClam]);
 
   return (
-    <div className="Farm">
+    <div className="overflow-x-hidden">
       {loading && (
         <div className="loading-screen">
           <div className="loading-elems">
@@ -190,58 +200,76 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
           </div>
         </div>
       )}
-      <Web3Navbar title="Clam Farm" />
-      <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
-      <Character name="al" />
+      <Web3Navbar title="Clam Farms" />
+      <VideoBackground
+        videoImage={videoImage}
+        videoMp4={videoMp4}
+        videoWebM={videoWebM}
+      />
 
       <Modal isShowing={isShowing} onClose={toggleModal}>
         {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
-          <PearlDetails pearl={selectedPearl} onWithdrawPearl={onWithdrawPearl}></PearlDetails>
+          <PearlDetails
+            pearl={selectedPearl}
+            onWithdrawPearl={onWithdrawPearl}
+          ></PearlDetails>
         ) : (
-          <ClamDeposit setSelectedClam={setSelectedClam} clams={clams}></ClamDeposit>
+          <ClamDeposit
+            setSelectedClam={setSelectedClam}
+            clams={clams}
+          ></ClamDeposit>
         )}
       </Modal>
 
       {address && (
-        <div className="flex-1 min-w-full flex justify-center items-center flex-col">
-          <div className="w-4/5 flex flex-col relative pt-24">
-            {/* navbar */}
-            <div className="w-full rounded-xl mx-auto flex flex-row justify-end">
-              <div className="px-3 py-2 flex justify-between">
-                <button className="deposit-clam-btn" onClick={onDepositClam}>
-                  Deposit Clam
-                </button>
+        <div className="w-full lg:w-4/5 mx-auto relative z-10">
+          <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-center">
+            <div className="w-4/5 flex flex-col relative pt-24">
+              {/* navbar */}
+              <div className="bg-white rounded-xl shadow-xl w-full rounded-xl mx-auto flex flex-row justify-between items-center">
+                <h2 className="px-3 text-3xl font-extrabold font-aristotelica-bold text-blue-500">
+                  My Deposits
+                </h2>
+                <div className="p-3">
+                  <button className="btn btn-info" onClick={onDepositClam}>
+                    Deposit Clam
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* clams and pears grid */}
-          <div className="w-4/5 my-4 overflow-auto" style={{ height: "50rem" }}>
-            <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
-              {clams &&
-                clams.map((clam, i) => {
-                  const isStaking = +clam.pearlProductionStart > 0;
-                  return (
-                    isStaking && (
-                      <FarmItem
-                        key={i}
-                        {...clam}
-                        onViewPearlDetails={onViewPearlDetails}
-                        onWithdrawPearl={onWithdrawPearl}
-                        onViewPearl={onViewPearl}
-                      />
-                    )
-                  );
-                })}
+            {/* clams and pears grid */}
+            <div className="w-4/5 my-4 overflow-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
+                {console.log({ clams, clamsStaked })}
+                {clamsStaked &&
+                  clamsStaked.map((clam, i) => (
+                    <FarmItem
+                      key={i}
+                      {...clam}
+                      onViewPearlDetails={onViewPearlDetails}
+                      onWithdrawPearl={onWithdrawPearl}
+                      onViewPearl={onViewPearl}
+                    />
+                  ))}
 
-              {/* {PEARLS &&
+                {/* {PEARLS &&
                   PEARLS.map((pearl, i) => (
                     <PearlItem key={i} pearl={pearl} />
                   ))} */}
+              </div>
+
+              {!clamsStaked.length && (
+                <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
+                  You&#39;ve got no clams or pearls deposited on farms &#128542;
+                </div>
+              )}
             </div>
           </div>
         </div>
       )}
+
+      <Character name="al" />
     </div>
   );
 };
