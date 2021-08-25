@@ -46,3 +46,14 @@ export const stakeClamAgain = async (clamId) => {
 
   await method.send({ from: account, gas: gasEstimation });
 };
+
+export const unstakeClam = async (clamId) => {
+  const account = getAccount();
+
+  await approveContractForMaxUintErc721(account, clamNFTAddress, pearlFarmAddress, clamId);
+
+  const method = pearlFarm().methods.unstakeClam(clamId);
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation });
+};
