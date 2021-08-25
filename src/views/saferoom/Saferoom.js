@@ -12,7 +12,10 @@ import NFTItem from "./NFTItem";
 import ClamView from "./ClamView";
 import PearlView from "./PearlView";
 
-import videoImage from "../../assets/locations/saferoom_static.jpg";
+import videoImage from "../../assets/locations/Saferoom.jpg";
+import videoMp4 from "../../assets/locations/Saferoom.mp4";
+import videoWebM from "../../assets/locations/Saferoom.webm";
+import VideoBackground from "../../components/VideoBackground";
 
 import { actions } from "../../store/redux";
 
@@ -133,32 +136,7 @@ const Saferoom = ({
       )}
       <Web3Navbar />
       {/* container */}
-      <div className="saferoom-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
-        <video
-          autoPlay
-          muted
-          loop
-          className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
-        >
-          <source
-            src={
-              process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"
-            }
-            type="video/mp4"
-          />
-          <source
-            src={
-              process.env.PUBLIC_URL +
-              "/location_vids/saferoom_animated_webm.webm"
-            }
-            type='video/webm; codecs="vp8, vorbis"'
-          />
-          <img
-            src={videoImage}
-            title="Your browser does not support the video"
-          ></img>
-        </video>
-      </div>
+      <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
       {/* chat character   */}
       {!address && <Character name="tanja" />}
@@ -212,7 +190,6 @@ const Saferoom = ({
             {/* clams and pears grid */}
             <div
               className="w-full my-4 overflow-auto"
-              style={{ height: "50rem" }}
             >
               {tab === "Clam" && clams && clams.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
