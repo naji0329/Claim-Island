@@ -1,11 +1,12 @@
+import { connect } from "redux-zero/react";
+
 import { Link } from "react-router-dom";
 import FarmPearl from "../../assets/img/farm_pearl.png";
-
+import { actions } from "../../store/redux";
 import { stakeClam } from "../../web3/pearlFarm";
 
-const ClamItem = (clam) => {
-  const { birthTime, pearlProductionDelay, pearlProductionStart } =
-    clam.clamDataValues;
+const ClamItem = ({ clamDataValues, clamId, dnaDecoded, updateAccount }) => {
+  const { birthTime, pearlProductionDelay, pearlProductionStart } = clamDataValues;
 
   const etaSeconds =
     +pearlProductionDelay +
@@ -13,7 +14,11 @@ const ClamItem = (clam) => {
     new Date().getTime() / 1000;
 
   const handleDeposit = async (clamId) => {
-    await stakeClam(clamId);
+    try {
+      await stakeClam(clamId);
+    } catch (err) {
+      updateAccount({ error: err.message });
+    }
   };
 
   return (
@@ -28,19 +33,15 @@ const ClamItem = (clam) => {
             {new Date(etaSeconds * 1000).toISOString().substr(11, 8)}
           </div>
           <div className="grid-title">Lifespan</div>
-          <div className="grid-value">{clam.dnaDecoded.lifespan} pearls</div>
+          <div className="grid-value">{dnaDecoded.lifespan} pearls</div>
         </div>
         <div className="flex flex-col">
-          <Link
-            to={"/saferoom"}
-            className="font-montserrat underline"
-            style={{ color: "#757575" }}
-          >
+          <Link to={"/saferoom"} className="font-montserrat underline" style={{ color: "#757575" }}>
             View in saferoom
           </Link>
           <a
             className="btn btn-info mt-4 font-montserrat font-bold"
-            onClick={() => handleDeposit(clam.clamId)}
+            onClick={() => handleDeposit(clamId)}
           >
             Deposit
           </a>
@@ -50,15 +51,16 @@ const ClamItem = (clam) => {
   );
 };
 
-const ClamDeposit = ({ clams }) => {
+const ClamDeposit = ({ clams, updateAccount }) => {
   return (
     <div className="ClamDeposit max-h-160">
       <h3 className="heading">Choose a Clam</h3>
       {clams.map((clam, i) => (
-        <ClamItem key={i} {...clam} />
+        <ClamItem key={i} updateAccount={updateAccount} {...clam} />
       ))}
     </div>
   );
 };
 
-export default ClamDeposit;
+const mapToProps = (state) => state;
+export default connect(mapToProps, actions)(ClamDeposit);

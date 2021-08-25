@@ -5,7 +5,7 @@ import classnames from "classnames";
 import { deposit, harvest, withdraw, pendingGem } from "../../web3/bank";
 import pancake from "../../web3/pancake";
 
-import { approveBankForMaxUint, hasMaxUintAllowance, balanceOf } from "../../web3/bep20";
+import { approveBankForMaxUint, hasMaxUintAllowanceBank, balanceOf } from "../../web3/bep20";
 import { bankAddress, wBNB } from "../../web3/constants";
 import { formatFromWei, formatToWei } from "../../web3/shared";
 import { useAsync, createStateContext } from "react-use";
@@ -13,7 +13,6 @@ import { useAsync, createStateContext } from "react-use";
 import { useEthers } from "@usedapp/core";
 import { useForm } from "react-hook-form";
 import BigNumber from "bignumber.js";
-import { LoopOnce } from "three";
 
 // shared state across all pool copoments - to avoid passing too much props down to children
 const [useSharedState, SharedStateProvider] = createStateContext();
@@ -468,7 +467,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
     const earnedGem = await pendingGem(pool.poolId);
     setGemEarned(earnedGem);
 
-    const isEnabled = await hasMaxUintAllowance(pool.account, pool.lpToken);
+    const isEnabled = await hasMaxUintAllowanceBank(pool.account, pool.lpToken);
     setIsEnabled(isEnabled);
   });
 
