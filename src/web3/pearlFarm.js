@@ -75,3 +75,12 @@ export const reclaimGems = async (clamId) => {
 
   await method.send({ from: account, gas: gasEstimation });
 };
+
+export const propClamOpenForPearl = async (clamId) => {
+  const account = getAccount();
+
+  const method = pearlFarm().methods.propClamOpenForPearl(clamId);
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation });
+};
