@@ -6,7 +6,7 @@ import { Mist } from "./Mist";
 
 export const Pearl3DView = (props) => {
   const { pearlDna, decodedDna, showTraitsTable } = props;
-  const { shape, surface, HSV, overtone, lustre, size } = decodedDna;
+  const { shape, surface, HSV, overtone, lustre, size, glow } = decodedDna;
 
   return (
     <div className="w-full max-w-canvas h-canvas cursor-grab active:cursor-grabbing">
@@ -18,9 +18,10 @@ export const Pearl3DView = (props) => {
           overtone={overtone}
           lustre={lustre}
           size={size}
+          glow={glow}
         />
         <ReflectionPlate />
-        <PearlGround />
+        {/*<PearlGround />*/}
         <Mist />
       </PearlScene>
     </div>

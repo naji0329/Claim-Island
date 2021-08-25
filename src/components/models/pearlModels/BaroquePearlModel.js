@@ -14,6 +14,7 @@ export default function Model(props) {
     emissiveIntensity,
     roughness,
     onBeforeCompile,
+    glowMaterial,
   } = props;
 
   return (
@@ -32,6 +33,17 @@ export default function Model(props) {
           onBeforeCompile={onBeforeCompile}
         />
       </mesh>
+      {glowMaterial && (
+        <mesh
+          geometry={nodes.Pearl_Baroque.geometry}
+          material={glowMaterial}
+          scale={1.025}
+          position={[0, -0.001, 0]}
+          /*scale={1.2}
+          position={[0, -0.008, 0]}*/
+          layers={1}
+        />
+      )}
     </group>
   );
 }
