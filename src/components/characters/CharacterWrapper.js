@@ -8,13 +8,7 @@ import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 import "./index.scss";
 
 // button => obj {text, alt}
-const CharacterWrapper = ({
-  name,
-  action,
-  button,
-  buttonAlt,
-  onClickButton,
-}) => {
+const CharacterWrapper = ({ name, action, button, buttonAlt, onClickButton }) => {
   const character = get(CHARACTERS, name);
   const speech = get(SPEECHES, action, action);
 
@@ -88,7 +82,7 @@ const CharacterWrapper = ({
       <div
         className={
           showBubble
-            ? "character-bubble fixed z-999 bottom-8 h-screen pointer-events-none w-screen"
+            ? "character-bubble fixed z-999 bottom-8 h-1/3 pointer-events-none w-screen"
             : "character-bubble hide-bubble"
         }
         style={{ zIndex: speech ? undefined : 0, position: "fixed" }}
@@ -112,9 +106,7 @@ const CharacterWrapper = ({
                     className="btn character-btn"
                     id="btn-next"
                     onClick={() =>
-                      button.alt
-                        ? handleClickButtonAlt(button)
-                        : handleClickButton(button)
+                      button.alt ? handleClickButtonAlt(button) : handleClickButton(button)
                     }
                   >
                     {button.text}
@@ -124,9 +116,7 @@ const CharacterWrapper = ({
                   <button
                     className="btn character-btn"
                     onClick={() =>
-                      buttonAlt.alt
-                        ? handleClickButtonAlt(buttonAlt)
-                        : handleClickButton(buttonAlt)
+                      buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)
                     }
                   >
                     {buttonAlt.text}
@@ -143,10 +133,7 @@ const CharacterWrapper = ({
             onClick={handleClickCharacter}
           />
         </div>
-        <button
-          className="btn character-container-round"
-          onClick={handleClickCharacter}
-        >
+        <button className="btn character-container-round" onClick={handleClickCharacter}>
           <img src={character.charImg} className="character" />
         </button>
       </div>
