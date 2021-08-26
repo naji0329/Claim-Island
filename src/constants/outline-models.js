@@ -56,11 +56,10 @@ export const lighthouseOutlineModels = new Set([
 ]);
 
 export const farmOutlineModels = new Set([
-  "mesh_0",
-  "mesh_0_4",
-  "mesh_0_5",
-  "mesh_0_6",
-  "mesh_0_8",
+  "mesh_0_9",
+  "mesh_0_10",
+  "mesh_0_11",
+  "mesh_0_12",
 ]);
 
 export const vaultOutlineModels = new Set(["mesh_0_1", "mesh_0_2", "mesh_0_3"]);
