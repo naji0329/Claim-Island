@@ -29,10 +29,11 @@ export const getStakedClamIds = (account) => {
 
 export const stakeClam = async (clamId) => {
   const account = getAccount();
+
   const gemBalance = await getBalance(account).then((v) => new BigNumber(v)); // from string to BN
   const pearlPrice = await stakePrice().then((v) => new BigNumber(v)); // from string to BN
 
-  if (gemBalance.isLessThanOrEqualTo(pearlPrice))
+  if (gemBalance.lt(pearlPrice))
     throw new Error(
       `You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`
     );
@@ -49,4 +50,70 @@ export const stakeClam = async (clamId) => {
   const gasEstimation = await method.estimateGas({ from: account });
 
   await method.send({ from: account, gas: gasEstimation });
+};
+
+export const stakeClamAgain = async (clamId) => {
+  const account = getAccount();
+
+  await approveContractForMaxUintErc721(account, clamNFTAddress, pearlFarmAddress, clamId);
+
+  const method = pearlFarm().methods.stakeClamAgain(clamId);
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation });
+};
+
+export const unstakeClam = async (clamId) => {
+  const account = getAccount();
+
+  const method = pearlFarm().methods.unstakeClam(clamId);
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation });
+};
+
+export const prepareReclaiming = async (clamId) => {
+  const account = getAccount();
+
+  const method = pearlFarm().methods.prepareReclaiming(clamId);
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation });
+};
+
+export const reclaimGems = async (clamId) => {
+  const account = getAccount();
+
+  const method = pearlFarm().methods.reclaimGems(clamId);
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation });
+};
+
+export const propClamOpenForPearl = async (clamId) => {
+  const account = getAccount();
+
+  const method = pearlFarm().methods.propClamOpenForPearl(clamId);
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation });
+};
+
+export const collectPearl = async (clamId) => {
+  const account = getAccount();
+
+  const method = pearlFarm().methods.collectPearl(clamId);
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation });
+};
+
+export const getRemainingPearlProductionTime = async (clamId) => {
+  const time = await pearlFarm().methods.getRemainingPearlProductionTime(clamId).call();
+  return time;
+};
+
+export const isPearlProductionTimeYet = async (clamId) => {
+  const productionTimeReached = await pearlFarm().methods.isPearlProductionTimeYet(clamId).call();
+  return productionTimeReached;
 };
