@@ -106,17 +106,12 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     });
   };
 
-  const getClamsDataByIds = async (tokenIdsCalls) => {
-    const tokenIdsResult = await aggregate(tokenIdsCalls);
-    const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
-      tokenIdsResult.returnData
-    );
-
-    const clamDataCalls = clamContract.prepClamDataMulticall(tokenIdsDecoded);
+  const getClamsDataByIds = async (tokenIds) => {
+    const clamDataCalls = clamContract.prepClamDataMulticall(tokenIds);
     const clamDataResult = await aggregate(clamDataCalls);
     const clamDataDecoded = clamContract.decodeClamDataFromMulticall(
       clamDataResult.returnData,
-      tokenIdsDecoded
+      tokenIds
     );
     const clamDnas = clamDataDecoded.map((data) => data.clamDataValues.dna);
 
@@ -124,7 +119,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     const dnaDecodedResult = await aggregate(dnaDecodedCalls);
     const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(
       dnaDecodedResult.returnData,
-      tokenIdsDecoded
+      tokenIds
     );
 
     const clams = clamDataDecoded.map((clam) => {
@@ -151,20 +146,19 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
           // get staked clams
           const clamsStakedIds = await getStakedClamIds(address);
 
-          const skatedTokenIdsCalls = clamContract.prepTokenOfOwnerByIdsArrayMulticall(
-            address,
-            clamsStakedIds
-          );
-
           // get owned clams
           const tokenIdsCalls = clamContract.prepTokenOfOwnerByIndexMulticall(
             address,
             +clamBalance
           );
+          const tokenIdsResult = await aggregate(tokenIdsCalls);
+          const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
+            tokenIdsResult.returnData
+          );
 
           const [ownedClams, stakedClams] = await Promise.all([
-            getClamsDataByIds(tokenIdsCalls),
-            getClamsDataByIds(skatedTokenIdsCalls),
+            getClamsDataByIds(tokenIdsDecoded),
+            getClamsDataByIds(clamsStakedIds),
           ]);
 
           setClams(ownedClams);
