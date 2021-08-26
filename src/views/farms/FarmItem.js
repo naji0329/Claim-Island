@@ -6,8 +6,8 @@ const FarmItem = ({
   clamId,
   dnaDecoded,
   clamDataValues,
-  onViewPearlDetails,
-  onWithdrawPearl,
+  onViewDetails,
+  onWithdrawClam,
   onViewPearl,
 }) => {
   const [viewPearlText, setViewPearltext] = useState("View Pearl");
@@ -19,8 +19,7 @@ const FarmItem = ({
     pearlProductionCapacity,
     pearlsProduced,
   } = clamDataValues;
-  const clamStartTime =
-    +pearlProductionStart > 0 ? +pearlProductionStart : +birthTime;
+  const clamStartTime = +pearlProductionStart > 0 ? +pearlProductionStart : +birthTime;
   const currentTimeInSeconds = new Date().getTime() / 1000;
   const clamNextPearlTime = clamStartTime + +pearlProductionDelay;
   const etaSeconds = clamNextPearlTime - currentTimeInSeconds;
@@ -28,8 +27,7 @@ const FarmItem = ({
   const clam = {
     remainingTime: new Date(+etaSeconds * 1000).toISOString().substr(11, 8),
     progress: +(
-      ((currentTimeInSeconds - clamStartTime) /
-        (clamNextPearlTime - clamStartTime)) *
+      ((currentTimeInSeconds - clamStartTime) / (clamNextPearlTime - clamStartTime)) *
       100
     ).toFixed(2),
     processing: true, // to see the 2 views... processed and processing TODO: implement logic for this
@@ -56,10 +54,7 @@ const FarmItem = ({
           {/* Progress Bar */}
           <div className="progress-bar">
             <div className="base-bar">
-              <div
-                style={{ width: clam.progress }}
-                className="completion-bar"
-              ></div>
+              <div style={{ width: clam.progress }} className="completion-bar"></div>
               <span>Processing</span>
             </div>
           </div>
@@ -74,30 +69,20 @@ const FarmItem = ({
                 <p className="font-bold text-black">{clam.remainingTime}</p>
               </div>
               <div className="text-sm block">
-                <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-                  Progress
-                </p>
+                <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Progress</p>
                 <p className="font-bold text-black">{clam.progress}</p>
               </div>
             </div>
           </div>
 
           <div className="px-4 py-2">
-            <button
-              className="withdraw-btn"
-              onClick={() => {
-                onWithdrawPearl(clam);
-              }}
-            >
+            <button className="withdraw-btn" onClick={onWithdrawClam}>
               Withdraw
             </button>
           </div>
 
           <div className="px-4 py-2 text-center">
-            <button
-              className="view-details"
-              onClick={() => onViewPearlDetails(clam)}
-            >
+            <button className="view-details" onClick={onViewDetails}>
               View Details
             </button>
           </div>

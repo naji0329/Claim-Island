@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Clam3DView } from "../../components/clam3DView";
 import FarmPearl from "../../assets/img/farm_pearl.png";
 
-const PearlDetails = ({ pearl, onWithdrawPearl }) => {
+const PearlDetails = ({ clam }) => {
   const pearls = [
     {
       gemHr: "13",
@@ -14,29 +14,18 @@ const PearlDetails = ({ pearl, onWithdrawPearl }) => {
   return (
     <div className="PearlDetails flex flex-row">
       <div className="flex flex-1 flex-col">
-        <p className="font-extrabold text-green-600 text-center font-avenir">
-          {pearl.heading}
-        </p>
+        <p className="font-extrabold text-green-600 text-center font-avenir">{clam.heading}</p>
         <Clam3DView
           width={400}
           height={400}
-          clamDna={pearl.dna}
-          decodedDna={pearl.dnaDecoded}
+          clamDna={clam.dna}
+          decodedDna={clam.dnaDecoded}
           showTraitsTable={false}
         />
+
         <div className="flex flex-row justify-between my-2">
           <p className="float-left">Remaining Time</p>
-          <p className="float-right">{pearl.remainingTime}</p>
-        </div>
-        <div>
-          <button
-            className="withdraw-btn"
-            onClick={() => {
-              onWithdrawPearl(pearl);
-            }}
-          >
-            Withdraw
-          </button>
+          <p className="float-right">{clam.remainingTime}</p>
         </div>
       </div>
       <div className="flex flex-1 flex-col">
@@ -44,9 +33,9 @@ const PearlDetails = ({ pearl, onWithdrawPearl }) => {
           <h1 className="heading">General Stats</h1>
           <div className="grid md:grid-cols-2 md:grid-rows-2 gap-1 mt-2">
             <div>Harvestable $SHELL</div>
-            <div className="text-right">{pearl.harvestableShell}</div>
+            <div className="text-right">{clam.harvestableShell}</div>
             <div>Lifespan Remaining</div>
-            <div className="text-right">{pearl.remainingLifeSpan}</div>
+            <div className="text-right">{clam.remainingLifeSpan}</div>
           </div>
         </div>
 
