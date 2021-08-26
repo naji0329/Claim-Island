@@ -5,13 +5,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchPlus, faSearchMinus } from "@fortawesome/free-solid-svg-icons";
 
-
 // THREE.JS LIBRARIES
 import * as THREE from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
 import { OrbitControls } from "../../loaders/OrbitControls";
 import loadGLTF from "./loaders/gltf_loader";
@@ -21,15 +20,6 @@ import "./3d_map.scss";
 import createWater from "./create_water";
 import createSky from "./create_sky";
 import clamIcon from "../../assets/clam-icon.png";
-import {
-  lighthouseOutlineModels,
-  farmOutlineModels,
-  vaultOutlineModels,
-  marketOutlineModels,
-  bankOutlineModels,
-  OUTLINE_MODEL_NAMES,
-} from "../../constants/outline-models";
-import { isNeedOutlineModel, getOutlineMeshes } from "../../utils/outline";
 
 const clock = new THREE.Clock();
 
@@ -38,19 +28,38 @@ THREE.Cache.enabled = true;
 const Map3D = () => {
   const mapRef = useRef(null);
   const [loading, setLoading] = useState(true);
-  const [hoverName, setHoverName] = useState('');
+  const [hoverName, setHoverName] = useState("");
   var [controls, setControls] = useState({});
   var renderer, scene, camera, totalGroup, water;
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
-  let bank, farm, market, vault, lighthouse, bridge, rocks, lilly, boats, ship, sailboat, seagulls, dolphins;
+  let bank,
+    farm,
+    market,
+    vault,
+    lighthouse,
+    bridge,
+    rocks,
+    lilly,
+    boats,
+    ship,
+    sailboat,
+    seagulls,
+    dolphins;
   let hotModelBank, hotModelFarm, hotModelMarket;
-  let composer, outlinePass, effectFXAA, outlineMeshes = [], hoverStr = '';
+  let composer,
+    outlinePass,
+    effectFXAA,
+    outlineMeshes = [],
+    hoverStr = "";
   let bankSign, farmSign, marketSign, safeSign, infoSign, shopSign;
-  let lighthouseOutlineMeshes, farmOutlineMeshes, vaultOutlineMeshes, marketOutlineMeshes, bankOutlineMeshes;
+  let lighthouseOutlineMeshes,
+    farmOutlineMeshes,
+    vaultOutlineMeshes,
+    marketOutlineMeshes,
+    bankOutlineMeshes;
   useEffect(() => {
     create3DScene(mapRef.current, setLoading);
-
   }, [mapRef]);
 
   const zoomIn = () => {
@@ -72,12 +81,11 @@ const Map3D = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     document.getElementById("container").appendChild(renderer.domElement);
-		renderer.setClearColor(0xe1e1e1, 1);
+    renderer.setClearColor(0xe1e1e1, 1);
     //renderer.physicallyCorrectLights = true;
 
     camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 20000);
     camera.position.set(650, 350, 500);
-    console.log(camera);
 
     controls = new OrbitControls(camera, renderer.domElement);
     // controls.minZoom = 1;
@@ -115,28 +123,32 @@ const Map3D = () => {
     setOutlineMeshes();
 
     setLoading(false);
-    composer = new EffectComposer( renderer );
+    composer = new EffectComposer(renderer);
 
-    const renderPass = new RenderPass( scene, camera );
-    composer.addPass( renderPass );
+    const renderPass = new RenderPass(scene, camera);
+    composer.addPass(renderPass);
 
-    outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
+    outlinePass = new OutlinePass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      scene,
+      camera
+    );
     outlinePass.edgeStrength = 10;
     outlinePass.edgeThickness = 2;
     outlinePass.pulsePeriod = 2;
     outlinePass.edgeGlow = 0.2;
-    outlinePass.visibleEdgeColor.set( 0x38dcdc );
-    outlinePass.hiddenEdgeColor.set( 0x38dcdc );
-    composer.addPass( outlinePass );
+    outlinePass.visibleEdgeColor.set(0x38dcdc);
+    outlinePass.hiddenEdgeColor.set(0x38dcdc);
+    composer.addPass(outlinePass);
 
-    effectFXAA = new ShaderPass( FXAAShader );
-    effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
-    composer.addPass( effectFXAA );
+    effectFXAA = new ShaderPass(FXAAShader);
+    effectFXAA.uniforms["resolution"].value.set(1 / window.innerWidth, 1 / window.innerHeight);
+    composer.addPass(effectFXAA);
 
-    renderer.domElement.addEventListener( 'mousemove', onMouseMove );
-    renderer.domElement.addEventListener( 'pointerdown', onMouseDown );
-    renderer.domElement.addEventListener( 'mouseup', onMouseUp );
-    renderer.domElement.addEventListener( 'click', onMouseClick );
+    renderer.domElement.addEventListener("mousemove", onMouseMove);
+    renderer.domElement.addEventListener("pointerdown", onMouseDown);
+    renderer.domElement.addEventListener("mouseup", onMouseUp);
+    renderer.domElement.addEventListener("click", onMouseClick);
 
     animate();
   };
@@ -158,24 +170,25 @@ const Map3D = () => {
 
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0xe0fffc, 0.4);
     scene.add(hemiLight);
-    console.log(scene);
   };
 
+  const getOutlineMesh = (mesh, name) => mesh.children.filter((el) => el.name === name);
+
   const setOutlineMeshes = () => {
-    lighthouseOutlineMeshes = getOutlineMeshes(lighthouse, lighthouseOutlineModels);
-    farmOutlineMeshes = getOutlineMeshes(farm, farmOutlineModels);
-    vaultOutlineMeshes = getOutlineMeshes(vault, vaultOutlineModels);
-    marketOutlineMeshes = getOutlineMeshes(market, marketOutlineModels);
-    bankOutlineMeshes = getOutlineMeshes(bank, bankOutlineModels);
+    lighthouseOutlineMeshes = getOutlineMesh(lighthouse, "lighthouse");
+    farmOutlineMeshes = getOutlineMesh(farm, "farm");
+    vaultOutlineMeshes = getOutlineMesh(vault, "vault");
+    marketOutlineMeshes = getOutlineMesh(market, "market");
+    bankOutlineMeshes = getOutlineMesh(bank, "bank");
 
     outlineMeshes = [
       ...lighthouseOutlineMeshes,
       ...farmOutlineMeshes,
-      ...vaultOutlineMeshes,
       ...marketOutlineMeshes,
-      ...bankOutlineMeshes
+      ...bankOutlineMeshes,
+      ...vaultOutlineMeshes,
     ];
-  }
+  };
 
   const animate = () => {
     requestAnimationFrame(animate);
@@ -234,10 +247,7 @@ const Map3D = () => {
           var zpos = Math.random() * 100 + 350;
           var xpos = Math.random() * 100 - 250;
         }
-        if (
-          THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 > 120 &&
-          !dolphin.pivot.under
-        ) {
+        if (THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 > 120 && !dolphin.pivot.under) {
           dolphin.pivot.position.z = zpos;
           dolphin.pivot.position.x = xpos;
           dolphin.pivot.rotation.x += THREE.Math.degToRad(Math.random() * 90);
@@ -252,77 +262,89 @@ const Map3D = () => {
     }
   };
 
-  const onMouseMove = ( event ) => {
-    if ( event.isPrimary === false ) return;
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  const onMouseMove = (event) => {
+    if (event.isPrimary === false) return;
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     checkIntersection(event);
-  }
+  };
 
-  const onMouseDown = ( ) => {
-    if (hoverStr !== '') controls.enabled = false;
-  }
+  const onMouseDown = () => {
+    if (hoverStr !== "") controls.enabled = false;
+  };
 
   const onMouseUp = () => {
     controls.enabled = true;
-  }
+  };
 
   const onMouseClick = () => {
-    if (hoverStr === '') return;
-    window.open('', '_self');
-  }
+    if (hoverStr === "") return;
+    window.open("", "_self");
+  };
   /** TODO refactor when get rid of hot models */
   const checkIntersection = (event) => {
-    raycaster.setFromCamera( mouse, camera );
-    const intersect = raycaster.intersectObjects( outlineMeshes, true )[0];
-    if ( intersect ) {
-      const interObject = intersect.object;
+    raycaster.setFromCamera(mouse, camera);
+    const intersect = raycaster.intersectObjects(outlineMeshes, true)[0];
+    if (intersect) {
+      const interParent = intersect.object.parent.name;
       const currentHover = hoverStr;
-
-      if (isNeedOutlineModel(lighthouseOutlineMeshes, interObject)) {
-        if (hoverStr !== OUTLINE_MODEL_NAMES.lighthouse) {
-          hoverStr = OUTLINE_MODEL_NAMES.lighthouse;
-          outlinePass.selectedObjects = [...lighthouseOutlineMeshes];
+      switch (interParent) {
+        case "lighthouse": {
+          if (hoverStr !== "lighthouse") {
+            hoverStr = "lighthouse";
+            outlinePass.selectedObjects = lighthouseOutlineMeshes;
+          }
+          break;
         }
-      } else if (isNeedOutlineModel(farmOutlineMeshes, interObject)) {
-        if (hoverStr !== OUTLINE_MODEL_NAMES.farm) {
-          hoverStr = OUTLINE_MODEL_NAMES.farm;
-          outlinePass.selectedObjects = [...farmOutlineMeshes];
+        case "farm": {
+          if (hoverStr !== "farm") {
+            hoverStr = "farm";
+            outlinePass.selectedObjects = farmOutlineMeshes;
+          }
+          break;
         }
-      } else if (isNeedOutlineModel(vaultOutlineMeshes, interObject)) {
-        if (hoverStr !== OUTLINE_MODEL_NAMES.vault) {
-          hoverStr = OUTLINE_MODEL_NAMES.vault;
-          outlinePass.selectedObjects = [...vaultOutlineMeshes];
+        case "market": {
+          if (hoverStr !== "market") {
+            hoverStr = "market";
+            outlinePass.selectedObjects = marketOutlineMeshes;
+          }
+          break;
         }
-      } else if (isNeedOutlineModel(marketOutlineMeshes, interObject)) {
-        if (hoverStr !== OUTLINE_MODEL_NAMES.market) {
-          hoverStr = OUTLINE_MODEL_NAMES.market;
-          outlinePass.selectedObjects = [...marketOutlineMeshes];
+        case "bank": {
+          if (hoverStr !== "bank") {
+            hoverStr = "bank";
+            outlinePass.selectedObjects = bankOutlineMeshes;
+          }
+          break;
         }
-      } else if (isNeedOutlineModel(bankOutlineMeshes, interObject)) {
-        if (hoverStr !== OUTLINE_MODEL_NAMES.bank) {
-          hoverStr = OUTLINE_MODEL_NAMES.bank;
-          outlinePass.selectedObjects = [...bankOutlineMeshes];
+        case "vault": {
+          if (hoverStr !== "vault") {
+            hoverStr = "vault";
+            outlinePass.selectedObjects = vaultOutlineMeshes;
+          }
+          break;
         }
+        default:
+          console.error("intersect obj is not found");
       }
 
       if (currentHover !== hoverStr) {
         setHoverName(hoverStr);
-        const hoverLabel = document.getElementById('hoverLabel');
-        hoverLabel.style.left = (event.clientX + 50)+'px';
-        hoverLabel.style.top = (event.clientY - 100)+'px';
-        hoverLabel.style.display='block';
+        const hoverLabel = document.getElementById("hoverLabel");
+        hoverLabel.style.left = event.clientX + 50 + "px";
+        hoverLabel.style.top = event.clientY - 100 + "px";
+        hoverLabel.style.display = "block";
       }
     } else {
-      if (hoverStr !== '') {
-        hoverStr = '';
+      if (hoverStr !== "") {
+        hoverStr = "";
         outlinePass.selectedObjects = [];
-        const hoverLabel = document.getElementById('hoverLabel');
-        hoverLabel.style.display='none';
-        setHoverName('');
+        const hoverLabel = document.getElementById("hoverLabel");
+        hoverLabel.style.display = "none";
+        setHoverName("");
       }
     }
-  }
+  };
 
   return (
     <div>
@@ -338,8 +360,12 @@ const Map3D = () => {
       <button className="zoom-btn zoom-out text-blue-500" onClick={zoomOut}>
         <FontAwesomeIcon icon={faSearchMinus} />
       </button>
-      <div className={`three-container ${hoverName!==''?'hover':''}`} id='container' ref={mapRef} />
-      <div id='hoverLabel'>Opening Soon</div>
+      <div
+        className={`three-container ${hoverName !== "" ? "hover" : ""}`}
+        id="container"
+        ref={mapRef}
+      />
+      <div id="hoverLabel">Opening Soon</div>
     </div>
   );
 };
