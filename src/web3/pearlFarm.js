@@ -33,7 +33,7 @@ export const stakeClam = async (clamId) => {
   const gemBalance = await getBalance(account).then((v) => new BigNumber(v)); // from string to BN
   const pearlPrice = await stakePrice().then((v) => new BigNumber(v)); // from string to BN
 
-  if (gemBalance.isLessThanOrEqualTo(pearlPrice))
+  if (gemBalance.lt(pearlPrice))
     throw new Error(
       `You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`
     );
