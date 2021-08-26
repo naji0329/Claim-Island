@@ -22,7 +22,7 @@ import {
   decodeGetDnaDecodedFromMulticall,
 } from "../../web3/dnaDecoder";
 
-import { getStakedClamIds } from "../../web3/pearlFarm";
+import { getStakedClamIds, unstakeClam } from "../../web3/pearlFarm";
 
 import FarmItem from "./FarmItem";
 import PearlDetails from "./PearlDetails";
@@ -34,7 +34,7 @@ const MODAL_OPTS = {
   PEARL_DETAILS: "pearlDetails",
 };
 
-const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
+const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
   let history = useHistory();
   const [clams, setClams] = useState([]);
   const [clamsStaked, setClamsStaked] = useState([]);
@@ -43,6 +43,15 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
 
   const [modalSelected, setModal] = useState("");
   const [selectedPearl, setSelectedPearl] = useState({});
+
+  const handleWithdraw = async (clam, index) => {
+    console.log({ clam });
+    try {
+      await unstakeClam(index);
+    } catch (err) {
+      updateAccount({ error: err.message });
+    }
+  };
 
   // When Deposit Clam Butto is clicked - open the modal to show list of clams
   const onDepositClam = () => {
@@ -65,8 +74,9 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
     }, 2000);
   };
 
-  // when "View Pearl" is clicked - open the modal for the selected pearl
-  const onWithdrawPearl = (pearl) => {
+  // when "Withdraw" is clicked - open the modal
+  const onWithdrawClam = (clam, index) => {
+    console.log({ clam });
     updateCharacter({
       name: "al",
       action: "farms.withdraw.text",
@@ -77,10 +87,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
         alt: {
           action: "cb",
           dismiss: true,
-          destination: () => {
-            // toggleModal();
-            // setShowClams(true);
-          },
+          destination: () => handleWithdraw(clam, index),
         },
       },
       buttonAlt: {
@@ -89,8 +96,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
           action: "cb",
           dismiss: true,
           destination: () => {
-            // toggleModal();
-            // setShowClams(true);
+            updateCharacter({
+              name: "al",
+              action: undefined,
+            });
           },
         },
       },
@@ -119,9 +128,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
     );
 
     const clams = clamDataDecoded.map((clam) => {
-      const sameClam = dnaDecodedDecoded.find(
-        ({ clamId }) => clamId === clam.clamId
-      );
+      const sameClam = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
       if (sameClam) {
         const dnaDecoded = sameClam.dnaDecodedValues;
         return { ...clam, dnaDecoded };
@@ -144,11 +151,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
           // get staked clams
           const clamsStakedIds = await getStakedClamIds(address);
 
-          const skatedTokenIdsCalls =
-            clamContract.prepTokenOfOwnerByIdsArrayMulticall(
-              address,
-              clamsStakedIds
-            );
+          const skatedTokenIdsCalls = clamContract.prepTokenOfOwnerByIdsArrayMulticall(
+            address,
+            clamsStakedIds
+          );
 
           // get owned clams
           const tokenIdsCalls = clamContract.prepTokenOfOwnerByIndexMulticall(
@@ -205,11 +211,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
         </div>
       )}
       <Web3Navbar title="Clam Farms" />
-      <VideoBackground
-        videoImage={videoImage}
-        videoMp4={videoMp4}
-        videoWebM={videoWebM}
-      />
+      <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
       <Modal
         isShowing={isShowing}
@@ -217,10 +219,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
         width={modalSelected === MODAL_OPTS.PEARL_DETAILS ? "60rem" : "30rem"}
       >
         {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
-          <PearlDetails
-            pearl={selectedPearl}
-            onWithdrawPearl={onWithdrawPearl}
-          />
+          <PearlDetails pearl={selectedPearl} onWithdrawPearl={onWithdrawClam} />
         ) : (
           <ClamDeposit clams={clams} />
         )}
@@ -252,7 +251,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
                       key={i}
                       {...clam}
                       onViewPearlDetails={onViewPearlDetails}
-                      onWithdrawPearl={onWithdrawPearl}
+                      onWithdrawPearl={() => onWithdrawClam(clam, i)}
                       onViewPearl={onViewPearl}
                     />
                   ))}
