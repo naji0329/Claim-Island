@@ -10,8 +10,7 @@
 
 .FarmItem {
   @apply rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 bg-white;
-  @apply hover:border hover:border-blue-200;
-  @apply flex flex-col justify-between cursor-pointer;
+  @apply flex flex-col justify-between;
 
   .progress-bar {
     @apply relative pt-1 px-2;
@@ -28,8 +27,8 @@
   }
 
   .view-pearl-btn {
-    @apply bg-blue-500 text-white; /* border and text color*/
-    @apply font-black font-avenir text-2xl; /*font weight and size*/
+    @apply bg-blue-500 text-white hover:bg-blue-400; /* border and text color*/
+    @apply font-black font-avenir text-xl; /*font weight and size*/
     @apply px-4 py-4 rounded-lg w-full; /* button padding, width, radius*/
   }
 
