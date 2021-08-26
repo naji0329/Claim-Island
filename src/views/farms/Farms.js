@@ -225,7 +225,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
       {address && (
         <div className="w-full lg:w-4/5 mx-auto relative z-10">
           <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-center">
-            <div className="w-4/5 flex flex-col relative pt-24">
+            <div className="w-full flex flex-col relative pt-24">
               {/* navbar */}
               <div className="bg-white rounded-xl shadow-xl w-full rounded-xl mx-auto flex flex-row justify-between items-center">
                 <h2 className="px-3 text-3xl font-extrabold font-aristotelica-bold text-blue-500">
@@ -240,9 +240,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
             </div>
 
             {/* clams and pears grid */}
-            <div className="w-4/5 my-4 overflow-auto">
+            <div className="w-full my-4 overflow-auto">
               <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
-                {console.log({ clams, clamsStaked })}
                 {clamsStaked &&
                   clamsStaked.map((clam, i) => (
                     <FarmItem

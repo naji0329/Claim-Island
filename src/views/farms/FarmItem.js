@@ -32,7 +32,7 @@ const FarmItem = ({
         (clamNextPearlTime - clamStartTime)) *
       100
     ).toFixed(2),
-    processing: false, // to see the 2 views... processed and processing TODO: implement logic for this
+    processing: true, // to see the 2 views... processed and processing TODO: implement logic for this
     dnaDecoded,
     heading: dnaDecoded.rarity,
     harvestableShell: pearlProductionCapacity,
@@ -82,7 +82,7 @@ const FarmItem = ({
             </div>
           </div>
 
-          <div className="px-4 md:px-6 py-2">
+          <div className="px-4 py-2">
             <button
               className="withdraw-btn"
               onClick={() => {
@@ -93,15 +93,13 @@ const FarmItem = ({
             </button>
           </div>
 
-          <div className="px-4 md:px-6 py-2 justify-center flex">
-            <a
+          <div className="px-4 py-2 text-center">
+            <button
               className="view-details"
-              onClick={() => {
-                onViewPearlDetails(clam);
-              }}
+              onClick={() => onViewPearlDetails(clam)}
             >
               View Details
-            </a>
+            </button>
           </div>
         </>
       ) : (

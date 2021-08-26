@@ -33,15 +33,15 @@
   }
 
   .view-details {
-    @apply text-xl text-center;
+    @apply text-lg underline hover:no-underline;
     color: #757575;
   }
 }
 
 .withdraw-btn {
-  @apply border-4 border-withdraw text-withdraw; /* border and text color*/
-  @apply font-black font-avenir text-2xl; /*font weight and size*/
-  @apply px-4 py-4 rounded-lg w-full; /* button padding, width, radius*/
+  @apply border-4 border-withdraw text-withdraw hover:bg-withdraw hover:text-white; /* border and text color*/
+  @apply font-black font-avenir text-xl; /*font weight and size*/
+  @apply rounded-lg w-full; /* button padding, width, radius*/
 }
 
 .PearlDetails {
