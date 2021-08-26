@@ -40,7 +40,9 @@ export const getClamData = async (tokenId) => {
 
 export const getClamByIndex = async (account, index) => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
-  const value = await clamNft.methods.tokenOfOwnerByIndex(account, index).call();
+  const value = await clamNft.methods
+    .tokenOfOwnerByIndex(account, index)
+    .call();
   return value;
 };
 
@@ -123,7 +125,10 @@ export const buyClamWithVestedTokens = async (account) => {
 };
 
 export const getPrice = async () => {
-  const clamShop = contractFactory({ abi: clamShopAbi, address: clamShopAddress });
+  const clamShop = contractFactory({
+    abi: clamShopAbi,
+    address: clamShopAddress,
+  });
   const value = await clamShop.methods.getUpdatedPrice().call();
   return value;
 };
@@ -140,7 +145,9 @@ export const checkHasClamToCollect = async (address) => {
     address: clamShopAddress,
   });
 
-  const value = await clamShop.methods.rngRequestHashForFarmedClam(address).call();
+  const value = await clamShop.methods
+    .rngRequestHashForFarmedClam(address)
+    .call();
   return value;
 };
 
@@ -176,6 +183,34 @@ export const ownerOf = async (tokenId) => {
 export const prepTokenOfOwnerByIndexMulticall = (address, length) => {
   const contractCalls = [];
   for (let index = 0; index < Number(length); index++) {
+    contractCalls.push([
+      clamNFTAddress,
+      web3.eth.abi.encodeFunctionCall(
+        {
+          name: "tokenOfOwnerByIndex",
+          type: "function",
+          inputs: [
+            {
+              type: "address",
+              name: "owner",
+            },
+            {
+              type: "uint256",
+              name: "index",
+            },
+          ],
+        },
+        [address, index]
+      ),
+    ]);
+  }
+
+  return contractCalls;
+};
+
+export const prepTokenOfOwnerByIdsArrayMulticall = (address, ids) => {
+  const contractCalls = [];
+  for (let index in ids) {
     contractCalls.push([
       clamNFTAddress,
       web3.eth.abi.encodeFunctionCall(
@@ -304,6 +339,7 @@ export default {
   checkHasClamToCollect,
   collectClam,
   prepTokenOfOwnerByIndexMulticall,
+  prepTokenOfOwnerByIdsArrayMulticall,
   decodeTokenOfOwnerByIndexFromMulticall,
   prepClamDataMulticall,
   decodeClamDataFromMulticall,

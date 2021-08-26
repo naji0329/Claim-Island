@@ -22,6 +22,8 @@ import {
   decodeGetDnaDecodedFromMulticall,
 } from "../../web3/dnaDecoder";
 
+import { getStakedClamIds } from "../../web3/pearlFarm";
+
 import FarmItem from "./FarmItem";
 import PearlDetails from "./PearlDetails";
 import ClamDeposit from "./ClamDeposit";
@@ -95,6 +97,43 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
     });
   };
 
+  const getClamsDataByIds = async (tokenIdsCalls) => {
+    const tokenIdsResult = await aggregate(tokenIdsCalls);
+    const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
+      tokenIdsResult.returnData
+    );
+
+    const clamDataCalls = clamContract.prepClamDataMulticall(tokenIdsDecoded);
+    const clamDataResult = await aggregate(clamDataCalls);
+    const clamDataDecoded = clamContract.decodeClamDataFromMulticall(
+      clamDataResult.returnData,
+      tokenIdsDecoded
+    );
+    const clamDnas = clamDataDecoded.map((data) => data.clamDataValues.dna);
+
+    const dnaDecodedCalls = prepGetDnaDecodedMulticall(clamDnas);
+    const dnaDecodedResult = await aggregate(dnaDecodedCalls);
+    const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(
+      dnaDecodedResult.returnData,
+      tokenIdsDecoded
+    );
+
+    const clams = clamDataDecoded.map((clam) => {
+      const sameClam = dnaDecodedDecoded.find(
+        ({ clamId }) => clamId === clam.clamId
+      );
+      if (sameClam) {
+        const dnaDecoded = sameClam.dnaDecodedValues;
+        return { ...clam, dnaDecoded };
+      }
+      console.error(`Clam ${clam.clamId} from ${address} not found`);
+    });
+
+    const clamsFiltered = clams.filter((c) => c);
+
+    return clamsFiltered;
+  };
+
   useEffect(() => {
     // wallet is connected and has clams
     if (address && clamBalance !== "0") {
@@ -102,45 +141,30 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
         try {
           setLoading(true);
 
+          // get staked clams
+          const clamsStakedIds = await getStakedClamIds(address);
+
+          const skatedTokenIdsCalls =
+            clamContract.prepTokenOfOwnerByIdsArrayMulticall(
+              address,
+              clamsStakedIds
+            );
+
+          // get owned clams
           const tokenIdsCalls = clamContract.prepTokenOfOwnerByIndexMulticall(
             address,
             +clamBalance
           );
-          const tokenIdsResult = await aggregate(tokenIdsCalls);
-          const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
-            tokenIdsResult.returnData
-          );
 
-          const clamDataCalls = clamContract.prepClamDataMulticall(tokenIdsDecoded);
-          const clamDataResult = await aggregate(clamDataCalls);
-          const clamDataDecoded = clamContract.decodeClamDataFromMulticall(
-            clamDataResult.returnData,
-            tokenIdsDecoded
-          );
-          const clamDnas = clamDataDecoded.map((clamData) => clamData.clamDataValues.dna);
+          const [ownedClams, stakedClams] = await Promise.all([
+            getClamsDataByIds(tokenIdsCalls),
+            getClamsDataByIds(skatedTokenIdsCalls),
+          ]);
 
-          const dnaDecodedCalls = prepGetDnaDecodedMulticall(clamDnas);
-          const dnaDecodedResult = await aggregate(dnaDecodedCalls);
-          const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(
-            dnaDecodedResult.returnData,
-            tokenIdsDecoded
-          );
+          setClams(ownedClams);
+          setClamsStaked(stakedClams);
 
-          const clams = clamDataDecoded.map((clam) => {
-            const sameClam = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
-            if (sameClam) {
-              const dnaDecoded = sameClam.dnaDecodedValues;
-              return { ...clam, dnaDecoded };
-            }
-            console.error(`Clam ${clam.clamId} from ${address} not found`);
-          });
-
-          const clamsFiltered = clams.filter((c) => c);
-          const staking = clams.filter((clam) => +clam.pearlProductionStart > 0);
-          setClamsStaked(staking);
-          setClams(clamsFiltered);
           setLoading(false);
-          updateCharacter({ action: "dismissBubble" });
         } catch (error) {
           setLoading(false);
           console.log({ error });
@@ -181,11 +205,22 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
         </div>
       )}
       <Web3Navbar title="Clam Farms" />
-      <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
+      <VideoBackground
+        videoImage={videoImage}
+        videoMp4={videoMp4}
+        videoWebM={videoWebM}
+      />
 
-      <Modal isShowing={isShowing} onClose={toggleModal} width="30rem">
+      <Modal
+        isShowing={isShowing}
+        onClose={toggleModal}
+        width={modalSelected === MODAL_OPTS.PEARL_DETAILS ? "60rem" : "30rem"}
+      >
         {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
-          <PearlDetails pearl={selectedPearl} onWithdrawPearl={onWithdrawPearl} />
+          <PearlDetails
+            pearl={selectedPearl}
+            onWithdrawPearl={onWithdrawPearl}
+          />
         ) : (
           <ClamDeposit clams={clams} />
         )}
@@ -194,7 +229,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
       {address && (
         <div className="w-full lg:w-4/5 mx-auto relative z-10">
           <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-center">
-            <div className="w-4/5 flex flex-col relative pt-24">
+            <div className="w-full flex flex-col relative pt-24">
               {/* navbar */}
               <div className="bg-white rounded-xl shadow-xl w-full rounded-xl mx-auto flex flex-row justify-between items-center">
                 <h2 className="px-3 text-3xl font-extrabold font-aristotelica-bold text-blue-500">
@@ -209,9 +244,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
             </div>
 
             {/* clams and pears grid */}
-            <div className="w-4/5 my-4 overflow-auto">
+            <div className="w-full my-4 overflow-auto">
               <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
-                {console.log({ clams, clamsStaked })}
                 {clamsStaked &&
                   clamsStaked.map((clam, i) => (
                     <FarmItem

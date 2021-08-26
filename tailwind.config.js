@@ -36,6 +36,10 @@ module.exports = {
       ...theme("colors"),
       withdraw: FARM_WITHDRAW_COLOR,
     }),
+    backgroundColor: (theme) => ({
+      ...theme("colors"),
+      withdraw: FARM_WITHDRAW_COLOR,
+    }),
     fontFamily: {
       avenir: ["AvenirBlack"],
       montserrat: ["Montserrat-Medium"],

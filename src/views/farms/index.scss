@@ -1,5 +1,3 @@
-
-
 .farm-heading {
   @apply font-bold text-white text-7xl mb-2 drop-shadow-2xl font-aristotelica;
   text-shadow: 2px 2px #333333;
@@ -12,8 +10,7 @@
 
 .FarmItem {
   @apply rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 bg-white;
-  @apply hover:border hover:border-blue-200;
-  @apply flex flex-col justify-between cursor-pointer;
+  @apply flex flex-col justify-between;
 
   .progress-bar {
     @apply relative pt-1 px-2;
@@ -30,51 +27,57 @@
   }
 
   .view-pearl-btn {
-    @apply bg-blue-500 text-white; /* border and text color*/
-    @apply font-black font-avenir text-2xl; /*font weight and size*/
+    @apply bg-blue-500 text-white hover:bg-blue-400; /* border and text color*/
+    @apply font-black font-avenir text-xl; /*font weight and size*/
     @apply px-4 py-4 rounded-lg w-full; /* button padding, width, radius*/
   }
 
   .view-details {
-    @apply text-xl text-center;
+    @apply text-lg underline hover:no-underline;
     color: #757575;
   }
 }
 
-
 .withdraw-btn {
-@apply border-4 border-withdraw text-withdraw; /* border and text color*/
-@apply font-black font-avenir text-2xl; /*font weight and size*/
-@apply px-4 py-4 rounded-lg w-full; /* button padding, width, radius*/
+  @apply border-4 border-withdraw text-withdraw hover:bg-withdraw hover:text-white; /* border and text color*/
+  @apply font-black font-avenir text-xl; /*font weight and size*/
+  @apply rounded-lg w-full; /* button padding, width, radius*/
 }
 
 .PearlDetails {
-.detail-box {
-  @apply bg-gray-300 rounded-xl p-4 mt-4;
+
   .heading {
-    @apply font-semibold text-black font-montserrat;
+    @apply font-extrabold text-black font-avenir;
   }
-}
+
+  .detail-box {
+    @apply bg-gray-300 rounded-xl p-4 mt-4;
+   
+  }
+
+  .grid-value {
+    @apply text-black font-bold text-right font-montserrat;
+  }
+  .grid-title {
+    @apply font-montserrat text-left;
+    color: #757575;
+  }
 }
 
 .ClamDeposit {
-@apply w-full;
+  @apply w-full;
   .heading {
     @apply text-black font-bold font-aristotelica text-2xl;
   }
   .clam-details {
-    @apply flex flex-row;
+    @apply flex flex-row items-center;
     @apply border-4 border-blue-200 rounded-xl p-4 my-4;
-    
+
+   
+
     .details {
       @apply flex flex-1 flex-col;
-      .grid-value {
-        @apply text-black font-bold text-right text-xl font-montserrat;
-      }
-      .grid-title {
-        @apply font-montserrat text-left;
-        color: #757575;
-      }
+      
     }
   }
 }
