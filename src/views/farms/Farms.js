@@ -211,7 +211,11 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter }) => {
         videoWebM={videoWebM}
       />
 
-      <Modal isShowing={isShowing} onClose={toggleModal} width="30rem">
+      <Modal
+        isShowing={isShowing}
+        onClose={toggleModal}
+        width={modalSelected === MODAL_OPTS.PEARL_DETAILS ? "60rem" : "30rem"}
+      >
         {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
           <PearlDetails
             pearl={selectedPearl}

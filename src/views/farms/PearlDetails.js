@@ -14,7 +14,9 @@ const PearlDetails = ({ pearl, onWithdrawPearl }) => {
   return (
     <div className="PearlDetails flex flex-row">
       <div className="flex flex-1 flex-col">
-        <p className="heading">{pearl.heading}</p>
+        <p className="font-extrabold text-green-600 text-center font-avenir">
+          {pearl.heading}
+        </p>
         <Clam3DView
           width={400}
           height={400}
@@ -22,11 +24,11 @@ const PearlDetails = ({ pearl, onWithdrawPearl }) => {
           decodedDna={pearl.dnaDecoded}
           showTraitsTable={false}
         />
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between my-2">
           <p className="float-left">Remaining Time</p>
           <p className="float-right">{pearl.remainingTime}</p>
         </div>
-        <div className="px-4 md:px-6 py-2">
+        <div>
           <button
             className="withdraw-btn"
             onClick={() => {
@@ -40,11 +42,11 @@ const PearlDetails = ({ pearl, onWithdrawPearl }) => {
       <div className="flex flex-1 flex-col">
         <div className="detail-box general-stats">
           <h1 className="heading">General Stats</h1>
-          <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4">
+          <div className="grid md:grid-cols-2 md:grid-rows-2 gap-1 mt-2">
             <div>Harvestable $SHELL</div>
-            <div>{pearl.harvestableShell}</div>
+            <div className="text-right">{pearl.harvestableShell}</div>
             <div>Lifespan Remaining</div>
-            <div>{pearl.remainingLifeSpan}</div>
+            <div className="text-right">{pearl.remainingLifeSpan}</div>
           </div>
         </div>
 
@@ -53,11 +55,12 @@ const PearlDetails = ({ pearl, onWithdrawPearl }) => {
           <div className="flex flex-col gap-2">
             {pearls.map((k, i) => (
               <div key={i} className="flex flex-row">
-                <div className="clam-img flex flex-1">
-                  <img src={FarmPearl} className="w-1/2" />
+                <div className="w-1/2">
+                  <img className="w-full p-4" src={FarmPearl} />
                 </div>
+
                 <div className="details flex flex-1 flex-col">
-                  <div className="grid md:grid-cols-2 md:grid-rows-4 gap-4 flex-2">
+                  <div className="grid md:grid-cols-2 md:grid-rows-4 gap-1 flex items-center">
                     <div className="grid-title">$GEM/hr</div>
                     <div className="grid-value">{k.gemHr}</div>
                     <div className="grid-title">Duration (hrs):</div>

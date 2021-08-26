@@ -45,11 +45,22 @@
 }
 
 .PearlDetails {
+
+  .heading {
+    @apply font-extrabold text-black font-avenir;
+  }
+
   .detail-box {
     @apply bg-gray-300 rounded-xl p-4 mt-4;
-    .heading {
-      @apply font-semibold text-black font-montserrat;
-    }
+   
+  }
+
+  .grid-value {
+    @apply text-black font-bold text-right font-montserrat;
+  }
+  .grid-title {
+    @apply font-montserrat text-left;
+    color: #757575;
   }
 }
 
@@ -62,15 +73,11 @@
     @apply flex flex-row items-center;
     @apply border-4 border-blue-200 rounded-xl p-4 my-4;
 
+   
+
     .details {
       @apply flex flex-1 flex-col;
-      .grid-value {
-        @apply text-black font-bold text-right text-xl font-montserrat;
-      }
-      .grid-title {
-        @apply font-montserrat text-left;
-        color: #757575;
-      }
+      
     }
   }
 }
