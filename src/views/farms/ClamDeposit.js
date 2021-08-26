@@ -3,7 +3,7 @@ import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import FarmPearl from "../../assets/img/farm_pearl.png";
 import { actions } from "../../store/redux";
-import { stakeClam } from "../../web3/pearlFarm";
+import { stakeClam, hasClamBeenStakedBeforeByUser, stakeClamAgain } from "../../web3/pearlFarm";
 
 const ClamItem = ({ clamDataValues, clamId, dnaDecoded, updateAccount }) => {
   const { birthTime, pearlProductionDelay, pearlProductionStart } = clamDataValues;
@@ -15,7 +15,12 @@ const ClamItem = ({ clamDataValues, clamId, dnaDecoded, updateAccount }) => {
 
   const handleDeposit = async (clamId) => {
     try {
-      await stakeClam(clamId);
+      const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
+      if (hasClamBeenStakeByUserBefore) {
+        await stakeClamAgain(clamId);
+      } else {
+        await stakeClam(clamId);
+      }
     } catch (err) {
       updateAccount({ error: err.message });
     }

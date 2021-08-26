@@ -27,6 +27,11 @@ export const getStakedClamIds = (account) => {
   return pearlFarm().methods.getStakedClamIds(account).call();
 };
 
+export const hasClamBeenStakedBeforeByUser = (clamId) => {
+  const account = getAccount();
+  return pearlFarm().methods.hasClamBeenStakedBeforeByUser(account, clamId).call();
+};
+
 export const stakeClam = async (clamId) => {
   const account = getAccount();
 
@@ -34,16 +39,9 @@ export const stakeClam = async (clamId) => {
   const pearlPrice = await stakePrice().then((v) => new BigNumber(v)); // from string to BN
 
   if (gemBalance.lt(pearlPrice))
-    throw new Error(
-      `You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`
-    );
+    throw new Error(`You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`);
 
-  await approveContractForMaxUintErc721(
-    account,
-    clamNFTAddress,
-    pearlFarmAddress,
-    clamId
-  );
+  await approveContractForMaxUintErc721(account, clamNFTAddress, pearlFarmAddress, clamId);
   await approveSpending(account, pearlFarmAddress, pearlPrice);
 
   const method = pearlFarm().methods.stakeClam(clamId);
