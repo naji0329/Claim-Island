@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { get } from "lodash";
 import classnames from "classnames";
 
-import { deposit, harvest, withdraw, pendingGem } from "../../web3/bank";
+import { deposit, harvest, withdraw, pendingGem, gemPerBlock } from "../../web3/bank";
 import pancake from "../../web3/pancake";
 
 import { approveBankForMaxUint, hasMaxUintAllowance, balanceOf } from "../../web3/bep20";
@@ -459,6 +459,7 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
+  const [gemPerBlock, setGemPerBlock] = useState(0);
   const [urlForExchange, setUrlForExchange] = useState("");
   const [state, setSharedState] = useSharedState();
 
@@ -470,6 +471,9 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
 
     const isEnabled = await hasMaxUintAllowance(pool.account, pool.lpToken);
     setIsEnabled(isEnabled);
+
+    const gemPerBlock = await gemPerBlock();
+    setGemPerBlock(gemPerBlock);
   });
 
   const handleOpen = async () => {
@@ -513,12 +517,12 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
             <p className="font-bold text-black text-center">{pool.multiplier}%</p>
           </div>
 
-          {/* <div className="text-sm block">
+          <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
               APR
             </p>
             <p className="font-bold text-black">{pool.apy}</p>
-          </div> */}
+          </div>
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Deposited</p>
