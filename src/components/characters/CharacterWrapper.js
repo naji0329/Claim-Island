@@ -14,6 +14,7 @@ const CharacterWrapper = ({
   button,
   buttonAlt,
   onClickButton,
+  suppressSpeechBubble,
 }) => {
   const character = get(CHARACTERS, name);
   const speech = get(SPEECHES, action, action);
@@ -26,23 +27,23 @@ const CharacterWrapper = ({
   let history = useHistory();
 
   const handleClickButton = (button) => {
-    if (button.dismiss) {
-      setShowBubble(false);
-      return;
-    }
-    const speech = get(SPEECHES, button.next, button.next);
-    setStateSpeech(speech);
-    if (onClickButton) {
-      onClickButton();
+    if (button) {
+      handleButtonCallback(button);
+      if (button.dismiss || (button.alt && button.alt.dismiss === true)) {
+        setShowBubble(false);
+      }
+      if (button.next) {
+        const speech = get(SPEECHES, button.next, button.next);
+        setStateSpeech(speech);
+      }
+      if (onClickButton) {
+        onClickButton();
+      }
     }
   };
 
-  const handleClickButtonAlt = (button) => {
-    if (button.alt && button.alt.dismiss === true) {
-      setShowBubble(false);
-    }
-
-    switch (button.alt.action) {
+  const handleButtonCallback = (button) => {
+    switch (get(button, "alt.action", "")) {
       case "url":
         window.open(button.alt.destination, "_blank");
         break;
@@ -74,8 +75,12 @@ const CharacterWrapper = ({
   };
 
   useEffect(() => {
-    setShowBubble(!!action);
-  }, [action]);
+    if (suppressSpeechBubble) {
+      setShowBubble(false);
+    } else {
+      setShowBubble(!!action);
+    }
+  }, [action, suppressSpeechBubble]);
 
   return (
     <div
@@ -111,11 +116,7 @@ const CharacterWrapper = ({
                   <button
                     className="btn character-btn"
                     id="btn-next"
-                    onClick={() =>
-                      button.alt
-                        ? handleClickButtonAlt(button)
-                        : handleClickButton(button)
-                    }
+                    onClick={() => handleClickButton(button)}
                   >
                     {button.text}
                   </button>
@@ -123,11 +124,7 @@ const CharacterWrapper = ({
                 {buttonAlt && buttonAlt.text && (
                   <button
                     className="btn character-btn"
-                    onClick={() =>
-                      buttonAlt.alt
-                        ? handleClickButtonAlt(buttonAlt)
-                        : handleClickButton(buttonAlt)
-                    }
+                    onClick={() => handleClickButton(buttonAlt)}
                   >
                     {buttonAlt.text}
                   </button>
@@ -143,10 +140,7 @@ const CharacterWrapper = ({
             onClick={handleClickCharacter}
           />
         </div>
-        <button
-          className="btn character-container-round"
-          onClick={handleClickCharacter}
-        >
+        <button className="btn character-container-round" onClick={handleClickCharacter}>
           <img src={character.charImg} className="character" />
         </button>
       </div>
@@ -154,10 +148,11 @@ const CharacterWrapper = ({
   );
 };
 
-const mapToProps = ({ character: { name, action, button, buttonAlt } }) => ({
+const mapToProps = ({ character: { name, action, button, buttonAlt, suppressSpeechBubble } }) => ({
   name,
   action,
   button,
   buttonAlt,
+  suppressSpeechBubble,
 });
 export default connect(mapToProps)(CharacterWrapper);
