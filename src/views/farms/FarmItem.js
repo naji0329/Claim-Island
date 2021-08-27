@@ -38,9 +38,12 @@ const FarmItem = ({
   };
   clam.processing = clam.progress < 100;
 
-  const onClickViewPearl = () => {
+  const onClickViewPearl = async () => {
     setViewPearltext("Hold On ...");
-    onViewPearl(clam);
+    const success = await onViewPearl(clamId);
+    if(!success) {
+      setViewPearltext("View Pearl");
+    }
   };
 
   return (

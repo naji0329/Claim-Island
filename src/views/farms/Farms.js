@@ -22,12 +22,14 @@ import {
   decodeGetDnaDecodedFromMulticall,
 } from "../../web3/dnaDecoder";
 
-import { getStakedClamIds, unstakeClam } from "../../web3/pearlFarm";
+import { getStakedClamIds, unstakeClam, collectPearl } from "../../web3/pearlFarm";
 
 import FarmItem from "./FarmItem";
 import PearlDetails from "./PearlDetails";
 import ClamDeposit from "./ClamDeposit";
 import { aggregate } from "../../web3/multicall";
+
+import { toast } from "react-toastify";
 
 const MODAL_OPTS = {
   DEPOSIT_CLAM: "depositClam",
@@ -69,11 +71,21 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   };
 
   // when pearl is ready and is to be viewed
-  const onViewPearl = (pearl) => {
-    console.log(pearl);
-    setTimeout(() => {
+  const onViewPearl = async (clamId) => {
+    try {
+      await collectPearl(clamId);
       history.push("/saferoom");
-    }, 2000);
+      return true;
+    } catch (error) {
+      const errorMsg = JSON.parse(error.message.split('\n').slice(1).join(''));
+      toast.error(
+        <>
+          <p>There was an error collecting your pearl.</p>
+          <p>{errorMsg.message}</p>
+        </>
+      );
+      return Promise.resolve(false);
+    }
   };
 
   // when "Withdraw" is clicked - open the modal

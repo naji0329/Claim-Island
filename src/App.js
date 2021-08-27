@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useWallet } from "@binance-chain/bsc-use-wallet";
+import { ToastContainer } from "react-toastify";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -32,6 +33,7 @@ const App = (props) => {
           })}
         </Switch>
       </div>
+      <ToastContainer />
     </Router>
   );
 };
