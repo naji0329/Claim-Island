@@ -40,9 +40,7 @@ export const getClamData = async (tokenId) => {
 
 export const getClamByIndex = async (account, index) => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
-  const value = await clamNft.methods
-    .tokenOfOwnerByIndex(account, index)
-    .call();
+  const value = await clamNft.methods.tokenOfOwnerByIndex(account, index).call();
   return value;
 };
 
@@ -145,9 +143,7 @@ export const checkHasClamToCollect = async (address) => {
     address: clamShopAddress,
   });
 
-  const value = await clamShop.methods
-    .rngRequestHashForFarmedClam(address)
-    .call();
+  const value = await clamShop.methods.rngRequestHashForFarmedClam(address).call();
   return value;
 };
 
@@ -263,6 +259,8 @@ export const prepClamDataMulticall = (tokenIds) => {
 export const decodeTokenOfOwnerByIndexFromMulticall = (values) => {
   const result = [];
 
+  console.log(web3.eth.abi.decodeParameter("uint256", values[0]));
+
   for (let index = 0; index < values.length; index++) {
     result.push(web3.eth.abi.decodeParameter("uint256", values[index]));
   }
@@ -326,6 +324,22 @@ export const harvestClamForShell = async (tokenId, account) => {
     from: account,
     gas: gasEstimation,
   });
+};
+
+export const canStillProducePearls = async (clamId) => {
+  const clamNft = contractFactory({
+    abi: clamNFTAbi,
+    address: clamNFTAddress,
+  });
+  return await clamNft.methods.canStillProducePearls(clamId).call();
+};
+
+export const canCurrentlyProducePearl = async (clamId) => {
+  const clamNft = contractFactory({
+    abi: clamNFTAbi,
+    address: clamNFTAddress,
+  });
+  return await clamNft.methods.canCurrentlyProducePearl(clamId).call();
 };
 
 export default {

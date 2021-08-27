@@ -6,6 +6,7 @@ import { approveContractForMaxUintErc721 } from "./bep20";
 import { getBalance, approveSpending } from "./gem";
 import { formatFromWei } from "./shared";
 import BigNumber from "bignumber.js";
+import { getOracleFee } from "./rng";
 
 const pearlFarm = () =>
   contractFactory({
@@ -91,10 +92,12 @@ export const reclaimGems = async (clamId) => {
 export const propClamOpenForPearl = async (clamId) => {
   const account = getAccount();
 
-  const method = pearlFarm().methods.propClamOpenForPearl(clamId);
-  const gasEstimation = await method.estimateGas({ from: account });
+  const oracleFee = await getOracleFee();
 
-  await method.send({ from: account, gas: gasEstimation });
+  const method = pearlFarm().methods.propClamOpenForPearl(clamId);
+  const gasEstimation = await method.estimateGas({ from: account, value: +oracleFee });
+
+  await method.send({ from: account, gas: gasEstimation, value: +oracleFee });
 };
 
 export const collectPearl = async (clamId) => {
@@ -114,4 +117,14 @@ export const getRemainingPearlProductionTime = async (clamId) => {
 export const isPearlProductionTimeYet = async (clamId) => {
   const productionTimeReached = await pearlFarm().methods.isPearlProductionTimeYet(clamId).call();
   return productionTimeReached;
+};
+
+export const clamIdToStaker = async (clamId) => {
+  return await pearlFarm().methods.clamIdToStaker(clamId).call();
+};
+
+export const rngRequestHashForProducedPearl = async (clamId) => {
+  const account = getAccount();
+
+  return pearlFarm().methods.rngRequestHashForProducedPearl(account, clamId).call();
 };

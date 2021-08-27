@@ -1,6 +1,17 @@
-import { get } from "lodash";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import clsx from "clsx";
+import { ChainId, useEthers } from "@usedapp/core";
+
 import FarmPearl from "../../assets/img/farm_pearl.png";
+
+import { web3 } from "../../web3";
+import {
+  getRemainingPearlProductionTime,
+  collectPearl,
+  rngRequestHashForProducedPearl,
+  propClamOpenForPearl,
+} from "../../web3/pearlFarm";
+import { canCurrentlyProducePearl, canStillProducePearls } from "../../web3/clam";
 
 const FarmItem = ({
   clamId,
@@ -10,7 +21,13 @@ const FarmItem = ({
   onWithdrawClam,
   onViewPearl,
 }) => {
-  const [viewPearlText, setViewPearltext] = useState("View Pearl");
+  const { chainId } = useEthers();
+
+  const [buttonText, setButtonText] = useState("Can't produce yet");
+  const [remainingTime, setRemainingTime] = useState("");
+  const [canStillProducePearl, setCanStillProducePearl] = useState(false);
+  const [canProducePearl, setCanProducePearl] = useState(false);
+  const [readyForPearl, setReadyForPearl] = useState(false);
 
   const {
     pearlProductionDelay,
@@ -20,17 +37,43 @@ const FarmItem = ({
     pearlsProduced,
   } = clamDataValues;
   const clamStartTime = +pearlProductionStart > 0 ? +pearlProductionStart : +birthTime;
-  const currentTimeInSeconds = new Date().getTime() / 1000;
   const clamNextPearlTime = clamStartTime + +pearlProductionDelay;
-  const etaSeconds = clamNextPearlTime - currentTimeInSeconds;
+  const progress = !+remainingTime
+    ? 100
+    : +((remainingTime / (clamNextPearlTime - clamStartTime)) * 100).toFixed(2);
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const remaining = await getRemainingPearlProductionTime(clamId);
+        setRemainingTime(remaining);
+
+        const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId);
+        setReadyForPearl(!!+rngHashForProducedPearl);
+
+        const canProduce = await canCurrentlyProducePearl(clamId);
+        setCanProducePearl(canProduce);
+
+        const canStillProduce = await canStillProducePearls(clamId);
+        setCanStillProducePearl(canStillProduce);
+      } catch (err) {
+        console.log(`err`, err);
+      }
+    };
+
+    init();
+  });
+
+  useEffect(() => {
+    if (canProducePearl) setButtonText("Collect Pearl");
+    if (!readyForPearl) setButtonText("Open Clam");
+    if (!canStillProducePearl) setButtonText("Can't produce anymore!");
+  }, [readyForPearl, canProducePearl, canStillProducePearl]);
 
   const clam = {
-    remainingTime: new Date(+etaSeconds * 1000).toISOString().substr(11, 8),
-    progress: +(
-      ((currentTimeInSeconds - clamStartTime) / (clamNextPearlTime - clamStartTime)) *
-      100
-    ).toFixed(2),
-    processing: true, // to see the 2 views... processed and processing TODO: implement logic for this
+    remainingTime: new Date(+remainingTime * 1000).toISOString().substr(11, 8),
+    progress,
+    processing: remainingTime < new Date().getTime(), // to see the 2 views... processed and processing
     dnaDecoded,
     heading: dnaDecoded.rarity,
     harvestableShell: pearlProductionCapacity,
@@ -39,11 +82,24 @@ const FarmItem = ({
   clam.processing = clam.progress < 100;
 
   const onClickViewPearl = async () => {
-    setViewPearltext("Hold On ...");
+    setButtonText("Hold On ...");
     const success = await onViewPearl(clamId);
-    if(!success) {
-      setViewPearltext("View Pearl");
+    if (!success) {
+      setButtonText("View Pearl");
     }
+  };
+
+  const onClickOpenClam = async () => {
+    await propClamOpenForPearl(clamId);
+  };
+
+  const onClickCollectPearl = async () => {
+    await collectPearl(clamId);
+  };
+
+  const getClamFunction = () => {
+    if (!readyForPearl) return onClickOpenClam();
+    if (canProducePearl) return onClickCollectPearl();
   };
 
   return (
@@ -52,12 +108,49 @@ const FarmItem = ({
         <img className="w-auto" src={FarmPearl} />
       </div>
 
+      {chainId === ChainId.Localhost && (
+        <button
+          className="btn m-2"
+          onClick={async () => {
+            const block = await web3.eth.getBlock(await web3.eth.getBlockNumber());
+            console.log(`block`, block.number);
+            console.log(`timestamp`, block.timestamp);
+            await web3.currentProvider.send(
+              {
+                jsonrpc: "2.0",
+                method: "evm_mine",
+                id: new Date().getTime(),
+              },
+              (err, result) => {
+                console.log(`err`, err);
+                console.log(`result`, result);
+              }
+            );
+
+            await web3.currentProvider.send(
+              {
+                jsonrpc: "2.0",
+                method: "evm_increaseTime",
+                params: [100000],
+                id: new Date().getTime(),
+              },
+              (err, result) => {
+                console.log(`err`, err);
+                console.log(`result`, result);
+              }
+            );
+          }}
+        >
+          Advance time
+        </button>
+      )}
+
       {clam.processing ? (
         <>
           {/* Progress Bar */}
           <div className="progress-bar">
             <div className={"base-bar " + (clam.progress < 100 ? "base-bar-animated" : "")}>
-              <div style={{ width: clam.progress + '%' }} className="completion-bar"></div>
+              <div style={{ width: clam.progress + "%" }} className="completion-bar"></div>
               <span>Processing {clam.progress}%</span>
             </div>
           </div>
@@ -72,7 +165,9 @@ const FarmItem = ({
                 <p className="font-bold text-black">{clam.remainingTime}</p>
               </div>
               <div className="text-sm block">
-                <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Lifespan Remaining</p>
+                <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
+                  Lifespan Remaining
+                </p>
                 <p className="font-bold text-black text-right">{clam.remainingLifeSpan}</p>
               </div>
             </div>
@@ -92,12 +187,12 @@ const FarmItem = ({
         </>
       ) : (
         <div className="px-4 py-2">
-          <p className="text-center mb-2">Pearl is ready!</p>
-          <div>
-            <button className="view-pearl-btn" onClick={onClickViewPearl}>
-              {viewPearlText}
-            </button>
-          </div>
+          <button
+            className={clsx("view-pearl-btn", !canProducePearl && "btn-disabled")}
+            onClick={getClamFunction}
+          >
+            {buttonText}
+          </button>
         </div>
       )}
     </div>
