@@ -36,6 +36,7 @@ const FarmItem = ({
     harvestableShell: pearlProductionCapacity,
     remainingLifeSpan: pearlProductionCapacity - pearlsProduced,
   };
+  clam.processing = clam.progress < 100;
 
   const onClickViewPearl = () => {
     setViewPearltext("Hold On ...");
