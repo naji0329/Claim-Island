@@ -96,7 +96,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
 
   useEffect(async () => {
     if (!web3) {
-      return updateAccount({ error: "Metamask not installed" });
+      return updateAccount({ web3Installed: false, error: "Metamask not installed" });
     }
     const netId = await web3.eth.net.getId();
     console.log("useEffect updateAccount", { activateChainId, netId });
