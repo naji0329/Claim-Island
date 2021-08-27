@@ -77,7 +77,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       history.push("/saferoom/pearl");
       return true;
     } catch (error) {
-      const errorMsg = JSON.parse(error.message.split('\n').slice(1).join(''));
+      const errorMsg = JSON.parse(error.message.split("\n").slice(1).join(""));
       toast.error(
         <>
           <p>There was an error collecting your pearl.</p>
@@ -151,8 +151,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   };
 
   useEffect(() => {
-    // wallet is connected and has clams
-    if (address && clamBalance !== "0") {
+    // wallet is connected
+    if (address) {
       const initClams = async () => {
         try {
           setLoading(true);
