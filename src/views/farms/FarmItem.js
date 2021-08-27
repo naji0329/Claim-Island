@@ -38,7 +38,6 @@ const FarmItem = ({
   };
 
   const onClickViewPearl = () => {
-    console.log("##########");
     setViewPearltext("Hold On ...");
     onViewPearl(clam);
   };
@@ -53,9 +52,9 @@ const FarmItem = ({
         <>
           {/* Progress Bar */}
           <div className="progress-bar">
-            <div className="base-bar">
+            <div className={"base-bar " + (clam.progress < 100 ? "base-bar-animated" : "")}>
               <div style={{ width: clam.progress + '%' }} className="completion-bar"></div>
-              <span>Processing</span>
+              <span>Processing {clam.progress}%</span>
             </div>
           </div>
 
@@ -69,8 +68,8 @@ const FarmItem = ({
                 <p className="font-bold text-black">{clam.remainingTime}</p>
               </div>
               <div className="text-sm block">
-                <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Progress</p>
-                <p className="font-bold text-black">{clam.progress}</p>
+                <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Lifespan Remaining</p>
+                <p className="font-bold text-black text-right">{clam.remainingLifeSpan}</p>
               </div>
             </div>
           </div>
@@ -82,7 +81,7 @@ const FarmItem = ({
           </div>
 
           <div className="px-4 py-2 text-center">
-            <button className="view-details" onClick={onViewDetails}>
+            <button className="view-details" onClick={(e) => onViewDetails(e, clam)}>
               View Details
             </button>
           </div>

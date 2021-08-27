@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Clam3DView } from "../../components/clam3DView";
 import FarmPearl from "../../assets/img/farm_pearl.png";
 
-const PearlDetails = ({ clam }) => {
+const PearlDetails = ({ clam, clamProcessing }) => {
   const pearls = [
     {
       gemHr: "13",
@@ -33,9 +33,9 @@ const PearlDetails = ({ clam }) => {
           <h1 className="heading">General Stats</h1>
           <div className="grid md:grid-cols-2 md:grid-rows-2 gap-1 mt-2">
             <div>Harvestable $SHELL</div>
-            <div className="text-right">{clam.harvestableShell}</div>
+            <div className="text-right">{clamProcessing.harvestableShell}</div>
             <div>Lifespan Remaining</div>
-            <div className="text-right">{clam.remainingLifeSpan}</div>
+            <div className="text-right">{clamProcessing.remainingLifeSpan}</div>
           </div>
         </div>
 

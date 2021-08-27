@@ -37,6 +37,7 @@ const MODAL_OPTS = {
 const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
   let history = useHistory();
   const [clams, setClams] = useState([]);
+  const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
   const [loading, setLoading] = useState(false);
   const { isShowing, toggle: toggleModal } = useModal();
@@ -60,7 +61,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   };
 
   // when "View Pearl" is clicked - open the modal for the selected pearl
-  const onViewDetails = (clam, index) => {
+  const onViewDetails = (clam, clamProcessing, index) => {
+    setClamProcessing(clamProcessing);
     setSelectedClam(clam);
     setModal(MODAL_OPTS.PEARL_DETAILS);
     toggleModal();
@@ -213,7 +215,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
         width={modalSelected === MODAL_OPTS.PEARL_DETAILS ? "60rem" : "30rem"}
       >
         {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
-          <PearlDetails clam={selectedClam} />
+          <PearlDetails clam={selectedClam} clamProcessing={clamProcessing} />
         ) : (
           <ClamDeposit clams={clams} />
         )}
@@ -244,7 +246,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
                     <FarmItem
                       key={i}
                       {...clam}
-                      onViewDetails={() => onViewDetails(clam, i)}
+                      onViewDetails={(e, clamProcessing) => onViewDetails(clam, clamProcessing, i)}
                       onWithdrawClam={() => onWithdrawClam(clam, i)}
                       onViewPearl={onViewPearl}
                     />
