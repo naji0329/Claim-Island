@@ -54,7 +54,7 @@ const FarmItem = ({
           {/* Progress Bar */}
           <div className="progress-bar">
             <div className="base-bar">
-              <div style={{ width: clam.progress }} className="completion-bar"></div>
+              <div style={{ width: clam.progress + '%' }} className="completion-bar"></div>
               <span>Processing</span>
             </div>
           </div>
