@@ -61,7 +61,7 @@ const PearlDetails = ({ clam, clamProcessing }) => {
                   </div>
                   <div className="flex flex-col">
                     <Link
-                      to={"/saferoom"}
+                      to={"/saferoom/pearl"}
                       className="font-montserrat underline"
                       style={{ color: "#757575" }}
                     >

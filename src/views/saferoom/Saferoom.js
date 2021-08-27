@@ -27,10 +27,7 @@ import { getPearlDNADecoded } from "../../web3/pearlDnaDecoder";
 
 import { get } from "lodash";
 
-const Saferoom = ({
-  account: { clamBalance, pearlBalance, address },
-  updateCharacter,
-}) => {
+const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateCharacter }) => {
   const [clams, setClams] = useState([]);
   const [pearls, setPearls] = useState([]);
   const [selectedAsset, setSelectedAsset] = useState();
@@ -41,13 +38,7 @@ const Saferoom = ({
 
   const { isShowing, toggle } = useModal();
 
-  const getDna = async (
-    getByNFTIndex,
-    getNFTData,
-    account,
-    index,
-    getDecodedDNA
-  ) => {
+  const getDna = async (getByNFTIndex, getNFTData, account, index, getDecodedDNA) => {
     const tokenId = await getByNFTIndex(account, index);
     const data = await getNFTData(tokenId);
     const { dna } = data;
@@ -64,17 +55,10 @@ const Saferoom = ({
       try {
         setLoading(true);
 
-        const getNFTs = async (
-          getByNFTIndex,
-          getNFTData,
-          nftBalance,
-          getDecodedDNA
-        ) => {
+        const getNFTs = async (getByNFTIndex, getNFTData, nftBalance, getDecodedDNA) => {
           let promises = [];
           for (let i = 0; i < Number(nftBalance); i++) {
-            promises.push(
-              getDna(getByNFTIndex, getNFTData, address, i, getDecodedDNA)
-            );
+            promises.push(getDna(getByNFTIndex, getNFTData, address, i, getDecodedDNA));
           }
 
           return await Promise.all(promises);
@@ -151,15 +135,20 @@ const Saferoom = ({
       {address && (
         <div className="flex-1 min-h-full min-w-full flex relative z-20 justify-center items-start">
           <div className="w-4/5 flex flex-col relative pt-24">
-
             {/* navbar */}
-            <SaferoomNav setTab={setTab} tab={tab} url={url} />
+            <SaferoomNav
+              setTab={setTab}
+              tab={tab}
+              url={url}
+              clamBalance={clamBalance}
+              pearlBalance={pearlBalance}
+            />
 
             {/* clams and pears grid */}
             <div className="w-full my-4 overflow-auto">
               <Switch>
                 <Route exact path={path}>
-                  <Redirect to={`${url}/{tab}`}/>;
+                  <Redirect to={`${url}/{tab}`} />;
                 </Route>
                 <Route path={`${path}/:tabId`}>
                   <TabContainer
@@ -167,7 +156,8 @@ const Saferoom = ({
                     setSelectedAsset={setSelectedAsset}
                     toggle={toggle}
                     setTab={setTab}
-                    pearls={pearls}/>
+                    pearls={pearls}
+                  />
                 </Route>
               </Switch>
             </div>
@@ -178,40 +168,37 @@ const Saferoom = ({
   );
 };
 
-const SaferoomNav = ({ setTab, tab, url }) => {
+const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
+  const showNumberOfAssets = (number, asset) => {
+    return +number > 1 ? `${number} ${asset}s` : `${number} ${asset}`;
+  };
+
   return (
     <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
-
       <div className="px-3 py-2">
-        <h2 className="text-blue-700 font-semibold text-4xl mb-2">
-          My Saferoom
-        </h2>
+        <h2 className="text-blue-700 font-semibold text-4xl mb-2">My Saferoom</h2>
         <p className="text-yellow-700">All your minted NFTs</p>
       </div>
 
       <div className="px-3 py-2 flex justify-between">
         <Link
           className={`mx-2 px-5 py-6 rounded-xl ${
-            tab === "Clam"
-              ? "bg-blue-400 text-white"
-              : "text-blue-700 bg-grey"
+            tab === "Clam" ? "bg-blue-400 text-white" : "text-blue-700 bg-grey"
           }`}
           to={`${url}/clam`}
           onClick={() => setTab("Clam")}
         >
-          Clams
+          {showNumberOfAssets(clamBalance, "Clam")}
         </Link>
 
         <Link
           className={`mx-2 px-5 py-6 rounded-xl ${
-            tab === "Pearl"
-              ? "bg-blue-400 text-white"
-              : "text-blue-700"
+            tab === "Pearl" ? "bg-blue-400 text-white" : "text-blue-700"
           }`}
           to={`${url}/pearl`}
           onClick={() => setTab("Pearl")}
         >
-          Pearls
+          {showNumberOfAssets(pearlBalance, "Pearl")}
         </Link>
 
         <Link
@@ -234,55 +221,55 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
 
   return (
     <>
-    {tabId === "clam" && clams && clams.length > 0 && (
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
-        {clams &&
-          clams.map((clam, i) => {
-            const rarity = get(clam.dnaDecoded, "rarity");
-            const shape = get(clam.dnaDecoded, "shellShape");
+      {tabId === "clam" && clams && clams.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
+          {clams &&
+            clams.map((clam, i) => {
+              const rarity = get(clam.dnaDecoded, "rarity");
+              const shape = get(clam.dnaDecoded, "shellShape");
 
-            return (
-              <div
-                onClick={() => {
-                  setSelectedAsset(clam);
-                  toggle();
-                }}
-                key={i}
-              >
-                <NFTItem rarity={rarity} shape={shape} />
-              </div>
-            );
-          })}
-      </div>
-    )}
+              return (
+                <div
+                  onClick={() => {
+                    setSelectedAsset(clam);
+                    toggle();
+                  }}
+                  key={i}
+                >
+                  <NFTItem rarity={rarity} shape={shape} />
+                </div>
+              );
+            })}
+        </div>
+      )}
 
-    {tabId === "pearl" && pearls && pearls.length > 0 && (
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
-        {pearls &&
-          pearls.map((pearl, i) => {
-            const rarity = get(pearl.dnaDecoded, "rarity");
-            const shape = get(pearl.dnaDecoded, "shape");
+      {tabId === "pearl" && pearls && pearls.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
+          {pearls &&
+            pearls.map((pearl, i) => {
+              const rarity = get(pearl.dnaDecoded, "rarity");
+              const shape = get(pearl.dnaDecoded, "shape");
 
-            return (
-              <div
-                onClick={() => {
-                  setSelectedAsset(pearl);
-                  toggle();
-                }}
-                key={i}
-              >
-                <NFTItem rarity={rarity} shape={shape} />
-              </div>
-            );
-          })}
-      </div>
-    )}
+              return (
+                <div
+                  onClick={() => {
+                    setSelectedAsset(pearl);
+                    toggle();
+                  }}
+                  key={i}
+                >
+                  <NFTItem rarity={rarity} shape={shape} />
+                </div>
+              );
+            })}
+        </div>
+      )}
 
-    {!pearls.length && !clams.length && (
-      <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
-        You&#39;ve got no clams or pearls &#128542;
-      </div>
-    )}
+      {!pearls.length && !clams.length && (
+        <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
+          You&#39;ve got no clams or pearls &#128542;
+        </div>
+      )}
     </>
   );
 };

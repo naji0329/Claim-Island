@@ -41,7 +41,7 @@ const ClamItem = ({ clamDataValues, clamId, dnaDecoded, updateAccount }) => {
           <div className="grid-value">{dnaDecoded.lifespan} pearls</div>
         </div>
         <div className="flex flex-col">
-          <Link to={"/saferoom"} className="font-montserrat underline" style={{ color: "#757575" }}>
+          <Link to={"/saferoom/clam"} className="font-montserrat underline" style={{ color: "#757575" }}>
             View in saferoom
           </Link>
           <a
