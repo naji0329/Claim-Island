@@ -3,7 +3,7 @@ import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
 import "./index.scss";
 
-import { Link } from "react-router-dom";
+import { Link, Switch, Route, useRouteMatch, useParams, Redirect } from "react-router-dom";
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
 import clamIcon from "../../assets/clam-icon.png";
@@ -36,6 +36,8 @@ const Saferoom = ({
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? "Clam" : "Pearl");
   const [loading, setLoading] = useState(false);
+
+  let { path, url } = useRouteMatch();
 
   const { isShowing, toggle } = useModal();
 
@@ -145,105 +147,142 @@ const Saferoom = ({
         {tab === "Clam" && <ClamView {...selectedAsset} />}
         {tab === "Pearl" && <PearlView {...selectedAsset} />}
       </Modal>
-      {address && (
-        <div className="flex-1 min-h-full min-w-full flex relative z-20  justify-center items-start">
-          <div className="w-4/5 flex flex-col relative pt-24">
-            {/* navbar */}
-            <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
-              <div className="px-3 py-2">
-                <h2 className="text-blue-700 font-semibold text-4xl mb-2">
-                  My Saferoom
-                </h2>
-                <p className="text-yellow-700">All you minted NFTs</p>
-              </div>
 
-              <div className="px-3 py-2 flex justify-between">
-                <button
-                  className={`mx-2 px-5 ${
-                    tab === "Clam"
-                      ? "rounded-xl bg-blue-400 text-white"
-                      : "text-blue-700"
-                  }`}
-                  onClick={() => setTab("Clam")}
-                >
-                  Clams
-                </button>
-                <button
-                  className={`mx-2 px-5 ${
-                    tab === "Pearl"
-                      ? "rounded-xl bg-blue-400 text-white"
-                      : "text-blue-700"
-                  }`}
-                  onClick={() => setTab("Pearl")}
-                >
-                  Pearls
-                </button>
-                <Link
-                  to="/shop"
-                  className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6 mx-2"
-                >
-                  Shop
-                </Link>
-              </div>
-            </div>
+      {address && (
+        <div className="flex-1 min-h-full min-w-full flex relative z-20 justify-center items-start">
+          <div className="w-4/5 flex flex-col relative pt-24">
+
+            {/* navbar */}
+            <SaferoomNav setTab={setTab} tab={tab} url={url} />
 
             {/* clams and pears grid */}
-            <div
-              className="w-full my-4 overflow-auto"
-            >
-              {tab === "Clam" && clams && clams.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
-                  {clams &&
-                    clams.map((clam, i) => {
-                      const rarity = get(clam.dnaDecoded, "rarity");
-                      const shape = get(clam.dnaDecoded, "shellShape");
-
-                      return (
-                        <div
-                          onClick={() => {
-                            setSelectedAsset(clam);
-                            toggle();
-                          }}
-                          key={i}
-                        >
-                          <NFTItem rarity={rarity} shape={shape} />
-                        </div>
-                      );
-                    })}
-                </div>
-              )}
-
-              {tab === "Pearl" && pearls && pearls.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
-                  {pearls &&
-                    pearls.map((pearl, i) => {
-                      const rarity = get(pearl.dnaDecoded, "rarity");
-                      const shape = get(pearl.dnaDecoded, "shape");
-
-                      return (
-                        <div
-                          onClick={() => {
-                            setSelectedAsset(pearl);
-                            toggle();
-                          }}
-                          key={i}
-                        >
-                          <NFTItem rarity={rarity} shape={shape} />
-                        </div>
-                      );
-                    })}
-                </div>
-              )}
-
-              {!pearls.length && !clams.length && (
-                <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
-                  You&#39;ve got no clams or pearls &#128542;
-                </div>
-              )}
+            <div className="w-full my-4 overflow-auto">
+              <Switch>
+                <Route exact path={path}>
+                  <Redirect to={`${url}/{tab}`}/>;
+                </Route>
+                <Route path={`${path}/:tabId`}>
+                  <TabContainer
+                    clams={clams}
+                    setSelectedAsset={setSelectedAsset}
+                    toggle={toggle}
+                    setTab={setTab}
+                    pearls={pearls}/>
+                </Route>
+              </Switch>
             </div>
           </div>
         </div>
       )}
+    </>
+  );
+};
+
+const SaferoomNav = ({ setTab, tab, url }) => {
+  return (
+    <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
+
+      <div className="px-3 py-2">
+        <h2 className="text-blue-700 font-semibold text-4xl mb-2">
+          My Saferoom
+        </h2>
+        <p className="text-yellow-700">All your minted NFTs</p>
+      </div>
+
+      <div className="px-3 py-2 flex justify-between">
+        <Link
+          className={`mx-2 px-5 py-6 rounded-xl ${
+            tab === "Clam"
+              ? "bg-blue-400 text-white"
+              : "text-blue-700 bg-grey"
+          }`}
+          to={`${url}/clam`}
+          onClick={() => setTab("Clam")}
+        >
+          Clams
+        </Link>
+
+        <Link
+          className={`mx-2 px-5 py-6 rounded-xl ${
+            tab === "Pearl"
+              ? "bg-blue-400 text-white"
+              : "text-blue-700"
+          }`}
+          to={`${url}/pearl`}
+          onClick={() => setTab("Pearl")}
+        >
+          Pearls
+        </Link>
+
+        <Link
+          to="/shop"
+          className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6 mx-2"
+        >
+          Shop
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
+  let { tabId } = useParams();
+
+  useEffect(() => {
+    setTab(tabId[0].toUpperCase() + tabId.slice(1));
+  }, []);
+
+  return (
+    <>
+    {tabId === "clam" && clams && clams.length > 0 && (
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
+        {clams &&
+          clams.map((clam, i) => {
+            const rarity = get(clam.dnaDecoded, "rarity");
+            const shape = get(clam.dnaDecoded, "shellShape");
+
+            return (
+              <div
+                onClick={() => {
+                  setSelectedAsset(clam);
+                  toggle();
+                }}
+                key={i}
+              >
+                <NFTItem rarity={rarity} shape={shape} />
+              </div>
+            );
+          })}
+      </div>
+    )}
+
+    {tabId === "pearl" && pearls && pearls.length > 0 && (
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
+        {pearls &&
+          pearls.map((pearl, i) => {
+            const rarity = get(pearl.dnaDecoded, "rarity");
+            const shape = get(pearl.dnaDecoded, "shape");
+
+            return (
+              <div
+                onClick={() => {
+                  setSelectedAsset(pearl);
+                  toggle();
+                }}
+                key={i}
+              >
+                <NFTItem rarity={rarity} shape={shape} />
+              </div>
+            );
+          })}
+      </div>
+    )}
+
+    {!pearls.length && !clams.length && (
+      <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
+        You&#39;ve got no clams or pearls &#128542;
+      </div>
+    )}
     </>
   );
 };

@@ -74,7 +74,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   const onViewPearl = async (clamId) => {
     try {
       await collectPearl(clamId);
-      history.push("/saferoom");
+      history.push("/saferoom/pearl");
       return true;
     } catch (error) {
       const errorMsg = JSON.parse(error.message.split('\n').slice(1).join(''));
