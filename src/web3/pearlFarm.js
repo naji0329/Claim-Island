@@ -14,13 +14,13 @@ export const stakePrice = async () => {
   return await pearlFarm().methods.pearlPrice().call();
 };
 
-export const getStakedClamIds = (account) => {
-  return pearlFarm().methods.getStakedClamIds(account).call();
+export const getStakedClamIds = async (account) => {
+  return await pearlFarm().methods.getStakedClamIds(account).call();
 };
 
-export const hasClamBeenStakedBeforeByUser = (clamId) => {
+export const hasClamBeenStakedBeforeByUser = async (clamId) => {
   const account = getAccount();
-  return pearlFarm().methods.hasClamBeenStakedBeforeByUser(account, clamId).call();
+  return await pearlFarm().methods.hasClamBeenStakedBeforeByUser(account, clamId).call();
 };
 
 export const stakeClam = async (clamId) => {
