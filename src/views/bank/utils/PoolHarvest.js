@@ -1,11 +1,12 @@
 import { get } from "lodash";
-import { formatNumber } from '.';
+import { formatNumber } from ".";
 
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
-  onDepositHarvestSuccess
-} from '../character/OnDepositHarvest';
+  onDepositHarvestSuccess,
+} from "../character/OnDepositHarvest";
+import { harvest } from "../../../web3/bank";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
 const PoolHarvest = ({ useSharedState, updateCharacter }) => {
