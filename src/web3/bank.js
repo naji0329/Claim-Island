@@ -131,6 +131,10 @@ export const decodeUserInfoReturnFromMulticall = (values) => {
   return result;
 };
 
+export const getTokenSupplies = async () => {
+  return await bank().methods.getTokenSupplies().call();
+};
+
 export const getPoolsLength = async () => {
   const poolsLen = await bank().methods.poolLength().call();
   return poolsLen;
