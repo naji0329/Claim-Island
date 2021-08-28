@@ -1,27 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAsync, createStateContext } from "react-use";
 import classnames from "classnames";
 import { useEthers } from "@usedapp/core";
 
-import { pendingGem } from "../../web3/bank";
+import { pendingGem, gemPerBlock } from "../../web3/bank";
 import { hasMaxUintAllowanceBank } from "../../web3/bep20";
 
-import PoolHarvest from './utils/PoolHarvest';
+import PoolHarvest from "./utils/PoolHarvest";
 import PoolDepositWithdraw from "./utils/PoolDepositWithdraw";
 
-import {
-  exchangeUrl, getBalancesFormatted, PoolData
-} from './utils';
+import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
 
-// shared state across all pool copoments - to avoid passing too much props down to children
+import { gemTokenAddress } from "../../web3/constants";
+
+// shared state across all pool components - to avoid passing too much props down to children
 const [useSharedState, SharedStateProvider] = createStateContext();
 
-const PoolItem = ({ account, updateAccount, updateCharacter, ...pool }) => {
+const PoolItem = ({ account, totalAllocation, updateCharacter, ...pool }) => {
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
+  const [apr, setApr] = useState(0);
   const [urlForExchange, setUrlForExchange] = useState("");
   const [state, setSharedState] = useSharedState();
 
@@ -35,6 +36,44 @@ const PoolItem = ({ account, updateAccount, updateCharacter, ...pool }) => {
     setIsEnabled(isEnabled);
   });
 
+  const calcAPR = ({ poolInfo, gemsPerBlock, gemPrice, totalAllocation }) => {
+    const constantValue = 10512000;
+    const supply = +poolInfo.poolLpTokenBalance > 0 ? +poolInfo.poolLpTokenBalance : 1;
+
+    if (poolInfo.lpToken === gemTokenAddress) {
+      return (
+        (((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) * constantValue) /
+        supply
+      );
+    }
+
+    return (
+      ((((gemPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
+        Number(totalAllocation)) *
+        constantValue) /
+        supply) *
+      gemPrice
+    );
+  };
+
+  useEffect(async () => {
+    const setAprValue = async () => {
+      const fakeGemPrice = 1000000000000000000;
+      const gemsPerBlock = await gemPerBlock();
+
+      const apr = calcAPR({
+        poolInfo: pool,
+        gemsPerBlock,
+        gemPrice: fakeGemPrice,
+        totalAllocation,
+      });
+
+      setApr(apr);
+    };
+
+    await setAprValue();
+  }, [totalAllocation, pool]);
+
   const handleOpen = async () => {
     setIsOpen(true);
     const balances = await getBalancesFormatted(account, pool.lpToken, pool.isSingleStake);
@@ -43,7 +82,6 @@ const PoolItem = ({ account, updateAccount, updateCharacter, ...pool }) => {
       tokenAddress: pool.lpToken,
       isSingleStake: pool.isSingleStake,
     });
-    console.log({ url });
     setUrlForExchange(url);
 
     setSharedState({ ...state, account, pool, balances });
@@ -76,12 +114,10 @@ const PoolItem = ({ account, updateAccount, updateCharacter, ...pool }) => {
             <p className="font-bold text-black text-center">{pool.multiplier}%</p>
           </div>
 
-          {/* <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-              APR
-            </p>
-            <p className="font-bold text-black">{pool.apy}</p>
-          </div> */}
+          <div className="text-sm block">
+            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">APR</p>
+            <p className="font-bold text-black">{String(apr)}</p>
+          </div>
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Deposited</p>
@@ -124,7 +160,10 @@ const PoolItem = ({ account, updateAccount, updateCharacter, ...pool }) => {
             </div>
 
             <div className="flex w-2/5 h-full">
-              <PoolDepositWithdraw updateCharacter={updateCharacter} useSharedState={useSharedState} />
+              <PoolDepositWithdraw
+                updateCharacter={updateCharacter}
+                useSharedState={useSharedState}
+              />
             </div>
 
             <div className="flex w-2/5 h-full">

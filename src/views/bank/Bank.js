@@ -22,6 +22,7 @@ import {
   pendingGem,
   updatePool,
   getStartBlock,
+  getTokenSupplies,
 } from "../../web3/bank";
 
 import { aggregate } from "../../web3/multicall";
@@ -40,6 +41,7 @@ const Bank = ({
   updateAccount,
 }) => {
   const [pools, setPools] = useState([]);
+  const [totalAlloc, setTotalAlloc] = useState(0);
   const [assistantAcknowledged, setAssistantAcknowledged] = useState(
     window.localStorage.getItem("bankAssistantAcknowledged") === "true"
   );
@@ -51,7 +53,9 @@ const Bank = ({
       const poolLength = await getPoolsLength();
       const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
       const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
-      const totalAlloc = await totalAllocPoint();
+      const poolLpTokenBalances = await getTokenSupplies();
+      const _totalAlloc = await totalAllocPoint();
+      setTotalAlloc(_totalAlloc);
 
       const [poolInfo, userInfo] = await Promise.all([
         aggregate(poolInfocalls),
@@ -60,16 +64,16 @@ const Bank = ({
 
       const poolInfoValues = decodePoolInfoReturnFromMulticall(poolInfo.returnData);
       const userInfoValues = decodeUserInfoReturnFromMulticall(userInfo.returnData);
-
       const pools = poolInfoValues.map(async (pool, index) => {
         const poolAsset = poolAssets[pool.poolInfoValues.lpToken];
         const poolInfo = pool.poolInfoValues;
         const pending = await pendingGem(index);
+
         if (poolAsset) {
           return {
             name: poolAsset.name,
             apy: poolAsset.apy,
-            multiplier: ((poolInfo.allocPoint / totalAlloc) * 100).toFixed(1),
+            multiplier: ((Number(poolInfo.allocPoint) / Number(_totalAlloc)) * 100).toFixed(1),
             images: poolAsset.images,
             poolId: pool.poolId,
             lpToken: poolInfo.lpToken,
@@ -79,6 +83,7 @@ const Bank = ({
             userDepositAmountInPool: formatFromWei(userInfoValues[index].userValues.amount),
             userRewardAmountInPool: formatFromWei(pending),
             isSingleStake: poolAsset.isSingleStake,
+            poolLpTokenBalance: poolLpTokenBalances[index],
           };
         }
       });
@@ -145,7 +150,7 @@ const Bank = ({
                       key={i}
                       {...pool}
                       account={address}
-                      updateAccount={updateAccount}
+                      totalAllocation={totalAlloc}
                       updateCharacter={updateCharacter}
                     />
                   ))}

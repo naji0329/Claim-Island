@@ -131,6 +131,10 @@ export const decodeUserInfoReturnFromMulticall = (values) => {
   return result;
 };
 
+export const getTokenSupplies = async () => {
+  return await bank().methods.getTokenSupplies().call();
+};
+
 export const getPoolsLength = async () => {
   const poolsLen = await bank().methods.poolLength().call();
   return poolsLen;
@@ -165,6 +169,10 @@ export const pendingGem = async (pid) => {
   const gemPending = await bank().methods.pendingGem(pid, account).call();
 
   return gemPending;
+};
+
+export const gemPerBlock = async () => {
+  return bank().methods.gemPerBlock().call();
 };
 
 export const totalAllocPoint = async () => {
