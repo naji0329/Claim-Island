@@ -66,7 +66,7 @@ const FarmItem = ({
     };
 
     init();
-  });
+  }, []);
 
   useEffect(() => {
     if (canProducePearl) setButtonText("Collect Pearl");
