@@ -11,7 +11,7 @@ import {
   getRemainingPearlProductionTime,
 } from "../../web3/pearlFarm";
 
-const ClamItem = ({ clamId, dnaDecoded, updateAccount }) => {
+const ClamItem = ({ clamId, clamDataValues, updateAccount }) => {
   const [remainingTime, setRemainingTime] = useState("");
 
   useEffect(() => {
@@ -52,7 +52,10 @@ const ClamItem = ({ clamId, dnaDecoded, updateAccount }) => {
             {new Date(remainingTime * 1000).toISOString().substr(11, 8)}
           </div>
           <div className="grid-title">Lifespan</div>
-          <div className="grid-value">{dnaDecoded.lifespan} pearls</div>
+          <div className="grid-value">
+            {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced} pearls
+            remaining
+          </div>
         </div>
         <div className="flex flex-col">
           <Link
