@@ -3,6 +3,7 @@ import BEP20ABI from "./abi/BEP20.json";
 import ERC721ABI from "./abi/ERC721.json";
 import { shellTokenAddress, clamNFTAddress, bankAddress } from "./constants";
 import { contractFactory } from "./index";
+import { getAccount } from "./shared";
 
 export const balanceOf = async (address, account) => {
   const token = contractFactory({ abi: BEP20ABI, address });
@@ -11,12 +12,8 @@ export const balanceOf = async (address, account) => {
   return accountBalance;
 };
 
-export const approveContractForMaxUintErc721 = async (
-  account,
-  tokenAddress,
-  contractAddress,
-  tokenId
-) => {
+export const approveContractForMaxUintErc721 = async (tokenAddress, contractAddress, tokenId) => {
+  const account = getAccount();
   const token = contractFactory({ abi: ERC721ABI, address: tokenAddress });
 
   const method = token.methods.approve(contractAddress, tokenId);
