@@ -44,6 +44,10 @@ const CharacterWrapper = ({
   };
 
   const handleButtonCallback = (button) => {
+    if (button.alt && button.alt.dismiss === true) {
+      setShowBubble(false);
+    }
+
     switch (get(button, "alt.action", "")) {
       case "url":
         window.open(button.alt.destination, "_blank");
@@ -119,7 +123,7 @@ const CharacterWrapper = ({
                     id="btn-next"
 
                     onClick={() =>
-                      button.alt ? handleClickButtonAlt(button) : handleClickButton(button)
+                      button.alt ? handleButtonCallback(button) : handleClickButton(button)
                     }
                   >
                     {button.text}
@@ -129,7 +133,7 @@ const CharacterWrapper = ({
                   <button
                     className="btn character-btn"
                     onClick={() =>
-                      buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)
+                      buttonAlt.alt ? handleButtonCallback(buttonAlt) : handleClickButton(buttonAlt)
                     }
 
                   >
