@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
-import { useAsync } from "react-use";
-// import { Link } from "react-router-dom";
 
 import { actions } from "../../store/redux";
 import videoImage from "../../assets/locations/Bank.jpg";
@@ -38,7 +36,6 @@ import { WalletConnectAndAssist } from "./character/WalletConnectAndAssist";
 const Bank = ({
   account: { address, isBSChain, isWeb3Installed, isConnected },
   updateCharacter,
-  updateAccount,
 }) => {
   const [pools, setPools] = useState([]);
   const [totalAlloc, setTotalAlloc] = useState(0);
