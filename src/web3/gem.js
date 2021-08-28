@@ -9,6 +9,12 @@ export const getAllowance = async (ownerAddress, spenderAddress) => {
   return value;
 };
 
+export const getBalance = async (account) => {
+  const gem = contractFactory({ abi: gemAbi, address: gemTokenAddress });
+  const value = await gem.methods.balanceOf(account).call();
+  return value;
+};
+
 export const approveSpending = async (ownerAddress, spenderAddress, amount) => {
   console.log("amount", amount);
   const allowance = await getAllowance(ownerAddress, spenderAddress);

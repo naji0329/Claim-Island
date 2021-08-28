@@ -77,6 +77,12 @@
       "last 1 safari version"
     ]
   },
+  "stylelint": {
+    "rules": {
+      "at-rule-no-unknown": null,
+      "scss/at-rule-no-unknown": true
+    }
+  },
   "devDependencies": {
     "autoprefixer": "^9.8.6",
     "babel-eslint": "^10.1.0",

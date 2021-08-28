@@ -8,6 +8,7 @@ import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 import "./index.scss";
 
 // button => obj {text, alt}
+
 const CharacterWrapper = ({
   name,
   action,
@@ -85,7 +86,7 @@ const CharacterWrapper = ({
   return (
     <div
       className={classNames(
-        "flex-1 min-h-full min-w-full  md:flex items-center ",
+        "flex-1 min-h-full min-w-full md:flex items-center ",
         { "z-30": showBubble },
         { "z-0": !showBubble }
       )}
@@ -93,10 +94,10 @@ const CharacterWrapper = ({
       <div
         className={
           showBubble
-            ? "character-bubble fixed z-999 bottom-8 h-screen pointer-events-none w-screen"
-            : "character-bubble hide-bubble"
+            ? "character-bubble fixed z-999 bottom-8 h-1/3 pointer-events-none w-screen"
+            : "character-bubble h-1/3 hide-bubble fixed justify-end"
         }
-        style={{ zIndex: speech ? undefined : 0, position: "fixed" }}
+        style={{ zIndex: speech ? undefined : 0 }}
       >
         {speech && (
           <div className="text-bubble flex-col justify-end pointer-events-none">
@@ -116,7 +117,10 @@ const CharacterWrapper = ({
                   <button
                     className="btn character-btn"
                     id="btn-next"
-                    onClick={() => handleClickButton(button)}
+
+                    onClick={() =>
+                      button.alt ? handleClickButtonAlt(button) : handleClickButton(button)
+                    }
                   >
                     {button.text}
                   </button>
@@ -124,7 +128,10 @@ const CharacterWrapper = ({
                 {buttonAlt && buttonAlt.text && (
                   <button
                     className="btn character-btn"
-                    onClick={() => handleClickButton(buttonAlt)}
+                    onClick={() =>
+                      buttonAlt.alt ? handleClickButtonAlt(buttonAlt) : handleClickButton(buttonAlt)
+                    }
+
                   >
                     {buttonAlt.text}
                   </button>
