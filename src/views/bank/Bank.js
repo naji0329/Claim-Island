@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
-import { truncate } from "lodash";
 import { useAsync } from "react-use";
 // import { Link } from "react-router-dom";
 
@@ -32,6 +31,10 @@ import "./bank.scss";
 import { poolAssets } from "./poolsAssets";
 import { web3 } from "../../web3";
 import { ChainId, useEthers } from "@usedapp/core";
+
+import {
+  WalletConnectAndAssist
+} from './character/WalletConnectAndAssist'
 
 const Bank = ({
   account: { address, isBSChain, isWeb3Installed, isConnected },
@@ -91,122 +94,15 @@ const Bank = ({
     }
   }, [pools, address, isBSChain]);
 
-  const welcomeUserBack = (suppressSpeechBubble = false) => {
-    updateCharacter({
-      name: "tanja",
-      action: "bank.welcome_back.text",
-      suppressSpeechBubble,
-      button: {
-        text: "Yes Please",
-        alt: {
-          action: "cb",
-          destination: () => {
-            updateCharacter({
-              name: "tanja",
-              action: "bank.help_needed.text",
-              button: {
-                text: "Read Visitor’s Guide",
-                alt: {
-                  action: "cb",
-                  destination: () => {
-                    window.open(
-                      "https://clamisland.medium.com/clam-island-essential-visitors-guide-63f2a9984336",
-                      "_blank"
-                    );
-                  },
-                },
-              },
-              buttonAlt: {
-                text: "Go to Info Centre",
-                alt: {
-                  action: "internal",
-                  destination: "/infoCenter",
-                },
-              },
-            });
-          },
-        },
-      },
-      buttonAlt: {
-        text: "No Thanks",
-        alt: {
-          action: "cb",
-          destination: () => {
-            updateCharacter({
-              name: "tanja",
-              suppressSpeechBubble,
-              action: "bank.acknowledge_no_help_needed.text",
-              button: {
-                text: "Ok",
-                dismiss: truncate,
-              },
-            });
-          },
-        },
-      },
-    });
-  };
-
+  // CHARACTER SPEAK. functions in ./character folder
   useEffect(async () => {
-    if (!isWeb3Installed || !isBSChain) {
-      updateCharacter({
-        name: "tanja",
-        action: !isWeb3Installed ? "bank.connect_no_wallet.text" : "bank.connect_wrong_chain.text",
-        button: {
-          text: "Tell me how",
-          alt: {
-            action: "cb",
-            destination: () => {
-              window.open(
-                "https://medium.com/stakingbits/setting-up-metamask-for-binance-smart-chain-bsc-921d9a2625fd",
-                "_blank"
-              );
-            },
-          },
-        },
-        buttonAlt: {
-          text: "Back to Island",
-          alt: {
-            action: "internal",
-            destination: "/",
-          },
-        },
-      });
-    } else if (!isConnected) {
-      updateCharacter({
-        name: "tanja",
-        action: "bank.connect.text",
-        button: {
-          text: "Back to Island",
-          alt: {
-            action: "internal",
-            destination: "/",
-          },
-        },
-      });
-    } else if (!assistantAcknowledged) {
-      updateCharacter({
-        name: "tanja",
-        action: "bank.welcome.text",
-        button: {
-          text: "Ok",
-          dismiss: truncate,
-          alt: {
-            action: "cb",
-            dismiss: true,
-            destination: () => {
-              window.localStorage.setItem("bankAssistantAcknowledged", true);
-              setTimeout(() => {
-                const surpressSpeechBubble = true;
-                welcomeUserBack(surpressSpeechBubble);
-              }, 1000);
-            },
-          },
-        },
-      });
-    } else {
-      welcomeUserBack();
-    }
+    WalletConnectAndAssist({
+      isWeb3Installed,
+      isBSChain,
+      isConnected,
+      assistantAcknowledged,
+      updateCharacter
+    });
   }, [isWeb3Installed, isBSChain, isConnected]);
 
   return (
@@ -218,7 +114,7 @@ const Bank = ({
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
         {address && (
           <>
-            <div className="w-full lg:w-4/5 mx-auto relative z-10">
+            <div className="w-full lg:w-7/10 mx-auto relative z-10">
               <div className="px-2 md:px-8 py-4 mt-24 flex flex-col">
                 {chainId === ChainId.Localhost && (
                   <button
@@ -247,16 +143,21 @@ const Bank = ({
                 )}
                 {pools &&
                   pools.map((pool, i) => (
-                    <PoolItem key={i} {...pool} account={address} updateAccount={updateAccount} />
+                    <PoolItem
+                      key={i}
+                      {...pool}
+                      account={address}
+                      updateAccount={updateAccount}
+                      updateCharacter={updateCharacter} />
                   ))}
               </div>
             </div>
           </>
         )}
 
-        {/* chat character   */}
       </div>
 
+      {/* chat character   */}
       <Character name="tanja" />
     </>
   );
