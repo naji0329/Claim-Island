@@ -2,18 +2,11 @@ import React, { useState, useEffect } from "react";
 import { get } from "lodash";
 import classnames from "classnames";
 
-import {
-  deposit,
-  harvest,
-  withdraw,
-  pendingGem,
-  gemPerBlock,
-  getTokenSupplies,
-} from "../../web3/bank";
+import { deposit, harvest, withdraw, pendingGem, gemPerBlock } from "../../web3/bank";
 import pancake from "../../web3/pancake";
 
 import { approveBankForMaxUint, hasMaxUintAllowance, balanceOf } from "../../web3/bep20";
-import { bankAddress, wBNB, gemTokenAddress} from "../../web3/constants";
+import { bankAddress, wBNB, gemTokenAddress } from "../../web3/constants";
 import { formatFromWei, formatToWei } from "../../web3/shared";
 import { useAsync, createStateContext } from "react-use";
 
@@ -459,14 +452,13 @@ const PoolHarvest = () => {
   );
 };
 
-const PoolItem = ({ account, updateAccount, totalAllocation, ...pool }) => {
-  console.log('pool.multiplier: ', pool.multiplier);
+const PoolItem = ({ account, totalAllocation, ...pool }) => {
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
-  const [apr, setApr] = useState([]);
+  const [apr, setApr] = useState(0);
   const [urlForExchange, setUrlForExchange] = useState("");
   const [state, setSharedState] = useSharedState();
 
@@ -480,27 +472,43 @@ const PoolItem = ({ account, updateAccount, totalAllocation, ...pool }) => {
     setIsEnabled(isEnabled);
   });
 
-  useEffect(() => {
-    const setAprValues = async () => {
-      console.log('pool.multiplier: ', pool.multiplier);
-      const fakeGemPrice = 1000000000000;
-      const multiplier = 10512000; //TODO: better name
+  const calcAPR = ({ poolInfo, gemsPerBlock, gemPrice, totalAllocation }) => {
+    const constantValue = 10512000;
+    const supply = +poolInfo.poolLpTokenBalance > 0 ? +poolInfo.poolLpTokenBalance : 1;
+
+    if (poolInfo.lpToken === gemTokenAddress) {
+      return (
+        (((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) * constantValue) /
+        supply
+      );
+    }
+
+    return (
+      ((((gemPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
+        Number(totalAllocation)) *
+        constantValue) /
+        supply) *
+      gemPrice
+    );
+  };
+
+  useEffect(async () => {
+    const setAprValue = async () => {
+      const fakeGemPrice = 1000000000000000000;
       const gemsPerBlock = await gemPerBlock();
-      const tokenSupplies = await getTokenSupplies();
-      let aprValues = [];
-      for (let pid = 0; pid < tokenSupplies.length; pid++) {
-        const supply = tokenSupplies[pid] > 0 ? tokenSupplies[pid] : 1;
-        if (pool.lpToken === gemTokenAddress) {
-          aprValues.push(gemsPerBlock * pool.allocPoint / totalAllocation * multiplier / supply);
-        } else {
-          //TODO: replace fakeGemPrice
-          aprValues.push(fakeGemPrice * gemsPerBlock * pool.allocPoint / totalAllocation * multiplier / supply * fakeGemPrice);
-        }
-      }
-      setApr(aprValues);
+
+      const apr = calcAPR({
+        poolInfo: pool,
+        gemsPerBlock,
+        gemPrice: fakeGemPrice,
+        totalAllocation,
+      });
+
+      setApr(apr);
     };
-    setAprValues();
-  }, []);
+
+    await setAprValue();
+  }, [totalAllocation, pool]);
 
   const handleOpen = async () => {
     setIsOpen(true);
@@ -510,7 +518,6 @@ const PoolItem = ({ account, updateAccount, totalAllocation, ...pool }) => {
       tokenAddress: pool.lpToken,
       isSingleStake: pool.isSingleStake,
     });
-    console.log({ url });
     setUrlForExchange(url);
 
     setSharedState({ ...state, account, pool, balances });
@@ -545,7 +552,7 @@ const PoolItem = ({ account, updateAccount, totalAllocation, ...pool }) => {
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">APR</p>
-            <p className="font-bold text-black">{apr[pool.poolId]}</p>
+            <p className="font-bold text-black">{String(apr)}</p>
           </div>
 
           <div className="text-sm block">
