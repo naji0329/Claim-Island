@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { connect } from "redux-zero/react";
 import clsx from "clsx";
 import { ChainId, useEthers } from "@usedapp/core";
 
+import { actions } from "../../store/redux";
 import FarmPearl from "../../assets/img/farm_pearl.png";
 
 import { web3 } from "../../web3";
@@ -20,6 +22,7 @@ const FarmItem = ({
   onViewDetails,
   onWithdrawClam,
   onViewPearl,
+  updateAccount,
 }) => {
   const { chainId } = useEthers();
 
@@ -57,7 +60,7 @@ const FarmItem = ({
         const canStillProduce = await canStillProducePearls(clamId);
         setCanStillProducePearl(canStillProduce);
       } catch (err) {
-        console.log(`err`, err);
+        updateAccount({ error: err.message });
       }
     };
 
@@ -107,7 +110,6 @@ const FarmItem = ({
       <div className="flex-1 justify-center md:flex items-center p-4">
         <img className="w-auto" src={FarmPearl} />
       </div>
-
       {chainId === ChainId.Localhost && (
         <button
           className="btn m-2"
@@ -199,4 +201,5 @@ const FarmItem = ({
   );
 };
 
-export default FarmItem;
+const mapToProps = (state) => state;
+export default connect(mapToProps, actions)(FarmItem);

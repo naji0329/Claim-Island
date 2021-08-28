@@ -1,17 +1,31 @@
+import { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
-
 import { Link } from "react-router-dom";
+
 import FarmPearl from "../../assets/img/farm_pearl.png";
 import { actions } from "../../store/redux";
-import { stakeClam, hasClamBeenStakedBeforeByUser, stakeClamAgain } from "../../web3/pearlFarm";
+import {
+  stakeClam,
+  hasClamBeenStakedBeforeByUser,
+  stakeClamAgain,
+  getRemainingPearlProductionTime,
+} from "../../web3/pearlFarm";
 
-const ClamItem = ({ clamDataValues, clamId, dnaDecoded, updateAccount }) => {
-  const { birthTime, pearlProductionDelay, pearlProductionStart } = clamDataValues;
+const ClamItem = ({ clamId, dnaDecoded, updateAccount }) => {
+  const [remainingTime, setRemainingTime] = useState("");
 
-  const etaSeconds =
-    +pearlProductionDelay +
-    (+pearlProductionStart > 0 ? +pearlProductionStart : +birthTime) -
-    new Date().getTime() / 1000;
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const remaining = await getRemainingPearlProductionTime(clamId);
+        setRemainingTime(remaining);
+      } catch (err) {
+        updateAccount({ error: err.message });
+      }
+    };
+
+    init();
+  });
 
   const handleDeposit = async (clamId) => {
     try {
@@ -35,13 +49,17 @@ const ClamItem = ({ clamDataValues, clamId, dnaDecoded, updateAccount }) => {
         <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
           <div className="grid-title">Pearl ETA</div>
           <div className="grid-value">
-            {new Date(etaSeconds * 1000).toISOString().substr(11, 8)}
+            {new Date(remainingTime * 1000).toISOString().substr(11, 8)}
           </div>
           <div className="grid-title">Lifespan</div>
           <div className="grid-value">{dnaDecoded.lifespan} pearls</div>
         </div>
         <div className="flex flex-col">
-          <Link to={"/saferoom/clam"} className="font-montserrat underline" style={{ color: "#757575" }}>
+          <Link
+            to={"/saferoom/clam"}
+            className="font-montserrat underline"
+            style={{ color: "#757575" }}
+          >
             View in saferoom
           </Link>
           <a
