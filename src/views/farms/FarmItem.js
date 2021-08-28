@@ -26,6 +26,7 @@ const FarmItem = ({
 }) => {
   const { chainId } = useEthers();
 
+  const [inTx, setInTx] = useState(false);
   const [buttonText, setButtonText] = useState("Can't produce yet");
   const [remainingTime, setRemainingTime] = useState("");
   const [canStillProducePearl, setCanStillProducePearl] = useState(false);
@@ -85,7 +86,7 @@ const FarmItem = ({
   clam.processing = clam.progress < 100;
 
   const onClickViewPearl = async () => {
-    setButtonText("Hold On ...");
+    setButtonText("Hold on ...");
     const success = await onViewPearl(clamId);
     if (!success) {
       setButtonText("View Pearl");
@@ -93,11 +94,27 @@ const FarmItem = ({
   };
 
   const onClickOpenClam = async () => {
-    await propClamOpenForPearl(clamId);
+    try {
+      setInTx(true);
+      setButtonText("Hold on ...");
+      await propClamOpenForPearl(clamId);
+      setInTx(false);
+    } catch (err) {
+      updateAccount({ error: err.message });
+      setInTx(false);
+    }
   };
 
   const onClickCollectPearl = async () => {
-    await collectPearl(clamId);
+    try {
+      setInTx(true);
+      setButtonText("Hold on ...");
+      await collectPearl(clamId);
+      setInTx(false);
+    } catch (err) {
+      updateAccount({ error: err.message });
+      setInTx(false);
+    }
   };
 
   const getClamFunction = () => {
@@ -190,8 +207,9 @@ const FarmItem = ({
       ) : (
         <div className="px-4 py-2">
           <button
-            className={clsx("view-pearl-btn", !canProducePearl && "btn-disabled")}
+            className={clsx("view-pearl-btn", (!canProducePearl || inTx) && "btn-disabled")}
             onClick={getClamFunction}
+            disabled={!canProducePearl || inTx}
           >
             {buttonText}
           </button>
