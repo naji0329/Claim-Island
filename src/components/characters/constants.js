@@ -100,13 +100,13 @@ export const SPEECHES = {
       skip: false,
     },
     transaction_error: {
-      text: "We’re sorry, something went wrong and your transaction could not be processed. Your [funds / yield] have not been [taken / withdrawn / harvested]. Please try again later.",
+      text: "We’re sorry, something went wrong and your transaction could not be processed. Funds has not been removed. Please try again later.",
       next: false,
       dismiss: true,
       skip: false,
     },
     transaction_success: {
-      text: "Congratulations, your [deposit / withdrawal / harvest] was successful!",
+      text: "Congratulations, your transaction was successful!",
       next: false,
       dismiss: true,
       skip: false,
@@ -116,7 +116,7 @@ export const SPEECHES = {
       next: false,
       dismiss: true,
       skip: false,
-    }, 
+    },
     withdraw_pearl_rewards_alert: {
       text: "Please note that withdrawing from your investment pool while Pearl boost is active will cause you to lose Pearl boost rewards proportionately to your amount of withdrawal. Do you want to continue?",
       next: false,
@@ -584,7 +584,7 @@ export const SPEECHES = {
       next: false,
       dismiss: true,
       skip: false,
-    }
+    },
   },
   saferoom: {
     connect: {

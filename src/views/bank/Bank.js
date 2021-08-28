@@ -32,9 +32,7 @@ import { poolAssets } from "./poolsAssets";
 import { web3 } from "../../web3";
 import { ChainId, useEthers } from "@usedapp/core";
 
-import {
-  WalletConnectAndAssist
-} from './character/WalletConnectAndAssist'
+import { WalletConnectAndAssist } from "./character/WalletConnectAndAssist";
 
 const Bank = ({
   account: { address, isBSChain, isWeb3Installed, isConnected },
@@ -101,7 +99,7 @@ const Bank = ({
       isBSChain,
       isConnected,
       assistantAcknowledged,
-      updateCharacter
+      updateCharacter,
     });
   }, [isWeb3Installed, isBSChain, isConnected]);
 
@@ -148,13 +146,13 @@ const Bank = ({
                       {...pool}
                       account={address}
                       updateAccount={updateAccount}
-                      updateCharacter={updateCharacter} />
+                      updateCharacter={updateCharacter}
+                    />
                   ))}
               </div>
             </div>
           </>
         )}
-
       </div>
 
       {/* chat character   */}
