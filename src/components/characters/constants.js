@@ -92,7 +92,43 @@ export const SPEECHES = {
       next: false,
       dismiss: true,
       skip: false,
-    }
+    },
+    process_transaction: {
+      text: "Please hold while we process the transaction…",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    transaction_error: {
+      text: "We’re sorry, something went wrong and your transaction could not be processed. Your [funds / yield] have not been [taken / withdrawn / harvested]. Please try again later.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    transaction_success: {
+      text: "Congratulations, your [deposit / withdrawal / harvest] was successful!",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    deposit_fee_alert: {
+      text: "Please note, this pool has a deposit fee of [x]% on your investment, which is deducted on deposit and not refundable. Do you want to proceed?",
+      next: false,
+      dismiss: true,
+      skip: false,
+    }, 
+    withdraw_pearl_rewards_alert: {
+      text: "Please note that withdrawing from your investment pool while Pearl boost is active will cause you to lose Pearl boost rewards proportionately to your amount of withdrawal. Do you want to continue?",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    pearl_boost_yield_alert: {
+      text: "This will destroy your Pearl in return for the investment boost, and is irreversible. Do you want to continue?",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
   },
 
   shell_voting_complete: {
@@ -953,6 +989,25 @@ export const BUTTONS = {
   clam_shop: {
     welcome: {
       next: "Let's go!",
+      alt: false,
+    },
+  },
+
+  bank: {
+    transaction_error: {
+      next: "OK",
+      alt: false,
+    },
+    deposit_fee_alert: {
+      next: "OK",
+      alt: false,
+    },
+    withdraw_pearl_rewards_alert: {
+      next: "OK",
+      alt: false,
+    },
+    pearl_boost_yield_alert: {
+      next: "OK",
       alt: false,
     },
   },
