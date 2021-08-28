@@ -5,7 +5,7 @@ import classnames from "classnames";
 import { deposit, harvest, withdraw, pendingGem, gemPerBlock } from "../../web3/bank";
 import pancake from "../../web3/pancake";
 
-import { approveBankForMaxUint, hasMaxUintAllowance, balanceOf } from "../../web3/bep20";
+import { approveBankForMaxUint, hasMaxUintAllowanceBank, balanceOf } from "../../web3/bep20";
 import { bankAddress, wBNB, gemTokenAddress } from "../../web3/constants";
 import { formatFromWei, formatToWei } from "../../web3/shared";
 import { useAsync, createStateContext } from "react-use";
@@ -468,7 +468,7 @@ const PoolItem = ({ account, totalAllocation, ...pool }) => {
     const earnedGem = await pendingGem(pool.poolId);
     setGemEarned(earnedGem);
 
-    const isEnabled = await hasMaxUintAllowance(pool.account, pool.lpToken);
+    const isEnabled = await hasMaxUintAllowanceBank(pool.account, pool.lpToken);
     setIsEnabled(isEnabled);
   });
 

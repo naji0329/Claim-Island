@@ -33,7 +33,7 @@ const ClamPresale = ({
           text: "Go to Saferoom",
           alt: {
             action: "internal",
-            destination: "/saferoom",
+            destination: "/clam",
           },
         },
         buttonAlt: {

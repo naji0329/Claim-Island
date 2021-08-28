@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
+import { truncate } from "lodash";
 import { useAsync } from "react-use";
 // import { Link } from "react-router-dom";
 
@@ -33,9 +34,16 @@ import { poolAssets } from "./poolsAssets";
 import { web3 } from "../../web3";
 import { ChainId, useEthers } from "@usedapp/core";
 
-const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount }) => {
+const Bank = ({
+  account: { address, isBSChain, isWeb3Installed, isConnected },
+  updateCharacter,
+  updateAccount,
+}) => {
   const [pools, setPools] = useState([]);
   const [totalAlloc, setTotalAlloc] = useState(0);
+  const [assistantAcknowledged, setAssistantAcknowledged] = useState(
+    window.localStorage.getItem("bankAssistantAcknowledged") === "true"
+  );
 
   const { chainId } = useEthers();
 
@@ -88,24 +96,123 @@ const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount 
     }
   }, [pools, address, isBSChain]);
 
-  useAsync(async () => {
+  const welcomeUserBack = (suppressSpeechBubble = false) => {
     updateCharacter({
       name: "tanja",
-      action: "bank.connect.text",
+      action: "bank.welcome_back.text",
+      suppressSpeechBubble,
       button: {
-        text: "Dismiss",
+        text: "Yes Please",
         alt: {
           action: "cb",
           destination: () => {
             updateCharacter({
               name: "tanja",
-              action: undefined,
+              action: "bank.help_needed.text",
+              button: {
+                text: "Read Visitor’s Guide",
+                alt: {
+                  action: "cb",
+                  destination: () => {
+                    window.open(
+                      "https://clamisland.medium.com/clam-island-essential-visitors-guide-63f2a9984336",
+                      "_blank"
+                    );
+                  },
+                },
+              },
+              buttonAlt: {
+                text: "Go to Info Centre",
+                alt: {
+                  action: "internal",
+                  destination: "/infoCenter",
+                },
+              },
+            });
+          },
+        },
+      },
+      buttonAlt: {
+        text: "No Thanks",
+        alt: {
+          action: "cb",
+          destination: () => {
+            updateCharacter({
+              name: "tanja",
+              suppressSpeechBubble,
+              action: "bank.acknowledge_no_help_needed.text",
+              button: {
+                text: "Ok",
+                dismiss: truncate,
+              },
             });
           },
         },
       },
     });
-  });
+  };
+
+  useEffect(async () => {
+    if (!isWeb3Installed || !isBSChain) {
+      updateCharacter({
+        name: "tanja",
+        action: !isWeb3Installed ? "bank.connect_no_wallet.text" : "bank.connect_wrong_chain.text",
+        button: {
+          text: "Tell me how",
+          alt: {
+            action: "cb",
+            destination: () => {
+              window.open(
+                "https://medium.com/stakingbits/setting-up-metamask-for-binance-smart-chain-bsc-921d9a2625fd",
+                "_blank"
+              );
+            },
+          },
+        },
+        buttonAlt: {
+          text: "Back to Island",
+          alt: {
+            action: "internal",
+            destination: "/",
+          },
+        },
+      });
+    } else if (!isConnected) {
+      updateCharacter({
+        name: "tanja",
+        action: "bank.connect.text",
+        button: {
+          text: "Back to Island",
+          alt: {
+            action: "internal",
+            destination: "/",
+          },
+        },
+      });
+    } else if (!assistantAcknowledged) {
+      updateCharacter({
+        name: "tanja",
+        action: "bank.welcome.text",
+        button: {
+          text: "Ok",
+          dismiss: truncate,
+          alt: {
+            action: "cb",
+            dismiss: true,
+            destination: () => {
+              window.localStorage.setItem("bankAssistantAcknowledged", true);
+              setTimeout(() => {
+                const surpressSpeechBubble = true;
+                welcomeUserBack(surpressSpeechBubble);
+              }, 1000);
+            },
+          },
+        },
+      });
+    } else {
+      welcomeUserBack();
+    }
+  }, [isWeb3Installed, isBSChain, isConnected]);
 
   return (
     <>

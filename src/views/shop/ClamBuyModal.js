@@ -14,7 +14,7 @@ import ArrowDown from "../../assets/img/arrow-down.svg";
 
 import { buyClam, getPrice } from "../../web3/clam";
 import { approveSpending } from "../../web3/gem";
-import { clamPresaleAddress, clamShopAddress } from "../../web3/constants";
+import { clamShopAddress } from "../../web3/constants";
 import { actions } from "../../store/redux";
 
 const Divider = () => (
@@ -37,8 +37,10 @@ const ClamBuyModal = ({
   const [showHatching, setShowHatching] = useState(false);
   const disableButton = usersPurchasedClam >= INDIVIDUAL_CAP;
 
-  const { register, handleSubmit, setValue, reset, formState, getValues } = useForm();
+  const { register, handleSubmit } = useForm();
+
   const [clamPrice, setClamPrice] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       const price = await getPrice();
@@ -46,6 +48,7 @@ const ClamBuyModal = ({
     };
     fetchData();
   }, []);
+
   const onSubmit = async (data) => {
     console.log({ data });
     setIsLoading(true);
@@ -100,7 +103,9 @@ const ClamBuyModal = ({
         {!showHatching && (
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col mb-4">
-              <h2 className="text-blue-700 text-center font-semibold text-3xl mb-2">Get Clams</h2>
+              <h2 className="text-blue-700 text-center font-semibold text-3xl mb-2">
+                Get Clams
+              </h2>
 
               {/* <div className="alert alert-success">
               <div className="flex-1">
@@ -127,14 +132,16 @@ const ClamBuyModal = ({
               {address ? (
                 <a
                   className="text-gray-500 text-base underline text-center p-2"
-                  href={getExplorerAddressLink(clamPresaleAddress, ChainId.BSC)}
+                  href={getExplorerAddressLink(clamShopAddress, ChainId.BSC)}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  {clamPresaleAddress}
+                  {clamShopAddress}
                 </a>
               ) : (
-                <span className="text-yellow-400 text-center">Wallet not connected</span>
+                <span className="text-yellow-400 text-center">
+                  Wallet not connected
+                </span>
               )}
             </div>
 
@@ -142,7 +149,9 @@ const ClamBuyModal = ({
             <div className="bg-white border-2 shadow rounded-xl">
               <div className="px-2 py-2">
                 <div className="flex flex-col">
-                  <div className="text-lg font-semibold my-2">Price of Clam</div>
+                  <div className="text-lg font-semibold my-2">
+                    Price of Clam
+                  </div>
                   <div className="flex flex-col text-sm text-gray-600">
                     <div className="flex flex-col">
                       <div className="flex flex-row items-center justify-between">
@@ -215,7 +224,9 @@ const ClamBuyModal = ({
                         CLAM
                       </span> */}
 
-                        <div className="mx-2">1 CLAM = {formatUnits(clamPrice, 18)} GEM</div>
+                        <div className="mx-2">
+                          1 CLAM = {formatUnits(clamPrice, 18)} GEM
+                        </div>
                       </div>
                     </div>
                   </div>

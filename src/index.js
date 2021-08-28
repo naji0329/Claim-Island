@@ -19,6 +19,7 @@ import { multicallAddress } from "./web3/constants";
 // import library css
 import "leaflet/dist/leaflet.css";
 import "./index.scss";
+import "react-toastify/dist/ReactToastify.css";
 
 const bscMainnetChainId = 56;
 const rpcUrl = "https://bsc-dataseed.binance.org";

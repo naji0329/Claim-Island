@@ -10,9 +10,9 @@ export const pearlNFTAddress = "0x89478e72395aba3A609e34B9ab7E30BDcba477dF";
 export const pearlBurnerAddress = "0x10fda9aF45192c9fCa4fa940c87d3Ce2e21851c1";
 export const rngAddress = "0x0c2d5Bc9a8c51B6f865609257627Af4E834ECFa7";
 export const dnaDecoderAddress = "0xa931f40e73F094f9AEB4c8549833Ff1aB5DDEd17";
-export const clamBonusAddress = "0x5B71fc3FE3e3C299fd5713F0E5Fbf5611BD152b5";
-export const clamShopAddress = "0xf6fEEA84B09c28aA823B279D30b8cbC0042e4844";
-export const pearlFarmAddress = "0x40a44c03F743F71be0f63bAffa83a3a977141368";
+export const clamBonusAddress = "0x40a44c03F743F71be0f63bAffa83a3a977141368";
+export const clamShopAddress = "0x4108013C7a3c9E4F6dcb08c2264A3e87d42D8d3B";
+export const pearlFarmAddress = "0x00D45Bd841d878698Ad57f7210222Ea1Ace51110";
 //// end of test contracts
 
 //// contracts already deployed to mainnet

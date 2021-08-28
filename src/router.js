@@ -11,15 +11,15 @@ import Saferoom from "./views/saferoom/Saferoom";
 // import ShellVoting from "./views/shell_voting";
 
 const ROUTES = [
-  { title: "Home", url: "/", component: Home },
-  { title: "Saferoom", url: "/saferoom", component: Saferoom },
-  { title: "Clam Presale", url: "/clam-presale", component: ClamPresale },
-  { title: "Shop", url: "/shop", component: Shop },
-  { title: "Clam Claimer", url: "/clam-claimer", component: ClamClaimer },
+  { title: "Home", url: "/", component: Home, exact: true },
+  { title: "Saferoom", url: "/saferoom", component: Saferoom, exact: false },
+  { title: "Clam Presale", url: "/clam-presale", component: ClamPresale, exact: true },
+  { title: "Shop", url: "/shop", component: Shop, exact: true },
+  { title: "Clam Claimer", url: "/clam-claimer", component: ClamClaimer, exact: true },
   // { title: "Clam Viewer", url: "/clam-viewer", component: ClamViewer },
   // TODOs
-  { title: "Farms", url: "/farms", component: Farms },
-  { title: "Bank", url: "/bank", component: Bank },
+  { title: "Farms", url: "/farms", component: Farms, exact: true },
+  { title: "Bank", url: "/bank", component: Bank, exact: true },
   // { title: "Vault", url: "/vault/", component: Vault },
   // { title: "Vault", url: "/vault/:tokenId", component: Vault },
   // { title: "Shell Presale", url: "/shell-presale", component: ShellPresale },
