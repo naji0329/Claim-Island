@@ -52,11 +52,47 @@ export const SPEECHES = {
 
   bank: {
     connect: {
-      text: "Welcome to the bank!",
+      text: "Welcome to Clam Island Bank! You’ll need to connect your wallet using the button on the top right of your screen in order to invest with us.",
       next: false,
       dismiss: true,
       skip: false,
     },
+    connect_no_wallet: {
+      text: "Welcome to Clam Island Bank! It looks like you don’t have a blockchain wallet installed. You will need one in order to invest with us.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    connect_wrong_chain: {
+      text: "Welcome to Clam Island Bank! In order to invest with us, you will need to switch your wallet to Binance Smart Chain.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    welcome: {
+      text: "Welcome back to Clam Island Bank! Please let me know if you need help with anything",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    welcome_back: {
+      text: "Hello again! Do you need my assistance?",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    acknowledge_no_help_needed: {
+      text: "No problem, happy investing! Just talk to me if you do need any help.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    help_needed: {
+      text: "We are currently working on an explainer video, in the meantime please refer to our Visitor’s Guide. You can also find more information on the Clam Island ecosystem in general at the Visitor’s Information Centre.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    }
   },
 
   shell_voting_complete: {
