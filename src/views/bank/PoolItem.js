@@ -13,16 +13,15 @@ import {
 import pancake from "../../web3/pancake";
 
 import { approveBankForMaxUint, hasMaxUintAllowance, balanceOf } from "../../web3/bep20";
-import { bankAddress, wBNB } from "../../web3/constants";
+import { bankAddress, wBNB, gemTokenAddress} from "../../web3/constants";
 import { formatFromWei, formatToWei } from "../../web3/shared";
 import { useAsync, createStateContext } from "react-use";
 
 import { useEthers } from "@usedapp/core";
 import { useForm } from "react-hook-form";
 import BigNumber from "bignumber.js";
-import { LoopOnce } from "three";
 
-// shared state across all pool copoments - to avoid passing too much props down to children
+// shared state across all pool components - to avoid passing too much props down to children
 const [useSharedState, SharedStateProvider] = createStateContext();
 
 // prevent rounding up
@@ -461,6 +460,7 @@ const PoolHarvest = () => {
 };
 
 const PoolItem = ({ account, updateAccount, totalAllocation, ...pool }) => {
+  console.log('pool.multiplier: ', pool.multiplier);
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -482,6 +482,7 @@ const PoolItem = ({ account, updateAccount, totalAllocation, ...pool }) => {
 
   useEffect(() => {
     const setAprValues = async () => {
+      console.log('pool.multiplier: ', pool.multiplier);
       const fakeGemPrice = 1000000000000;
       const multiplier = 10512000; //TODO: better name
       const gemsPerBlock = await gemPerBlock();
@@ -489,7 +490,12 @@ const PoolItem = ({ account, updateAccount, totalAllocation, ...pool }) => {
       let aprValues = [];
       for (let pid = 0; pid < tokenSupplies.length; pid++) {
         const supply = tokenSupplies[pid] > 0 ? tokenSupplies[pid] : 1;
-        aprValues.push(fakeGemPrice * gemsPerBlock * pool.allocPoint / totalAllocation * multiplier / supply);
+        if (pool.lpToken === gemTokenAddress) {
+          aprValues.push(gemsPerBlock * pool.allocPoint / totalAllocation * multiplier / supply);
+        } else {
+          //TODO: replace fakeGemPrice
+          aprValues.push(fakeGemPrice * gemsPerBlock * pool.allocPoint / totalAllocation * multiplier / supply * fakeGemPrice);
+        }
       }
       setApr(aprValues);
     };
