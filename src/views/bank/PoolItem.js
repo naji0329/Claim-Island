@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { get } from "lodash";
 import classnames from "classnames";
 
-import { deposit, harvest, withdraw, pendingGem, gemPerBlock } from "../../web3/bank";
+import {
+  deposit,
+  harvest,
+  withdraw,
+  pendingGem,
+  gemPerBlock,
+  getTokenSupplies,
+} from "../../web3/bank";
 import pancake from "../../web3/pancake";
 
 import { approveBankForMaxUint, hasMaxUintAllowance, balanceOf } from "../../web3/bep20";
@@ -453,13 +460,13 @@ const PoolHarvest = () => {
   );
 };
 
-const PoolItem = ({ account, updateAccount, ...pool }) => {
+const PoolItem = ({ account, updateAccount, totalAllocation, ...pool }) => {
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
-  const [gemPerBlock, setGemPerBlock] = useState(0);
+  const [apr, setApr] = useState([]);
   const [urlForExchange, setUrlForExchange] = useState("");
   const [state, setSharedState] = useSharedState();
 
@@ -471,10 +478,23 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
 
     const isEnabled = await hasMaxUintAllowance(pool.account, pool.lpToken);
     setIsEnabled(isEnabled);
-
-    const gemPerBlock = await gemPerBlock();
-    setGemPerBlock(gemPerBlock);
   });
+
+  useEffect(() => {
+    const setAprValues = async () => {
+      const fakeGemPrice = 1000000000000;
+      const multiplier = 10512000; //TODO: better name
+      const gemsPerBlock = await gemPerBlock();
+      const tokenSupplies = await getTokenSupplies();
+      let aprValues = [];
+      for (let pid = 0; pid < tokenSupplies.length; pid++) {
+        const supply = tokenSupplies[pid] > 0 ? tokenSupplies[pid] : 1;
+        aprValues.push(fakeGemPrice * gemsPerBlock * pool.allocPoint / totalAllocation * multiplier / supply);
+      }
+      setApr(aprValues);
+    };
+    setAprValues();
+  }, []);
 
   const handleOpen = async () => {
     setIsOpen(true);
@@ -518,10 +538,8 @@ const PoolItem = ({ account, updateAccount, ...pool }) => {
           </div>
 
           <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
-              APR
-            </p>
-            <p className="font-bold text-black">{pool.apy}</p>
+            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">APR</p>
+            <p className="font-bold text-black">{apr[pool.poolId]}</p>
           </div>
 
           <div className="text-sm block">

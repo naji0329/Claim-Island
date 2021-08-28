@@ -34,6 +34,7 @@ import { ChainId, useEthers } from "@usedapp/core";
 
 const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount }) => {
   const [pools, setPools] = useState([]);
+  const [totalAlloc, setTotalAlloc] = useState(0);
 
   const { chainId } = useEthers();
 
@@ -42,7 +43,8 @@ const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount 
       const poolLength = await getPoolsLength();
       const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
       const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
-      const totalAlloc = await totalAllocPoint();
+      const _totalAlloc = await totalAllocPoint();
+      setTotalAlloc(_totalAlloc);
 
       const [poolInfo, userInfo] = await Promise.all([
         aggregate(poolInfocalls),
@@ -140,7 +142,7 @@ const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount 
                 )}
                 {pools &&
                   pools.map((pool, i) => (
-                    <PoolItem key={i} {...pool} account={address} updateAccount={updateAccount} />
+                    <PoolItem key={i} {...pool} account={address} updateAccount={updateAccount} totalAllocation={totalAlloc} />
                   ))}
               </div>
             </div>
