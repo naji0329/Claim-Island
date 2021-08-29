@@ -15,7 +15,7 @@ const getAccount = () => {
   throw new Error("No address found");
 };
 
-const eventCallback = (res) => {
+const eventCallback = async (res) => {
   try {
     console.log("Success", { res }); // add a toaster here
 
