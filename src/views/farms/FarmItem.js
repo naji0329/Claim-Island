@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { connect } from "redux-zero/react";
 import clsx from "clsx";
 import { ChainId, useEthers } from "@usedapp/core";
 
+import { actions } from "../../store/redux";
 import FarmPearl from "../../assets/img/farm_pearl.png";
 
 import { web3 } from "../../web3";
@@ -20,9 +22,11 @@ const FarmItem = ({
   onViewDetails,
   onWithdrawClam,
   onViewPearl,
+  updateAccount,
 }) => {
   const { chainId } = useEthers();
 
+  const [inTx, setInTx] = useState(false);
   const [buttonText, setButtonText] = useState("Can't produce yet");
   const [remainingTime, setRemainingTime] = useState("");
   const [canStillProducePearl, setCanStillProducePearl] = useState(false);
@@ -40,7 +44,11 @@ const FarmItem = ({
   const clamNextPearlTime = clamStartTime + +pearlProductionDelay;
   const progress = !+remainingTime
     ? 100
-    : +((remainingTime / (clamNextPearlTime - clamStartTime)) * 100).toFixed(2);
+    : +(
+        ((clamNextPearlTime - remainingTime - clamStartTime) /
+          (clamNextPearlTime - clamStartTime)) *
+        100
+      ).toFixed(2);
 
   useEffect(() => {
     const init = async () => {
@@ -57,12 +65,12 @@ const FarmItem = ({
         const canStillProduce = await canStillProducePearls(clamId);
         setCanStillProducePearl(canStillProduce);
       } catch (err) {
-        console.log(`err`, err);
+        updateAccount({ error: err.message });
       }
     };
 
     init();
-  });
+  }, [inTx]);
 
   useEffect(() => {
     if (canProducePearl) setButtonText("Collect Pearl");
@@ -73,16 +81,15 @@ const FarmItem = ({
   const clam = {
     remainingTime: new Date(+remainingTime * 1000).toISOString().substr(11, 8),
     progress,
-    processing: remainingTime < new Date().getTime(), // to see the 2 views... processed and processing
+    processing: remainingTime > 0,
     dnaDecoded,
     heading: dnaDecoded.rarity,
     harvestableShell: pearlProductionCapacity,
     remainingLifeSpan: pearlProductionCapacity - pearlsProduced,
   };
-  clam.processing = clam.progress < 100;
 
   const onClickViewPearl = async () => {
-    setButtonText("Hold On ...");
+    setButtonText("Hold on ...");
     const success = await onViewPearl(clamId);
     if (!success) {
       setButtonText("View Pearl");
@@ -90,11 +97,27 @@ const FarmItem = ({
   };
 
   const onClickOpenClam = async () => {
-    await propClamOpenForPearl(clamId);
+    try {
+      setInTx(true);
+      setButtonText("Hold on ...");
+      await propClamOpenForPearl(clamId);
+      setInTx(false);
+    } catch (err) {
+      updateAccount({ error: err.message });
+      setInTx(false);
+    }
   };
 
   const onClickCollectPearl = async () => {
-    await collectPearl(clamId);
+    try {
+      setInTx(true);
+      setButtonText("Hold on ...");
+      await collectPearl(clamId);
+      setInTx(false);
+    } catch (err) {
+      updateAccount({ error: err.message });
+      setInTx(false);
+    }
   };
 
   const getClamFunction = () => {
@@ -107,7 +130,6 @@ const FarmItem = ({
       <div className="flex-1 justify-center md:flex items-center p-4">
         <img className="w-auto" src={FarmPearl} />
       </div>
-
       {chainId === ChainId.Localhost && (
         <button
           className="btn m-2"
@@ -188,8 +210,9 @@ const FarmItem = ({
       ) : (
         <div className="px-4 py-2">
           <button
-            className={clsx("view-pearl-btn", !canProducePearl && "btn-disabled")}
+            className={clsx("view-pearl-btn", (!canProducePearl || inTx) && "btn-disabled")}
             onClick={getClamFunction}
+            disabled={!canProducePearl || inTx}
           >
             {buttonText}
           </button>
@@ -199,4 +222,5 @@ const FarmItem = ({
   );
 };
 
-export default FarmItem;
+const mapToProps = (state) => state;
+export default connect(mapToProps, actions)(FarmItem);
