@@ -16,7 +16,7 @@ import { gemTokenAddress } from "../../web3/constants";
 // shared state across all pool components - to avoid passing too much props down to children
 const [useSharedState, SharedStateProvider] = createStateContext();
 
-const PoolItem = ({ account, totalAllocation, updateCharacter, ...pool }) => {
+const PoolItem = ({ account, totalAllocation, updateCharacter, toggleModal, ...pool }) => {
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -167,7 +167,11 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, ...pool }) => {
             </div>
 
             <div className="flex w-2/5 h-full">
-              <PoolHarvest updateCharacter={updateCharacter} useSharedState={useSharedState} />
+              <PoolHarvest
+                updateCharacter={updateCharacter}
+                useSharedState={useSharedState}
+                toggleModal={toggleModal}
+              />
             </div>
           </div>
         )}

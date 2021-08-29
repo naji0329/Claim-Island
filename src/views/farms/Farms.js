@@ -42,7 +42,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { isShowing, toggle: toggleModal } = useModal();
+  const { isShowing, toggleModal } = useModal();
 
   const [modalSelected, setModal] = useState("");
   const [selectedClam, setSelectedClam] = useState({});

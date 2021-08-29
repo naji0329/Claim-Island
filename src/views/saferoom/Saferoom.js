@@ -36,7 +36,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
 
   let { path, url } = useRouteMatch();
 
-  const { isShowing, toggle } = useModal();
+  const { isShowing, toggleModal } = useModal();
 
   const getDna = async (getByNFTIndex, getNFTData, account, index, getDecodedDNA) => {
     const tokenId = await getByNFTIndex(account, index);
@@ -127,7 +127,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
       {/* chat character   */}
       {!address && <Character name="tanja" />}
 
-      <Modal isShowing={isShowing} onClose={toggle}>
+      <Modal isShowing={isShowing} onClose={toggleModal}>
         {tab === "Clam" && <ClamView {...selectedAsset} />}
         {tab === "Pearl" && <PearlView {...selectedAsset} />}
       </Modal>
@@ -154,7 +154,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
                   <TabContainer
                     clams={clams}
                     setSelectedAsset={setSelectedAsset}
-                    toggle={toggle}
+                    toggle={toggleModal}
                     setTab={setTab}
                     pearls={pearls}
                   />
