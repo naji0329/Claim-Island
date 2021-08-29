@@ -26,13 +26,20 @@ const rpcUrl = "https://bsc-dataseed.binance.org";
 
 const ganacheChainId = 1337;
 const hardHatChainId = 31337;
+const bscTestnet = 97;
 
 const config = {
-  supportedChains: [ChainId.BSC, ganacheChainId, hardHatChainId],
+  supportedChains: [ChainId.BSC, ganacheChainId, hardHatChainId, bscTestnet],
   readOnlyChainId: ChainId.BSC,
-  multicallAddresses: { [ganacheChainId]: multicallAddress, [hardHatChainId]: multicallAddress },
+  multicallAddresses: {
+    [ChainId.BSC]: multicallAddress[ganacheChainId],
+    [ganacheChainId]: multicallAddress[ganacheChainId],
+    [hardHatChainId]: multicallAddress[hardHatChainId],
+    [bscTestnet]: multicallAddress[bscTestnet],
+  },
   readOnlyUrls: {
     [ChainId.BSC]: "https://bsc-dataseed.binance.org",
+    [bscTestnet]: "https://data-seed-prebsc-1-s2.binance.org:8545/",
     [ganacheChainId]: "http://127.0.0.1:8545/",
     [hardHatChainId]: "http://127.0.0.1:8545/",
   },

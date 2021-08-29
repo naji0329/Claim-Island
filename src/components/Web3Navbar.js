@@ -100,7 +100,13 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     }
     const netId = await web3.eth.net.getId();
     console.log("useEffect updateAccount", { activateChainId, netId });
-    const isBSChain = activateChainId === ChainId.BSC || activateChainId === ChainId.Localhost;
+
+    const bscTestnet = 97;
+
+    const isBSChain =
+      activateChainId === ChainId.BSC ||
+      activateChainId === ChainId.Localhost ||
+      activateChainId === bscTestnet;
 
     updateAccount({
       bnbBalance: activateBnbBalance,
