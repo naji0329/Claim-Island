@@ -47,10 +47,9 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   const [modalSelected, setModal] = useState("");
   const [selectedClam, setSelectedClam] = useState({});
 
-  const handleWithdraw = async (clam, index) => {
-    console.log({ clam });
+  const handleWithdraw = async (clamId) => {
     try {
-      await unstakeClam(index);
+      await unstakeClam(clamId);
     } catch (err) {
       updateAccount({ error: err.message });
     }
@@ -89,8 +88,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   };
 
   // when "Withdraw" is clicked - open the modal
-  const onWithdrawClam = (clam, index) => {
-    console.log({ clam });
+  const onWithdrawClam = (clam) => {
     updateCharacter({
       name: "al",
       action: "farms.withdraw.text",
@@ -101,7 +99,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
         alt: {
           action: "cb",
           dismiss: true,
-          destination: () => handleWithdraw(clam, index),
+          destination: () => handleWithdraw(clam.clamId),
         },
       },
       buttonAlt: {
@@ -259,7 +257,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
                       key={i}
                       {...clam}
                       onViewDetails={(e, clamProcessing) => onViewDetails(clam, clamProcessing, i)}
-                      onWithdrawClam={() => onWithdrawClam(clam, i)}
+                      onWithdrawClam={() => onWithdrawClam(clam)}
                       onViewPearl={onViewPearl}
                     />
                   ))}

@@ -42,7 +42,7 @@ const ClamItem = ({ clamId, clamDataValues, updateAccount, address }) => {
     };
 
     init();
-  }, [address]);
+  }, [address, inTx]);
 
   const handleDeposit = async (clamId) => {
     try {

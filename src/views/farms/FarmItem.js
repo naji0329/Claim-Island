@@ -44,7 +44,11 @@ const FarmItem = ({
   const clamNextPearlTime = clamStartTime + +pearlProductionDelay;
   const progress = !+remainingTime
     ? 100
-    : +((remainingTime / (clamNextPearlTime - clamStartTime)) * 100).toFixed(2);
+    : +(
+        ((clamNextPearlTime - remainingTime - clamStartTime) /
+          (clamNextPearlTime - clamStartTime)) *
+        100
+      ).toFixed(2);
 
   useEffect(() => {
     const init = async () => {
@@ -66,7 +70,7 @@ const FarmItem = ({
     };
 
     init();
-  }, []);
+  }, [inTx]);
 
   useEffect(() => {
     if (canProducePearl) setButtonText("Collect Pearl");
@@ -77,13 +81,12 @@ const FarmItem = ({
   const clam = {
     remainingTime: new Date(+remainingTime * 1000).toISOString().substr(11, 8),
     progress,
-    processing: remainingTime < new Date().getTime(), // to see the 2 views... processed and processing
+    processing: remainingTime > 0,
     dnaDecoded,
     heading: dnaDecoded.rarity,
     harvestableShell: pearlProductionCapacity,
     remainingLifeSpan: pearlProductionCapacity - pearlsProduced,
   };
-  clam.processing = clam.progress < 100;
 
   const onClickViewPearl = async () => {
     setButtonText("Hold on ...");
