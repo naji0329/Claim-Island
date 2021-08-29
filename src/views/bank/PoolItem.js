@@ -472,35 +472,35 @@ const PoolItem = ({ account, totalAllocation, ...pool }) => {
     setIsEnabled(isEnabled);
   });
 
-  const calcAPR = ({ poolInfo, gemsPerBlock, gemPrice, totalAllocation }) => {
-    const constantValue = 10512000;
+  const calcAPR = ({ poolInfo, gemsPerBlock, tokenPrice, totalAllocation }) => {
+    const blocksPerYear = 10512000; // seconds per year / 3
     const supply = +poolInfo.poolLpTokenBalance > 0 ? +poolInfo.poolLpTokenBalance : 1;
 
     if (poolInfo.lpToken === gemTokenAddress) {
       return (
-        (((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) * constantValue) /
+        (((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) * blocksPerYear) /
         supply
       );
     }
 
     return (
-      ((((gemPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
+      ((((tokenPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
         Number(totalAllocation)) *
-        constantValue) /
+        blocksPerYear) /
         supply) *
-      gemPrice
+      tokenPrice
     );
   };
 
   useEffect(async () => {
     const setAprValue = async () => {
-      const fakeGemPrice = 1000000000000000000;
+      const fakeTokenPrice = 1000000000000000000;
       const gemsPerBlock = await gemPerBlock();
 
       const apr = calcAPR({
         poolInfo: pool,
         gemsPerBlock,
-        gemPrice: fakeGemPrice,
+        tokenPrice: fakeTokenPrice,
         totalAllocation,
       });
 
