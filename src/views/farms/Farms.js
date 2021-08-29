@@ -36,6 +36,8 @@ const MODAL_OPTS = {
   PEARL_DETAILS: "pearlDetails",
 };
 
+import { useEthers } from "@usedapp/core";
+
 const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
   let history = useHistory();
   const [clams, setClams] = useState([]);
@@ -46,6 +48,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
   const [modalSelected, setModal] = useState("");
   const [selectedClam, setSelectedClam] = useState({});
+
+  const { chainId } = useEthers();
 
   const handleWithdraw = async (clamId) => {
     try {
@@ -120,7 +124,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
   const getClamsDataByIds = async (tokenIds) => {
     const clamDataCalls = clamContract.prepClamDataMulticall(tokenIds);
-    const clamDataResult = await aggregate(clamDataCalls);
+    const clamDataResult = await aggregate(clamDataCalls, chainId);
     const clamDataDecoded = clamContract.decodeClamDataFromMulticall(
       clamDataResult.returnData,
       tokenIds
@@ -128,7 +132,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     const clamDnas = clamDataDecoded.map((data) => data.clamDataValues.dna);
 
     const dnaDecodedCalls = prepGetDnaDecodedMulticall(clamDnas);
-    const dnaDecodedResult = await aggregate(dnaDecodedCalls);
+    const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
     const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(
       dnaDecodedResult.returnData,
       tokenIds
@@ -163,11 +167,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
             address,
             +clamBalance
           );
-          const tokenIdsResult = await aggregate(tokenIdsCalls);
+          const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
           const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
             tokenIdsResult.returnData
           );
-
           const [ownedClams, stakedClams] = await Promise.all([
             getClamsDataByIds(tokenIdsDecoded),
             getClamsDataByIds(clamsStakedIds),
@@ -190,7 +193,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   useAsync(async () => {
     updateCharacter({
       name: "al",
-      action: "saferoom.connect.text",
+      action: "farms.placeholder.text",
       button: {
         text: "Dismiss",
         alt: {

@@ -92,7 +92,7 @@ export const SPEECHES = {
       next: false,
       dismiss: true,
       skip: false,
-    }
+    },
   },
 
   shell_voting_complete: {
@@ -548,7 +548,7 @@ export const SPEECHES = {
       next: false,
       dismiss: true,
       skip: false,
-    }
+    },
   },
   saferoom: {
     connect: {
@@ -615,6 +615,10 @@ export const SPEECHES = {
     },
   },
   farms: {
+    placeholder: {
+      text: `Hello There! Welcome to the place where you can farm pearls.`,
+      dismiss: true,
+    },
     connect: {
       text: `Excellent! First, let's get your wallet connected. You will need to do this in order to see your Clams. Press the "Connect Wallet" button in the top right of the screen.`,
       next: `purchase`,
