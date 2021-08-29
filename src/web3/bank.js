@@ -1,19 +1,13 @@
 import bankAbi from "./abi/Bank.json";
 import { bankAddress } from "./constants";
 import { contractFactory } from "./index";
-import { store } from "../store/redux";
+import { getAccount } from "./shared";
 
 const bank = () =>
   contractFactory({
     abi: bankAbi,
     address: bankAddress,
   });
-
-const getAccount = () => {
-  const address = store.getState().account.address;
-  if (address) return address;
-  throw new Error("No address found");
-};
 
 const eventCallback = async (res) => {
   try {
