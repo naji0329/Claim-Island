@@ -18,6 +18,7 @@ export const Pearl3DView = (props) => {
           overtone={overtone}
           lustre={lustre}
           size={size}
+          pearlDna={pearlDna}
         />
         <ReflectionPlate />
         <PearlGround />

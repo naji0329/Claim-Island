@@ -11,6 +11,7 @@ import { Modal, useModal } from "../../components/Modal";
 import NFTItem from "./NFTItem";
 import ClamView from "./ClamView";
 import NFTUnknown from "../../assets/img/clam_unknown.png";
+import PEARLunknown from "../../assets/img/pearl_unknown.png";
 import PearlView from "./PearlView";
 
 import videoImage from "../../assets/locations/saferoom_static.jpg";
@@ -34,12 +35,9 @@ import { get } from "lodash";
 //   }
 // }];
 
-const Saferoom = ({
-  account: { clamBalance, pearlBalance, address },
-  updateCharacter,
-}) => {
+const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateCharacter }) => {
   const [clams, setClams] = useState([]);
-// const [clams, setClams] = useState(TEST_CLAMS)
+  // const [clams, setClams] = useState(TEST_CLAMS)
   const [pearls, setPearls] = useState([]);
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? "Clam" : "Pearl");
@@ -47,13 +45,7 @@ const Saferoom = ({
 
   const { isShowing, toggle } = useModal();
 
-  const getDna = async (
-    getByNFTIndex,
-    getNFTData,
-    account,
-    index,
-    getDecodedDNA
-  ) => {
+  const getDna = async (getByNFTIndex, getNFTData, account, index, getDecodedDNA) => {
     const tokenId = await getByNFTIndex(account, index);
     const data = await getNFTData(tokenId);
     const { dna } = data;
@@ -70,17 +62,10 @@ const Saferoom = ({
       try {
         setLoading(true);
 
-        const getNFTs = async (
-          getByNFTIndex,
-          getNFTData,
-          nftBalance,
-          getDecodedDNA
-        ) => {
+        const getNFTs = async (getByNFTIndex, getNFTData, nftBalance, getDecodedDNA) => {
           let promises = [];
           for (let i = 0; i < Number(nftBalance); i++) {
-            promises.push(
-              getDna(getByNFTIndex, getNFTData, address, i, getDecodedDNA)
-            );
+            promises.push(getDna(getByNFTIndex, getNFTData, address, i, getDecodedDNA));
           }
 
           return await Promise.all(promises);
@@ -133,12 +118,14 @@ const Saferoom = ({
   });
 
   // on modal open/close check for cache api image and set it if exists
-  useEffect(async () => {
-    const cache = await caches.open('clam-island');
-    const promises = await Promise.all(clams.map(clam => cache.match(clam.dna)));
-    const images = await Promise.all(promises.map(resp => {
-      return resp ? resp.json() : '';
-    }));
+  const setClamsPreview = async () => {
+    const cache = await caches.open("clam-island");
+    const promises = await Promise.all(clams.map((clam) => cache.match(clam.dna)));
+    const images = await Promise.all(
+      promises.map((resp) => {
+        return resp ? resp.json() : "";
+      })
+    );
     const clamsUptd = clams.map((clam, index) => {
       let clamImg = images[index];
       clamImg = clamImg ? clamImg.img : clamImg;
@@ -146,7 +133,29 @@ const Saferoom = ({
       return clam;
     });
     setClams(clamsUptd);
-  }, [isShowing]);
+  };
+
+  const setPearlsPreview = async () => {
+    const cache = await caches.open("clam-island");
+    const promises = await Promise.all(pearls.map((pearl) => cache.match(pearl.dna)));
+    const images = await Promise.all(
+      promises.map((resp) => {
+        return resp ? resp.json() : "";
+      })
+    );
+    const pearlsUptd = pearls.map((pearl, index) => {
+      let pearlImg = images[index];
+      pearlImg = pearlImg ? pearlImg.img : pearlImg;
+      pearl.img = pearlImg || PEARLunknown;
+      return pearl;
+    });
+    setPearls(pearlsUptd);
+  };
+
+  useEffect(() => {
+    setClamsPreview();
+    setPearlsPreview();
+  }, [!isShowing, loading]);
 
   return (
     <>
@@ -168,22 +177,14 @@ const Saferoom = ({
           className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
         >
           <source
-            src={
-              process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"
-            }
+            src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated.mp4"}
             type="video/mp4"
           />
           <source
-            src={
-              process.env.PUBLIC_URL +
-              "/location_vids/saferoom_animated_webm.webm"
-            }
+            src={process.env.PUBLIC_URL + "/location_vids/saferoom_animated_webm.webm"}
             type='video/webm; codecs="vp8, vorbis"'
           />
-          <img
-            src={videoImage}
-            title="Your browser does not support the video"
-          ></img>
+          <img src={videoImage} title="Your browser does not support the video"></img>
         </video>
       </div>
 
@@ -200,18 +201,14 @@ const Saferoom = ({
             {/* navbar */}
             <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
               <div className="px-3 py-2">
-                <h2 className="text-blue-700 font-semibold text-4xl mb-2">
-                  My Saferoom
-                </h2>
+                <h2 className="text-blue-700 font-semibold text-4xl mb-2">My Saferoom</h2>
                 <p className="text-yellow-700">All you minted NFTs</p>
               </div>
 
               <div className="px-3 py-2 flex justify-between">
                 <button
                   className={`mx-2 px-5 ${
-                    tab === "Clam"
-                      ? "rounded-xl bg-blue-400 text-white"
-                      : "text-blue-700"
+                    tab === "Clam" ? "rounded-xl bg-blue-400 text-white" : "text-blue-700"
                   }`}
                   onClick={() => setTab("Clam")}
                 >
@@ -219,9 +216,7 @@ const Saferoom = ({
                 </button>
                 <button
                   className={`mx-2 px-5 ${
-                    tab === "Pearl"
-                      ? "rounded-xl bg-blue-400 text-white"
-                      : "text-blue-700"
+                    tab === "Pearl" ? "rounded-xl bg-blue-400 text-white" : "text-blue-700"
                   }`}
                   onClick={() => setTab("Pearl")}
                 >
@@ -237,10 +232,7 @@ const Saferoom = ({
             </div>
 
             {/* clams and pears grid */}
-            <div
-              className="w-full my-4 overflow-auto"
-              style={{ height: "50rem" }}
-            >
+            <div className="w-full my-4 overflow-auto" style={{ height: "50rem" }}>
               {tab === "Clam" && clams && clams.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
                   {clams &&
@@ -278,7 +270,7 @@ const Saferoom = ({
                           }}
                           key={i}
                         >
-                          <NFTItem rarity={rarity} shape={shape} />
+                          <NFTItem rarity={rarity} shape={shape} img={pearl.img} />
                         </div>
                       );
                     })}
