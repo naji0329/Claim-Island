@@ -8,6 +8,7 @@ const pancake = (lpAddress) =>
     address: lpAddress,
   });
 
+// TODO: no 'async' needed here?
 export const getLPTokens = (lpAddress) => {
   const contract = pancake(lpAddress);
   return Promise.all([contract.methods.token0().call(), contract.methods.token1().call()]);
