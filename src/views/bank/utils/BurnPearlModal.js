@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { connect } from "redux-zero/react";
 import moment from "moment";
 import { actions } from "../../../store/redux";
@@ -20,9 +19,9 @@ import {
   weekStart,
   prepBonusRewardsMulticall,
   decodeBonusRewardsFromMulticall,
-  burnPearl,
 } from "../../../web3/pearlBurner";
 import { useTimer } from "../../../hooks/useTimer";
+import PearlInfo from "./PearlInfo";
 
 const BurnPearlModal = (props) => {
   const {
@@ -129,55 +128,6 @@ const BurnPearlModal = (props) => {
     ({ dnaDecoded }) => dnaDecoded.shape !== eligibleShape || dnaDecoded.color !== eligibleColor
   );
 
-  const PearlInfo = ({ pearl, isEligible, isLast }) => {
-    const hours = 720; // hours in 30 days
-    const gemPerHour = (+pearl.bonusRewards / hours).toFixed(2);
-    const handleBurn = async () => {
-      try {
-        await burnPearl(pearl.pearlId, pearl.dnaDecoded.shape, pearl.dnaDecoded.color);
-      } catch (err) {
-        updateAccount({ error: err.message });
-      }
-    };
-
-    const InfoLine = ({ label, value }) => (
-      <div className="w-full flex justify-between">
-        <span className="text-gray-500">{label}</span>
-        <span className="text-gray-500">{value}</span>
-      </div>
-    );
-
-    return (
-      <>
-        <div className="w-full flex">
-          <div className="w-1/4">pearl img</div>
-          <div className="w-3/4">
-            <InfoLine label="$Gem/hr" value={gemPerHour} />
-            <InfoLine label="Duration (hrs):" value={hours} />
-            <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
-            <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
-            <div className="w-full flex justify-between">
-              <button
-                onClick={handleBurn}
-                className={
-                  "font-montserrat underline font-bold " +
-                  (isEligible ? "text-blue-700" : "text-gray-500")
-                }
-                disabled={!isNativeStaker || !isEligible}
-              >
-                Use
-              </button>
-              <Link to={"/saferoom/pearl"} className="font-montserrat underline text-gray-500">
-                View in saferoom
-              </Link>
-            </div>
-          </div>
-        </div>
-        {!isLast && <div className="bg-gray-400 py-px mx-8 my-4 rounded-xl" />}
-      </>
-    );
-  };
-
   return (
     <div className="w-full flex flex-col">
       <h1 className="text-3xl font-aristotelica-bold text-gray-500 text-center mb-4">
@@ -205,7 +155,13 @@ const BurnPearlModal = (props) => {
           <p className="font-bold mb-4">Available for boost</p>
           {eligiblePearls.length ? (
             eligiblePearls.map((pearl, i, a) => (
-              <PearlInfo key={i} pearl={pearl} isLast={i === a.length - 1} isEligible />
+              <PearlInfo
+                key={i}
+                pearl={pearl}
+                isLast={i === a.length - 1}
+                isEligible
+                isNativeStaker={isNativeStaker}
+              />
             ))
           ) : (
             <p>No pearls available</p>
@@ -215,7 +171,12 @@ const BurnPearlModal = (props) => {
           <p className="font-bold mb-4">Not available this week</p>
           {notEligiblePearls.length ? (
             notEligiblePearls.map((pearl, i, a) => (
-              <PearlInfo key={i} pearl={pearl} isLast={i === a.length - 1} />
+              <PearlInfo
+                key={i}
+                pearl={pearl}
+                isLast={i === a.length - 1}
+                isNativeStaker={isNativeStaker}
+              />
             ))
           ) : (
             <p>No pearls available</p>
