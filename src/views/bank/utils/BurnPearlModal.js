@@ -22,6 +22,7 @@ import {
   decodeBonusRewardsFromMulticall,
   burnPearl,
 } from "../../../web3/pearlBurner";
+import { useTimer } from "../../../hooks/useTimer";
 
 const BurnPearlModal = (props) => {
   const {
@@ -33,12 +34,21 @@ const BurnPearlModal = (props) => {
   const [eligibleShape, setEligibleShape] = useState("");
   const [eligibleColor, setEligibleColor] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
-  const startOfWeekMs = +startOfWeek * 1000;
-  const nextWeek = moment(startOfWeekMs).add(7, "days");
-  const remainingTime = nextWeek.diff(moment());
-  const duration = moment(moment.duration(remainingTime)._data).format(
-    "DD[d], HH[h], mm[m], ss[s]"
-  );
+
+  const calculateTimeLeft = () => {
+    const startOfWeekMs = +startOfWeek * 1000;
+    const nextWeek = moment(startOfWeekMs).add(7, "d");
+    const remainingMs = nextWeek.diff(moment());
+    const days = moment.duration(remainingMs).days();
+    const hours = moment.duration(remainingMs).hours();
+    const minutes = moment.duration(remainingMs).minutes();
+    const seconds = moment.duration(remainingMs).seconds();
+    const duration = `${days}d, ${hours}h, ${minutes}m, ${seconds}s`;
+
+    return duration;
+  };
+
+  const { timeLeft } = useTimer(calculateTimeLeft);
 
   const getPearlDataByIds = async (tokenIds) => {
     const pearlDataCalls = prepPearlDataMulticall(tokenIds);
@@ -187,7 +197,7 @@ const BurnPearlModal = (props) => {
         </div>
         <div className="flex flex-col w-2/5 items-end">
           <span className="font-bold">Changes in</span>
-          <span className="text-gray-500">{duration !== "Invalid date" && duration}</span>
+          <span className="text-gray-500">{timeLeft[0] !== "-" && timeLeft}</span>
         </div>
       </div>
       <div className="w-full flex justify-between">
