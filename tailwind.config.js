@@ -59,6 +59,9 @@ module.exports = {
       height: {
         canvas: "400px",
       },
+      width: {
+        "7/10": "70%"
+      }
     },
   },
   variants: {
