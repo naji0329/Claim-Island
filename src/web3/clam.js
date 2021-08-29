@@ -295,7 +295,7 @@ export const decodeClamDataFromMulticall = (values, tokenIds) => {
   return result;
 };
 
-export const getClamValueInShellToken = () => {
+export const getClamValueInShellToken = async () => {
   const clamNft = contractFactory({
     abi: clamNFTAbi,
     address: clamNFTAddress,
