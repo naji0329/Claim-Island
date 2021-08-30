@@ -4,9 +4,9 @@ export const onDepositHarvestTxn = (updateCharacter) => {
   updateCharacter({
     name: "tanja",
     action: "bank.process_transaction.text",
-    button: false
+    button: false,
   });
-}; 
+};
 
 export const onDepositHarvestSuccess = (updateCharacter) => {
   updateCharacter({
@@ -14,10 +14,10 @@ export const onDepositHarvestSuccess = (updateCharacter) => {
     action: "bank.transaction_success.text",
     button: {
       text: "OK",
-      dismiss: truncate,
+      dismiss: true,
     },
   });
-}; 
+};
 
 export const onDepositHarvestError = (updateCharacter) => {
   updateCharacter({
@@ -25,10 +25,17 @@ export const onDepositHarvestError = (updateCharacter) => {
     action: "bank.transaction_error.text",
     button: {
       text: "OK",
-      dismiss: truncate,
+      dismiss: true
+    },
+    buttonAlt: {
+      text: "Back to Island",
+      alt: {
+        action: "internal",
+        destination: "/",
+      },
     },
   });
-}; 
+};
 
 export const onDepositFeeAlert = (updateCharacter, cb) => {
   updateCharacter({
@@ -48,7 +55,7 @@ export const onDepositFeeAlert = (updateCharacter, cb) => {
       dismiss: truncate
     }
   });
-}; 
+};
 
 export const onWithdrawPearlRewardsAlert = (updateCharacter, cb) => {
   updateCharacter({
@@ -68,7 +75,7 @@ export const onWithdrawPearlRewardsAlert = (updateCharacter, cb) => {
       dismiss: truncate
     }
   });
-}; 
+};
 
 export const onPearlBoostYieldAlert = (updateCharacter, cb) => {
   updateCharacter({
@@ -88,4 +95,4 @@ export const onPearlBoostYieldAlert = (updateCharacter, cb) => {
       dismiss: truncate
     }
   });
-}; 
+};

@@ -259,8 +259,6 @@ export const prepClamDataMulticall = (tokenIds) => {
 export const decodeTokenOfOwnerByIndexFromMulticall = (values) => {
   const result = [];
 
-  console.log(web3.eth.abi.decodeParameter("uint256", values[0]));
-
   for (let index = 0; index < values.length; index++) {
     result.push(web3.eth.abi.decodeParameter("uint256", values[index]));
   }
@@ -295,7 +293,7 @@ export const decodeClamDataFromMulticall = (values, tokenIds) => {
   return result;
 };
 
-export const getClamValueInShellToken = () => {
+export const getClamValueInShellToken = async () => {
   const clamNft = contractFactory({
     abi: clamNFTAbi,
     address: clamNFTAddress,

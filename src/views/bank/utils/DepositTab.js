@@ -79,7 +79,7 @@ const DepositTab = ({ useSharedState, updateCharacter }) => {
         <div className="flex items-center justify-between opacity-40 text-xl">
           <div className="">Wallet:</div> {/* TODO: update after deposit */}
           <div className="flex items-center">
-            <div className="mx-2">{formatNumber(+get(state, "balances[0]", "0"), 4)}</div>
+            <div className="mx-2">{formatNumber(+get(state, "balances[0]", "0"), 3)}</div>
             {/* <div className="text-sm">($15.01) </div> */}
           </div>
         </div>
@@ -116,7 +116,7 @@ const DepositTab = ({ useSharedState, updateCharacter }) => {
               placeholder="Amount"
               type="number"
               max={get(state, "balances[0]", "0")}
-              value={formatNumber(+state.depositAmount, 6)}
+              value={formatNumber(+state.depositAmount, 3)}
               onChange={handleDepositChange}
             />
 

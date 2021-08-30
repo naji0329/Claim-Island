@@ -28,6 +28,21 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, ...pool }) => {
 
   const { activateBrowserWallet } = useEthers();
 
+  const riskClass = (risk) => {
+    if (pool.risk == "High Risk") {
+      return "rounded-full bg-red-500 py-2 px-4 text-white";
+    } else if(pool.risk == "Medium Risk") {
+      return "rounded-full bg-yellow-500 py-2 px-4 text-white";
+    } else if(pool.risk == "Low Risk") {
+      return "rounded-full bg-blue-500 py-2 px-4 text-white";
+    } else {
+      return "rounded-full bg-green-500 py-2 px-4 text-white";
+    }
+  }
+
+  const riskStyle = riskClass(pool.risk);
+
+  console.log(riskClass);
   useAsync(async () => {
     const earnedGem = await pendingGem(pool.poolId);
     setGemEarned(earnedGem);
@@ -36,38 +51,42 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, ...pool }) => {
     setIsEnabled(isEnabled);
   });
 
-  const calcAPR = ({ poolInfo, gemsPerBlock, gemPrice, totalAllocation }) => {
-    const constantValue = 10512000;
+  const calcAPR = ({ poolInfo, gemsPerBlock, tokenPrice, totalAllocation }) => {
+    const blocksPerYear = 10512000; // seconds per year / 3
     const supply = +poolInfo.poolLpTokenBalance > 0 ? +poolInfo.poolLpTokenBalance : 1;
-
+    let apr;
     if (poolInfo.lpToken === gemTokenAddress) {
-      return (
-        (((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) * constantValue) /
-        supply
-      );
+      apr = Math.round((((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) * blocksPerYear) /
+        supply * 100) / 100;
+    } else {
+      apr = Math.round(((((tokenPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
+          Number(totalAllocation)) *
+          blocksPerYear) /
+          supply) *
+        tokenPrice * 100) / 100;
+        console.log(apr);
     }
 
-    return (
-      ((((gemPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
-        Number(totalAllocation)) *
-        constantValue) /
-        supply) *
-      gemPrice
-    );
+
+    if(apr > 1000000000000) {
+      apr = "∞";
+    }
+
+    return apr;
+
   };
 
   useEffect(async () => {
     const setAprValue = async () => {
-      const fakeGemPrice = 1000000000000000000;
+      const fakeTokenPrice = 1000000000000000000;
       const gemsPerBlock = await gemPerBlock();
 
       const apr = calcAPR({
         poolInfo: pool,
         gemsPerBlock,
-        gemPrice: fakeGemPrice,
+        tokenPrice: fakeTokenPrice,
         totalAllocation,
       });
-
       setApr(apr);
     };
 
@@ -110,13 +129,16 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, ...pool }) => {
           {/* <div className="badge badge-warning">Medium risk</div> */}
 
           <div className="text-sm block">
+            <p className={riskStyle}>{pool.risk}</p>
+          </div>
+          <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Reward Share</p>
             <p className="font-bold text-black text-center">{pool.multiplier}%</p>
           </div>
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">APR</p>
-            <p className="font-bold text-black">{String(apr)}</p>
+            <p className="font-bold text-black">{String(apr)}%</p>
           </div>
 
           <div className="text-sm block">

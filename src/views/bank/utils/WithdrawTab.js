@@ -78,7 +78,7 @@ const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
           <div className="">Vault:</div>
           <div className="flex items-center">
             <div className="mx-2">
-              {formatNumber(+get(state, "pool.userDepositAmountInPool", "0"), 4)}
+              {formatNumber(+get(state, "pool.userDepositAmountInPool", "0"), 3)}
             </div>
             {/* TODO convert LP to dolar */}
             {/* <div className="text-sm">($15.01) </div> */}
@@ -117,7 +117,7 @@ const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
               placeholder="Amount"
               type="number"
               max={get(state, "pool.userDepositAmountInPool")}
-              value={formatNumber(+state.withdrawAmount, 6)}
+              value={formatNumber(+state.withdrawAmount, 3)}
               onChange={handleWithdrawChange}
             />
 

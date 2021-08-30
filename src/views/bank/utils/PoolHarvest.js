@@ -69,7 +69,7 @@ const PoolHarvest = ({ useSharedState, updateCharacter }) => {
             </div>
 
             <div className="mx-2 text-4xl">
-              {formatNumber(+get(state, "pool.userRewardAmountInPool", "0.0"), 4)}
+              {formatNumber(+get(state, "pool.userRewardAmountInPool", "0.0"), 3)}
             </div>
             <div className="mx-2 text-xl">GEM</div>
             {/* TODO convert GEM to dola */}

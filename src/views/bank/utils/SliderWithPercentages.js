@@ -27,7 +27,7 @@ const SliderWithPercentages = ({ isDeposit, useSharedState }) => {
         type="range"
         max="100"
         value={slideValue}
-        className="range range-xs"
+        className="range range-xs w-full"
         onChange={(e) => handleSlide(e.target.value)}
       />
       <div className="flex w-full justify-between">
