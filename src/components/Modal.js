@@ -1,4 +1,10 @@
-import React, { useEffect, useImperativeHandle, useState, forwardRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useImperativeHandle,
+  useState,
+  forwardRef,
+  useCallback,
+} from "react";
 import ReactDOM from "react-dom";
 
 export const useModal = () => {
@@ -14,15 +20,18 @@ export const useModal = () => {
   };
 };
 
-export const Modal = ({ isShowing, onClose, className, children }) =>
+export const Modal = ({ isShowing, onClose, className, children, width }) =>
   isShowing
     ? ReactDOM.createPortal(
         <React.Fragment>
           <div
             className={`fixed w-full inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster`}
-            style={{ background: `rgba(0,0,0,.7)` }}
+            style={{ background: `rgba(0,0,0,.7)`, zIndex: 1000 }}
           >
-            <div className="border border-blue-500 shadow-lg bg-white w-2/3 md:max-w-11/12 mx-auto rounded-xl shadow-lg z-50 overflow-y-auto">
+            <div
+              className="border border-blue-500 shadow-lg bg-white w-2/3 md:max-w-11/12 mx-auto rounded-xl shadow-lg z-50 overflow-y-auto"
+              style={{ width: width ? width : undefined }}
+            >
               <div className="py-4 text-left px-6">
                 <div className="flex justify-end items-center pb-3">
                   {/* <p className="text-2xl font-bold text-gray-500">{title}</p> */}

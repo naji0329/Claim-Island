@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
-import { useAsync } from "react-use";
-// import { Link } from "react-router-dom";
 
 import { actions } from "../../store/redux";
-import videoImage from "../../assets/locations/bank_static.jpg";
-import videoMp4 from "../../assets/locations/bank_animated.mp4";
-import videoWebM from "../../assets/locations/bank_animated.webm";
+import videoImage from "../../assets/locations/Bank.jpg";
+import videoMp4 from "../../assets/locations/Bank.mp4";
+import videoWebM from "../../assets/locations/Bank.webm";
 
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
@@ -22,6 +20,7 @@ import {
   pendingGem,
   updatePool,
   getStartBlock,
+  getTokenSupplies,
 } from "../../web3/bank";
 
 import { aggregate } from "../../web3/multicall";
@@ -32,8 +31,17 @@ import { poolAssets } from "./poolsAssets";
 import { web3 } from "../../web3";
 import { ChainId, useEthers } from "@usedapp/core";
 
-const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount }) => {
+import { WalletConnectAndAssist } from "./character/WalletConnectAndAssist";
+
+const Bank = ({
+  account: { address, isBSChain, isWeb3Installed, isConnected },
+  updateCharacter,
+}) => {
   const [pools, setPools] = useState([]);
+  const [totalAlloc, setTotalAlloc] = useState(0);
+  const [assistantAcknowledged, setAssistantAcknowledged] = useState(
+    window.localStorage.getItem("bankAssistantAcknowledged") === "true"
+  );
 
   const { chainId } = useEthers();
 
@@ -42,7 +50,9 @@ const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount 
       const poolLength = await getPoolsLength();
       const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
       const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
-      const totalAlloc = await totalAllocPoint();
+      const poolLpTokenBalances = await getTokenSupplies();
+      const _totalAlloc = await totalAllocPoint();
+      setTotalAlloc(_totalAlloc);
 
       const [poolInfo, userInfo] = await Promise.all([
         aggregate(poolInfocalls),
@@ -51,25 +61,27 @@ const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount 
 
       const poolInfoValues = decodePoolInfoReturnFromMulticall(poolInfo.returnData);
       const userInfoValues = decodeUserInfoReturnFromMulticall(userInfo.returnData);
-
       const pools = poolInfoValues.map(async (pool, index) => {
         const poolAsset = poolAssets[pool.poolInfoValues.lpToken];
         const poolInfo = pool.poolInfoValues;
         const pending = await pendingGem(index);
+
         if (poolAsset) {
           return {
             name: poolAsset.name,
             apy: poolAsset.apy,
-            multiplier: ((poolInfo.allocPoint / totalAlloc) * 100).toFixed(1),
+            multiplier: ((Number(poolInfo.allocPoint) / Number(_totalAlloc)) * 100).toFixed(1),
             images: poolAsset.images,
+            risk: poolAsset.risk,
             poolId: pool.poolId,
             lpToken: poolInfo.lpToken,
             allocPoint: poolInfo.allocPoint,
             depositFeeBP: poolInfo.depositFeeBP,
             lastRewardBlock: poolInfo.lastRewardBlock,
-            userDepositAmountInPool: formatFromWei(userInfoValues[index].userValues.amount),
-            userRewardAmountInPool: formatFromWei(pending),
+            userDepositAmountInPool: Math.round(formatFromWei(userInfoValues[index].userValues.amount) * 100) / 100,
+            userRewardAmountInPool: Math.round(formatFromWei(pending) * 100) / 100,
             isSingleStake: poolAsset.isSingleStake,
+            poolLpTokenBalance: poolLpTokenBalances[index],
           };
         }
       });
@@ -83,24 +95,16 @@ const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount 
     }
   }, [pools, address, isBSChain]);
 
-  useAsync(async () => {
-    updateCharacter({
-      name: "tanja",
-      action: "bank.connect.text",
-      button: {
-        text: "Dismiss",
-        alt: {
-          action: "cb",
-          destination: () => {
-            updateCharacter({
-              name: "tanja",
-              action: undefined,
-            });
-          },
-        },
-      },
+  // CHARACTER SPEAK. functions in ./character folder
+  useEffect(async () => {
+    WalletConnectAndAssist({
+      isWeb3Installed,
+      isBSChain,
+      isConnected,
+      assistantAcknowledged,
+      updateCharacter,
     });
-  });
+  }, [isWeb3Installed, isBSChain, isConnected]);
 
   return (
     <>
@@ -111,7 +115,7 @@ const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount 
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
         {address && (
           <>
-            <div className="w-full lg:w-4/5 mx-auto relative z-10">
+            <div className="w-full lg:w-7/10 mx-auto relative z-10">
               <div className="px-2 md:px-8 py-4 mt-24 flex flex-col">
                 {chainId === ChainId.Localhost && (
                   <button
@@ -140,16 +144,21 @@ const Bank = ({ account: { address, isBSChain }, updateCharacter, updateAccount 
                 )}
                 {pools &&
                   pools.map((pool, i) => (
-                    <PoolItem key={i} {...pool} account={address} updateAccount={updateAccount} />
+                    <PoolItem
+                      key={i}
+                      {...pool}
+                      account={address}
+                      totalAllocation={totalAlloc}
+                      updateCharacter={updateCharacter}
+                    />
                   ))}
               </div>
             </div>
           </>
         )}
-
-        {/* chat character   */}
       </div>
 
+      {/* chat character   */}
       <Character name="tanja" />
     </>
   );
