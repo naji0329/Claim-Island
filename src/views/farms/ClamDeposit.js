@@ -35,7 +35,7 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
         const gemAllowance = await getAllowance(address, pearlFarmAddress).then(
           (v) => new BigNumber(v)
         );
-        setGemApproved(gemAllowance.lt(pPrice));
+        setGemApproved(pPrice.lt(gemAllowance));
       } catch (err) {
         updateAccount({ error: err.message });
       }
@@ -55,7 +55,7 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
       setButtonText("Approving Clam...");
       await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress, clamId);
 
-      if (gemApproved) {
+      if (!gemApproved) {
         setButtonText("Approving GEM...");
         await approveSpending(address, pearlFarmAddress, pearlPrice);
       }
