@@ -279,7 +279,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} />
+                  <NFTItem rarity={rarity} shape={shape} img={clam.img} />
                 </div>
               );
             })}
@@ -301,7 +301,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} />
+                  <NFTItem rarity={rarity} shape={shape} img={pearl.img}/>
                 </div>
               );
             })}
