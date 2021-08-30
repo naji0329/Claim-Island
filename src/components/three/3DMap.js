@@ -90,7 +90,7 @@ const Map3D = () => {
     addLights();
 
     bank = await loadGLTF("glb_files/Bank_Island.glb", scene);
-    farm = await loadGLTF("glb_files/Farm_Island.glb", scene);
+    farm = await loadGLTF("glb_files/farm_island.glb", scene);
     market = await loadGLTF("glb_files/Market_Island.glb", scene);
     vault = await loadGLTF("glb_files/Vault_Island.glb", scene);
     bridge = await loadGLTF("glb_files/Bridges.glb", scene, "bridge");
