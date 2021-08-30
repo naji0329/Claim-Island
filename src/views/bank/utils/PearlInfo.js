@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Pearl3DView } from "../../../components/pearl3DView";
 import { burnPearl } from "../../../web3/pearlBurner";
 
 const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker }) => {
@@ -22,8 +23,14 @@ const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker }) => {
   return (
     <>
       <div className="w-full flex">
-        <div className="w-1/4">pearl img</div>
-        <div className="w-3/4">
+        <div className="w-2/5 mr-4">
+          <Pearl3DView
+            pearlDna={pearl.pearlDataValues.dna}
+            decodedDna={pearl.dnaDecoded}
+            height="8rem"
+          />
+        </div>
+        <div className="w-3/5">
           <InfoLine label="$Gem/hr" value={gemPerHour} />
           <InfoLine label="Duration (hrs):" value={hours} />
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
