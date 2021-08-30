@@ -70,13 +70,13 @@ export const SPEECHES = {
       skip: false,
     },
     welcome: {
-      text: "Welcome back to Clam Island Bank! Please let me know if you need help with anything",
+      text: "Welcome back to Clam Island Bank! Please let me know if you need help with anything.",
       next: false,
       dismiss: true,
       skip: false,
     },
     welcome_back: {
-      text: "Hello again! Do you need my assistance?",
+      text: "Hello again! Can I help you with anything?",
       next: false,
       dismiss: true,
       skip: false,
