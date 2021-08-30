@@ -6,14 +6,14 @@ import Map3D from "../../components/three/3DMap";
 import CharacterSpeak from "../../components/characters";
 
 // import ClamIsland from "../../assets/img/clam_island_sign.png";
-import TgIcon from "../../assets/img/tg-icon.png";
-import TwitterIcon from "../../assets/img/twitter-icon.png";
+// import TgIcon from "../../assets/img/tg-icon.png";
+// import TwitterIcon from "../../assets/img/twitter-icon.png";
 
 // Main Home Component
 const Home = () => {
   return (
     <>
-      <div>
+      {/* <div>
         <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
           <div className="opening-soon">
             <a
@@ -37,7 +37,7 @@ const Home = () => {
             </a>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="Home" style={{ height: "95.5vh" }}>
         {/* <Map></Map> */}
         <Map3D></Map3D>

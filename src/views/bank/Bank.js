@@ -59,8 +59,8 @@ const Bank = ({
       setTotalAlloc(_totalAlloc);
 
       const [poolInfo, userInfo] = await Promise.all([
-        aggregate(poolInfocalls),
-        aggregate(userInfocalls),
+        aggregate(poolInfocalls, chainId),
+        aggregate(userInfocalls, chainId),
       ]);
 
       const poolInfoValues = decodePoolInfoReturnFromMulticall(poolInfo.returnData);

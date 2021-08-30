@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 // font awesome icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -41,6 +41,8 @@ const Map3D = () => {
   let hotModelBank, hotModelFarm, hotModelMarket, hotModelVault, lighthouseOutlineMeshes;
   let composer, outlinePass, effectFXAA, hotMeshArr = [], hoverStr = '';
   let bankSign, farmSign, marketSign, safeSign, infoSign, shopSign;
+
+  const history = useHistory();
 
   useEffect(() => {
     create3DScene(mapRef.current, setLoading, setControls, setHoverName);
@@ -270,7 +272,13 @@ const Map3D = () => {
   }
 
   const onMouseClick = () => {
+    // places: bank, farm, market, vault, lighthouse
     if (hoverStr === '') return;
+    if (hoverStr === 'bank') return history.push('/bank');
+    if (hoverStr === 'farm') return history.push('/farms');
+    if (hoverStr === 'market') return history.push('/shop');
+    if (hoverStr === 'vault') return history.push('/saferoom');
+    if (hoverStr === 'lighthouse') return window.open('https://clamisland.medium.com/clam-island-essential-visitors-guide-63f2a9984336', '_blank');
     window.open('', '_self');
   }
   /** TODO refactor when get rid of hot models */
@@ -326,7 +334,7 @@ const Map3D = () => {
         <FontAwesomeIcon icon={faSearchMinus} />
       </button>
       <div className={`three-container ${hoverName!==''?'hover':''}`} id='container' ref={mapRef}></div>
-      <div id='hoverLabel'>Opening Soon</div>
+      <div id='hoverLabel'>Open</div>
     </div>
   );
 };

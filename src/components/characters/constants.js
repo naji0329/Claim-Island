@@ -31,7 +31,7 @@ export const SPEECHES = {
       skip: false,
     },
     first: {
-      text: `The island isn't open yet, although Diego just finished a presale for some Clams ahead of grand opening. If you bought some from him, you can go see them in the Saferoom.`,
+      text: `The island is open. If you bought some from him, you can go see them in the Saferoom.`,
       next: "second",
       dismiss: false,
       skip: false,
@@ -651,6 +651,10 @@ export const SPEECHES = {
     },
   },
   farms: {
+    placeholder: {
+      text: `Hello There! Welcome to the place where you can farm pearls.`,
+      dismiss: true,
+    },
     connect: {
       text: `Excellent! First, let's get your wallet connected. You will need to do this in order to see your Clams. Press the "Connect Wallet" button in the top right of the screen.`,
       next: `purchase`,
