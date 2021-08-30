@@ -16,7 +16,7 @@ import {
   stakePrice,
 } from "../../web3/pearlFarm";
 
-const ClamItem = ({ clamId, clamDataValues, updateAccount, address }) => {
+const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState("Approve Clam");
   const [inTx, setInTx] = useState(false);
@@ -78,7 +78,7 @@ const ClamItem = ({ clamId, clamDataValues, updateAccount, address }) => {
   return (
     <div className="clam-details">
       <div className="w-1/2">
-        <img className="w-full p-4" src={FarmPearl} />
+        <img className="w-full p-4" src={img} />
       </div>
       <div className="details">
         <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">

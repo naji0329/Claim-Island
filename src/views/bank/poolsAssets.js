@@ -8,6 +8,7 @@ export const poolAssets = {
     images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
     risk: "High Risk",
     isSingleStake: true,
+    isNative: true,
   },
   [shellTokenAddress]: {
     name: `$SHELL`,
@@ -16,6 +17,7 @@ export const poolAssets = {
     images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
     risk: "High Risk",
     isSingleStake: true,
+    isNative: true,
   },
   "0xAaf0A7603b9d45c5e2BE0c1b03Cf238168334Ce4": {
     name: `SHELL - BNB`, // dummy bnb - carapace
@@ -25,6 +27,7 @@ export const poolAssets = {
       "https://clamisland.fi/favicon/android-chrome-192x192.png",
       "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
     ],
+    isNative: true,
     risk: "High Risk",
   },
   "0x72032eEcACF17c516dAd81298FDA8Abdc212AB06": {
@@ -35,6 +38,7 @@ export const poolAssets = {
       "https://clamisland.fi/favicon/android-chrome-192x192.png",
       "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
     ],
+    isNative: true,
     risk: "High Risk",
   },
   "0x61EB789d75A95CAa3fF50ed7E47b96c132fEc082": {

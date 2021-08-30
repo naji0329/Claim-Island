@@ -17,6 +17,7 @@ import { canCurrentlyProducePearl, canStillProducePearls } from "../../web3/clam
 
 const FarmItem = ({
   clamId,
+  img,
   dnaDecoded,
   clamDataValues,
   onViewDetails,
@@ -128,7 +129,7 @@ const FarmItem = ({
   return (
     <div className="FarmItem">
       <div className="flex-1 justify-center md:flex items-center p-4">
-        <img className="w-auto" src={FarmPearl} />
+        <img className="w-auto" src={img} />
       </div>
       {chainId === ChainId.Localhost && (
         <button

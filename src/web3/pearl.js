@@ -36,6 +36,90 @@ export const getPearlByIndex = async (account, index) => {
   return value;
 };
 
+export const prepTokenOfOwnerByIndexMulticall = (address, length) => {
+  const contractCalls = [];
+  for (let index = 0; index < Number(length); index++) {
+    contractCalls.push([
+      pearlNFTAddress,
+      web3.eth.abi.encodeFunctionCall(
+        {
+          name: "tokenOfOwnerByIndex",
+          type: "function",
+          inputs: [
+            {
+              type: "address",
+              name: "owner",
+            },
+            {
+              type: "uint256",
+              name: "index",
+            },
+          ],
+        },
+        [address, index]
+      ),
+    ]);
+  }
+
+  return contractCalls;
+};
+
+export const decodeTokenOfOwnerByIndexFromMulticall = (values) => {
+  const result = [];
+
+  for (let index = 0; index < values.length; index++) {
+    result.push(web3.eth.abi.decodeParameter("uint256", values[index]));
+  }
+
+  return result;
+};
+
+export const prepPearlDataMulticall = (tokenIds) => {
+  const contractCalls = [];
+  for (let index = 0; index < tokenIds.length; index++) {
+    contractCalls.push([
+      pearlNFTAddress,
+      web3.eth.abi.encodeFunctionCall(
+        {
+          name: "pearlData",
+          type: "function",
+          inputs: [
+            {
+              type: "uint256",
+              name: "",
+            },
+          ],
+        },
+        [tokenIds[index]]
+      ),
+    ]);
+  }
+
+  return contractCalls;
+};
+
+export const decodePearlDataFromMulticall = (values, tokenIds) => {
+  const result = [];
+
+  for (let index = 0; index < values.length; index++) {
+    result.push({
+      pearlId: tokenIds[index],
+      pearlDataValues: web3.eth.abi.decodeParameter(
+        {
+          pearlData: {
+            birthTime: "uint256",
+            dna: "uint256",
+            pearlsRemaining: "uint256",
+          },
+        },
+        values[index]
+      ),
+    });
+  }
+
+  return result;
+};
+
 export default {
   balanceOf,
   accountPearlBalance,

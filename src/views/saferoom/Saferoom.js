@@ -10,6 +10,8 @@ import clamIcon from "../../assets/clam-icon.png";
 import { Modal, useModal } from "../../components/Modal";
 import NFTItem from "./NFTItem";
 import ClamView from "./ClamView";
+import NFTUnknown from "../../assets/img/clam_unknown.png";
+import PEARLunknown from "../../assets/img/pearl_unknown.png";
 import PearlView from "./PearlView";
 
 import videoImage from "../../assets/locations/Saferoom.jpg";
@@ -29,6 +31,7 @@ import { get } from "lodash";
 
 const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateCharacter }) => {
   const [clams, setClams] = useState([]);
+  // const [clams, setClams] = useState(TEST_CLAMS)
   const [pearls, setPearls] = useState([]);
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? "Clam" : "Pearl");
@@ -36,7 +39,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
 
   let { path, url } = useRouteMatch();
 
-  const { isShowing, toggle } = useModal();
+  const { isShowing, toggleModal } = useModal();
 
   const getDna = async (getByNFTIndex, getNFTData, account, index, getDecodedDNA) => {
     const tokenId = await getByNFTIndex(account, index);
@@ -110,6 +113,46 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
     });
   });
 
+  // on modal open/close check for cache api image and set it if exists
+  const setClamsPreview = async () => {
+    const cache = await caches.open("clam-island");
+    const promises = await Promise.all(clams.map((clam) => cache.match(`/${clam.dna}`)));
+    const images = await Promise.all(
+      promises.map((resp) => {
+        return resp ? resp.json() : "";
+      })
+    );
+    const clamsUptd = clams.map((clam, index) => {
+      let clamImg = images[index];
+      clamImg = clamImg ? clamImg.img : clamImg;
+      clam.img = clamImg || NFTUnknown;
+      return clam;
+    });
+    setClams(clamsUptd);
+  };
+
+  const setPearlsPreview = async () => {
+    const cache = await caches.open("clam-island");
+    const promises = await Promise.all(pearls.map((pearl) => cache.match(`/${pearl.dna}`)));
+    const images = await Promise.all(
+      promises.map((resp) => {
+        return resp ? resp.json() : "";
+      })
+    );
+    const pearlsUptd = pearls.map((pearl, index) => {
+      let pearlImg = images[index];
+      pearlImg = pearlImg ? pearlImg.img : pearlImg;
+      pearl.img = pearlImg || PEARLunknown;
+      return pearl;
+    });
+    setPearls(pearlsUptd);
+  };
+
+  useEffect(() => {
+    setClamsPreview();
+    setPearlsPreview();
+  }, [!isShowing, loading]);
+
   return (
     <>
       {loading && (
@@ -127,7 +170,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
       {/* chat character   */}
       {!address && <Character name="tanja" />}
 
-      <Modal isShowing={isShowing} onClose={toggle}>
+      <Modal isShowing={isShowing} onClose={toggleModal}>
         {tab === "Clam" && <ClamView {...selectedAsset} />}
         {tab === "Pearl" && <PearlView {...selectedAsset} />}
       </Modal>
@@ -154,7 +197,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
                   <TabContainer
                     clams={clams}
                     setSelectedAsset={setSelectedAsset}
-                    toggle={toggle}
+                    toggle={toggleModal}
                     setTab={setTab}
                     pearls={pearls}
                   />
@@ -236,7 +279,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} />
+                  <NFTItem rarity={rarity} shape={shape} img={clam.img} />
                 </div>
               );
             })}
@@ -258,7 +301,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} />
+                  <NFTItem rarity={rarity} shape={shape} img={pearl.img}/>
                 </div>
               );
             })}

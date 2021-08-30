@@ -204,34 +204,6 @@ export const prepTokenOfOwnerByIndexMulticall = (address, length) => {
   return contractCalls;
 };
 
-export const prepTokenOfOwnerByIdsArrayMulticall = (address, ids) => {
-  const contractCalls = [];
-  for (let index in ids) {
-    contractCalls.push([
-      clamNFTAddress,
-      web3.eth.abi.encodeFunctionCall(
-        {
-          name: "tokenOfOwnerByIndex",
-          type: "function",
-          inputs: [
-            {
-              type: "address",
-              name: "owner",
-            },
-            {
-              type: "uint256",
-              name: "index",
-            },
-          ],
-        },
-        [address, index]
-      ),
-    ]);
-  }
-
-  return contractCalls;
-};
-
 export const prepClamDataMulticall = (tokenIds) => {
   const contractCalls = [];
   for (let index = 0; index < tokenIds.length; index++) {
@@ -351,7 +323,6 @@ export default {
   checkHasClamToCollect,
   collectClam,
   prepTokenOfOwnerByIndexMulticall,
-  prepTokenOfOwnerByIdsArrayMulticall,
   decodeTokenOfOwnerByIndexFromMulticall,
   prepClamDataMulticall,
   decodeClamDataFromMulticall,

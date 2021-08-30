@@ -28,6 +28,7 @@ import FarmItem from "./FarmItem";
 import PearlDetails from "./PearlDetails";
 import ClamDeposit from "./ClamDeposit";
 import { aggregate } from "../../web3/multicall";
+import NFTUnknown from "../../assets/img/clam_unknown.png";
 
 import { toast } from "react-toastify";
 
@@ -42,7 +43,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { isShowing, toggle: toggleModal } = useModal();
+  const { isShowing, toggleModal } = useModal();
 
   const [modalSelected, setModal] = useState("");
   const [selectedClam, setSelectedClam] = useState({});
@@ -148,6 +149,26 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     return clamsFiltered;
   };
 
+  const addClamImg = async (clams) => {
+    const cache = await caches.open("clam-island");
+    const promises = await Promise.all(clams.map((clam) => {
+      const dna = clam.clamDataValues.dna;
+      return cache.match(`/${dna}`);
+    }));
+    const images = await Promise.all(
+      promises.map((resp) => {
+        return resp ? resp.json() : "";
+      })
+    );
+    const clamsUptd = clams.map((clam, index) => {
+      let clamImg = images[index];
+      clamImg = clamImg ? clamImg.img : clamImg;
+      clam.img = clamImg || NFTUnknown;
+      return clam;
+    });
+    return clamsUptd;
+  }
+
   useEffect(() => {
     // wallet is connected
     if (address) {
@@ -173,8 +194,11 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
             getClamsDataByIds(clamsStakedIds),
           ]);
 
-          setClams(ownedClams);
-          setClamsStaked(stakedClams);
+          const ownedClamsImg = await addClamImg(ownedClams);
+          const stakedClamsImg = await addClamImg(stakedClams);
+
+          setClams(ownedClamsImg);
+          setClamsStaked(stakedClamsImg);
 
           setLoading(false);
         } catch (error) {

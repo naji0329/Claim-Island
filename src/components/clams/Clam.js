@@ -1,5 +1,5 @@
-import { useRef, useEffect } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useRef, useEffect, useState } from "react";
+import { useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { BarnacleClam } from "./BarnacleClam";
 import { BigmouthClam } from "./BigMouthClam";
@@ -32,11 +32,15 @@ const CLAM_COMPONENTS = {
 const DefaultClam = () => null;
 
 export const Clam = (props) => {
-  const { clamType, tongueType, textures } = props;
+  const { clamType, tongueType, textures, clamDna } = props;
 
   const ClamComponent = CLAM_COMPONENTS[clamType] || DefaultClam;
   const groupMesh = useRef();
+  const { gl: canvasGl } = useThree();
+  const [rotate, startRotation] = useState(false);
+
   useEffect(() => {
+    renderImg();
     return () => {
       textures.forEach((texture) => {
         texture.dispose();
@@ -44,11 +48,30 @@ export const Clam = (props) => {
     };
   }, []);
 
-  useFrame(() => {
-    if (groupMesh.current) {
-      groupMesh.current.rotation.y += Math.PI * 2 * 0.001;
+  // check if cache api image exists
+  const checkImgExists = async (cache) => {
+    const response = await cache.match(`/${clamDna}`);
+    if (response) {
+      let clamImg = await response.json();
+      clamImg = clamImg ? clamImg.img : clamImg;
+      return clamImg ? true : false;
+    } else {
+      return false;
     }
-  });
+  };
+
+  const renderImg = async () => {
+    const cache = await caches.open("clam-island");
+    let imgExists = await checkImgExists(cache);
+
+    if (!imgExists) {
+      const img = canvasGl.domElement.toDataURL();
+      cache.put(`/${clamDna}`, new Response(JSON.stringify({ img })));
+      startRotation(true);
+    } else {
+      startRotation(true);
+    }
+  };
 
   return (
     <>
@@ -59,12 +82,10 @@ export const Clam = (props) => {
       </group>
       <OrbitControls
         enableZoom={true}
-        autoRotate={true}
+        autoRotate={rotate}
         autoRotateSpeed={3}
         minPolarAngle={0}
         maxPolarAngle={Math.PI}
-        //minAzimuthAngle={Math.PI}
-        //maxAzimuthAngle={Math.PI}
         maxDistance={3}
         minDistance={0.7}
         target={[0, 0, -0.05]}
