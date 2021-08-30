@@ -5,6 +5,10 @@ const ClamIslandChain = {
   Hardhat: 31337,
 };
 
+const localhostMulticallAddress = process.env.REACT_APP_BSC_TESTNET_FORK
+  ? "0x28d387c0405Fb8eE7bBeB92A6D783A8436076487"
+  : "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1";
+
 //// add test contracts here
 export const shellTokenAddress = "0xb3f768D115B234Ac39B21D40Cb5E4D530AdAbea4";
 export const clamNFTAddress = "0x6190Aa95C9Ac532A8Ea15605163451DAb3F85E65";
@@ -31,7 +35,7 @@ export const pearlFarmAddress = "0x5Ef121f2D160A3fae2CBA6A628ac3253C575A192";
 
 export const multicallAddress = {
   [ClamIslandChain.BSC]: "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1",
-  [ClamIslandChain.Localhost]: "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1",
+  [ClamIslandChain.Localhost]: localhostMulticallAddress,
   [ClamIslandChain.BSC_TESTNET]: "0x28d387c0405Fb8eE7bBeB92A6D783A8436076487",
 };
 

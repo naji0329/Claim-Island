@@ -5,19 +5,26 @@ const onHelpNeeded = (updateCharacter) => {
     text: "Read Visitor’s Guide",
     alt: {
       action: "cb",
-      destination: () => window.open(
-        "https://clamisland.medium.com/clam-island-essential-visitors-guide-63f2a9984336",
-        "_blank"
-      )
+      destination: () =>
+        window.open(
+          "https://clamisland.medium.com/clam-island-essential-visitors-guide-63f2a9984336",
+          "_blank"
+        ),
     },
   };
 
+  // const infoCenterBtn = {
+  //   text: "Go to Info Centre",
+  //   alt: {
+  //     action: "internal",
+  //     destination: "/infoCenter",
+  //   },
+  // };
+
+  // alternative while info center is not open
   const infoCenterBtn = {
-    text: "Go to Info Centre",
-    alt: {
-      action: "internal",
-      destination: "/infoCenter",
-    },
+    text: "OK",
+    dismiss: true,
   };
 
   return () => {
@@ -41,7 +48,7 @@ const infoCenter = (updateCharacter, suppressSpeechBubble) => {
         dismiss: truncate,
       },
     });
-  }
+  };
 };
 
 export const WelcomeUserBack = ({ suppressSpeechBubble = false, updateCharacter }) => {
@@ -53,15 +60,15 @@ export const WelcomeUserBack = ({ suppressSpeechBubble = false, updateCharacter 
       text: "Yes Please",
       alt: {
         action: "cb",
-        destination: onHelpNeeded(updateCharacter)
+        destination: onHelpNeeded(updateCharacter),
       },
     },
     buttonAlt: {
       text: "No Thanks",
       alt: {
         action: "cb",
-        destination: infoCenter(updateCharacter, suppressSpeechBubble)
-      }
-    }
+        destination: infoCenter(updateCharacter, suppressSpeechBubble),
+      },
+    },
   });
 };

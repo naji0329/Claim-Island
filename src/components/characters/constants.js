@@ -31,7 +31,7 @@ export const SPEECHES = {
       skip: false,
     },
     first: {
-      text: `The island is open. If you bought some from him, you can go see them in the Saferoom.`,
+      text: `The island is open. Note that if you have clams or pearls, you can go see them in the Saferoom.`,
       next: "second",
       dismiss: false,
       skip: false,
@@ -88,7 +88,7 @@ export const SPEECHES = {
       skip: false,
     },
     help_needed: {
-      text: "We are currently working on an explainer video, in the meantime please refer to our Visitor’s Guide. You can also find more information on the Clam Island ecosystem in general at the Visitor’s Information Centre.",
+      text: "We are currently working on an explainer video, in the meantime please refer to our Visitor’s Guide. In the future the video will be part of the Visitor’s Information Centre.",
       next: false,
       dismiss: true,
       skip: false,

@@ -66,7 +66,6 @@ const ClamBuyModal = ({
     await buyClam(address)
       .then(async (res) => {
         setIsLoading(false);
-        console.log("yooo");
         setShowHatching(true);
         await sleep(3);
         setShowHatching(false);
@@ -103,9 +102,7 @@ const ClamBuyModal = ({
         {!showHatching && (
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col mb-4">
-              <h2 className="text-blue-700 text-center font-semibold text-3xl mb-2">
-                Get Clams
-              </h2>
+              <h2 className="text-blue-700 text-center font-semibold text-3xl mb-2">Get Clams</h2>
 
               {/* <div className="alert alert-success">
               <div className="flex-1">
@@ -139,9 +136,7 @@ const ClamBuyModal = ({
                   {clamShopAddress}
                 </a>
               ) : (
-                <span className="text-yellow-400 text-center">
-                  Wallet not connected
-                </span>
+                <span className="text-yellow-400 text-center">Wallet not connected</span>
               )}
             </div>
 
@@ -149,9 +144,7 @@ const ClamBuyModal = ({
             <div className="bg-white border-2 shadow rounded-xl">
               <div className="px-2 py-2">
                 <div className="flex flex-col">
-                  <div className="text-lg font-semibold my-2">
-                    Price of Clam
-                  </div>
+                  <div className="text-lg font-semibold my-2">Price of Clam</div>
                   <div className="flex flex-col text-sm text-gray-600">
                     <div className="flex flex-col">
                       <div className="flex flex-row items-center justify-between">
@@ -224,9 +217,7 @@ const ClamBuyModal = ({
                         CLAM
                       </span> */}
 
-                        <div className="mx-2">
-                          1 CLAM = {formatUnits(clamPrice, 18)} GEM
-                        </div>
+                        <div className="mx-2">1 CLAM = {formatUnits(clamPrice, 18)} GEM</div>
                       </div>
                     </div>
                   </div>
