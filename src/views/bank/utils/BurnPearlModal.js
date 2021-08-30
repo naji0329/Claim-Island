@@ -28,6 +28,7 @@ const BurnPearlModal = (props) => {
     account: { address, pearlBalance },
     updateAccount,
     isNativeStaker,
+    chainId,
   } = props;
   const [pearls, setPearls] = useState([]);
   const [eligibleShape, setEligibleShape] = useState("");
@@ -51,12 +52,12 @@ const BurnPearlModal = (props) => {
 
   const getPearlDataByIds = async (tokenIds) => {
     const pearlDataCalls = prepPearlDataMulticall(tokenIds);
-    const pearlDataResult = await aggregate(pearlDataCalls);
+    const pearlDataResult = await aggregate(pearlDataCalls, chainId);
     const pearlDataDecoded = decodePearlDataFromMulticall(pearlDataResult.returnData, tokenIds);
     const pearlDnas = pearlDataDecoded.map((data) => data.pearlDataValues.dna);
 
     const dnaDecodedCalls = prepGetDnaDecodedMulticall(pearlDnas);
-    const dnaDecodedResult = await aggregate(dnaDecodedCalls);
+    const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
     const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(
       dnaDecodedResult.returnData,
       tokenIds
@@ -73,7 +74,7 @@ const BurnPearlModal = (props) => {
     );
 
     const bonusRewardsCalls = prepBonusRewardsMulticall(traits);
-    const bonusRewardsResult = await aggregate(bonusRewardsCalls);
+    const bonusRewardsResult = await aggregate(bonusRewardsCalls, chainId);
     const bonusRewardsDecoded = decodeBonusRewardsFromMulticall(
       bonusRewardsResult.returnData,
       tokenIds
@@ -100,7 +101,7 @@ const BurnPearlModal = (props) => {
     const init = async () => {
       try {
         const tokenIdsCalls = prepTokenOfOwnerByIndexMulticall(address, +pearlBalance);
-        const tokenIdsResult = await aggregate(tokenIdsCalls);
+        const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
         const tokenIdsDecoded = decodeTokenOfOwnerByIndexFromMulticall(tokenIdsResult.returnData);
 
         const ownedPearls = await getPearlDataByIds(tokenIdsDecoded);

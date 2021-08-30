@@ -5,9 +5,10 @@ const ClamIslandChain = {
   Hardhat: 31337,
 };
 
-const localhostMulticallAddress = process.env.REACT_APP_BSC_TESTNET_FORK
-  ? "0x28d387c0405Fb8eE7bBeB92A6D783A8436076487"
-  : "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1";
+const localhostMulticallAddress =
+  process.env.REACT_APP_BSC_TESTNET_FORK === "true"
+    ? "0x28d387c0405Fb8eE7bBeB92A6D783A8436076487"
+    : "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1";
 
 //// add test contracts here
 export const shellTokenAddress = "0xb3f768D115B234Ac39B21D40Cb5E4D530AdAbea4";

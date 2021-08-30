@@ -118,7 +118,7 @@ const Bank = ({
     <>
       <div className="bg-bank overflow-x-hidden">
         <Modal isShowing={isShowing} onClose={toggleModal} width={"60rem"}>
-          <BurnPearlModal isNativeStaker={isNativeStaker} />
+          <BurnPearlModal isNativeStaker={isNativeStaker} chainId={chainId} />
         </Modal>
         <Web3Navbar title="Clam Bank" />
         {/* container */}
