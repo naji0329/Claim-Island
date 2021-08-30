@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 import "./index.scss";
 
@@ -115,7 +114,7 @@ const CharacterSpeak = (props) => {
     console.log("#### sale confirmed or failure", props.saleStatus);
     console.log(props.saleErrorMsg);
     if (props.saleStatus === "sale_failure") {
-      toast("There was an error during your purchase");
+      toast.error("There was an error during your purchase");
     }
     if (props.saleStatus === "sale_success") {
       onClickNext();
@@ -256,7 +255,6 @@ const CharacterSpeak = (props) => {
         <img src={charImg} className="character" />
       </button>
 
-      <ToastContainer />
     </div>
   );
 };

@@ -50,7 +50,7 @@ export const Clam = (props) => {
 
   // check if cache api image exists
   const checkImgExists = async (cache) => {
-    const response = await cache.match(clamDna);
+    const response = await cache.match(`/${clamDna}`);
     if (response) {
       let clamImg = await response.json();
       clamImg = clamImg ? clamImg.img : clamImg;
@@ -66,7 +66,7 @@ export const Clam = (props) => {
 
     if (!imgExists) {
       const img = canvasGl.domElement.toDataURL();
-      cache.put(clamDna, new Response(JSON.stringify({ img })));
+      cache.put(`/${clamDna}`, new Response(JSON.stringify({ img })));
       startRotation(true);
     } else {
       startRotation(true);

@@ -12,6 +12,7 @@ const initialState = {
     error: undefined,
     isConnected: undefined,
     isBSChain: true,
+    isWeb3Installed: true,
     address: undefined,
   },
   presale: {
@@ -37,14 +38,18 @@ const initialState = {
   character: {
     name: undefined,
     action: undefined,
+    show: undefined, // true or false
     button: {
       text: undefined,
       alt: undefined,
+      dismiss: undefined,
     },
     buttonAlt: {
       text: undefined,
       alt: undefined,
+      dismiss: undefined,
     },
+    suppressSpeechBubble: undefined
   },
   konvaObjects: [],
 };
@@ -83,6 +88,7 @@ export const actions = (store) => ({
       character: {
         ...state.character,
         ...value,
+        suppressSpeechBubble: value.suppressSpeechBubble,
       },
     };
     return obj;

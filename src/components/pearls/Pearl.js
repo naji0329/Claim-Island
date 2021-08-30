@@ -65,7 +65,7 @@ export const Pearl = (props) => {
 
   // check if cache api image exists
   const checkImgExists = async (cache) => {
-    const response = await cache.match(pearlDna);
+    const response = await cache.match(`/${pearlDna}`);
     if (response) {
       let pearlImg = await response.json();
       pearlImg = pearlImg ? pearlImg.img : pearlImg;
@@ -81,7 +81,7 @@ export const Pearl = (props) => {
 
     if (!imgExists) {
       const img = canvasGl.domElement.toDataURL();
-      cache.put(pearlDna, new Response(JSON.stringify({ img })));
+      cache.put(`/${pearlDna}`, new Response(JSON.stringify({ img })));
       //startRotation(true);
     } else {
       //startRotation(true);

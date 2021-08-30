@@ -14,6 +14,11 @@ import ClamHarvestModal from "./ClamHarvestModal";
 import { checkHasClamToCollect } from "../../web3/clam";
 import { zeroHash } from "../../web3/constants";
 
+import videoImage from "../../assets/locations/Shop.jpg";
+import videoMp4 from "../../assets/locations/Shop.mp4";
+import videoWebM from "../../assets/locations/Shop.webm";
+import VideoBackground from "../../components/VideoBackground";
+
 const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAccount }) => {
   const [modalToShow, setModalToShow] = useState(null);
   const [userReady, setUserReady] = useState(false);
@@ -111,23 +116,7 @@ const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAcco
     <>
       <Web3Navbar />
       {/* container */}
-      <div className="shop-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">
-        <video
-          autoPlay
-          muted
-          loop
-          className="flex-1 h-full w-full md:flex relative z-10 object-cover object-center"
-        >
-          <source
-            src={process.env.PUBLIC_URL + "/location_vids/shop_animated.mp4"}
-            type="video/mp4"
-          />
-          <source
-            src={process.env.PUBLIC_URL + "/location_vids/shop_animated_webm.webm"}
-            type='video/webm; codecs="vp8, vorbis"'
-          />
-        </video>
-      </div>
+      <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
       {/* chat character   */}
       <Character name="diego" />
 

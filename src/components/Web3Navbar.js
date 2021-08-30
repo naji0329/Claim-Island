@@ -96,7 +96,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
 
   useEffect(async () => {
     if (!web3) {
-      return updateAccount({ error: "Metamask not installed" });
+      return updateAccount({ web3Installed: false, error: "Metamask not installed" });
     }
     const netId = await web3.eth.net.getId();
     console.log("useEffect updateAccount", { activateChainId, netId });
@@ -224,7 +224,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
               <>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <Link
-                    to="/saferoom"
+                    to="/saferoom/clam"
                     className="flex"
                     style={
                       Number(activateClamBalance) > 0 &&
@@ -244,7 +244,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                 </div>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <Link
-                    to="/saferoom"
+                    to="/saferoom/pearl"
                     className="flex"
                     style={
                       Number(activatePearlBalance) > 0 &&

@@ -23,6 +23,22 @@
   font-weight: bold;
 }
 
+@font-face {
+  font-family: AvenirBlack;
+  src: url(./assets/fonts/avenir_ff/AvenirLTStd-Black.otf) format("opentype");
+  font-weight: bold;
+}
+@font-face {
+  font-family: AvenirBook;
+  src: url(./assets/fonts/avenir_ff/AvenirLTStd-Book.otf) format("opentype");
+  font-weight: bold;
+}
+@font-face {
+  font-family: AvenirRoman;
+  src: url(./assets/fonts/avenir_ff/AvenirLTStd-Roman.otf) format("opentype");
+  font-weight: bold;
+}
+
 body {
   margin: 0;
 
