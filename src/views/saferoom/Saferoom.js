@@ -176,7 +176,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
       </Modal>
 
       {address && (
-        <div className="flex-1 min-h-full min-w-full flex relative z-20 justify-center items-start">
+        <div className="flex-1 min-h-full min-w-full flex relative z-10 justify-center items-start">
           <div className="w-4/5 flex flex-col relative pt-24">
             {/* navbar */}
             <SaferoomNav

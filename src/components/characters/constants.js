@@ -544,7 +544,7 @@ export const SPEECHES = {
   },
   clam_shop: {
     welcome: {
-      text: `Howdy friend. My name is Diego the Shopkeeper. Welcome to my Clam Shop! Here you can buy Clams for $GEM and trade them for $SHELL. Let me show you around...`,
+      text: `Howdy friend. My name is Diego the Shopkeeper. Welcome to my Clam Shop! Here you can buy Clams for $GEM and harvest them for $SHELL. Let me show you around...`,
       next: "connect",
       dismiss: false,
       skip: false,
@@ -568,7 +568,7 @@ export const SPEECHES = {
       skip: false,
     },
     choose_path: {
-      text: `Now that everything is set up, tell me what led you to my Shop?`,
+      text: `Now that everything is set up, how can I help you today?`,
       next: false,
       dismiss: false,
       skip: false,
