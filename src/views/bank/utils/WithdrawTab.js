@@ -6,22 +6,20 @@ import { formatToWei } from "../../../web3/shared";
 
 import { useForm } from "react-hook-form";
 import BigNumber from "bignumber.js";
-import {
-  formatNumber, getBalancesFormatted
-} from './';
-import SliderWithPercentages from './SliderWithPercentages';
+import { formatNumber, getBalancesFormatted } from "./";
+import SliderWithPercentages from "./SliderWithPercentages";
 
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
   onDepositHarvestSuccess,
-  onWithdrawPearlRewardsAlert
-} from '../character/OnDepositHarvest';
+  onWithdrawPearlRewardsAlert,
+} from "../character/OnDepositHarvest";
 
-const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
+const WithdrawTab = ({ useSharedState, updateCharacter, updateAccount }) => {
   const [state, setSharedState] = useSharedState();
   const [withdrawFee, setWithdrawFee] = useState(false);
-  const { pool, account, withdrawAmount, updateAccount } = state;
+  const { pool, account, withdrawAmount } = state;
   const [inTx, setInTx] = useState(false);
 
   const { handleSubmit, formState } = useForm();
@@ -32,7 +30,7 @@ const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
   };
 
   const handleWithdraw = async () => {
-    if(withdrawFee) {
+    if (withdrawFee) {
       onWithdrawPearlRewardsAlert(updateCharacter, async () => {
         await executeWithdraw();
       });
@@ -125,7 +123,7 @@ const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
             {/* <div className="text-md opacity-40"> ($7.01) </div> */}
           </div>
 
-          <SliderWithPercentages useSharedState={useSharedState}/>
+          <SliderWithPercentages useSharedState={useSharedState} />
 
           {errors.withdrawAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>

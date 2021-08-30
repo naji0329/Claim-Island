@@ -36,6 +36,7 @@ import { WalletConnectAndAssist } from "./character/WalletConnectAndAssist";
 const Bank = ({
   account: { address, isBSChain, isWeb3Installed, isConnected },
   updateCharacter,
+  updateAccount,
 }) => {
   const [pools, setPools] = useState([]);
   const [totalAlloc, setTotalAlloc] = useState(0);
@@ -78,7 +79,8 @@ const Bank = ({
             allocPoint: poolInfo.allocPoint,
             depositFeeBP: poolInfo.depositFeeBP,
             lastRewardBlock: poolInfo.lastRewardBlock,
-            userDepositAmountInPool: Math.round(formatFromWei(userInfoValues[index].userValues.amount) * 100) / 100,
+            userDepositAmountInPool:
+              Math.round(formatFromWei(userInfoValues[index].userValues.amount) * 100) / 100,
             userRewardAmountInPool: Math.round(formatFromWei(pending) * 100) / 100,
             isSingleStake: poolAsset.isSingleStake,
             poolLpTokenBalance: poolLpTokenBalances[index],
@@ -150,6 +152,7 @@ const Bank = ({
                       account={address}
                       totalAllocation={totalAlloc}
                       updateCharacter={updateCharacter}
+                      updateAccount={updateAccount}
                     />
                   ))}
               </div>

@@ -16,7 +16,7 @@ import { gemTokenAddress } from "../../web3/constants";
 // shared state across all pool components - to avoid passing too much props down to children
 const [useSharedState, SharedStateProvider] = createStateContext();
 
-const PoolItem = ({ account, totalAllocation, updateCharacter, ...pool }) => {
+const PoolItem = ({ account, totalAllocation, updateCharacter, updateAccount, ...pool }) => {
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,20 +29,19 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, ...pool }) => {
   const { activateBrowserWallet } = useEthers();
 
   const riskClass = (risk) => {
-    if (pool.risk == "High Risk") {
+    if (risk == "High Risk") {
       return "rounded-full bg-red-500 py-2 px-4 text-white";
-    } else if(pool.risk == "Medium Risk") {
+    } else if (risk == "Medium Risk") {
       return "rounded-full bg-yellow-500 py-2 px-4 text-white";
-    } else if(pool.risk == "Low Risk") {
+    } else if (risk == "Low Risk") {
       return "rounded-full bg-blue-500 py-2 px-4 text-white";
     } else {
       return "rounded-full bg-green-500 py-2 px-4 text-white";
     }
-  }
+  };
 
   const riskStyle = riskClass(pool.risk);
 
-  console.log(riskClass);
   useAsync(async () => {
     const earnedGem = await pendingGem(pool.poolId);
     setGemEarned(earnedGem);
@@ -56,24 +55,31 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, ...pool }) => {
     const supply = +poolInfo.poolLpTokenBalance > 0 ? +poolInfo.poolLpTokenBalance : 1;
     let apr;
     if (poolInfo.lpToken === gemTokenAddress) {
-      apr = Math.round((((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) * blocksPerYear) /
-        supply * 100) / 100;
+      apr =
+        Math.round(
+          ((((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) *
+            blocksPerYear) /
+            supply) *
+            100
+        ) / 100;
     } else {
-      apr = Math.round(((((tokenPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
-          Number(totalAllocation)) *
-          blocksPerYear) /
-          supply) *
-        tokenPrice * 100) / 100;
-        console.log(apr);
+      apr =
+        Math.round(
+          ((((tokenPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
+            Number(totalAllocation)) *
+            blocksPerYear) /
+            supply) *
+            tokenPrice *
+            100
+        ) / 100;
+      console.log(apr);
     }
 
-
-    if(apr > 1000000000000) {
+    if (apr > 1000000000000) {
       apr = "∞";
     }
 
     return apr;
-
   };
 
   useEffect(async () => {
@@ -185,6 +191,8 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, ...pool }) => {
               <PoolDepositWithdraw
                 updateCharacter={updateCharacter}
                 useSharedState={useSharedState}
+                depositFee={depositFee}
+                updateAccount={updateAccount}
               />
             </div>
 

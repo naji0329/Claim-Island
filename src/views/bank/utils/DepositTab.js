@@ -7,25 +7,21 @@ import { deposit } from "../../../web3/bank";
 import { approveBankForMaxUint } from "../../../web3/bep20";
 import { formatToWei } from "../../../web3/shared";
 
-import {
-  formatNumber,
-  getBalancesFormatted
-} from '.';
+import { formatNumber, getBalancesFormatted } from ".";
 
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
   onDepositHarvestSuccess,
-  onDepositFeeAlert
-} from '../character/OnDepositHarvest';
+  onDepositFeeAlert,
+} from "../character/OnDepositHarvest";
 
-import SliderWithPercentages from './SliderWithPercentages';
+import SliderWithPercentages from "./SliderWithPercentages";
 
-const DepositTab = ({ useSharedState, updateCharacter }) => {
+const DepositTab = ({ useSharedState, updateCharacter, updateAccount, depositFee }) => {
   const [state, setSharedState] = useSharedState();
   const [inTx, setInTx] = useState(false);
-  const [depositFee, setDepositFee] = useState(false);
-  const { pool, account, depositAmount, updateAccount } = state;
+  const { pool, account, depositAmount } = state;
   const { handleSubmit, formState } = useForm();
   const { errors, isValid } = formState;
 
@@ -34,7 +30,7 @@ const DepositTab = ({ useSharedState, updateCharacter }) => {
   };
 
   const handleDeposit = async () => {
-    if(depositFee) {
+    if (depositFee) {
       onDepositFeeAlert(updateCharacter, async () => {
         await executeDeposit();
       });
