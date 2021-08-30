@@ -70,13 +70,13 @@ export const SPEECHES = {
       skip: false,
     },
     welcome: {
-      text: "Welcome back to Clam Island Bank! Please let me know if you need help with anything",
+      text: "Welcome back to Clam Island Bank! Please let me know if you need help with anything.",
       next: false,
       dismiss: true,
       skip: false,
     },
     welcome_back: {
-      text: "Hello again! Do you need my assistance?",
+      text: "Hello again! Can I help you with anything?",
       next: false,
       dismiss: true,
       skip: false,
@@ -94,13 +94,13 @@ export const SPEECHES = {
       skip: false,
     },
     process_transaction: {
-      text: "Please hold while we process the transaction…",
+      text: "Please wait while we process your transaction. Please note, your wallet may ask you to approve two transactions one after the other - please approve both transactions if that occurs.",
       next: false,
       dismiss: true,
       skip: false,
     },
     transaction_error: {
-      text: "We’re sorry, something went wrong and your transaction could not be processed. Funds has not been removed. Please try again later.",
+      text: "We’re sorry, something went wrong and your transaction could not be processed. Funds have not been removed. Please try again later.",
       next: false,
       dismiss: true,
       skip: false,

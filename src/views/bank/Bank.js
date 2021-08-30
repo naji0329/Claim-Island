@@ -37,6 +37,7 @@ import BurnPearlModal from "./utils/BurnPearlModal";
 const Bank = ({
   account: { address, isBSChain, isWeb3Installed, isConnected },
   updateCharacter,
+  updateAccount,
 }) => {
   const [pools, setPools] = useState([]);
   const [totalAlloc, setTotalAlloc] = useState(0);
@@ -76,15 +77,16 @@ const Bank = ({
               apy: poolAsset.apy,
               multiplier: ((Number(poolInfo.allocPoint) / Number(_totalAlloc)) * 100).toFixed(1),
               images: poolAsset.images,
+              risk: poolAsset.risk,
               poolId: pool.poolId,
               lpToken: poolInfo.lpToken,
               allocPoint: poolInfo.allocPoint,
               depositFeeBP: poolInfo.depositFeeBP,
               lastRewardBlock: poolInfo.lastRewardBlock,
-              userDepositAmountInPool: formatFromWei(userInfoValues[index].userValues.amount),
-              userRewardAmountInPool: formatFromWei(pending),
+              userDepositAmountInPool:
+                Math.round(formatFromWei(userInfoValues[index].userValues.amount) * 100) / 100,
+              userRewardAmountInPool: Math.round(formatFromWei(pending) * 100) / 100,
               isSingleStake: poolAsset.isSingleStake,
-              isNative: poolAsset.isNative,
               poolLpTokenBalance: poolLpTokenBalances[index],
             };
           }
@@ -159,6 +161,7 @@ const Bank = ({
                       totalAllocation={totalAlloc}
                       updateCharacter={updateCharacter}
                       toggleModal={toggleModal}
+                      updateAccount={updateAccount}
                     />
                   ))}
               </div>

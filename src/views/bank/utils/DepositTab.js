@@ -7,23 +7,21 @@ import { deposit } from "../../../web3/bank";
 import { approveBankForMaxUint } from "../../../web3/bep20";
 import { formatToWei } from "../../../web3/shared";
 
-import {
-  formatNumber,
-  getBalancesFormatted
-} from '.';
+import { formatNumber, getBalancesFormatted } from ".";
 
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
-  onDepositHarvestSuccess
-} from '../character/OnDepositHarvest';
+  onDepositHarvestSuccess,
+  onDepositFeeAlert,
+} from "../character/OnDepositHarvest";
 
-import SliderWithPercentages from './SliderWithPercentages';
+import SliderWithPercentages from "./SliderWithPercentages";
 
-const DepositTab = ({ useSharedState, updateCharacter }) => {
+const DepositTab = ({ useSharedState, updateCharacter, updateAccount, depositFee }) => {
   const [state, setSharedState] = useSharedState();
   const [inTx, setInTx] = useState(false);
-  const { pool, account, depositAmount, updateAccount } = state;
+  const { pool, account, depositAmount } = state;
   const { handleSubmit, formState } = useForm();
   const { errors, isValid } = formState;
 
@@ -32,9 +30,18 @@ const DepositTab = ({ useSharedState, updateCharacter }) => {
   };
 
   const handleDeposit = async () => {
+    if (depositFee) {
+      onDepositFeeAlert(updateCharacter, async () => {
+        await executeDeposit();
+      });
+    } else {
+      await executeDeposit();
+    }
+  };
+
+  const executeDeposit = async () => {
     setInTx(true);
     onDepositHarvestTxn(updateCharacter);
-
     try {
       await approveBankForMaxUint(account, pool.lpToken);
       await deposit(pool.poolId, formatToWei(depositAmount));
@@ -68,7 +75,7 @@ const DepositTab = ({ useSharedState, updateCharacter }) => {
         <div className="flex items-center justify-between opacity-40 text-xl">
           <div className="">Wallet:</div> {/* TODO: update after deposit */}
           <div className="flex items-center">
-            <div className="mx-2">{formatNumber(+get(state, "balances[0]", "0"), 4)}</div>
+            <div className="mx-2">{formatNumber(+get(state, "balances[0]", "0"), 3)}</div>
             {/* <div className="text-sm">($15.01) </div> */}
           </div>
         </div>
@@ -105,7 +112,7 @@ const DepositTab = ({ useSharedState, updateCharacter }) => {
               placeholder="Amount"
               type="number"
               max={get(state, "balances[0]", "0")}
-              value={formatNumber(+state.depositAmount, 6)}
+              value={formatNumber(+state.depositAmount, 3)}
               onChange={handleDepositChange}
             />
 

@@ -6,20 +6,20 @@ import { formatToWei } from "../../../web3/shared";
 
 import { useForm } from "react-hook-form";
 import BigNumber from "bignumber.js";
-import {
-  formatNumber, getBalancesFormatted
-} from './';
-import SliderWithPercentages from './SliderWithPercentages';
+import { formatNumber, getBalancesFormatted } from "./";
+import SliderWithPercentages from "./SliderWithPercentages";
 
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
-  onDepositHarvestSuccess
-} from '../character/OnDepositHarvest';
+  onDepositHarvestSuccess,
+  onWithdrawPearlRewardsAlert,
+} from "../character/OnDepositHarvest";
 
-const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
+const WithdrawTab = ({ useSharedState, updateCharacter, updateAccount }) => {
   const [state, setSharedState] = useSharedState();
-  const { pool, account, withdrawAmount, updateAccount } = state;
+  const [withdrawFee, setWithdrawFee] = useState(false);
+  const { pool, account, withdrawAmount } = state;
   const [inTx, setInTx] = useState(false);
 
   const { handleSubmit, formState } = useForm();
@@ -30,6 +30,16 @@ const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
   };
 
   const handleWithdraw = async () => {
+    if (withdrawFee) {
+      onWithdrawPearlRewardsAlert(updateCharacter, async () => {
+        await executeWithdraw();
+      });
+    } else {
+      await executeWithdraw();
+    }
+  };
+
+  const executeWithdraw = async () => {
     setInTx(true);
     onDepositHarvestTxn(updateCharacter);
 
@@ -66,7 +76,7 @@ const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
           <div className="">Vault:</div>
           <div className="flex items-center">
             <div className="mx-2">
-              {formatNumber(+get(state, "pool.userDepositAmountInPool", "0"), 4)}
+              {formatNumber(+get(state, "pool.userDepositAmountInPool", "0"), 3)}
             </div>
             {/* TODO convert LP to dolar */}
             {/* <div className="text-sm">($15.01) </div> */}
@@ -105,7 +115,7 @@ const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
               placeholder="Amount"
               type="number"
               max={get(state, "pool.userDepositAmountInPool")}
-              value={formatNumber(+state.withdrawAmount, 6)}
+              value={formatNumber(+state.withdrawAmount, 3)}
               onChange={handleWithdrawChange}
             />
 
@@ -113,7 +123,7 @@ const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
             {/* <div className="text-md opacity-40"> ($7.01) </div> */}
           </div>
 
-          <SliderWithPercentages useSharedState={useSharedState}/>
+          <SliderWithPercentages useSharedState={useSharedState} />
 
           {errors.withdrawAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>

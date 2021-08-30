@@ -5,7 +5,7 @@ import DepositTab from "./DepositTab";
 import WithdrawTab from "./WithdrawTab";
 
 // WHEN WITHDRAWING FROM POOL DEPOSIT. CALLED IN ./PoolItem.js
-const PoolDepositWithdraw = ({ useSharedState, updateCharacter }) => {
+const PoolDepositWithdraw = ({ useSharedState, updateCharacter, updateAccount, depositFee }) => {
   const [tab, setTab] = useState(0);
 
   const StateButton = ({ isActive, children, ...rest }) => (
@@ -41,15 +41,18 @@ const PoolDepositWithdraw = ({ useSharedState, updateCharacter }) => {
           "rounded-b-xl rounded-tl-xl": tab === 1,
         })}
       >
-        {tab === 0
-        && <DepositTab
-              useSharedState={useSharedState}
-              updateCharacter={updateCharacter}/>}
+        {tab === 0 && (
+          <DepositTab
+            useSharedState={useSharedState}
+            updateCharacter={updateCharacter}
+            depositFee={depositFee}
+            updateAccount={updateAccount}
+          />
+        )}
 
-        {tab === 1
-          && <WithdrawTab
-                useSharedState={useSharedState}
-                updateCharacter={updateCharacter} />}
+        {tab === 1 && (
+          <WithdrawTab useSharedState={useSharedState} updateCharacter={updateCharacter} updateAccount={updateAccount} />
+        )}
       </div>
     </div>
   );

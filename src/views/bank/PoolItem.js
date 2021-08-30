@@ -16,7 +16,14 @@ import { gemTokenAddress } from "../../web3/constants";
 // shared state across all pool components - to avoid passing too much props down to children
 const [useSharedState, SharedStateProvider] = createStateContext();
 
-const PoolItem = ({ account, totalAllocation, updateCharacter, toggleModal, ...pool }) => {
+const PoolItem = ({
+  account,
+  totalAllocation,
+  updateCharacter,
+  toggleModal,
+  updateAccount,
+  ...pool
+}) => {
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,6 +34,20 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, toggleModal, ...p
   const [state, setSharedState] = useSharedState();
 
   const { activateBrowserWallet } = useEthers();
+
+  const riskClass = (risk) => {
+    if (risk == "High Risk") {
+      return "rounded-full bg-red-500 py-2 px-4 text-white";
+    } else if (risk == "Medium Risk") {
+      return "rounded-full bg-yellow-500 py-2 px-4 text-white";
+    } else if (risk == "Low Risk") {
+      return "rounded-full bg-blue-500 py-2 px-4 text-white";
+    } else {
+      return "rounded-full bg-green-500 py-2 px-4 text-white";
+    }
+  };
+
+  const riskStyle = riskClass(pool.risk);
 
   useAsync(async () => {
     const earnedGem = await pendingGem(pool.poolId);
@@ -39,21 +60,33 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, toggleModal, ...p
   const calcAPR = ({ poolInfo, gemsPerBlock, tokenPrice, totalAllocation }) => {
     const blocksPerYear = 10512000; // seconds per year / 3
     const supply = +poolInfo.poolLpTokenBalance > 0 ? +poolInfo.poolLpTokenBalance : 1;
-
+    let apr;
     if (poolInfo.lpToken === gemTokenAddress) {
-      return (
-        (((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) * blocksPerYear) /
-        supply
-      );
+      apr =
+        Math.round(
+          ((((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) *
+            blocksPerYear) /
+            supply) *
+            100
+        ) / 100;
+    } else {
+      apr =
+        Math.round(
+          ((((tokenPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
+            Number(totalAllocation)) *
+            blocksPerYear) /
+            supply) *
+            tokenPrice *
+            100
+        ) / 100;
+      console.log(apr);
     }
 
-    return (
-      ((((tokenPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
-        Number(totalAllocation)) *
-        blocksPerYear) /
-        supply) *
-      tokenPrice
-    );
+    if (apr > 1000000000000) {
+      apr = "∞";
+    }
+
+    return apr;
   };
 
   useEffect(async () => {
@@ -67,7 +100,6 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, toggleModal, ...p
         tokenPrice: fakeTokenPrice,
         totalAllocation,
       });
-
       setApr(apr);
     };
 
@@ -110,13 +142,16 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, toggleModal, ...p
           {/* <div className="badge badge-warning">Medium risk</div> */}
 
           <div className="text-sm block">
+            <p className={riskStyle}>{pool.risk}</p>
+          </div>
+          <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Reward Share</p>
             <p className="font-bold text-black text-center">{pool.multiplier}%</p>
           </div>
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">APR</p>
-            <p className="font-bold text-black">{String(apr)}</p>
+            <p className="font-bold text-black">{String(apr)}%</p>
           </div>
 
           <div className="text-sm block">
@@ -163,6 +198,8 @@ const PoolItem = ({ account, totalAllocation, updateCharacter, toggleModal, ...p
               <PoolDepositWithdraw
                 updateCharacter={updateCharacter}
                 useSharedState={useSharedState}
+                depositFee={depositFee}
+                updateAccount={updateAccount}
               />
             </div>
 

@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { get } from "lodash";
 import { formatNumber } from ".";
 
@@ -5,6 +6,7 @@ import {
   onDepositHarvestTxn,
   onDepositHarvestError,
   onDepositHarvestSuccess,
+  onPearlBoostYieldAlert,
 } from "../character/OnDepositHarvest";
 import { harvest } from "../../../web3/bank";
 
@@ -12,8 +14,19 @@ import { harvest } from "../../../web3/bank";
 const PoolHarvest = ({ useSharedState, updateCharacter, toggleModal }) => {
   const [state] = useSharedState();
   const isNativePool = state.pool && state.pool.isNative;
+  const [pearlBoostYield, setPearlBoostYield] = useState(false);
 
   const handleHarvest = async () => {
+    if (pearlBoostYield) {
+      onPearlBoostYieldAlert(updateCharacter, async () => {
+        await executeHarvest();
+      });
+    } else {
+      await executeHarvest();
+    }
+  };
+
+  const executeHarvest = async () => {
     onDepositHarvestTxn(updateCharacter);
     try {
       await harvest(state.pool.poolId);
@@ -58,7 +71,7 @@ const PoolHarvest = ({ useSharedState, updateCharacter, toggleModal }) => {
             </div>
 
             <div className="mx-2 text-4xl">
-              {formatNumber(+get(state, "pool.userRewardAmountInPool", "0.0"), 4)}
+              {formatNumber(+get(state, "pool.userRewardAmountInPool", "0.0"), 3)}
             </div>
             <div className="mx-2 text-xl">GEM</div>
             {/* TODO convert GEM to dola */}
