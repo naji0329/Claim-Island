@@ -14,11 +14,13 @@ import SliderWithPercentages from './SliderWithPercentages';
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
-  onDepositHarvestSuccess
+  onDepositHarvestSuccess,
+  onWithdrawPearlRewardsAlert
 } from '../character/OnDepositHarvest';
 
 const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
   const [state, setSharedState] = useSharedState();
+  const [withdrawFee, setWithdrawFee] = useState(false);
   const { pool, account, withdrawAmount, updateAccount } = state;
   const [inTx, setInTx] = useState(false);
 
@@ -30,6 +32,16 @@ const  WithdrawTab = ({ useSharedState, updateCharacter }) => {
   };
 
   const handleWithdraw = async () => {
+    if(withdrawFee) {
+      onWithdrawPearlRewardsAlert(updateCharacter, async () => {
+        await executeWithdraw();
+      });
+    } else {
+      await executeWithdraw();
+    }
+  };
+
+  const executeWithdraw = async () => {
     setInTx(true);
     onDepositHarvestTxn(updateCharacter);
 

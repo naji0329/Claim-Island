@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { get } from "lodash";
 import { formatNumber } from ".";
 
@@ -5,14 +6,26 @@ import {
   onDepositHarvestTxn,
   onDepositHarvestError,
   onDepositHarvestSuccess,
+  onPearlBoostYieldAlert
 } from "../character/OnDepositHarvest";
 import { harvest } from "../../../web3/bank";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
 const PoolHarvest = ({ useSharedState, updateCharacter }) => {
   const [state] = useSharedState();
+  const [pearlBoostYield, setPearlBoostYield] = useState(false);
 
   const handleHarvest = async () => {
+    if(pearlBoostYield) {
+      onPearlBoostYieldAlert(updateCharacter, async () => {
+        await executeHarvest();
+      });
+    } else {
+      await executeHarvest();
+    }
+  };
+
+  const executeHarvest = async () => {
     onDepositHarvestTxn(updateCharacter);
     try {
       await harvest(state.pool.poolId);

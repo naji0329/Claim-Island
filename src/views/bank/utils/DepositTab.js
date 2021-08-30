@@ -15,7 +15,8 @@ import {
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
-  onDepositHarvestSuccess
+  onDepositHarvestSuccess,
+  onDepositFeeAlert
 } from '../character/OnDepositHarvest';
 
 import SliderWithPercentages from './SliderWithPercentages';
@@ -23,6 +24,7 @@ import SliderWithPercentages from './SliderWithPercentages';
 const DepositTab = ({ useSharedState, updateCharacter }) => {
   const [state, setSharedState] = useSharedState();
   const [inTx, setInTx] = useState(false);
+  const [depositFee, setDepositFee] = useState(false);
   const { pool, account, depositAmount, updateAccount } = state;
   const { handleSubmit, formState } = useForm();
   const { errors, isValid } = formState;
@@ -32,9 +34,18 @@ const DepositTab = ({ useSharedState, updateCharacter }) => {
   };
 
   const handleDeposit = async () => {
+    if(depositFee) {
+      onDepositFeeAlert(updateCharacter, async () => {
+        await executeDeposit();
+      });
+    } else {
+      await executeDeposit();
+    }
+  };
+
+  const executeDeposit = async () => {
     setInTx(true);
     onDepositHarvestTxn(updateCharacter);
-
     try {
       await approveBankForMaxUint(account, pool.lpToken);
       await deposit(pool.poolId, formatToWei(depositAmount));
