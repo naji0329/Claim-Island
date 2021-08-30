@@ -61,8 +61,6 @@ export default ({ dna, dnaDecoded }) => {
     }
   }, [dnaDecoded]);
 
-  console.log({ dna, dnaDecoded });
-
   const RowStat = ({ label, value }) => (
     <div className="text-sm flex flex-row justify-between my-1">
       <div className="block">

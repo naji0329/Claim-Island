@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useTexture } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
 import convert from "color-convert";
 
 import { PEARLS_SHAPES } from "../../constants/pearls";
@@ -30,7 +31,7 @@ const PEARL_COMPONENTS = {
 };
 
 export const Pearl = (props) => {
-  const { shape, surface, HSV, overtone, lustre, size } = props;
+  const { shape, surface, HSV, overtone, lustre, size, pearlDna } = props;
 
   const PearlComponent = PEARL_COMPONENTS[shape] || PEARL_COMPONENTS.default;
   const [bodyColorHSV, overtoneColorHSV] = HSV;
@@ -40,6 +41,7 @@ export const Pearl = (props) => {
   const emissiveIntensity = getEmissiveIntensity(bodyColorHSV, overtoneColorHSV, lustre);
   const roughness = 0.2 + ((100 - lustre) / 100) * 0.15;
   const scaleFactor = (size / 100) * 0.5 + 0.5;
+  const { gl: canvasGl } = useThree();
 
   const { map, envMap, emissiveMap } = useTexture({
     map: "/pearl-models/patterns/ice-texture-final-7.jpg",
@@ -53,7 +55,38 @@ export const Pearl = (props) => {
     updateMap(map);
     updateEnvMap(envMap);
     updateEmissiveMap(emissiveMap);
+    renderImg();
+    return () => {
+      map.dispose();
+      envMap.dispose();
+      emissiveMap.dispose();
+    };
   }, [map, envMap, emissiveMap]);
+
+  // check if cache api image exists
+  const checkImgExists = async (cache) => {
+    const response = await cache.match(`/${pearlDna}`);
+    if (response) {
+      let pearlImg = await response.json();
+      pearlImg = pearlImg ? pearlImg.img : pearlImg;
+      return pearlImg ? true : false;
+    } else {
+      return false;
+    }
+  };
+
+  const renderImg = async () => {
+    const cache = await caches.open("clam-island");
+    let imgExists = await checkImgExists(cache);
+
+    if (!imgExists) {
+      const img = canvasGl.domElement.toDataURL();
+      cache.put(`/${pearlDna}`, new Response(JSON.stringify({ img })));
+      //startRotation(true);
+    } else {
+      //startRotation(true);
+    }
+  };
 
   return (
     <group position={[0, 0.001, 0]} scale={4 * scaleFactor}>

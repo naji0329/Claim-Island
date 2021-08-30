@@ -23,6 +23,7 @@ const Clam3DViewComponent = memo((props) => {
   } = props;
   const [textures, setTextures] = useState();
   const traits = clamViewer ? clamTraits : decodeDna(decodedDna);
+  // const traits = clamTraits;
   const clamType = traits.shellShape.toLowerCase();
   const tongueType = traits.tongue.toLowerCase();
 
@@ -51,8 +52,17 @@ const Clam3DViewComponent = memo((props) => {
       {/** Put here some loading animation, it will be shown while canvas is initializing */}
       <div style={{ position: "absolute" }}>LOADING</div>
       <ClamScene>
-        {textures && <Clam clamType={clamType} tongueType={tongueType} textures={textures} />}
-        {!textures && <Loading3DView />}
+        {textures && (
+          <Clam
+            clamDna={clamDna}
+            clamType={clamType}
+            tongueType={tongueType}
+            textures={textures}
+          />
+        ) }
+        {!textures && (
+          <Loading3DView />
+        )}
       </ClamScene>
     </div>
   );
