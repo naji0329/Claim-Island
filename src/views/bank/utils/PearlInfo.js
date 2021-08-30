@@ -1,5 +1,5 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Pearl3DView } from "../../../components/pearl3DView";
 import { burnPearl } from "../../../web3/pearlBurner";
 
 const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker }) => {
@@ -13,6 +13,20 @@ const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker }) => {
     }
   };
 
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    const getPearlImage = async () => {
+      const cache = await caches.open("clam-island");
+      const res = await cache.match(`/${pearl.pearlDataValues.dna}`);
+      const image = res ? await res.json() : "";
+
+      setImage(image && image.img ? image.img : "");
+    };
+
+    getPearlImage();
+  }, []);
+
   const InfoLine = ({ label, value }) => (
     <div className="w-full flex justify-between">
       <span className="text-gray-500">{label}</span>
@@ -24,11 +38,7 @@ const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker }) => {
     <>
       <div className="w-full flex">
         <div className="w-2/5 mr-4">
-          <Pearl3DView
-            pearlDna={pearl.pearlDataValues.dna}
-            decodedDna={pearl.dnaDecoded}
-            height="8rem"
-          />
+          <img src={image} />
         </div>
         <div className="w-3/5">
           <InfoLine label="$Gem/hr" value={gemPerHour} />
