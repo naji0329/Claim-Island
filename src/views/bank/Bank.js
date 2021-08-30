@@ -88,6 +88,7 @@ const Bank = ({
               userRewardAmountInPool: Math.round(formatFromWei(pending) * 100) / 100,
               isSingleStake: poolAsset.isSingleStake,
               poolLpTokenBalance: poolLpTokenBalances[index],
+              isNative: poolAsset.isNative,
             };
           }
         })
