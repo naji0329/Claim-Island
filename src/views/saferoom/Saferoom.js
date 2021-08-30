@@ -116,7 +116,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
   // on modal open/close check for cache api image and set it if exists
   const setClamsPreview = async () => {
     const cache = await caches.open("clam-island");
-    const promises = await Promise.all(clams.map((clam) => cache.match(clam.dna)));
+    const promises = await Promise.all(clams.map((clam) => cache.match(`/${clam.dna}`)));
     const images = await Promise.all(
       promises.map((resp) => {
         return resp ? resp.json() : "";
@@ -133,7 +133,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
 
   const setPearlsPreview = async () => {
     const cache = await caches.open("clam-island");
-    const promises = await Promise.all(pearls.map((pearl) => cache.match(pearl.dna)));
+    const promises = await Promise.all(pearls.map((pearl) => cache.match(`/${pearl.dna}`)));
     const images = await Promise.all(
       promises.map((resp) => {
         return resp ? resp.json() : "";

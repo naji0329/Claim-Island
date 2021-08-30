@@ -66,7 +66,7 @@ export const Clam = (props) => {
 
     if (!imgExists) {
       const img = canvasGl.domElement.toDataURL();
-      cache.put(clamDna, new Response(JSON.stringify({ img })));
+      cache.put(`/${clamDna}`, new Response(JSON.stringify({ img })));
       startRotation(true);
     } else {
       startRotation(true);

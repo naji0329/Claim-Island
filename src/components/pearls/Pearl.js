@@ -81,7 +81,7 @@ export const Pearl = (props) => {
 
     if (!imgExists) {
       const img = canvasGl.domElement.toDataURL();
-      cache.put(pearlDna, new Response(JSON.stringify({ img })));
+      cache.put(`/${pearlDna}`, new Response(JSON.stringify({ img })));
       //startRotation(true);
     } else {
       //startRotation(true);

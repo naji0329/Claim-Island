@@ -18,7 +18,7 @@ const PearlDetails = ({ clam, clamProcessing }) => {
         <Clam3DView
           width={400}
           height={400}
-          clamDna={clam.dna}
+          clamDna={clam.clamDataValues.dna}
           decodedDna={clam.dnaDecoded}
           showTraitsTable={false}
         />
