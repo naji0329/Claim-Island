@@ -3,10 +3,11 @@ import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
 
-import FarmPearl from "../../assets/img/farm_pearl.png";
+// import FarmPearl from "../../assets/img/farm_pearl.png";
 import { actions } from "../../store/redux";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
 import { clamNFTAddress, pearlFarmAddress } from "../../web3/constants";
+import { formatFromWei } from "../../web3/shared";
 import { getBalance, approveSpending, getAllowance } from "../../web3/gem";
 import {
   stakeClam,
@@ -29,14 +30,15 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
         const remaining = await getRemainingPearlProductionTime(clamId);
         setRemainingTime(remaining);
 
-        const pPrice = await stakePrice().then((v) => new BigNumber(v));
-        const pPriceN = await stakePrice().then((v) => {return v}); // from string to BN
-        setPearlPrice(pPriceN);
+        const pPrice = await stakePrice(); // price as string
+        setPearlPrice(pPrice);
 
+        // set up for GEM approval comparison check
+        const pPriceAsBigNumber = new BigNumber(pPrice);
         const gemAllowance = await getAllowance(address, pearlFarmAddress).then(
           (v) => new BigNumber(v)
         );
-        setGemApproved(gemAllowance.lt(pPrice));
+        setGemApproved(pPriceAsBigNumber.lt(gemAllowance));
       } catch (err) {
         updateAccount({ error: err.message });
       }
@@ -56,7 +58,7 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
       setButtonText("Approving Clam...");
       await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress, clamId);
 
-      if (gemApproved) {
+      if (!gemApproved) {
         setButtonText("Approving GEM...");
         console.log(pearlPrice);
         await approveSpending(address, pearlFarmAddress, pearlPrice);
