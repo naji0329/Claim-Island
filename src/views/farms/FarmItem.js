@@ -41,13 +41,12 @@ const FarmItem = ({
     pearlProductionCapacity,
     pearlsProduced,
   } = clamDataValues;
-  const clamStartTime = +pearlProductionStart > 0 ? +pearlProductionStart : +birthTime;
-  const clamNextPearlTime = clamStartTime + +pearlProductionDelay;
+  const now = Math.round(new Date().getTime() / 1000);
+  const pearlProductionTime = now + +remainingTime;
   const progress = !+remainingTime
     ? 100
     : +(
-        ((clamNextPearlTime - remainingTime - clamStartTime) /
-          (clamNextPearlTime - clamStartTime)) *
+        ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
         100
       ).toFixed(2);
 
