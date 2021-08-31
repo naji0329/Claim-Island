@@ -27,6 +27,10 @@ module.exports = {
       30: 30,
       40: 40,
       50: 50,
+      60: 60,
+      999: 999,
+      9998: 9998,
+      9999: 9999,
     },
     borderColor: (theme) => ({
       ...theme("colors"),
@@ -62,12 +66,16 @@ module.exports = {
       },
       width: {
         "7/10": "70%"
-      }
+      },
+      dropShadow: {
+        'center': '0 0 5px rgba(0, 0, 0, 0.5)',
+        'border': '0 0 1px rgba(0, 0, 0, 1)',
+      },
     },
   },
   variants: {
     extend: {
-      opacity: ["disabled"],
+      //opacity: ["disabled"],
       cursor: ["active"],
     },
   },

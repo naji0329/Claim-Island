@@ -35,7 +35,7 @@ const NavigationButton = () => {
 
   const navIcons = () => {
     const icons = NAV_ROUTES.map((k, i) => {
-      return <div key={i} className="nav-access-btn">
+      return <div key={i} className="nav-access-btn" onClick={toggle}>
         <Link to={k.url} className={checkSelectedRoute(k, 'class')}>
           <img src={checkSelectedRoute(k)}/>
         </Link>
@@ -58,13 +58,21 @@ const NavigationButton = () => {
 
 	return (
     <>
-      {!showNav ? 
+      {!showNav ? <>
         <div className="nav-access-btn nav-btn-container" onClick={toggle}>
           <button className="nav-icon">
             <img src={IMG_LOC + homeIcon} />
           </button>
         </div>
-      : <div className="nav-btn-container">{navIcons()}</div>
+        <div className="overlay pointer-events-none opacity-0">
+        </div>
+        </>
+      :
+        <>
+        <div className="nav-btn-container">{navIcons()}</div>
+        <div className="overlay pointer-events-auto opacity-70">
+        </div>
+        </>
       }
     </>
   );
