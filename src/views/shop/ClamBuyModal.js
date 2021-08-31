@@ -45,6 +45,7 @@ const ClamBuyModal = ({
     const fetchData = async () => {
       const price = await getPrice();
       setClamPrice(price);
+      console.log(price);
     };
     fetchData();
   }, []);

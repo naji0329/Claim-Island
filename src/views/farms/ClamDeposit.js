@@ -29,8 +29,9 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
         const remaining = await getRemainingPearlProductionTime(clamId);
         setRemainingTime(remaining);
 
-        const pPrice = await stakePrice().then((v) => new BigNumber(v)); // from string to BN
-        setPearlPrice(pPrice);
+        const pPrice = await stakePrice().then((v) => new BigNumber(v));
+        const pPriceN = await stakePrice().then((v) => {return v}); // from string to BN
+        setPearlPrice(pPriceN);
 
         const gemAllowance = await getAllowance(address, pearlFarmAddress).then(
           (v) => new BigNumber(v)
@@ -57,6 +58,7 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
 
       if (gemApproved) {
         setButtonText("Approving GEM...");
+        console.log(pearlPrice);
         await approveSpending(address, pearlFarmAddress, pearlPrice);
       }
 
