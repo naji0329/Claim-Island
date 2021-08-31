@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import ROUTES from "./router";
+import NavigationButton from './components/NavigationButton';
 
 // import {  getClamTokenContract, getContract, httpProvider } from './services/web3';
 // import {  getContract, httpProvider } from './services/web3';
@@ -33,6 +34,7 @@ const App = (props) => {
           })}
         </Switch>
       </div>
+      <NavigationButton />
       <ToastContainer />
     </Router>
   );

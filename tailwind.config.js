@@ -39,6 +39,7 @@ module.exports = {
     backgroundColor: (theme) => ({
       ...theme("colors"),
       withdraw: FARM_WITHDRAW_COLOR,
+      darkPearl: '#38DCDC'
     }),
     fontFamily: {
       avenir: ["AvenirBlack"],

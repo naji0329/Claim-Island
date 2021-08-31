@@ -1,0 +1,35 @@
+@mixin nav-icon {
+  @apply rounded-full px-4 py-4;
+  img {
+    @apply w-10;
+  }
+}
+
+.nav-access-btn {
+	@apply flex flex-row mb-2 ml-4;
+
+  .nav-icon {
+    @include nav-icon;
+    @apply bg-white;
+    &:hover {
+      @apply bg-darkPearl;
+      img {
+        @apply w-12;
+      }
+    }
+  }
+
+  .current-nav-icon {
+    @include nav-icon;
+    @apply bg-darkPearl;
+  }
+
+  p {
+    @apply mt-6 ml-5 font-aristotelica font-bold text-2xl text-white;
+  }
+}
+
+.nav-btn-container {
+  @apply absolute bottom-5;
+}
+
