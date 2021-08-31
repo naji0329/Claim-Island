@@ -60,6 +60,7 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
 
       if (!gemApproved) {
         setButtonText("Approving GEM...");
+        console.log(pearlPrice);
         await approveSpending(address, pearlFarmAddress, pearlPrice);
       }
 
