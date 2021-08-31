@@ -112,7 +112,7 @@ export const SPEECHES = {
       skip: false,
     },
     deposit_fee_alert: {
-      text: "Please note, this pool has a deposit fee of [x]% on your investment, which is deducted on deposit and not refundable. Do you want to proceed?",
+      text: "Please note, this pool has a deposit fee, which is deducted on deposit and not refundable. Do you want to proceed?",
       next: false,
       dismiss: true,
       skip: false,
