@@ -45,7 +45,7 @@ const FarmItem = ({
   } = clamDataValues;
 
   const progress =
-    !+pearlProductionTime || !+now || !+remainingTime || remainingTime == 0
+    !+pearlProductionTime || !+now || !+remainingTime || +remainingTime == 0
       ? 100
       : +(
           ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
