@@ -123,19 +123,16 @@ const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAcco
       {/* wallet is connected */}
       {address && userReady && (
         <div className="flex relative z-20  justify-center items-start top-40 w-full">
-          <div className="">
-            {/* step 1 */}
-            {modalToShow === "buy" && <ClamBuyModal setModalToShow={setModalToShow} />}
-            {/* step 2 */}
-            {modalToShow === "collect" && clamToCollect && (
-              <ClamCollectModal setModalToShow={setModalToShow} />
-            )}
-            {/* step 3 */}
-            {modalToShow === "display" && <ClamDisplayModal setModalToShow={setModalToShow} />}
-            {/* step 4 */}
-            {modalToShow === "harvest" && <ClamHarvestModal setModalToShow={setModalToShow} />}
-
-          </div>
+          {/* step 1 */}
+          {modalToShow === "buy" && <ClamBuyModal setModalToShow={setModalToShow} />}
+          {/* step 2 */}
+          {modalToShow === "collect" && clamToCollect && (
+            <ClamCollectModal setModalToShow={setModalToShow} />
+          )}
+          {/* step 3 */}
+          {modalToShow === "display" && <ClamDisplayModal setModalToShow={setModalToShow} />}
+          {/* step 4 */}
+          {modalToShow === "harvest" && <ClamHarvestModal setModalToShow={setModalToShow} />}
         </div>
       )}
     </>

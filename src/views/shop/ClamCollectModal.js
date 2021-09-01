@@ -52,9 +52,31 @@ const ClamCollectModal = ({
         updateCharacter({
           name: "diego",
           action: "clam_shop.collect_congrats.text",
+          buttonAlt: {
+            text: "Harvest Clams",
+            alt: {
+              action: "cb",
+              destination: () => {
+                updateCharacter({
+                  name: "diego",
+                  action: null,
+                });
+                setModalToShow("harvest");
+              },
+            },
+          },
           button: {
-            text: "Gotcha",
-            dismiss: truncate,
+            text: "Buy Clams",
+            alt: {
+              action: "cb",
+              destination: () => {
+                updateCharacter({
+                  name: "diego",
+                  action: null,
+                });
+                setModalToShow("buy");
+              },
+            },
           },
         });
         setModalToShow("display");
