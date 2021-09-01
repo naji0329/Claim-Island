@@ -29,23 +29,17 @@ const FarmItem = ({
 
   const [inTx, setInTx] = useState(false);
   const [buttonText, setButtonText] = useState("Can't produce yet");
-  const [now, setNow] = useState("");
+  const now = Math.round(new Date().getTime() / 1000);
   const [pearlProductionTime, setPearlProductionTime] = useState("");
   const [remainingTime, setRemainingTime] = useState("");
   const [canStillProducePearl, setCanStillProducePearl] = useState(false);
   const [canProducePearl, setCanProducePearl] = useState(false);
   const [readyForPearl, setReadyForPearl] = useState(false);
 
-  const {
-    pearlProductionDelay,
-    pearlProductionStart,
-    birthTime,
-    pearlProductionCapacity,
-    pearlsProduced,
-  } = clamDataValues;
+  const { pearlProductionStart, pearlProductionCapacity, pearlsProduced } = clamDataValues;
 
   const progress =
-    !+pearlProductionTime || !+now || !+remainingTime || +remainingTime == 0
+    !+pearlProductionTime || !+remainingTime
       ? 100
       : +(
           ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
@@ -57,13 +51,10 @@ const FarmItem = ({
       try {
         const _productionTimeTotal = await getRemainingPearlProductionTime(clamId);
 
-        const _now = Math.round(new Date().getTime() / 1000);
-        setNow(_now);
-
         const _pearlProductionTime = +pearlProductionStart + +_productionTimeTotal;
         setPearlProductionTime(_pearlProductionTime);
 
-        const _remainingTime = _now > _pearlProductionTime ? 0 : _pearlProductionTime - _now;
+        const _remainingTime = now > _pearlProductionTime ? 0 : _pearlProductionTime - now;
         setRemainingTime(_remainingTime);
 
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId);
