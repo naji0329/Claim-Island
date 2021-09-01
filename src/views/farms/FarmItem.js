@@ -29,32 +29,33 @@ const FarmItem = ({
 
   const [inTx, setInTx] = useState(false);
   const [buttonText, setButtonText] = useState("Can't produce yet");
+  const now = Math.round(new Date().getTime() / 1000);
+  const [pearlProductionTime, setPearlProductionTime] = useState("");
   const [remainingTime, setRemainingTime] = useState("");
   const [canStillProducePearl, setCanStillProducePearl] = useState(false);
   const [canProducePearl, setCanProducePearl] = useState(false);
   const [readyForPearl, setReadyForPearl] = useState(false);
 
-  const {
-    pearlProductionDelay,
-    pearlProductionStart,
-    birthTime,
-    pearlProductionCapacity,
-    pearlsProduced,
-  } = clamDataValues;
-  const now = Math.round(new Date().getTime() / 1000);
-  const pearlProductionTime = now + +remainingTime;
-  const progress = !+remainingTime
-    ? 100
-    : +(
-        ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
-        100
-      ).toFixed(2);
+  const { pearlProductionStart, pearlProductionCapacity, pearlsProduced } = clamDataValues;
+
+  const progress =
+    !+pearlProductionTime || !+remainingTime
+      ? 100
+      : +(
+          ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
+          100
+        ).toFixed(2);
 
   useEffect(() => {
     const init = async () => {
       try {
-        const remaining = await getRemainingPearlProductionTime(clamId);
-        setRemainingTime(remaining);
+        const _productionTimeTotal = await getRemainingPearlProductionTime(clamId);
+
+        const _pearlProductionTime = +pearlProductionStart + +_productionTimeTotal;
+        setPearlProductionTime(_pearlProductionTime);
+
+        const _remainingTime = now > _pearlProductionTime ? 0 : _pearlProductionTime - now;
+        setRemainingTime(_remainingTime);
 
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId);
         setReadyForPearl(!!+rngHashForProducedPearl);
