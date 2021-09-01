@@ -54,18 +54,26 @@ const ClamBuyModal = ({
     console.log({ data });
     setIsLoading(true);
 
-    // updateCharacter({
-    //   name: "diego",
-    //   action: "clam_presale.processing.text",
-    //   button: {
-    //     text: undefined,
-    //   },
-    // });
+    updateCharacter({
+      name: "diego",
+      action: "clam_shop.processing.text",
+      button: {
+        text: undefined,
+      },
+    });
 
     await approveSpending(address, clamShopAddress, clamPrice);
 
     await buyClam(address)
       .then(async (res) => {
+        updateCharacter({
+          name: "diego",
+          action: "clam_shop.congrats.text",
+          button: {
+            text: undefined,
+          },
+        });
+
         setIsLoading(false);
         setShowHatching(true);
         await sleep(3);

@@ -10,6 +10,7 @@ import Card from "../../components/Card";
 import ClamPic from "../../assets/img/clam_unknown.png";
 import { actions } from "../../store/redux";
 import { truncate } from "lodash";
+import { useAsync } from "react-use";
 
 const ClamCollectModal = ({
   setModalToShow,
@@ -20,9 +21,27 @@ const ClamCollectModal = ({
   const { handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
 
+  useAsync(async () => {
+    updateCharacter({
+      name: "diego",
+      action: "clam_shop.collection.text",
+      button: {
+        text: undefined,
+      },
+    });
+  });
+
   const onSubmit = async (data) => {
     console.log({ data, address });
     setIsLoading(true);
+
+    updateCharacter({
+      name: "diego",
+      action: "clam_shop.collection_processing.text",
+      button: {
+        text: undefined,
+      },
+    });
 
     await collectClam(address)
       .then(() => {
