@@ -294,12 +294,6 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
                     <PearlItem key={i} pearl={pearl} />
                   ))} */}
               </div>
-
-              {!clamsStaked.length && (
-                <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
-                  You&#39;ve got no clams or pearls deposited on farms &#128542;
-                </div>
-              )}
             </div>
           </div>
         </div>

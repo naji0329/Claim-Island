@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
@@ -120,10 +120,18 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
 const ClamDeposit = ({ clams, updateAccount, account: { address } }) => {
   return (
     <div className="ClamDeposit max-h-160">
-      <h3 className="heading">Choose a Clam</h3>
-      {clams.map((clam, i) => (
-        <ClamItem key={i} updateAccount={updateAccount} address={address} {...clam} />
-      ))}
+      {clams.length ? (
+        <div>
+          <h3 className="heading">Choose a Clam</h3>
+          {clams.map((clam, i) => (
+            <ClamItem key={i} updateAccount={updateAccount} address={address} {...clam} />
+          ))}
+        </div>
+      ) : (
+        <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
+          You&#39;ve got no clams or pearls deposited on farms &#128542;
+        </div>
+      )}
     </div>
   );
 };
