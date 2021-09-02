@@ -10,6 +10,7 @@ import Card from "../../components/Card";
 import ClamPic from "../../assets/img/clam_unknown.png";
 import { actions } from "../../store/redux";
 import { truncate } from "lodash";
+import { useAsync } from "react-use";
 
 const ClamCollectModal = ({
   setModalToShow,
@@ -20,9 +21,27 @@ const ClamCollectModal = ({
   const { handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
 
+  useAsync(async () => {
+    updateCharacter({
+      name: "diego",
+      action: "clam_shop.collection.text",
+      button: {
+        text: undefined,
+      },
+    });
+  });
+
   const onSubmit = async (data) => {
     console.log({ data, address });
     setIsLoading(true);
+
+    updateCharacter({
+      name: "diego",
+      action: "clam_shop.collection_processing.text",
+      button: {
+        text: undefined,
+      },
+    });
 
     await collectClam(address)
       .then(() => {
@@ -33,9 +52,31 @@ const ClamCollectModal = ({
         updateCharacter({
           name: "diego",
           action: "clam_shop.collect_congrats.text",
+          buttonAlt: {
+            text: "Harvest Clams",
+            alt: {
+              action: "cb",
+              destination: () => {
+                updateCharacter({
+                  name: "diego",
+                  action: null,
+                });
+                setModalToShow("harvest");
+              },
+            },
+          },
           button: {
-            text: "Gotcha",
-            dismiss: truncate,
+            text: "Buy Clams",
+            alt: {
+              action: "cb",
+              destination: () => {
+                updateCharacter({
+                  name: "diego",
+                  action: null,
+                });
+                setModalToShow("buy");
+              },
+            },
           },
         });
         setModalToShow("display");
