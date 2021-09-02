@@ -39,5 +39,3 @@ export function MaximaModel(props) {
 }
 
 export default MaximaModel;
-
-useGLTF.preload("/clam-models/maxima/clam.glb");

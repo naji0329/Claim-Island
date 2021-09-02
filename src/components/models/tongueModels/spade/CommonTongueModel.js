@@ -22,5 +22,3 @@ export default function Model(props) {
     </group>
   );
 }
-
-useGLTF.preload("/clam-models/spade/Tongues/common.glb");

@@ -37,5 +37,3 @@ export function CommonModel(props) {
 }
 
 export default CommonModel;
-
-useGLTF.preload("/clam-models/common/clam.glb");

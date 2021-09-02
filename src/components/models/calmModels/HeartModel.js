@@ -37,5 +37,3 @@ export function HeartModel(props) {
 }
 
 export default HeartModel;
-
-useGLTF.preload("/clam-models/heart/clam.glb");

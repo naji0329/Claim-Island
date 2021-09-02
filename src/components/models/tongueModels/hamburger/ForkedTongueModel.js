@@ -29,5 +29,3 @@ export default function Model(props) {
     </group>
   );
 }
-
-useGLTF.preload("/clam-models/hamburger/Tongues/forked.glb");

@@ -61,5 +61,3 @@ export function FanModel(props) {
 }
 
 export default FanModel;
-
-useGLTF.preload("/clam-models/fan/clam.glb");
