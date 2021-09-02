@@ -41,5 +41,3 @@ export function SpadeModel(props) {
 }
 
 export default SpadeModel;
-
-useGLTF.preload("/clam-models/spade/clam.glb");

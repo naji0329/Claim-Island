@@ -27,5 +27,3 @@ export default function Model(props) {
     </group>
   );
 }
-
-useGLTF.preload("/clam-models/hamburger/Tongues/spiral.glb");

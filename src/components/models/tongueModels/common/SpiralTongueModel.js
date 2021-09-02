@@ -28,5 +28,3 @@ export default function Model(props) {
     </group>
   );
 }
-
-useGLTF.preload("/clam-models/common/Tongues/spiral.glb");

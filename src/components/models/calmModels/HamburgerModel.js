@@ -71,5 +71,3 @@ export function HamburgerModel(props) {
 }
 
 export default HamburgerModel;
-
-useGLTF.preload("/clam-models/hamburger/clam.glb");

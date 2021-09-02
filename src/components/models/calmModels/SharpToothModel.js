@@ -41,5 +41,3 @@ export function SharpToothModel(props) {
 }
 
 export default SharpToothModel;
-
-useGLTF.preload("/clam-models/sharptooth/clam.glb");
