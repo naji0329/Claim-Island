@@ -5,13 +5,12 @@ import { useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchPlus, faSearchMinus } from "@fortawesome/free-solid-svg-icons";
 
-
 // THREE.JS LIBRARIES
 import * as THREE from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
 import { OrbitControls } from "../../loaders/OrbitControls";
 import loadGLTF from "./loaders/gltf_loader";
@@ -21,8 +20,8 @@ import "./3d_map.scss";
 import createWater from "./create_water";
 import createSky from "./create_sky";
 import clamIcon from "../../assets/clam-icon.png";
-import { lighthouseOutlineModels, OUTLINE_MODEL_NAMES } from "../../constants/outline-models";
-import { isNeedOutlineModel } from "../../utils/outline";
+
+import { ISLAND_OBJECTS } from './constants';
 
 const clock = new THREE.Clock();
 
@@ -30,23 +29,31 @@ THREE.Cache.enabled = true;
 
 const Map3D = () => {
   const mapRef = useRef(null);
+  const hoverLabelRef = useRef(null);
+  const history = useHistory();
   const [loading, setLoading] = useState(true);
+  const [hoverName, setHoverName] = useState("");
 
-  const [hoverName, setHoverName] = useState('');
-  var [controls, setControls] = useState({});
-  var renderer, scene, camera, totalGroup, water;
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
-  let bank, farm, market, vault, lighthouse, bridge, rocks, lilly, boats, ship, sailboat, seagulls, dolphins;
-  let hotModelBank, hotModelFarm, hotModelMarket, hotModelVault, lighthouseOutlineMeshes;
-  let composer, outlinePass, effectFXAA, hotMeshArr = [], hoverStr = '';
-  let bankSign, farmSign, marketSign, safeSign, infoSign, shopSign;
 
-  const history = useHistory();
+  let modelObjs = [];
+  let renderer, scene, camera, water, controls;
+
+  let composer,
+    outlinePass,
+    effectFXAA,
+    outlineMeshes = [],
+    hoverStr = "";
+
+  let lighthouseOutlineMeshes,
+    farmOutlineMeshes,
+    vaultOutlineMeshes,
+    marketOutlineMeshes,
+    bankOutlineMeshes;
 
   useEffect(() => {
-    create3DScene(mapRef.current, setLoading, setControls, setHoverName);
-
+    create3DScene(mapRef.current, setLoading);
   }, [mapRef]);
 
   const zoomIn = () => {
@@ -60,24 +67,16 @@ const Map3D = () => {
   const create3DScene = async (element, setLoading) => {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.shadowMap.enabled = true;
-    //renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    //renderer.toneMappingExposure = 1.2;
-    // renderer.gammaOutput = true;
-    // renderer.gammaFactor = 2.2;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    document.getElementById("container").appendChild(renderer.domElement);
-		renderer.setClearColor(0xe1e1e1, 1);
-    //renderer.physicallyCorrectLights = true;
+    element.appendChild(renderer.domElement);
+    renderer.setClearColor(0xe1e1e1, 1);
 
     camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 20000);
     camera.position.set(650, 350, 500);
-    console.log(camera);
 
     controls = new OrbitControls(camera, renderer.domElement);
-    // controls.minZoom = 1;
-    // controls.maxZoom = 3;
     controls.minDistance = 800;
     controls.maxDistance = 1500;
     controls.maxPolarAngle = 1.5;
@@ -89,56 +88,43 @@ const Map3D = () => {
     createSky({ scene, water, renderer });
     addLights();
 
-    bank = await loadGLTF("glb_files/Bank_Island.glb", scene);
-    farm = await loadGLTF("glb_files/farm_island.glb", scene);
-    market = await loadGLTF("glb_files/Market_Island.glb", scene);
-    vault = await loadGLTF("glb_files/Vault_Island.glb", scene);
-    bridge = await loadGLTF("glb_files/Bridges.glb", scene, "bridge");
-    rocks = await loadGLTF("glb_files/Rocks.glb", scene, "rocks");
-    //lilly = await loadGLTF('glb_files/LillyPads.glb', scene, 'lillies');
-    lighthouse = await loadGLTF("glb_files/Info_Island.glb", scene, "island", "lighthouse");
-    boats = await loadGLTF("glb_files/Boats.glb", scene);
-    ship = await loadGLTF("glb_files/ship-2.glb", scene, "ship");
-    sailboat = await loadGLTF("glb_files/sailboat.glb", scene, "sailboat");
+    modelObjs = (await Promise.all(ISLAND_OBJECTS.map(k =>
+      loadGLTF(k.objectUrl, scene, k.type, k.name)
+    )))
+    .map((model, index) => ({
+      ...ISLAND_OBJECTS[index],
+      model
+    }));
 
-    bankSign = await loadGLTF("glb_files/bank_sign.glb", scene, "island", "bank_sign");
-    farmSign = await loadGLTF("glb_files/farm_sign.glb", scene, "island", "farm_sign");
-    // marketSign = await loadGLTF("glb_files/market_sign.glb", scene, "island", "market_sign");
-    safeSign = await loadGLTF("glb_files/safe_sign.glb", scene, "island", "safe_sign");
-    infoSign = await loadGLTF("glb_files/info_sign.glb", scene, "island", "info_sign");
-    shopSign = await loadGLTF("glb_files/shop_sign.glb", scene, "island", "shop_sign");
-
-    seagulls = await loadGLTF("glb_files/seagull.glb", scene, "seagull");
-    dolphins = await loadGLTF("glb_files/dolphin.glb", scene, "dolphin");
-    hotModelBank = await loadGLTF("glb_files/hot_bank.glb", scene);
-    hotModelFarm = await loadGLTF("glb_files/hot_farm.glb", scene);
-    hotModelMarket = await loadGLTF("glb_files/hot_market.glb", scene);
-    hotModelVault = await loadGLTF("glb_files/hot_vault.glb", scene);
-    setHotModel();
+    setOutlineMeshes();
 
     setLoading(false);
-    composer = new EffectComposer( renderer );
+    composer = new EffectComposer(renderer);
 
-    const renderPass = new RenderPass( scene, camera );
-    composer.addPass( renderPass );
+    const renderPass = new RenderPass(scene, camera);
+    composer.addPass(renderPass);
 
-    outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
+    outlinePass = new OutlinePass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      scene,
+      camera
+    );
     outlinePass.edgeStrength = 10;
     outlinePass.edgeThickness = 2;
     outlinePass.pulsePeriod = 2;
     outlinePass.edgeGlow = 0.2;
-    outlinePass.visibleEdgeColor.set( 0x38dcdc );
-    outlinePass.hiddenEdgeColor.set( 0x38dcdc );
-    composer.addPass( outlinePass );
+    outlinePass.visibleEdgeColor.set(0x38dcdc);
+    outlinePass.hiddenEdgeColor.set(0x38dcdc);
+    composer.addPass(outlinePass);
 
-    effectFXAA = new ShaderPass( FXAAShader );
-    effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
-    composer.addPass( effectFXAA );
+    effectFXAA = new ShaderPass(FXAAShader);
+    effectFXAA.uniforms["resolution"].value.set(1 / window.innerWidth, 1 / window.innerHeight);
+    composer.addPass(effectFXAA);
 
-    renderer.domElement.addEventListener( 'mousemove', onMouseMove );
-    renderer.domElement.addEventListener( 'pointerdown', onMouseDown );
-    renderer.domElement.addEventListener( 'mouseup', onMouseUp );
-    renderer.domElement.addEventListener( 'click', onMouseClick );
+    renderer.domElement.addEventListener("mousemove", onMouseMove);
+    renderer.domElement.addEventListener("pointerdown", onMouseDown);
+    renderer.domElement.addEventListener("mouseup", onMouseUp);
+    renderer.domElement.addEventListener("click", onMouseClick);
 
     animate();
   };
@@ -160,25 +146,28 @@ const Map3D = () => {
 
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0xe0fffc, 0.4);
     scene.add(hemiLight);
-    console.log(scene);
   };
 
-  const setHotModel = () => {
-    hotMeshArr = [];
-    [hotModelBank, hotModelFarm, hotModelMarket, hotModelVault].forEach(obj => {
-      const hotMesh = obj.children[0];
-      hotMesh.material = new THREE.MeshBasicMaterial({transparent:true, opacity:0});
-      hotMeshArr.push(hotMesh);
-    });
-    /** Lighthouse meshes that provoke Lighthouse outline */
-    lighthouseOutlineMeshes = lighthouse.children[0].children.reduce((acc, mesh) => {
-      if (lighthouseOutlineModels.has(mesh.name)) {
-        acc.push(mesh);
-      }
-      return acc;
-    }, [])
-    hotMeshArr.push(...lighthouseOutlineMeshes);
-  }
+  const getOutlineMesh = (name) => {
+    const mesh = modelObjs.find(k => k.name === name).model;
+    return mesh.children.filter((el) => el.name === name);
+  };
+
+  const setOutlineMeshes = () => {
+    lighthouseOutlineMeshes = getOutlineMesh("lighthouse");
+    farmOutlineMeshes = getOutlineMesh("farm");
+    vaultOutlineMeshes = getOutlineMesh("vault");
+    marketOutlineMeshes = getOutlineMesh("market");
+    bankOutlineMeshes = getOutlineMesh("bank");
+
+    outlineMeshes = [
+      ...lighthouseOutlineMeshes,
+      ...farmOutlineMeshes,
+      ...marketOutlineMeshes,
+      ...bankOutlineMeshes,
+      ...vaultOutlineMeshes,
+    ];
+  };
 
   const animate = () => {
     requestAnimationFrame(animate);
@@ -186,28 +175,16 @@ const Map3D = () => {
 
     let t = clock.getElapsedTime();
     const tdelta = clock.getDelta();
-    giveBuoyancy(ship, t, 4, 35);
-    giveBuoyancy(bank, t, 2, -5);
-    giveBuoyancy(bankSign, t, 2, -5);
-    giveBuoyancy(market, t, 2, 2);
-    giveBuoyancy(shopSign, t, 2, 2);
-    giveBuoyancy(vault, t, 2, 2);
-    giveBuoyancy(safeSign, t, 2, 2);
-    giveBuoyancy(lighthouse, t, 2, 2);
 
-    giveBuoyancy(hotModelBank, t, 2, -5);
-    giveBuoyancy(hotModelMarket, t, 2, 2);
-    giveBuoyancy(hotModelVault, t, 2, 2);
+    modelObjs.forEach(k => {
+      if (k.buoyancy) {
+        giveBuoyancy(k.model, t, k.buoyancy.factor, k.buoyancy.init);
+      }
+    });
 
-    giveBuoyancy(bridge, t, 2, 30);
-    giveBuoyancy(boats, t, 1.5, 1);
-    //giveBuoyancy(lilly, t, 0.3, 32);
-    giveBuoyancy(sailboat, t, 2, 38);
+    flyingSeagulls(tdelta);
+    swimmingDolphins(t);
 
-    flyingSeagulls(seagulls, tdelta);
-    swimmingDolphins(dolphins, t);
-
-    // renderer.render(scene, camera);
     composer.render();
   };
 
@@ -219,7 +196,8 @@ const Map3D = () => {
     }
   };
 
-  const flyingSeagulls = (seagulls, t) => {
+  const flyingSeagulls = (t) => {
+    const seagulls = modelObjs.find(k => k.type === 'seagull').model;
     if (seagulls) {
       seagulls.forEach((seagull, i) => {
         seagull.pivot.rotation.y += seagull.pivot.userData.speed + 0.01;
@@ -227,7 +205,8 @@ const Map3D = () => {
     }
   };
 
-  const swimmingDolphins = (dolphins, t) => {
+  const swimmingDolphins = (t) => {
+    const dolphins = modelObjs.find(k => k.type === 'dolphin').model;
     if (dolphins) {
       dolphins.forEach((dolphin, i) => {
         dolphin.pivot.rotation.x += 0.02;
@@ -238,10 +217,7 @@ const Map3D = () => {
           var zpos = Math.random() * 100 + 350;
           var xpos = Math.random() * 100 - 250;
         }
-        if (
-          THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 > 120 &&
-          !dolphin.pivot.under
-        ) {
+        if (THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 > 120 && !dolphin.pivot.under) {
           dolphin.pivot.position.z = zpos;
           dolphin.pivot.position.x = xpos;
           dolphin.pivot.rotation.x += THREE.Math.degToRad(Math.random() * 90);
@@ -256,68 +232,97 @@ const Map3D = () => {
     }
   };
 
-  const onMouseMove = ( event ) => {
-    if ( event.isPrimary === false ) return;
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  const onMouseMove = (event) => {
+    if (event.isPrimary === false) return;
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     checkIntersection(event);
-  }
+  };
 
-  const onMouseDown = ( ) => {
-    if (hoverStr !== '') controls.enabled = false;
-  }
+  const onMouseDown = () => {
+    if (hoverStr !== "") controls.enabled = false;
+  };
 
   const onMouseUp = () => {
     controls.enabled = true;
-  }
+  };
 
   const onMouseClick = () => {
     // places: bank, farm, market, vault, lighthouse
     if (hoverStr === '') return;
-    if (hoverStr === 'bank') return history.push('/bank');
-    if (hoverStr === 'farm') return history.push('/farms');
-    if (hoverStr === 'market') return history.push('/shop');
-    if (hoverStr === 'vault') return history.push('/saferoom');
-    if (hoverStr === 'lighthouse') return window.open('https://clamisland.medium.com/clam-island-essential-visitors-guide-63f2a9984336', '_blank');
-    window.open('', '_self');
-  }
-  /** TODO refactor when get rid of hot models */
+    const obj = modelObjs.find(k => k.name === hoverStr);
+    if (obj && obj.url && obj.urlType === 'external') {
+      return window.open(obj.url, '_blank');
+    } else if (obj && obj.url) {
+      return history.push(obj.url);
+    } else {
+      window.open('', '_self');
+    }
+  };
+
   const checkIntersection = (event) => {
-    raycaster.setFromCamera( mouse, camera );
-    const intersect = raycaster.intersectObjects( hotMeshArr, true )[0];
-    if ( intersect ) {
-      const interObject = intersect.object;
-      if (isNeedOutlineModel(lighthouseOutlineModels, interObject)) {
-        if (hoverStr !== OUTLINE_MODEL_NAMES.lighthouse) {
-          hoverStr = OUTLINE_MODEL_NAMES.lighthouse;
-          const hoverLabel = document.getElementById('hoverLabel');
-          hoverLabel.style.left = (event.clientX + 50)+'px';
-          hoverLabel.style.top = (event.clientY - 100)+'px';
-          hoverLabel.style.display='block';
-          setHoverName(hoverStr);
-          outlinePass.selectedObjects = [...lighthouseOutlineMeshes];
+    raycaster.setFromCamera(mouse, camera);
+    const intersect = raycaster.intersectObjects(outlineMeshes, true)[0];
+    if (intersect) {
+      const interParent = intersect.object.parent.name;
+      const currentHover = hoverStr;
+      switch (interParent) {
+        case "lighthouse": {
+          if (hoverStr !== "lighthouse") {
+            hoverStr = "lighthouse";
+            outlinePass.selectedObjects = lighthouseOutlineMeshes;
+          }
+          break;
         }
-      } else {
-        if (hoverStr !== interObject.name) {
-          hoverStr = interObject.name;
-          const hoverLabel = document.getElementById('hoverLabel');
-          hoverLabel.style.left = (event.clientX + 50)+'px';
-          hoverLabel.style.top = (event.clientY - 100)+'px';
-          hoverLabel.style.display='block';
-          setHoverName(hoverStr);
-          outlinePass.selectedObjects = [intersect.object];
+        case "farm": {
+          if (hoverStr !== "farm") {
+            hoverStr = "farm";
+            outlinePass.selectedObjects = farmOutlineMeshes;
+          }
+          break;
         }
+        case "market": {
+          if (hoverStr !== "market") {
+            hoverStr = "market";
+            outlinePass.selectedObjects = marketOutlineMeshes;
+          }
+          break;
+        }
+        case "bank": {
+          if (hoverStr !== "bank") {
+            hoverStr = "bank";
+            outlinePass.selectedObjects = bankOutlineMeshes;
+          }
+          break;
+        }
+        case "vault": {
+          if (hoverStr !== "vault") {
+            hoverStr = "vault";
+            outlinePass.selectedObjects = vaultOutlineMeshes;
+          }
+          break;
+        }
+        default:
+          console.error("intersect obj is not found");
+      }
+
+      if (currentHover !== hoverStr) {
+        setHoverName(hoverStr);
+        const hoverLabel = hoverLabelRef.current;
+        hoverLabel.style.left = event.clientX + 50 + "px";
+        hoverLabel.style.top = event.clientY - 100 + "px";
+        hoverLabel.style.display = "block";
       }
     } else {
-      if (hoverStr !== '') {
-        hoverStr = '';
+      if (hoverStr !== "") {
+        hoverStr = "";
         outlinePass.selectedObjects = [];
-        const hoverLabel = document.getElementById('hoverLabel');
-        hoverLabel.style.display='none';
-        setHoverName('');
+        const hoverLabel = hoverLabelRef.current;
+        hoverLabel.style.display = "none";
+        setHoverName("");
       }
     }
-  }
+  };
 
   return (
     <div>
@@ -333,8 +338,12 @@ const Map3D = () => {
       <button className="zoom-btn zoom-out text-blue-500" onClick={zoomOut}>
         <FontAwesomeIcon icon={faSearchMinus} />
       </button>
-      <div className={`three-container ${hoverName!==''?'hover':''}`} id='container' ref={mapRef}></div>
-      <div id='hoverLabel'>Open</div>
+      <div
+        className={`three-container ${hoverName !== "" ? "hover" : ""}`}
+        id="container"
+        ref={mapRef}
+      />
+      <div id="hoverLabel" ref={hoverLabelRef}>Opening Soon</div>
     </div>
   );
 };
