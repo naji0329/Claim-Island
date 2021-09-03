@@ -37,9 +37,9 @@
       transform: translateX(-100%);
       background-image: linear-gradient(
         90deg,
-        rgba(22, 22, 22, 1) 0,
-        rgba(22, 22, 22, 0.9) 50%,
-        rgba(22, 22, 22, 0.8) 100%
+        rgba(0, 100, 200, 1) 0,
+        rgba(0, 100, 200, 0.9) 50%,
+        rgba(0, 100, 200, 0.8) 100%
       );
       animation: shimmer 3s ease-out infinite;
       content: "";
