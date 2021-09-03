@@ -3,6 +3,7 @@ import { Clam3DView } from "../../components/clam3DView";
 import FarmPearl from "../../assets/img/farm_pearl.png";
 
 const PearlDetails = ({ clam, clamProcessing }) => {
+  console.log(clamProcessing);
   const pearls = [
     {
       gemHr: "13",
@@ -23,9 +24,9 @@ const PearlDetails = ({ clam, clamProcessing }) => {
           showTraitsTable={false}
         />
 
-        <div className="flex flex-row justify-between my-2">
+        <div className="flex flex-row justify-between my-2" style={{ maxWidth: "400px" }}>
           <p className="float-left">Remaining Time</p>
-          <p className="float-right">{clam.remainingTime}</p>
+          <p className="float-right">{clamProcessing.remainingTime}</p>
         </div>
       </div>
       <div className="flex flex-1 flex-col">
