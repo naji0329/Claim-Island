@@ -76,7 +76,7 @@ const ClamHarvestModal = ({
       name: "diego",
       action: "clam_shop.harvest_warn.text",
       button: {
-        text: "MoreInformation",
+        text: "More Information",
         alt: {
           action: "cb",
           destination: () => {
