@@ -306,13 +306,13 @@ const Map3D = () => {
           console.error("intersect obj is not found");
       }
 
-      if (currentHover !== hoverStr) {
-        setHoverName(hoverStr);
-        const hoverLabel = hoverLabelRef.current;
-        hoverLabel.style.left = event.clientX + 50 + "px";
-        hoverLabel.style.top = event.clientY - 100 + "px";
-        hoverLabel.style.display = "block";
-      }
+      // if (currentHover !== hoverStr) {
+      //   setHoverName(hoverStr);
+      //   const hoverLabel = hoverLabelRef.current;
+      //   hoverLabel.style.left = event.clientX + 50 + "px";
+      //   hoverLabel.style.top = event.clientY - 100 + "px";
+      //   hoverLabel.style.display = "block";
+      // }
     } else {
       if (hoverStr !== "") {
         hoverStr = "";
