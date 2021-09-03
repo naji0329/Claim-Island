@@ -18,38 +18,40 @@
       @apply overflow-hidden h-4 mb-4 text-xs flex rounded bg-blue-200;
     }
 
-    .base-bar-animated {
-      &::after {
-        @apply overflow-hidden h-4 mb-4 text-xs flex rounded;
-        // background-color: red;
-        position: absolute;
-        // top: 0;
-        right: 8px;
-        // bottom: 0;
-        left: 8px;
-        // margin-left: 10px;
-        // transform: translateX(-100%);
-        background-image: linear-gradient(
-          90deg,
-          rgba(233, 233, 233, 1) 0,
-          rgba(233, 233, 233, 0.9) 50%,
-          rgba(233, 233, 233, 0.8) 100%
-        );
-        animation: shimmer 2s ease-out infinite;
-        content: "";
-      }
 
-      @keyframes shimmer {
-        100% {
-          transform: translateX(0%);
-          opacity: 0;
-        }
-      }
-    }
+
 
     .completion-bar {
-      @apply shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500;
+      @apply shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center;
+      position: relative;
+      overflow: hidden;
+      background-color: rgba(0, 155, 255, 0.7);
     }
+
+    .completion-bar::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%);
+      background-image: linear-gradient(
+        90deg,
+        rgba(22, 22, 22, 1) 0,
+        rgba(22, 22, 22, 0.9) 50%,
+        rgba(22, 22, 22, 0.8) 100%
+      );
+      animation: shimmer 3s ease-out infinite;
+      content: "";
+    }
+
+    @keyframes shimmer {
+      100% {
+        transform: translateX(0%);
+        opacity: 0;
+      }
+    }
+
     span {
       @apply absolute;
       left: 35%;
@@ -82,7 +84,7 @@
 
   .detail-box {
     @apply bg-gray-300 rounded-xl p-4 mt-4;
-   
+
   }
 
   .grid-value {
@@ -103,11 +105,11 @@
     @apply flex flex-row items-center;
     @apply border-4 border-blue-200 rounded-xl p-4 my-4;
 
-   
+
 
     .details {
       @apply flex flex-1 flex-col;
-      
+
     }
   }
 }

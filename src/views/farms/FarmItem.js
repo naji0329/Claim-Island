@@ -85,7 +85,7 @@ const FarmItem = ({
     processing: remainingTime > 0,
     dnaDecoded,
     heading: dnaDecoded.rarity,
-    harvestableShell: pearlProductionCapacity,
+    harvestableShell: 1 + pearlsProduced * 0.1,
     remainingLifeSpan: pearlProductionCapacity - pearlsProduced,
   };
 

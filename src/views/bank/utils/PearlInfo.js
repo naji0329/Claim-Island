@@ -38,7 +38,7 @@ const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker }) => {
     <>
       <div className="w-full flex">
         <div className="w-2/5 mr-4 h-32 overflow-hidden">
-          <img src={image} className="-mt-16" />
+          <img src={image} />
         </div>
         <div className="w-3/5">
           <InfoLine label="$Gem/hr" value={gemPerHour} />
