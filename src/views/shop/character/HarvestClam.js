@@ -1,6 +1,6 @@
 import { truncate } from "lodash";
 
-const harvestWarning = () => ({
+const harvestClamInfo = () => ({
   text: "More Information",
   alt: {
     action: "cb",
@@ -34,17 +34,72 @@ export const harvestError = ({ updateCharacter }) => {
   });
 };
 
-export const harvestClamSpeak = (updateCharacter, cb) => {
+export const harvestNoClamsAvailable = ({ updateCharacter, setModalToShow, hours }) => {
+  updateCharacter({
+    name: "diego",
+    action: "clam_shop.harvest_no_clams.text",
+    variables: { incubationTime: hours },
+    button: {
+      text: "Buy Clams",
+      alt: {
+        action: "cb",
+        destination: () => {
+          updateCharacter({
+            name: "diego",
+            action: null,
+          });
+          setModalToShow("buy");
+        },
+      },
+    },
+    buttonAlt: {
+      text: "Back to Island",
+      alt: {
+        action: "internal",
+        destination: "/",
+      },
+    },
+  });
+};
+
+export const harvestChooseClams = ({ updateCharacter, setModalToShow }) => {
+  updateCharacter({
+    name: "diego",
+    action: "clam_shop.harvest_choose_clams.text",
+    button: {
+      text: "I want to buy Clams instead.",
+      alt: {
+        action: "cb",
+        destination: () => {
+          updateCharacter({
+            name: "diego",
+            action: null,
+          });
+          setModalToShow("buy");
+        },
+      },
+    },
+    buttonAlt: {
+      text: "Back to Island",
+      alt: {
+        action: "internal",
+        destination: "/",
+      },
+    },
+  });
+};
+
+export const harvestClamSpeak = ({ updateCharacter }, cb) => {
   updateCharacter({
     name: "diego",
     action: "clam_shop.harvest_warn.text",
-    button: harvestWarning(),
+    button: harvestClamInfo(),
     buttonAlt: {
-      text: "Proceed",
+      text: "Yes",
       alt: {
         action: "cb",
         destination: () => { cb(); }
       },
     },
-  })
+  });
 };

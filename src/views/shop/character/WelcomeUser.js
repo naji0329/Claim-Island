@@ -1,3 +1,38 @@
+export const harvestClamWarning = ({ updateCharacter, setModalToShow }, cb) => {
+  updateCharacter({
+    name: "diego",
+    action: "clam_shop.harvest_warn.text",
+    button: {
+      text: "Yes",
+      alt: {
+        action: "cb",
+        destination: () => {
+          setUserReady(true);
+          updateCharacter({
+            name: "diego",
+            action: null,
+          });
+          setModalToShow("harvest");
+        },
+      },
+    },
+    buttonAlt: {
+      text: "No, I want to buy Clams instead.",
+      alt: {
+        action: "cb",
+        destination: () => {
+          updateCharacter({
+            name: "diego",
+            action: null,
+          });
+          setModalToShow("buy");
+        },
+      },
+    },
+  })
+};
+
+
 const harvestClamsBtn = ({ updateCharacter, setUserReady, setModalToShow }) => {
   return {
     text: "Harvest Clams",

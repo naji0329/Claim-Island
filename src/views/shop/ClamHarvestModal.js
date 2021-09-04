@@ -3,7 +3,7 @@ import { connect } from "redux-zero/react";
 import { formatUnits } from "@ethersproject/units";
 import { Link } from "react-router-dom";
 
-import {
+import clam, {
   getClamByIndex,
   getClamData,
   getClamValueInShellToken,
@@ -26,7 +26,9 @@ import { truncate, get } from "lodash";
 import {
   harvestClamSpeak,
   harvestCongrats,
-  harvestError
+  harvestError,
+  harvestChooseClams,
+  harvestNoClamsAvailable
 } from "./character/HarvestClam";
 
 const formatShell = (value) => (value ? formatUnits(value, 18) : "0");
@@ -78,7 +80,8 @@ const ClamHarvestModal = ({
   const [clamValueInShellToken, setClamValueInShellToken] = useState("");
 
   const harvestClam = async (tokenId) => {
-    harvestClamSpeak(updateCharacter, async () => {
+    // character speaks
+    harvestClamSpeak({ updateCharacter }, async () => {
       try {
         await harvestClamForShell(tokenId, address);
         harvestCongrats({ updateCharacter }); // character speaks
@@ -111,6 +114,7 @@ const ClamHarvestModal = ({
 
       if (filteredClams.length > 0) {
         setMessage(`Choose a Clam`);
+        harvestChooseClams({ updateCharacter, setModalToShow }); // character speaks
       } else {
         const formatDuration = (totalSeconds) => {
           const hours = Math.floor(totalSeconds / 3600);
@@ -124,30 +128,33 @@ const ClamHarvestModal = ({
 
         const hours = formatDuration(+incubationtime);
         setMessage(
-          `None of your clams are able to produce pearls. They must be either alive or be past the ${hours} incubation period once they have been farmed.`
+          `None of your clams are able to produce pearls.
+           They must be either alive or be past the ${hours} incubation period once they have been farmed.`
         );
+        harvestNoClamsAvailable({ updateCharacter, setModalToShow, hours }); // character speaks
       }
-
       setClams(filteredClams);
     }
     setClamValueInShellToken(await getClamValueInShellToken());
   }, [address, clamBalance]);
 
   return (
-    <Card className="p-2">
-      <h1 className="flex justify-center font-bold">{message}</h1>
-      <div className="bg-white flex-1 justify-center  md:flex items-center flex-col overflow-scroll">
-        {clams.length &&
-          clams.map((clam, i) => (
-            <ClamItem
-              clam={clam}
-              key={i}
-              harvestClam={harvestClam}
-              clamValueInShellToken={clamValueInShellToken}
-            />
-          ))}
-      </div>
-    </Card>
+    <>
+      {clams.length ?
+        <Card className="p-2">
+          <h1 className="flex justify-center font-bold">{message}</h1>
+          <div className="bg-white flex-1 justify-center  md:flex items-center flex-col overflow-scroll">
+            {clams.map((clam, i) => (
+              <ClamItem
+                clam={clam}
+                key={i}
+                harvestClam={harvestClam}
+                clamValueInShellToken={clamValueInShellToken}
+              />
+            ))}
+          </div>
+        </Card> : ''}
+    </>
   );
 };
 

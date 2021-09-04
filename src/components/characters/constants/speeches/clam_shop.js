@@ -6,12 +6,14 @@ export const CLAM_SHOP_SPEECH = {
       dismiss: false,
       skip: false,
     },
+
     connect: {
       text: `Oh I've noticed that you've not connected your blockchain wallet yet. Before you can buy or trade any Clams, you need to enable that...`,
       next: false,
       dismiss: false,
       skip: false,
     },
+
     collect: {
       text: `Looks like you still have a clam to collect from last time you visited. Please do so before you proceed.`,
       next: false,
@@ -60,12 +62,28 @@ export const CLAM_SHOP_SPEECH = {
       dismiss: false,
       skip: false,
     },
+
     harvest_warn: {
-      text: `WARNING!!! This action will destroy your Clam for $SHELL tokens and it is not reversible. Click proceed to finish harvesting your chosen Clam.`,
+      text: `WARNING!! Harvesting a Clam will destroy it but you will get $SHELL in return. This process is not reversible. Do you want to continue?`,
       next: false,
       dismiss: true,
       skip: false,
     },
+
+    harvest_no_clams: {
+      text: (d) => `I'm sorry, you don't have any Clams that can be harvested right now. New Clams need to be incubated for ${d.incubationTime} in the Saferoom before they can be harvested for $SHELL or farmed for Pearls.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
+    harvest_choose_clams: {
+      text: `Please choose a Clam for harvesting.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
     harvest_congrats: {
       text: `Big Decision. We have added $SHELL to your wallet`,
       next: false,

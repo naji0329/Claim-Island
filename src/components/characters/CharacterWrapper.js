@@ -12,15 +12,17 @@ import "./index.scss";
 const CharacterWrapper = ({
   name,
   action,
+  variables,
   button,
   buttonAlt,
   onClickButton,
   suppressSpeechBubble,
 }) => {
   const character = get(CHARACTERS, name);
-  const speech = get(SPEECHES, action, action);
-
-  // console.log({ action, character, speech, button });
+  let speech = get(SPEECHES, action, action);
+  if (speech && typeof speech !== 'string') {
+    speech = variables ? speech(variables) : speech({});
+  }
 
   const [showBubble, setShowBubble] = useState(true);
   const [stateSpeech, setStateSpeech] = useState();
@@ -159,9 +161,10 @@ const CharacterWrapper = ({
   );
 };
 
-const mapToProps = ({ character: { name, action, button, buttonAlt, suppressSpeechBubble } }) => ({
+const mapToProps = ({ character: { name, action, variables, button, buttonAlt, suppressSpeechBubble } }) => ({
   name,
   action,
+  variables,
   button,
   buttonAlt,
   suppressSpeechBubble,
