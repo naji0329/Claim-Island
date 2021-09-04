@@ -1,4 +1,4 @@
-const ifHarvestClams = ({ updateCharacter, setUserReady }) => {
+const ifHarvestClams = ({ updateCharacter, setUserReady, setModalToShow }) => {
   return {
     text: "Harvest Clams",
     alt: {
@@ -79,7 +79,7 @@ export const WelcomeUser = ({
             updateCharacter({
               name: "diego",
               action: "clam_shop.choose_path.text",
-              buttonAlt: ifHarvestClams({ updateCharacter, setUserReady }),
+              buttonAlt: ifHarvestClams({ updateCharacter, setUserReady, setModalToShow }),
               button: ifBuyClams({
                 updateCharacter, setUserReady,
                 setModalToShow, clamToCollect
