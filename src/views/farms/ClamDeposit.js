@@ -8,7 +8,7 @@ import { actions } from "../../store/redux";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
 import { clamNFTAddress, pearlFarmAddress } from "../../web3/constants";
 import { formatFromWei } from "../../web3/shared";
-import { getBalance, approveSpending, getAllowance } from "../../web3/gem";
+import { getBalance, infiniteApproveSpending, getAllowance } from "../../web3/gem";
 import {
   stakeClam,
   hasClamBeenStakedBeforeByUser,
@@ -56,12 +56,12 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
         throw new Error(`You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`);
 
       setButtonText("Approving Clam...");
-      await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress, clamId);
+      await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
 
       if (!gemApproved) {
         setButtonText("Approving GEM...");
         console.log(pearlPrice);
-        await approveSpending(address, pearlFarmAddress, pearlPrice);
+        await infiniteApproveSpending(address, pearlFarmAddress, pearlPrice);
       }
 
       setButtonText("Depositing Clam...");

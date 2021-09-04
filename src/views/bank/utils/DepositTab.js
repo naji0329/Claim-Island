@@ -43,7 +43,7 @@ const DepositTab = ({ useSharedState, updateCharacter, updateAccount, depositFee
     setInTx(true);
     onDepositHarvestTxn(updateCharacter);
     try {
-      await approveBankForMaxUint(account, pool.lpToken);
+      await approveBankForMaxUint(account, pool.lpToken, depositAmount);
       await deposit(pool.poolId, formatToWei(depositAmount));
 
       const balances = await getBalancesFormatted(account, pool.lpToken, pool.isSingleStake);
