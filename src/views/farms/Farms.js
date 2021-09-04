@@ -38,6 +38,7 @@ const MODAL_OPTS = {
 };
 
 import { useEthers } from "@usedapp/core";
+import { WelcomeUser, withdrawClamSpeak } from "./character/WithdrawClam";
 
 const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
   let history = useHistory();
@@ -94,32 +95,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
   // when "Withdraw" is clicked - open the modal
   const onWithdrawClam = (clam) => {
-    updateCharacter({
-      name: "al",
-      action: "farms.withdraw.text",
-      show: true,
-      button: {
-        // text: undefined,
-        text: "Withdraw",
-        alt: {
-          action: "cb",
-          dismiss: true,
-          destination: () => handleWithdraw(clam.clamId),
-        },
-      },
-      buttonAlt: {
-        text: "Cancel",
-        alt: {
-          action: "cb",
-          dismiss: true,
-          destination: () => {
-            updateCharacter({
-              name: "al",
-              action: undefined,
-            });
-          },
-        },
-      },
+    withdrawClamSpeak(updateCharacter, () => {
+      handleWithdraw(clam.clamId);
     });
   };
 
@@ -215,22 +192,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   }, [address, clamBalance]);
 
   useAsync(async () => {
-    updateCharacter({
-      name: "al",
-      action: "farms.placeholder.text",
-      button: {
-        text: "Dismiss",
-        alt: {
-          action: "cb",
-          destination: () => {
-            updateCharacter({
-              name: "al",
-              action: undefined,
-            });
-          },
-        },
-      },
-    });
+    WelcomeUser({ updateCharacter });
   });
 
   return (

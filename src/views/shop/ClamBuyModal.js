@@ -17,6 +17,12 @@ import { approveSpending } from "../../web3/gem";
 import { clamShopAddress } from "../../web3/constants";
 import { actions } from "../../store/redux";
 
+import {
+  buyClamError,
+  buyClamSuccess,
+  buyClamProcessing
+} from "./character/BuyClam";
+
 const Divider = () => (
   <div className="w-full flex flex-col justify-center items-center my-2">
     <div className="bg-grey-light hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded inline-flex items-center">
@@ -54,45 +60,27 @@ const ClamBuyModal = ({
     console.log({ data });
     setIsLoading(true);
 
-    updateCharacter({
-      name: "diego",
-      action: "clam_shop.processing.text",
-      button: {
-        text: undefined,
-      },
-    });
+    buyClamProcessing({ updateCharacter }); // character speaks
 
     await approveSpending(address, clamShopAddress, clamPrice);
 
-    await buyClam(address)
-      .then(async (res) => {
-        updateCharacter({
-          name: "diego",
-          action: "clam_shop.congrats.text",
-          button: {
-            text: undefined,
-          },
-        });
+    try {
+      await buyClam(address);
+      buyClamSuccess({ updateCharacter }); // character speaks
+      setIsLoading(false);
+      setShowHatching(true);
 
-        setIsLoading(false);
-        setShowHatching(true);
-        await sleep(3);
-        setShowHatching(false);
-        setModalToShow("collect");
-      })
-      .catch((e) => {
-        console.log("error", e.message);
-        setIsLoading(false);
-        console.log("nooo");
-        updateAccount({ error: e.message });
-        updateCharacter({
-          name: "diego",
-          action: "clam_presale.error.text",
-          button: {
-            text: undefined,
-          },
-        });
-      });
+      await sleep(3);
+      setShowHatching(false);
+      setModalToShow("collect");
+
+    } catch (e) {
+      console.log("error", e.message);
+      setIsLoading(false);
+      console.log("nooo");
+      updateAccount({ error: e.message });
+      buyClamError({ updateCharacter }); // character speaks
+    }
   };
 
   return (
@@ -164,18 +152,18 @@ const ClamBuyModal = ({
                             value={formatUnits(clamPrice, 18)}
                             className="bg-gray-100 text-center text-xl w-20  text-black p-2 font-normal rounded  border-none  font-extrabold"
                             {...register("input", { required: true })}
-                            // onChange={(v) => {
-                            //   const input = parseUnits(
-                            //     v.currentTarget.value,
-                            //     "wei"
-                            //   ); // input in wei
-                            //   const price = parseUnits(
-                            //     presaleState.salePrice,
-                            //     "ether"
-                            //   ); // input in ether
-                            //   const out = formatUnits(input.mul(price), 18);
-                            //   setValue("output", out);
-                            // }}
+                          // onChange={(v) => {
+                          //   const input = parseUnits(
+                          //     v.currentTarget.value,
+                          //     "wei"
+                          //   ); // input in wei
+                          //   const price = parseUnits(
+                          //     presaleState.salePrice,
+                          //     "ether"
+                          //   ); // input in ether
+                          //   const out = formatUnits(input.mul(price), 18);
+                          //   setValue("output", out);
+                          // }}
                           />
                           <span className="flex items-center  px-3 text-lg font-extrabold font-sans mx-1">
                             GEM
@@ -206,20 +194,20 @@ const ClamBuyModal = ({
                             value="1"
                             className="bg-gray-100 text-center text-xl w-20  text-black p-2 font-normal rounded  border-none font-extrabold"
                             {...register("output", { required: true })}
-                            // onChange={(v) => {
-                            //   const output = parseUnits(
-                            //     v.currentTarget.value,
-                            //     "ether"
-                            //   ); // input in wei
-                            //   const price = parseUnits(
-                            //     presaleState.salePrice,
-                            //     "ether"
-                            //   ); // input in ether
-                            //   console.log({ output, price });
-                            //   const input = formatUnits(output.div(price), 18);
-                            //   console.log({ output, price, input });
-                            //   setValue("input", input);
-                            // }}
+                          // onChange={(v) => {
+                          //   const output = parseUnits(
+                          //     v.currentTarget.value,
+                          //     "ether"
+                          //   ); // input in wei
+                          //   const price = parseUnits(
+                          //     presaleState.salePrice,
+                          //     "ether"
+                          //   ); // input in ether
+                          //   console.log({ output, price });
+                          //   const input = formatUnits(output.div(price), 18);
+                          //   console.log({ output, price, input });
+                          //   setValue("input", input);
+                          // }}
                           />
                         </div>
                         {/* <span className="flex items-center  px-3 text-lg font-extrabold font-sans mx-1">

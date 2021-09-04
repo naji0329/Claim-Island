@@ -23,6 +23,12 @@ import ClamPic from "../../assets/collect-clam.png";
 import { actions } from "../../store/redux";
 import { truncate, get } from "lodash";
 
+import {
+  harvestClamSpeak,
+  harvestCongrats,
+  harvestError
+} from "./character/HarvestClam";
+
 const formatShell = (value) => (value ? formatUnits(value, 18) : "0");
 
 const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
@@ -72,52 +78,17 @@ const ClamHarvestModal = ({
   const [clamValueInShellToken, setClamValueInShellToken] = useState("");
 
   const harvestClam = async (tokenId) => {
-    updateCharacter({
-      name: "diego",
-      action: "clam_shop.harvest_warn.text",
-      button: {
-        text: "More Information",
-        alt: {
-          action: "cb",
-          destination: () => {
-            window.open(
-              "https://clamisland.medium.com/clam-island-essential-visitors-guide-63f2a9984336",
-              "_blank"
-            );
-          },
-        },
-      },
-      buttonAlt: {
-        text: "Proceed",
-        alt: {
-          action: "cb",
-          destination: async () => {
-            try {
-              await harvestClamForShell(tokenId, address);
-              updateCharacter({
-                name: "diego",
-                action: "clam_shop.harvest_congrats.text",
-                button: {
-                  text: "Ok",
-                  dismiss: truncate,
-                },
-              });
-              setModalToShow(null);
-            } catch (e) {
-              console.error(e);
-              setIsLoading(false);
-              updateAccount({ error: e.message });
-              updateCharacter({
-                name: "diego",
-                action: "clam_presale.error.text",
-                button: {
-                  text: undefined,
-                },
-              });
-            }
-          },
-        },
-      },
+    harvestClamSpeak(updateCharacter, async () => {
+      try {
+        await harvestClamForShell(tokenId, address);
+        harvestCongrats({ updateCharacter }); // character speaks
+        setModalToShow(null);
+      } catch (e) {
+        console.error(e);
+        setIsLoading(false);
+        updateAccount({ error: e.message });
+        harvestError({ updateCharacter }); // character speaks
+      }
     });
   };
 

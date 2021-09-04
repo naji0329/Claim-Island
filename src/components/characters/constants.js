@@ -681,7 +681,7 @@ export const SPEECHES = {
     },
   },
   farms: {
-    placeholder: {
+    welcome: {
       text: `Hello There! Welcome to the place where you can farm pearls.`,
       dismiss: true,
     },

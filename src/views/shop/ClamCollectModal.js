@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { connect } from "redux-zero/react";
-import { collectClam } from "../../web3/clam";
+import { useAsync } from "react-use";
 
-import "./index.scss";
+import { collectClam } from "../../web3/clam";
 
 import Card from "../../components/Card";
 
 import ClamPic from "../../assets/img/clam_unknown.png";
 import { actions } from "../../store/redux";
-import { truncate } from "lodash";
-import { useAsync } from "react-use";
+
+import "./index.scss";
+import {
+  collectClamError,
+  collectClamProcessing,
+  collectClamSuccess,
+  collectClamReady
+} from "./character/CollectClam";
 
 const ClamCollectModal = ({
   setModalToShow,
@@ -22,77 +28,30 @@ const ClamCollectModal = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useAsync(async () => {
-    updateCharacter({
-      name: "diego",
-      action: "clam_shop.collection.text",
-      button: {
-        text: undefined,
-      },
-    });
+    collectClamReady({ updateCharacter }); // character speaks
   });
 
+  // on form submit
   const onSubmit = async (data) => {
     console.log({ data, address });
     setIsLoading(true);
+    collectClamProcessing({ updateCharacter }); // character speaks
 
-    updateCharacter({
-      name: "diego",
-      action: "clam_shop.collection_processing.text",
-      button: {
-        text: undefined,
-      },
-    });
+    try {
+      await collectClam(address);
+      setIsLoading(false);
 
-    await collectClam(address)
-      .then(() => {
-        setIsLoading(false);
+      updateAccount({ clamToCollect: null });
 
-        updateAccount({ clamToCollect: null });
+      collectClamSuccess({ updateCharacter, setModalToShow }); // character speaks
+      setModalToShow("display");
 
-        updateCharacter({
-          name: "diego",
-          action: "clam_shop.collect_congrats.text",
-          buttonAlt: {
-            text: "Harvest Clams",
-            alt: {
-              action: "cb",
-              destination: () => {
-                updateCharacter({
-                  name: "diego",
-                  action: null,
-                });
-                setModalToShow("harvest");
-              },
-            },
-          },
-          button: {
-            text: "Buy Clams",
-            alt: {
-              action: "cb",
-              destination: () => {
-                updateCharacter({
-                  name: "diego",
-                  action: null,
-                });
-                setModalToShow("buy");
-              },
-            },
-          },
-        });
-        setModalToShow("display");
-      })
-      .catch((e) => {
-        console.error(e);
-        setIsLoading(false);
-        updateAccount({ error: e.message });
-        updateCharacter({
-          name: "diego",
-          action: "clam_presale.error.text",
-          button: {
-            text: undefined,
-          },
-        });
-      });
+    } catch (e) {
+      console.error(e);
+      setIsLoading(false);
+      updateAccount({ error: e.message });
+      collectClamError({ updateCharacter }); // character speaks
+    }
   };
 
   return (
@@ -108,34 +67,15 @@ const ClamCollectModal = ({
               <button
                 disabled={isLoading}
                 type="submit"
-                className="flex justify-content-center items-center block uppercase text-center shadow bg-yellow-200 text-yellow-600 text-xl py-3 px-10 rounded-xl cursor-not-allowed"
+                className="sending-txn-btn"
               >
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-yellow-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>{" "}
+                <SVGSpinner />{" "}
                 Sending transaction...
               </button>
             ) : (
               <button
                 type="submit"
-                className="block font-extrabold text-center shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-2xl"
+                className="collect-clam-btn"
               >
                 Collect Clam
               </button>
@@ -144,6 +84,31 @@ const ClamCollectModal = ({
         </Card>
       </form>
     </>
+  );
+};
+
+const SVGSpinner = () => {
+  return (
+    <svg
+      className="animate-spin -ml-1 mr-3 h-5 w-5 text-yellow-600"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      ></circle>
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      ></path>
+    </svg>
   );
 };
 

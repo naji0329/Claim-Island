@@ -101,14 +101,6 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
       action: "saferoom.connect.text",
       button: {
         text: undefined,
-        // text: "Ok",
-        // alt: {
-        //   action: "cb",
-        //   dismiss: true,
-        //   destination: () => {
-        //     setShowClams(true);
-        //   },
-        // },
       },
     });
   });
