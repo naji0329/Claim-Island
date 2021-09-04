@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import BigNumber from "bignumber.js";
 import { formatNumber, getBalancesFormatted } from "./";
 import SliderWithPercentages from "./SliderWithPercentages";
+import ActionButton from "./SliderWithPercentages";
 
 import {
   onDepositHarvestTxn,
@@ -128,13 +129,9 @@ const WithdrawTab = ({ useSharedState, updateCharacter, updateAccount }) => {
           {errors.withdrawAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
 
-        <button
-          disabled={inTx}
-          type="submit"
-          className="w-full text-white bg-red-500 hover:bg-red-400 rounded-xl shadow-xl p-2 text-center text-2xl"
-        >
+        <ActionButton style="btn-withdraw" isLoading={inTx}>
           Withdraw {get(state, "pool.name")}
-        </button>
+        </ActionButton>
       </div>
     </form>
   );

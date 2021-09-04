@@ -17,6 +17,7 @@ import {
 } from "../character/OnDepositHarvest";
 
 import SliderWithPercentages from "./SliderWithPercentages";
+import ActionButton from "./ActionButton";
 
 const DepositTab = ({ useSharedState, updateCharacter, updateAccount, depositFee }) => {
   const [state, setSharedState] = useSharedState();
@@ -126,13 +127,9 @@ const DepositTab = ({ useSharedState, updateCharacter, updateAccount, depositFee
           {errors.depositAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
 
-        <button
-          disabled={!isValid || inTx}
-          type="submit"
-          className="w-full text-white bg-green-500 hover:bg-green-400 rounded-xl shadow-xl p-2 text-center text-2xl"
-        >
+        <ActionButton style="btn-deposit" isDisabled={!isValid} isLoading={inTx}>
           Deposit {get(state, "pool.name")}
-        </button>
+        </ActionButton>
       </div>
     </form>
   );
