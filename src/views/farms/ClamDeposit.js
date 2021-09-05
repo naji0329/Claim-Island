@@ -1,14 +1,13 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
 
-// import FarmPearl from "../../assets/img/farm_pearl.png";
 import { actions } from "../../store/redux";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
 import { clamNFTAddress, pearlFarmAddress } from "../../web3/constants";
 import { formatFromWei } from "../../web3/shared";
-import { getBalance, approveSpending, getAllowance } from "../../web3/gem";
+import { getBalance, infiniteApproveSpending, getAllowance } from "../../web3/gem";
 import {
   stakeClam,
   hasClamBeenStakedBeforeByUser,
@@ -56,12 +55,12 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
         throw new Error(`You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`);
 
       setButtonText("Approving Clam...");
-      await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress, clamId);
+      await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
 
       if (!gemApproved) {
         setButtonText("Approving GEM...");
         console.log(pearlPrice);
-        await approveSpending(address, pearlFarmAddress, pearlPrice);
+        await infiniteApproveSpending(address, pearlFarmAddress, pearlPrice);
       }
 
       setButtonText("Depositing Clam...");
@@ -129,7 +128,7 @@ const ClamDeposit = ({ clams, updateAccount, account: { address } }) => {
         </div>
       ) : (
         <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
-          You&#39;ve got no clams or pearls deposited on farms &#128542;
+          You&#39;ve got no more clams available to add to farm
         </div>
       )}
     </div>

@@ -31,8 +31,12 @@ const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAcco
     if (!userReady) {
       // character greets
       WelcomeUser({
-        updateCharacter, activateBrowserWallet, address,
-        setModalToShow, setUserReady, clamToCollect
+        updateCharacter,
+        activateBrowserWallet,
+        address,
+        setModalToShow,
+        setUserReady,
+        clamToCollect,
       });
     }
   }, [address, userReady, clamToCollect]);
