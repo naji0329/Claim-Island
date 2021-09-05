@@ -60,7 +60,6 @@ const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAcco
                       destination: () => {
                         setUserReady(true);
 
-                        console.log("clamToCollect", clamToCollect);
                         if (clamToCollect) {
                           updateCharacter({
                             name: "diego",

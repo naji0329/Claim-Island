@@ -53,8 +53,9 @@ const PoolItem = ({
     const earnedGem = await pendingGem(pool.poolId);
     setGemEarned(earnedGem);
 
-    const isEnabled = await hasMaxUintAllowanceBank(pool.account, pool.lpToken);
-    setIsEnabled(isEnabled);
+    // not used
+    // const isEnabled = await hasMaxUintAllowanceBank(pool.account, pool.lpToken);
+    // setIsEnabled(isEnabled);
   });
 
   const calcAPR = ({ poolInfo, gemsPerBlock, tokenPrice, totalAllocation }) => {
