@@ -1,4 +1,4 @@
-export const withdrawClamSpeak = ({ updateCharacter, cb }) => {
+export const withdrawClamSpeak = ({ updateCharacter }, cb) => {
   updateCharacter({
     name: "al",
     action: "farms.withdraw.text",
@@ -31,20 +31,20 @@ export const withdrawClamSpeak = ({ updateCharacter, cb }) => {
 };
 
 export const WelcomeUser = ({ updateCharacter }) => {
-    updateCharacter({
-      name: "al",
-      action: "farms.welcome.text",
-      button: {
-        text: "Dismiss",
-        alt: {
-          action: "cb",
-          destination: () => {
-            updateCharacter({
-              name: "al",
-              action: undefined,
-            });
-          },
+  updateCharacter({
+    name: "al",
+    action: "farms.welcome.text",
+    button: {
+      text: "Dismiss",
+      alt: {
+        action: "cb",
+        destination: () => {
+          updateCharacter({
+            name: "al",
+            action: undefined,
+          });
         },
       },
-    });
+    },
+  });
 };

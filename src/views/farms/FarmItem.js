@@ -3,26 +3,36 @@ import { connect } from "redux-zero/react";
 import clsx from "clsx";
 import { ChainId, useEthers } from "@usedapp/core";
 
-import { actions } from "../../store/redux";
-import FarmPearl from "../../assets/img/farm_pearl.png";
+import { actions } from "store/redux";
 
-import { web3 } from "../../web3";
+import { web3 } from "web3";
 import {
   getRemainingPearlProductionTime,
   collectPearl,
   rngRequestHashForProducedPearl,
   propClamOpenForPearl,
-} from "../../web3/pearlFarm";
-import { canCurrentlyProducePearl, canStillProducePearls } from "../../web3/clam";
+} from "web3/pearlFarm";
+import {
+  canCurrentlyProducePearl,
+  canStillProducePearls
+} from "web3/clam";
+
+import {
+  pearlCollectSuccess,
+  pearlSendToSaferoom,
+  pearlGenerateNew
+} from "./character/pearlCollection";
 
 const FarmItem = ({
   clamId,
   img,
+  dna,
   dnaDecoded,
   clamDataValues,
   onViewDetails,
   onWithdrawClam,
   onViewPearl,
+  updateCharacter,
   updateAccount,
 }) => {
   const { chainId } = useEthers();
@@ -35,6 +45,7 @@ const FarmItem = ({
   const [canStillProducePearl, setCanStillProducePearl] = useState(false);
   const [canProducePearl, setCanProducePearl] = useState(false);
   const [readyForPearl, setReadyForPearl] = useState(false);
+  const [gemsNeededForPearlProd, setGemsNeededForPearl] = useState(0);
 
   const { pearlProductionStart, pearlProductionCapacity, pearlsProduced } = clamDataValues;
 
@@ -42,9 +53,9 @@ const FarmItem = ({
     !+pearlProductionTime || !+remainingTime
       ? 100
       : +(
-          ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
-          100
-        ).toFixed(2);
+        ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
+        100
+      ).toFixed(2);
 
   useEffect(() => {
     const init = async () => {
@@ -114,6 +125,17 @@ const FarmItem = ({
       setInTx(true);
       setButtonText("Hold on ...");
       await collectPearl(clamId);
+      // TODO: add function for gems needed for pearl prod
+      const gems = gemsNeededForPearlProd;
+      const viewPearl = () => { onViewPearl({ dna, dnaDecoded, showPearlModal: true }); }
+      pearlCollectSuccess({ updateCharacter, viewPearl }, () => {
+        pearlSendToSaferoom({ updateCharacter }, () => {
+          pearlGenerateNew({ updateCharacter, gems }, () => {
+            // TODO: add function to push through the wallet
+            // TODO: transaction to attach $GEM / deposit Clam
+          });
+        })
+      });
       setInTx(false);
     } catch (err) {
       updateAccount({ error: err.message });

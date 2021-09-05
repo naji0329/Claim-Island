@@ -1,51 +1,56 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
-import { actions } from "../../store/redux";
-import "./index.scss";
-
 import { useHistory } from "react-router-dom";
-import Character from "../../components/characters/CharacterWrapper";
-import Web3Navbar from "../../components/Web3Navbar";
-import { Modal, useModal } from "../../components/Modal";
+import { toast } from "react-toastify";
+import { useEthers } from "@usedapp/core";
 
-import videoImage from "../../assets/locations/Farm.jpg";
-import videoMp4 from "../../assets/locations/Farm.mp4";
-import videoWebM from "../../assets/locations/Farm.webm";
-import VideoBackground from "../../components/VideoBackground";
+import { actions } from "store/redux";
+import Character from "components/characters/CharacterWrapper";
+import Web3Navbar from "components/Web3Navbar";
+import { Modal, useModal } from "components/Modal";
+import VideoBackground from "components/VideoBackground";
 
-import clamIcon from "../../assets/clam-icon.png";
+import videoImage from "assets/locations/Farm.jpg";
+import videoMp4 from "assets/locations/Farm.mp4";
+import videoWebM from "assets/locations/Farm.webm";
+import clamIcon from "assets/clam-icon.png";
+import NFTUnknown from "assets/img/clam_unknown.png";
 
-import clamContract from "../../web3/clam";
+import clamContract from "web3/clam";
 import {
   prepGetDnaDecodedMulticall,
   decodeGetDnaDecodedFromMulticall,
-} from "../../web3/dnaDecoder";
+} from "web3/dnaDecoder";
+import {
+  getStakedClamIds,
+  unstakeClam,
+  collectPearl
+} from "web3/pearlFarm";
+import { aggregate } from "web3/multicall";
 
-import { getStakedClamIds, unstakeClam, collectPearl } from "../../web3/pearlFarm";
-
+import "./index.scss";
 import FarmItem from "./FarmItem";
 import PearlDetails from "./PearlDetails";
 import ClamDeposit from "./ClamDeposit";
-import { aggregate } from "../../web3/multicall";
-import NFTUnknown from "../../assets/img/clam_unknown.png";
+import PearlView from "./PearlView";
+import { MODAL_OPTS } from "./constants";
+import {
+  WelcomeUser,
+  withdrawClamSpeak
+} from "./character/WithdrawClam";
 
-import { toast } from "react-toastify";
-
-const MODAL_OPTS = {
-  DEPOSIT_CLAM: "depositClam",
-  PEARL_DETAILS: "pearlDetails",
-};
-
-import { useEthers } from "@usedapp/core";
-import { WelcomeUser, withdrawClamSpeak } from "./character/WithdrawClam";
-
-const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
+const Farms = ({
+  account: { clamBalance, address },
+  updateCharacter,
+  updateAccount
+}) => {
   let history = useHistory();
   const [clams, setClams] = useState([]);
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selPearl, setSelPearl] = useState({});
   const { isShowing, toggleModal } = useModal();
 
   const [modalSelected, setModal] = useState("");
@@ -76,26 +81,32 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   };
 
   // when pearl is ready and is to be viewed
-  const onViewPearl = async (clamId) => {
-    try {
-      await collectPearl(clamId);
-      history.push("/saferoom/pearl");
-      return true;
-    } catch (error) {
-      const errorMsg = JSON.parse(error.message.split("\n").slice(1).join(""));
-      toast.error(
-        <>
-          <p>There was an error collecting your pearl.</p>
-          <p>{errorMsg.message}</p>
-        </>
-      );
-      return Promise.resolve(false);
+  const onViewPearl = async ({ clamId, dna, dnaDecoded, showPearlModal }) => {
+    if (showPearlModal) {
+      setSelPearl({ dna, dnaDecoded });
+      setModal(MODAL_OPTS.VIEW_PEARL);
+      toggleModal();
+    } else {
+      try {
+        await collectPearl(clamId);
+        history.push("/saferoom/pearl");
+        return true;
+      } catch (error) {
+        const errorMsg = JSON.parse(error.message.split("\n").slice(1).join(""));
+        toast.error(
+          <>
+            <p>There was an error collecting your pearl.</p>
+            <p>{errorMsg.message}</p>
+          </>
+        );
+        return Promise.resolve(false);
+      }
     }
   };
 
   // when "Withdraw" is clicked - open the modal
   const onWithdrawClam = (clam) => {
-    withdrawClamSpeak(updateCharacter, () => {
+    withdrawClamSpeak({ updateCharacter }, () => {
       handleWithdraw(clam.clamId);
     });
   };
@@ -120,7 +131,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       const sameClam = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
       if (sameClam) {
         const dnaDecoded = sameClam.dnaDecodedValues;
-        return { ...clam, dnaDecoded };
+        const dna = clam.clamDataValues.dna;
+        return { ...clam, dnaDecoded, dna };
       }
       console.error(`Clam ${clam.clamId} from ${address} not found`);
     });
@@ -215,8 +227,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       >
         {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
           <PearlDetails clam={selectedClam} clamProcessing={clamProcessing} />
-        ) : (
+        ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
           <ClamDeposit clams={clams} />
+        ) : (
+          <PearlView dna={selPearl.dna} dnaDecoded={selPearl.dnaDecoded} />
         )}
       </Modal>
 
@@ -225,7 +239,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
           <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-center">
             <div className="w-full flex flex-col relative pt-24">
               {/* navbar */}
-              <div className="bg-white rounded-xl shadow-xl w-full rounded-xl mx-auto flex flex-row justify-between items-center">
+              <div className="bg-white shadow-xl w-full rounded-xl mx-auto flex flex-row justify-between items-center">
                 <h2 className="px-3 text-3xl font-extrabold font-aristotelica-bold text-blue-500">
                   My Deposits
                 </h2>
@@ -248,6 +262,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
                       onViewDetails={(e, clamProcessing) => onViewDetails(clam, clamProcessing, i)}
                       onWithdrawClam={() => onWithdrawClam(clam)}
                       onViewPearl={onViewPearl}
+                      updateCharacter={updateCharacter}
                     />
                   ))}
 

@@ -1,9 +1,9 @@
 import { truncate } from "lodash";
 
-export const pearlCollectSuccess = ({ updateCharacter, gems, setModalToShow }, depositClamCb) => {
+export const pearlCollectSuccess = ({ updateCharacter, viewPearl }, cb) => {
   updateCharacter({
     name: "al",
-    action: "clam_shop.pearlCollectSuccess.text",
+    action: "farms.pearlCollectSuccess.text",
     button: {
       text: "Show me!",
       alt: {
@@ -14,7 +14,7 @@ export const pearlCollectSuccess = ({ updateCharacter, gems, setModalToShow }, d
             name: "al",
             action: null,
           });
-          setModalToShow("pearl");
+          if (viewPearl) viewPearl();
         }
       },
     },
@@ -23,23 +23,23 @@ export const pearlCollectSuccess = ({ updateCharacter, gems, setModalToShow }, d
       alt: {
         action: "cb",
         destination: () => {
-          pearlSendToSaferoom({ updateCharacter, gems }, depositClamCb);
+          cb();
         }
       },
     },
   });
 };
 
-export const pearlSendToSaferoom = ({ updateCharacter, gems }, depositClamCb) => {
+export const pearlSendToSaferoom = ({ updateCharacter }, cb) => {
   updateCharacter({
     name: "al",
-    action: "clam_shop.pearlSendSaferoom.text",
+    action: "farms.pearlSendSaferoom.text",
     button: {
       text: "Sure",
       alt: {
         action: "cb",
         destination: () => {
-          pearlGenerateNew({ updateCharacter, gems }, depositClamCb)
+          cb();
         }
       },
     },
@@ -58,13 +58,15 @@ export const pearlSendToSaferoom = ({ updateCharacter, gems }, depositClamCb) =>
 export const pearlGenerateNew = ({ updateCharacter, gems }, depositClamCb) => {
   updateCharacter({
     name: "al",
-    action: "clam_shop.pearlGenerateNew.text",
+    action: "farms.pearlGenerateNew.text",
     variables: { gems },
     button: {
       text: "Yes please",
       alt: {
         action: "cb",
-        destination: () => { depositClamCb(); }
+        destination: () => {
+          depositClamCb();
+        }
       },
     },
     buttonAlt: {
@@ -82,7 +84,7 @@ export const pearlGenerateNew = ({ updateCharacter, gems }, depositClamCb) => {
 export const sendClamToSaferoom = ({ updateCharacter, variant }) => {
   updateCharacter({
     name: "al",
-    action: `clam_shop.pearlSendClamSaferoom${variant}.text`,
+    action: `farms.pearlSendClamSaferoom${variant}.text`,
     button: {
       text: "OK",
       dismiss: truncate,
