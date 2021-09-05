@@ -17,7 +17,7 @@ export const approveContractForMaxUintErc721 = async (tokenAddress, contractAddr
   const account = getAccount();
   const token = contractFactory({ abi: ERC721ABI, address: tokenAddress });
 
-  const isApprovalForAll = token.methods.isApprovedForAll(account, contractAddress).call();
+  const isApprovalForAll = await token.methods.isApprovedForAll(account, contractAddress).call();
 
   if (isApprovalForAll) return;
 

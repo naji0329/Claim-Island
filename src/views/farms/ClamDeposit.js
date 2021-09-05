@@ -1,9 +1,8 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
 
-// import FarmPearl from "../../assets/img/farm_pearl.png";
 import { actions } from "../../store/redux";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
 import { clamNFTAddress, pearlFarmAddress } from "../../web3/constants";
@@ -129,7 +128,7 @@ const ClamDeposit = ({ clams, updateAccount, account: { address } }) => {
         </div>
       ) : (
         <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
-          You&#39;ve got no clams or pearls deposited on farms &#128542;
+          You&#39;ve got no more clams available to add to farm
         </div>
       )}
     </div>
