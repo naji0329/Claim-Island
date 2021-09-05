@@ -21,14 +21,14 @@ import Card from "../../components/Card";
 
 import ClamPic from "../../assets/collect-clam.png";
 import { actions } from "../../store/redux";
-import { truncate, get } from "lodash";
+import { get } from "lodash";
 
 import {
   harvestClamSpeak,
   harvestCongrats,
   harvestError,
   harvestChooseClams,
-  harvestNoClamsAvailable
+  harvestNoClamsAvailable,
 } from "./character/HarvestClam";
 
 const formatShell = (value) => (value ? formatUnits(value, 18) : "0");
@@ -68,6 +68,14 @@ const getUserClamDnaByIndex = async (account, index) => {
   }
 };
 
+const formatDuration = (totalSeconds) => {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds - hours * 3600 - minutes * 60;
+
+  return [`${hours}h`, `${minutes}m`, `${seconds}s`].filter((item) => item[0] !== "0").join(" ");
+};
+
 const ClamHarvestModal = ({
   setModalToShow,
   account: { address, clamBalance },
@@ -96,6 +104,8 @@ const ClamHarvestModal = ({
   };
 
   useEffect(async () => {
+    const incubationtime = await getClamIncubationTime();
+
     if (+clamBalance > 0) {
       let promises = [];
       for (let index = 0; index < Number(clamBalance); index++) {
@@ -104,7 +114,6 @@ const ClamHarvestModal = ({
       const clams = await Promise.all(promises);
 
       const currentBlockTimestamp = await getCurrentBlockTimestamp();
-      const incubationtime = await getClamIncubationTime();
 
       const filteredClams = clams.filter(
         ({ dnaDecoded, birthTime }) =>
@@ -116,31 +125,26 @@ const ClamHarvestModal = ({
         setMessage(`Choose a Clam`);
         harvestChooseClams({ updateCharacter, setModalToShow }); // character speaks
       } else {
-        const formatDuration = (totalSeconds) => {
-          const hours = Math.floor(totalSeconds / 3600);
-          const minutes = Math.floor((totalSeconds % 3600) / 60);
-          const seconds = totalSeconds - hours * 3600 - minutes * 60;
-
-          return [`${hours}h`, `${minutes}m`, `${seconds}s`]
-            .filter((item) => item[0] !== "0")
-            .join(" ");
-        };
-
         const hours = formatDuration(+incubationtime);
         setMessage(
-          `None of your clams are able to produce pearls.
+          `None of your clams are able to be harvested.
            They must be either alive or be past the ${hours} incubation period once they have been farmed.`
         );
         harvestNoClamsAvailable({ updateCharacter, setModalToShow, hours }); // character speaks
       }
       setClams(filteredClams);
+    } else {
+      // clam balance is zero
+      const hours = formatDuration(+incubationtime);
+      harvestNoClamsAvailable({ updateCharacter, setModalToShow, hours }); // character speaks
     }
+
     setClamValueInShellToken(await getClamValueInShellToken());
   }, [address, clamBalance]);
 
   return (
     <>
-      {clams.length ?
+      {clams.length ? (
         <Card className="p-2">
           <h1 className="flex justify-center font-bold">{message}</h1>
           <div className="bg-white flex-1 justify-center  md:flex items-center flex-col overflow-scroll">
@@ -153,7 +157,10 @@ const ClamHarvestModal = ({
               />
             ))}
           </div>
-        </Card> : ''}
+        </Card>
+      ) : (
+        ""
+      )}
     </>
   );
 };
