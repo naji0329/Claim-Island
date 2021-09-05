@@ -16,6 +16,36 @@ export const FARM_SPEECH = {
       dismiss: false,
       skip: `purchase`,
     },
+    pearlCollectSuccess: {
+      text: `Your Pearl has been successfully collected! Would you like to see it now?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: `purchase`,
+    },
+    pearlSendSaferoom: {
+      text: ({ gems }) => `We will send your Pearl to the Saferoom. You can have your Clam back as well. Would you like to deposit it again to produce another Pearl?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: `purchase`,
+    },
+    pearlGenerateNew: {
+      text: ({ gems }) => `Great! you will just need to pay ${gems} $GEM to produce another Pearl. Do you want to continue?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: `purchase`,
+    },
+    pearlSendClamSaferoom1: {
+      text: `Ok, your Clam will be returned to your Saferoom.`,
+      next: `purchase`,
+      dismiss: false,
+      skip: `purchase`,
+    },
+    pearlSendClamSaferoom2: {
+      text: `No problem, we will send your Clam back to the Saferoom.`,
+      next: `purchase`,
+      dismiss: false,
+      skip: `purchase`,
+    },
   }
 };
 
