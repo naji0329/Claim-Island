@@ -18,15 +18,8 @@ import clamIcon from "assets/clam-icon.png";
 import NFTUnknown from "assets/img/clam_unknown.png";
 
 import clamContract from "web3/clam";
-import {
-  prepGetDnaDecodedMulticall,
-  decodeGetDnaDecodedFromMulticall,
-} from "web3/dnaDecoder";
-import {
-  getStakedClamIds,
-  unstakeClam,
-  collectPearl
-} from "web3/pearlFarm";
+import { prepGetDnaDecodedMulticall, decodeGetDnaDecodedFromMulticall } from "web3/dnaDecoder";
+import { getStakedClamIds, unstakeClam, collectPearl } from "web3/pearlFarm";
 import { aggregate } from "web3/multicall";
 
 import "./index.scss";
@@ -35,16 +28,9 @@ import PearlDetails from "./PearlDetails";
 import ClamDeposit from "./ClamDeposit";
 import PearlView from "./PearlView";
 import { MODAL_OPTS } from "./constants";
-import {
-  WelcomeUser,
-  withdrawClamSpeak
-} from "./character/WithdrawClam";
+import { WelcomeUser, withdrawClamSpeak } from "./character/WithdrawClam";
 
-const Farms = ({
-  account: { clamBalance, address },
-  updateCharacter,
-  updateAccount
-}) => {
+const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
   let history = useHistory();
   const [clams, setClams] = useState([]);
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
@@ -144,10 +130,12 @@ const Farms = ({
 
   const addClamImg = async (clams) => {
     const cache = await caches.open("clam-island");
-    const promises = await Promise.all(clams.map((clam) => {
-      const dna = clam.clamDataValues.dna;
-      return cache.match(`/${dna}`);
-    }));
+    const promises = await Promise.all(
+      clams.map((clam) => {
+        const dna = clam.clamDataValues.dna;
+        return cache.match(`/${dna}`);
+      })
+    );
     const images = await Promise.all(
       promises.map((resp) => {
         return resp ? resp.json() : "";
@@ -160,7 +148,7 @@ const Farms = ({
       return clam;
     });
     return clamsUptd;
-  }
+  };
 
   useEffect(() => {
     // wallet is connected

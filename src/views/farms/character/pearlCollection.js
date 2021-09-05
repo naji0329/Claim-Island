@@ -15,7 +15,7 @@ export const pearlCollectSuccess = ({ updateCharacter, viewPearl }, cb) => {
             action: null,
           });
           if (viewPearl) viewPearl();
-        }
+        },
       },
     },
     buttonAlt: {
@@ -24,7 +24,7 @@ export const pearlCollectSuccess = ({ updateCharacter, viewPearl }, cb) => {
         action: "cb",
         destination: () => {
           cb();
-        }
+        },
       },
     },
   });
@@ -40,7 +40,7 @@ export const pearlSendToSaferoom = ({ updateCharacter }, cb) => {
         action: "cb",
         destination: () => {
           cb();
-        }
+        },
       },
     },
     buttonAlt: {
@@ -49,7 +49,7 @@ export const pearlSendToSaferoom = ({ updateCharacter }, cb) => {
         action: "cb",
         destination: () => {
           sendClamToSaferoom({ updateCharacter, variant: 1 });
-        }
+        },
       },
     },
   });
@@ -66,7 +66,7 @@ export const pearlGenerateNew = ({ updateCharacter, gems }, depositClamCb) => {
         action: "cb",
         destination: () => {
           depositClamCb();
-        }
+        },
       },
     },
     buttonAlt: {
@@ -75,7 +75,7 @@ export const pearlGenerateNew = ({ updateCharacter, gems }, depositClamCb) => {
         action: "cb",
         destination: () => {
           sendClamToSaferoom({ updateCharacter, variant: 2 });
-        }
+        },
       },
     },
   });
@@ -94,7 +94,7 @@ export const sendClamToSaferoom = ({ updateCharacter, variant }) => {
       alt: {
         action: "internal",
         destination: "/saferoom/clams",
-      }
+      },
     },
   });
 };

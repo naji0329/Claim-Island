@@ -24,6 +24,12 @@ export const totalPearlSupply = async () => {
   return totalSupply;
 };
 
+export const nextPearlId = async () => {
+  const pearlNft = contractFactory({ abi: pearlNFTAbi, address: pearlNFTAddress });
+  const value = await pearlNft.methods.nextPearlId().call();
+  return value;
+};
+
 export const getPearlData = async (tokenId) => {
   const pearlNft = contractFactory({ abi: pearlNFTAbi, address: pearlNFTAddress });
   const value = await pearlNft.methods.pearlData(tokenId).call();

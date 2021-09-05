@@ -18,7 +18,7 @@ import {
 
 const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
   const [remainingTime, setRemainingTime] = useState("");
-  const [buttonText, setButtonText] = useState("Approve Clam");
+  const [buttonText, setButtonText] = useState("Deposit Clam");
   const [inTx, setInTx] = useState(false);
   const [gemApproved, setGemApproved] = useState(false);
   const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));

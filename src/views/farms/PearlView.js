@@ -51,8 +51,8 @@ export default ({ dna, dnaDecoded }) => {
     if (dnaDecoded.length) {
       const grade_ = calculateGrade(
         Number(get(dnaDecoded, "lustre")) +
-        Number(get(dnaDecoded, "surface")) +
-        Number(get(dnaDecoded, "nacreQuality"))
+          Number(get(dnaDecoded, "surface")) +
+          Number(get(dnaDecoded, "nacreQuality"))
       );
       setGrade(grade_);
 
