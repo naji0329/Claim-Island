@@ -13,7 +13,7 @@ import ClamIcon from "../../assets/clam-icon.png";
 import ArrowDown from "../../assets/img/arrow-down.svg";
 
 import { buyClam, getPrice } from "../../web3/clam";
-import { approveSpending } from "../../web3/gem";
+import { infiniteApproveSpending } from "../../web3/gem";
 import { clamShopAddress } from "../../web3/constants";
 import { actions } from "../../store/redux";
 
@@ -51,7 +51,6 @@ const ClamBuyModal = ({
   }, []);
 
   const onSubmit = async (data) => {
-    console.log({ data });
     setIsLoading(true);
 
     updateCharacter({
@@ -62,7 +61,7 @@ const ClamBuyModal = ({
       },
     });
 
-    await approveSpending(address, clamShopAddress, clamPrice);
+    await infiniteApproveSpending(address, clamShopAddress, clamPrice);
 
     await buyClam(address)
       .then(async (res) => {
