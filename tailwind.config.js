@@ -65,11 +65,14 @@ module.exports = {
         canvas: "400px",
       },
       width: {
-        "7/10": "70%"
+        "7/10": "70%",
       },
       dropShadow: {
-        'center': '0 0 5px rgba(0, 0, 0, 0.5)',
-        'border': '0 0 1px rgba(0, 0, 0, 1)',
+        center: "0 0 5px rgba(0, 0, 0, 0.5)",
+        border: "0 0 1px rgba(0, 0, 0, 1)",
+      },
+      spacing: {
+        "4%": "4%",
       },
     },
   },
