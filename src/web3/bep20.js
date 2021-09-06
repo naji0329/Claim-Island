@@ -1,7 +1,10 @@
 import clamNFTAbi from "./abi/ClamNFT.json";
 import BEP20ABI from "./abi/BEP20.json";
+import ERC721ABI from "./abi/ERC721.json";
 import { shellTokenAddress, clamNFTAddress, bankAddress } from "./constants";
 import { contractFactory } from "./index";
+import { getAccount, MaxUint256 } from "./shared";
+import BigNumber from "bignumber.js";
 
 export const balanceOf = async (address, account) => {
   const token = contractFactory({ abi: BEP20ABI, address });
@@ -10,11 +13,15 @@ export const balanceOf = async (address, account) => {
   return accountBalance;
 };
 
-export const approveBankForMaxUint = async (account, tokenAddress) => {
-  const maxUint = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
-  const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
+export const approveContractForMaxUintErc721 = async (tokenAddress, contractAddress) => {
+  const account = getAccount();
+  const token = contractFactory({ abi: ERC721ABI, address: tokenAddress });
 
-  const method = token.methods.approve(bankAddress, maxUint);
+  const isApprovalForAll = await token.methods.isApprovedForAll(account, contractAddress).call();
+
+  if (isApprovalForAll) return;
+
+  const method = token.methods.setApprovalForAll(contractAddress, true);
 
   const gasEstimation = await method.estimateGas({
     from: account,
@@ -26,13 +33,31 @@ export const approveBankForMaxUint = async (account, tokenAddress) => {
   });
 };
 
-export const hasMaxUintAllowance = async (owner, tokenAddress) => {
-  const maxUint = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+export const approveBankForMaxUint = async (account, tokenAddress, amount) => {
+  const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
+
+  const allowance = await token.methods.allowance(account, bankAddress).call();
+
+  if (new BigNumber(allowance).gte(new BigNumber(amount))) return;
+
+  const method = token.methods.approve(bankAddress, MaxUint256);
+
+  const gasEstimation = await method.estimateGas({
+    from: account,
+  });
+
+  await method.send({
+    from: account,
+    gas: gasEstimation,
+  });
+};
+
+export const hasMaxUintAllowanceBank = async (owner, tokenAddress) => {
   const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
   const allowance = await token.methods.allowance(owner, bankAddress).call();
-  const allowanceAsHex = web3.utils.toHex(allowance);
+  // const allowanceAsHex = web3.utils.toHex(allowance);
 
-  return allowanceAsHex == maxUint;
+  return new BigNumber(allowance).isEqualTo(MaxUint256);
 };
 
 export const accountShellBalance = async (account) => {

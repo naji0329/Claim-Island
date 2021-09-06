@@ -11,6 +11,7 @@ export const PearlScene = (props) => {
 
   return (
     <Canvas
+      gl={{ preserveDrawingBuffer: true }}
       camera={{
         fov: 50,
         aspect: 1,
@@ -26,7 +27,7 @@ export const PearlScene = (props) => {
       }}
     >
       <CameraControls />
-      <Suspense fallback={Loading3DView}>
+      <Suspense fallback={<Loading3DView />}>
         {children}
         <PearlBackground />
       </Suspense>

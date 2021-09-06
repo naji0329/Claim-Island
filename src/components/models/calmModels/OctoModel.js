@@ -57,5 +57,3 @@ export function OctoModel(props) {
 }
 
 export default OctoModel;
-
-useGLTF.preload("/clam-models/octo/clam.glb");

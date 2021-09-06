@@ -96,11 +96,17 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
 
   useEffect(async () => {
     if (!web3) {
-      return updateAccount({ error: "Metamask not installed" });
+      return updateAccount({ web3Installed: false, error: "Metamask not installed" });
     }
     const netId = await web3.eth.net.getId();
     console.log("useEffect updateAccount", { activateChainId, netId });
-    const isBSChain = activateChainId === ChainId.BSC || activateChainId === ChainId.Localhost;
+
+    const bscTestnet = 97;
+
+    const isBSChain =
+      activateChainId === ChainId.BSC ||
+      activateChainId === ChainId.Localhost ||
+      activateChainId === bscTestnet;
 
     updateAccount({
       bnbBalance: activateBnbBalance,
@@ -195,7 +201,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
         </>
       )}
 
-      <nav className="flex min-h-48 min-w-full items-center fixed px-6 py-4 bg-transparent mt-2 z-10">
+      <nav className="flex min-h-48 min-w-full items-center fixed px-6 py-4 bg-transparent mt-2 z-20">
         {/* this push menu to right side */}
         <div className="flex justify-between lg:w-auto w-full  pl-6 pr-2 pb-0 lg:pb-2"></div>
 
@@ -222,9 +228,16 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
 
             {account && (
               <>
+                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl bg-blue-400">
+                  <Link to="/" className="flex ">
+                    <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                      Back to Island
+                    </span>
+                  </Link>
+                </div>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <Link
-                    to="/saferoom"
+                    to="/saferoom/clam"
                     className="flex"
                     style={
                       Number(activateClamBalance) > 0 &&
@@ -244,7 +257,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                 </div>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <Link
-                    to="/saferoom"
+                    to="/saferoom/pearl"
                     className="flex"
                     style={
                       Number(activatePearlBalance) > 0 &&

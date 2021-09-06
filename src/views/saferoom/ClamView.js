@@ -5,10 +5,14 @@ import { get } from "lodash";
 import { Clam3DView } from "../../components/clam3DView";
 // import { Pearl3DView } from "../../components/pearl3DView";
 
+// import { getTraits } from "../../components/three/3DClams/main";
+import { Link } from "react-router-dom";
+
 export default ({ dna, dnaDecoded }) => {
   const [showTraits, setShowTraits] = useState(false);
+  // const clamTraits = getTraits();
 
-  console.log({ dnaDecoded });
+  // console.log({ dnaDecoded });
 
   const RowStat = ({ label, value }) => (
     <div className="text-sm flex flex-row justify-between my-1">
@@ -65,6 +69,7 @@ export default ({ dna, dnaDecoded }) => {
             height={400}
             clamDna={dna}
             decodedDna={dnaDecoded}
+            // clamTraits={clamTraits}
             showTraitsTable={showTraits}
           />
           {/** 3D Clam with react three fiber */}
@@ -75,12 +80,11 @@ export default ({ dna, dnaDecoded }) => {
         </div>
 
         <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
-          <button
-            disabled
-            className="disabled:opacity-50 cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
-          >
-            Stake in Farm
-          </button>
+          <Link to="/farms">
+            <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
+              Stake in Farm
+            </button>
+          </Link>
           <button
             disabled
             className="disabled:opacity-50 cursor-not-allowed px-4 p-3 shadown-xl   text-red-700 font-semibold border-2 border-red-500 rounded-xl hover:text-white hover:bg-red-500 bg-transparent"

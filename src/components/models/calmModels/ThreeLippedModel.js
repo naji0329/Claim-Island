@@ -61,5 +61,3 @@ export function ThreeLippedModel(props) {
 }
 
 export default ThreeLippedModel;
-
-useGLTF.preload("/clam-models/threelipped/clam.glb");

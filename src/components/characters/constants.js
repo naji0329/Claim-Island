@@ -31,7 +31,7 @@ export const SPEECHES = {
       skip: false,
     },
     first: {
-      text: `The island isn't open yet, although Diego just finished a presale for some Clams ahead of grand opening. If you bought some from him, you can go see them in the Saferoom.`,
+      text: `The island is open. Note that if you have clams or pearls, you can go see them in the Saferoom.`,
       next: "second",
       dismiss: false,
       skip: false,
@@ -52,7 +52,79 @@ export const SPEECHES = {
 
   bank: {
     connect: {
-      text: "Welcome to the bank!",
+      text: "Welcome to Clam Island Bank! You’ll need to connect your wallet using the button on the top right of your screen in order to invest with us.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    connect_no_wallet: {
+      text: "Welcome to Clam Island Bank! It looks like you don’t have a blockchain wallet installed. You will need one in order to invest with us.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    connect_wrong_chain: {
+      text: "Welcome to Clam Island Bank! In order to invest with us, you will need to switch your wallet to Binance Smart Chain.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    welcome: {
+      text: "Welcome back to Clam Island Bank! Please let me know if you need help with anything.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    welcome_back: {
+      text: "Hello again! Can I help you with anything?",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    acknowledge_no_help_needed: {
+      text: "No problem, happy investing! Just talk to me if you do need any help.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    help_needed: {
+      text: "We are currently working on an explainer video, in the meantime please refer to our Visitor’s Guide. In the future the video will be part of the Visitor’s Information Centre.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    process_transaction: {
+      text: "Please wait while we process your transaction. Please note, your wallet may ask you to approve two transactions one after the other - please approve both transactions if that occurs.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    transaction_error: {
+      text: "We’re sorry, something went wrong and your transaction could not be processed. Funds have not been removed. Please try again later.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    transaction_success: {
+      text: "Congratulations, your transaction was successful!",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    deposit_fee_alert: {
+      text: "Please note, this pool has a deposit fee, which is deducted on deposit and not refundable. Do you want to proceed?",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    withdraw_pearl_rewards_alert: {
+      text: "Please note that withdrawing from your investment pool while Pearl boost is active will cause you to lose Pearl boost rewards proportionately to your amount of withdrawal. Do you want to continue?",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    pearl_boost_yield_alert: {
+      text: "This will destroy your Pearl in return for the investment boost, and is irreversible. Do you want to continue?",
       next: false,
       dismiss: true,
       skip: false,
@@ -472,7 +544,7 @@ export const SPEECHES = {
   },
   clam_shop: {
     welcome: {
-      text: `Howdy friend. My name is Diego the Shopkeeper. Welcome to my Clam Shop! Here you can buy Clams for $GEM and trade them for $SHELL. Let me show you around...`,
+      text: `Howdy friend. Welcome to my Clam Shop! Here you can buy Clams using $GEM and harvest them for $SHELL. Let's get to it!`,
       next: "connect",
       dismiss: false,
       skip: false,
@@ -489,14 +561,44 @@ export const SPEECHES = {
       dismiss: true,
       skip: false,
     },
-    collect_congrats: {
-      text: `Congrats on your Clam! You can take your time to savour your luck. If you still feel like buying, click "Buy more" button and I will be able to assist you.`,
+
+    collection: {
+      text: `You Clam is ready for collection!`,
       next: false,
       dismiss: true,
       skip: false,
     },
+
+    collection_processing: {
+      text: `One moment, just let me unbox this Clam for you. Did you know that no one knows what Clam is inside until you collect it, not even me?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
+    collect_congrats: {
+      text: `Congrats on your Clam! You can take your time to savour your luck. We send your collected clams directly to the Saferoom, so you can see them there.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
+    processing: {
+      text: `Hold on while we process your transaction...`,
+      next: `congrats`,
+      dismiss: false,
+      skip: false,
+    },
+
+    congrats: {
+      text: `Thank you for your purchase! Let me just go fetch your Clam. I'll just be a minute.`,
+      next: "collection",
+      dismiss: true,
+      skip: false,
+    },
+
     choose_path: {
-      text: `Now that everything is set up, tell me what led you to my Shop?`,
+      text: `So, friend, how can I help you today?`,
       next: false,
       dismiss: false,
       skip: false,
@@ -512,7 +614,7 @@ export const SPEECHES = {
       next: false,
       dismiss: true,
       skip: false,
-    }
+    },
   },
   saferoom: {
     connect: {
@@ -576,6 +678,24 @@ export const SPEECHES = {
       next: "purchase",
       dismiss: false,
       skip: false,
+    },
+  },
+  farms: {
+    placeholder: {
+      text: `Hello There! Welcome to the place where you can farm pearls.`,
+      dismiss: true,
+    },
+    connect: {
+      text: `Excellent! First, let's get your wallet connected. You will need to do this in order to see your Clams. Press the "Connect Wallet" button in the top right of the screen.`,
+      next: `purchase`,
+      dismiss: false,
+      skip: `purchase`,
+    },
+    withdraw: {
+      text: `This will stop the Pearl production process! But you can continue later without starting from scratch. Do you want to continue?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: `purchase`,
     },
   },
 };
@@ -888,9 +1008,40 @@ export const BUTTONS = {
       },
     },
   },
+
+  farms: {
+    withdraw: {
+      next: "Withdraw Pearl",
+      alt: {
+        action: "url",
+        destination: "/saferoom",
+        text: "Go to Saferoom",
+      },
+    },
+  },
+
   clam_shop: {
     welcome: {
       next: "Let's go!",
+      alt: false,
+    },
+  },
+
+  bank: {
+    transaction_error: {
+      next: "OK",
+      alt: false,
+    },
+    deposit_fee_alert: {
+      next: "OK",
+      alt: false,
+    },
+    withdraw_pearl_rewards_alert: {
+      next: "OK",
+      alt: false,
+    },
+    pearl_boost_yield_alert: {
+      next: "OK",
       alt: false,
     },
   },

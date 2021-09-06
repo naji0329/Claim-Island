@@ -37,7 +37,7 @@ const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
         <div>$SHELL value: {formatShell(clamValueInShellToken)}</div>
         <div>Lifespan: {get(dnaDecoded, "lifespan")} pearls</div>
         <div>
-          <Link to="/saferoom" className="block">
+          <Link to="/clam" className="block">
             View in Saferoom{" "}
           </Link>
         </div>
@@ -76,7 +76,7 @@ const ClamHarvestModal = ({
       name: "diego",
       action: "clam_shop.harvest_warn.text",
       button: {
-        text: "MoreInformation",
+        text: "More Information",
         alt: {
           action: "cb",
           destination: () => {

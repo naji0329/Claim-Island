@@ -13,8 +13,8 @@ import ClamIcon from "../../assets/clam-icon.png";
 import ArrowDown from "../../assets/img/arrow-down.svg";
 
 import { buyClam, getPrice } from "../../web3/clam";
-import { approveSpending } from "../../web3/gem";
-import { clamPresaleAddress, clamShopAddress } from "../../web3/constants";
+import { infiniteApproveSpending } from "../../web3/gem";
+import { clamShopAddress } from "../../web3/constants";
 import { actions } from "../../store/redux";
 
 const Divider = () => (
@@ -37,33 +37,43 @@ const ClamBuyModal = ({
   const [showHatching, setShowHatching] = useState(false);
   const disableButton = usersPurchasedClam >= INDIVIDUAL_CAP;
 
-  const { register, handleSubmit, setValue, reset, formState, getValues } = useForm();
+  const { register, handleSubmit } = useForm();
+
   const [clamPrice, setClamPrice] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       const price = await getPrice();
       setClamPrice(price);
+      console.log(price);
     };
     fetchData();
   }, []);
+
   const onSubmit = async (data) => {
-    console.log({ data });
     setIsLoading(true);
 
-    // updateCharacter({
-    //   name: "diego",
-    //   action: "clam_presale.processing.text",
-    //   button: {
-    //     text: undefined,
-    //   },
-    // });
+    updateCharacter({
+      name: "diego",
+      action: "clam_shop.processing.text",
+      button: {
+        text: undefined,
+      },
+    });
 
-    await approveSpending(address, clamShopAddress, clamPrice);
+    await infiniteApproveSpending(address, clamShopAddress, clamPrice);
 
     await buyClam(address)
       .then(async (res) => {
+        updateCharacter({
+          name: "diego",
+          action: "clam_shop.congrats.text",
+          button: {
+            text: undefined,
+          },
+        });
+
         setIsLoading(false);
-        console.log("yooo");
         setShowHatching(true);
         await sleep(3);
         setShowHatching(false);
@@ -127,11 +137,11 @@ const ClamBuyModal = ({
               {address ? (
                 <a
                   className="text-gray-500 text-base underline text-center p-2"
-                  href={getExplorerAddressLink(clamPresaleAddress, ChainId.BSC)}
+                  href={getExplorerAddressLink(clamShopAddress, ChainId.BSC)}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  {clamPresaleAddress}
+                  {clamShopAddress}
                 </a>
               ) : (
                 <span className="text-yellow-400 text-center">Wallet not connected</span>

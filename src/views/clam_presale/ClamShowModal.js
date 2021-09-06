@@ -48,7 +48,7 @@ const ClamShowModal = ({
                 text: "Go to Saferoom",
                 alt: {
                   action: "internal",
-                  destination: "/saferoom",
+                  destination: "/saferoom/clam",
                 },
               },
               buttonAlt: {
