@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import BigNumber from "bignumber.js";
+import { connect } from "redux-zero/react";
+import { actions } from "../../../store/redux";
 import { get } from "lodash";
 
 import { deposit } from "../../../web3/bank";
@@ -19,15 +21,20 @@ import {
 import SliderWithPercentages from "./SliderWithPercentages";
 import ActionButton from "./ActionButton";
 
-const DepositTab = ({ useSharedState, updateCharacter, updateAccount, depositFee }) => {
-  const [state, setSharedState] = useSharedState();
+const DepositTab = ({
+  account: { address },
+  bank: { depositAmount, selectedPool, ...bank },
+  updateBank,
+  updateCharacter,
+  updateAccount,
+  depositFee,
+}) => {
   const [inTx, setInTx] = useState(false);
-  const { pool, account, depositAmount } = state;
   const { handleSubmit, formState } = useForm();
   const { errors, isValid } = formState;
 
   const handleDepositChange = (e) => {
-    setSharedState({ ...state, depositAmount: e.target.value });
+    updateBank({ depositAmount: e.target.value });
   };
 
   const handleDeposit = async () => {
@@ -44,20 +51,23 @@ const DepositTab = ({ useSharedState, updateCharacter, updateAccount, depositFee
     setInTx(true);
     onDepositHarvestTxn(updateCharacter);
     try {
-      await approveBankForMaxUint(account, pool.lpToken, depositAmount);
-      await deposit(pool.poolId, formatToWei(depositAmount));
+      await approveBankForMaxUint(address, selectedPool.lpToken, depositAmount);
+      await deposit(selectedPool.poolId, formatToWei(depositAmount));
 
-      const balances = await getBalancesFormatted(account, pool.lpToken, pool.isSingleStake);
-      const currentDepositBN = new BigNumber(pool.userDepositAmountInPool);
+      const balances = await getBalancesFormatted(
+        address,
+        selectedPool.lpToken,
+        selectedPool.isSingleStake
+      );
+      const currentDepositBN = new BigNumber(selectedPool.userDepositAmountInPool);
       const depositBN = new BigNumber(depositAmount);
       const newDepositBN = currentDepositBN.plus(depositBN).toString();
 
-      setSharedState({
-        ...state,
+      updateBank({
         balances,
         depositAmount: "0",
-        pool: {
-          ...pool,
+        selectedPool: {
+          ...selectedPool,
           userDepositAmountInPool: newDepositBN,
         },
       });
@@ -76,7 +86,7 @@ const DepositTab = ({ useSharedState, updateCharacter, updateAccount, depositFee
         <div className="flex items-center justify-between opacity-40 text-xl">
           <div className="">Wallet:</div> {/* TODO: update after deposit */}
           <div className="flex items-center">
-            <div className="mx-2">{formatNumber(+get(state, "balances[0]", "0"), 3)}</div>
+            <div className="mx-2">{formatNumber(+get(bank, "balances[0]", "0"), 3)}</div>
             {/* <div className="text-sm">($15.01) </div> */}
           </div>
         </div>
@@ -112,8 +122,8 @@ const DepositTab = ({ useSharedState, updateCharacter, updateAccount, depositFee
               className="text-4xl text-right pt-2 w-full rounded bg-transparent"
               placeholder="Amount"
               type="number"
-              max={get(state, "balances[0]", "0")}
-              value={formatNumber(+state.depositAmount, 3)}
+              max={get(bank, "balances[0]", "0")}
+              value={formatNumber(+depositAmount, 3)}
               onChange={handleDepositChange}
             />
 
@@ -121,17 +131,25 @@ const DepositTab = ({ useSharedState, updateCharacter, updateAccount, depositFee
             {/* <div className="text-md opacity-40"> ($7.01) </div> */}
           </div>
 
-          <SliderWithPercentages isDeposit useSharedState={useSharedState} />
+          <SliderWithPercentages
+            isDeposit
+            onChange={(newValue) => {
+              console.log({ newValue });
+              updateBank(newValue);
+            }}
+          />
 
           {/* TODO better validation with Yulp */}
           {errors.depositAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
 
         <ActionButton style="btn-deposit" isDisabled={!isValid} isLoading={inTx}>
-          Deposit {get(state, "pool.name")}
+          Deposit {get(selectedPool, "name")}
         </ActionButton>
       </div>
     </form>
   );
 };
-export default DepositTab;
+
+const mapToProps = (state) => state;
+export default connect(mapToProps, actions)(DepositTab);

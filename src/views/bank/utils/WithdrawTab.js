@@ -17,8 +17,7 @@ import {
   onWithdrawPearlRewardsAlert,
 } from "../character/OnDepositHarvest";
 
-const WithdrawTab = ({ useSharedState, updateCharacter, updateAccount }) => {
-  const [state, setSharedState] = useSharedState();
+const WithdrawTab = ({ updateCharacter, updateAccount }) => {
   const [withdrawFee, setWithdrawFee] = useState(false);
   const { pool, account, withdrawAmount } = state;
   const [inTx, setInTx] = useState(false);
@@ -124,7 +123,7 @@ const WithdrawTab = ({ useSharedState, updateCharacter, updateAccount }) => {
             {/* <div className="text-md opacity-40"> ($7.01) </div> */}
           </div>
 
-          <SliderWithPercentages useSharedState={useSharedState} />
+          <SliderWithPercentages />
 
           {errors.withdrawAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
