@@ -109,10 +109,8 @@ const PoolItem = ({
     });
     setUrlForExchange(url);
 
-    // setSharedState({ ...state, account, pool, balances });
-
     updateBank({
-      balances: [null, null, null],
+      balances: balances,
       depositAmount: "0",
       withdrawAmount: "0",
       selectedPool: {
