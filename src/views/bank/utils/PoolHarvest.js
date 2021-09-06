@@ -12,7 +12,7 @@ import {
 import { harvest } from "../../../web3/bank";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
-const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, toggleModal }) => {
+const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, updateAccount, toggleModal }) => {
   const isNativePool = selectedPool && selectedPool.isNative;
   const [pearlBoostYield, setPearlBoostYield] = useState(false);
 
@@ -32,7 +32,7 @@ const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, toggleModal }) =
       await harvest(selectedPool.poolId);
       onDepositHarvestSuccess(updateCharacter);
     } catch (error) {
-      state.updateAccount({ error: error.message });
+      updateAccount({ error: error.message });
       onDepositHarvestError(updateCharacter);
     }
   };
