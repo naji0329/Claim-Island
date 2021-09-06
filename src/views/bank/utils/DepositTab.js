@@ -133,6 +133,7 @@ const DepositTab = ({
 
           <SliderWithPercentages
             isDeposit
+            state={{ selectedPool, ...bank }}
             onChange={(newValue) => {
               console.log({ newValue });
               updateBank(newValue);
