@@ -17,10 +17,9 @@ import { gemTokenAddress } from "../../web3/constants";
 
 const PoolItem = ({
   account: { address },
-  bank: { selectedPool },
+  bank: { selectedPool, depositAmount },
   toggleModal,
   updateBank,
-  updateCharacter,
   pool,
 }) => {
   const depositFee = pool.depositFeeBP / 100;
@@ -160,7 +159,9 @@ const PoolItem = ({
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Deposited</p>
-            <p className="font-bold text-gray-300 text-center">{pool.userDepositAmountInPool}</p>
+            <p className="font-bold text-gray-300 text-center">
+              {selectedPool ? selectedPool.userDepositAmountInPool : pool.userDepositAmountInPool}
+            </p>
           </div>
 
           <div className="text-sm block">
