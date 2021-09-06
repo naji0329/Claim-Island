@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAsync, createStateContext } from "react-use";
+import { connect } from "redux-zero/react";
+import { actions } from "../../store/redux";
 import classnames from "classnames";
 import { useEthers } from "@usedapp/core";
 
@@ -13,25 +15,21 @@ import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
 
 import { gemTokenAddress } from "../../web3/constants";
 
-// shared state across all pool components - to avoid passing too much props down to children
-const [useSharedState, SharedStateProvider] = createStateContext();
-
 const PoolItem = ({
-  account,
-  totalAllocation,
-  updateCharacter,
+  account: { address },
+  bank: { selectedPool },
   toggleModal,
-  updateAccount,
-  ...pool
+  updateBank,
+  updateCharacter,
+  pool,
 }) => {
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
-  const [isEnabled, setIsEnabled] = useState(false);
   const [gemEarned, setGemEarned] = useState(0);
-  const [apr, setApr] = useState(0);
+  const [apr, setApr] = useState();
+
   const [urlForExchange, setUrlForExchange] = useState("");
-  const [state, setSharedState] = useSharedState();
 
   const { activateBrowserWallet } = useEthers();
 
@@ -49,67 +47,61 @@ const PoolItem = ({
 
   const riskStyle = riskClass(pool.risk);
 
+  const calcAPR = ({ poolInfo, gemsPerBlock, tokenPrice }) => {
+    const blocksPerYear = 10512000; // seconds per year / 3
+    const supply = +poolInfo.poolLpTokenBalance > 0 ? +poolInfo.poolLpTokenBalance : 1;
+    let finalApr;
+    if (poolInfo.lpToken === gemTokenAddress) {
+      finalApr =
+        Math.round(
+          ((((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(poolInfo.totalAllocation)) *
+            blocksPerYear) /
+            supply) *
+            100
+        ) / 100;
+    } else {
+      finalApr =
+        Math.round(
+          ((((tokenPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
+            Number(poolInfo.totalAllocation)) *
+            blocksPerYear) /
+            supply) *
+            tokenPrice *
+            100
+        ) / 100;
+      console.log(finalApr);
+    }
+
+    if (finalApr > 1000000000000) {
+      finalApr = "∞";
+    }
+
+    return finalApr;
+  };
+
   useAsync(async () => {
+    const fakeTokenPrice = 1000000000000000000;
+
     const earnedGem = await pendingGem(pool.poolId);
+    const gemsPerBlock = await gemPerBlock();
+
+    const apr = calcAPR({
+      poolInfo: pool,
+      gemsPerBlock,
+      tokenPrice: fakeTokenPrice,
+    });
+
     setGemEarned(earnedGem);
+    setApr(apr);
 
     // not used
     // const isEnabled = await hasMaxUintAllowanceBank(pool.account, pool.lpToken);
     // setIsEnabled(isEnabled);
   });
 
-  const calcAPR = ({ poolInfo, gemsPerBlock, tokenPrice, totalAllocation }) => {
-    const blocksPerYear = 10512000; // seconds per year / 3
-    const supply = +poolInfo.poolLpTokenBalance > 0 ? +poolInfo.poolLpTokenBalance : 1;
-    let apr;
-    if (poolInfo.lpToken === gemTokenAddress) {
-      apr =
-        Math.round(
-          ((((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(totalAllocation)) *
-            blocksPerYear) /
-            supply) *
-            100
-        ) / 100;
-    } else {
-      apr =
-        Math.round(
-          ((((tokenPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
-            Number(totalAllocation)) *
-            blocksPerYear) /
-            supply) *
-            tokenPrice *
-            100
-        ) / 100;
-      console.log(apr);
-    }
-
-    if (apr > 1000000000000) {
-      apr = "∞";
-    }
-
-    return apr;
-  };
-
-  useEffect(async () => {
-    const setAprValue = async () => {
-      const fakeTokenPrice = 1000000000000000000;
-      const gemsPerBlock = await gemPerBlock();
-
-      const apr = calcAPR({
-        poolInfo: pool,
-        gemsPerBlock,
-        tokenPrice: fakeTokenPrice,
-        totalAllocation,
-      });
-      setApr(apr);
-    };
-
-    await setAprValue();
-  }, [totalAllocation, pool]);
-
   const handleOpen = async () => {
     setIsOpen(true);
-    const balances = await getBalancesFormatted(account, pool.lpToken, pool.isSingleStake);
+    const balances = await getBalancesFormatted(address, pool.lpToken, pool.isSingleStake);
 
     const url = await exchangeUrl({
       tokenAddress: pool.lpToken,
@@ -117,7 +109,18 @@ const PoolItem = ({
     });
     setUrlForExchange(url);
 
-    setSharedState({ ...state, account, pool, balances });
+    // setSharedState({ ...state, account, pool, balances });
+
+    updateBank({
+      balances: [null, null, null],
+      depositAmount: "0",
+      withdrawAmount: "0",
+      selectedPool: {
+        ...pool,
+        earnedGem: gemEarned,
+        apr,
+      },
+    });
   };
 
   const handleClose = () => setIsOpen(false);
@@ -152,7 +155,9 @@ const PoolItem = ({
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">APR</p>
-            <p className="font-bold text-black">{String(apr)}%</p>
+            <p className="font-bold text-black">
+              {selectedPool && <>{String(selectedPool.apr)}%</>}
+            </p>
           </div>
 
           <div className="text-sm block">
@@ -166,7 +171,7 @@ const PoolItem = ({
           </div>
 
           <div className="text-sm block">
-            {account ? (
+            {address ? (
               <button onClick={() => (isOpen ? handleClose() : handleOpen())}>
                 <svg
                   className={classnames(
@@ -196,20 +201,11 @@ const PoolItem = ({
             </div>
 
             <div className="flex w-2/5 h-full">
-              <PoolDepositWithdraw
-                updateCharacter={updateCharacter}
-                useSharedState={useSharedState}
-                depositFee={depositFee}
-                updateAccount={updateAccount}
-              />
+              <PoolDepositWithdraw depositFee={depositFee} />
             </div>
 
             <div className="flex w-2/5 h-full">
-              <PoolHarvest
-                updateCharacter={updateCharacter}
-                useSharedState={useSharedState}
-                toggleModal={toggleModal}
-              />
+              <PoolHarvest toggleModal={toggleModal} />
             </div>
           </div>
         )}
@@ -218,19 +214,5 @@ const PoolItem = ({
   );
 };
 
-const PoolItemWrapper = (props) => {
-  return (
-    <SharedStateProvider
-      initialValue={{
-        updateAccount: props.updateAccount,
-        balances: [null, null, null],
-        depositAmount: "0",
-        withdrawAmount: "0",
-      }}
-    >
-      <PoolItem {...props} />
-    </SharedStateProvider>
-  );
-};
-
-export default PoolItemWrapper;
+const mapToProps = (state) => state;
+export default connect(mapToProps, actions)(PoolItem);
