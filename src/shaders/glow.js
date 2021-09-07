@@ -13,7 +13,22 @@ void main()
 }
 `;
 
-const vertexShader = (amplitude, frequency) => `
+//glowing without noise
+const vertexShader = `
+uniform vec3 viewVector;
+uniform float c;
+uniform float p;
+varying float intensity;
+void main()
+{
+  vec3 vNormal = normalize( normalMatrix * normal );
+  vec3 vNormel = normalize( normalMatrix * viewVector );
+  intensity = pow( c - dot(vNormal, vNormel), p );
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
+`;
+
+const vertexShaderWithNoise = (amplitude, frequency) => `
 uniform vec3 viewVector;
 uniform float c;
 uniform float p;
@@ -29,37 +44,21 @@ void main()
   gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
 }
 `;
-//glowing without noise
-/*const vertexShader = () => `
-uniform vec3 viewVector;
-uniform float c;
-uniform float p;
-varying float intensity;
-void main()
-{
-  vec3 vNormal = normalize( normalMatrix * normal );
-  vec3 vNormel = normalize( normalMatrix * viewVector );
-  intensity = pow( c - dot(vNormal, vNormel), p );
-  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-}
-`*/
 
-export const getGlowMaterial = (camera, color, surface) =>
+export const getGlowMaterial = (camera, color, surface, isBackSide, disableNoise) =>
   new THREE.ShaderMaterial({
     uniforms: {
       /** Params "c" and "p" configure glow */
-      /*c:   { type: "f", value: 1 },
-        p:   { type: "f", value: 1.4 },*/
-      c: { type: "f", value: 0.5 },
-      p: { type: "f", value: 0.7 },
-      /*c:   { type: "f", value: 0.1 },
-        p:   { type: "f", value: 3 },*/
+      c: { type: "f", value: 0.2 },
+      p: { type: "f", value: isBackSide ? 2.8 : 2 },
       glowColor: { type: "c", value: new THREE.Color(parseInt(color.replace("#", "0x"), 16)) },
       viewVector: { type: "v3", value: camera.position },
     },
-    vertexShader: vertexShader(getAmplitude(surface), getFrequency(surface)),
+    vertexShader: disableNoise
+      ? vertexShader
+      : vertexShaderWithNoise(getAmplitude(surface), getFrequency(surface)),
     fragmentShader: fragmentShader,
-    side: THREE.FrontSide,
+    side: isBackSide ? THREE.BackSide : THREE.FrontSide,
     blending: THREE.AdditiveBlending,
     transparent: true,
   });

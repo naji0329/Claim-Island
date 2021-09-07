@@ -15,6 +15,7 @@ export default function Model(props) {
     roughness,
     onBeforeCompile,
     glowMaterial,
+    backGlowMaterial,
   } = props;
 
   return (
@@ -39,7 +40,16 @@ export default function Model(props) {
           material={glowMaterial}
           scale={1.025}
           layers={1}
-          position={[0, -0.001, 0]}
+          position={[0, -0.0012, 0]}
+        />
+      )}
+      {backGlowMaterial && (
+        <mesh
+          geometry={nodes.Circle_03.geometry}
+          material={backGlowMaterial}
+          scale={1.1}
+          position={[0, -0.0035, 0]}
+          layers={1}
         />
       )}
     </group>

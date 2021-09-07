@@ -11,7 +11,7 @@ export const ReflectionPlate = memo(() => {
         clipBias: 0.003,
         textureWidth: window.innerWidth * window.devicePixelRatio,
         textureHeight: window.innerHeight * window.devicePixelRatio,
-        color: 0xa3a6a8,
+        color: 0x555256,
       }),
     []
   );

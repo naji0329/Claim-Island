@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
 import convert from "color-convert";
 
 import { PEARLS_SHAPES } from "../../constants/pearls";
@@ -56,6 +55,10 @@ export const Pearl = (props) => {
   const { camera } = useThree();
   camera.layers.enable(1);
   const glowMaterial = useMemo(() => glow && getGlowMaterial(camera, color, surface), [glow]);
+  const backGlowMaterial = useMemo(
+    () => glow && getGlowMaterial(camera, color, surface, true, true),
+    [glow]
+  );
 
   useEffect(() => {
     updateMap(map);
@@ -75,7 +78,7 @@ export const Pearl = (props) => {
     if (response) {
       let pearlImg = await response.json();
       pearlImg = pearlImg ? pearlImg.img : pearlImg;
-      return pearlImg ? true : false;
+      return !!pearlImg;
     } else {
       return false;
     }
@@ -107,6 +110,7 @@ export const Pearl = (props) => {
         emissiveIntensity={emissiveIntensity}
         roughness={roughness}
         glowMaterial={glowMaterial ? glowMaterial : undefined}
+        backGlowMaterial={backGlowMaterial}
       />
     </group>
   );

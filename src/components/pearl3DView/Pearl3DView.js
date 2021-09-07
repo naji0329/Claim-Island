@@ -5,7 +5,7 @@ import { ReflectionPlate } from "../ReflectionPlate";
 import { Mist } from "./Mist";
 
 export const Pearl3DView = (props) => {
-  const { pearlDna, decodedDna, showTraitsTable, height } = props;
+  const { pearlDna, decodedDna, height } = props;
   const { shape, surface, HSV, overtone, lustre, size, glow } = decodedDna;
 
   return (
