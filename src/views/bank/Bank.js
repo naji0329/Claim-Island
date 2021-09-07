@@ -127,7 +127,7 @@ const Bank = ({
         {address && (
           <>
             <div className="w-full lg:w-7/10 mx-auto relative z-10">
-              <div className="px-2 md:px-8 py-4 mt-24 flex flex-col">
+              <div className="px-2 md:px-4% py-4 mt-24 flex flex-col">
                 {chainId === ChainId.Localhost && (
                   <button
                     // only works if web3.setProvider("ws://localhost:8545"); in getWeb3.js
