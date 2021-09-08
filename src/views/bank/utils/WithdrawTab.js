@@ -21,7 +21,7 @@ import {
 
 const WithdrawTab = ({
   account: { address },
-  bank: { withdrawAmount, selectedPool },
+  bank: { withdrawAmount, selectedPool, ...bank },
   updateBank,
   updateCharacter,
   updateAccount,
@@ -133,7 +133,12 @@ const WithdrawTab = ({
             {/* <div className="text-md opacity-40"> ($7.01) </div> */}
           </div>
 
-          <SliderWithPercentages />
+          <SliderWithPercentages
+            state={{ selectedPool, ...bank }}
+            onChange={(newValue) => {
+              updateBank(newValue);
+            }}
+          />
 
           {errors.withdrawAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
