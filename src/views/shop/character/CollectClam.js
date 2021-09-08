@@ -1,9 +1,12 @@
+import { truncate } from "lodash";
+
 export const collectClamReady = ({ updateCharacter }) => {
   updateCharacter({
     name: "diego",
     action: "clam_shop.collection.text",
     button: {
-      text: undefined,
+      text: "Ok",
+      dismiss: truncate,
     },
   });
 };
@@ -30,34 +33,34 @@ export const collectClamError = ({ updateCharacter }) => {
 
 const btnHarvestClams = ({ updateCharacter, setModalToShow }) => {
   return {
-      text: "Harvest Clams",
-      alt: {
-        action: "cb",
-        destination: () => {
-          updateCharacter({
-            name: "diego",
-            action: null,
-          });
-          setModalToShow("harvest");
-        },
+    text: "Harvest Clams",
+    alt: {
+      action: "cb",
+      destination: () => {
+        updateCharacter({
+          name: "diego",
+          action: null,
+        });
+        setModalToShow("harvest");
       },
-    }
+    },
+  }
 };
 
 const btnBuyClams = ({ updateCharacter, setModalToShow }) => {
   return {
-      text: "Buy Clams",
-      alt: {
-        action: "cb",
-        destination: () => {
-          updateCharacter({
-            name: "diego",
-            action: null,
-          });
-          setModalToShow("buy");
-        },
+    text: "Buy Clams",
+    alt: {
+      action: "cb",
+      destination: () => {
+        updateCharacter({
+          name: "diego",
+          action: null,
+        });
+        setModalToShow("buy");
       },
-    }
+    },
+  }
 };
 
 export const collectClamSuccess = ({ updateCharacter, setModalToShow }) => {
