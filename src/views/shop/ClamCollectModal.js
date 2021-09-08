@@ -15,7 +15,7 @@ import {
   collectClamError,
   collectClamProcessing,
   collectClamSuccess,
-  collectClamReady
+  collectClamReady,
 } from "./character/CollectClam";
 
 const ClamCollectModal = ({
@@ -45,7 +45,6 @@ const ClamCollectModal = ({
 
       collectClamSuccess({ updateCharacter, setModalToShow }); // character speaks
       setModalToShow("display");
-
     } catch (e) {
       console.error(e);
       setIsLoading(false);
@@ -64,19 +63,12 @@ const ClamCollectModal = ({
 
           <div className="py-2 flex flex-col">
             {isLoading ? (
-              <button
-                disabled={isLoading}
-                type="submit"
-                className="sending-txn-btn"
-              >
-                <SVGSpinner />{" "}
+              <button disabled={isLoading} type="submit" className="sending-txn-btn">
+                <SVGSpinner />
                 Sending transaction...
               </button>
             ) : (
-              <button
-                type="submit"
-                className="collect-clam-btn"
-              >
+              <button type="submit" className="collect-clam-btn">
                 Collect Clam
               </button>
             )}

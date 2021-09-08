@@ -141,23 +141,23 @@ const ClamPresale = ({
 
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
-        {/* chat character   */}
-        {isStarted != undefined && (
-          <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
-            <CharacterWrapper name="diego" />
-          </div>
-        )}
-
-        {/* modal   -top-0 md:-top-64 */}
-        <div className="flex-1 justify-center min-h-full min-w-full flex items-center absolute z-30 pointer-events-none pb-60">
-          {isStarted && // pre sale has started
-            address && // wallet is connected
-            showMintModal && // user has agreed clicked Yes
-            !rng && <ClamMintModal setShowMintModal={setShowMintModal} />}
-          {/* !rng = did not have clams to collect */}
-          {rng && <ClamCollectModal setShowMintModal={setShowMintModal} />}
-          {/* {clamBalance === "1" && address && <ClamShowModal />} */}
+      {/* chat character   */}
+      {isStarted != undefined && (
+        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
+          <CharacterWrapper name="diego" />
         </div>
+      )}
+
+      {/* modal   -top-0 md:-top-64 */}
+      <div className="flex-1 justify-center min-h-full min-w-full flex items-center absolute z-30 pointer-events-none pb-60">
+        {isStarted && // pre sale has started
+          address && // wallet is connected
+          showMintModal && // user has agreed clicked Yes
+          !rng && <ClamMintModal setShowMintModal={setShowMintModal} />}
+        {/* !rng = did not have clams to collect */}
+        {rng && <ClamCollectModal setShowMintModal={setShowMintModal} />}
+        {/* {clamBalance === "1" && address && <ClamShowModal />} */}
+      </div>
     </>
   );
 };

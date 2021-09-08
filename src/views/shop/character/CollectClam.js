@@ -44,7 +44,7 @@ const btnHarvestClams = ({ updateCharacter, setModalToShow }) => {
         setModalToShow("harvest");
       },
     },
-  }
+  };
 };
 
 const btnBuyClams = ({ updateCharacter, setModalToShow }) => {
@@ -60,7 +60,7 @@ const btnBuyClams = ({ updateCharacter, setModalToShow }) => {
         setModalToShow("buy");
       },
     },
-  }
+  };
 };
 
 export const collectClamSuccess = ({ updateCharacter, setModalToShow }) => {

@@ -3,7 +3,7 @@ import { connect } from "redux-zero/react";
 import { formatUnits } from "@ethersproject/units";
 import { Link } from "react-router-dom";
 
-import clam, {
+import {
   getClamByIndex,
   getClamData,
   getClamValueInShellToken,
@@ -82,7 +82,7 @@ const ClamHarvestModal = ({
   updateCharacter,
   updateAccount,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [clams, setClams] = useState([]);
   const [message, setMessage] = useState("Loading...");
   const [clamValueInShellToken, setClamValueInShellToken] = useState("");
@@ -96,7 +96,7 @@ const ClamHarvestModal = ({
         setModalToShow(null);
       } catch (e) {
         console.error(e);
-        setIsLoading(false);
+        // setIsLoading(false);
         updateAccount({ error: e.message });
         harvestError({ updateCharacter }); // character speaks
       }

@@ -98,7 +98,9 @@ export const harvestClamSpeak = ({ updateCharacter }, cb) => {
       text: "Yes",
       alt: {
         action: "cb",
-        destination: () => { cb(); }
+        destination: () => {
+          cb();
+        },
       },
     },
   });

@@ -1,4 +1,4 @@
-export const harvestClamWarning = ({ updateCharacter, setModalToShow }, cb) => {
+export const harvestClamWarning = ({ updateCharacter, setUserReady, setModalToShow }) => {
   updateCharacter({
     name: "diego",
     action: "clam_shop.harvest_warn.text",
@@ -29,9 +29,8 @@ export const harvestClamWarning = ({ updateCharacter, setModalToShow }, cb) => {
         },
       },
     },
-  })
+  });
 };
-
 
 const harvestClamsBtn = ({ updateCharacter, setUserReady, setModalToShow }) => {
   return {
@@ -47,13 +46,10 @@ const harvestClamsBtn = ({ updateCharacter, setUserReady, setModalToShow }) => {
         setModalToShow("harvest");
       },
     },
-  }
+  };
 };
 
-const buyClamsBtn = ({
-  updateCharacter, setUserReady,
-  setModalToShow, clamToCollect
-}) => {
+const buyClamsBtn = ({ updateCharacter, setUserReady, setModalToShow, clamToCollect }) => {
   return {
     text: "Buy Clams",
     alt: {
@@ -81,7 +77,7 @@ const buyClamsBtn = ({
         }
       },
     },
-  }
+  };
 };
 
 const connectWallet = ({ updateCharacter, activateBrowserWallet }) => {
@@ -96,11 +92,15 @@ const connectWallet = ({ updateCharacter, activateBrowserWallet }) => {
       },
     },
   });
-}
+};
 
 export const WelcomeUser = ({
-  updateCharacter, activateBrowserWallet, address,
-  setModalToShow, setUserReady, clamToCollect
+  updateCharacter,
+  activateBrowserWallet,
+  address,
+  setModalToShow,
+  setUserReady,
+  clamToCollect,
 }) => {
   updateCharacter({
     name: "diego",
@@ -116,14 +116,16 @@ export const WelcomeUser = ({
               action: "clam_shop.choose_path.text",
               buttonAlt: harvestClamsBtn({ updateCharacter, setUserReady, setModalToShow }),
               button: buyClamsBtn({
-                updateCharacter, setUserReady,
-                setModalToShow, clamToCollect
+                updateCharacter,
+                setUserReady,
+                setModalToShow,
+                clamToCollect,
               }),
             });
           } else {
             connectWallet({
               updateCharacter,
-              activateBrowserWallet
+              activateBrowserWallet,
             });
           }
         },

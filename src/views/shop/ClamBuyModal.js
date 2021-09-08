@@ -17,11 +17,7 @@ import { infiniteApproveSpending } from "../../web3/gem";
 import { clamShopAddress } from "../../web3/constants";
 import { actions } from "../../store/redux";
 
-import {
-  buyClamError,
-  buyClamSuccess,
-  buyClamProcessing
-} from "./character/BuyClam";
+import { buyClamError, buyClamSuccess, buyClamProcessing } from "./character/BuyClam";
 
 const Divider = () => (
   <div className="w-full flex flex-col justify-center items-center my-2">
@@ -33,7 +29,7 @@ const Divider = () => (
 
 const ClamBuyModal = ({
   account: { gemBalance, address },
-  presale: { salePrice, usersPurchasedClam },
+  presale: { usersPurchasedClam },
   updateCharacter,
   updateAccount,
   setModalToShow,
@@ -56,7 +52,7 @@ const ClamBuyModal = ({
     fetchData();
   }, []);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     setIsLoading(true);
 
     buyClamProcessing({ updateCharacter }); // character speaks
@@ -72,7 +68,6 @@ const ClamBuyModal = ({
       await sleep(3);
       setShowHatching(false);
       setModalToShow("collect");
-
     } catch (e) {
       console.log("error", e.message);
       setIsLoading(false);
@@ -151,18 +146,6 @@ const ClamBuyModal = ({
                             value={formatUnits(clamPrice, 18)}
                             className="bg-gray-100 text-center text-xl w-20  text-black p-2 font-normal rounded  border-none  font-extrabold"
                             {...register("input", { required: true })}
-                          // onChange={(v) => {
-                          //   const input = parseUnits(
-                          //     v.currentTarget.value,
-                          //     "wei"
-                          //   ); // input in wei
-                          //   const price = parseUnits(
-                          //     presaleState.salePrice,
-                          //     "ether"
-                          //   ); // input in ether
-                          //   const out = formatUnits(input.mul(price), 18);
-                          //   setValue("output", out);
-                          // }}
                           />
                           <span className="flex items-center  px-3 text-lg font-extrabold font-sans mx-1">
                             GEM
@@ -193,20 +176,6 @@ const ClamBuyModal = ({
                             value="1"
                             className="bg-gray-100 text-center text-xl w-20  text-black p-2 font-normal rounded  border-none font-extrabold"
                             {...register("output", { required: true })}
-                          // onChange={(v) => {
-                          //   const output = parseUnits(
-                          //     v.currentTarget.value,
-                          //     "ether"
-                          //   ); // input in wei
-                          //   const price = parseUnits(
-                          //     presaleState.salePrice,
-                          //     "ether"
-                          //   ); // input in ether
-                          //   console.log({ output, price });
-                          //   const input = formatUnits(output.div(price), 18);
-                          //   console.log({ output, price, input });
-                          //   setValue("input", input);
-                          // }}
                           />
                         </div>
                         {/* <span className="flex items-center  px-3 text-lg font-extrabold font-sans mx-1">
