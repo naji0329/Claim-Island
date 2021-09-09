@@ -36,11 +36,11 @@ import BurnPearlModal from "./utils/BurnPearlModal";
 
 const Bank = ({
   account: { address, isBSChain, isWeb3Installed, isConnected },
+  bank: { pools },
   updateCharacter,
   updateAccount,
+  updateBank,
 }) => {
-  const [pools, setPools] = useState([]);
-  const [totalAlloc, setTotalAlloc] = useState(0);
   const [assistantAcknowledged, setAssistantAcknowledged] = useState(
     window.localStorage.getItem("bankAssistantAcknowledged") === "true"
   );
@@ -56,7 +56,6 @@ const Bank = ({
       const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
       const poolLpTokenBalances = await getTokenSupplies();
       const _totalAlloc = await totalAllocPoint();
-      setTotalAlloc(_totalAlloc);
 
       const [poolInfo, userInfo] = await Promise.all([
         aggregate(poolInfocalls, chainId),
@@ -75,6 +74,7 @@ const Bank = ({
             return {
               name: poolAsset.name,
               apy: poolAsset.apy,
+              totalAllocation: _totalAlloc,
               multiplier: ((Number(poolInfo.allocPoint) / Number(_totalAlloc)) * 100).toFixed(1),
               images: poolAsset.images,
               risk: poolAsset.risk,
@@ -96,7 +96,7 @@ const Bank = ({
 
       const setUpPools = pools.filter((p) => p);
 
-      setPools(setUpPools);
+      updateBank({ pools: setUpPools });
     };
     if (pools.length === 0 && address) {
       getPoolInfo();
@@ -155,15 +155,7 @@ const Bank = ({
                 )}
                 {pools &&
                   pools.map((pool, i) => (
-                    <PoolItem
-                      key={i}
-                      {...pool}
-                      account={address}
-                      totalAllocation={totalAlloc}
-                      updateCharacter={updateCharacter}
-                      toggleModal={toggleModal}
-                      updateAccount={updateAccount}
-                    />
+                    <PoolItem key={i} pool={pool} toggleModal={toggleModal} />
                   ))}
               </div>
             </div>

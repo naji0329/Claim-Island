@@ -3,15 +3,20 @@ import { get } from "lodash";
 
 import { formatNumber } from "./index";
 
-const SliderWithPercentages = ({ isDeposit, useSharedState }) => {
-  const [state, setSharedState] = useSharedState();
+const SliderWithPercentages = ({ state, isDeposit, onChange }) => {
   const [slideValue, setSlideValue] = useState(0);
   const stateProp = isDeposit ? "depositAmount" : "withdrawAmount";
 
   const setPercentage = (percentage) => {
-    const balance = get(state, isDeposit ? "balances[0]" : "pool.userDepositAmountInPool", "0");
+    const balance = get(
+      state,
+      isDeposit ? "balances[0]" : "selectedPool.userDepositAmountInPool",
+      "0"
+    );
     const absolute = formatNumber((percentage / 100) * +balance, 6);
-    setSharedState({ ...state, [stateProp]: absolute });
+    // setSharedState({ ...state, [stateProp]: absolute });
+
+    onChange({ [stateProp]: absolute });
   };
 
   const handleSlide = (value) => {

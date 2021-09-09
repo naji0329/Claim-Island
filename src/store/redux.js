@@ -49,7 +49,11 @@ const initialState = {
       alt: undefined,
       dismiss: undefined,
     },
-    suppressSpeechBubble: undefined
+    suppressSpeechBubble: undefined,
+  },
+  bank: {
+    pools: [],
+    selectedPool: undefined,
   },
   konvaObjects: [],
 };
@@ -104,6 +108,14 @@ export const actions = (store) => ({
     });
     return {
       konvaObjects: [],
+    };
+  },
+  updateBank: (state, value) => {
+    return {
+      bank: {
+        ...state.bank,
+        ...value,
+      },
     };
   },
 });

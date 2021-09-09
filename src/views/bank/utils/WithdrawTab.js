@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { get } from "lodash";
+import { connect } from "redux-zero/react";
+import { actions } from "../../../store/redux";
 
 import { withdraw } from "../../../web3/bank";
 import { formatToWei } from "../../../web3/shared";
@@ -8,6 +10,7 @@ import { useForm } from "react-hook-form";
 import BigNumber from "bignumber.js";
 import { formatNumber, getBalancesFormatted } from "./";
 import SliderWithPercentages from "./SliderWithPercentages";
+import ActionButton from "./ActionButton";
 
 import {
   onDepositHarvestTxn,
@@ -16,17 +19,21 @@ import {
   onWithdrawPearlRewardsAlert,
 } from "../character/OnDepositHarvest";
 
-const WithdrawTab = ({ useSharedState, updateCharacter, updateAccount }) => {
-  const [state, setSharedState] = useSharedState();
+const WithdrawTab = ({
+  account: { address },
+  bank: { withdrawAmount, selectedPool, ...bank },
+  updateBank,
+  updateCharacter,
+  updateAccount,
+}) => {
   const [withdrawFee, setWithdrawFee] = useState(false);
-  const { pool, account, withdrawAmount } = state;
   const [inTx, setInTx] = useState(false);
 
   const { handleSubmit, formState } = useForm();
   const { errors } = formState;
 
   const handleWithdrawChange = (e) => {
-    setSharedState({ ...state, withdrawAmount: e.target.value });
+    updateBank({ withdrawAmount: e.target.value });
   };
 
   const handleWithdraw = async () => {
@@ -44,19 +51,22 @@ const WithdrawTab = ({ useSharedState, updateCharacter, updateAccount }) => {
     onDepositHarvestTxn(updateCharacter);
 
     try {
-      await withdraw(pool.poolId, formatToWei(withdrawAmount));
-      const balances = await getBalancesFormatted(account, pool.lpToken, pool.isSingleStake);
+      await withdraw(selectedPool.poolId, formatToWei(withdrawAmount));
+      const balances = await getBalancesFormatted(
+        address,
+        selectedPool.lpToken,
+        selectedPool.isSingleStake
+      );
 
-      const currentDepositBN = new BigNumber(pool.userDepositAmountInPool);
+      const currentDepositBN = new BigNumber(selectedPool.userDepositAmountInPool);
       const depositBN = new BigNumber(withdrawAmount);
       const newDepositBN = currentDepositBN.minus(depositBN).toString();
 
-      setSharedState({
-        ...state,
+      updateBank({
         balances,
         withdrawAmount: "0",
-        pool: {
-          ...pool,
+        selectedPool: {
+          ...selectedPool,
           userDepositAmountInPool: newDepositBN,
         },
       });
@@ -76,7 +86,7 @@ const WithdrawTab = ({ useSharedState, updateCharacter, updateAccount }) => {
           <div className="">Vault:</div>
           <div className="flex items-center">
             <div className="mx-2">
-              {formatNumber(+get(state, "pool.userDepositAmountInPool", "0"), 3)}
+              {formatNumber(+get(selectedPool, "userDepositAmountInPool", "0"), 3)}
             </div>
             {/* TODO convert LP to dolar */}
             {/* <div className="text-sm">($15.01) </div> */}
@@ -114,8 +124,8 @@ const WithdrawTab = ({ useSharedState, updateCharacter, updateAccount }) => {
               className="text-4xl text-right pt-2 w-full rounded bg-transparent"
               placeholder="Amount"
               type="number"
-              max={get(state, "pool.userDepositAmountInPool")}
-              value={formatNumber(+state.withdrawAmount, 3)}
+              max={get(selectedPool, "userDepositAmountInPool")}
+              value={formatNumber(+withdrawAmount, 3)}
               onChange={handleWithdrawChange}
             />
 
@@ -123,20 +133,23 @@ const WithdrawTab = ({ useSharedState, updateCharacter, updateAccount }) => {
             {/* <div className="text-md opacity-40"> ($7.01) </div> */}
           </div>
 
-          <SliderWithPercentages useSharedState={useSharedState} />
+          <SliderWithPercentages
+            state={{ selectedPool, ...bank }}
+            onChange={(newValue) => {
+              updateBank(newValue);
+            }}
+          />
 
           {errors.withdrawAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
 
-        <button
-          disabled={inTx}
-          type="submit"
-          className="w-full text-white bg-red-500 hover:bg-red-400 rounded-xl shadow-xl p-2 text-center text-2xl"
-        >
-          Withdraw {get(state, "pool.name")}
-        </button>
+        <ActionButton style="btn-withdraw" isLoading={inTx}>
+          Withdraw {get(selectedPool, "name")}
+        </ActionButton>
       </div>
     </form>
   );
 };
-export default WithdrawTab;
+
+const mapToProps = (state) => state;
+export default connect(mapToProps, actions)(WithdrawTab);
