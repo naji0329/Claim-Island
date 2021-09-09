@@ -7,17 +7,9 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ROUTES from "./router";
 import NavigationButton from "./components/NavigationButton";
 
-// import {  getClamTokenContract, getContract, httpProvider } from './services/web3';
-// import {  getContract, httpProvider } from './services/web3';
-
-// import NavbarComp from './components/Navbar';
-
 // Main App Component
 const App = () => {
   const { account, connect } = useWallet();
-
-  // const contract = getClamTokenContract();
-  // console.log(contract);
 
   useEffect(() => {
     if (!account && window.localStorage.getItem("accountStatus")) {
