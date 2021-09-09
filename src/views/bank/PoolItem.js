@@ -4,6 +4,7 @@ import { connect } from "redux-zero/react";
 import { actions } from "../../store/redux";
 import classnames from "classnames";
 import { useEthers } from "@usedapp/core";
+import { formatEther } from "@ethersproject/units";
 
 import { pendingGem, gemPerBlock } from "../../web3/bank";
 import { hasMaxUintAllowanceBank } from "../../web3/bep20";
@@ -151,9 +152,19 @@ const PoolItem = ({
           </div>
 
           <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">APR</p>
+            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none text-center">APR</p>
             <p className="font-bold text-black">
-              {selectedPool && <>{String(selectedPool.apr)}%</>}
+              {selectedPool ? `${String(selectedPool.apr)}%` : `${String(apr)}%`}
+            </p>
+          </div>
+
+          <div className="text-sm block">
+            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none text-center">TVL</p>
+            <p className="font-bold text-black text-center">
+              {formatEther(
+                selectedPool ? selectedPool.poolLpTokenBalance : pool.poolLpTokenBalance
+              )}{" "}
+              GEM
             </p>
           </div>
 
