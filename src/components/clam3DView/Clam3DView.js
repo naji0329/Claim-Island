@@ -53,7 +53,13 @@ const Clam3DViewComponent = memo((props) => {
       <div style={{ position: "absolute" }}>LOADING</div>
       <ClamScene>
         {textures && (
-          <Clam clamDna={clamDna} clamType={clamType} tongueType={tongueType} textures={textures} />
+          <Clam
+            clamDna={clamDna}
+            clamType={clamType}
+            tongueType={tongueType}
+            textures={textures}
+            size={traits.size}
+          />
         )}
         {!textures && <Loading3DView />}
       </ClamScene>
