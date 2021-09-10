@@ -174,7 +174,7 @@ const FarmItem = ({
           <div className="progress-bar">
             <div className={"base-bar " + (clam.progress < 100 ? "base-bar-animated" : "")}>
               <div style={{ width: clam.progress + "%" }} className="completion-bar"></div>
-              <span>Processing {clam.progress}%</span>
+              <span>Producing {clam.progress}%</span>
             </div>
           </div>
 
