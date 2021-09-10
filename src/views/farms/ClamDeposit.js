@@ -71,9 +71,9 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
       } else {
         await stakeClam(clamId);
       }
-      setInTx(false);
     } catch (err) {
       updateAccount({ error: err.message });
+      setButtonText("Approve Clam");
       setInTx(false);
     }
   };
@@ -122,8 +122,8 @@ const ClamDeposit = ({ clams, updateAccount, account: { address } }) => {
       {clams.length ? (
         <div>
           <h3 className="heading">Choose a Clam</h3>
-          {clams.map((clam, i) => (
-            <ClamItem key={i} updateAccount={updateAccount} address={address} {...clam} />
+          {clams.map((clam) => (
+            <ClamItem key={clam.clamId} updateAccount={updateAccount} address={address} {...clam} />
           ))}
         </div>
       ) : (
