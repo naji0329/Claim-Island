@@ -51,6 +51,7 @@
   },
   "scripts": {
     "start": "craco start",
+    "local": "NODE_ENV=local craco start",
     "build": "craco build",
     "test": "craco test",
     "serve": "HOST=0.0.0.0 npm start",
