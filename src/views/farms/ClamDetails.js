@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useEthers } from "@usedapp/core";
-import { Clam3DView } from "../../components/clam3DView";
-import { getPearlDataByIds } from "../../web3/shared";
+import { Clam3DView } from "components/clam3DView";
+import { getPearlDataByIds } from "web3/shared";
 import PearlInfo from "../bank/utils/PearlInfo";
+import { secondsToFormattedTime } from "../../utils/time";
 
 const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
   const [producedPearls, setProducedPearls] = useState([]);
+  const [timeLeft, setTimeLeft] = useState(clamProcessing.remainingTime || 0);
+  const remainingFormattedTime = secondsToFormattedTime(timeLeft);
   const { chainId } = useEthers();
 
   useEffect(() => {
@@ -20,6 +23,13 @@ const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
 
     init();
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timeLeft]);
 
   return (
     <div className="ClamDetails flex flex-row">
@@ -37,7 +47,7 @@ const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
 
         <div className="flex flex-row justify-between my-2" style={{ width: "400px" }}>
           <p className="float-left">Remaining Time</p>
-          <p className="float-right">{clamProcessing.remainingTime}</p>
+          <p className="float-right">{remainingFormattedTime}</p>
         </div>
       </div>
       <div className="flex flex-1 flex-col">
