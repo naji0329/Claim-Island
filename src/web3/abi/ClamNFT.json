@@ -729,6 +729,25 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "clamId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getProducedPearlIds",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -848,6 +867,11 @@
       {
         "internalType": "uint256",
         "name": "_tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "producedPearlId",
         "type": "uint256"
       }
     ],

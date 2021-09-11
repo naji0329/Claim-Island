@@ -132,6 +132,13 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     );
     const clamDnas = clamDataDecoded.map((data) => data.clamDataValues.dna);
 
+    const producedPearlIdsCalls = clamContract.prepClamProducedPearlIds(tokenIds);
+    const producedPearlIdsResult = await aggregate(producedPearlIdsCalls, chainId);
+    const producedPearlIdsDecoded = clamContract.decodeProducedPearlIdsFromMulticall(
+      producedPearlIdsResult.returnData,
+      tokenIds
+    );
+
     const dnaDecodedCalls = prepGetDnaDecodedMulticall(clamDnas);
     const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
     const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(
@@ -140,10 +147,14 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     );
 
     const clams = clamDataDecoded.map((clam) => {
-      const sameClam = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
-      if (sameClam) {
-        const dnaDecoded = sameClam.dnaDecodedValues;
-        return { ...clam, dnaDecoded };
+      const sameClamDna = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
+      const sameClamPearlsProduced = producedPearlIdsDecoded.find(
+        ({ clamId }) => clamId === clam.clamId
+      );
+      if (sameClamDna && sameClamPearlsProduced) {
+        const dnaDecoded = sameClamDna.dnaDecodedValues;
+        const pearlsProduced = sameClamPearlsProduced.pearlsProduced;
+        return { ...clam, dnaDecoded, pearlsProduced };
       }
       console.error(`Clam ${clam.clamId} from ${address} not found`);
     });
@@ -155,10 +166,12 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
   const addClamImg = async (clams) => {
     const cache = await caches.open("clam-island");
-    const promises = await Promise.all(clams.map((clam) => {
-      const dna = clam.clamDataValues.dna;
-      return cache.match(`/${dna}`);
-    }));
+    const promises = await Promise.all(
+      clams.map((clam) => {
+        const dna = clam.clamDataValues.dna;
+        return cache.match(`/${dna}`);
+      })
+    );
     const images = await Promise.all(
       promises.map((resp) => {
         return resp ? resp.json() : "";
@@ -171,7 +184,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       return clam;
     });
     return clamsUptd;
-  }
+  };
 
   useEffect(() => {
     // wallet is connected
