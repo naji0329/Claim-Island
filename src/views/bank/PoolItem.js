@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { useAsync, createStateContext } from "react-use";
+import React, { useState } from "react";
+import { useAsync } from "react-use";
 import { connect } from "redux-zero/react";
-import { actions } from "../../store/redux";
+import { actions } from "store/redux";
 import classnames from "classnames";
 import { useEthers } from "@usedapp/core";
 import { formatEther } from "@ethersproject/units";
 
-import { pendingGem, gemPerBlock } from "../../web3/bank";
-import { hasMaxUintAllowanceBank } from "../../web3/bep20";
+import { pendingGem, gemPerBlock } from "web3/bank";
+// import { hasMaxUintAllowanceBank } from "web3/bep20";
 
 import PoolHarvest from "./utils/PoolHarvest";
 import PoolDepositWithdraw from "./utils/PoolDepositWithdraw";
 
 import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
 
-import { gemTokenAddress } from "../../web3/constants";
+import { gemTokenAddress } from "web3/constants";
 
-import InfoTooltip from "../../components/InfoTooltip";
-import Tooltip from "../../components/Tooltip";
+import InfoTooltip from "components/InfoTooltip";
+import Tooltip from "components/Tooltip";
 
 const PoolItem = ({
   account: { address },
@@ -60,7 +60,7 @@ const PoolItem = ({
           ((((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(poolInfo.totalAllocation)) *
             blocksPerYear) /
             supply) *
-            100
+          100
         ) / 100;
     } else {
       finalApr =
@@ -69,8 +69,8 @@ const PoolItem = ({
             Number(poolInfo.totalAllocation)) *
             blocksPerYear) /
             supply) *
-            tokenPrice *
-            100
+          tokenPrice *
+          100
         ) / 100;
       console.log(finalApr);
     }
@@ -153,30 +153,19 @@ const PoolItem = ({
           </div>
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Reward Share</p>
-            <p className="font-bold text-black text-center">
+            <div className="font-bold text-black text-center">
               {pool.multiplier}%
               <InfoTooltip text="The share of overall rewards allocated to this pool" />
-            </p>
+            </div>
           </div>
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none text-center">APR</p>
 
-            <p className="font-bold text-black items-center">
+            <div className="font-bold text-black items-center">
               {selectedPool ? `${String(selectedPool.apr)}%` : `${String(apr)}%`}
               <InfoTooltip text="Annual Percentage Return - non-compounded rate of return" />
-            </p>
-          </div>
-
-          <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none text-center">TVL</p>
-            <p className="font-bold text-black text-center">
-              {formatEther(
-                selectedPool ? selectedPool.poolLpTokenBalance : pool.poolLpTokenBalance
-              )}{" "}
-              GEM
-              <InfoTooltip text="Total Value Locked - the value of deposits in this pool" />
-            </p>
+            </div>
           </div>
 
           <div className="text-sm block">
@@ -218,7 +207,9 @@ const PoolItem = ({
         {isOpen && (
           <div className="flex justify-between items-start p-4 border-t-2 border-gray-700 h-96">
             <div className="flex w-1/5">
-              <PoolData depositFee={depositFee} urlForExchange={urlForExchange} />
+              <PoolData depositFee={depositFee} urlForExchange={urlForExchange} tvl={formatEther(
+                selectedPool ? selectedPool.poolLpTokenBalance : pool.poolLpTokenBalance
+              )} />
             </div>
 
             <div className="flex w-2/5 h-full">

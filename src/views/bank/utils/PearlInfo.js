@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { burnPearl } from "../../../web3/pearlBurner";
+import { burnPearl } from "web3/pearlBurner";
 
 const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker }) => {
   const hours = 720; // hours in 30 days
