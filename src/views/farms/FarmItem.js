@@ -168,7 +168,7 @@ const FarmItem = ({
         </button>
       )}
 
-      {clam.processing ? (
+      {!clam.processing ? (
         <>
           {/* Progress Bar */}
           <div className="progress-bar">

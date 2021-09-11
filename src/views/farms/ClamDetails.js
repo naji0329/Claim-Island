@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Clam3DView } from "../../components/clam3DView";
 import FarmPearl from "../../assets/img/farm_pearl.png";
 
-const PearlDetails = ({ clam, clamProcessing }) => {
+const ClamDetails = ({ clam, clamProcessing }) => {
   console.log(clamProcessing);
   const pearls = [
     {
@@ -13,7 +13,7 @@ const PearlDetails = ({ clam, clamProcessing }) => {
     },
   ];
   return (
-    <div className="PearlDetails flex flex-row">
+    <div className="ClamDetails flex flex-row">
       <div className="flex flex-1 flex-col">
         <p className="font-extrabold text-green-600 text-center font-avenir">{clam.heading}</p>
         <Clam3DView
@@ -79,4 +79,4 @@ const PearlDetails = ({ clam, clamProcessing }) => {
   );
 };
 
-export default PearlDetails;
+export default ClamDetails;

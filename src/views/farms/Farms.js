@@ -25,7 +25,7 @@ import {
 import { getStakedClamIds, unstakeClam, collectPearl } from "../../web3/pearlFarm";
 
 import FarmItem from "./FarmItem";
-import PearlDetails from "./PearlDetails";
+import ClamDetails from "./ClamDetails";
 import ClamDeposit from "./ClamDeposit";
 import { aggregate } from "../../web3/multicall";
 import NFTUnknown from "../../assets/img/clam_unknown.png";
@@ -34,7 +34,7 @@ import { toast } from "react-toastify";
 
 const MODAL_OPTS = {
   DEPOSIT_CLAM: "depositClam",
-  PEARL_DETAILS: "pearlDetails",
+  PEARL_DETAILS: "clamDetails",
 };
 
 import { useEthers } from "@usedapp/core";
@@ -265,7 +265,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
         width={modalSelected === MODAL_OPTS.PEARL_DETAILS ? "60rem" : "30rem"}
       >
         {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
-          <PearlDetails clam={selectedClam} clamProcessing={clamProcessing} />
+          <ClamDetails clam={selectedClam} clamProcessing={clamProcessing} />
         ) : (
           <ClamDeposit clams={clams} />
         )}
