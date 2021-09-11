@@ -14,6 +14,8 @@ export default function Model(props) {
     emissiveIntensity,
     roughness,
     onBeforeCompile,
+    glowMaterial,
+    backGlowMaterial,
   } = props;
 
   return (
@@ -32,6 +34,24 @@ export default function Model(props) {
           onBeforeCompile={onBeforeCompile}
         />
       </mesh>
+      {glowMaterial && (
+        <mesh
+          geometry={nodes.Drop.geometry}
+          material={glowMaterial}
+          scale={1.025}
+          layers={1}
+          position={[0, -0.001, 0]}
+        />
+      )}
+      {backGlowMaterial && (
+        <mesh
+          geometry={nodes.Drop.geometry}
+          material={backGlowMaterial}
+          scale={1.1}
+          position={[0, -0.003, 0]}
+          layers={1}
+        />
+      )}
     </group>
   );
 }

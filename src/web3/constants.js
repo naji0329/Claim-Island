@@ -25,6 +25,22 @@ export const dnaDecoderAddress = "0x05AB5F88bE1aFDEB6eF23136b1f398e2a5d54494";
 export const clamBonusAddress = "0x225B00316580c1eD1C878BBe0F2D7D864c1299d8";
 export const clamShopAddress = "0x74f3dc50456c757a2455BFD661C2979A5e56338f";
 export const pearlFarmAddress = "0x5Ef121f2D160A3fae2CBA6A628ac3253C575A192";
+
+// export const shellTokenAddress = "0x6BD2ce3D5556799464Aa4737a1742C1bC6DD2304";
+// export const clamNFTAddress = "0x48F38cfac50f34Eec654a2Cabf219fB31bA39394";
+// export const gemTokenAddress = "0xae78ECf8aFbA0b9447E82b5Cbd519DE74FFCc4e7";
+// export const gemLockerAddress = "0x50E571Db905936163775325f3d4B1Eb4ADfFf206";
+// export const pearlProductionTimeReductionAddress = "0x8Fd9d0c0f49956c0d87Dda967ce45fe7c3b6b10B";
+// export const bankAddress = "0x78573464595f57BB36Bf2AdCE7159BF279E98Fc9";
+// export const pearlDnaDecoderAddress = "0x09050Fa6E6cADA3B87c7BA8Db9D0a545BB506f0a";
+// export const pearlNFTAddress = "0x526b57f9D6126BBB91A44c38A405D68C1adB741a";
+// export const pearlBurnerAddress = "0x0c2d5Bc9a8c51B6f865609257627Af4E834ECFa7";
+// export const rngAddress = "0xf6fEEA84B09c28aA823B279D30b8cbC0042e4844";
+// export const dnaDecoderAddress = "0xa931f40e73F094f9AEB4c8549833Ff1aB5DDEd17";
+// export const clamBonusAddress = "0x00D45Bd841d878698Ad57f7210222Ea1Ace51110";
+// export const clamShopAddress = "0x5B71fc3FE3e3C299fd5713F0E5Fbf5611BD152b5";
+// export const pearlFarmAddress = "0xd5EcaFd95824E7d443913b5D284950CeC742347b";
+
 //// end of test contracts
 
 //// contracts already deployed to mainnet

@@ -3,19 +3,13 @@ import { connect } from "redux-zero/react";
 
 import "./index.scss";
 
-import Card from "../../components/Card";
 import ClamView from "../saferoom/ClamView";
 
-import { clamNFTAddress } from "../../web3/constants";
 import clamContract from "../../web3/clam";
 import { actions } from "../../store/redux";
 import { getDNADecoded } from "../../web3/dnaDecoder";
 
-const ClamDisplayModal = ({
-  setModalToShow,
-  account: { address, clamToCollect, clamBalance },
-  updateCharacter,
-}) => {
+const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) => {
   const [clamDna, setClamDna] = useState("");
   const [clamDnaDecoded, setClamDnaDecoded] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,12 +20,10 @@ const ClamDisplayModal = ({
         setIsLoading(true);
 
         const index = Number(clamBalance);
-        console.log({ clamBalance, index });
         const tokenId = await clamContract.getClamByIndex(address, index).catch(async () => {
           //fallback
           return clamContract.getClamByIndex(address, index - 1);
         });
-        console.log({ tokenId });
 
         if (tokenId) {
           const clamData = await clamContract.getClamData(tokenId);

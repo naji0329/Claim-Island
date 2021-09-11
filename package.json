@@ -26,7 +26,6 @@
     "lodash": "^4.17.21",
     "mersenne-twister": "^1.1.0",
     "moment": "^2.29.1",
-    "node-sass": "5.0.0",
     "pullstate": "^1.22.1",
     "react": "^17.0.1",
     "react-color": "^2.19.3",
@@ -43,6 +42,7 @@
     "react-toastify": "^7.0.4",
     "react-use": "^17.2.4",
     "redux-zero": "^5.1.7",
+    "sass": "^1.39.0",
     "styled-components": "^5.2.1",
     "three": "^0.126.1",
     "use-wallet": "^0.8.1",
@@ -51,6 +51,7 @@
   },
   "scripts": {
     "start": "craco start",
+    "local": "NODE_ENV=local craco start",
     "build": "craco build",
     "test": "craco test",
     "serve": "HOST=0.0.0.0 npm start",

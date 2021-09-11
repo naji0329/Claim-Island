@@ -140,3 +140,35 @@ canvas {
 .font-aristotelica-bold {
   font-family: "AristotelicaBold";
 }
+
+
+
+
+.csstooltip {
+  display: inline;
+  position: relative;
+}
+.csstooltip:hover:after{
+  @apply text-xs;
+  position: fixed;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  background: black;
+  border-radius: 8px;
+  color: #fff;
+  content: attr(title);
+  margin: -7rem auto 0;
+  padding: 13px;
+  width: 18rem;
+}
+.csstooltip:hover:before{
+  border: solid;
+  border-color: black transparent;
+  border-width: 12px 6px 0 6px;
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  right: -1rem;
+}

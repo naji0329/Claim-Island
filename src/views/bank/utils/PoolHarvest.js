@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { get } from "lodash";
 import { formatNumber } from ".";
 import { connect } from "redux-zero/react";
-import { actions } from "../../../store/redux";
+import { actions } from "store/redux";
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
   onDepositHarvestSuccess,
   onPearlBoostYieldAlert,
 } from "../character/OnDepositHarvest";
-import { harvest } from "../../../web3/bank";
+import { harvest } from "web3/bank";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
 const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, updateAccount, toggleModal }) => {

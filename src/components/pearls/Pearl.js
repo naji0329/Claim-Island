@@ -1,6 +1,6 @@
-import { useCallback, useEffect } from "react";
-import { useTexture } from "@react-three/drei";
+import { useCallback, useEffect, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
+import { useTexture } from "@react-three/drei";
 import convert from "color-convert";
 
 import { PEARLS_SHAPES } from "../../constants/pearls";
@@ -11,6 +11,7 @@ import OvalPearlModel from "../models/pearlModels/OvalPearlModel";
 import RingedPearlModel from "../models/pearlModels/RingedPearlModel";
 import RoundPearlModel from "../models/pearlModels/RoundPearlModel";
 import { getOnBeforeCompile } from "../../shaders/noise-material";
+import { getGlowMaterial } from "../../shaders/glow";
 
 import {
   updateMap,
@@ -31,7 +32,7 @@ const PEARL_COMPONENTS = {
 };
 
 export const Pearl = (props) => {
-  const { shape, surface, HSV, overtone, lustre, size, pearlDna } = props;
+  const { shape, surface, HSV, overtone, lustre, size, pearlDna, glow } = props;
 
   const PearlComponent = PEARL_COMPONENTS[shape] || PEARL_COMPONENTS.default;
   const [bodyColorHSV, overtoneColorHSV] = HSV;
@@ -51,6 +52,14 @@ export const Pearl = (props) => {
 
   const onBeforeCompile = useCallback(getOnBeforeCompile(surface), [surface]);
 
+  const { camera } = useThree();
+  camera.layers.enable(1);
+  const glowMaterial = useMemo(() => glow && getGlowMaterial(camera, color, surface), [glow]);
+  const backGlowMaterial = useMemo(
+    () => glow && getGlowMaterial(camera, color, surface, true, true),
+    [glow]
+  );
+
   useEffect(() => {
     updateMap(map);
     updateEnvMap(envMap);
@@ -69,7 +78,7 @@ export const Pearl = (props) => {
     if (response) {
       let pearlImg = await response.json();
       pearlImg = pearlImg ? pearlImg.img : pearlImg;
-      return pearlImg ? true : false;
+      return !!pearlImg;
     } else {
       return false;
     }
@@ -100,6 +109,8 @@ export const Pearl = (props) => {
         emissive={emissive}
         emissiveIntensity={emissiveIntensity}
         roughness={roughness}
+        glowMaterial={glowMaterial ? glowMaterial : undefined}
+        backGlowMaterial={backGlowMaterial}
       />
     </group>
   );

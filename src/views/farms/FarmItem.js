@@ -1,61 +1,85 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { connect } from "redux-zero/react";
 import clsx from "clsx";
 import { ChainId, useEthers } from "@usedapp/core";
+import BigNumber from "bignumber.js";
 
-import { actions } from "../../store/redux";
-import FarmPearl from "../../assets/img/farm_pearl.png";
+import { actions } from "store/redux";
+import { useTimer } from "../../hooks/useTimer";
+import { secondsToFormattedTime } from "../../utils/time";
 
-import { web3 } from "../../web3";
+import { web3 } from "web3";
 import {
   getRemainingPearlProductionTime,
   collectPearl,
   rngRequestHashForProducedPearl,
   propClamOpenForPearl,
-} from "../../web3/pearlFarm";
-import { canCurrentlyProducePearl, canStillProducePearls } from "../../web3/clam";
+  stakeClam,
+  stakeClamAgain,
+  stakePrice,
+  hasClamBeenStakedBeforeByUser,
+} from "web3/pearlFarm";
+import { canCurrentlyProducePearl, canStillProducePearls } from "web3/clam";
+import { nextPearlId, getPearlData } from "web3/pearl";
+
+import { getBalance, infiniteApproveSpending } from "web3/gem";
+import { approveContractForMaxUintErc721 } from "web3/bep20";
+import { clamNFTAddress, pearlFarmAddress } from "web3/constants";
+import { formatFromWei } from "web3/shared";
+
+import {
+  pearlCollectSuccess,
+  pearlSendToSaferoom,
+  pearlGenerateNew,
+} from "./character/pearlCollection";
+import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
 
 const FarmItem = ({
   clamId,
   img,
+  dna,
   dnaDecoded,
   clamDataValues,
   onViewDetails,
   onWithdrawClam,
   onViewPearl,
+  updateCharacter,
   updateAccount,
+  account: { address },
 }) => {
   const { chainId } = useEthers();
 
   const [inTx, setInTx] = useState(false);
-  const [buttonText, setButtonText] = useState("Can't produce yet");
+  const [action, setAction] = useState("");
+  const [buttonText, setButtonText] = useState("");
   const now = Math.round(new Date().getTime() / 1000);
   const [pearlProductionTime, setPearlProductionTime] = useState("");
-  const [remainingTime, setRemainingTime] = useState("");
   const [canStillProducePearl, setCanStillProducePearl] = useState(false);
   const [canProducePearl, setCanProducePearl] = useState(false);
   const [readyForPearl, setReadyForPearl] = useState(false);
+  const [gemsNeededForPearlProd, setGemsNeededForPearl] = useState(0);
 
+  const calculateTimeLeft = useCallback(() => {
+    const now = Math.round(Date.now() / 1000);
+    return now > pearlProductionTime ? 0 : pearlProductionTime - now;
+  }, [pearlProductionTime]);
+  const { timeLeft } = useTimer(calculateTimeLeft);
   const { pearlProductionStart, pearlProductionCapacity, pearlsProduced } = clamDataValues;
 
   const progress =
-    !+pearlProductionTime || !+remainingTime
+    !+pearlProductionTime || !timeLeft
       ? 100
       : +(
-          ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
-          100
-        ).toFixed(2);
+        ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
+        100
+      ).toFixed(2);
 
   useEffect(() => {
     const init = async () => {
       try {
         const _productionTimeTotal = await getRemainingPearlProductionTime(clamId);
-
         const _pearlProductionTime = +pearlProductionStart + +_productionTimeTotal;
         setPearlProductionTime(_pearlProductionTime);
-
-        const _remainingTime = now > _pearlProductionTime ? 0 : _pearlProductionTime - now;
-        setRemainingTime(_remainingTime);
 
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId);
         setReadyForPearl(!!+rngHashForProducedPearl);
@@ -65,24 +89,35 @@ const FarmItem = ({
 
         const canStillProduce = await canStillProducePearls(clamId);
         setCanStillProducePearl(canStillProduce);
+
+        const priceForPearlInGem = await stakePrice();
+        setGemsNeededForPearl(priceForPearlInGem);
       } catch (err) {
         updateAccount({ error: err.message });
       }
     };
 
     init();
-  }, [inTx]);
+  }, [inTx, address]);
 
   useEffect(() => {
-    if (canProducePearl) setButtonText("Collect Pearl");
-    if (!readyForPearl) setButtonText("Open Clam");
+    setButtonText("Hold on ...");
+    if (canProducePearl) {
+      setButtonText("Collect Pearl");
+      setAction("collect");
+    }
+    if (!readyForPearl) {
+      setButtonText("Open Clam");
+      setAction("open");
+    }
     if (!canStillProducePearl) setButtonText("Can't produce anymore!");
   }, [readyForPearl, canProducePearl, canStillProducePearl]);
 
   const clam = {
-    remainingTime: new Date(+remainingTime * 1000).toISOString().substr(11, 8),
+    remainingFormattedTime: secondsToFormattedTime(timeLeft),
+    remainingTime: timeLeft,
     progress,
-    processing: remainingTime > 0,
+    processing: timeLeft > 0,
     dnaDecoded,
     heading: dnaDecoded.rarity,
     harvestableShell: 1 + pearlsProduced * 0.1,
@@ -105,6 +140,8 @@ const FarmItem = ({
       setInTx(false);
     } catch (err) {
       updateAccount({ error: err.message });
+      setButtonText("Open Clam");
+      setAction("open");
       setInTx(false);
     }
   };
@@ -113,17 +150,57 @@ const FarmItem = ({
     try {
       setInTx(true);
       setButtonText("Hold on ...");
-      await collectPearl(clamId);
-      setInTx(false);
+
+      const pearlId = await nextPearlId();
+      const gems = gemsNeededForPearlProd;
+
+      await collectPearl(clamId).then(async () => {
+        const { dna: pearlDna } = await getPearlData(pearlId);
+        const pearlDnaDecoded = await getPearlDNADecoded(pearlDna);
+
+        const viewPearl = () => {
+          onViewPearl({
+            clamId,
+            dna: pearlDna,
+            dnaDecoded: pearlDnaDecoded,
+            showPearlModal: true,
+          });
+        };
+        // character speaks
+        pearlCollectSuccess({ updateCharacter, viewPearl }, () => {
+          pearlSendToSaferoom({ updateCharacter }, () => {
+            pearlGenerateNew({ updateCharacter, gems: formatFromWei(gems) }, async () => {
+              const pricePerPearlInGem = gemsNeededForPearlProd;
+              const gemBalance = await getBalance(address).then((v) => new BigNumber(v)); // from string to BN
+              if (gemBalance.lt(pricePerPearlInGem))
+                throw new Error(
+                  `You need at least ${formatFromWei(pricePerPearlInGem)} $GEM to stake Clam`
+                );
+              await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
+              await infiniteApproveSpending(address, pearlFarmAddress, pricePerPearlInGem);
+
+              const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
+              if (hasClamBeenStakeByUserBefore) {
+                await stakeClamAgain(clamId);
+              } else {
+                await stakeClam(clamId);
+              }
+            });
+          });
+        });
+        setInTx(false);
+      });
     } catch (err) {
       updateAccount({ error: err.message });
       setInTx(false);
+      setButtonText("Collect Pearl");
+      setAction("collect");
     }
   };
 
   const getClamFunction = () => {
-    if (!readyForPearl) return onClickOpenClam();
-    if (canProducePearl) return onClickCollectPearl();
+    if (action === "open" || !readyForPearl) return onClickOpenClam();
+    if (action === "collect" || canProducePearl) return onClickCollectPearl();
   };
 
   return (
@@ -185,7 +262,7 @@ const FarmItem = ({
                 <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                   Remaining Time
                 </p>
-                <p className="font-bold text-black">{clam.remainingTime}</p>
+                <p className="font-bold text-black">{clam.remainingFormattedTime}</p>
               </div>
               <div className="text-sm block">
                 <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">

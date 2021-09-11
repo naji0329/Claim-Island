@@ -101,14 +101,6 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
       action: "saferoom.connect.text",
       button: {
         text: undefined,
-        // text: "Ok",
-        // alt: {
-        //   action: "cb",
-        //   dismiss: true,
-        //   destination: () => {
-        //     setShowClams(true);
-        //   },
-        // },
       },
     });
   });
@@ -225,9 +217,8 @@ const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
 
       <div className="px-3 py-2 flex justify-between">
         <Link
-          className={`mx-2 px-5 py-6 rounded-xl ${
-            tab === "Clam" ? "bg-blue-400 text-white" : "text-blue-700 bg-grey"
-          }`}
+          className={`mx-2 px-5 py-6 rounded-xl ${tab === "Clam" ? "bg-blue-400 text-white" : "text-blue-700 bg-grey"
+            }`}
           to={`${url}/clam`}
           onClick={() => setTab("Clam")}
         >
@@ -235,9 +226,8 @@ const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
         </Link>
 
         <Link
-          className={`mx-2 px-5 py-6 rounded-xl ${
-            tab === "Pearl" ? "bg-blue-400 text-white" : "text-blue-700"
-          }`}
+          className={`mx-2 px-5 py-6 rounded-xl ${tab === "Pearl" ? "bg-blue-400 text-white" : "text-blue-700"
+            }`}
           to={`${url}/pearl`}
           onClick={() => setTab("Pearl")}
         >
@@ -301,7 +291,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} img={pearl.img}/>
+                  <NFTItem rarity={rarity} shape={shape} img={pearl.img} />
                 </div>
               );
             })}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 
@@ -32,6 +32,11 @@ const CharacterSpeak = (props) => {
   const [speech, setSpeech] = useState(speechTrack[trackCount].text);
   const [buttonNextText, setButtonNextText] = useState(btnTrack[trackCount].next);
   const [buttonAltText, setButtonAltText] = useState(btnTrack[trackCount].alt.text);
+
+  const btnAlt = useRef();
+  const btnNext = useRef();
+  const characterImg = useRef();
+  const characterWrap = useRef();
   /*
     useEffect(()=>{
       if(!props.web3) {
@@ -45,18 +50,17 @@ const CharacterSpeak = (props) => {
     let timeOut = 0;
     if (speechTrack[trackCount].dismiss && !direct) {
       setShowBubble(false);
-      const characterImg = document.querySelector(".character");
-      characterImg.style.marginTop = characterImg.offsetHeight - 76 + "px";
+      characterImg.current.style.marginTop = characterImg.current.offsetHeight - 76 + "px";
       switch (charName) {
         case "Tanja":
-          characterImg.style.paddingRight = "15px";
+          characterImg.current.style.paddingRight = "15px";
           break;
         case "Diego":
-          characterImg.style.paddingLeft = "5px";
+          characterImg.current.style.paddingLeft = "5px";
           break;
       }
-      document.querySelector(".character-wrap .character").style.pointerEvents = "auto";
-      document.querySelector(".character-wrap .character").style.cursor = "pointer";
+      characterWrap.current.style.pointerEvents = "auto";
+      characterWrap.current.style.cursor = "pointer";
       timeOut = 1000;
     }
     if (speechTrack[trackCount].next) {
@@ -69,31 +73,31 @@ const CharacterSpeak = (props) => {
             setSpeech(speechTrack[speechTrack[trackCount].next].text);
             setTrackCount(speechTrack[trackCount].next);
             if (btnTrack[speechTrack[trackCount].next].next) {
-              document.querySelector("#btn-next").style.display = "block";
+              btnNext.current.style.display = "block";
               setButtonNextText(btnTrack[speechTrack[trackCount].next].next);
             } else {
-              document.querySelector("#btn-next").style.display = "none";
+              btnNext.current.style.display = "none";
             }
             if (btnTrack[speechTrack[trackCount].next].alt) {
-              document.querySelector("#btn-alt").style.display = "block";
+              btnAlt.current.style.display = "block";
               setButtonAltText(btnTrack[speechTrack[trackCount].next].alt.text);
             } else {
-              document.querySelector("#btn-alt").style.display = "none";
+              btnAlt.current.style.display = "none";
             }
           } else {
             setSpeech(speechTrack[trackCount].text);
 
             if (btnTrack[trackCount].next) {
-              document.querySelector("#btn-next").style.display = "block";
+              btnNext.current.style.display = "block";
               setButtonNextText(btnTrack[trackCount].next);
             } else {
-              document.querySelector("#btn-next").style.display = "none";
+              btnNext.current.style.display = "none";
             }
             if (btnTrack[trackCount].alt) {
-              document.querySelector("#btn-alt").style.display = "block";
+              btnAlt.current.style.display = "block";
               setButtonAltText(btnTrack[trackCount].alt.text);
             } else {
-              document.querySelector("#btn-alt").style.display = "none";
+              btnAlt.current.style.display = "none";
             }
           }
         }
@@ -213,7 +217,7 @@ const CharacterSpeak = (props) => {
       //setButtonText(btnTrack[trackCount+1]);
       //const newCount = trackCount + 1;
       //setTrackCount(newCount);
-      document.querySelector(".character-wrap .character").style.marginTop = "0px";
+      characterWrap.current.style.marginTop = "0px";
     } else {
     }
   };
@@ -233,10 +237,15 @@ const CharacterSpeak = (props) => {
           ["shell_voting", "shell_voted_already", "shell_voting_complete"].indexOf(props.speech) ===
             -1 ? (
             <div className="buttons">
-              <button className="btn character-btn" id="btn-alt" onClick={onClickAlt}>
+              <button className="btn character-btn" id="btn-alt" ref={btnAlt} onClick={onClickAlt}>
                 {buttonAltText}
               </button>
-              <button className="btn character-btn" id="btn-next" onClick={(e) => onClickNext()}>
+              <button
+                className="btn character-btn"
+                id="btn-next"
+                ref={btnNext}
+                onClick={() => onClickNext()}
+              >
                 {buttonNextText}
               </button>
             </div>
@@ -247,14 +256,13 @@ const CharacterSpeak = (props) => {
       </div>
 
       <div className="character-container">
-        <div className="character-wrap">
+        <div className="character-wrap" ref={characterWrap}>
           <img src={charImg} className="character" onClick={onClickCharacter} />
         </div>
       </div>
       <button className="btn character-container-round" onClick={onClickCharacter}>
-        <img src={charImg} className="character" />
+        <img src={charImg} className="character" ref={characterImg} />
       </button>
-
     </div>
   );
 };

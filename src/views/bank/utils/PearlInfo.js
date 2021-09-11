@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { burnPearl } from "../../../web3/pearlBurner";
-import NFTUnknown from "../../../assets/img/pearl_unknown.png";
+import { burnPearl } from "web3/pearlBurner";
+import NFTUnknown from "assets/img/pearl_unknown.png";
 
 const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker, showBurn }) => {
   const hours = 720; // hours in 30 days

@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
 import { ChainId, useEthers } from "@usedapp/core";
 
-import { actions } from "../../store/redux";
-import videoImage from "../../assets/locations/Bank.jpg";
-import videoMp4 from "../../assets/locations/Bank.mp4";
-import videoWebM from "../../assets/locations/Bank.webm";
+import { actions } from "store/redux";
+import videoImage from "assets/locations/Bank.jpg";
+import videoMp4 from "assets/locations/Bank.mp4";
+import videoWebM from "assets/locations/Bank.webm";
 
 import { WalletConnectAndAssist } from "./character/WalletConnectAndAssist";
-import Character from "../../components/characters/CharacterWrapper";
-import Web3Navbar from "../../components/Web3Navbar";
-import VideoBackground from "../../components/VideoBackground";
-import { Modal, useModal } from "../../components/Modal";
+import Character from "components/characters/CharacterWrapper";
+import Web3Navbar from "components/Web3Navbar";
+import VideoBackground from "components/VideoBackground";
+import { Modal, useModal } from "components/Modal";
 
-import { web3 } from "../../web3";
+import { web3 } from "web3";
 import {
   getPoolsLength,
   prepGetPoolInfoForMulticall,
@@ -25,9 +25,9 @@ import {
   updatePool,
   getStartBlock,
   getTokenSupplies,
-} from "../../web3/bank";
-import { aggregate } from "../../web3/multicall";
-import { formatFromWei } from "../../web3/shared";
+} from "web3/bank";
+import { aggregate } from "web3/multicall";
+import { formatFromWei } from "web3/shared";
 
 import "./bank.scss";
 import PoolItem from "./PoolItem";
