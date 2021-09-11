@@ -4,6 +4,7 @@ import { connect } from "redux-zero/react";
 import { actions } from "../../store/redux";
 import classnames from "classnames";
 import { useEthers } from "@usedapp/core";
+import { formatEther } from "@ethersproject/units";
 
 import { pendingGem, gemPerBlock } from "../../web3/bank";
 import { hasMaxUintAllowanceBank } from "../../web3/bep20";
@@ -14,6 +15,9 @@ import PoolDepositWithdraw from "./utils/PoolDepositWithdraw";
 import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
 
 import { gemTokenAddress } from "../../web3/constants";
+
+import InfoTooltip from "../../components/InfoTooltip";
+import Tooltip from "../../components/Tooltip";
 
 const PoolItem = ({
   account: { address },
@@ -143,17 +147,35 @@ const PoolItem = ({
           {/* <div className="badge badge-warning">Medium risk</div> */}
 
           <div className="text-sm block">
-            <p className={riskStyle}>{pool.risk}</p>
+            <Tooltip text="Relative to other investment pools - higher means more risk of capital value fluctuation">
+              <p className={riskStyle}>{pool.risk}</p>
+            </Tooltip>
           </div>
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Reward Share</p>
-            <p className="font-bold text-black text-center">{pool.multiplier}%</p>
+            <p className="font-bold text-black text-center">
+              {pool.multiplier}%
+              <InfoTooltip text="The share of overall rewards allocated to this pool" />
+            </p>
           </div>
 
           <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">APR</p>
-            <p className="font-bold text-black">
-              {selectedPool && <>{String(selectedPool.apr)}%</>}
+            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none text-center">APR</p>
+
+            <p className="font-bold text-black items-center">
+              {selectedPool ? `${String(selectedPool.apr)}%` : `${String(apr)}%`}
+              <InfoTooltip text="Annual Percentage Return - non-compounded rate of return" />
+            </p>
+          </div>
+
+          <div className="text-sm block">
+            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none text-center">TVL</p>
+            <p className="font-bold text-black text-center">
+              {formatEther(
+                selectedPool ? selectedPool.poolLpTokenBalance : pool.poolLpTokenBalance
+              )}{" "}
+              GEM
+              <InfoTooltip text="Total Value Locked - the value of deposits in this pool" />
             </p>
           </div>
 
