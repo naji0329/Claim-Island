@@ -32,12 +32,13 @@ const CLAM_COMPONENTS = {
 const DefaultClam = () => null;
 
 export const Clam = (props) => {
-  const { clamType, tongueType, textures, clamDna } = props;
+  const { clamType, tongueType, textures, clamDna, size = 100 } = props;
 
   const ClamComponent = CLAM_COMPONENTS[clamType] || DefaultClam;
   const groupMesh = useRef();
   const { gl: canvasGl } = useThree();
   const [rotate, startRotation] = useState(false);
+  const scaleFactor = (size / 100) * 0.5 + 0.5;
 
   useEffect(() => {
     renderImg();
@@ -75,7 +76,7 @@ export const Clam = (props) => {
 
   return (
     <>
-      <group ref={groupMesh} position={[0, -0.02, -0.05]}>
+      <group ref={groupMesh} position={[0, -0.02, -0.05]} scale={scaleFactor}>
         <group position={[0, 0, 0.1]}>
           <ClamComponent tongueType={tongueType} textures={textures} />
         </group>

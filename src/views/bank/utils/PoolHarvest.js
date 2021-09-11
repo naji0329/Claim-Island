@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { get } from "lodash";
 import { formatNumber } from ".";
-
+import { connect } from "redux-zero/react";
+import { actions } from "../../../store/redux";
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
@@ -11,9 +12,8 @@ import {
 import { harvest } from "../../../web3/bank";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
-const PoolHarvest = ({ useSharedState, updateCharacter, toggleModal }) => {
-  const [state] = useSharedState();
-  const isNativePool = state.pool && state.pool.isNative;
+const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, updateAccount, toggleModal }) => {
+  const isNativePool = selectedPool && selectedPool.isNative;
   const [pearlBoostYield, setPearlBoostYield] = useState(false);
 
   const handleHarvest = async () => {
@@ -29,10 +29,10 @@ const PoolHarvest = ({ useSharedState, updateCharacter, toggleModal }) => {
   const executeHarvest = async () => {
     onDepositHarvestTxn(updateCharacter);
     try {
-      await harvest(state.pool.poolId);
+      await harvest(selectedPool.poolId);
       onDepositHarvestSuccess(updateCharacter);
     } catch (error) {
-      state.updateAccount({ error: error.message });
+      updateAccount({ error: error.message });
       onDepositHarvestError(updateCharacter);
     }
   };
@@ -71,7 +71,7 @@ const PoolHarvest = ({ useSharedState, updateCharacter, toggleModal }) => {
             </div>
 
             <div className="mx-2 text-4xl">
-              {formatNumber(+get(state, "pool.userRewardAmountInPool", "0.0"), 3)}
+              {formatNumber(+get(selectedPool, "userRewardAmountInPool", "0.0"), 3)}
             </div>
             <div className="mx-2 text-xl">GEM</div>
             {/* TODO convert GEM to dola */}
@@ -89,4 +89,6 @@ const PoolHarvest = ({ useSharedState, updateCharacter, toggleModal }) => {
     </div>
   );
 };
-export default PoolHarvest;
+
+const mapToProps = (state) => state;
+export default connect(mapToProps, actions)(PoolHarvest);

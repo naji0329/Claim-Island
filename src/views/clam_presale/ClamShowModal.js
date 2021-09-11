@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-// import { useForm } from "react-hook-form";
-// import { useAsync } from "react-use";
 import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 
 import "./index.scss";
 
 import Card from "../../components/Card";
-import Clams3D from "../../components/three/3DClams/3DClams";
 
 import { clamNFTAddress } from "../../web3/constants";
 import clamContract from "../../web3/clam";
 import { actions } from "../../store/redux";
 import { getDNADecoded } from "../../web3/dnaDecoder";
+import { Clam3DView } from "../../components/clam3DView";
 
 const ClamShowModal = ({
   setShowMintModal,
@@ -96,12 +94,11 @@ const ClamShowModal = ({
 
           <div className="bg-white flex-1 justify-center md:flex items-center h-full">
             {clamDna && (
-              <Clams3D
+              <Clam3DView
                 width={400}
                 height={400}
                 clamDna={clamDna}
                 decodedDna={clamDnaDecoded}
-                showTraitsTable={true}
               />
             )}
             {isLoading && (

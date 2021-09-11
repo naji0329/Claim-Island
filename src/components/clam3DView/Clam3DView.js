@@ -1,12 +1,12 @@
 import { memo, useEffect, useState } from "react";
+import { connect } from "redux-zero/react";
 import * as THREE from "three";
 
 import { ClamScene } from "./ClamScene";
 import { Clam } from "../clams/Clam";
 import { Loading3DView } from "../Loading3DView";
 import { loadAllTextures, getClamDir } from "../../utils/konva";
-import decodeDna from "../three/3DClams/decodeDna";
-import { connect } from "redux-zero/react";
+import { decodeDna } from "../../utils/decodeDna";
 import { actions } from "../../store/redux";
 
 const Clam3DViewComponent = memo((props) => {
@@ -58,11 +58,10 @@ const Clam3DViewComponent = memo((props) => {
             clamType={clamType}
             tongueType={tongueType}
             textures={textures}
+            size={traits.size}
           />
-        ) }
-        {!textures && (
-          <Loading3DView />
         )}
+        {!textures && <Loading3DView />}
       </ClamScene>
     </div>
   );

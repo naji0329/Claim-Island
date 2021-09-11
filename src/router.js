@@ -4,7 +4,6 @@ import Bank from "./views/bank/Bank";
 import ClamPresale from "./views/clam_presale";
 import Shop from "./views/shop";
 import ClamClaimer from "./views/clam_claimers";
-// import ClamViewer from "./views/clam_viewer/ClamViewer";
 import Saferoom from "./views/saferoom/Saferoom";
 // import Vault from "./views/vault/Vault";
 // import ShellPresale from "./views/shell_presale";
@@ -23,7 +22,6 @@ const ROUTES = [
   { title: "Clam Presale", url: "/clam-presale", component: ClamPresale, exact: true },
   { title: "Shop", url: "/shop", component: Shop, exact: true, icon: "shop.svg", order: 5 },
   { title: "Clam Claimer", url: "/clam-claimer", component: ClamClaimer, exact: true },
-  // { title: "Clam Viewer", url: "/clam-viewer", component: ClamViewer },
   // TODOs
   { title: "Farms", url: "/farms", component: Farms, exact: true, icon: "farm.svg", order: 3 },
   { title: "Bank", url: "/bank", component: Bank, exact: true, icon: "bank.svg", order: 2 },
