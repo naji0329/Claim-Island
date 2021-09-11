@@ -1,9 +1,13 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Clam3DView } from "../../components/clam3DView";
 import FarmPearl from "../../assets/img/farm_pearl.png";
+import { secondsToFormattedTime } from "../../utils/time";
 
 const PearlDetails = ({ clam, clamProcessing }) => {
   console.log(clamProcessing);
+  const [timeLeft, setTimeLeft] = useState(clamProcessing.remainingTime || 0);
+  const remainingFormattedTime = secondsToFormattedTime(timeLeft);
   const pearls = [
     {
       gemHr: "13",
@@ -12,6 +16,14 @@ const PearlDetails = ({ clam, clamProcessing }) => {
       bodyColor: "Blue",
     },
   ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timeLeft]);
+
   return (
     <div className="PearlDetails flex flex-row">
       <div className="flex flex-1 flex-col">
@@ -26,7 +38,7 @@ const PearlDetails = ({ clam, clamProcessing }) => {
 
         <div className="flex flex-row justify-between my-2" style={{ maxWidth: "400px" }}>
           <p className="float-left">Remaining Time</p>
-          <p className="float-right">{clamProcessing.remainingTime}</p>
+          <p className="float-right">{remainingFormattedTime}</p>
         </div>
       </div>
       <div className="flex flex-1 flex-col">

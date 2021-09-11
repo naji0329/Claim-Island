@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { connect } from "redux-zero/react";
 import clsx from "clsx";
 import { ChainId, useEthers } from "@usedapp/core";
 import BigNumber from "bignumber.js";
 
 import { actions } from "store/redux";
+import { useTimer } from "../../hooks/useTimer";
+import { secondsToFormattedTime } from "../../utils/time";
 
 import { web3 } from "web3";
 import {
@@ -52,16 +54,20 @@ const FarmItem = ({
   const [buttonText, setButtonText] = useState("");
   const now = Math.round(new Date().getTime() / 1000);
   const [pearlProductionTime, setPearlProductionTime] = useState("");
-  const [remainingTime, setRemainingTime] = useState("");
   const [canStillProducePearl, setCanStillProducePearl] = useState(false);
   const [canProducePearl, setCanProducePearl] = useState(false);
   const [readyForPearl, setReadyForPearl] = useState(false);
   const [gemsNeededForPearlProd, setGemsNeededForPearl] = useState(0);
 
+  const calculateTimeLeft = useCallback(() => {
+    const now = Math.round(Date.now() / 1000);
+    return now > pearlProductionTime ? 0 : pearlProductionTime - now;
+  }, [pearlProductionTime]);
+  const { timeLeft } = useTimer(calculateTimeLeft);
   const { pearlProductionStart, pearlProductionCapacity, pearlsProduced } = clamDataValues;
 
   const progress =
-    !+pearlProductionTime || !+remainingTime
+    !+pearlProductionTime || !timeLeft
       ? 100
       : +(
         ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
@@ -72,12 +78,8 @@ const FarmItem = ({
     const init = async () => {
       try {
         const _productionTimeTotal = await getRemainingPearlProductionTime(clamId);
-
         const _pearlProductionTime = +pearlProductionStart + +_productionTimeTotal;
         setPearlProductionTime(_pearlProductionTime);
-
-        const _remainingTime = now > _pearlProductionTime ? 0 : _pearlProductionTime - now;
-        setRemainingTime(_remainingTime);
 
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId);
         setReadyForPearl(!!+rngHashForProducedPearl);
@@ -112,9 +114,10 @@ const FarmItem = ({
   }, [readyForPearl, canProducePearl, canStillProducePearl]);
 
   const clam = {
-    remainingTime: new Date(+remainingTime * 1000).toISOString().substr(11, 8),
+    remainingFormattedTime: secondsToFormattedTime(timeLeft),
+    remainingTime: timeLeft,
     progress,
-    processing: remainingTime > 0,
+    processing: timeLeft > 0,
     dnaDecoded,
     heading: dnaDecoded.rarity,
     harvestableShell: 1 + pearlsProduced * 0.1,
@@ -259,7 +262,7 @@ const FarmItem = ({
                 <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                   Remaining Time
                 </p>
-                <p className="font-bold text-black">{clam.remainingTime}</p>
+                <p className="font-bold text-black">{clam.remainingFormattedTime}</p>
               </div>
               <div className="text-sm block">
                 <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
