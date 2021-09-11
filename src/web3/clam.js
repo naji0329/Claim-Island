@@ -258,7 +258,7 @@ export const decodeProducedPearlIdsFromMulticall = (values, tokenIds) => {
   for (let index = 0; index < values.length; index++) {
     result.push({
       clamId: tokenIds[index],
-      pearlsProduced: web3.eth.abi.decodeParameter("uint256[]", values[index]),
+      producedPearlIds: web3.eth.abi.decodeParameter("uint256[]", values[index]),
     });
   }
 

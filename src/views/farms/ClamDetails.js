@@ -1,21 +1,32 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useEthers } from "@usedapp/core";
 import { Clam3DView } from "../../components/clam3DView";
-import FarmPearl from "../../assets/img/farm_pearl.png";
+import { getPearlDataByIds } from "../../web3/shared";
+import PearlInfo from "../bank/utils/PearlInfo";
 
-const ClamDetails = ({ clam, clamProcessing }) => {
-  console.log(clamProcessing);
-  const pearls = [
-    {
-      gemHr: "13",
-      duration: 24,
-      shape: "round",
-      bodyColor: "Blue",
-    },
-  ];
+const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
+  const [producedPearls, setProducedPearls] = useState([]);
+  const { chainId } = useEthers();
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const pearls = await getPearlDataByIds(clam.producedPearlIds, chainId);
+        setProducedPearls(pearls);
+      } catch (err) {
+        updateAccount({ error: err.message });
+      }
+    };
+
+    init();
+  }, []);
+
   return (
     <div className="ClamDetails flex flex-row">
-      <div className="flex flex-1 flex-col">
-        <p className="font-extrabold text-green-600 text-center font-avenir">{clam.heading}</p>
+      <div className="flex flex-1 flex-col items-center">
+        <p className="font-extrabold text-green-600 text-center text-lg font-avenir mb-2">
+          {clamProcessing.heading}
+        </p>
         <Clam3DView
           width={400}
           height={400}
@@ -24,13 +35,13 @@ const ClamDetails = ({ clam, clamProcessing }) => {
           showTraitsTable={false}
         />
 
-        <div className="flex flex-row justify-between my-2" style={{ maxWidth: "400px" }}>
+        <div className="flex flex-row justify-between my-2" style={{ width: "400px" }}>
           <p className="float-left">Remaining Time</p>
           <p className="float-right">{clamProcessing.remainingTime}</p>
         </div>
       </div>
       <div className="flex flex-1 flex-col">
-        <div className="detail-box general-stats">
+        <div className="detail-box">
           <h1 className="heading">General Stats</h1>
           <div className="grid md:grid-cols-2 md:grid-rows-2 gap-1 mt-2">
             <div>Harvestable $SHELL</div>
@@ -40,37 +51,11 @@ const ClamDetails = ({ clam, clamProcessing }) => {
           </div>
         </div>
 
-        <div className="detail-box produced-pearls">
+        <div className="detail-box mt-4 overflow-y-auto" style={{ maxHeight: "20rem" }}>
           <h1 className="heading">Produced Pearls</h1>
           <div className="flex flex-col gap-2">
-            {pearls.map((k, i) => (
-              <div key={i} className="flex flex-row">
-                <div className="w-1/2">
-                  <img className="w-full p-4" src={FarmPearl} />
-                </div>
-
-                <div className="details flex flex-1 flex-col">
-                  <div className="grid md:grid-cols-2 md:grid-rows-4 gap-1 flex items-center">
-                    <div className="grid-title">$GEM/hr</div>
-                    <div className="grid-value">{k.gemHr}</div>
-                    <div className="grid-title">Duration (hrs):</div>
-                    <div className="grid-value">{k.duration}</div>
-                    <div className="grid-title">Shape:</div>
-                    <div className="grid-value">{k.shape}</div>
-                    <div className="grid-title">Body color:</div>
-                    <div className="grid-value">{k.bodyColor}</div>
-                  </div>
-                  <div className="flex flex-col">
-                    <Link
-                      to={"/saferoom/pearl"}
-                      className="font-montserrat underline"
-                      style={{ color: "#757575" }}
-                    >
-                      View in saferoom
-                    </Link>
-                  </div>
-                </div>
-              </div>
+            {producedPearls.map((pearl, i, a) => (
+              <PearlInfo key={i} pearl={pearl} isLast={i === a.length - 1} />
             ))}
           </div>
         </div>

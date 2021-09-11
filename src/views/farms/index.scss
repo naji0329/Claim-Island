@@ -75,11 +75,11 @@
 
 .ClamDetails {
   .heading {
-    @apply font-extrabold text-black font-avenir;
+    @apply font-extrabold text-black font-avenir text-xl mb-2;
   }
 
   .detail-box {
-    @apply bg-gray-300 rounded-xl p-4 mt-4;
+    @apply bg-gray-300 rounded-xl p-4;
   }
 
   .grid-value {

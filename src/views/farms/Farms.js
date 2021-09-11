@@ -34,7 +34,7 @@ import { toast } from "react-toastify";
 
 const MODAL_OPTS = {
   DEPOSIT_CLAM: "depositClam",
-  PEARL_DETAILS: "clamDetails",
+  CLAM_DETAILS: "clamDetails",
 };
 
 import { useEthers } from "@usedapp/core";
@@ -67,10 +67,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   };
 
   // when "View Pearl" is clicked - open the modal for the selected pearl
-  const onViewDetails = (clam, clamProcessing, index) => {
+  const onViewDetails = (clam, clamProcessing) => {
     setClamProcessing(clamProcessing);
     setSelectedClam(clam);
-    setModal(MODAL_OPTS.PEARL_DETAILS);
+    setModal(MODAL_OPTS.CLAM_DETAILS);
     toggleModal();
   };
 
@@ -153,8 +153,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       );
       if (sameClamDna && sameClamPearlsProduced) {
         const dnaDecoded = sameClamDna.dnaDecodedValues;
-        const pearlsProduced = sameClamPearlsProduced.pearlsProduced;
-        return { ...clam, dnaDecoded, pearlsProduced };
+        const producedPearlIds = sameClamPearlsProduced.producedPearlIds;
+        return { ...clam, dnaDecoded, producedPearlIds };
       }
       console.error(`Clam ${clam.clamId} from ${address} not found`);
     });
@@ -262,10 +262,14 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       <Modal
         isShowing={isShowing}
         onClose={toggleModal}
-        width={modalSelected === MODAL_OPTS.PEARL_DETAILS ? "60rem" : "30rem"}
+        width={modalSelected === MODAL_OPTS.CLAM_DETAILS ? "60rem" : "30rem"}
       >
-        {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
-          <ClamDetails clam={selectedClam} clamProcessing={clamProcessing} />
+        {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
+          <ClamDetails
+            clam={selectedClam}
+            clamProcessing={clamProcessing}
+            updateAccount={updateAccount}
+          />
         ) : (
           <ClamDeposit clams={clams} />
         )}
