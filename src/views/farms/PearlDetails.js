@@ -50,7 +50,7 @@ const PearlDetails = ({ clam, clamProcessing }) => {
                 </div>
 
                 <div className="details flex flex-1 flex-col">
-                  <div className="grid md:grid-cols-2 md:grid-rows-4 gap-1 flex items-center">
+                  <div className="grid md:grid-cols-2 md:grid-rows-4 gap-1 items-center">
                     <div className="grid-title">$GEM/hr</div>
                     <div className="grid-value">{k.gemHr}</div>
                     <div className="grid-title">Duration (hrs):</div>

@@ -520,6 +520,16 @@
         "internalType": "uint256",
         "name": "pearlsRemaining",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint8[10]",
+        "name": "pearlBodyColorNumber",
+        "type": "uint8[10]"
+      },
+      {
+        "internalType": "uint8[6]",
+        "name": "pearlShapeNumber",
+        "type": "uint8[6]"
       }
     ],
     "name": "mint",
@@ -535,6 +545,19 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nextPearlId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

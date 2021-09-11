@@ -38,6 +38,7 @@ const initialState = {
   character: {
     name: undefined,
     action: undefined,
+    variables: {},
     show: undefined, // true or false
     button: {
       text: undefined,
