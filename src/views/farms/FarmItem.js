@@ -64,9 +64,9 @@ const FarmItem = ({
     !+pearlProductionTime || !+remainingTime
       ? 100
       : +(
-          ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
-          100
-        ).toFixed(2);
+        ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
+        100
+      ).toFixed(2);
 
   useEffect(() => {
     const init = async () => {
@@ -163,6 +163,7 @@ const FarmItem = ({
             showPearlModal: true,
           });
         };
+        // character speaks
         pearlCollectSuccess({ updateCharacter, viewPearl }, () => {
           pearlSendToSaferoom({ updateCharacter }, () => {
             pearlGenerateNew({ updateCharacter, gems: formatFromWei(gems) }, async () => {
