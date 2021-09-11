@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { get } from "lodash";
 import { connect } from "redux-zero/react";
-import { actions } from "../../../store/redux";
+import { actions } from "store/redux";
 
-import { withdraw } from "../../../web3/bank";
-import { formatToWei } from "../../../web3/shared";
+import { withdraw } from "web3/bank";
+import { formatToWei } from "web3/shared";
 
 import { useForm } from "react-hook-form";
 import BigNumber from "bignumber.js";

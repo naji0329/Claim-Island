@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { bankAddress, wBNB } from "../../../web3/constants";
-import { formatFromWei } from "../../../web3/shared";
-import { balanceOf } from "../../../web3/bep20";
-import pancake from "../../../web3/pancake";
+import { bankAddress, wBNB } from "web3/constants";
+import { formatFromWei } from "web3/shared";
+import { balanceOf } from "web3/bep20";
+import pancake from "web3/pancake";
+import InfoTooltip from "components/InfoTooltip";
 
 // prevent rounding up
 export const formatNumber = (number, decimals) => {
@@ -13,7 +14,7 @@ export const formatNumber = (number, decimals) => {
 
 // get the pancakeswap exchange url
 export const exchangeUrl = async ({ isSingleStake, tokenAddress }) => {
-  if(tokenAddress) {
+  if (tokenAddress) {
     if (isSingleStake) return `https://pancakeswap.finance/swap?outputCurrency=${tokenAddress}`;
     let [token0, token1] = await pancake.getLPTokens(tokenAddress);
     token0 = token0 === wBNB ? "BNB" : token0;
@@ -24,7 +25,7 @@ export const exchangeUrl = async ({ isSingleStake, tokenAddress }) => {
 
 // get a formatted balance
 export const getBalancesFormatted = async (account, lpToken, isSingleStake) => {
-  if(lpToken) {
+  if (lpToken) {
     if (isSingleStake) {
       const balance = await balanceOf(lpToken, account);
       return [formatFromWei(balance), null, null];
@@ -42,16 +43,31 @@ export const getBalancesFormatted = async (account, lpToken, isSingleStake) => {
 };
 
 // POOL DATA component
-export const PoolData = ({ depositFee, urlForExchange }) => {
+export const PoolData = ({ depositFee, urlForExchange, tvl }) => {
+  const [tvlFmtd, setTVL] = useState('');
+
+  useEffect(() => {
+    const formattedTvl = `$ ${(+tvl).toFixed(2)}`;
+    setTVL(formattedTvl);
+  }, [tvl]);
+
+
   return (
     <div className="w-full px-2">
-      {/* <div className="flex flex-row justify-between">
-        <p className="text-gray-500 font-semibold">TVL:</p>
-        <p className="font-bold text-black text-center">$5,006,710</p>
-      </div> */}
       <div className="flex flex-row justify-between">
         <p className="text-gray-500 font-semibold">Deposit fee:</p>
-        <p className="font-bold text-black text-center">{depositFee}%</p>
+        <p className="font-bold text-black text-center">
+          {depositFee}
+        </p>
+      </div>
+      <div className="flex flex-row justify-between">
+        <div className="text-gray-500 font-semibold">
+          TVL:
+          <InfoTooltip text="Total Value Locked - the value of deposits in this pool" />
+        </div>
+        <div className="font-bold text-black text-center">
+          {tvlFmtd}
+        </div>
       </div>
       <div className="flex">
         <a
