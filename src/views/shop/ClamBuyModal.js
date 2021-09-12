@@ -8,7 +8,6 @@ import "./index.scss";
 import { sleep } from "../../utils/time";
 import Card from "../../components/Card";
 import ClamUnknown from "../../assets/img/clam_unknown.png";
-import HatchingClam from "../../assets/hatching-clam.png";
 import ClamIcon from "../../assets/clam-icon.png";
 import ArrowDown from "../../assets/img/arrow-down.svg";
 
@@ -83,11 +82,11 @@ const ClamBuyModal = ({
         {showHatching && (
           <div className="flex flex-col mb-4">
             <div className="bg-white flex-1 justify-center  md:flex items-center">
-              <img src={HatchingClam} width="300" />
+              <img src={ClamUnknown} width="300" />
             </div>
-            <h2 className="text-blue-700 text-center font-semibold text-3xl mb-2">
-              New Clam is hatching
-            </h2>
+            <div className="block text-white text-center shadow text-xl py-3 px-10 rounded-xl bg-gray-600">
+              Fetching your clam...
+            </div>
           </div>
         )}
         {!showHatching && (
@@ -221,12 +220,12 @@ const ClamBuyModal = ({
                           r="10"
                           stroke="currentColor"
                           strokeWidth="4"
-                        ></circle>
+                        />
                         <path
                           className="opacity-75"
                           fill="currentColor"
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
+                        />
                       </svg>{" "}
                       <span>Sending transaction...</span>
                     </button>
