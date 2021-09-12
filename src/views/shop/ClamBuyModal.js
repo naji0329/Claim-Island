@@ -5,16 +5,16 @@ import { connect } from "redux-zero/react";
 import { formatUnits } from "@ethersproject/units";
 import "./index.scss";
 
-import { sleep } from "../../utils/time";
-import Card from "../../components/Card";
-import ClamUnknown from "../../assets/img/clam_unknown.png";
-import ClamIcon from "../../assets/clam-icon.png";
-import ArrowDown from "../../assets/img/arrow-down.svg";
+import { sleep } from "utils/time";
+import Card from "components/Card";
+import ClamUnknown from "assets/img/clam_unknown.png";
+import ClamIcon from "assets/clam-icon.png";
+import ArrowDown from "assets/img/arrow-down.svg";
 
-import { buyClam, getPrice } from "../../web3/clam";
-import { infiniteApproveSpending } from "../../web3/gem";
-import { clamShopAddress } from "../../web3/constants";
-import { actions } from "../../store/redux";
+import { buyClam, getPrice, canUnlockGemVestedAmount } from "web3/clam";
+import { infiniteApproveSpending } from "web3/gem";
+import { clamShopAddress } from "web3/constants";
+import { actions } from "store/redux";
 
 import { buyClamError, buyClamSuccess, buyClamProcessing } from "./character/BuyClam";
 
@@ -34,19 +34,21 @@ const ClamBuyModal = ({
   setModalToShow,
 }) => {
   const INDIVIDUAL_CAP = 5;
-  const [isLoading, setIsLoading] = useState(false);
-  const [showHatching, setShowHatching] = useState(false);
   const disableButton = usersPurchasedClam >= INDIVIDUAL_CAP;
 
-  const { register, handleSubmit } = useForm();
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [showHatching, setShowHatching] = useState(false);
   const [clamPrice, setClamPrice] = useState(0);
+  const [lockedGem, setLockedGem] = useState(0);
+
+  const { register, handleSubmit } = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
       const price = await getPrice();
       setClamPrice(price);
-      console.log(price);
+      const locked = await canUnlockGemVestedAmount(address);
+      setLockedGem(locked);
     };
     fetchData();
   }, []);
@@ -143,14 +145,23 @@ const ClamBuyModal = ({
                           <input
                             disabled
                             value={formatUnits(clamPrice, 18)}
-                            className="bg-gray-100 text-center text-xl w-20  text-black p-2 font-normal rounded  border-none  font-extrabold"
+                            className="bg-gray-100 text-center text-xl w-20 text-black p-2 font-normal rounded border-none font-extrabold"
                             {...register("input", { required: true })}
                           />
-                          <span className="flex items-center  px-3 text-lg font-extrabold font-sans mx-1">
+                          <span className="flex items-center text-lg font-extrabold font-sans mx-1">
                             GEM
                           </span>
                         </div>
-                        <span className="my-2">{gemBalance} GEM available</span>
+                        <div className="flex flex-col my-2 ml-8 w-1/2">
+                          <div className="flex justify-between">
+                            <span>Wallet:</span>
+                            <span>{gemBalance} GEM</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Vested:</span>
+                            <span>{formatUnits(lockedGem, 18)} GEM</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
