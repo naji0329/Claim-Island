@@ -80,10 +80,12 @@ export const harvestChooseClams = ({ updateCharacter, setModalToShow }) => {
       },
     },
     buttonAlt: {
-      text: "Back to Island",
+      text: "Choose Clam for Harvesting.",
       alt: {
-        action: "internal",
-        destination: "/",
+        action: "cb",
+        destination: () => {
+          setModalToShow("harvest");
+        },
       },
     },
   });

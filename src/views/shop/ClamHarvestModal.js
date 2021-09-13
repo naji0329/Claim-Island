@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { formatUnits } from "@ethersproject/units";
 import { Link } from "react-router-dom";
+import NFTUnknown from "assets/img/clam_unknown.png";
 
 import {
   getClamByIndex,
@@ -22,6 +23,7 @@ import Card from "../../components/Card";
 import ClamPic from "../../assets/collect-clam.png";
 import { actions } from "../../store/redux";
 import { get } from "lodash";
+import { Modal, useModal } from "components/Modal";
 
 import {
   harvestClamSpeak,
@@ -34,24 +36,33 @@ import {
 const formatShell = (value) => (value ? formatUnits(value, 18) : "0");
 
 const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
-  const { dnaDecoded, tokenId } = clam;
+  const { dnaDecoded, tokenId, img } = clam;
   return (
-    <div className="bg-white flex-1 justify-center  md:flex items-center p-4">
-      <div className="mr-4">
-        <img src={ClamPic} width="50" />
-        <div>{get(dnaDecoded, "rarity")}</div>
+    <div className="clam-details">
+      <div className="w-1/2">
+        <img className="w-full p-4" src={img} />
       </div>
-      <div className="w-full">
-        <div>$SHELL value: {formatShell(clamValueInShellToken)}</div>
-        <div>Lifespan: {get(dnaDecoded, "lifespan")} pearls</div>
-        <div>
-          <Link to="/clam" className="block">
-            View in Saferoom{" "}
-          </Link>
+      <div className="details">
+        <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
+          <div className="grid-title">$SHELL</div>
+          <div className="grid-value">{formatShell(clamValueInShellToken)}</div>
+          <div className="grid-title">Lifespan</div>
+          <div className="grid-value">{get(dnaDecoded, "lifespan")} pearls</div>
         </div>
-
-        <div className="underline cursor-pointer" onClick={() => harvestClam(tokenId)}>
-          Harvest
+        <div className="flex flex-col">
+          <Link
+            to={"/saferoom/clam"}
+            className="font-montserrat underline"
+            style={{ color: "#757575" }}
+          >
+            View in saferoom
+          </Link>
+          <button
+            className="btn btn-info mt-4 font-montserrat font-bold"
+            onClick={() => harvestClam(tokenId)}
+          >
+            Harvest
+          </button>
         </div>
       </div>
     </div>
@@ -87,6 +98,8 @@ const ClamHarvestModal = ({
   const [message, setMessage] = useState("Loading...");
   const [clamValueInShellToken, setClamValueInShellToken] = useState("");
 
+  const { isShowing, toggleModal } = useModal({ show: true });
+
   const harvestClam = async (tokenId) => {
     // character speaks
     harvestClamSpeak({ updateCharacter }, async () => {
@@ -103,6 +116,33 @@ const ClamHarvestModal = ({
     });
   };
 
+  const closeModal = () => {
+    toggleModal();
+    setModalToShow(null);
+  };
+
+  const addClamImg = async (clams) => {
+    const cache = await caches.open("clam-island");
+    const promises = await Promise.all(
+      clams.map((clam) => {
+        const dna = clam.dna;
+        return cache.match(`/${dna}`);
+      })
+    );
+    const images = await Promise.all(
+      promises.map((resp) => {
+        return resp ? resp.json() : "";
+      })
+    );
+    const clamsUptd = clams.map((clam, index) => {
+      let clamImg = images[index];
+      clamImg = clamImg ? clamImg.img : clamImg;
+      clam.img = clamImg || NFTUnknown;
+      return clam;
+    });
+    return clamsUptd;
+  };
+
   useEffect(async () => {
     const incubationtime = await getClamIncubationTime();
 
@@ -111,7 +151,8 @@ const ClamHarvestModal = ({
       for (let index = 0; index < Number(clamBalance); index++) {
         promises.push(getUserClamDnaByIndex(address, index));
       }
-      const clams = await Promise.all(promises);
+      let clams = await Promise.all(promises);
+      clams = await addClamImg(clams);
 
       const currentBlockTimestamp = await getCurrentBlockTimestamp();
 
@@ -143,25 +184,33 @@ const ClamHarvestModal = ({
   }, [address, clamBalance]);
 
   return (
-    <>
-      {clams.length ? (
-        <Card className="p-2">
-          <h1 className="flex justify-center font-bold">{message}</h1>
-          <div className="bg-white flex-1 justify-center  md:flex items-center flex-col overflow-scroll">
-            {clams.map((clam, i) => (
-              <ClamItem
-                clam={clam}
-                key={i}
-                harvestClam={harvestClam}
-                clamValueInShellToken={clamValueInShellToken}
-              />
-            ))}
+    <div className="HarvestModal">
+      <Modal isShowing={isShowing} onClose={closeModal} width={"30rem"}>
+        {clams.length ? (
+          <div className="ClamDeposit max-h-160">
+            {clams.length ? (
+              <div>
+                <h3 className="heading">{message}</h3>
+                {clams.map((clam, i) => (
+                  <ClamItem
+                    key={i}
+                    clam={clam}
+                    harvestClam={harvestClam}
+                    clamValueInShellToken={clamValueInShellToken}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
+                You&#39;ve got no more clams available to add to farm
+              </div>
+            )}
           </div>
-        </Card>
-      ) : (
-        ""
-      )}
-    </>
+        ) : (
+          ""
+        )}
+      </Modal>
+    </div>
   );
 };
 
