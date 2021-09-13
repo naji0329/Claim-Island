@@ -4,13 +4,10 @@ import { get } from "lodash";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faMinus, faTimes, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 import { withSkipDialog } from "../../hoc/withSkipDialog";
 import { actions } from "../../store/redux";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignInAlt, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 import "./index.scss";
 
