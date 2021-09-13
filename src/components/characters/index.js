@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faMinusCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 import { VotingStore } from "../../store/voting";
@@ -285,11 +285,19 @@ const CharacterSpeak = (props) => {
         <div className="text-wrapper">
           <div className="name">{charName}</div>
           <div className="absolute top-4 right-8 text-white">
-            <button className="mr-2 pointer-events-auto" onClick={onClickMinimizedButton}>
-              <FontAwesomeIcon icon={faMinus} />
+            <button
+              data-tip="Hide"
+              className="mr-2 pointer-events-auto tooltip"
+              onClick={onClickMinimizedButton}
+            >
+              <FontAwesomeIcon icon={faMinusCircle} />
             </button>
-            <button className="pointer-events-auto" onClick={onClickSkipDialogButton}>
-              <FontAwesomeIcon icon={faTimes} />
+            <button
+              data-tip="Don't show again"
+              className="pointer-events-auto tooltip"
+              onClick={onClickSkipDialogButton}
+            >
+              <FontAwesomeIcon icon={faTimesCircle} />
             </button>
           </div>
           <div className="speech">

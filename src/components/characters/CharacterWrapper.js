@@ -4,8 +4,8 @@ import { get } from "lodash";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faTimes, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
-import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
+import { faMinusCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { SPEECHES, CHARACTERS } from "./constants";
 import { withSkipDialog } from "../../hoc/withSkipDialog";
 import { actions } from "../../store/redux";
 
@@ -26,7 +26,7 @@ const CharacterWrapper = ({
 }) => {
   const character = get(CHARACTERS, name);
   let speech = get(SPEECHES, action, action);
-  if (speech && typeof speech !== 'string') {
+  if (speech && typeof speech !== "string") {
     speech = variables ? speech(variables) : speech({});
   }
   const actionPath = action ? action.replace(/\.text$/, "") : "";
@@ -124,9 +124,6 @@ const CharacterWrapper = ({
           <div className="text-bubble flex-col justify-end pointer-events-none">
             <div className="text-wrapper">
               <div className="name px-10">{character.name}</div>
-              <button className="close-btn" onClick={dismissCharacter}>
-                <FontAwesomeIcon icon={faTimesCircle} className="ml-1" />
-              </button>
               <div className="speech">
                 <div
                   className="speech-text"
@@ -154,18 +151,25 @@ const CharacterWrapper = ({
                     onClick={() =>
                       buttonAlt.alt ? handleButtonCallback(buttonAlt) : handleClickButton(buttonAlt)
                     }
-
                   >
                     {buttonAlt.text}
                   </button>
                 )}
               </div>
               <div className="absolute top-4 right-8 text-white">
-                <button className="mr-2 pointer-events-auto" onClick={onClickMinimizedButton}>
-                  <FontAwesomeIcon icon={faMinus} />
+                <button
+                  data-tip="Hide"
+                  className="mr-2 pointer-events-auto tooltip"
+                  onClick={onClickMinimizedButton}
+                >
+                  <FontAwesomeIcon icon={faMinusCircle} />
                 </button>
-                <button className="pointer-events-auto" onClick={onClickSkipDialogButton}>
-                  <FontAwesomeIcon icon={faTimes} />
+                <button
+                  data-tip="Don't show again"
+                  className="pointer-events-auto tooltip"
+                  onClick={onClickSkipDialogButton}
+                >
+                  <FontAwesomeIcon icon={faTimesCircle} />
                 </button>
               </div>
             </div>
@@ -186,7 +190,9 @@ const CharacterWrapper = ({
   );
 };
 
-const mapToProps = ({ character: { name, action, variables, button, buttonAlt, suppressSpeechBubble, skipDialogs } }) => ({
+const mapToProps = ({
+  character: { name, action, variables, button, buttonAlt, suppressSpeechBubble, skipDialogs },
+}) => ({
   name,
   action,
   variables,
