@@ -51,6 +51,7 @@ const initialState = {
       dismiss: undefined,
     },
     suppressSpeechBubble: undefined,
+    skipDialogs: false,
   },
   bank: {
     pools: [],
@@ -88,7 +89,9 @@ export const actions = (store) => ({
     };
   },
   updateCharacter: (state, value) => {
-    value.buttonAlt = value.buttonAlt ? value.buttonAlt : {};
+    if (!("skipDialogs" in value)) {
+      value.buttonAlt = value.buttonAlt ? value.buttonAlt : {};
+    }
     const obj = {
       character: {
         ...state.character,

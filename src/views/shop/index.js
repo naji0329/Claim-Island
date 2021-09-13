@@ -21,7 +21,7 @@ import ClamDisplayModal from "./ClamDisplayModal";
 import ClamHarvestModal from "./ClamHarvestModal";
 import { WelcomeUser } from "./character/WelcomeUser";
 
-const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAccount }) => {
+const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAccount, character }) => {
   const [modalToShow, setModalToShow] = useState(null);
   const [userReady, setUserReady] = useState(false);
 
@@ -37,6 +37,7 @@ const Shop = ({ account: { address, clamToCollect }, updateCharacter, updateAcco
         setModalToShow,
         setUserReady,
         clamToCollect,
+        skipDialogs: character.skipDialogs,
       });
     }
   }, [address, userReady, clamToCollect]);

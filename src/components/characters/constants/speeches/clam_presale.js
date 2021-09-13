@@ -63,14 +63,14 @@ export const CLAM_PRESALE_SPEECH = {
       text: `Excellent! First, let's get your wallet connected. You will need to do this in order to purchase a Clam. Press the "Connect Wallet" button in the top right of the screen.`,
       next: `purchase`,
       dismiss: false,
-      skip: `purchase`,
+      skip: false,
     },
 
     welcome_connected: {
       text: `Welcome, traveller! My shop is not open yet, but I do have a batch of Clams that I can sell to you early. Due to limited stock, there's a limit of five Clams per customer. Would you like to buy one?`,
       next: `purchase`,
       dismiss: false,
-      skip: `purchase`,
+      skip: false,
     },
 
     purchase: {

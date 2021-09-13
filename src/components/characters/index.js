@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
-
-import { toast } from "react-toastify";
-
-import "./index.scss";
-
 import { VotingStore } from "../../store/voting";
+import "./index.scss";
 
 const CharacterSpeak = (props) => {
   const votingInProgress = VotingStore.useState((s) => s.inProgress);
@@ -32,6 +31,7 @@ const CharacterSpeak = (props) => {
   const [speech, setSpeech] = useState(speechTrack[trackCount].text);
   const [buttonNextText, setButtonNextText] = useState(btnTrack[trackCount].next);
   const [buttonAltText, setButtonAltText] = useState(btnTrack[trackCount].alt.text);
+  const [skipDialog, setSkipDialog] = useState(null);
 
   const btnAlt = useRef();
   const btnNext = useRef();
@@ -46,7 +46,41 @@ const CharacterSpeak = (props) => {
 
     */
 
+  const onClickNextSkip = () => {
+    if (skipDialog === "propose") {
+      setSpeech(SPEECHES.skip.agree.text);
+      setButtonNextText(BUTTONS.skip.agree.next);
+      btnAlt.current.style.display = "none";
+      setSkipDialog("agree");
+    }
+
+    if (skipDialog === "agree") {
+      setShowBubble(false);
+      localStorage.setItem("skipDialogs", "true");
+    }
+
+    if (skipDialog === "disagree") {
+      setSkipDialog(null);
+      setSpeech(speechTrack[trackCount].text);
+      setButtonNextText(btnTrack[trackCount].next);
+      setButtonAltText(btnTrack[trackCount].alt.text);
+    }
+  };
+
+  const onClickAltSkip = () => {
+    setSpeech(SPEECHES.skip.disagree.text);
+    setButtonNextText(BUTTONS.skip.disagree.next);
+    btnAlt.current.style.display = "none";
+    setSkipDialog("disagree");
+    localStorage.removeItem("skipDialogs");
+  };
+
   const onClickNext = (direct = false) => {
+    if (skipDialog) {
+      onClickNextSkip();
+      return;
+    }
+
     let timeOut = 0;
     if (speechTrack[trackCount].dismiss && !direct) {
       setShowBubble(false);
@@ -188,6 +222,11 @@ const CharacterSpeak = (props) => {
   ]);
 
   const onClickAlt = (e) => {
+    if (skipDialog) {
+      onClickAltSkip();
+      return;
+    }
+
     let destination = btnTrack[trackCount].alt.destination;
     switch (btnTrack[trackCount].alt.action) {
       case "url_internal":
@@ -222,11 +261,37 @@ const CharacterSpeak = (props) => {
     }
   };
 
+  const onClickMinimizedButton = () => {
+    setShowBubble(false);
+  };
+
+  const onClickSkipDialogButton = () => {
+    setSpeech(SPEECHES.skip.propose.text);
+    setButtonNextText(BUTTONS.skip.propose.next);
+    setButtonAltText(BUTTONS.skip.propose.alt);
+    btnAlt.current.style.display = "block";
+    setSkipDialog("propose");
+  };
+
+  useEffect(() => {
+    if (Boolean(localStorage.getItem("skipDialogs"))) {
+      setShowBubble(false);
+    }
+  }, []);
+
   return (
     <div className={showBubble ? "character-bubble" : "character-bubble hide-bubble"}>
       <div className="text-bubble">
         <div className="text-wrapper">
           <div className="name">{charName}</div>
+          <div className="absolute top-4 right-8 text-white">
+            <button className="mr-2 pointer-events-auto" onClick={onClickMinimizedButton}>
+              <FontAwesomeIcon icon={faMinus} />
+            </button>
+            <button className="pointer-events-auto" onClick={onClickSkipDialogButton}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+          </div>
           <div className="speech">
             <p className="speech-text">{speech}</p>
           </div>

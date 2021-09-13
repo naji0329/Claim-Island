@@ -101,35 +101,57 @@ export const WelcomeUser = ({
   setModalToShow,
   setUserReady,
   clamToCollect,
+  skipDialogs,
 }) => {
-  updateCharacter({
-    name: "diego",
-    action: "clam_shop.welcome.text",
-    button: {
-      text: "Let's go!",
-      alt: {
-        action: "cb",
-        destination: () => {
-          if (address) {
-            updateCharacter({
-              name: "diego",
-              action: "clam_shop.choose_path.text",
-              buttonAlt: harvestClamsBtn({ updateCharacter, setUserReady, setModalToShow }),
-              button: buyClamsBtn({
+  if (skipDialogs) {
+    if (address) {
+      updateCharacter({
+        name: "diego",
+        action: "clam_shop.choose_path.text",
+        buttonAlt: harvestClamsBtn({ updateCharacter, setUserReady, setModalToShow }),
+        button: buyClamsBtn({
+          updateCharacter,
+          setUserReady,
+          setModalToShow,
+          clamToCollect,
+        }),
+      });
+    } else {
+      connectWallet({
+        updateCharacter,
+        activateBrowserWallet,
+      });
+    }
+  } else {
+    updateCharacter({
+      name: "diego",
+      action: "clam_shop.welcome.text",
+      button: {
+        text: "Let's go!",
+        alt: {
+          action: "cb",
+          destination: () => {
+            if (address) {
+              updateCharacter({
+                name: "diego",
+                action: "clam_shop.choose_path.text",
+                buttonAlt: harvestClamsBtn({ updateCharacter, setUserReady, setModalToShow }),
+                button: buyClamsBtn({
+                  updateCharacter,
+                  setUserReady,
+                  setModalToShow,
+                  clamToCollect,
+                }),
+              });
+            } else {
+              connectWallet({
                 updateCharacter,
-                setUserReady,
-                setModalToShow,
-                clamToCollect,
-              }),
-            });
-          } else {
-            connectWallet({
-              updateCharacter,
-              activateBrowserWallet,
-            });
-          }
+                activateBrowserWallet,
+              });
+            }
+          },
         },
       },
-    },
-  });
+    });
+  }
 };

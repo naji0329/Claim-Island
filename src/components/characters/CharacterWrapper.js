@@ -3,7 +3,11 @@ import { connect } from "redux-zero/react";
 import { get } from "lodash";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
+import { withSkipDialog } from "../../hoc/withSkipDialog";
+import { actions } from "../../store/redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
@@ -20,12 +24,16 @@ const CharacterWrapper = ({
   buttonAlt,
   onClickButton,
   suppressSpeechBubble,
+  onClickSkipDialogButton,
+  skipDialogs,
 }) => {
   const character = get(CHARACTERS, name);
   let speech = get(SPEECHES, action, action);
   if (speech && typeof speech !== 'string') {
     speech = variables ? speech(variables) : speech({});
   }
+  const actionPath = action ? action.replace(/\.text$/, "") : "";
+  const isNeedSkipDialog = get(SPEECHES, `${actionPath}.skip`, false);
 
   const [showBubble, setShowBubble] = useState(true);
   const [stateSpeech, setStateSpeech] = useState();
@@ -81,6 +89,10 @@ const CharacterWrapper = ({
     setShowBubble(false);
   };
 
+  const onClickMinimizedButton = () => {
+    setShowBubble(false);
+  };
+
   useEffect(() => {
     if (suppressSpeechBubble) {
       setShowBubble(false);
@@ -88,6 +100,12 @@ const CharacterWrapper = ({
       setShowBubble(!!action);
     }
   }, [action, suppressSpeechBubble]);
+
+  useEffect(() => {
+    if (isNeedSkipDialog && skipDialogs) {
+      setShowBubble(false);
+    }
+  }, [isNeedSkipDialog, actionPath]);
 
   return (
     <div
@@ -126,7 +144,6 @@ const CharacterWrapper = ({
                   <button
                     className="btn character-btn"
                     id="btn-next"
-
                     onClick={() =>
                       button.alt ? handleButtonCallback(button) : handleClickButton(button)
                     }
@@ -146,6 +163,14 @@ const CharacterWrapper = ({
                   </button>
                 )}
               </div>
+              <div className="absolute top-4 right-8 text-white">
+                <button className="mr-2 pointer-events-auto" onClick={onClickMinimizedButton}>
+                  <FontAwesomeIcon icon={faMinus} />
+                </button>
+                <button className="pointer-events-auto" onClick={onClickSkipDialogButton}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -164,12 +189,16 @@ const CharacterWrapper = ({
   );
 };
 
-const mapToProps = ({ character: { name, action, variables, button, buttonAlt, suppressSpeechBubble } }) => ({
+const mapToProps = ({ character: { name, action, variables, button, buttonAlt, suppressSpeechBubble, skipDialogs } }) => ({
   name,
   action,
   variables,
   button,
   buttonAlt,
   suppressSpeechBubble,
+  skipDialogs,
 });
-export default connect(mapToProps)(CharacterWrapper);
+
+const mapDispatchToProps = () => ({ updateCharacter: actions().updateCharacter });
+
+export default connect(mapToProps, mapDispatchToProps)(withSkipDialog(CharacterWrapper));

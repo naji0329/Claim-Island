@@ -22,13 +22,13 @@ export const BANK_SPEECH = {
       text: "Welcome back to Clam Island Bank! Please let me know if you need help with anything.",
       next: false,
       dismiss: true,
-      skip: false,
+      skip: true,
     },
     welcome_back: {
       text: "Hello again! Can I help you with anything?",
       next: false,
       dismiss: true,
-      skip: false,
+      skip: true,
     },
     acknowledge_no_help_needed: {
       text: "No problem, happy investing! Just talk to me if you do need any help.",
@@ -46,7 +46,7 @@ export const BANK_SPEECH = {
       text: "Please wait while we process your transaction. Please note, your wallet may ask you to approve two transactions one after the other - please approve both transactions if that occurs.",
       next: false,
       dismiss: true,
-      skip: false,
+      skip: true,
     },
     transaction_error: {
       text: "We’re sorry, something went wrong and your transaction could not be processed. Funds have not been removed. Please try again later.",
@@ -58,7 +58,7 @@ export const BANK_SPEECH = {
       text: "Congratulations, your transaction was successful!",
       next: false,
       dismiss: true,
-      skip: false,
+      skip: true,
     },
     deposit_fee_alert: {
       text: "Please note, this pool has a deposit fee, which is deducted on deposit and not refundable. Do you want to proceed?",
