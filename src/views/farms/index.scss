@@ -18,9 +18,6 @@
       @apply overflow-hidden h-4 mb-4 text-xs flex rounded bg-blue-200;
     }
 
-
-
-
     .completion-bar {
       @apply shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center;
       position: relative;
@@ -76,15 +73,13 @@
   @apply rounded-lg w-full; /* button padding, width, radius*/
 }
 
-.PearlDetails {
-
+.ClamDetails {
   .heading {
-    @apply font-extrabold text-black font-avenir;
+    @apply font-extrabold text-black font-avenir text-xl mb-2;
   }
 
   .detail-box {
-    @apply bg-gray-300 rounded-xl p-4 mt-4;
-
+    @apply bg-gray-300 rounded-xl p-4;
   }
 
   .grid-value {
@@ -105,11 +100,8 @@
     @apply flex flex-row items-center;
     @apply border-4 border-blue-200 rounded-xl p-4 my-4;
 
-
-
     .details {
       @apply flex flex-1 flex-col;
-
     }
   }
 }

@@ -2,24 +2,13 @@ import { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import moment from "moment";
 import { actions } from "../../../store/redux";
+import { getPearlDataByIds } from "../../../web3/shared";
 import { aggregate } from "../../../web3/multicall";
 import {
   prepTokenOfOwnerByIndexMulticall,
   decodeTokenOfOwnerByIndexFromMulticall,
-  prepPearlDataMulticall,
-  decodePearlDataFromMulticall,
 } from "../../../web3/pearl";
-import {
-  prepGetDnaDecodedMulticall,
-  decodeGetDnaDecodedFromMulticall,
-} from "../../../web3/pearlDnaDecoder";
-import {
-  color,
-  shape,
-  weekStart,
-  prepBonusRewardsMulticall,
-  decodeBonusRewardsFromMulticall,
-} from "../../../web3/pearlBurner";
+import { color, shape, weekStart } from "../../../web3/pearlBurner";
 import { useTimer } from "../../../hooks/useTimer";
 import PearlInfo from "./PearlInfo";
 
@@ -50,53 +39,6 @@ const BurnPearlModal = (props) => {
 
   const { timeLeft } = useTimer(calculateTimeLeft);
 
-  const getPearlDataByIds = async (tokenIds) => {
-    const pearlDataCalls = prepPearlDataMulticall(tokenIds);
-    const pearlDataResult = await aggregate(pearlDataCalls, chainId);
-    const pearlDataDecoded = decodePearlDataFromMulticall(pearlDataResult.returnData, tokenIds);
-    const pearlDnas = pearlDataDecoded.map((data) => data.pearlDataValues.dna);
-
-    const dnaDecodedCalls = prepGetDnaDecodedMulticall(pearlDnas);
-    const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
-    const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(
-      dnaDecodedResult.returnData,
-      tokenIds
-    );
-
-    const traits = dnaDecodedDecoded.map(
-      ({ dnaDecodedValues: { size, lustre, nacreQuality, surface, rarityValue } }) => ({
-        size,
-        lustre,
-        nacreQuality,
-        surface,
-        rarityValue,
-      })
-    );
-
-    const bonusRewardsCalls = prepBonusRewardsMulticall(traits);
-    const bonusRewardsResult = await aggregate(bonusRewardsCalls, chainId);
-    const bonusRewardsDecoded = decodeBonusRewardsFromMulticall(
-      bonusRewardsResult.returnData,
-      tokenIds
-    );
-
-    const pearls = pearlDataDecoded.map((pearl) => {
-      const samePearl = dnaDecodedDecoded.find(({ pearlId }) => pearlId === pearl.pearlId);
-      const sameBonus = bonusRewardsDecoded.find(({ pearlId }) => pearlId === pearl.pearlId);
-
-      if (samePearl && sameBonus) {
-        const dnaDecoded = samePearl.dnaDecodedValues;
-        const { bonusRewards } = sameBonus;
-        return { ...pearl, dnaDecoded, bonusRewards };
-      }
-      console.error(`Pearl ${pearl.pearlId} from ${address} not found`);
-    });
-
-    const pearlsFiltered = pearls.filter((c) => c);
-
-    return pearlsFiltered;
-  };
-
   useEffect(() => {
     const init = async () => {
       try {
@@ -104,7 +46,7 @@ const BurnPearlModal = (props) => {
         const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
         const tokenIdsDecoded = decodeTokenOfOwnerByIndexFromMulticall(tokenIdsResult.returnData);
 
-        const ownedPearls = await getPearlDataByIds(tokenIdsDecoded);
+        const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainId);
         setPearls(ownedPearls);
 
         const elShape = await shape();
@@ -162,6 +104,7 @@ const BurnPearlModal = (props) => {
                 isLast={i === a.length - 1}
                 isEligible
                 isNativeStaker={isNativeStaker}
+                showBurn
               />
             ))
           ) : (
@@ -177,6 +120,7 @@ const BurnPearlModal = (props) => {
                 pearl={pearl}
                 isLast={i === a.length - 1}
                 isNativeStaker={isNativeStaker}
+                showBurn
               />
             ))
           ) : (
