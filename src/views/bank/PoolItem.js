@@ -5,6 +5,7 @@ import { actions } from "store/redux";
 import classnames from "classnames";
 import { useEthers } from "@usedapp/core";
 import { formatEther } from "@ethersproject/units";
+import BigNumber from "bignumber.js";
 
 import { pendingGem, gemPerBlock } from "web3/bank";
 // import { hasMaxUintAllowanceBank } from "web3/bep20";
@@ -15,22 +16,18 @@ import PoolDepositWithdraw from "./utils/PoolDepositWithdraw";
 import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
 
 import { gemTokenAddress } from "web3/constants";
+import { getUsdPriceOfToken } from "web3/pancakeRouter";
 
 import InfoTooltip from "components/InfoTooltip";
 import Tooltip from "components/Tooltip";
 
-const PoolItem = ({
-  account: { address },
-  bank: { selectedPool, depositAmount },
-  toggleModal,
-  updateBank,
-  pool,
-}) => {
+const PoolItem = ({ account: { address }, toggleModal, updateBank, pool }) => {
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
   const [gemEarned, setGemEarned] = useState(0);
   const [apr, setApr] = useState();
+  const [tvl, setTvl] = useState(0);
 
   const [urlForExchange, setUrlForExchange] = useState("");
 
@@ -52,15 +49,16 @@ const PoolItem = ({
 
   const calcAPR = ({ poolInfo, gemsPerBlock, tokenPrice }) => {
     const blocksPerYear = 10512000; // seconds per year / 3
-    const supply = +poolInfo.poolLpTokenBalance > 0 ? +poolInfo.poolLpTokenBalance : 1;
+    const supply = +poolInfo.poolLpTokenBalance || 1;
     let finalApr;
+
     if (poolInfo.lpToken === gemTokenAddress) {
       finalApr =
         Math.round(
           ((((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(poolInfo.totalAllocation)) *
             blocksPerYear) /
             supply) *
-          100
+            100
         ) / 100;
     } else {
       finalApr =
@@ -69,10 +67,9 @@ const PoolItem = ({
             Number(poolInfo.totalAllocation)) *
             blocksPerYear) /
             supply) *
-          tokenPrice *
-          100
+            tokenPrice *
+            100
         ) / 100;
-      console.log(finalApr);
     }
 
     if (finalApr > 1000000000000) {
@@ -83,23 +80,19 @@ const PoolItem = ({
   };
 
   useAsync(async () => {
-    const fakeTokenPrice = 1000000000000000000;
-
     const earnedGem = await pendingGem(pool.poolId);
     const gemsPerBlock = await gemPerBlock();
+    const tokenPrice = await getUsdPriceOfToken(pool.lpToken);
 
     const apr = calcAPR({
       poolInfo: pool,
       gemsPerBlock,
-      tokenPrice: fakeTokenPrice,
+      tokenPrice,
     });
 
     setGemEarned(earnedGem);
     setApr(apr);
-
-    // not used
-    // const isEnabled = await hasMaxUintAllowanceBank(pool.account, pool.lpToken);
-    // setIsEnabled(isEnabled);
+    setTvl(new BigNumber(formatEther(pool.poolLpTokenBalance)).multipliedBy(tokenPrice));
   });
 
   const handleOpen = async () => {
@@ -163,16 +156,14 @@ const PoolItem = ({
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none text-center">APR</p>
 
             <div className="font-bold text-black items-center">
-              {selectedPool ? `${String(selectedPool.apr)}%` : `${String(apr)}%`}
+              {apr ? `${apr}%` : "loading..."}
               <InfoTooltip text="Annual Percentage Return - non-compounded rate of return" />
             </div>
           </div>
 
           <div className="text-sm block">
             <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Deposited</p>
-            <p className="font-bold text-gray-300 text-center">
-              {selectedPool ? selectedPool.userDepositAmountInPool : pool.userDepositAmountInPool}
-            </p>
+            <p className="font-bold text-gray-300 text-center">{pool.userDepositAmountInPool}</p>
           </div>
 
           <div className="text-sm block">
@@ -207,9 +198,7 @@ const PoolItem = ({
         {isOpen && (
           <div className="flex justify-between items-start p-4 border-t-2 border-gray-700 h-96">
             <div className="flex w-1/5">
-              <PoolData depositFee={depositFee} urlForExchange={urlForExchange} tvl={formatEther(
-                selectedPool ? selectedPool.poolLpTokenBalance : pool.poolLpTokenBalance
-              )} />
+              <PoolData depositFee={depositFee} urlForExchange={urlForExchange} tvl={tvl} />
             </div>
 
             <div className="flex w-2/5 h-full">
