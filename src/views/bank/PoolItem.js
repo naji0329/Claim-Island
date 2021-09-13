@@ -16,12 +16,12 @@ import PoolDepositWithdraw from "./utils/PoolDepositWithdraw";
 import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
 
 import { gemTokenAddress } from "web3/constants";
-import { getUsdPriceOfToken } from "web3/pancakeRouter";
+import { getTokenPriceOfPair, getGemPrice } from "web3/pancakeRouter";
 
 import InfoTooltip from "components/InfoTooltip";
 import Tooltip from "components/Tooltip";
 
-const PoolItem = ({ account: { address }, toggleModal, updateBank, pool }) => {
+const PoolItem = ({ account: { address }, toggleModal, updateBank, pool, updateAccount }) => {
   const depositFee = pool.depositFeeBP / 100;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,7 +47,7 @@ const PoolItem = ({ account: { address }, toggleModal, updateBank, pool }) => {
 
   const riskStyle = riskClass(pool.risk);
 
-  const calcAPR = ({ poolInfo, gemsPerBlock, tokenPrice }) => {
+  const calcAPR = ({ poolInfo, gemsPerBlock, gemPrice, tokenPrice }) => {
     const blocksPerYear = 10512000; // seconds per year / 3
     const supply = +poolInfo.poolLpTokenBalance || 1;
     let finalApr;
@@ -63,7 +63,7 @@ const PoolItem = ({ account: { address }, toggleModal, updateBank, pool }) => {
     } else {
       finalApr =
         Math.round(
-          ((((tokenPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
+          ((((gemPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
             Number(poolInfo.totalAllocation)) *
             blocksPerYear) /
             supply) *
@@ -80,19 +80,25 @@ const PoolItem = ({ account: { address }, toggleModal, updateBank, pool }) => {
   };
 
   useAsync(async () => {
-    const earnedGem = await pendingGem(pool.poolId);
-    const gemsPerBlock = await gemPerBlock();
-    const tokenPrice = await getUsdPriceOfToken(pool.lpToken);
+    try {
+      const earnedGem = await pendingGem(pool.poolId);
+      const gemsPerBlock = await gemPerBlock();
+      const gemPrice = await getGemPrice();
+      const tokenPrice = await getTokenPriceOfPair(pool.lpToken, pool.isSingleStake);
 
-    const apr = calcAPR({
-      poolInfo: pool,
-      gemsPerBlock,
-      tokenPrice,
-    });
+      const apr = calcAPR({
+        poolInfo: pool,
+        gemsPerBlock,
+        gemPrice,
+        tokenPrice,
+      });
 
-    setGemEarned(earnedGem);
-    setApr(apr);
-    setTvl(new BigNumber(formatEther(pool.poolLpTokenBalance)).multipliedBy(tokenPrice));
+      setGemEarned(earnedGem);
+      setApr(apr);
+      setTvl(new BigNumber(formatEther(pool.poolLpTokenBalance)).multipliedBy(tokenPrice));
+    } catch (err) {
+      updateAccount({ error: err.message });
+    }
   });
 
   const handleOpen = async () => {

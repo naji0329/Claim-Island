@@ -1,8 +1,9 @@
 import { formatEther, parseEther } from "@ethersproject/units";
-import BigNumber from "bignumber.js";
 import pancakeRouterAbi from "./abi/PancakeRouter.json";
-import { pancakeRouterAddress, wBNB, BUSD } from "./constants";
+import { pancakeRouterAddress, wBNB, BUSD, gemTokenAddress } from "./constants";
 import { contractFactory } from "./index";
+import { getLPTokens, getReserves } from "./pancakePair";
+import BigNumber from "bignumber.js";
 
 const router = () =>
   contractFactory({
@@ -10,15 +11,45 @@ const router = () =>
     address: pancakeRouterAddress,
   });
 
-const bnbPriceWei = async () => {
-  return await getAmountsOut(parseEther("1"), [wBNB, BUSD]);
+const getBaseCurrency = (token) => {
+  switch (token) {
+    // add more possible base currencies here, like eth
+    default:
+      return wBNB;
+  }
 };
 
-export const getUsdPriceOfToken = async (tokenAddress) => {
-  const [, tokenInBNB] = await getAmountsOut(parseEther("1"), [tokenAddress, wBNB]);
-  const [, bnbPrice] = await bnbPriceWei();
-  const price = new BigNumber(formatEther(tokenInBNB)).multipliedBy(formatEther(bnbPrice));
-  return price.toNumber();
+export const getTokenPriceOfPair = async (lpToken, isSingleStake) => {
+  if (isSingleStake) {
+    return getUsdPriceOfToken(lpToken);
+  } else {
+    const { 0: t0Supply, 1: t1Supply } = await getReserves(lpToken);
+    const [token0, token1] = await getLPTokens(lpToken);
+    const [t0Price, t1Price] = await Promise.all([
+      getUsdPriceOfToken(token0),
+      getUsdPriceOfToken(token1),
+    ]);
+
+    const p0 = new BigNumber(formatEther(t0Supply)).multipliedBy(t0Price);
+    const p1 = new BigNumber(formatEther(t1Supply)).multipliedBy(t1Price);
+
+    return p0.plus(p1).toNumber();
+  }
+};
+
+const getUsdPriceOfToken = async (tokenAddress, baseCurrency = "BNB") => {
+  const base = getBaseCurrency(baseCurrency);
+  const path = tokenAddress === base ? [tokenAddress, BUSD] : [tokenAddress, base, BUSD];
+  const result = await getAmountsOut(parseEther("1"), path);
+  const price = result[result.length - 1];
+
+  return formatEther(price);
+};
+
+export const getGemPrice = async () => {
+  const [, , price] = await getAmountsOut(parseEther("1"), [gemTokenAddress, wBNB, BUSD]);
+
+  return formatEther(price);
 };
 
 const getAmountsOut = async (amount, path) => {
