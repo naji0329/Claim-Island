@@ -45,7 +45,7 @@ const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
         <div>$SHELL value: {formatShell(clamValueInShellToken)}</div>
         <div>Lifespan: {get(dnaDecoded, "lifespan")} pearls</div>
         <div>
-          <Link to="/clam" className="block">
+          <Link to="/saferoom/clam" className="block">
             View in Saferoom{" "}
           </Link>
         </div>
@@ -92,7 +92,7 @@ const ClamHarvestModal = ({
     harvestClamSpeak({ updateCharacter }, async () => {
       try {
         await harvestClamForShell(tokenId, address);
-        harvestCongrats({ updateCharacter }); // character speaks
+        harvestCongrats({ updateCharacter, setModalToShow }); // character speaks
         setModalToShow(null);
       } catch (e) {
         console.error(e);

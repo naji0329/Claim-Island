@@ -1,5 +1,3 @@
-import { truncate } from "lodash";
-
 const harvestClamInfo = () => ({
   text: "More Information",
   alt: {
@@ -13,13 +11,35 @@ const harvestClamInfo = () => ({
   },
 });
 
-export const harvestCongrats = ({ updateCharacter }) => {
+export const harvestCongrats = ({ updateCharacter, setModalToShow }) => {
   updateCharacter({
     name: "diego",
     action: "clam_shop.harvest_congrats.text",
+    buttonAlt: {
+      text: "Harvest Clams",
+      alt: {
+        action: "cb",
+        destination: () => {
+          updateCharacter({
+            name: "diego",
+            action: null,
+          });
+          setModalToShow("harvest");
+        },
+      },
+    },
     button: {
-      text: "Ok",
-      dismiss: truncate,
+      text: "Buy Clams",
+      alt: {
+        action: "cb",
+        destination: () => {
+          updateCharacter({
+            name: "diego",
+            action: null,
+          });
+          setModalToShow("buy");
+        },
+      },
     },
   });
 };

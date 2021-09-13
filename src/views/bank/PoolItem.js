@@ -23,7 +23,7 @@ import Tooltip from "components/Tooltip";
 
 const PoolItem = ({ account: { address }, toggleModal, updateBank, pool, updateAccount }) => {
   const depositFee = pool.depositFeeBP / 100;
-  const [isOpen, setIsOpen] = useState(false);
+  const isAdditionalInfoVisible = selectedPool?._poolReference === pool;
 
   const [gemEarned, setGemEarned] = useState(0);
   const [apr, setApr] = useState();
@@ -102,7 +102,6 @@ const PoolItem = ({ account: { address }, toggleModal, updateBank, pool, updateA
   });
 
   const handleOpen = async () => {
-    setIsOpen(true);
     const balances = await getBalancesFormatted(address, pool.lpToken, pool.isSingleStake);
 
     const url = await exchangeUrl({
@@ -119,11 +118,24 @@ const PoolItem = ({ account: { address }, toggleModal, updateBank, pool, updateA
         ...pool,
         earnedGem: gemEarned,
         apr,
+        _poolReference: pool,
       },
     });
   };
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    updateBank({
+      selectedPool: null,
+    });
+  };
+
+  const handleClick = () => {
+    if (isAdditionalInfoVisible) {
+      handleClose();
+    } else {
+      handleOpen();
+    }
+  };
 
   return (
     <>
@@ -179,11 +191,11 @@ const PoolItem = ({ account: { address }, toggleModal, updateBank, pool, updateA
 
           <div className="text-sm block">
             {address ? (
-              <button onClick={() => (isOpen ? handleClose() : handleOpen())}>
+              <button onClick={handleClick}>
                 <svg
                   className={classnames(
                     "fill-current text-blue-700 h-6 w-6 transform transition-transform duration-500",
-                    { "rotate-180": isOpen }
+                    { "rotate-180": isAdditionalInfoVisible }
                   )}
                   viewBox="0 0 20 20"
                 >
@@ -201,7 +213,7 @@ const PoolItem = ({ account: { address }, toggleModal, updateBank, pool, updateA
           </div>
         </div>
 
-        {isOpen && (
+        {isAdditionalInfoVisible && (
           <div className="flex justify-between items-start p-4 border-t-2 border-gray-700 h-96">
             <div className="flex w-1/5">
               <PoolData depositFee={depositFee} urlForExchange={urlForExchange} tvl={tvl} />

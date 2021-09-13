@@ -69,7 +69,7 @@ export const SHELL_PRESALE_SPEECH = {
       text: `First, let's get your wallet connected. You will need to do this in order to purchase $SHELL. Press the "Connect Wallet" button in the top right of the screen.`,
       next: `purchase`,
       dismiss: false,
-      skip: `purchase`,
+      skip: false,
     },
 
     purchase: {

@@ -15,8 +15,10 @@ import { harvest } from "web3/bank";
 const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, updateAccount, toggleModal }) => {
   const isNativePool = selectedPool && selectedPool.isNative;
   const [pearlBoostYield, setPearlBoostYield] = useState(false);
+  const [inTx, setInTx] = useState(false);
 
   const handleHarvest = async () => {
+    setInTx(true);
     if (pearlBoostYield) {
       onPearlBoostYieldAlert(updateCharacter, async () => {
         await executeHarvest();
@@ -24,6 +26,7 @@ const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, updateAccount, t
     } else {
       await executeHarvest();
     }
+    setInTx(false);
   };
 
   const executeHarvest = async () => {
@@ -82,6 +85,7 @@ const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, updateAccount, t
         <button
           onClick={handleHarvest}
           className="w-full text-white bg-blue-500 hover:bg-blue-400 rounded-xl shadow-xl p-2 text-center text-2xl"
+          disabled={inTx}
         >
           Harvest
         </button>
