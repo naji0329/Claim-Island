@@ -57,6 +57,7 @@ export const multicallAddress = {
 };
 
 export const zapAddress = "0x25AE8E764b0c8318c093d8eFdd03000b442bb56a";
+export const pancakeRouterAddress = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3";
 
 // legacy contracts
 export const clamPresaleAddress = "0xAAEB1Ea585DbeF06349ac371EBBA54efa0713D1D";
@@ -66,4 +67,8 @@ export const clamClaimersAddress = "0xDaF219f41931B4833A71B9D08881491010246691";
 
 export const zeroHash = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
-export const wBNB = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+// tokens
+// export const wBNB = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+export const wBNB = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"; // testnet
+// export const BUSD = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
+export const BUSD = "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7"; // testnet
