@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { bankAddress, wBNB } from "web3/constants";
 import { formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";
-import pancake from "web3/pancake";
+import pancake from "web3/pancakePair";
 import InfoTooltip from "components/InfoTooltip";
 
 // prevent rounding up
@@ -44,30 +44,28 @@ export const getBalancesFormatted = async (account, lpToken, isSingleStake) => {
 
 // POOL DATA component
 export const PoolData = ({ depositFee, urlForExchange, tvl }) => {
-  const [tvlFmtd, setTVL] = useState('');
+  const [tvlFmtd, setTVL] = useState("");
 
   useEffect(() => {
-    const formattedTvl = `$ ${(+tvl).toFixed(2)}`;
+    const formattedTvl = (+tvl).toLocaleString("EN", {
+      style: "currency",
+      currency: "USD",
+    });
     setTVL(formattedTvl);
   }, [tvl]);
-
 
   return (
     <div className="w-full px-2">
       <div className="flex flex-row justify-between">
         <p className="text-gray-500 font-semibold">Deposit fee:</p>
-        <p className="font-bold text-black text-center">
-          {depositFee}
-        </p>
+        <p className="font-bold text-black text-center">{depositFee}</p>
       </div>
       <div className="flex flex-row justify-between">
         <div className="text-gray-500 font-semibold">
           TVL:
           <InfoTooltip text="Total Value Locked - the value of deposits in this pool" />
         </div>
-        <div className="font-bold text-black text-center">
-          {tvlFmtd}
-        </div>
+        <div className="font-bold text-black text-center">{tvlFmtd}</div>
       </div>
       <div className="flex">
         <a
