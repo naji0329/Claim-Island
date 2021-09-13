@@ -57,7 +57,8 @@ export const multicallAddress = {
 };
 
 export const zapAddress = "0x25AE8E764b0c8318c093d8eFdd03000b442bb56a";
-export const pancakeRouterAddress = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3";
+// export const pancakeRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
+export const pancakeRouterAddress = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3"; // testnet
 
 // legacy contracts
 export const clamPresaleAddress = "0xAAEB1Ea585DbeF06349ac371EBBA54efa0713D1D";
