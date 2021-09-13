@@ -21,7 +21,14 @@ import { getTokenPriceOfPair, getGemPrice } from "web3/pancakeRouter";
 import InfoTooltip from "components/InfoTooltip";
 import Tooltip from "components/Tooltip";
 
-const PoolItem = ({ account: { address }, toggleModal, updateBank, pool, updateAccount }) => {
+const PoolItem = ({
+  account: { address },
+  bank: { selectedPool },
+  toggleModal,
+  updateBank,
+  pool,
+  updateAccount,
+}) => {
   const depositFee = pool.depositFeeBP / 100;
   const isAdditionalInfoVisible = selectedPool?._poolReference === pool;
 
