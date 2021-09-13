@@ -228,6 +228,43 @@ export const prepClamDataMulticall = (tokenIds) => {
   return contractCalls;
 };
 
+export const prepClamProducedPearlIds = (tokenIds) => {
+  const contractCalls = [];
+  for (let index = 0; index < tokenIds.length; index++) {
+    contractCalls.push([
+      clamNFTAddress,
+      web3.eth.abi.encodeFunctionCall(
+        {
+          name: "getProducedPearlIds",
+          type: "function",
+          inputs: [
+            {
+              type: "uint256",
+              name: "clamId",
+            },
+          ],
+        },
+        [tokenIds[index]]
+      ),
+    ]);
+  }
+
+  return contractCalls;
+};
+
+export const decodeProducedPearlIdsFromMulticall = (values, tokenIds) => {
+  const result = [];
+
+  for (let index = 0; index < values.length; index++) {
+    result.push({
+      clamId: tokenIds[index],
+      producedPearlIds: web3.eth.abi.decodeParameter("uint256[]", values[index]),
+    });
+  }
+
+  return result;
+};
+
 export const decodeTokenOfOwnerByIndexFromMulticall = (values) => {
   const result = [];
 
@@ -328,4 +365,6 @@ export default {
   decodeClamDataFromMulticall,
   getClamValueInShellToken,
   harvestClamForShell,
+  prepClamProducedPearlIds,
+  decodeProducedPearlIdsFromMulticall,
 };

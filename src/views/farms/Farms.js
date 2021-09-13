@@ -24,8 +24,9 @@ import { aggregate } from "web3/multicall";
 
 import "./index.scss";
 import FarmItem from "./FarmItem";
-import PearlDetails from "./PearlDetails";
+import ClamDetails from "./ClamDetails";
 import ClamDeposit from "./ClamDeposit";
+
 import PearlView from "./PearlView";
 import { MODAL_OPTS } from "./constants";
 import { WelcomeUser, withdrawClamSpeak } from "./character/WithdrawClam";
@@ -59,10 +60,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   };
 
   // when "View Pearl" is clicked - open the modal for the selected pearl
-  const onViewDetails = (clam, clamProcessing, index) => {
+  const onViewDetails = (clam, clamProcessing) => {
     setClamProcessing(clamProcessing);
     setSelectedClam(clam);
-    setModal(MODAL_OPTS.PEARL_DETAILS);
+    setModal(MODAL_OPTS.CLAM_DETAILS);
     toggleModal();
   };
 
@@ -106,6 +107,13 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     );
     const clamDnas = clamDataDecoded.map((data) => data.clamDataValues.dna);
 
+    const producedPearlIdsCalls = clamContract.prepClamProducedPearlIds(tokenIds);
+    const producedPearlIdsResult = await aggregate(producedPearlIdsCalls, chainId);
+    const producedPearlIdsDecoded = clamContract.decodeProducedPearlIdsFromMulticall(
+      producedPearlIdsResult.returnData,
+      tokenIds
+    );
+
     const dnaDecodedCalls = prepGetDnaDecodedMulticall(clamDnas);
     const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
     const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(
@@ -114,11 +122,15 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     );
 
     const clams = clamDataDecoded.map((clam) => {
-      const sameClam = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
-      if (sameClam) {
-        const dnaDecoded = sameClam.dnaDecodedValues;
+      const sameClamDna = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
+      const sameClamPearlsProduced = producedPearlIdsDecoded.find(
+        ({ clamId }) => clamId === clam.clamId
+      );
+      if (sameClamDna && sameClamPearlsProduced) {
+        const dnaDecoded = sameClamDna.dnaDecodedValues;
+        const producedPearlIds = sameClamPearlsProduced.producedPearlIds;
         const dna = clam.clamDataValues.dna;
-        return { ...clam, dnaDecoded, dna };
+        return { ...clam, dnaDecoded, producedPearlIds, dna };
       }
       console.error(`Clam ${clam.clamId} from ${address} not found`);
     });
@@ -211,10 +223,14 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       <Modal
         isShowing={isShowing}
         onClose={toggleModal}
-        width={modalSelected === MODAL_OPTS.PEARL_DETAILS ? "60rem" : "30rem"}
+        width={modalSelected === MODAL_OPTS.CLAM_DETAILS ? "60rem" : "30rem"}
       >
-        {modalSelected === MODAL_OPTS.PEARL_DETAILS ? (
-          <PearlDetails clam={selectedClam} clamProcessing={clamProcessing} />
+        {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
+          <ClamDetails
+            clam={selectedClam}
+            clamProcessing={clamProcessing}
+            updateAccount={updateAccount}
+          />
         ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
           <ClamDeposit clams={clams} />
         ) : (

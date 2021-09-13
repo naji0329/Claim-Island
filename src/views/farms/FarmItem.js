@@ -70,9 +70,9 @@ const FarmItem = ({
     !+pearlProductionTime || !timeLeft
       ? 100
       : +(
-        ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
-        100
-      ).toFixed(2);
+          ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
+          100
+        ).toFixed(2);
 
   useEffect(() => {
     const init = async () => {
