@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
-import { formatUnits } from "@ethersproject/units";
+import { formatEther, parseEther } from "@ethersproject/units";
+import BigNumber from "bignumber.js";
 import "./index.scss";
 
 import { sleep } from "utils/time";
@@ -11,12 +12,13 @@ import ClamUnknown from "assets/img/clam_unknown.png";
 import ClamIcon from "assets/clam-icon.png";
 import ArrowDown from "assets/img/arrow-down.svg";
 
-import { buyClam, getPrice, canUnlockGemVestedAmount } from "web3/clam";
+import { buyClam, getPrice, canUnlockGemVestedAmount, buyClamWithVestedTokens } from "web3/clam";
 import { infiniteApproveSpending } from "web3/gem";
 import { clamShopAddress } from "web3/constants";
 import { actions } from "store/redux";
 
 import { buyClamError, buyClamSuccess, buyClamProcessing } from "./character/BuyClam";
+import { formatNumber } from "../bank/utils";
 
 const Divider = () => (
   <div className="w-full flex flex-col justify-center items-center my-2">
@@ -40,6 +42,7 @@ const ClamBuyModal = ({
   const [showHatching, setShowHatching] = useState(false);
   const [clamPrice, setClamPrice] = useState(0);
   const [lockedGem, setLockedGem] = useState(0);
+  const [canBuy, setCanBuy] = useState(false);
 
   const { register, handleSubmit } = useForm();
 
@@ -53,6 +56,13 @@ const ClamBuyModal = ({
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const balanceBN = new BigNumber(parseEther(gemBalance).toString());
+    const lockedBN = new BigNumber(lockedGem);
+    const totalBN = balanceBN.plus(lockedBN);
+    setCanBuy(totalBN.isGreaterThanOrEqualTo(new BigNumber(clamPrice)));
+  }, [gemBalance, clamPrice, lockedGem]);
+
   const onSubmit = async () => {
     setIsLoading(true);
 
@@ -61,7 +71,7 @@ const ClamBuyModal = ({
     await infiniteApproveSpending(address, clamShopAddress, clamPrice);
 
     try {
-      await buyClam(address);
+      lockedGem > 0 ? await buyClamWithVestedTokens(address) : await buyClam(address);
       buyClamSuccess({ updateCharacter }); // character speaks
       setIsLoading(false);
       setShowHatching(true);
@@ -144,7 +154,7 @@ const ClamBuyModal = ({
                           <img className="w-12 mr-2" src={ClamIcon} />
                           <input
                             disabled
-                            value={formatUnits(clamPrice, 18)}
+                            value={formatEther(clamPrice)}
                             className="bg-gray-100 text-center text-xl w-20 text-black p-2 font-normal rounded border-none font-extrabold"
                             {...register("input", { required: true })}
                           />
@@ -152,14 +162,14 @@ const ClamBuyModal = ({
                             GEM
                           </span>
                         </div>
-                        <div className="flex flex-col my-2 ml-8 w-1/2">
+                        <div className="flex flex-col my-2 pl-4 w-1/2">
                           <div className="flex justify-between">
                             <span>Wallet:</span>
-                            <span>{gemBalance} GEM</span>
+                            <span>{formatNumber(+gemBalance, 3)} GEM</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Vested:</span>
-                            <span>{formatUnits(lockedGem, 18)} GEM</span>
+                            <span>{formatNumber(+formatEther(lockedGem), 3)} GEM</span>
                           </div>
                         </div>
                       </div>
@@ -192,7 +202,7 @@ const ClamBuyModal = ({
                         CLAM
                       </span> */}
 
-                        <div className="mx-2">1 CLAM = {formatUnits(clamPrice, 18)} GEM</div>
+                        <div className="mx-2">1 CLAM = {formatEther(clamPrice)} GEM</div>
                       </div>
                     </div>
                   </div>
@@ -243,9 +253,11 @@ const ClamBuyModal = ({
                   ) : (
                     <button
                       type="submit"
-                      className="block uppercase text-center shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl"
+                      className={`block uppercase text-center shadow hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl 
+                        ${canBuy ? "bg-blue-600" : "btn-disabled bg-grey-light"}
+                        `}
                     >
-                      Buy 1 Clam
+                      {canBuy ? "Buy 1 Clam" : "Not enough GEM"}
                     </button>
                   )}
                 </>

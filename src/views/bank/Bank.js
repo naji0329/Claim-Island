@@ -13,7 +13,7 @@ import Web3Navbar from "components/Web3Navbar";
 import VideoBackground from "components/VideoBackground";
 import { Modal, useModal } from "components/Modal";
 
-import { web3 } from "web3";
+import { web3 } from "../../web3";
 import {
   getPoolsLength,
   prepGetPoolInfoForMulticall,
