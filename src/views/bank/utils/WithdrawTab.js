@@ -143,7 +143,7 @@ const WithdrawTab = ({
           {errors.withdrawAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
 
-        <ActionButton style="btn-withdraw" isLoading={inTx}>
+        <ActionButton style="btn-withdraw" isLoading={inTx} isDisabled={inTx}>
           Withdraw {get(selectedPool, "name")}
         </ActionButton>
       </div>

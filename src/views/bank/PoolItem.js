@@ -27,7 +27,7 @@ const PoolItem = ({
   pool,
 }) => {
   const depositFee = pool.depositFeeBP / 100;
-  const [isOpen, setIsOpen] = useState(false);
+  const isAdditionalInfoVisible = selectedPool?._poolReference === pool;
 
   const [gemEarned, setGemEarned] = useState(0);
   const [apr, setApr] = useState();
@@ -60,7 +60,7 @@ const PoolItem = ({
           ((((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(poolInfo.totalAllocation)) *
             blocksPerYear) /
             supply) *
-          100
+            100
         ) / 100;
     } else {
       finalApr =
@@ -69,8 +69,8 @@ const PoolItem = ({
             Number(poolInfo.totalAllocation)) *
             blocksPerYear) /
             supply) *
-          tokenPrice *
-          100
+            tokenPrice *
+            100
         ) / 100;
       console.log(finalApr);
     }
@@ -103,7 +103,6 @@ const PoolItem = ({
   });
 
   const handleOpen = async () => {
-    setIsOpen(true);
     const balances = await getBalancesFormatted(address, pool.lpToken, pool.isSingleStake);
 
     const url = await exchangeUrl({
@@ -120,11 +119,24 @@ const PoolItem = ({
         ...pool,
         earnedGem: gemEarned,
         apr,
+        _poolReference: pool,
       },
     });
   };
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    updateBank({
+      selectedPool: null,
+    });
+  };
+
+  const handleClick = () => {
+    if (isAdditionalInfoVisible) {
+      handleClose();
+    } else {
+      handleOpen();
+    }
+  };
 
   return (
     <>
@@ -182,11 +194,11 @@ const PoolItem = ({
 
           <div className="text-sm block">
             {address ? (
-              <button onClick={() => (isOpen ? handleClose() : handleOpen())}>
+              <button onClick={handleClick}>
                 <svg
                   className={classnames(
                     "fill-current text-blue-700 h-6 w-6 transform transition-transform duration-500",
-                    { "rotate-180": isOpen }
+                    { "rotate-180": isAdditionalInfoVisible }
                   )}
                   viewBox="0 0 20 20"
                 >
@@ -204,12 +216,16 @@ const PoolItem = ({
           </div>
         </div>
 
-        {isOpen && (
+        {isAdditionalInfoVisible && (
           <div className="flex justify-between items-start p-4 border-t-2 border-gray-700 h-96">
             <div className="flex w-1/5">
-              <PoolData depositFee={depositFee} urlForExchange={urlForExchange} tvl={formatEther(
-                selectedPool ? selectedPool.poolLpTokenBalance : pool.poolLpTokenBalance
-              )} />
+              <PoolData
+                depositFee={depositFee}
+                urlForExchange={urlForExchange}
+                tvl={formatEther(
+                  selectedPool ? selectedPool.poolLpTokenBalance : pool.poolLpTokenBalance
+                )}
+              />
             </div>
 
             <div className="flex w-2/5 h-full">
