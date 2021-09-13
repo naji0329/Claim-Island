@@ -9,6 +9,10 @@
   padding-left: 5rem;
   justify-content: flex-end;
 
+  .close-btn {
+    @apply absolute right-4 mt-2 text-white text-4xl cursor-pointer pointer-events-auto;
+  }
+
   @media screen and (max-width: 1440px) {
     //height: 35em;
   }

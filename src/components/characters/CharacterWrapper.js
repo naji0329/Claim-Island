@@ -5,6 +5,9 @@ import { useHistory } from "react-router-dom";
 import classNames from "classnames";
 import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignInAlt, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+
 import "./index.scss";
 
 // button => obj {text, alt}
@@ -71,14 +74,11 @@ const CharacterWrapper = ({
   };
 
   const handleClickCharacter = (e) => {
-    console.log("handleClickCharacter", { showBubble });
-    if (!showBubble) {
-      setShowBubble(true);
-      // document.querySelector(".character-wrap .character").style.marginTop =
-      //   "22rem";
-    } else {
-      setShowBubble(false);
-    }
+    setShowBubble(!showBubble);
+  };
+
+  const dismissCharacter = (e) => {
+    setShowBubble(false);
   };
 
   useEffect(() => {
@@ -109,6 +109,9 @@ const CharacterWrapper = ({
           <div className="text-bubble flex-col justify-end pointer-events-none">
             <div className="text-wrapper">
               <div className="name px-10">{character.name}</div>
+              <button className="close-btn" onClick={dismissCharacter}>
+                <FontAwesomeIcon icon={faTimesCircle} className="ml-1" />
+              </button>
               <div className="speech">
                 <div
                   className="speech-text"
