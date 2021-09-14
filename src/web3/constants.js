@@ -11,20 +11,21 @@ const localhostMulticallAddress =
     : "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1";
 
 //// add test contracts here
-export const shellTokenAddress = "0xb3f768D115B234Ac39B21D40Cb5E4D530AdAbea4";
-export const clamNFTAddress = "0x6190Aa95C9Ac532A8Ea15605163451DAb3F85E65";
-export const gemTokenAddress = "0xBbdb7f29e9D40E8317d8E7cf0552846D3F2251F1";
-export const gemLockerAddress = "0xE5827CF0994dcBcd14e0e052F84faFc1B6459D5D";
-export const pearlProductionTimeReductionAddress = "0xbacdF6F20DC405574C7c1e1a7cbAB06107d94DEc";
-export const bankAddress = "0xb9cCd96b2D6B9733b97Ad17BA4395Ee37ef0312f";
-export const pearlDnaDecoderAddress = "0x81d8AcA8eE8199E5FbFBA2bbd75e49E07aBED68f";
-export const pearlNFTAddress = "0x792Ce8Ea57f65C292990e1b2AE86902DDa1f0a2E";
-export const pearlBurnerAddress = "0x9e00DdE8263B46FC67a602b95fbD9A8aE240e58D";
-export const rngAddress = "0xbCD9B1Fa013060dA6937a5BCBd63Da22C7518eDc";
-export const dnaDecoderAddress = "0x05AB5F88bE1aFDEB6eF23136b1f398e2a5d54494";
-export const clamBonusAddress = "0x225B00316580c1eD1C878BBe0F2D7D864c1299d8";
-export const clamShopAddress = "0x74f3dc50456c757a2455BFD661C2979A5e56338f";
-export const pearlFarmAddress = "0x5Ef121f2D160A3fae2CBA6A628ac3253C575A192";
+export const shellTokenAddress = "0xBf7c5EA332af71C2ccCB890AfB963c8Fc3a70632";
+export const clamNFTAddress = "0xC7417cb112488bEb4eBbCc6f518f5E9E2f4FA572";
+export const gemTokenAddress = "0x88F502AaE684eb5EA515c2ff4Fb19716cd5B8a14";
+export const gemLockerAddress = "0xbf01c7c478462cD1e1FDFf7d4C8db2c88EF6A676";
+export const pearlProductionTimeReductionAddress = "0xfC47D5e69a7574D4aacA574A5312d7afF19a5103";
+export const bankAddress = "0xa6f97093B83102D65Fa07ca0C6D7A7f0A0B3F85A";
+export const pearlDnaDecoderAddress = "0x8E278074Ab0604fd8c7CA32507D02CcB2e407bdA";
+export const pearlNFTAddress = "0x25AE8E764b0c8318c093d8eFdd03000b442bb56a";
+export const pearlBurnerAddress = "0x704e5430A63749E0D8eA44066065d14E1Fbf9DA4";
+export const rngAddress = "0xc4E021a682a3A2109c4E709d37EbD1F22cE664d5";
+export const dnaDecoderAddress = "0xbC009070Bd1b18CCe6993F8e3dF47D4e7B404Db1";
+export const clamBonusAddress = "0x18ABb319A9738D0637A70967E61082088b077AAD";
+export const clamLotteryAddress = "0x672A2Afc9DE934Bc355f5c7A796D265712704021";
+export const clamShopAddress = "0xDaF219f41931B4833A71B9D08881491010246691";
+export const pearlFarmAddress = "0x4cb38172d52685C139B84cf8E3F912448d13cc8e";
 
 // export const shellTokenAddress = "0x6BD2ce3D5556799464Aa4737a1742C1bC6DD2304";
 // export const clamNFTAddress = "0x48F38cfac50f34Eec654a2Cabf219fB31bA39394";
