@@ -101,8 +101,9 @@ const ClamHarvestModal = ({
   const { isShowing, toggleModal } = useModal({ show: true });
 
   const harvestClam = async (tokenId) => {
+    toggleModal();
     // character speaks
-    harvestClamSpeak({ updateCharacter }, async () => {
+    harvestClamSpeak({ updateCharacter, setModalToShow }, async () => {
       try {
         await harvestClamForShell(tokenId, address);
         harvestCongrats({ updateCharacter, setModalToShow }); // character speaks

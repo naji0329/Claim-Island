@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-export const useModal = ({ show = false }) => {
+export const useModal = (props) => {
+  const show = props && props.show ? true : false;
   const [isShowing, setIsShowing] = useState(show);
 
   const toggleModal = () => {
