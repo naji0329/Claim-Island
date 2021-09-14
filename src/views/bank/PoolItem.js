@@ -54,10 +54,10 @@ const PoolItem = ({
 
   useAsync(async () => {
     const blocksPerYear = 10512000; // seconds per year / 3
-    const supply = +pool.poolLpTokenBalance > 0 ? pool.poolLpTokenBalance : 1;
+    const supply = +pool.poolLpTokenBalance > 0 ? formatEther(pool.poolLpTokenBalance) : 1;
     let apr;
     let _tvl;
-    const getTvl = (price) => new BigNumber(formatEther(supply)).multipliedBy(price);
+    const getTvl = (price) => new BigNumber(supply).multipliedBy(price);
 
     try {
       const earnedGem = await pendingGem(pool.poolId);
@@ -66,12 +66,12 @@ const PoolItem = ({
       const gemsPerBlock = await gemPerBlock();
       const gemPrice = await getGemPrice();
       const allocationShare = +pool.allocPoint / +pool.totalAllocation;
-      const gemPerYearByAlloc = new BigNumber(gemsPerBlock)
+      const gemPerYearByAlloc = new BigNumber(formatEther(gemsPerBlock))
         .multipliedBy(allocationShare)
         .multipliedBy(blocksPerYear);
 
       if (pool.lpToken === gemTokenAddress) {
-        apr = gemPerYearByAlloc.dividedBy(supply).toNumber().toFixed(2);
+        apr = gemPerYearByAlloc.dividedBy(supply).multipliedBy(100).toNumber().toFixed(2);
 
         _tvl = getTvl(gemPrice);
       } else if (pool.lpToken === shellTokenAddress) {
@@ -80,6 +80,7 @@ const PoolItem = ({
         apr = new BigNumber(gemPrice)
           .multipliedBy(gemPerYearByAlloc)
           .dividedBy(new BigNumber(shellPrice).multipliedBy(supply))
+          .multipliedBy(100)
           .toNumber()
           .toFixed(2);
 
@@ -91,7 +92,8 @@ const PoolItem = ({
 
         apr = new BigNumber(gemPrice)
           .multipliedBy(gemPerYearByAlloc)
-          .dividedBy(pairUsdValue)
+          .dividedBy(new BigNumber(tokenPrice).multipliedBy(supply))
+          .multipliedBy(100)
           .toNumber()
           .toFixed(2);
 
