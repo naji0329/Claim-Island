@@ -100,20 +100,35 @@ export const harvestChooseClams = ({ updateCharacter, setModalToShow }) => {
       },
     },
     buttonAlt: {
-      text: "Back to Island",
+      text: "Choose Clam for Harvesting.",
       alt: {
-        action: "internal",
-        destination: "/",
+        action: "cb",
+        destination: () => {
+          setModalToShow("harvest");
+        },
       },
     },
   });
 };
 
-export const harvestClamSpeak = ({ updateCharacter }, cb) => {
+export const harvestClamSpeak = ({ updateCharacter, setModalToShow }, cb) => {
   updateCharacter({
     name: "diego",
     action: "clam_shop.harvest_warn.text",
-    button: harvestClamInfo(),
+    // button: harvestClamInfo(),
+    button: {
+      text: "No. Buy Clams instead.",
+      alt: {
+        action: "cb",
+        destination: () => {
+          updateCharacter({
+            name: "diego",
+            action: null,
+          });
+          setModalToShow("buy");
+        },
+      },
+    },
     buttonAlt: {
       text: "Yes",
       alt: {
