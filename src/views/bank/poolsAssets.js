@@ -19,7 +19,8 @@ export const poolAssets = {
     isSingleStake: true,
     isNative: true,
   },
-  "0xAaf0A7603b9d45c5e2BE0c1b03Cf238168334Ce4": {
+  "0xd7f3f922578480a8e6ad71f020c202505a2bccb5": {
+    // testnet
     name: `SHELL - BNB`, // dummy bnb - carapace
     apy: `82.3%`,
     multiplier: `40x`,
@@ -30,7 +31,8 @@ export const poolAssets = {
     isNative: true,
     risk: "High Risk",
   },
-  "0x72032eEcACF17c516dAd81298FDA8Abdc212AB06": {
+  "0xe981bd77432db9f596eaa3836ebe3fc2e2264039": {
+    // testnet
     name: `GEM - BNB`, // dummy  bnb - jade
     apy: `82.3%`,
     multiplier: `40x`,
@@ -61,7 +63,9 @@ export const poolAssets = {
     ],
     risk: "Low Risk",
   },
-  "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16": {
+  "0xe0e92035077c39594793e61802a350347c320cf2": {
+    // testnet
+    // "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16": { // mainnet
     name: `BNB - BUSD`, // real
     apy: `82.3%`,
     multiplier: `40x`,
