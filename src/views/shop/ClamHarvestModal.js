@@ -18,9 +18,6 @@ import { getDNADecoded } from "../../web3/dnaDecoder";
 
 import "./index.scss";
 
-import Card from "../../components/Card";
-
-import ClamPic from "../../assets/collect-clam.png";
 import { actions } from "../../store/redux";
 import { get } from "lodash";
 import { Modal, useModal } from "components/Modal";
@@ -93,7 +90,7 @@ const ClamHarvestModal = ({
   updateCharacter,
   updateAccount,
 }) => {
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [clams, setClams] = useState([]);
   const [message, setMessage] = useState("Loading...");
   const [clamValueInShellToken, setClamValueInShellToken] = useState("");
@@ -110,7 +107,6 @@ const ClamHarvestModal = ({
         setModalToShow(null);
       } catch (e) {
         console.error(e);
-        // setIsLoading(false);
         updateAccount({ error: e.message });
         harvestError({ updateCharacter }); // character speaks
       }
@@ -145,6 +141,7 @@ const ClamHarvestModal = ({
   };
 
   useEffect(async () => {
+    setIsLoading(true);
     const incubationtime = await getClamIncubationTime();
 
     if (+clamBalance > 0) {
@@ -175,10 +172,12 @@ const ClamHarvestModal = ({
         harvestNoClamsAvailable({ updateCharacter, setModalToShow, hours }); // character speaks
       }
       setClams(filteredClams);
+      setIsLoading(false);
     } else {
       // clam balance is zero
       const hours = formatDuration(+incubationtime);
       harvestNoClamsAvailable({ updateCharacter, setModalToShow, hours }); // character speaks
+      setIsLoading(false);
     }
 
     setClamValueInShellToken(await getClamValueInShellToken());
@@ -187,19 +186,45 @@ const ClamHarvestModal = ({
   return (
     <div className="HarvestModal">
       <Modal isShowing={isShowing} onClose={closeModal} width={"30rem"}>
-        {clams.length ? (
-          <div className="ClamDeposit max-h-160">
-            {clams.length ? (
-              <div>
-                <h3 className="heading">{message}</h3>
-                {clams.map((clam, i) => (
-                  <ClamItem
-                    key={i}
-                    clam={clam}
-                    harvestClam={harvestClam}
-                    clamValueInShellToken={clamValueInShellToken}
-                  />
-                ))}
+        {isLoading ? (
+          <div>
+            <h1>Loading ...</h1>
+            <svg
+              className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-800"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          </div>
+        ) : (
+          <div>
+            {clams.length && !isLoading ? (
+              <div className="ClamDeposit max-h-160">
+                <div>
+                  <h3 className="heading">{message}</h3>
+                  {clams.map((clam, i) => (
+                    <ClamItem
+                      key={i}
+                      clam={clam}
+                      harvestClam={harvestClam}
+                      clamValueInShellToken={clamValueInShellToken}
+                    />
+                  ))}
+                </div>
               </div>
             ) : (
               <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
@@ -207,8 +232,6 @@ const ClamHarvestModal = ({
               </div>
             )}
           </div>
-        ) : (
-          ""
         )}
       </Modal>
     </div>
