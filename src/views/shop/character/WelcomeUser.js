@@ -21,6 +21,7 @@ export const harvestClamWarning = ({ updateCharacter, setUserReady, setModalToSh
       alt: {
         action: "cb",
         destination: () => {
+          setUserReady(true);
           updateCharacter({
             name: "diego",
             action: null,
@@ -38,12 +39,17 @@ const harvestClamsBtn = ({ updateCharacter, setUserReady, setModalToShow }) => {
     alt: {
       action: "cb",
       destination: () => {
-        setUserReady(true);
-        updateCharacter({
-          name: "diego",
-          action: null,
+        harvestClamWarning({
+          updateCharacter,
+          setUserReady,
+          setModalToShow,
         });
-        setModalToShow("harvest");
+        // setUserReady(true);
+        // updateCharacter({
+        //   name: "diego",
+        //   action: null,
+        // });
+        // setModalToShow("harvest");
       },
     },
   };

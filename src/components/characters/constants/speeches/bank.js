@@ -78,7 +78,7 @@ export const BANK_SPEECH = {
       dismiss: true,
       skip: false,
     },
-  }
+  },
 };
 
 export const BANK_BUTTONS = {
@@ -99,5 +99,5 @@ export const BANK_BUTTONS = {
       next: "OK",
       alt: false,
     },
-  }
+  },
 };

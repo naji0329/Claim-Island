@@ -24,13 +24,15 @@ export const FARM_SPEECH = {
       skip: false,
     },
     pearlSendSaferoom: {
-      text: ({ gems }) => `We will send your Pearl to the Saferoom. You can have your Clam back as well. Would you like to deposit it again to produce another Pearl?`,
+      text: ({ gems }) =>
+        `We will send your Pearl to the Saferoom. You can have your Clam back as well. Would you like to deposit it again to produce another Pearl?`,
       next: `purchase`,
       dismiss: false,
       skip: false,
     },
     pearlGenerateNew: {
-      text: ({ gems }) => `Great! you will just need to pay ${gems} $GEM to produce another Pearl. Do you want to continue?`,
+      text: ({ gems }) =>
+        `Great! you will just need to pay ${gems} $GEM to produce another Pearl. Do you want to continue?`,
       next: `purchase`,
       dismiss: false,
       skip: false,
@@ -60,5 +62,5 @@ export const FARM_BUTTONS = {
         text: "Go to Saferoom",
       },
     },
-  }
+  },
 };

@@ -128,7 +128,7 @@ export const CLAM_PRESALE_SPEECH = {
       dismiss: false,
       skip: false,
     },
-  }
+  },
 };
 
 export const CLAM_PRESALE_BUTTONS = {
