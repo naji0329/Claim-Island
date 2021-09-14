@@ -88,9 +88,10 @@ const PoolItem = ({
         const pairUsdValue = await getUsdValueOfPair(pool.lpToken);
         const totalLpSupply = await totalSupply(pool.lpToken);
         const tokenPrice = new BigNumber(pairUsdValue).dividedBy(formatEther(totalLpSupply));
+
         apr = new BigNumber(gemPrice)
           .multipliedBy(gemPerYearByAlloc)
-          .dividedBy(new BigNumber(pairUsdValue).multipliedBy(1e18))
+          .dividedBy(pairUsdValue)
           .toNumber()
           .toFixed(2);
 
