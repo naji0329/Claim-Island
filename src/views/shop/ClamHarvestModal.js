@@ -228,7 +228,7 @@ const ClamHarvestModal = ({
               </div>
             ) : (
               <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
-                You&#39;ve got no more clams available to add to farm
+                You&#39;ve got no clams ready for harvest at the moment
               </div>
             )}
           </div>
