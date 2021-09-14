@@ -3,10 +3,11 @@ import { connect } from "redux-zero/react";
 import { get } from "lodash";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
-import { SPEECHES, CHARACTERS, BUTTONS } from "./constants";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignInAlt, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faMinusCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { SPEECHES, CHARACTERS } from "./constants";
+import { withSkipDialog } from "../../hoc/withSkipDialog";
+import { actions } from "../../store/redux";
 
 import "./index.scss";
 
@@ -20,12 +21,16 @@ const CharacterWrapper = ({
   buttonAlt,
   onClickButton,
   suppressSpeechBubble,
+  onClickSkipDialogButton,
+  skipDialogs,
 }) => {
   const character = get(CHARACTERS, name);
   let speech = get(SPEECHES, action, action);
-  if (speech && typeof speech !== 'string') {
+  if (speech && typeof speech !== "string") {
     speech = variables ? speech(variables) : speech({});
   }
+  const actionPath = action ? action.replace(/\.text$/, "") : "";
+  const isNeedSkipDialog = get(SPEECHES, `${actionPath}.skip`, false);
 
   const [showBubble, setShowBubble] = useState(true);
   const [stateSpeech, setStateSpeech] = useState();
@@ -81,6 +86,10 @@ const CharacterWrapper = ({
     setShowBubble(false);
   };
 
+  const onClickMinimizedButton = () => {
+    setShowBubble(false);
+  };
+
   useEffect(() => {
     if (suppressSpeechBubble) {
       setShowBubble(false);
@@ -88,6 +97,12 @@ const CharacterWrapper = ({
       setShowBubble(!!action);
     }
   }, [action, suppressSpeechBubble]);
+
+  useEffect(() => {
+    if (isNeedSkipDialog && skipDialogs) {
+      setShowBubble(false);
+    }
+  }, [isNeedSkipDialog, actionPath]);
 
   return (
     <div
@@ -109,9 +124,6 @@ const CharacterWrapper = ({
           <div className="text-bubble flex-col justify-end pointer-events-none">
             <div className="text-wrapper">
               <div className="name px-10">{character.name}</div>
-              <button className="close-btn" onClick={dismissCharacter}>
-                <FontAwesomeIcon icon={faTimesCircle} className="ml-1" />
-              </button>
               <div className="speech">
                 <div
                   className="speech-text"
@@ -126,7 +138,6 @@ const CharacterWrapper = ({
                   <button
                     className="btn character-btn"
                     id="btn-next"
-
                     onClick={() =>
                       button.alt ? handleButtonCallback(button) : handleClickButton(button)
                     }
@@ -140,11 +151,26 @@ const CharacterWrapper = ({
                     onClick={() =>
                       buttonAlt.alt ? handleButtonCallback(buttonAlt) : handleClickButton(buttonAlt)
                     }
-
                   >
                     {buttonAlt.text}
                   </button>
                 )}
+              </div>
+              <div className="absolute top-4 right-8 text-white">
+                <button
+                  data-tip="Hide"
+                  className="mr-2 pointer-events-auto tooltip"
+                  onClick={onClickMinimizedButton}
+                >
+                  <FontAwesomeIcon icon={faMinusCircle} />
+                </button>
+                <button
+                  data-tip="Don't show again"
+                  className="pointer-events-auto tooltip"
+                  onClick={onClickSkipDialogButton}
+                >
+                  <FontAwesomeIcon icon={faTimesCircle} />
+                </button>
               </div>
             </div>
           </div>
@@ -164,12 +190,18 @@ const CharacterWrapper = ({
   );
 };
 
-const mapToProps = ({ character: { name, action, variables, button, buttonAlt, suppressSpeechBubble } }) => ({
+const mapToProps = ({
+  character: { name, action, variables, button, buttonAlt, suppressSpeechBubble, skipDialogs },
+}) => ({
   name,
   action,
   variables,
   button,
   buttonAlt,
   suppressSpeechBubble,
+  skipDialogs,
 });
-export default connect(mapToProps)(CharacterWrapper);
+
+const mapDispatchToProps = () => ({ updateCharacter: actions().updateCharacter });
+
+export default connect(mapToProps, mapDispatchToProps)(withSkipDialog(CharacterWrapper));

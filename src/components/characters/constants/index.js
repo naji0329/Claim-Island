@@ -12,6 +12,7 @@ import { SHELL_PRESALE_SPEECH, SHELL_PRESALE_BUTTONS } from "./speeches/shell_pr
 import { CLAM_PRESALE_BUTTONS, CLAM_PRESALE_SPEECH } from "./speeches/clam_presale";
 import { SHELL_VOTING_SPEECH, SHELL_VOTING_BUTTONS } from "./speeches/shell_voting";
 import { CLAM_CLAIMERS_SPEECH, CLAM_CLAIMERS_BUTTONS } from "./speeches/clam_claimers";
+import { OTHER_SPEECH, OTHER_BUTTONS } from "./speeches/other";
 
 export const CHARACTERS = {
   nacre: {
@@ -42,6 +43,7 @@ export const SPEECHES = {
   ...FARM_SPEECH,
   ...CLAM_SHOP_SPEECH,
   ...SAFEROOM_SPEECH,
+  ...OTHER_SPEECH,
 };
 
 export const BUTTONS = {
@@ -53,5 +55,6 @@ export const BUTTONS = {
   ...BANK_BUTTONS,
   ...FARM_BUTTONS,
   ...SAFEROOM_BUTTONS,
-  ...CLAM_SHOP_BUTTONS
+  ...CLAM_SHOP_BUTTONS,
+  ...OTHER_BUTTONS,
 };

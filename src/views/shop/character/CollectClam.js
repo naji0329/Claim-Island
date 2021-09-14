@@ -31,7 +31,7 @@ export const collectClamError = ({ updateCharacter }) => {
   });
 };
 
-const btnHarvestClams = ({ updateCharacter, setModalToShow }) => {
+export const btnHarvestClams = ({ updateCharacter, setModalToShow }) => {
   return {
     text: "Harvest Clams",
     alt: {
@@ -47,7 +47,7 @@ const btnHarvestClams = ({ updateCharacter, setModalToShow }) => {
   };
 };
 
-const btnBuyClams = ({ updateCharacter, setModalToShow }) => {
+export const btnBuyClams = ({ updateCharacter, setModalToShow }) => {
   return {
     text: "Buy Clams",
     alt: {

@@ -105,7 +105,7 @@ const ClamHarvestModal = ({
     harvestClamSpeak({ updateCharacter }, async () => {
       try {
         await harvestClamForShell(tokenId, address);
-        harvestCongrats({ updateCharacter }); // character speaks
+        harvestCongrats({ updateCharacter, setModalToShow }); // character speaks
         setModalToShow(null);
       } catch (e) {
         console.error(e);

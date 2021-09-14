@@ -25,14 +25,14 @@ export const CLAM_SHOP_SPEECH = {
       text: `You Clam is ready for collection!`,
       next: false,
       dismiss: true,
-      skip: false,
+      skip: true,
     },
 
     collection_processing: {
       text: `One moment, just let me unbox this Clam for you. Did you know that no one knows what Clam is inside until you collect it, not even me?`,
       next: false,
       dismiss: true,
-      skip: false,
+      skip: true,
     },
 
     collect_congrats: {
@@ -46,14 +46,14 @@ export const CLAM_SHOP_SPEECH = {
       text: `Hold on while we process your transaction...`,
       next: `congrats`,
       dismiss: false,
-      skip: false,
+      skip: true,
     },
 
     congrats: {
       text: `Thank you for your purchase! Let me just go fetch your Clam. I'll just be a minute.`,
       next: "collection",
       dismiss: true,
-      skip: false,
+      skip: true,
     },
 
     choose_path: {
@@ -71,7 +71,8 @@ export const CLAM_SHOP_SPEECH = {
     },
 
     harvest_no_clams: {
-      text: (d) => `I'm sorry, you don't have any Clams that can be harvested right now. New Clams need to be incubated for ${d.incubationTime} in the Saferoom before they can be harvested for $SHELL or farmed for Pearls.`,
+      text: (d) =>
+        `I'm sorry, you don't have any Clams that can be harvested right now. New Clams need to be incubated for ${d.incubationTime} in the Saferoom before they can be harvested for $SHELL or farmed for Pearls.`,
       next: false,
       dismiss: true,
       skip: false,
@@ -90,9 +91,8 @@ export const CLAM_SHOP_SPEECH = {
       dismiss: true,
       skip: false,
     },
-  }
+  },
 };
-
 
 export const CLAM_SHOP_BUTTONS = {
   clam_shop: {
@@ -100,5 +100,5 @@ export const CLAM_SHOP_BUTTONS = {
       next: "Let's go!",
       alt: false,
     },
-  }
+  },
 };

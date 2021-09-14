@@ -144,7 +144,7 @@ const DepositTab = ({
           {errors.depositAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
 
-        <ActionButton style="btn-deposit" isDisabled={!isValid} isLoading={inTx}>
+        <ActionButton style="btn-deposit" isDisabled={!isValid || inTx} isLoading={inTx}>
           Deposit {get(selectedPool, "name")}
         </ActionButton>
       </div>
