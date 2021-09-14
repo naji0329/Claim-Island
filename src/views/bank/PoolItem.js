@@ -7,16 +7,14 @@ import { useEthers } from "@usedapp/core";
 import { formatEther } from "@ethersproject/units";
 import BigNumber from "bignumber.js";
 
-import { pendingGem, gemPerBlock } from "web3/bank";
-// import { hasMaxUintAllowanceBank } from "web3/bep20";
-
+import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
 import PoolHarvest from "./utils/PoolHarvest";
 import PoolDepositWithdraw from "./utils/PoolDepositWithdraw";
 
-import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
-
-import { gemTokenAddress } from "web3/constants";
-import { getTokenPriceOfPair, getGemPrice } from "web3/pancakeRouter";
+import { pendingGem, gemPerBlock } from "web3/bank";
+import { totalSupply } from "web3/bep20";
+import { gemTokenAddress, shellTokenAddress } from "web3/constants";
+import { getUsdValueOfPair, getGemPrice, getUsdPriceOfToken } from "web3/pancakeRouter";
 
 import InfoTooltip from "components/InfoTooltip";
 import Tooltip from "components/Tooltip";
@@ -54,55 +52,57 @@ const PoolItem = ({
 
   const riskStyle = riskClass(pool.risk);
 
-  const calcAPR = ({ poolInfo, gemsPerBlock, gemPrice, tokenPrice }) => {
-    const blocksPerYear = 10512000; // seconds per year / 3
-    const supply = +poolInfo.poolLpTokenBalance || 1;
-    let finalApr;
-
-    if (poolInfo.lpToken === gemTokenAddress) {
-      finalApr =
-        Math.round(
-          ((((gemsPerBlock * Number(poolInfo.allocPoint)) / Number(poolInfo.totalAllocation)) *
-            blocksPerYear) /
-            supply) *
-            100
-        ) / 100;
-    } else {
-      finalApr =
-        Math.round(
-          ((((gemPrice * Number(gemsPerBlock) * Number(poolInfo.allocPoint)) /
-            Number(poolInfo.totalAllocation)) *
-            blocksPerYear) /
-            supply) *
-            tokenPrice *
-            100
-        ) / 100;
-    }
-
-    if (finalApr > 1000000000000) {
-      finalApr = "∞";
-    }
-
-    return finalApr;
-  };
-
   useAsync(async () => {
+    const blocksPerYear = 10512000; // seconds per year / 3
+    const supply = +pool.poolLpTokenBalance > 0 ? pool.poolLpTokenBalance : 1;
+    let apr;
+    let _tvl;
+    const getTvl = (price) => new BigNumber(formatEther(supply)).multipliedBy(price);
+
     try {
       const earnedGem = await pendingGem(pool.poolId);
+      setGemEarned(earnedGem);
+
       const gemsPerBlock = await gemPerBlock();
       const gemPrice = await getGemPrice();
-      const tokenPrice = await getTokenPriceOfPair(pool.lpToken, pool.isSingleStake);
+      const allocationShare = +pool.allocPoint / +pool.totalAllocation;
+      const gemPerYearByAlloc = new BigNumber(gemsPerBlock)
+        .multipliedBy(allocationShare)
+        .multipliedBy(blocksPerYear);
 
-      const apr = calcAPR({
-        poolInfo: pool,
-        gemsPerBlock,
-        gemPrice,
-        tokenPrice,
-      });
+      if (pool.lpToken === gemTokenAddress) {
+        apr = gemPerYearByAlloc.dividedBy(supply).toNumber().toFixed(2);
 
-      setGemEarned(earnedGem);
+        _tvl = getTvl(gemPrice);
+      } else if (pool.lpToken === shellTokenAddress) {
+        const shellPrice = await getUsdPriceOfToken(pool.lpToken);
+
+        apr = new BigNumber(gemPrice)
+          .multipliedBy(gemPerYearByAlloc)
+          .dividedBy(new BigNumber(shellPrice).multipliedBy(supply))
+          .toNumber()
+          .toFixed(2);
+
+        _tvl = getTvl(shellPrice);
+      } else {
+        const pairUsdValue = await getUsdValueOfPair(pool.lpToken);
+        const totalLpSupply = await totalSupply(pool.lpToken);
+        const tokenPrice = new BigNumber(pairUsdValue).dividedBy(formatEther(totalLpSupply));
+        apr = new BigNumber(gemPrice)
+          .multipliedBy(gemPerYearByAlloc)
+          .dividedBy(new BigNumber(pairUsdValue).multipliedBy(1e18))
+          .toNumber()
+          .toFixed(2);
+
+        _tvl = getTvl(tokenPrice);
+      }
+
+      if (+apr > 1_000_000_000_000) {
+        apr = "∞";
+      }
+
+      setTvl(_tvl);
       setApr(apr);
-      setTvl(new BigNumber(formatEther(pool.poolLpTokenBalance)).multipliedBy(tokenPrice));
     } catch (err) {
       updateAccount({ error: err.message });
     }
@@ -146,57 +146,55 @@ const PoolItem = ({
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-md overflow-hidden border-2 border-gray-800 flex flex-col justify-between mb-4">
-        <div className="flex justify-between items-center py-1 px-4">
-          <div className="flex justify-start items-center min-w-xs">
-            <div className="avatar-group -space-x-6">
+      <div className="flex flex-col justify-between mb-4 overflow-hidden bg-white border-2 border-gray-800 shadow-md rounded-xl">
+        <div className="flex items-center justify-between px-4 py-1">
+          <div className="flex items-center justify-start min-w-xs">
+            <div className="-space-x-6 avatar-group">
               {pool.images &&
                 pool.images.map((image, i) => (
-                  <div className="avatar bg-white" key={i}>
+                  <div className="bg-white avatar" key={i}>
                     <div className="w-12 h-12">
                       <img src={image} />
                     </div>
                   </div>
                 ))}
             </div>
-            <div className="mx-2 font-aristotelica-bold text-xl">{pool.name}</div>
+            <div className="mx-2 text-xl font-aristotelica-bold">{pool.name}</div>
           </div>
 
-          {/* <div className="badge badge-warning">Medium risk</div> */}
-
-          <div className="text-sm block">
+          <div className="block text-sm">
             <Tooltip text="Relative to other investment pools - higher means more risk of capital value fluctuation">
               <p className={riskStyle}>{pool.risk}</p>
             </Tooltip>
           </div>
-          <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Reward Share</p>
-            <div className="font-bold text-black text-center">
+          <div className="block text-sm">
+            <p className="mb-1 text-xs font-semibold leading-none text-gray-500">Reward Share</p>
+            <div className="font-bold text-center text-black">
               {pool.multiplier}%
               <InfoTooltip text="The share of overall rewards allocated to this pool" />
             </div>
           </div>
 
-          <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none text-center">APR</p>
+          <div className="block text-sm">
+            <p className="mb-1 text-xs font-semibold leading-none text-center text-gray-500">APR</p>
 
-            <div className="font-bold text-black items-center">
+            <div className="items-center font-bold text-black">
               {apr ? `${apr}%` : "loading..."}
               <InfoTooltip text="Annual Percentage Return - non-compounded rate of return" />
             </div>
           </div>
 
-          <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">Deposited</p>
-            <p className="font-bold text-gray-300 text-center">{pool.userDepositAmountInPool}</p>
+          <div className="block text-sm">
+            <p className="mb-1 text-xs font-semibold leading-none text-gray-500">Deposited</p>
+            <p className="font-bold text-center text-gray-300">{pool.userDepositAmountInPool}</p>
           </div>
 
-          <div className="text-sm block">
-            <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">To Harvest</p>
-            <p className="font-bold text-gray-300 text-center">{pool.userRewardAmountInPool}</p>
+          <div className="block text-sm">
+            <p className="mb-1 text-xs font-semibold leading-none text-gray-500">To Harvest</p>
+            <p className="font-bold text-center text-gray-300">{pool.userRewardAmountInPool}</p>
           </div>
 
-          <div className="text-sm block">
+          <div className="block text-sm">
             {address ? (
               <button onClick={handleClick}>
                 <svg
@@ -211,7 +209,7 @@ const PoolItem = ({
               </button>
             ) : (
               <p
-                className="text-gray-500 font-semibold text-xs mb-1 leading-none"
+                className="mb-1 text-xs font-semibold leading-none text-gray-500"
                 onClick={() => activateBrowserWallet()}
               >
                 Connect Wallet
@@ -221,7 +219,7 @@ const PoolItem = ({
         </div>
 
         {isAdditionalInfoVisible && (
-          <div className="flex justify-between items-start p-4 border-t-2 border-gray-700 h-96">
+          <div className="flex items-start justify-between p-4 border-t-2 border-gray-700 h-96">
             <div className="flex w-1/5">
               <PoolData depositFee={depositFee} urlForExchange={urlForExchange} tvl={tvl} />
             </div>
