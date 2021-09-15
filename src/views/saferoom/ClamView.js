@@ -1,18 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Accordion from "../../components/Accordion";
 import { get } from "lodash";
 
+import { getClamIncubationTime } from "web3/clam";
+import { getCurrentBlockTimestamp } from "web3/index";
+
 import { Clam3DView } from "../../components/clam3DView";
-// import { Pearl3DView } from "../../components/pearl3DView";
 
-// import { getTraits } from "../../components/three/3DClams/main";
-import { Link } from "react-router-dom";
-
-export default ({ dna, dnaDecoded }) => {
+export default ({ dna, dnaDecoded, birthTime }) => {
   const [showTraits, setShowTraits] = useState(false);
-  // const clamTraits = getTraits();
-
-  // console.log({ dnaDecoded });
+  const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
+  const lifespan = get(dnaDecoded, "lifespan");
 
   const RowStat = ({ label, value }) => (
     <div className="text-sm flex flex-row justify-between my-1">
@@ -59,6 +58,19 @@ export default ({ dna, dnaDecoded }) => {
       ),
     },
   ];
+
+  useEffect(() => {
+    const initClamView = async () => {
+      const incubationTime = await getClamIncubationTime();
+      const currentBlockTimestamp = await getCurrentBlockTimestamp();
+
+      const isClamAvailableForHarvest =
+        lifespan !== "0" && birthTime && currentBlockTimestamp > +birthTime + +incubationTime;
+      setIsClamAvailableForHarvest(isClamAvailableForHarvest);
+    };
+
+    initClamView();
+  }, [birthTime, lifespan]);
   return (
     <>
       <div className="flex flex-col justify-between w-full">
@@ -72,8 +84,6 @@ export default ({ dna, dnaDecoded }) => {
             // clamTraits={clamTraits}
             showTraitsTable={showTraits}
           />
-          {/** 3D Clam with react three fiber */}
-          {/*<Pearl3DView />*/}
           <div className="w-full md:w-1/2 px-4 md:px-6">
             <Accordion data={accordionData} />
           </div>
@@ -83,6 +93,17 @@ export default ({ dna, dnaDecoded }) => {
           <Link to="/farms">
             <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
               Stake in Farm
+            </button>
+          </Link>
+          <Link
+            className={isClamAvailableForHarvest ? "" : "cursor-not-allowed"}
+            to={isClamAvailableForHarvest ? "/shop?view=harvest" : "#"}
+          >
+            <button
+              disabled={!isClamAvailableForHarvest}
+              className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:opacity-50 font-semibold"
+            >
+              Harvest for $SHELL
             </button>
           </Link>
           <button

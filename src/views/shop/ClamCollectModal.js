@@ -63,7 +63,7 @@ const ClamCollectModal = ({
 
           <div className="py-2 flex flex-col">
             {isLoading ? (
-              <button disabled={isLoading} type="submit" className="sending-txn-btn">
+              <button disabled={isLoading} type="submit" className="flex sending-txn-btn">
                 <SVGSpinner />
                 Sending transaction...
               </button>

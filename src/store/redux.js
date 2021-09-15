@@ -96,7 +96,7 @@ export const actions = (store) => ({
       character: {
         ...state.character,
         ...value,
-        suppressSpeechBubble: value.suppressSpeechBubble,
+        suppressSpeechBubble: value.suppressSpeechBubble || value.skipDialogs,
       },
     };
     return obj;

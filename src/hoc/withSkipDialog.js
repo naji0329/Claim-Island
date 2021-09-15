@@ -48,17 +48,17 @@ export const withSkipDialog = (WrappedComponent) => (props) => {
     setSkipModal({
       action: "skip.propose.text",
       button: {
-        text: BUTTONS.skip.propose.next,
-        alt: {
-          action: "cb",
-          destination: onSkipAccept,
-        },
-      },
-      buttonAlt: {
         text: BUTTONS.skip.propose.alt,
         alt: {
           action: "cb",
           destination: onSkipDecline,
+        },
+      },
+      buttonAlt: {
+        text: BUTTONS.skip.propose.next,
+        alt: {
+          action: "cb",
+          destination: onSkipAccept,
         },
       },
     });

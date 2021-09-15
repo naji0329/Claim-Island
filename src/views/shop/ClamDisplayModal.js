@@ -13,6 +13,7 @@ const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) 
   const [clamDna, setClamDna] = useState("");
   const [clamDnaDecoded, setClamDnaDecoded] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [clamBirthTime, setClamBirthTime] = useState();
 
   useEffect(async () => {
     if (!clamToCollect && address) {
@@ -27,8 +28,10 @@ const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) 
 
         if (tokenId) {
           const clamData = await clamContract.getClamData(tokenId);
+
           if (clamData.dna.length > 1) {
             setClamDna(clamData.dna);
+            setClamBirthTime(clamData.birthTime);
 
             const decodedDna = await getDNADecoded(clamData.dna).catch(console.log);
             console.log({ decodedDna });
@@ -48,7 +51,7 @@ const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) 
       <div className="bg-white shadow-md rounded-xl p-5 flex-1 justify-center md:flex items-center h-full flex-col w-full">
         {clamDna && clamDnaDecoded && (
           <>
-            <ClamView dna={clamDna} dnaDecoded={clamDnaDecoded} />
+            <ClamView dna={clamDna} dnaDecoded={clamDnaDecoded} birthTime={clamBirthTime} />
           </>
         )}
         {isLoading && (

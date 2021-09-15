@@ -44,11 +44,12 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
   const getDna = async (getByNFTIndex, getNFTData, account, index, getDecodedDNA) => {
     const tokenId = await getByNFTIndex(account, index);
     const data = await getNFTData(tokenId);
-    const { dna } = data;
+
+    const { dna, birthTime } = data;
 
     if (dna.length > 1) {
       const dnaDecoded = await getDecodedDNA(dna);
-      return { dna, dnaDecoded };
+      return { dna, dnaDecoded, birthTime };
     }
   };
 
@@ -217,8 +218,9 @@ const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
 
       <div className="px-3 py-2 flex justify-between">
         <Link
-          className={`mx-2 px-5 py-6 rounded-xl ${tab === "Clam" ? "bg-blue-400 text-white" : "text-blue-700 bg-grey"
-            }`}
+          className={`mx-2 px-5 py-6 rounded-xl ${
+            tab === "Clam" ? "bg-blue-400 text-white" : "text-blue-700 bg-grey"
+          }`}
           to={`${url}/clam`}
           onClick={() => setTab("Clam")}
         >
@@ -226,8 +228,9 @@ const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
         </Link>
 
         <Link
-          className={`mx-2 px-5 py-6 rounded-xl ${tab === "Pearl" ? "bg-blue-400 text-white" : "text-blue-700"
-            }`}
+          className={`mx-2 px-5 py-6 rounded-xl ${
+            tab === "Pearl" ? "bg-blue-400 text-white" : "text-blue-700"
+          }`}
           to={`${url}/pearl`}
           onClick={() => setTab("Pearl")}
         >
