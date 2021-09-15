@@ -11,21 +11,21 @@ const localhostMulticallAddress =
     : "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1";
 
 //// add test contracts here
-export const shellTokenAddress = "0xb3f768D115B234Ac39B21D40Cb5E4D530AdAbea4"
-export const clamNFTAddress = "0xAbF5E799B79B9DD2AfE8766EA672257bb2c96EB8"
-export const gemTokenAddress = "0xBbdb7f29e9D40E8317d8E7cf0552846D3F2251F1"
-export const gemLockerAddress = "0xE90aB579610a46fAE5d8eb892Cf1533DA3cd976E"
-export const pearlProductionTimeReductionAddress = "0x93CdD7c46504cAC2E3c2c6BdAfc3Cc2866E94127"
-export const bankAddress = "0x8D2592412AB893cE5048d836c49147993C3eBEE3"
-export const pearlDnaDecoderAddress = "0xde89e60e8954880604D1141365Af00aCD3085365"
-export const pearlNFTAddress = "0x1cB9Abaf22cB2D41808c998BbC07EE9e773a007A"
-export const pearlBurnerAddress = "0xD0772158DFcedf5E067c2E50083BC7EC019BDE37"
-export const rngAddress = "0x2E1179D2d8c393499Dd65B9a3b3349e64eb2c6a6"
-export const dnaDecoderAddress = "0x787E0903fF061a901255cb95dd2c645f956D4D1B"
-export const clamBonusAddress = "0xD434b21B5F9E3163e8FBDF2FB698A17E443e80D1"
-export const clamLotteryAddress = "0xBecf0e8f5DE07316DC6E2f317775fAd27d4695B6"
-export const clamShopAddress = "0x96930F0667701D7A24B563138Fe0A34ACC0d2E9e"
-export const pearlFarmAddress = "0xb073dD56EDc93Ea80Bd3cBbB62eB2093aDAa5903"
+export const shellTokenAddress = "0xb3f768D115B234Ac39B21D40Cb5E4D530AdAbea4";
+export const clamNFTAddress = "0xAbF5E799B79B9DD2AfE8766EA672257bb2c96EB8";
+export const gemTokenAddress = "0xBbdb7f29e9D40E8317d8E7cf0552846D3F2251F1";
+export const gemLockerAddress = "0xE90aB579610a46fAE5d8eb892Cf1533DA3cd976E";
+export const pearlProductionTimeReductionAddress = "0x93CdD7c46504cAC2E3c2c6BdAfc3Cc2866E94127";
+export const bankAddress = "0x8D2592412AB893cE5048d836c49147993C3eBEE3";
+export const pearlDnaDecoderAddress = "0xde89e60e8954880604D1141365Af00aCD3085365";
+export const pearlNFTAddress = "0x1cB9Abaf22cB2D41808c998BbC07EE9e773a007A";
+export const pearlBurnerAddress = "0xD0772158DFcedf5E067c2E50083BC7EC019BDE37";
+export const rngAddress = "0x2E1179D2d8c393499Dd65B9a3b3349e64eb2c6a6";
+export const dnaDecoderAddress = "0x787E0903fF061a901255cb95dd2c645f956D4D1B";
+export const clamBonusAddress = "0xD434b21B5F9E3163e8FBDF2FB698A17E443e80D1";
+export const clamLotteryAddress = "0xBecf0e8f5DE07316DC6E2f317775fAd27d4695B6";
+export const clamShopAddress = "0x96930F0667701D7A24B563138Fe0A34ACC0d2E9e";
+export const pearlFarmAddress = "0xb073dD56EDc93Ea80Bd3cBbB62eB2093aDAa5903";
 
 // export const shellTokenAddress = "0x6BD2ce3D5556799464Aa4737a1742C1bC6DD2304";
 // export const clamNFTAddress = "0x48F38cfac50f34Eec654a2Cabf219fB31bA39394";
@@ -58,6 +58,8 @@ export const multicallAddress = {
 };
 
 export const zapAddress = "0x25AE8E764b0c8318c093d8eFdd03000b442bb56a";
+// export const pancakeRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
+export const pancakeRouterAddress = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3"; // testnet
 
 // legacy contracts
 export const clamPresaleAddress = "0xAAEB1Ea585DbeF06349ac371EBBA54efa0713D1D";
@@ -67,4 +69,8 @@ export const clamClaimersAddress = "0xDaF219f41931B4833A71B9D08881491010246691";
 
 export const zeroHash = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
-export const wBNB = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+// tokens
+// export const wBNB = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+export const wBNB = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"; // testnet
+// export const BUSD = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
+export const BUSD = "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7"; // testnet

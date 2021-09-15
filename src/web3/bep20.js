@@ -13,6 +13,11 @@ export const balanceOf = async (address, account) => {
   return accountBalance;
 };
 
+export const totalSupply = async (address) => {
+  const token = contractFactory({ abi: BEP20ABI, address });
+  return token.methods.totalSupply().call();
+};
+
 export const approveContractForMaxUintErc721 = async (tokenAddress, contractAddress) => {
   const account = getAccount();
   const token = contractFactory({ abi: ERC721ABI, address: tokenAddress });
