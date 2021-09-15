@@ -74,7 +74,7 @@ export const Pearl = (props) => {
 
   // check if cache api image exists
   const checkImgExists = async (cache) => {
-    const response = await cache.match(`/${pearlDna}`);
+    const response = await cache.match(`/pearls/${pearlDna}`);
     if (response) {
       let pearlImg = await response.json();
       pearlImg = pearlImg ? pearlImg.img : pearlImg;
@@ -89,11 +89,11 @@ export const Pearl = (props) => {
     let imgExists = await checkImgExists(cache);
 
     if (!imgExists) {
-      const img = canvasGl.domElement.toDataURL();
-      cache.put(`/${pearlDna}`, new Response(JSON.stringify({ img })));
-      //startRotation(true);
-    } else {
-      //startRotation(true);
+      /** Need some time to render pearl on scene */
+      setTimeout(() => {
+        const img = canvasGl.domElement.toDataURL();
+        cache.put(`/pearls/${pearlDna}`, new Response(JSON.stringify({ img })));
+      }, 100);
     }
   };
 
