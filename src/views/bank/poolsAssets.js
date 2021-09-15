@@ -19,7 +19,7 @@ export const poolAssets = {
     isSingleStake: true,
     isNative: true,
   },
-  "0xd7f3f922578480a8e6ad71f020c202505a2bccb5": {
+  "0xd7f3F922578480a8E6AD71f020C202505A2BCcb5": {
     // testnet
     name: `SHELL - BNB`, // dummy bnb - carapace
     apy: `82.3%`,
@@ -31,7 +31,7 @@ export const poolAssets = {
     isNative: true,
     risk: "High Risk",
   },
-  "0xe981bd77432db9f596eaa3836ebe3fc2e2264039": {
+  "0xe981Bd77432db9F596eAA3836EbE3Fc2E2264039": {
     // testnet
     name: `GEM - BNB`, // dummy  bnb - jade
     apy: `82.3%`,
