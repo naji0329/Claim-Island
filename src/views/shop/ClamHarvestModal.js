@@ -90,7 +90,7 @@ const ClamHarvestModal = ({
   updateCharacter,
   updateAccount,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [clams, setClams] = useState([]);
   const [message, setMessage] = useState("Loading...");
   const [clamValueInShellToken, setClamValueInShellToken] = useState("");
