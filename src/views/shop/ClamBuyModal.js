@@ -12,6 +12,9 @@ import ClamUnknown from "assets/img/clam_unknown.png";
 import ClamIcon from "assets/clam-icon.png";
 import ArrowDown from "assets/img/arrow-down.svg";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+
 import { buyClam, getPrice, canUnlockGemVestedAmount, buyClamWithVestedTokens } from "web3/clam";
 import { infiniteApproveSpending } from "web3/gem";
 import { clamShopAddress } from "web3/constants";
@@ -135,7 +138,12 @@ const ClamBuyModal = ({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  {clamShopAddress}
+                  <div className="truncate w-2/3 inline-block underline">{clamShopAddress}</div>
+                  <FontAwesomeIcon
+                    className="absolute"
+                    style={{ marginTop: "2px" }}
+                    icon={faExternalLinkAlt}
+                  />
                 </a>
               ) : (
                 <span className="text-yellow-400 text-center">Wallet not connected</span>
@@ -152,12 +160,9 @@ const ClamBuyModal = ({
                       <div className="flex flex-row items-center justify-between">
                         <div className="flex">
                           <img className="w-12 mr-2" src={ClamIcon} />
-                          <input
-                            disabled
-                            value={formatEther(clamPrice)}
-                            className="bg-gray-100 text-center text-xl w-20 text-black p-2 font-normal rounded border-none font-extrabold"
-                            {...register("input", { required: true })}
-                          />
+                          <div className="text-center text-xl w-20 text-black p-2 font-extrabold">
+                            {formatEther(clamPrice)}
+                          </div>
                           <span className="flex items-center text-lg font-extrabold font-sans mx-1">
                             GEM
                           </span>
@@ -171,6 +176,10 @@ const ClamBuyModal = ({
                             <span>Vested:</span>
                             <span>{formatNumber(+formatEther(lockedGem), 3)} GEM</span>
                           </div>
+                          <div className="flex justify-between">
+                            <span>1 CLAM =</span>
+                            <span>{formatEther(clamPrice)} GEM</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -182,32 +191,8 @@ const ClamBuyModal = ({
             <Divider />
 
             {/* output */}
-            <div className="bg-white border-2 shadow-xl rounded-xl">
-              <div className="px-2 py-2">
-                <div className="flex flex-col">
-                  <h4 className="text-lg font-semibold mb-2">Clams to buy</h4>
-                  <div className="flex flex-col text-sm text-gray-500">
-                    <div className="flex flex-col">
-                      <div className="flex flex-row items-center justify-between">
-                        <div className="flex">
-                          <img className="w-12 mr-2" src={ClamUnknown} />
-                          <input
-                            disabled
-                            value="1"
-                            className="bg-gray-100 text-center text-xl w-20  text-black p-2 font-normal rounded  border-none font-extrabold"
-                            {...register("output", { required: true })}
-                          />
-                        </div>
-                        {/* <span className="flex items-center  px-3 text-lg font-extrabold font-sans mx-1">
-                        CLAM
-                      </span> */}
-
-                        <div className="mx-2">1 CLAM = {formatEther(clamPrice)} GEM</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="flex flex-col justify-center items-center">
+              <img className="w-1/2" src={ClamUnknown} />
             </div>
 
             <div className="py-2 flex flex-col">
@@ -257,7 +242,7 @@ const ClamBuyModal = ({
                         ${canBuy ? "bg-blue-600" : "btn-disabled bg-grey-light"}
                         `}
                     >
-                      {canBuy ? "Buy 1 Clam" : "Not enough GEM"}
+                      {canBuy ? "Buy Clam" : "Not enough GEM"}
                     </button>
                   )}
                 </>
