@@ -19,7 +19,7 @@ const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker, showBurn }) => {
   useEffect(() => {
     const getPearlImage = async () => {
       const cache = await caches.open("clam-island");
-      const res = await cache.match(`/${pearl.pearlDataValues.dna}`);
+      const res = await cache.match(`/pearls/${pearl.pearlDataValues.dna}`);
       const image = res ? await res.json() : "";
 
       setImage(image && image.img ? image.img : NFTUnknown);

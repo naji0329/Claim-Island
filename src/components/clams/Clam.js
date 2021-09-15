@@ -51,7 +51,7 @@ export const Clam = (props) => {
 
   // check if cache api image exists
   const checkImgExists = async (cache) => {
-    const response = await cache.match(`/${clamDna}`);
+    const response = await cache.match(`/clams/${clamDna}`);
     if (response) {
       let clamImg = await response.json();
       clamImg = clamImg ? clamImg.img : clamImg;
@@ -66,9 +66,12 @@ export const Clam = (props) => {
     let imgExists = await checkImgExists(cache);
 
     if (!imgExists) {
-      const img = canvasGl.domElement.toDataURL();
-      cache.put(`/${clamDna}`, new Response(JSON.stringify({ img })));
-      startRotation(true);
+      /** Need some time to render clam on scene */
+      setTimeout(() => {
+        const img = canvasGl.domElement.toDataURL();
+        cache.put(`/clams/${clamDna}`, new Response(JSON.stringify({ img })));
+        startRotation(true);
+      }, 100);
     } else {
       startRotation(true);
     }

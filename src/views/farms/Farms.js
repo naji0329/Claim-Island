@@ -145,7 +145,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     const promises = await Promise.all(
       clams.map((clam) => {
         const dna = clam.clamDataValues.dna;
-        return cache.match(`/${dna}`);
+        return cache.match(`/clams/${dna}`);
       })
     );
     const images = await Promise.all(
