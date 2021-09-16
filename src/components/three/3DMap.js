@@ -33,6 +33,7 @@ const Map3D = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [hoverName, setHoverName] = useState("");
+  const [constrolsCmd, setConstrolsCmd] = useState(null);
 
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
@@ -57,11 +58,11 @@ const Map3D = () => {
   }, [mapRef]);
 
   const zoomIn = () => {
-    controls.dollyIn();
+    constrolsCmd.dollyIn();
   };
 
   const zoomOut = () => {
-    controls.dollyOut();
+    constrolsCmd.dollyOut();
   };
 
   const create3DScene = async (element, setLoading) => {
@@ -81,6 +82,7 @@ const Map3D = () => {
     controls.maxDistance = 1500;
     controls.maxPolarAngle = 1.5;
     controls.enablePan = false;
+    setConstrolsCmd(controls);
 
     scene = new THREE.Scene();
 

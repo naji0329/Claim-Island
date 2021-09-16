@@ -106,7 +106,7 @@ const FarmItem = ({
       setButtonText("Collect Pearl");
       setAction("collect");
     }
-    if (!readyForPearl) {
+    if (readyForPearl) {
       setButtonText("Open Clam");
       setAction("open");
     }
