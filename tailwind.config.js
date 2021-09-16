@@ -84,7 +84,7 @@ module.exports = {
       cursor: ["active"],
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 
   daisyui: {
     base: false,

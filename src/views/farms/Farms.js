@@ -31,6 +31,7 @@ import PearlView from "./PearlView";
 import { MODAL_OPTS } from "./constants";
 import { WelcomeUser, withdrawClamSpeak } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
+import { pearlSendToSaferoom } from "./character/pearlCollection";
 
 const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
   let history = useHistory();
@@ -51,6 +52,13 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       await unstakeClam(clamId);
     } catch (err) {
       updateAccount({ error: err.message });
+    }
+  };
+
+  const onModalClose = () => {
+    toggleModal();
+    if (modalSelected === MODAL_OPTS.VIEW_PEARL) {
+      pearlSendToSaferoom({ updateCharacter }, onDepositClam);
     }
   };
 
@@ -216,8 +224,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
       <Modal
         isShowing={isShowing}
-        onClose={toggleModal}
-        width={modalSelected === MODAL_OPTS.CLAM_DETAILS ? "60rem" : "30rem"}
+        onClose={onModalClose}
+        width={modalSelected === MODAL_OPTS.CLAM_DETAILS ? "60rem" : "40rem"}
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
           <ClamDetails

@@ -73,6 +73,12 @@
   @apply rounded-lg w-full; /* button padding, width, radius*/
 }
 
+.deposit-btn {
+  @apply bg-blue-500 text-white hover:bg-blue-400; /* border and text color*/
+  @apply font-black font-avenir text-xl; /*font weight and size*/
+  @apply px-4 py-4 rounded-lg w-full; /* button padding, width, radius*/
+}
+
 .ClamDetails {
   .heading {
     @apply font-extrabold text-black font-avenir text-xl mb-2;

@@ -81,6 +81,8 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
   const [activateGemPrice, setActivateGemPrice] = useState("0");
   const [activateShellPrice, setActivateShellPrice] = useState("0");
 
+  const [address, setAddress] = useState("");
+
   const { activateBrowserWallet, account, error } = useEthers();
   const clamBalance = useTokenBalance(clamNFTAddress, account);
   const pearlBalance = useTokenBalance(pearlNFTAddress, account);
@@ -130,6 +132,9 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
       isBSChain,
       chainId: netId,
     });
+    if (account) {
+      setAddress(account);
+    }
   }, [
     account,
     activateChainId,
@@ -190,7 +195,9 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
       }
     }
 
-    initNavBar();
+    if (address) {
+      initNavBar();
+    }
   }, [clamBalance, pearlBalance, account]);
 
   useEffect(() => {
