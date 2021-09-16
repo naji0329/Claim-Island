@@ -147,7 +147,7 @@ const PoolItem = ({
         {isAdditionalInfoVisible && (
           <div className="flex items-start justify-between p-4 border-t-2 border-gray-700 h-96">
             <div className="flex w-1/5">
-              <PoolData depositFee={depositFee} urlForExchange={urlForExchange} tvl={pool.tvl} />
+              <PoolData urlForExchange={urlForExchange} tvl={pool.tvl} />
             </div>
 
             <div className="flex w-2/5 h-full">

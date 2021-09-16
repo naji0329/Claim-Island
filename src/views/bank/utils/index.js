@@ -43,7 +43,7 @@ export const getBalancesFormatted = async (account, lpToken, isSingleStake) => {
 };
 
 // POOL DATA component
-export const PoolData = ({ depositFee, urlForExchange, tvl }) => {
+export const PoolData = ({ urlForExchange, tvl }) => {
   const [tvlFmtd, setTVL] = useState("");
 
   useEffect(() => {
@@ -56,10 +56,6 @@ export const PoolData = ({ depositFee, urlForExchange, tvl }) => {
 
   return (
     <div className="w-full px-2">
-      <div className="flex flex-row justify-between">
-        <p className="text-gray-500 font-semibold">Deposit fee:</p>
-        <p className="font-bold text-black text-center">{depositFee}</p>
-      </div>
       <div className="flex flex-row justify-between">
         <div className="text-gray-500 font-semibold">
           TVL:
