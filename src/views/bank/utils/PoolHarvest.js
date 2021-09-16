@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { get } from "lodash";
-import { formatNumber } from ".";
 import { connect } from "redux-zero/react";
 import { actions } from "store/redux";
 import {
@@ -21,6 +19,7 @@ const PoolHarvest = ({
   updateCharacter,
   updateAccount,
   toggleModal,
+  harvestAmount,
 }) => {
   const isNativePool = selectedPool && selectedPool.isNative;
   const [pearlBoostYield, setPearlBoostYield] = useState(false);
@@ -93,9 +92,7 @@ const PoolHarvest = ({
               </div>
             </div>
 
-            <div className="mx-2 text-4xl">
-              {formatNumber(+get(selectedPool, "userRewardAmountInPool", "0.0"), 3)}
-            </div>
+            <div className="mx-2 text-4xl">{harvestAmount}</div>
             <div className="mx-2 text-xl">GEM</div>
             {/* TODO convert GEM to dola */}
             {/* <div className="mx-2 text-xs">($12.00)</div> */}

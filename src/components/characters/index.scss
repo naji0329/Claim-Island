@@ -231,6 +231,7 @@
         }
 
         .character-btn {
+          @apply px-4;
           position: relative;
           float: right;
           height: auto;

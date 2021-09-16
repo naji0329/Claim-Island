@@ -155,7 +155,7 @@ const PoolItem = ({
             </div>
 
             <div className="flex w-2/5 h-full">
-              <PoolHarvest toggleModal={toggleModal} />
+              <PoolHarvest toggleModal={toggleModal} harvestAmount={pool.userRewardAmountInPool} />
             </div>
           </div>
         )}
