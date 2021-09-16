@@ -73,8 +73,11 @@ const PoolItem = ({
 
   return (
     <div className="flex flex-col justify-between mb-4 overflow-hidden bg-white border-2 border-gray-800 shadow-md rounded-xl">
-      <div className="flex items-center justify-between px-4 py-1" onClick={handleClick}>
-        <div className="flex items-center justify-start min-w-xs cursor-pointer">
+      <div
+        className="flex items-center justify-between px-4 py-1 cursor-pointer"
+        onClick={handleClick}
+      >
+        <div className="flex items-center justify-start min-w-xs">
           <div className="-space-x-6 avatar-group">
             {pool.images &&
               pool.images.map((image, i) => (

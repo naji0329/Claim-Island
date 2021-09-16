@@ -113,7 +113,6 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     if (!web3) {
       return updateAccount({ web3Installed: false, error: "Metamask not installed" });
     }
-    if (!account) return;
     const netId = await web3.eth.net.getId();
     const bscTestnet = 97;
 
