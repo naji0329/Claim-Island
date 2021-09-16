@@ -5,7 +5,7 @@ import { connect } from "redux-zero/react";
 import { actions } from "../../../store/redux";
 import { get } from "lodash";
 
-import { deposit } from "../../../web3/bank";
+import { deposit, getAllPools } from "../../../web3/bank";
 import { approveBankForMaxUint } from "../../../web3/bep20";
 import { formatToWei } from "../../../web3/shared";
 
@@ -22,7 +22,7 @@ import SliderWithPercentages from "./SliderWithPercentages";
 import ActionButton from "./ActionButton";
 
 const DepositTab = ({
-  account: { address },
+  account: { address, chainId },
   bank: { depositAmount, selectedPool, ...bank },
   updateBank,
   updateCharacter,
@@ -52,6 +52,7 @@ const DepositTab = ({
     onDepositHarvestTxn(updateCharacter);
     try {
       await approveBankForMaxUint(address, selectedPool.lpToken, depositAmount);
+
       await deposit(selectedPool.poolId, formatToWei(depositAmount));
 
       const balances = await getBalancesFormatted(
@@ -63,7 +64,10 @@ const DepositTab = ({
       const depositBN = new BigNumber(depositAmount);
       const newDepositBN = currentDepositBN.plus(depositBN).toString();
 
+      const setUpPools = await getAllPools({ address, chainId });
+
       updateBank({
+        pools: setUpPools, //update all pools
         balances,
         depositAmount: "0",
         selectedPool: {
