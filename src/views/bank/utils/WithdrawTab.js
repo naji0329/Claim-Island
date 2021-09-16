@@ -3,7 +3,7 @@ import { get } from "lodash";
 import { connect } from "redux-zero/react";
 import { actions } from "store/redux";
 
-import { withdraw } from "web3/bank";
+import { withdraw, getAllPools } from "web3/bank";
 import { formatToWei } from "web3/shared";
 
 import { useForm } from "react-hook-form";
@@ -20,7 +20,7 @@ import {
 } from "../character/OnDepositHarvest";
 
 const WithdrawTab = ({
-  account: { address },
+  account: { address, chainId },
   bank: { withdrawAmount, selectedPool, ...bank },
   updateBank,
   updateCharacter,
@@ -62,7 +62,10 @@ const WithdrawTab = ({
       const depositBN = new BigNumber(withdrawAmount);
       const newDepositBN = currentDepositBN.minus(depositBN).toString();
 
+      const setUpPools = await getAllPools({ address, chainId });
+
       updateBank({
+        pools: setUpPools, //update all pools
         balances,
         withdrawAmount: "0",
         selectedPool: {
