@@ -1,7 +1,16 @@
+import { pick } from "lodash";
+import BigNumber from "bignumber.js";
+import { formatEther } from "@ethersproject/units";
+
 import bankAbi from "./abi/Bank.json";
-import { bankAddress } from "./constants";
+import { bankAddress, gemTokenAddress, shellTokenAddress } from "./constants";
 import { contractFactory } from "./index";
-import { getAccount } from "./shared";
+import { getAccount, formatFromWei } from "./shared";
+
+import { aggregate } from "./multicall";
+import { poolAssets } from "../views/bank/poolsAssets";
+import { getUsdValueOfPair, getGemPrice, getUsdPriceOfToken } from "./pancakeRouter";
+import { totalSupply } from "./bep20";
 
 const bank = () =>
   contractFactory({
@@ -179,4 +188,121 @@ export const getStartBlock = async () => {
 
 export const updatePool = async (poolId) => {
   return bank().methods.updatePool(poolId).call();
+};
+
+const calculateAPRandTVL = async (pool) => {
+  const getTvl = (price, sup) => new BigNumber(sup).multipliedBy(price);
+
+  let apr;
+  let tvl;
+  const blocksPerYear = 10512000; // seconds per year / 3
+  const supply = +pool.poolLpTokenBalance > 0 ? formatEther(pool.poolLpTokenBalance) : 1;
+  const allocationShare = +pool.allocPoint / +pool.totalAllocation;
+
+  const [gemsPerBlock, gemPrice] = await Promise.all([gemPerBlock(), getGemPrice()]);
+
+  const gemPerYearByAlloc = new BigNumber(formatEther(gemsPerBlock))
+    .multipliedBy(allocationShare)
+    .multipliedBy(blocksPerYear);
+
+  // if is GEM pool
+  if (pool.lpToken === gemTokenAddress) {
+    apr = gemPerYearByAlloc.dividedBy(supply).multipliedBy(100).toNumber().toFixed(2);
+
+    tvl = getTvl(gemPrice, supply);
+
+    // if is SHELL pool
+  } else if (pool.lpToken === shellTokenAddress) {
+    const shellPrice = await getUsdPriceOfToken(pool.lpToken);
+
+    apr = new BigNumber(gemPrice)
+      .multipliedBy(gemPerYearByAlloc)
+      .dividedBy(new BigNumber(shellPrice).multipliedBy(supply))
+      .multipliedBy(100)
+      .toNumber()
+      .toFixed(2);
+
+    tvl = getTvl(shellPrice, supply);
+
+    //if is Pankcae tokens pool
+  } else {
+    console.log("lpToken", pool.lpToken);
+    const [pairUsdValue, totalLpSupply] = await Promise.all([
+      getUsdValueOfPair(pool.lpToken),
+      totalSupply(pool.lpToken),
+    ]);
+
+    const tokenPrice = new BigNumber(pairUsdValue).dividedBy(formatEther(totalLpSupply));
+
+    apr = new BigNumber(gemPrice)
+      .multipliedBy(gemPerYearByAlloc)
+      .dividedBy(new BigNumber(tokenPrice).multipliedBy(supply))
+      .multipliedBy(100)
+      .toNumber()
+      .toFixed(2);
+
+    tvl = getTvl(tokenPrice, supply);
+  }
+
+  if (+apr > 1_000_000_000_000) {
+    apr = "∞";
+  }
+
+  return [apr, tvl];
+};
+
+export const getAllPools = async ({ address, chainId }) => {
+  const [poolLength, poolLpTokenBalances, totalAllocation] = await Promise.all([
+    getPoolsLength(),
+    getTokenSupplies(),
+    totalAllocPoint(),
+  ]);
+
+  const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
+  const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
+
+  const [poolInfo, userInfo] = await Promise.all([
+    aggregate(poolInfocalls, chainId),
+    aggregate(userInfocalls, chainId),
+  ]);
+
+  const poolInfoValues = decodePoolInfoReturnFromMulticall(poolInfo.returnData);
+  const userInfoValues = decodeUserInfoReturnFromMulticall(userInfo.returnData);
+
+  const pools = await Promise.all(
+    poolInfoValues.map(async (pool, index) => {
+      const poolAsset = poolAssets[pool.poolInfoValues.lpToken];
+      const poolInfo = pool.poolInfoValues;
+      const pending = await pendingGem(index);
+
+      if (poolAsset) {
+        return {
+          poolId: pool.poolId,
+          pendingGem: pending,
+          ...pick(poolAsset, ["name", "apy", "images", "risk", "isSingleStake", "isNative"]),
+          ...pick(poolInfo, ["lpToken", "allocPoint", "depositFeeBP", "lastRewardBlock"]),
+
+          totalAllocation,
+          multiplier: ((Number(poolInfo.allocPoint) / Number(totalAllocation)) * 100).toFixed(1),
+          userDepositAmountInPool:
+            Math.round(formatFromWei(userInfoValues[index].userValues.amount) * 100) / 100,
+          userRewardAmountInPool: Math.round(formatFromWei(pending) * 100) / 100,
+          poolLpTokenBalance: poolLpTokenBalances[index],
+        };
+      }
+    })
+  );
+
+  const poolsWithApr = await Promise.all(
+    pools.map(async (pool) => {
+      const [apr, tvl] = await calculateAPRandTVL(pool);
+      return {
+        ...pool,
+        apr,
+        tvl,
+      };
+    })
+  );
+
+  return poolsWithApr.filter((p) => p);
 };

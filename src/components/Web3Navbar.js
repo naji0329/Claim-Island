@@ -131,6 +131,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
       address: account,
       isConnected: account ? true : false,
       isBSChain,
+      chainId: netId,
     });
   }, [
     account,

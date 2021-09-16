@@ -1,23 +1,27 @@
 import React, { useState } from "react";
-import { useAsync } from "react-use";
 import { connect } from "redux-zero/react";
 import { actions } from "store/redux";
 import classnames from "classnames";
 import { useEthers } from "@usedapp/core";
-import { formatEther } from "@ethersproject/units";
-import BigNumber from "bignumber.js";
 
 import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
 import PoolHarvest from "./utils/PoolHarvest";
 import PoolDepositWithdraw from "./utils/PoolDepositWithdraw";
 
-import { pendingGem, gemPerBlock } from "web3/bank";
-import { totalSupply } from "web3/bep20";
-import { gemTokenAddress, shellTokenAddress } from "web3/constants";
-import { getUsdValueOfPair, getGemPrice, getUsdPriceOfToken } from "web3/pancakeRouter";
-
 import InfoTooltip from "components/InfoTooltip";
 import Tooltip from "components/Tooltip";
+
+const riskClass = (risk) => {
+  if (risk == "High Risk") {
+    return "rounded-full bg-red-500 py-2 px-4 text-white";
+  } else if (risk == "Medium Risk") {
+    return "rounded-full bg-yellow-500 py-2 px-4 text-white";
+  } else if (risk == "Low Risk") {
+    return "rounded-full bg-blue-500 py-2 px-4 text-white";
+  } else {
+    return "rounded-full bg-green-500 py-2 px-4 text-white";
+  }
+};
 
 const PoolItem = ({
   account: { address },
@@ -25,91 +29,13 @@ const PoolItem = ({
   toggleModal,
   updateBank,
   pool,
-  updateAccount,
 }) => {
   const depositFee = pool.depositFeeBP / 100;
-  const isAdditionalInfoVisible = selectedPool?._poolReference === pool;
-
-  const [gemEarned, setGemEarned] = useState(0);
-  const [apr, setApr] = useState();
-  const [tvl, setTvl] = useState(0);
+  const isAdditionalInfoVisible = selectedPool?.poolId === pool.poolId;
 
   const [urlForExchange, setUrlForExchange] = useState("");
 
   const { activateBrowserWallet } = useEthers();
-
-  const riskClass = (risk) => {
-    if (risk == "High Risk") {
-      return "rounded-full bg-red-500 py-2 px-4 text-white";
-    } else if (risk == "Medium Risk") {
-      return "rounded-full bg-yellow-500 py-2 px-4 text-white";
-    } else if (risk == "Low Risk") {
-      return "rounded-full bg-blue-500 py-2 px-4 text-white";
-    } else {
-      return "rounded-full bg-green-500 py-2 px-4 text-white";
-    }
-  };
-
-  const riskStyle = riskClass(pool.risk);
-
-  useAsync(async () => {
-    const blocksPerYear = 10512000; // seconds per year / 3
-    const supply = +pool.poolLpTokenBalance > 0 ? formatEther(pool.poolLpTokenBalance) : 1;
-    let apr;
-    let _tvl;
-    const getTvl = (price) => new BigNumber(supply).multipliedBy(price);
-
-    try {
-      const earnedGem = await pendingGem(pool.poolId);
-      setGemEarned(earnedGem);
-
-      const gemsPerBlock = await gemPerBlock();
-      const gemPrice = await getGemPrice();
-      const allocationShare = +pool.allocPoint / +pool.totalAllocation;
-      const gemPerYearByAlloc = new BigNumber(formatEther(gemsPerBlock))
-        .multipliedBy(allocationShare)
-        .multipliedBy(blocksPerYear);
-
-      if (pool.lpToken === gemTokenAddress) {
-        apr = gemPerYearByAlloc.dividedBy(supply).multipliedBy(100).toNumber().toFixed(2);
-
-        _tvl = getTvl(gemPrice);
-      } else if (pool.lpToken === shellTokenAddress) {
-        const shellPrice = await getUsdPriceOfToken(pool.lpToken);
-
-        apr = new BigNumber(gemPrice)
-          .multipliedBy(gemPerYearByAlloc)
-          .dividedBy(new BigNumber(shellPrice).multipliedBy(supply))
-          .multipliedBy(100)
-          .toNumber()
-          .toFixed(2);
-
-        _tvl = getTvl(shellPrice);
-      } else {
-        const pairUsdValue = await getUsdValueOfPair(pool.lpToken);
-        const totalLpSupply = await totalSupply(pool.lpToken);
-        const tokenPrice = new BigNumber(pairUsdValue).dividedBy(formatEther(totalLpSupply));
-
-        apr = new BigNumber(gemPrice)
-          .multipliedBy(gemPerYearByAlloc)
-          .dividedBy(new BigNumber(tokenPrice).multipliedBy(supply))
-          .multipliedBy(100)
-          .toNumber()
-          .toFixed(2);
-
-        _tvl = getTvl(tokenPrice);
-      }
-
-      if (+apr > 1_000_000_000_000) {
-        apr = "∞";
-      }
-
-      setTvl(_tvl);
-      setApr(apr);
-    } catch (err) {
-      updateAccount({ error: err.message });
-    }
-  });
 
   const handleOpen = async () => {
     const balances = await getBalancesFormatted(address, pool.lpToken, pool.isSingleStake);
@@ -126,9 +52,6 @@ const PoolItem = ({
       withdrawAmount: "0",
       selectedPool: {
         ...pool,
-        earnedGem: gemEarned,
-        apr,
-        _poolReference: pool,
       },
     });
   };
@@ -167,7 +90,7 @@ const PoolItem = ({
 
           <div className="block text-sm">
             <Tooltip text="Relative to other investment pools - higher means more risk of capital value fluctuation">
-              <p className={riskStyle}>{pool.risk}</p>
+              <p className={riskClass(pool.risk)}>{pool.risk}</p>
             </Tooltip>
           </div>
           <div className="block text-sm">
@@ -182,7 +105,7 @@ const PoolItem = ({
             <p className="mb-1 text-xs font-semibold leading-none text-center text-gray-500">APR</p>
 
             <div className="items-center font-bold text-black">
-              {apr ? `${apr}%` : "loading..."}
+              {pool ? `${pool.apr}%` : "loading..."}
               <InfoTooltip text="Annual Percentage Return - non-compounded rate of return" />
             </div>
           </div>
@@ -224,7 +147,7 @@ const PoolItem = ({
         {isAdditionalInfoVisible && (
           <div className="flex items-start justify-between p-4 border-t-2 border-gray-700 h-96">
             <div className="flex w-1/5">
-              <PoolData depositFee={depositFee} urlForExchange={urlForExchange} tvl={tvl} />
+              <PoolData depositFee={depositFee} urlForExchange={urlForExchange} tvl={pool.tvl} />
             </div>
 
             <div className="flex w-2/5 h-full">
