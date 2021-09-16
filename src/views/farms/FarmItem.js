@@ -102,15 +102,16 @@ const FarmItem = ({
 
   useEffect(() => {
     setButtonText("Hold on ...");
-    if (canProducePearl) {
+    if (readyForPearl && !canProducePearl) {
+      setButtonText("Open Clam");
+      setAction("open");
+    } else if (readyForPearl && canProducePearl) {
       setButtonText("Collect Pearl");
       setAction("collect");
     }
-    if (readyForPearl) {
-      setButtonText("Open Clam");
-      setAction("open");
+    if (!canStillProducePearl) {
+      setButtonText("Can't produce anymore!");
     }
-    if (!canStillProducePearl) setButtonText("Can't produce anymore!");
   }, [readyForPearl, canProducePearl, canStillProducePearl]);
 
   const clam = {
