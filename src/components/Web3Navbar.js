@@ -112,23 +112,6 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
       return updateAccount({ web3Installed: false, error: "Metamask not installed" });
     }
     const netId = await web3.eth.net.getId();
-    const gemPrice = await getUsdPriceOfToken(gemTokenAddress, BUSD);
-    const gemPriceBigNumber = new BigNumber(gemPrice).toFixed(2);
-    const shellPrice = await getUsdPriceOfToken(shellTokenAddress, BUSD);
-    const shellPriceBigNumber = new BigNumber(shellPrice).toFixed(2);
-
-    setActivateGemPrice(gemPriceBigNumber);
-    setActivateShellPrice(shellPriceBigNumber);
-
-    // get Clam in farm
-    const stakedClamsInFarm = await getStakedClamIds(account);
-    setActivateClamBalanceInFarm(stakedClamsInFarm.length);
-    // get Pearls that are ready to be collected in farm
-    const promises = stakedClamsInFarm.map((clamId) => rngRequestHashForProducedPearl(clamId));
-    const pearlsReadyInFarm = await Promise.all(promises);
-    const numberOfPearlsReady = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
-    setActivatePearlBalanceInFarm(numberOfPearlsReady);
-
     const bscTestnet = 97;
 
     const isBSChain =
@@ -183,7 +166,31 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     if (balanceOfPearls !== activatePearlBalanceInSafe) {
       setActivatePearlBalanceInSafe(balanceOfPearls);
     }
-  }, [clamBalance, pearlBalance]);
+
+    async function initNavBar() {
+      if (account) {
+        const gemPrice = await getUsdPriceOfToken(gemTokenAddress, BUSD);
+        const gemPriceBigNumber = new BigNumber(gemPrice).toFixed(2);
+        const shellPrice = await getUsdPriceOfToken(shellTokenAddress, BUSD);
+        const shellPriceBigNumber = new BigNumber(shellPrice).toFixed(2);
+
+        setActivateGemPrice(gemPriceBigNumber);
+        setActivateShellPrice(shellPriceBigNumber);
+
+        // get Clam in farm
+        const stakedClamsInFarm = await getStakedClamIds(account);
+        setActivateClamBalanceInFarm(stakedClamsInFarm.length);
+
+        // get Pearls that are ready to be collected in farm
+        const promises = stakedClamsInFarm.map((clamId) => rngRequestHashForProducedPearl(clamId));
+        const pearlsReadyInFarm = await Promise.all(promises);
+        const numberOfPearlsReady = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
+        setActivatePearlBalanceInFarm(numberOfPearlsReady);
+      }
+    }
+
+    initNavBar();
+  }, [clamBalance, pearlBalance, account]);
 
   useEffect(() => {
     // gemBalance is bignumber
