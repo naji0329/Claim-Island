@@ -1,5 +1,5 @@
-export const sleep = (s) => {
-  return new Promise((resolve) => setTimeout(resolve, s * 1000));
+export const sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 export const secondsToFormattedTime = (seconds) =>
