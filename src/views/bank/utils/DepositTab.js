@@ -128,7 +128,8 @@ const DepositTab = ({
               placeholder="Amount"
               type="number"
               max={get(bank, "balances[0]", "0")}
-              value={formatNumber(+depositAmount, 3)}
+              min="0"
+              value={+depositAmount}
               onChange={handleDepositChange}
             />
 
@@ -140,7 +141,6 @@ const DepositTab = ({
             isDeposit
             state={{ selectedPool, ...bank }}
             onChange={(newValue) => {
-              console.log({ newValue });
               updateBank(newValue);
             }}
           />
