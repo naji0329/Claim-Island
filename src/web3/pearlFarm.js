@@ -102,8 +102,8 @@ export const clamIdToStaker = async (clamId) => {
   return await pearlFarm().methods.clamIdToStaker(clamId).call();
 };
 
-export const rngRequestHashForProducedPearl = async (clamId) => {
-  const account = getAccount();
+export const rngRequestHashForProducedPearl = async (clamId, address) => {
+  const account = address || getAccount();
 
   return pearlFarm().methods.rngRequestHashForProducedPearl(account, clamId).call();
 };

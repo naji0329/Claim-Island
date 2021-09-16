@@ -111,6 +111,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     if (!web3) {
       return updateAccount({ web3Installed: false, error: "Metamask not installed" });
     }
+    if (!account) return;
     const netId = await web3.eth.net.getId();
     const gemPrice = await getUsdPriceOfToken(gemTokenAddress, BUSD);
     const gemPriceBigNumber = new BigNumber(gemPrice).toFixed(2);
@@ -124,7 +125,9 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     const stakedClamsInFarm = await getStakedClamIds(account);
     setActivateClamBalanceInFarm(stakedClamsInFarm.length);
     // get Pearls that are ready to be collected in farm
-    const promises = stakedClamsInFarm.map((clamId) => rngRequestHashForProducedPearl(clamId));
+    const promises = stakedClamsInFarm.map((clamId) =>
+      rngRequestHashForProducedPearl(clamId, account)
+    );
     const pearlsReadyInFarm = await Promise.all(promises);
     const numberOfPearlsReady = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
     setActivatePearlBalanceInFarm(numberOfPearlsReady);
