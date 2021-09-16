@@ -1,14 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { connect } from "redux-zero/react";
 import clsx from "clsx";
-import { ChainId, useEthers } from "@usedapp/core";
 import BigNumber from "bignumber.js";
 
 import { actions } from "store/redux";
 import { useTimer } from "../../hooks/useTimer";
 import { secondsToFormattedTime } from "../../utils/time";
 
-import { web3 } from "web3";
 import {
   getRemainingPearlProductionTime,
   collectPearl,
@@ -37,7 +35,6 @@ import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
 const FarmItem = ({
   clamId,
   img,
-  dna,
   dnaDecoded,
   clamDataValues,
   onViewDetails,
@@ -47,8 +44,6 @@ const FarmItem = ({
   updateAccount,
   account: { address },
 }) => {
-  const { chainId } = useEthers();
-
   const [inTx, setInTx] = useState(false);
   const [action, setAction] = useState("");
   const [buttonText, setButtonText] = useState("");
@@ -209,42 +204,6 @@ const FarmItem = ({
       <div className="flex-1 justify-center md:flex items-center p-4">
         <img className="w-auto" src={img} />
       </div>
-      {chainId === ChainId.Localhost && (
-        <button
-          className="btn m-2"
-          onClick={async () => {
-            const block = await web3.eth.getBlock(await web3.eth.getBlockNumber());
-            console.log(`block`, block.number);
-            console.log(`timestamp`, block.timestamp);
-            await web3.currentProvider.send(
-              {
-                jsonrpc: "2.0",
-                method: "evm_mine",
-                id: new Date().getTime(),
-              },
-              (err, result) => {
-                console.log(`err`, err);
-                console.log(`result`, result);
-              }
-            );
-
-            await web3.currentProvider.send(
-              {
-                jsonrpc: "2.0",
-                method: "evm_increaseTime",
-                params: [100000],
-                id: new Date().getTime(),
-              },
-              (err, result) => {
-                console.log(`err`, err);
-                console.log(`result`, result);
-              }
-            );
-          }}
-        >
-          Advance time
-        </button>
-      )}
 
       {clam.processing ? (
         <>
