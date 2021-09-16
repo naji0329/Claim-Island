@@ -4,6 +4,7 @@ export const FARM_SPEECH = {
       text: `Hello There! Welcome to the place where you can farm pearls.`,
       dismiss: true,
       skip: true,
+      hideable: true,
     },
     connect: {
       text: `Excellent! First, let's get your wallet connected. You will need to do this in order to see your Clams. Press the "Connect Wallet" button in the top right of the screen.`,
@@ -22,6 +23,7 @@ export const FARM_SPEECH = {
       next: `purchase`,
       dismiss: false,
       skip: false,
+      hideable: true,
     },
     pearlSendSaferoom: {
       text: ({ gems }) =>
@@ -29,6 +31,7 @@ export const FARM_SPEECH = {
       next: `purchase`,
       dismiss: false,
       skip: false,
+      hideable: true,
     },
     pearlGenerateNew: {
       text: ({ gems }) =>
@@ -42,12 +45,14 @@ export const FARM_SPEECH = {
       next: `purchase`,
       dismiss: false,
       skip: false,
+      hideable: true,
     },
     pearlSendClamSaferoom2: {
       text: `No problem, we will send your Clam back to the Saferoom.`,
       next: `purchase`,
       dismiss: false,
       skip: false,
+      hideable: true,
     },
   },
 };

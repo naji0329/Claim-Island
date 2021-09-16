@@ -4,7 +4,8 @@ export const CLAM_SHOP_SPEECH = {
       text: `Howdy friend. Welcome to my Clam Shop! Here you can buy Clams using $GEM and harvest them for $SHELL. Let's get to it!`,
       next: "connect",
       dismiss: false,
-      skip: false,
+      skip: true,
+      hideable: true,
     },
 
     connect: {
@@ -26,6 +27,7 @@ export const CLAM_SHOP_SPEECH = {
       next: false,
       dismiss: true,
       skip: true,
+      hideable: true,
     },
 
     collection_processing: {
@@ -33,6 +35,7 @@ export const CLAM_SHOP_SPEECH = {
       next: false,
       dismiss: true,
       skip: true,
+      hideable: true,
     },
 
     collect_congrats: {
@@ -40,13 +43,15 @@ export const CLAM_SHOP_SPEECH = {
       next: false,
       dismiss: true,
       skip: false,
+      hideable: true,
     },
 
     processing: {
       text: `Hold on while we process your transaction...`,
       next: `congrats`,
       dismiss: false,
-      skip: true,
+      skip: false,
+      hideable: false,
     },
 
     congrats: {
@@ -54,6 +59,7 @@ export const CLAM_SHOP_SPEECH = {
       next: "collection",
       dismiss: true,
       skip: true,
+      hideable: true,
     },
 
     choose_path: {
@@ -61,6 +67,7 @@ export const CLAM_SHOP_SPEECH = {
       next: false,
       dismiss: false,
       skip: false,
+      hideable: true,
     },
 
     harvest_warn: {
@@ -76,6 +83,7 @@ export const CLAM_SHOP_SPEECH = {
       next: false,
       dismiss: true,
       skip: false,
+      hideable: true,
     },
 
     harvest_choose_clams: {
@@ -90,6 +98,7 @@ export const CLAM_SHOP_SPEECH = {
       next: false,
       dismiss: true,
       skip: false,
+      hideable: true,
     },
   },
 };
