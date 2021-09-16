@@ -12,6 +12,7 @@ const initialState = {
     error: undefined,
     isConnected: undefined,
     isBSChain: true,
+    chainId: undefined,
     isWeb3Installed: true,
     address: undefined,
   },
