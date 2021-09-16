@@ -26,6 +26,8 @@ const BurnPearlModal = (props) => {
   const [startOfWeek, setStartOfWeek] = useState("");
 
   const calculateTimeLeft = () => {
+    if (startOfWeek === "") return "calculating...";
+
     const startOfWeekMs = +startOfWeek * 1000;
     const nextWeek = moment(startOfWeekMs).add(7, "d");
     const remainingMs = nextWeek.diff(moment());
@@ -88,7 +90,7 @@ const BurnPearlModal = (props) => {
         </div>
         <div className="flex flex-col w-2/5 items-end">
           <span className="font-bold">Changes in</span>
-          <span className="text-gray-500">{timeLeft !== "-" && timeLeft}</span>
+          <span className="text-gray-500">{timeLeft}</span>
         </div>
       </div>
       <div className="w-full flex justify-between">
