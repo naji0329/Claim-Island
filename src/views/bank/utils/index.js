@@ -5,6 +5,7 @@ import { formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";
 import pancake from "web3/pancakePair";
 import InfoTooltip from "components/InfoTooltip";
+import { renderUsd } from "utils/number";
 
 // prevent rounding up
 export const formatNumber = (number, decimals) => {
@@ -47,10 +48,7 @@ export const PoolData = ({ urlForExchange, tvl }) => {
   const [tvlFmtd, setTVL] = useState("");
 
   useEffect(() => {
-    const formattedTvl = (+tvl).toLocaleString("EN", {
-      style: "currency",
-      currency: "USD",
-    });
+    const formattedTvl = renderUsd(+tvl);
     setTVL(formattedTvl);
   }, [tvl]);
 

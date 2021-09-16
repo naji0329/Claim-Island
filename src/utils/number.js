@@ -29,3 +29,57 @@ function pad(bnStr, position) {
 
   return bnStr;
 }
+
+/**
+ * @param {number} number number to be formatted
+ * @param {number} decimals decimals, default is 2 if not specified
+ * @param {string} fallBackSymbol this sumbol is returned if input number is null or undefined
+ * @returns number formatted
+ */
+export const renderNumber = (number, decimals, fallBackSymbol) => {
+  if (number !== 0 && !number) return fallBackSymbol || "";
+  if (decimals !== undefined)
+    return (
+      number?.toLocaleString("EN", {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      }) || ""
+    );
+  return number?.toLocaleString("EN") || fallBackSymbol || "";
+};
+
+/**
+ * @param {number} number numberto be formatted
+ * @param {number} decimals decimals, default is 2 if not specified
+ * @param {string} fallBackSymbol this sumbol is returned if input number is null or undefined
+ * @returns amount formatted in USD
+ */
+export const renderUsd = (number, decimals, fallBackSymbol) => {
+  if (number !== 0 && !number) return fallBackSymbol || "";
+  if (decimals !== undefined) {
+    return number.toLocaleString("EN", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+  return number.toLocaleString("EN", {
+    style: "currency",
+    currency: "USD",
+  });
+};
+
+/**
+ * @param {number} percentage percentage to be formatted
+ * @param {number} decimals decimals, default is 2 if not specified
+ * @param {string} fallBackSymbol this sumbol is returned if input number is null or undefined
+ * @returns number formatted in percentage, includes percentage symbol
+ */
+export const renderPercentage = (percentage, decimals, fallBackSymbol) => {
+  if (percentage !== 0 && !percentage) return fallBackSymbol || "";
+  return `${percentage.toLocaleString("EN", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  })}%`;
+};
