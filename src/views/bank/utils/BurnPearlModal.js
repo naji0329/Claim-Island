@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAsync } from "react-use";
 import { connect } from "redux-zero/react";
 import moment from "moment";
 import { actions } from "../../../store/redux";
@@ -8,7 +9,7 @@ import {
   prepTokenOfOwnerByIndexMulticall,
   decodeTokenOfOwnerByIndexFromMulticall,
 } from "../../../web3/pearl";
-import { color, shape, weekStart } from "../../../web3/pearlBurner";
+import { color, shape, periodStart } from "../../../web3/pearlBurner";
 import { useTimer } from "../../../hooks/useTimer";
 import PearlInfo from "./PearlInfo";
 
@@ -39,30 +40,27 @@ const BurnPearlModal = (props) => {
 
   const { timeLeft } = useTimer(calculateTimeLeft);
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const tokenIdsCalls = prepTokenOfOwnerByIndexMulticall(address, +pearlBalance);
-        const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
-        const tokenIdsDecoded = decodeTokenOfOwnerByIndexFromMulticall(tokenIdsResult.returnData);
+  useAsync(async () => {
+    try {
+      const tokenIdsCalls = prepTokenOfOwnerByIndexMulticall(address, +pearlBalance);
+      const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
+      const tokenIdsDecoded = decodeTokenOfOwnerByIndexFromMulticall(tokenIdsResult.returnData);
 
-        const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainId);
-        setPearls(ownedPearls);
+      const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainId);
+      setPearls(ownedPearls);
 
-        const elShape = await shape();
-        const elColor = await color();
-        setEligibleShape(elShape);
-        setEligibleColor(elColor);
+      const elShape = await shape();
+      const elColor = await color();
+      setEligibleShape(elShape);
+      setEligibleColor(elColor);
 
-        const start = await weekStart();
-        setStartOfWeek(start);
-      } catch (err) {
-        updateAccount({ error: err.message });
-      }
-    };
-
-    init();
-  }, []);
+      const start = await periodStart();
+      setStartOfWeek(start);
+    } catch (err) {
+      console.error(err);
+      updateAccount({ error: err.message });
+    }
+  });
 
   const eligiblePearls = pearls.filter(
     ({ dnaDecoded }) => dnaDecoded.shape === eligibleShape && dnaDecoded.color === eligibleColor
@@ -90,7 +88,7 @@ const BurnPearlModal = (props) => {
         </div>
         <div className="flex flex-col w-2/5 items-end">
           <span className="font-bold">Changes in</span>
-          <span className="text-gray-500">{timeLeft[0] !== "-" && timeLeft}</span>
+          <span className="text-gray-500">{timeLeft !== "-" && timeLeft}</span>
         </div>
       </div>
       <div className="w-full flex justify-between">
