@@ -8,6 +8,7 @@ import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
 import PoolHarvest from "./utils/PoolHarvest";
 import PoolDepositWithdraw from "./utils/PoolDepositWithdraw";
 
+import { renderPercentage, renderUsd } from "utils/number";
 import InfoTooltip from "components/InfoTooltip";
 import Tooltip from "components/Tooltip";
 
@@ -105,14 +106,16 @@ const PoolItem = ({
             <p className="mb-1 text-xs font-semibold leading-none text-center text-gray-500">APR</p>
 
             <div className="items-center font-bold text-black">
-              {pool ? `${pool.apr}%` : "loading..."}
+              {pool.apr ? renderPercentage(+pool.apr, 2) : "loading..."}
               <InfoTooltip text="Annual Percentage Return - non-compounded rate of return" />
             </div>
           </div>
 
           <div className="block text-sm">
             <p className="mb-1 text-xs font-semibold leading-none text-gray-500">Deposited</p>
-            <p className="font-bold text-center text-gray-300">{pool.userDepositAmountInPool}</p>
+            <p className="font-bold text-center text-gray-300">
+              {renderUsd(pool.userDepositAmountInPool * pool.tokenPrice)}
+            </p>
           </div>
 
           <div className="block text-sm">
