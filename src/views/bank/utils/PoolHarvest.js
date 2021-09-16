@@ -8,8 +8,8 @@ import {
   onPearlBoostYieldAlert,
 } from "../character/OnDepositHarvest";
 import { harvest, getAllPools } from "web3/bank";
-
 import ActionButton from "./ActionButton";
+import arrowDownRight from "assets/img/arrow_down_right.png";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
 const PoolHarvest = ({
@@ -93,9 +93,32 @@ const PoolHarvest = ({
             </div>
 
             <div className="mx-2 text-4xl">{harvestAmount}</div>
-            <div className="mx-2 text-xl">GEM</div>
+            <div className="mx-2 text-md">GEM EARNED</div>
             {/* TODO convert GEM to dola */}
             {/* <div className="mx-2 text-xs">($12.00)</div> */}
+          </div>
+          <div className="flex justify-end items-baseline text-xs">
+            <img src={arrowDownRight} width={50} />
+            <span className="w-16 text-right">123</span> {/** TODO: dummy data */}
+            <span className="w-36 ml-1">FROM FARMING</span>
+          </div>
+          <div className="flex justify-end items-baseline text-xs -mt-2">
+            <img src={arrowDownRight} width={50} />
+            <span className="w-16 text-right">12334</span> {/** TODO: dummy data */}
+            <span className="w-36 ml-1">FROM PEARL BOOST</span>
+          </div>
+        </div>
+
+        <div className="flex flex-col">
+          <div className="flex justify-between mx-2">
+            <span className="text-right w-2/5">Pending boost:</span>
+            {/** TODO: dummy data */}
+            <span className="text-right w-3/5">{121232340} GEM</span>
+          </div>
+          <div className="flex justify-between mx-2">
+            <span className="text-right w-2/5">Time left:</span>
+            {/** TODO: dummy data */}
+            <span className="text-right w-3/5">12:40:00</span>
           </div>
         </div>
 
