@@ -9,10 +9,19 @@ import {
   onDepositHarvestSuccess,
   onPearlBoostYieldAlert,
 } from "../character/OnDepositHarvest";
-import { harvest } from "web3/bank";
+import { harvest, getAllPools } from "web3/bank";
+
+import ActionButton from "./ActionButton";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
-const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, updateAccount, toggleModal }) => {
+const PoolHarvest = ({
+  account: { address, chainId },
+  bank: { selectedPool },
+  updateBank,
+  updateCharacter,
+  updateAccount,
+  toggleModal,
+}) => {
   const isNativePool = selectedPool && selectedPool.isNative;
   const [pearlBoostYield, setPearlBoostYield] = useState(false);
   const [inTx, setInTx] = useState(false);
@@ -33,6 +42,17 @@ const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, updateAccount, t
     onDepositHarvestTxn(updateCharacter);
     try {
       await harvest(selectedPool.poolId);
+
+      const setUpPools = await getAllPools({ address, chainId });
+
+      updateBank({
+        pools: setUpPools, //update all pools
+        selectedPool: {
+          ...selectedPool,
+          userRewardAmountInPool: 0,
+        },
+      });
+
       onDepositHarvestSuccess(updateCharacter);
     } catch (error) {
       updateAccount({ error: error.message });
@@ -82,13 +102,14 @@ const PoolHarvest = ({ bank: { selectedPool }, updateCharacter, updateAccount, t
           </div>
         </div>
 
-        <button
+        <ActionButton
           onClick={handleHarvest}
-          className="w-full text-white bg-blue-500 hover:bg-blue-400 rounded-xl shadow-xl p-2 text-center text-2xl"
-          disabled={inTx}
+          style="btn-harvest"
+          isDisabled={inTx}
+          isLoading={inTx}
         >
           Harvest
-        </button>
+        </ActionButton>
       </div>
     </div>
   );
