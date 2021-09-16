@@ -22,6 +22,7 @@ import createSky from "./create_sky";
 import clamIcon from "../../assets/clam-icon.png";
 
 import { ISLAND_OBJECTS } from './constants';
+import LoadingScreen from "components/LoadingScreen";
 
 const clock = new THREE.Clock();
 
@@ -33,6 +34,7 @@ const Map3D = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [hoverName, setHoverName] = useState("");
+  const [controlsCmd, setControlsCmd] = useState(null);
 
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
@@ -57,11 +59,11 @@ const Map3D = () => {
   }, [mapRef]);
 
   const zoomIn = () => {
-    controls.dollyIn();
+    controlsCmd.dollyIn();
   };
 
   const zoomOut = () => {
-    controls.dollyOut();
+    controlsCmd.dollyOut();
   };
 
   const create3DScene = async (element, setLoading) => {
@@ -81,6 +83,7 @@ const Map3D = () => {
     controls.maxDistance = 1500;
     controls.maxPolarAngle = 1.5;
     controls.enablePan = false;
+    setControlsCmd(controls);
 
     scene = new THREE.Scene();
 
@@ -91,10 +94,10 @@ const Map3D = () => {
     modelObjs = (await Promise.all(ISLAND_OBJECTS.map(k =>
       loadGLTF(k.objectUrl, scene, k.type, k.name)
     )))
-    .map((model, index) => ({
-      ...ISLAND_OBJECTS[index],
-      model
-    }));
+      .map((model, index) => ({
+        ...ISLAND_OBJECTS[index],
+        model
+      }));
 
     setOutlineMeshes();
 
@@ -326,12 +329,7 @@ const Map3D = () => {
 
   return (
     <div>
-      <div className={!loading ? "loading-screen hide" : "loading-screen"}>
-        <div className="loading-elems">
-          <img src={clamIcon} />
-          <p>Taking you to Clam Island...</p>
-        </div>
-      </div>
+      {loading && <LoadingScreen text="Taking you to Clam Island..." />}
       <button className="zoom-btn zoom-in text-blue-500" onClick={zoomIn}>
         <FontAwesomeIcon icon={faSearchPlus} />
       </button>

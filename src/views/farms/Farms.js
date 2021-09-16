@@ -30,6 +30,7 @@ import ClamDeposit from "./ClamDeposit";
 import PearlView from "./PearlView";
 import { MODAL_OPTS } from "./constants";
 import { WelcomeUser, withdrawClamSpeak } from "./character/WithdrawClam";
+import LoadingScreen from "components/LoadingScreen";
 
 const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
   let history = useHistory();
@@ -209,14 +210,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
   return (
     <div className="overflow-x-hidden">
-      {loading && (
-        <div className="loading-screen">
-          <div className="loading-elems">
-            <img src={clamIcon} />
-            <p>Loading...</p>
-          </div>
-        </div>
-      )}
+      {loading && <LoadingScreen />}
       <Web3Navbar title="Clam Farms" />
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 

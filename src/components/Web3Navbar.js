@@ -13,7 +13,13 @@ import { Link, useLocation } from "react-router-dom";
 
 import { formatUnits } from "@ethersproject/units";
 
-import { clamNFTAddress, pearlNFTAddress, gemTokenAddress } from "../web3/constants.js";
+import {
+  clamNFTAddress,
+  pearlNFTAddress,
+  gemTokenAddress,
+  shellTokenAddress,
+  BUSD,
+} from "../web3/constants.js";
 
 import getWeb3 from "../web3/getWeb3";
 
@@ -21,6 +27,8 @@ import Web3Avatar from "./Web3Avatar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { getUsdPriceOfToken } from "../web3/pancakeRouter";
+import BigNumber from "bignumber.js";
 
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
@@ -62,10 +70,12 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
   //  is called several times thus need a state to lower the renders
   const [activateError, setActivateError] = useState("");
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
-  const [activateClamBalance, setActivateClamBalance] = useState("0");
+  const [activateClamBalanceOnSafe, setActivateClamBalanceOnSafe] = useState("0");
   const [activateGemBalance, setActivateGemBalance] = useState("0");
-  const [activatePearlBalance, setActivatePearlBalance] = useState("0");
+  const [activatePearlBalanceOnSafe, setActivatePearlBalanceOnSafe] = useState("0");
   const [activateChainId, setActivateChainId] = useState();
+  const [activateGemPrice, setActivateGemPrice] = useState("0");
+  const [activateShellPrice, setActivateShellPrice] = useState("0");
 
   const { activateBrowserWallet, account, error } = useEthers();
   const clamBalance = useTokenBalance(clamNFTAddress, account);
@@ -77,7 +87,6 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
 
   useAsync(async () => {
     console.log("loaded");
-
     const netId = await web3.eth.net.getId();
     if (netId !== activateChainId) {
       setActivateChainId(netId);
@@ -100,19 +109,24 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     }
     const netId = await web3.eth.net.getId();
     console.log("useEffect updateAccount", { activateChainId, netId });
+    const gemPrice = await getUsdPriceOfToken(gemTokenAddress, BUSD);
+    const gemPriceBigNumber = new BigNumber(gemPrice).toFixed(2);
+    const shellPrice = await getUsdPriceOfToken(shellTokenAddress, BUSD);
+    const shellPriceBigNumber = new BigNumber(shellPrice).toFixed(2);
 
+    setActivateGemPrice(gemPriceBigNumber);
+    setActivateShellPrice(shellPriceBigNumber);
     const bscTestnet = 97;
 
     const isBSChain =
       activateChainId === ChainId.BSC ||
       activateChainId === ChainId.Localhost ||
       activateChainId === bscTestnet;
-
     updateAccount({
       bnbBalance: activateBnbBalance,
       gemBalance: activateGemBalance,
-      clamBalance: activateClamBalance,
-      pearlBalance: activatePearlBalance,
+      clamBalance: activateClamBalanceOnSafe,
+      pearlBalance: activatePearlBalanceOnSafe,
       error: isBSChain ? null : activateError,
       address: account,
       isConnected: account ? true : false,
@@ -123,8 +137,8 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     activateChainId,
     activateError,
     activateBnbBalance,
-    activateClamBalance,
-    activatePearlBalance,
+    activateClamBalanceOnSafe,
+    activatePearlBalanceOnSafe,
   ]);
 
   useEffect(() => {
@@ -146,14 +160,14 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
   useEffect(() => {
     // clamBalance is bignumber
     const balanceOfClams = formatNFT(clamBalance);
-    if (balanceOfClams !== activateClamBalance) {
+    if (balanceOfClams !== activateClamBalanceOnSafe) {
       // balanceOfClams is string
-      setActivateClamBalance(balanceOfClams);
+      setActivateClamBalanceOnSafe(balanceOfClams);
     }
 
     const balanceOfPearls = formatNFT(pearlBalance);
-    if (balanceOfPearls !== activatePearlBalance) {
-      setActivatePearlBalance(balanceOfPearls);
+    if (balanceOfPearls !== activatePearlBalanceOnSafe) {
+      setActivatePearlBalanceOnSafe(balanceOfPearls);
     }
   }, [clamBalance, pearlBalance]);
 
@@ -228,50 +242,42 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
 
             {account && (
               <>
-                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl bg-blue-400">
-                  <Link to="/" className="flex ">
-                    <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Back to Island
-                    </span>
-                  </Link>
+                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
+                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                    Gem Price: $ {activateGemPrice} | Shell Price: $ {activateShellPrice}
+                  </span>
                 </div>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <Link
                     to="/saferoom/clam"
                     className="flex"
                     style={
-                      Number(activateClamBalance) > 0 &&
-                        location.pathname.indexOf("saferoom") === -1
+                      location.pathname.indexOf("saferoom") === -1
                         ? null
                         : { pointerEvents: "none" }
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Clams in Safe: {activateClamBalance}
-                      {Number(activateClamBalance) > 0 &&
-                        location.pathname.indexOf("saferoom") === -1 && (
-                          <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
-                        )}
+                      Safe: {activateClamBalanceOnSafe} Clams | {activatePearlBalanceOnSafe} Pearls
+                      {location.pathname.indexOf("saferoom") === -1 && (
+                        <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
+                      )}
                     </span>
                   </Link>
                 </div>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <Link
-                    to="/saferoom/pearl"
+                    to="/farms"
                     className="flex"
                     style={
-                      Number(activatePearlBalance) > 0 &&
-                        location.pathname.indexOf("saferoom") === -1
-                        ? null
-                        : { pointerEvents: "none" }
+                      location.pathname.indexOf("farms") === -1 ? null : { pointerEvents: "none" }
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Pearls in Safe: {activatePearlBalance}
-                      {Number(activatePearlBalance) > 0 &&
-                        location.pathname.indexOf("saferoom") === -1 && (
-                          <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
-                        )}
+                      Farm: 0 Clams | 0 Pearls
+                      {location.pathname.indexOf("farms") === -1 && (
+                        <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
+                      )}
                     </span>
                   </Link>
                 </div>
