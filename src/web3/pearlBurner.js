@@ -17,8 +17,8 @@ export const color = async () => {
   return await pearlBurner().methods.colour().call();
 };
 
-export const weekStart = async () => {
-  return await pearlBurner().methods.weekStart().call();
+export const periodStart = async () => {
+  return await pearlBurner().methods.periodStart().call();
 };
 
 export const burnPearl = async (pearlId, shape, color) => {
