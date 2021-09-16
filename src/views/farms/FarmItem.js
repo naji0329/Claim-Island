@@ -3,6 +3,7 @@ import { connect } from "redux-zero/react";
 import clsx from "clsx";
 import { ChainId, useEthers } from "@usedapp/core";
 import BigNumber from "bignumber.js";
+import { toast } from "react-toastify";
 
 import { actions } from "store/redux";
 import { useTimer } from "../../hooks/useTimer";
@@ -105,7 +106,7 @@ const FarmItem = ({
     if (readyForPearl && !canProducePearl) {
       setButtonText("Open Clam");
       setAction("open");
-    } else if (readyForPearl && canProducePearl) {
+    } else if (canProducePearl) {
       setButtonText("Collect Pearl");
       setAction("collect");
     }
@@ -155,47 +156,53 @@ const FarmItem = ({
       const pearlId = await nextPearlId();
       const gems = gemsNeededForPearlProd;
 
-      await collectPearl(clamId).then(async () => {
-        const { dna: pearlDna } = await getPearlData(pearlId);
-        const pearlDnaDecoded = await getPearlDNADecoded(pearlDna);
+      await collectPearl(clamId);
+      const { dna: pearlDna } = await getPearlData(pearlId);
+      const pearlDnaDecoded = await getPearlDNADecoded(pearlDna);
 
-        const viewPearl = () => {
-          onViewPearl({
-            clamId,
-            dna: pearlDna,
-            dnaDecoded: pearlDnaDecoded,
-            showPearlModal: true,
-          });
-        };
-        // character speaks
-        pearlCollectSuccess({ updateCharacter, viewPearl }, () => {
-          pearlSendToSaferoom({ updateCharacter }, () => {
-            pearlGenerateNew({ updateCharacter, gems: formatFromWei(gems) }, async () => {
-              const pricePerPearlInGem = gemsNeededForPearlProd;
-              const gemBalance = await getBalance(address).then((v) => new BigNumber(v)); // from string to BN
-              if (gemBalance.lt(pricePerPearlInGem))
-                throw new Error(
-                  `You need at least ${formatFromWei(pricePerPearlInGem)} $GEM to stake Clam`
-                );
-              await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
-              await infiniteApproveSpending(address, pearlFarmAddress, pricePerPearlInGem);
+      const viewPearl = () => {
+        onViewPearl({
+          clamId,
+          dna: pearlDna,
+          dnaDecoded: pearlDnaDecoded,
+          showPearlModal: true,
+        });
+      };
+      // character speaks
+      pearlCollectSuccess({ updateCharacter, viewPearl }, () => {
+        pearlSendToSaferoom({ updateCharacter }, () => {
+          pearlGenerateNew({ updateCharacter, gems: formatFromWei(gems) }, async () => {
+            const pricePerPearlInGem = gemsNeededForPearlProd;
+            const gemBalance = await getBalance(address).then((v) => new BigNumber(v)); // from string to BN
+            if (gemBalance.lt(pricePerPearlInGem))
+              throw new Error(
+                `You need at least ${formatFromWei(pricePerPearlInGem)} $GEM to stake Clam`
+              );
+            await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
+            await infiniteApproveSpending(address, pearlFarmAddress, pricePerPearlInGem);
 
-              const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
-              if (hasClamBeenStakeByUserBefore) {
-                await stakeClamAgain(clamId);
-              } else {
-                await stakeClam(clamId);
-              }
-            });
+            const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
+            if (hasClamBeenStakeByUserBefore) {
+              await stakeClamAgain(clamId);
+            } else {
+              await stakeClam(clamId);
+            }
           });
         });
-        setInTx(false);
       });
+      setInTx(false);
     } catch (err) {
       updateAccount({ error: err.message });
       setInTx(false);
       setButtonText("Collect Pearl");
       setAction("collect");
+      const errorMsg = JSON.parse(err.message.split("\n").slice(1).join(""));
+      toast.error(
+        <>
+          <p>There was an error collecting your pearl.</p>
+          <p>{errorMsg.message}</p>
+        </>
+      );
     }
   };
 
