@@ -22,6 +22,8 @@ import {
 } from "../web3/constants.js";
 
 import getWeb3 from "../web3/getWeb3";
+import { EmptyBytes } from "web3/shared";
+import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm";
 
 import Web3Avatar from "./Web3Avatar";
 
@@ -70,9 +72,11 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
   //  is called several times thus need a state to lower the renders
   const [activateError, setActivateError] = useState("");
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
-  const [activateClamBalanceOnSafe, setActivateClamBalanceOnSafe] = useState("0");
+  const [activateClamBalanceInSafe, setActivateClamBalanceInSafe] = useState("0");
+  const [activateClamBalanceInFarm, setActivateClamBalanceInFarm] = useState("0");
   const [activateGemBalance, setActivateGemBalance] = useState("0");
-  const [activatePearlBalanceOnSafe, setActivatePearlBalanceOnSafe] = useState("0");
+  const [activatePearlBalanceInSafe, setActivatePearlBalanceInSafe] = useState("0");
+  const [activatePearlBalanceInFarm, setActivatePearlBalanceInFarm] = useState("0");
   const [activateChainId, setActivateChainId] = useState();
   const [activateGemPrice, setActivateGemPrice] = useState("0");
   const [activateShellPrice, setActivateShellPrice] = useState("0");
@@ -108,7 +112,6 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
       return updateAccount({ web3Installed: false, error: "Metamask not installed" });
     }
     const netId = await web3.eth.net.getId();
-    console.log("useEffect updateAccount", { activateChainId, netId });
     const gemPrice = await getUsdPriceOfToken(gemTokenAddress, BUSD);
     const gemPriceBigNumber = new BigNumber(gemPrice).toFixed(2);
     const shellPrice = await getUsdPriceOfToken(shellTokenAddress, BUSD);
@@ -116,6 +119,16 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
 
     setActivateGemPrice(gemPriceBigNumber);
     setActivateShellPrice(shellPriceBigNumber);
+
+    // get Clam in farm
+    const stakedClamsInFarm = await getStakedClamIds(account);
+    setActivateClamBalanceInFarm(stakedClamsInFarm.length);
+    // get Pearls that are ready to be collected in farm
+    const promises = stakedClamsInFarm.map((clamId) => rngRequestHashForProducedPearl(clamId));
+    const pearlsReadyInFarm = await Promise.all(promises);
+    const numberOfPearlsReady = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
+    setActivatePearlBalanceInFarm(numberOfPearlsReady);
+
     const bscTestnet = 97;
 
     const isBSChain =
@@ -125,8 +138,8 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     updateAccount({
       bnbBalance: activateBnbBalance,
       gemBalance: activateGemBalance,
-      clamBalance: activateClamBalanceOnSafe,
-      pearlBalance: activatePearlBalanceOnSafe,
+      clamBalance: activateClamBalanceInSafe,
+      pearlBalance: activatePearlBalanceInSafe,
       error: isBSChain ? null : activateError,
       address: account,
       isConnected: account ? true : false,
@@ -138,8 +151,8 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     activateChainId,
     activateError,
     activateBnbBalance,
-    activateClamBalanceOnSafe,
-    activatePearlBalanceOnSafe,
+    activateClamBalanceInSafe,
+    activatePearlBalanceInSafe,
   ]);
 
   useEffect(() => {
@@ -161,14 +174,14 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
   useEffect(() => {
     // clamBalance is bignumber
     const balanceOfClams = formatNFT(clamBalance);
-    if (balanceOfClams !== activateClamBalanceOnSafe) {
+    if (balanceOfClams !== activateClamBalanceInSafe) {
       // balanceOfClams is string
-      setActivateClamBalanceOnSafe(balanceOfClams);
+      setActivateClamBalanceInSafe(balanceOfClams);
     }
 
     const balanceOfPearls = formatNFT(pearlBalance);
-    if (balanceOfPearls !== activatePearlBalanceOnSafe) {
-      setActivatePearlBalanceOnSafe(balanceOfPearls);
+    if (balanceOfPearls !== activatePearlBalanceInSafe) {
+      setActivatePearlBalanceInSafe(balanceOfPearls);
     }
   }, [clamBalance, pearlBalance]);
 
@@ -259,7 +272,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Safe: {activateClamBalanceOnSafe} Clams | {activatePearlBalanceOnSafe} Pearls
+                      Safe: {activateClamBalanceInSafe} Clams | {activatePearlBalanceInSafe} Pearls
                       {location.pathname.indexOf("saferoom") === -1 && (
                         <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
                       )}
@@ -275,7 +288,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Farm: 0 Clams | 0 Pearls
+                      Farm: {activateClamBalanceInFarm} Clams | {activatePearlBalanceInFarm} Pearls
                       {location.pathname.indexOf("farms") === -1 && (
                         <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
                       )}

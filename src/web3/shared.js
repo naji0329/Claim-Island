@@ -23,6 +23,7 @@ export const WeiPerEther = new BigNumber("1000000000000000000");
 export const MaxUint256 = new BigNumber(
   "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
 );
+export const EmptyBytes = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
 export const getPearlDataByIds = async (tokenIds, chainId) => {
   const pearlDataCalls = prepPearlDataMulticall(tokenIds);
