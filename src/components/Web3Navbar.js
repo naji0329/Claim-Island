@@ -117,6 +117,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
       address: account,
       isConnected: account ? true : false,
       isBSChain,
+      chainId: netId,
     });
   }, [
     account,
@@ -241,7 +242,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                     className="flex"
                     style={
                       Number(activateClamBalance) > 0 &&
-                        location.pathname.indexOf("saferoom") === -1
+                      location.pathname.indexOf("saferoom") === -1
                         ? null
                         : { pointerEvents: "none" }
                     }
@@ -261,7 +262,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                     className="flex"
                     style={
                       Number(activatePearlBalance) > 0 &&
-                        location.pathname.indexOf("saferoom") === -1
+                      location.pathname.indexOf("saferoom") === -1
                         ? null
                         : { pointerEvents: "none" }
                     }
