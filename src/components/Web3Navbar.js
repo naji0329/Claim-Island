@@ -109,10 +109,10 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     }
     const netId = await web3.eth.net.getId();
     console.log("useEffect updateAccount", { activateChainId, netId });
-    let gemPrice = await getUsdPriceOfToken(gemTokenAddress, BUSD);
-    let gemPriceBigNumber = new BigNumber(gemPrice).toFixed(2);
-    let shellPrice = await getUsdPriceOfToken(shellTokenAddress, BUSD);
-    let shellPriceBigNumber = new BigNumber(shellPrice).toFixed(2);
+    const gemPrice = await getUsdPriceOfToken(gemTokenAddress, BUSD);
+    const gemPriceBigNumber = new BigNumber(gemPrice).toFixed(2);
+    const shellPrice = await getUsdPriceOfToken(shellTokenAddress, BUSD);
+    const shellPriceBigNumber = new BigNumber(shellPrice).toFixed(2);
 
     setActivateGemPrice(gemPriceBigNumber);
     setActivateShellPrice(shellPriceBigNumber);
@@ -244,12 +244,12 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
               <>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    Gem Price: {activateGemPrice} USD | Shell Price: {activateShellPrice} USD
+                    Gem Price: $ {activateGemPrice} | Shell Price: $ {activateShellPrice}
                   </span>
                 </div>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <Link
-                    to="/saferoom"
+                    to="/saferoom/clam"
                     className="flex"
                     style={
                       location.pathname.indexOf("saferoom") === -1

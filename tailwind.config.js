@@ -1,4 +1,5 @@
 const FARM_WITHDRAW_COLOR = "#FF4B47";
+const THEME_BLUE = "#0576e2";
 
 module.exports = {
   mode: "jit",
@@ -39,11 +40,12 @@ module.exports = {
     textColor: (theme) => ({
       ...theme("colors"),
       withdraw: FARM_WITHDRAW_COLOR,
+      theme_blue: THEME_BLUE,
     }),
     backgroundColor: (theme) => ({
       ...theme("colors"),
       withdraw: FARM_WITHDRAW_COLOR,
-      darkPearl: '#38DCDC'
+      darkPearl: "#38DCDC",
     }),
     fontFamily: {
       avenir: ["AvenirBlack"],
@@ -82,7 +84,7 @@ module.exports = {
       cursor: ["active"],
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [],
 
   daisyui: {
     base: false,

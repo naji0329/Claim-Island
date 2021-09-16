@@ -29,6 +29,8 @@ import { getPearlDNADecoded } from "../../web3/pearlDnaDecoder";
 
 import { get } from "lodash";
 
+import LoadingScreen from "components/LoadingScreen";
+
 const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateCharacter }) => {
   const [clams, setClams] = useState([]);
   // const [clams, setClams] = useState(TEST_CLAMS)
@@ -148,14 +150,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
 
   return (
     <>
-      {loading && (
-        <div className="loading-screen">
-          <div className="loading-elems">
-            <img src={clamIcon} />
-            <p>Loading...</p>
-          </div>
-        </div>
-      )}
+      {loading && <LoadingScreen />}
       <Web3Navbar />
       {/* container */}
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
