@@ -66,10 +66,22 @@ export const store = createStore(initialState, middlewares);
 
 export const actions = (store) => ({
   updateAccount: (state, value) => {
+    const { error } = value;
+    const errorObj = {};
+
+    /** If we get error from contract, we need to parse it */
+    if (error) {
+      try {
+        errorObj.error = error.match(/"message":\s?"(.+)"/)[1].replace(/\\n/g, " ");
+      } catch {
+        errorObj.error = error;
+      }
+    }
     return {
       account: {
         ...state.account,
         ...value,
+        ...errorObj,
       },
     };
   },
