@@ -92,7 +92,7 @@ const DepositTab = ({
           <span className="mx-2">{depositFee}%</span>
         </div>
         <div className="flex items-center justify-between opacity-40 text-xl">
-          <span>Wallet:</span> {/* TODO: update after deposit */}
+          <span>Wallet:</span>
           <span className="mx-2">{formatNumber(+get(bank, "balances[0]", "0"), 3)}</span>
         </div>
 
