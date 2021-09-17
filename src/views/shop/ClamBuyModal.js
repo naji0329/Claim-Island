@@ -79,7 +79,6 @@ const ClamBuyModal = ({
       setIsLoading(false);
       setShowHatching(true);
 
-      await sleep(3000);
       setShowHatching(false);
       setModalToShow("collect");
     } catch (e) {

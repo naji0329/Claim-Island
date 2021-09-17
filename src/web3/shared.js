@@ -6,7 +6,6 @@ import { aggregate } from "./multicall";
 import { prepPearlDataMulticall, decodePearlDataFromMulticall } from "./pearl";
 import { prepGetDnaDecodedMulticall, decodeGetDnaDecodedFromMulticall } from "./pearlDnaDecoder";
 import { prepBonusRewardsMulticall, decodeBonusRewardsFromMulticall } from "./pearlBurner";
-import { sleep } from "../utils/time";
 
 export const formatFromWei = (value) => (value ? formatUnits(value, 18) : "0");
 
@@ -16,22 +15,6 @@ export const getAccount = () => {
   const address = store.getState().account.address;
   if (address) return address;
   throw new Error("No address found");
-};
-
-export const getAccountAsync = async () => {
-  const getAddress = async () => {
-    for (let a = 0; a < 5; a++) {
-      let address = store.getState().account.address;
-      if (address !== undefined) {
-        return address;
-      }
-      if (a === 4) {
-        throw new Error("No address found");
-      }
-      await sleep(200);
-    }
-  };
-  return await getAddress();
 };
 
 export const Zero = new BigNumber(0);

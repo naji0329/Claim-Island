@@ -1,7 +1,7 @@
 import pearlFarmAbi from "./abi/PearlFarm.json";
 import { contractFactory } from "./index";
 import { pearlFarmAddress } from "./constants";
-import { getAccount, getAccountAsync } from "./shared";
+import { getAccount } from "./shared";
 import { getOracleFee } from "./rng";
 
 const pearlFarm = () =>
@@ -103,6 +103,6 @@ export const clamIdToStaker = async (clamId) => {
 };
 
 export const rngRequestHashForProducedPearl = async (clamId) => {
-  const account = await getAccountAsync();
+  const account = getAccount();
   return pearlFarm().methods.rngRequestHashForProducedPearl(account, clamId).call();
 };

@@ -195,6 +195,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     }
 
     if (address) {
+      console.log(address, account)
       initNavBar();
     }
   }, [clamBalance, pearlBalance, account]);
