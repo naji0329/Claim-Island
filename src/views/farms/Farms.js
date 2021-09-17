@@ -55,11 +55,16 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     }
   };
 
-  const onModalClose = () => {
+  const onModalClose = async () => {
     toggleModal();
     if (modalSelected === MODAL_OPTS.VIEW_PEARL) {
       pearlSendToSaferoom({ updateCharacter }, onDepositClam);
     }
+    const ownedClamsImg = await addClamImg(clams);
+    const stakedClamsImg = await addClamImg(clamsStaked);
+
+    setClams(ownedClamsImg);
+    setClamsStaked(stakedClamsImg);
   };
 
   // When Deposit Clam Butto is clicked - open the modal to show list of clams
