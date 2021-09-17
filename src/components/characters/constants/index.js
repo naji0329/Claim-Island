@@ -2,6 +2,7 @@ import Nacre from "assets/characters/captain_nacre.png";
 import Al from "assets/characters/al.png";
 import Tanja from "assets/characters/tanja.png";
 import Diego from "assets/characters/diego.png";
+import Janet from "assets/characters/janet.png";
 
 import { FARM_SPEECH, FARM_BUTTONS } from "./speeches/farms";
 import { BANK_SPEECH, BANK_BUTTONS } from "./speeches/bank";
@@ -13,6 +14,7 @@ import { CLAM_PRESALE_BUTTONS, CLAM_PRESALE_SPEECH } from "./speeches/clam_presa
 import { SHELL_VOTING_SPEECH, SHELL_VOTING_BUTTONS } from "./speeches/shell_voting";
 import { CLAM_CLAIMERS_SPEECH, CLAM_CLAIMERS_BUTTONS } from "./speeches/clam_claimers";
 import { OTHER_SPEECH, OTHER_BUTTONS } from "./speeches/other";
+import { INFOCENTER_SPEECH, INFOCENTER_BUTTONS } from "./speeches/infocenter";
 
 export const CHARACTERS = {
   nacre: {
@@ -31,6 +33,10 @@ export const CHARACTERS = {
     name: "Al",
     charImg: Al,
   },
+  janet: {
+    name: "Janet",
+    charImg: Janet,
+  },
 };
 
 export const SPEECHES = {
@@ -44,6 +50,7 @@ export const SPEECHES = {
   ...CLAM_SHOP_SPEECH,
   ...SAFEROOM_SPEECH,
   ...OTHER_SPEECH,
+  ...INFOCENTER_SPEECH,
 };
 
 export const BUTTONS = {
@@ -57,4 +64,5 @@ export const BUTTONS = {
   ...SAFEROOM_BUTTONS,
   ...CLAM_SHOP_BUTTONS,
   ...OTHER_BUTTONS,
+  ...INFOCENTER_BUTTONS,
 };

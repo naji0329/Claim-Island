@@ -1,0 +1,21 @@
+import React from "react";
+
+import Web3Navbar from "components/Web3Navbar";
+import VideoBackground from "components/VideoBackground";
+import Character from "components/characters/CharacterWrapper";
+
+import videoImage from "assets/locations/Infocenter.jpg";
+import videoMp4 from "assets/locations/Infocenter.mp4";
+import videoWebM from "assets/locations/Infocenter.webm";
+import { InfocenterContent } from "./InfocenterContent";
+
+export const Infocenter = () => {
+  return (
+    <>
+      <Web3Navbar />
+      <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
+      <Character name="janet" />
+      <InfocenterContent />
+    </>
+  );
+};
