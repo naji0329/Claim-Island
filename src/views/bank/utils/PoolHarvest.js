@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "redux-zero/react";
 import { actions } from "store/redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import arrowDownRight from "assets/img/arrow_down_right.png";
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
@@ -8,13 +11,18 @@ import {
   onPearlBoostYieldAlert,
 } from "../character/OnDepositHarvest";
 import { harvest, getAllPools } from "web3/bank";
+import { renderNumber } from "utils/number";
+import { formatMsToDuration } from "utils/time";
+import InfoTooltip from "components/InfoTooltip";
+import { Modal, useModal } from "components/Modal";
 import ActionButton from "./ActionButton";
-import arrowDownRight from "assets/img/arrow_down_right.png";
+import moment from "moment";
+import { useTimer } from "hooks/useTimer";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
 const PoolHarvest = ({
   account: { address, chainId },
-  bank: { selectedPool },
+  bank: { selectedPool, rewards },
   updateBank,
   updateCharacter,
   updateAccount,
@@ -24,6 +32,23 @@ const PoolHarvest = ({
   const isNativePool = selectedPool && selectedPool.isNative;
   const [pearlBoostYield, setPearlBoostYield] = useState(false);
   const [inTx, setInTx] = useState(false);
+  const { isShowing, toggleModal: toggleBreakdownModal } = useModal();
+
+  const calculateTimeLeft = () => {
+    if (!rewards) return "calculating...";
+
+    const startTime = rewards && +rewards.startTime * 1000;
+    const unlockDay = rewards.allLockedRewards[rewards.allLockedRewards.length - 1].lockedUntilDay;
+
+    const unlockMoment = moment(startTime).add(unlockDay, "d");
+    const remainingMs = unlockMoment.diff(moment());
+
+    const duration = formatMsToDuration(remainingMs);
+
+    return duration;
+  };
+
+  const { timeLeft } = useTimer(calculateTimeLeft);
 
   const handleHarvest = async () => {
     setInTx(true);
@@ -97,40 +122,103 @@ const PoolHarvest = ({
             {/* TODO convert GEM to dola */}
             {/* <div className="mx-2 text-xs">($12.00)</div> */}
           </div>
-          <div className="flex justify-end items-baseline text-xs">
-            <img src={arrowDownRight} width={50} />
-            <span className="w-16 text-right">123</span> {/** TODO: dummy data */}
-            <span className="w-36 ml-1">FROM FARMING</span>
-          </div>
-          <div className="flex justify-end items-baseline text-xs -mt-2">
-            <img src={arrowDownRight} width={50} />
-            <span className="w-16 text-right">12334</span> {/** TODO: dummy data */}
-            <span className="w-36 ml-1">FROM PEARL BOOST</span>
-          </div>
+          {selectedPool.isNative && !rewards ? (
+            <p className="text-center">Loading rewards data...</p>
+          ) : (
+            <>
+              <div className="flex justify-end items-baseline text-xs -mb-2">
+                <span className="w-36 ml-1 opacity-40">FROM</span>
+              </div>
+              <div className="flex justify-end items-baseline text-xs">
+                <img src={arrowDownRight} width={50} />
+                <span className="w-16 text-right opacity-40">
+                  {renderNumber(+rewards.availableFarmingRewards, 2)}
+                </span>
+                <span className="w-36 ml-1 opacity-40">FARMING (locked)</span>
+              </div>
+              <div className="flex justify-end items-baseline text-xs -mt-2">
+                <img src={arrowDownRight} width={50} />
+                <span className="w-16 text-right opacity-40">
+                  {renderNumber(+rewards.availableClamRewards, 2)}
+                </span>
+                <span className="w-36 ml-1 opacity-40">CLAM (staked)</span>
+              </div>
+              <div className="flex justify-end items-baseline text-xs -mt-2">
+                <img src={arrowDownRight} width={50} />
+                <span className="w-16 text-right opacity-40">
+                  {renderNumber(+rewards.availablePearlRewards, 2)}
+                </span>
+                <span className="w-36 ml-1 opacity-40">PEARL (burned)</span>
+              </div>
+            </>
+          )}
         </div>
 
-        <div className="flex flex-col">
-          <div className="flex justify-between mx-2">
-            <span className="text-right w-2/5">Pending boost:</span>
-            {/** TODO: dummy data */}
-            <span className="text-right w-3/5">{121232340} GEM</span>
+        {selectedPool.isNative && rewards && (
+          <div className="flex flex-col">
+            <div className="flex justify-between mx-2">
+              <span className="text-right w-1/2">
+                Pending boost:
+                <InfoTooltip text="Available from any native pool" />
+              </span>
+              <span className="text-right w-1/2">{renderNumber(+rewards.totalLocked, 2)} GEM</span>
+            </div>
+            <div className="flex justify-between mx-2">
+              <span className="text-right w-1/2">Time left:</span>
+              <span className="text-right w-1/2">{timeLeft}</span>
+            </div>
           </div>
-          <div className="flex justify-between mx-2">
-            <span className="text-right w-2/5">Time left:</span>
-            {/** TODO: dummy data */}
-            <span className="text-right w-3/5">12:40:00</span>
+        )}
+
+        <div className="dropdown dropdown-top dropdown-end dropdown-hover">
+          <ActionButton
+            onClick={handleHarvest}
+            style="btn-harvest w-full"
+            isDisabled={inTx}
+            isLoading={inTx}
+          >
+            Harvest
+            <FontAwesomeIcon icon={faInfoCircle} className="ml-1" />
+          </ActionButton>
+          <div className="w-72 p-2 card dropdown-content bg-gray-800 text-primary-content text-sm">
+            <p className="mb-2">
+              50% of GEM earned is locked for a 7-day vesting period. During this time the vesting
+              GEM can still be used to purchase Clams
+            </p>
+            {rewards && (
+              <>
+                <p className="mb-2">
+                  You currently have {renderNumber(+rewards.totalLocked, 2)} GEM rewards vesting.
+                </p>
+                <a className="link" onClick={toggleBreakdownModal}>
+                  View vesting breakdown
+                </a>
+              </>
+            )}
           </div>
         </div>
-
-        <ActionButton
-          onClick={handleHarvest}
-          style="btn-harvest"
-          isDisabled={inTx}
-          isLoading={inTx}
-        >
-          Harvest
-        </ActionButton>
       </div>
+      {rewards && (
+        <Modal
+          isShowing={isShowing}
+          onClose={toggleBreakdownModal}
+          width={"24rem"}
+          title="Vested GEM breakdown"
+        >
+          <div className="flex justify-between">
+            <span>Total vesting GEM:</span>
+            <span>{renderNumber(+rewards.totalLocked, 3)}</span>
+          </div>
+          {rewards.allLockedRewards.map((rewardData) => (
+            <div key={rewardData.lockedUntilDay} className="flex justify-between">
+              <span>
+                {`GEM unlocking in ${rewardData.lockedUntilDay - rewards.currentDay} days:`}
+              </span>
+              <span>{renderNumber(rewardData.amount)}</span>
+            </div>
+          ))}
+        </Modal>
+      )}
     </div>
   );
 };

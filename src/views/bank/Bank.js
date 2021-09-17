@@ -13,6 +13,7 @@ import VideoBackground from "components/VideoBackground";
 import { Modal, useModal } from "components/Modal";
 
 import { getAllPools } from "web3/bank";
+import { fetchRewards } from "web3/gemLocker";
 
 import "./bank.scss";
 import PoolItem from "./PoolItem";
@@ -44,7 +45,8 @@ const Bank = ({
       if (chainId && address) {
         const setUpPools = await getAllPools({ address, chainId });
         console.log("updated pools after 5s");
-        updateBank({ pools: setUpPools });
+        const rewards = await fetchRewards(chainId);
+        updateBank({ pools: setUpPools, rewards });
       }
     }, 5000);
   }, []);
