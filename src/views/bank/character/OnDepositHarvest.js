@@ -25,7 +25,7 @@ export const onDepositHarvestError = (updateCharacter) => {
     action: "bank.transaction_error.text",
     button: {
       text: "OK",
-      dismiss: true
+      dismiss: true,
     },
     buttonAlt: {
       text: "Back to Island",
@@ -47,13 +47,13 @@ export const onDepositFeeAlert = (updateCharacter, cb) => {
         action: "cb",
         destination: () => {
           cb();
-        }
+        },
       },
     },
     buttonAlt: {
       text: "No",
-      dismiss: truncate
-    }
+      dismiss: truncate,
+    },
   });
 };
 
@@ -62,18 +62,18 @@ export const onWithdrawPearlRewardsAlert = (updateCharacter, cb) => {
     name: "tanja",
     action: "bank.withdraw_pearl_rewards_alert.text",
     button: {
-      text: "Yes",
+      text: "Yes, I understand",
       alt: {
         action: "cb",
         destination: () => {
           cb();
-        }
+        },
       },
     },
     buttonAlt: {
-      text: "No",
-      dismiss: truncate
-    }
+      text: "No, I won't withdraw now",
+      dismiss: truncate,
+    },
   });
 };
 
@@ -87,12 +87,12 @@ export const onPearlBoostYieldAlert = (updateCharacter, cb) => {
         action: "cb",
         destination: () => {
           cb();
-        }
+        },
       },
     },
     buttonAlt: {
       text: "No",
-      dismiss: truncate
-    }
+      dismiss: truncate,
+    },
   });
 };
