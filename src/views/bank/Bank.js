@@ -35,7 +35,8 @@ const Bank = ({
   useEffect(async () => {
     if (pools.length === 0 && address) {
       const setUpPools = await getAllPools({ address, chainId });
-      updateBank({ pools: setUpPools });
+      const rewards = await fetchRewards(chainId);
+      updateBank({ pools: setUpPools, rewards });
     }
   }, [pools, address, isBSChain]);
 
@@ -49,7 +50,7 @@ const Bank = ({
         updateBank({ pools: setUpPools, rewards });
       }
     }, 5000);
-  }, []);
+  }, [pools]);
 
   // CHARACTER SPEAK. functions in ./character folder
   useEffect(async () => {
