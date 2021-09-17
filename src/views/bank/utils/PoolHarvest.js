@@ -122,36 +122,37 @@ const PoolHarvest = ({
             {/* TODO convert GEM to dola */}
             {/* <div className="mx-2 text-xs">($12.00)</div> */}
           </div>
-          {selectedPool.isNative && !rewards ? (
-            <p className="text-center">Loading rewards data...</p>
-          ) : (
-            <>
-              <div className="flex justify-end items-baseline text-xs -mb-2">
-                <span className="w-36 ml-1 opacity-40">FROM</span>
-              </div>
-              <div className="flex justify-end items-baseline text-xs">
-                <img src={arrowDownRight} width={50} />
-                <span className="w-16 text-right opacity-40">
-                  {renderNumber(+rewards.availableFarmingRewards, 2)}
-                </span>
-                <span className="w-36 ml-1 opacity-40">FARMING (locked)</span>
-              </div>
-              <div className="flex justify-end items-baseline text-xs -mt-2">
-                <img src={arrowDownRight} width={50} />
-                <span className="w-16 text-right opacity-40">
-                  {renderNumber(+rewards.availableClamRewards, 2)}
-                </span>
-                <span className="w-36 ml-1 opacity-40">CLAM (staked)</span>
-              </div>
-              <div className="flex justify-end items-baseline text-xs -mt-2">
-                <img src={arrowDownRight} width={50} />
-                <span className="w-16 text-right opacity-40">
-                  {renderNumber(+rewards.availablePearlRewards, 2)}
-                </span>
-                <span className="w-36 ml-1 opacity-40">PEARL (burned)</span>
-              </div>
-            </>
-          )}
+          {selectedPool.isNative &&
+            (!rewards ? (
+              <p className="text-center">Loading rewards data...</p>
+            ) : (
+              <>
+                <div className="flex justify-end items-baseline text-xs -mb-2">
+                  <span className="w-36 ml-1 opacity-40">FROM</span>
+                </div>
+                <div className="flex justify-end items-baseline text-xs">
+                  <img src={arrowDownRight} width={50} />
+                  <span className="w-16 text-right opacity-40">
+                    {renderNumber(+rewards.availableFarmingRewards, 2)}
+                  </span>
+                  <span className="w-36 ml-1 opacity-40">FARMING (locked)</span>
+                </div>
+                <div className="flex justify-end items-baseline text-xs -mt-2">
+                  <img src={arrowDownRight} width={50} />
+                  <span className="w-16 text-right opacity-40">
+                    {renderNumber(+rewards.availableClamRewards, 2)}
+                  </span>
+                  <span className="w-36 ml-1 opacity-40">CLAM (staked)</span>
+                </div>
+                <div className="flex justify-end items-baseline text-xs -mt-2">
+                  <img src={arrowDownRight} width={50} />
+                  <span className="w-16 text-right opacity-40">
+                    {renderNumber(+rewards.availablePearlRewards, 2)}
+                  </span>
+                  <span className="w-36 ml-1 opacity-40">PEARL (burned)</span>
+                </div>
+              </>
+            ))}
         </div>
 
         {selectedPool.isNative && rewards && (
@@ -205,7 +206,7 @@ const PoolHarvest = ({
           width={"24rem"}
           title="Vested GEM breakdown"
         >
-          <div className="flex justify-between">
+          <div className="flex justify-between mb-2">
             <span>Total vesting GEM:</span>
             <span>{renderNumber(+rewards.totalLocked, 3)}</span>
           </div>

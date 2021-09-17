@@ -46,6 +46,11 @@ const lockedPearlRewardsLength = async () => {
   return gemLocker().methods.lockedPearlRewardsLength(account).call();
 };
 
+const totalPearlRewardsLocked = async () => {
+  const account = getAccount();
+  return gemLocker().methods.totalPearlRewardsLocked(account).call();
+};
+
 const rewardType = {
   FARMING: "farming",
   CLAM: "clam",
@@ -139,7 +144,6 @@ const getAllLockedRewards = async (chainId) => {
 
   for (let i = 0; i < rewardTypes.length; i++) {
     const calls = await prepRewardsCalls(rewardTypes[i]);
-    // const lockedRewards = await aggregate(calls, chainId);
     const lockedRewards = await aggregate(calls, chainId);
     const valuesDecoded = decodeLockedRewards(lockedRewards.returnData);
 
@@ -177,6 +181,7 @@ export const fetchRewards = async (chainId) => {
   const availableClamRewards = await unlockableClamRewards();
   const availablePearlRewards = await unlockablePearlRewards();
   const startTime = await startTimestamp();
+  const hasLockedPearlRewards = +(await totalPearlRewardsLocked()) > 0;
 
   const rewards = {
     startTime,
@@ -186,6 +191,7 @@ export const fetchRewards = async (chainId) => {
     availableFarmingRewards,
     availableClamRewards,
     availablePearlRewards,
+    hasLockedPearlRewards,
   };
 
   return rewards;
