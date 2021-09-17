@@ -9,8 +9,8 @@ import { renderUsd } from "utils/number";
 
 // prevent rounding up
 export const formatNumber = (number, decimals) => {
-  const n = number.toFixed(decimals);
-  return n > number ? n - 1 / Math.pow(10, decimals) + "" : n;
+  const n = number.toFixed(decimals + 1);
+  return n.slice(0, -1);
 };
 
 // get the pancakeswap exchange url
