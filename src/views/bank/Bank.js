@@ -38,6 +38,17 @@ const Bank = ({
     }
   }, [pools, address, isBSChain]);
 
+  // update pools data every 5 seconds
+  useEffect(async () => {
+    setInterval(async () => {
+      if (chainId && address) {
+        const setUpPools = await getAllPools({ address, chainId });
+        console.log("updated pools after 5s");
+        updateBank({ pools: setUpPools });
+      }
+    }, 5000);
+  }, []);
+
   // CHARACTER SPEAK. functions in ./character folder
   useEffect(async () => {
     WalletConnectAndAssist({

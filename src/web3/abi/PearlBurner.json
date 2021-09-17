@@ -22,6 +22,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "NewPeriodStart",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -73,7 +86,7 @@
         "type": "uint256"
       }
     ],
-    "name": "PreviousPearlCounterBeforeWeeklyReset",
+    "name": "PreviousPearlCounterBeforePeriodReset",
     "type": "event"
   },
   {
@@ -100,6 +113,19 @@
       }
     ],
     "name": "SetMaxBurn",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "periodInSeconds",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetPeriodInSeconds",
     "type": "event"
   },
   {
@@ -296,7 +322,7 @@
   },
   {
     "inputs": [],
-    "name": "isCurrentWeek",
+    "name": "isCurrentPeriod",
     "outputs": [
       {
         "internalType": "bool",
@@ -310,19 +336,6 @@
   {
     "inputs": [],
     "name": "maxBurn",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "maxNumberOfPearlsBurnedPerUserOnRecord",
     "outputs": [
       {
         "internalType": "uint256",
@@ -387,6 +400,45 @@
   },
   {
     "inputs": [],
+    "name": "periodInSeconds",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "periodIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "periodStart",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -421,6 +473,19 @@
       }
     ],
     "name": "setMaxBurn",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_periodInSeconds",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPeriodInSeconds",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -480,32 +545,6 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "weekIndex",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "weekStart",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ]
