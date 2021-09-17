@@ -15,7 +15,7 @@ export const useModal = (props) => {
   };
 };
 
-export const Modal = ({ isShowing, onClose, className, children, width }) =>
+export const Modal = ({ isShowing, onClose, className, children, width, title }) =>
   isShowing
     ? ReactDOM.createPortal(
         <React.Fragment>
@@ -24,12 +24,12 @@ export const Modal = ({ isShowing, onClose, className, children, width }) =>
             style={{ background: `rgba(0,0,0,.7)`, zIndex: 1000 }}
           >
             <div
-              className="border border-blue-500 shadow-lg bg-white w-2/3 md:max-w-11/12 mx-auto rounded-xl shadow-lg z-50 overflow-y-auto"
+              className="border border-blue-500 bg-white w-2/3 md:max-w-11/12 mx-auto rounded-xl shadow-lg z-50 overflow-y-auto"
               style={{ width: width ? width : undefined }}
             >
               <div className="py-4 text-left px-6">
-                <div className="flex justify-end items-center pb-3">
-                  {/* <p className="text-2xl font-bold text-gray-500">{title}</p> */}
+                <div className="flex justify-between items-center pb-3">
+                  {title ? <p className="text-2xl font-bold text-gray-500">{title}</p> : <div />}
                   <div className="cursor-pointer z-50" onClick={onClose}>
                     <svg
                       className="fill-current text-gray-500"
