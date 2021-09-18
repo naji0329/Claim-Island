@@ -4,7 +4,8 @@ export const CLAM_SHOP_SPEECH = {
       text: `Howdy friend. Welcome to my Clam Shop! Here you can buy Clams using $GEM and harvest them for $SHELL. Let's get to it!`,
       next: "connect",
       dismiss: false,
-      skip: false,
+      skip: true,
+      hideable: true,
     },
 
     connect: {
@@ -26,27 +27,31 @@ export const CLAM_SHOP_SPEECH = {
       next: false,
       dismiss: true,
       skip: true,
+      hideable: true,
     },
 
     collection_processing: {
       text: `One moment, just let me unbox this Clam for you. Did you know that no one knows what Clam is inside until you collect it, not even me?`,
       next: false,
       dismiss: true,
-      skip: true,
+      skip: false,
+      hideable: true,
     },
 
     collect_congrats: {
-      text: `Congrats on your Clam! You can take your time to savour your luck. We send your collected clams directly to the Saferoom, so you can see them there.`,
+      text: `Congrats on your Clam! You can take your time to savour your luck. We send your collected clams directly to the Saferoom, so you can see them there. Can I help you with anything else?`,
       next: false,
       dismiss: true,
       skip: false,
+      hideable: true,
     },
 
     processing: {
       text: `Hold on while we process your transaction...`,
       next: `congrats`,
       dismiss: false,
-      skip: true,
+      skip: false,
+      hideable: false,
     },
 
     congrats: {
@@ -54,6 +59,7 @@ export const CLAM_SHOP_SPEECH = {
       next: "collection",
       dismiss: true,
       skip: true,
+      hideable: true,
     },
 
     choose_path: {
@@ -61,6 +67,7 @@ export const CLAM_SHOP_SPEECH = {
       next: false,
       dismiss: false,
       skip: false,
+      hideable: true,
     },
 
     harvest_warn: {
@@ -76,6 +83,7 @@ export const CLAM_SHOP_SPEECH = {
       next: false,
       dismiss: true,
       skip: false,
+      hideable: true,
     },
 
     harvest_choose_clams: {
@@ -90,6 +98,7 @@ export const CLAM_SHOP_SPEECH = {
       next: false,
       dismiss: true,
       skip: false,
+      hideable: true,
     },
   },
 };
