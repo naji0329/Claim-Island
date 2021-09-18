@@ -34,12 +34,12 @@ export const CLAM_SHOP_SPEECH = {
       text: `One moment, just let me unbox this Clam for you. Did you know that no one knows what Clam is inside until you collect it, not even me?`,
       next: false,
       dismiss: true,
-      skip: true,
+      skip: false,
       hideable: true,
     },
 
     collect_congrats: {
-      text: `Congrats on your Clam! You can take your time to savour your luck. We send your collected clams directly to the Saferoom, so you can see them there.`,
+      text: `Congrats on your Clam! You can take your time to savour your luck. We send your collected clams directly to the Saferoom, so you can see them there. Can I help you with anything else?`,
       next: false,
       dismiss: true,
       skip: false,
