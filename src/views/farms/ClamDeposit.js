@@ -118,7 +118,7 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
 
 const ClamDeposit = ({ clams, updateAccount, account: { address } }) => {
   return (
-    <div className="ClamDeposit max-h-160">
+    <div className="ClamDeposit max-h-160 overflow-y-auto">
       {clams.length ? (
         <div>
           <h3 className="heading">Choose a Clam</h3>

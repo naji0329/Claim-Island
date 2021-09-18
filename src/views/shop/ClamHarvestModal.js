@@ -213,7 +213,7 @@ const ClamHarvestModal = ({
         ) : (
           <div>
             {clams.length && !isLoading ? (
-              <div className="ClamDeposit max-h-160">
+              <div className="ClamDeposit max-h-160 overflow-y-auto">
                 <div>
                   <h3 className="heading">{message}</h3>
                   {clams.map((clam, i) => (
