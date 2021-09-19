@@ -31,6 +31,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { getUsdPriceOfToken } from "../web3/pancakeRouter";
 import BigNumber from "bignumber.js";
+import NetworkService from "../utils/NetworkService";
 
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
@@ -228,7 +229,11 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                   >
                     Binance Smart Chain
                   </a>{" "}
-                  network.
+                  network. Click <a className="cursor-pointer underline" onClick={
+                    async () => {
+                      await NetworkService.createOrSwitchNetwork()
+                    }
+                  }>here</a> for add/switch to a Binance network in your Metamask
                 </>
               }
             />
