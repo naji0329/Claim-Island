@@ -26,7 +26,7 @@ const ROUTES = [
   // TODOs
   { title: "Farms", url: "/farms", component: Farms, exact: true, icon: "farm.svg", order: 3 },
   { title: "Bank", url: "/bank", component: Bank, exact: true, icon: "bank.svg", order: 2 },
-  { title: "Infocenter", url: "/info", component: Infocenter, exact: true, icon: "bank.svg" },
+  { title: "Infocenter", url: "/info", component: Infocenter, exact: true, icon: "lighthouse.svg" },
   // { title: "Vault", url: "/vault/", component: Vault },
   // { title: "Vault", url: "/vault/:tokenId", component: Vault },
   // { title: "Shell Presale", url: "/shell-presale", component: ShellPresale },
