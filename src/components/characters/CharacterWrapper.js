@@ -31,6 +31,7 @@ const CharacterWrapper = ({
   }
   const actionPath = action ? action.replace(/\.text$/, "") : "";
   const isNeedSkipDialog = get(SPEECHES, `${actionPath}.skip`, false);
+  const isDialogHideable = get(SPEECHES, `${actionPath}.hideable`, false);
 
   const [showBubble, setShowBubble] = useState(true);
   const [stateSpeech, setStateSpeech] = useState();
@@ -157,20 +158,24 @@ const CharacterWrapper = ({
                 )}
               </div>
               <div className="absolute top-4 right-8 text-white">
-                <button
-                  data-tip="Hide"
-                  className="mr-2 pointer-events-auto tooltip"
-                  onClick={onClickMinimizedButton}
-                >
-                  <FontAwesomeIcon icon={faMinusCircle} />
-                </button>
-                <button
-                  data-tip="Don't show again"
-                  className="pointer-events-auto tooltip"
-                  onClick={onClickSkipDialogButton}
-                >
-                  <FontAwesomeIcon icon={faTimesCircle} />
-                </button>
+                {isDialogHideable && (
+                  <button
+                    data-tip="Hide"
+                    className="mr-2 pointer-events-auto tooltip"
+                    onClick={onClickMinimizedButton}
+                  >
+                    <FontAwesomeIcon icon={faMinusCircle} />
+                  </button>
+                )}
+                {isNeedSkipDialog && (
+                  <button
+                    data-tip="Don't show again"
+                    className="pointer-events-auto tooltip"
+                    onClick={onClickSkipDialogButton}
+                  >
+                    <FontAwesomeIcon icon={faTimesCircle} />
+                  </button>
+                )}
               </div>
             </div>
           </div>

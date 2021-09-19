@@ -1,4 +1,5 @@
 import { truncate } from "lodash";
+import { WelcomeUserBack } from "./WelcomeUserBack";
 
 export const onDepositHarvestTxn = (updateCharacter) => {
   updateCharacter({
@@ -25,7 +26,7 @@ export const onDepositHarvestError = (updateCharacter) => {
     action: "bank.transaction_error.text",
     button: {
       text: "OK",
-      dismiss: true
+      dismiss: true,
     },
     buttonAlt: {
       text: "Back to Island",
@@ -47,13 +48,16 @@ export const onDepositFeeAlert = (updateCharacter, cb) => {
         action: "cb",
         destination: () => {
           cb();
-        }
+        },
       },
     },
     buttonAlt: {
       text: "No",
-      dismiss: truncate
-    }
+      alt: {
+        action: "cb",
+        destination: () => WelcomeUserBack({ updateCharacter, suppressSpeechBubble: true }),
+      },
+    },
   });
 };
 
@@ -67,13 +71,13 @@ export const onWithdrawPearlRewardsAlert = (updateCharacter, cb) => {
         action: "cb",
         destination: () => {
           cb();
-        }
+        },
       },
     },
     buttonAlt: {
       text: "No",
-      dismiss: truncate
-    }
+      dismiss: truncate,
+    },
   });
 };
 
@@ -87,12 +91,12 @@ export const onPearlBoostYieldAlert = (updateCharacter, cb) => {
         action: "cb",
         destination: () => {
           cb();
-        }
+        },
       },
     },
     buttonAlt: {
       text: "No",
-      dismiss: truncate
-    }
+      dismiss: truncate,
+    },
   });
 };
