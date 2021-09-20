@@ -205,8 +205,8 @@ const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
   };
 
   return (
-    <div className="w-full rounded-xl mx-auto flex">
-      <div className="flex flex-none bg-gray-900 bg-opacity-80 p-2 rounded">
+    <div className="w-full py-2 mx-auto flex  border-b-2 border-gray-200 border-opacity-80">
+      <div className="flex flex-none bg-gray-900 bg-opacity-80 p-2 rounded ">
         <Link
           className={`px-5 py-2 text-2xl ${
             tab === "Clam" ? " text-blue-700 bg-gray-200 bg-opacity-80 rounded" : "text-gray-400"
