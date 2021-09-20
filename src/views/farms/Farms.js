@@ -45,14 +45,17 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
   const [modalSelected, setModal] = useState("");
   const [selectedClam, setSelectedClam] = useState({});
+  const [withdrawingClamId, setWithdrawingClamId] = useState(null);
 
   const { chainId } = useEthers();
 
   const handleWithdraw = async (clamId) => {
     try {
+      setWithdrawingClamId(clamId);
       await unstakeClam(clamId);
     } catch (err) {
       updateAccount({ error: err.message });
+      setWithdrawingClamId(null);
     }
   };
 
@@ -110,6 +113,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   const onWithdrawClam = (clam) => {
     withdrawClamSpeak({ updateCharacter }, () => {
       handleWithdraw(clam.clamId);
+      WelcomeUser({ updateCharacter, suppressSpeechBubble: true });
     });
   };
 
@@ -219,6 +223,12 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     }
   }, [address, clamBalance]);
 
+  useEffect(() => {
+    if (!clamsStaked.find(({ clamId }) => clamId === withdrawingClamId)) {
+      setWithdrawingClamId(null);
+    }
+  }, [clamsStaked]);
+
   useAsync(async () => {
     WelcomeUser({ updateCharacter });
   });
@@ -274,6 +284,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
                       onWithdrawClam={() => onWithdrawClam(clam)}
                       onViewPearl={onViewPearl}
                       updateCharacter={updateCharacter}
+                      withdrawingClamId={withdrawingClamId}
                     />
                   ))}
 

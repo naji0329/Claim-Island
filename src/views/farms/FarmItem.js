@@ -6,8 +6,9 @@ import BigNumber from "bignumber.js";
 import { toast } from "react-toastify";
 
 import { actions } from "store/redux";
-import { useTimer } from "../../hooks/useTimer";
-import { secondsToFormattedTime } from "../../utils/time";
+import { useTimer } from "hooks/useTimer";
+import { secondsToFormattedTime } from "utils/time";
+import { Spinner } from "components/spinner";
 
 import { web3 } from "web3";
 import {
@@ -47,6 +48,7 @@ const FarmItem = ({
   updateCharacter,
   updateAccount,
   account: { address },
+  withdrawingClamId,
 }) => {
   const { chainId } = useEthers();
 
@@ -59,6 +61,7 @@ const FarmItem = ({
   const [canProducePearl, setCanProducePearl] = useState(false);
   const [readyForPearl, setReadyForPearl] = useState(false);
   const [gemsNeededForPearlProd, setGemsNeededForPearl] = useState(0);
+  const isWithdrawing = withdrawingClamId === clamId;
 
   const calculateTimeLeft = useCallback(() => {
     const now = Math.round(Date.now() / 1000);
@@ -282,7 +285,12 @@ const FarmItem = ({
           </div>
 
           <div className="px-4 py-2">
-            <button className="withdraw-btn" onClick={onWithdrawClam}>
+            <button
+              className="withdraw-btn flex justify-center items-center"
+              onClick={onWithdrawClam}
+              disabled={withdrawingClamId}
+            >
+              <Spinner show={isWithdrawing} color="#ff4b47" />
               Withdraw
             </button>
           </div>
