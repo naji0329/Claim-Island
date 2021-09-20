@@ -51,7 +51,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
 
     if (dna.length > 1) {
       const dnaDecoded = await getDecodedDNA(dna);
-      return { dna, dnaDecoded, birthTime };
+      return { dna, dnaDecoded, birthTime, tokenId };
     }
   };
 
@@ -262,7 +262,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} img={clam.img} />
+                  <NFTItem rarity={rarity} shape={shape} img={clam.img} tokenId={clam.tokenId} />
                 </div>
               );
             })}
@@ -284,7 +284,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} img={pearl.img} />
+                  <NFTItem rarity={rarity} shape={shape} img={pearl.img} tokenId={pearl.tokenId} />
                 </div>
               );
             })}
