@@ -60,7 +60,7 @@ const NavigationButton = () => {
   return (
     <>
       {!showNav ? (<>
-        <div className="nav-access-btn nav-btn-container" onClick={toggle}>
+        <div className="nav-access-btn nav-btn-container fixed" onClick={toggle}>
           <button className="nav-icon">
             <img src={IMG_LOC + homeIcon} />
           </button>
@@ -69,7 +69,7 @@ const NavigationButton = () => {
       </>
       ) : (
         <>
-          <div className="nav-btn-container">{navIcons()}</div>
+          <div className="nav-btn-container fixed">{navIcons()}</div>
           <div className="overlay pointer-events-auto opacity-70" />
         </>
       )}

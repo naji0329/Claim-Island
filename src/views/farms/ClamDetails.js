@@ -61,9 +61,9 @@ const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
           </div>
         </div>
 
-        <div className="detail-box mt-4 overflow-y-auto" style={{ maxHeight: "20rem" }}>
+        <div className="detail-box mt-4">
           <h1 className="heading">Produced Pearls</h1>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 overflow-y-auto" style={{ maxHeight: "18rem" }}>
             {producedPearls.map((pearl, i, a) => (
               <PearlInfo key={i} pearl={pearl} isLast={i === a.length - 1} />
             ))}

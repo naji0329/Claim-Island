@@ -1,5 +1,6 @@
 import { truncate } from "lodash";
 import { WelcomeUserBack } from "./WelcomeUserBack";
+import NetworkService from "../../../utils/NetworkService";
 
 const ifWeb3NotInstalled = ({ updateCharacter, isWeb3Installed }) => {
   updateCharacter({
@@ -9,11 +10,15 @@ const ifWeb3NotInstalled = ({ updateCharacter, isWeb3Installed }) => {
       text: "Tell me how",
       alt: {
         action: "cb",
-        destination: () => {
-          window.open(
-            "https://medium.com/stakingbits/setting-up-metamask-for-binance-smart-chain-bsc-921d9a2625fd",
-            "_blank"
-          );
+        destination: async () => {
+          if(isWeb3Installed) {
+            await NetworkService.createOrSwitchNetwork()
+          } else {
+            window.open(
+              "https://medium.com/stakingbits/setting-up-metamask-for-binance-smart-chain-bsc-921d9a2625fd",
+              "_blank"
+            );
+          }
         },
       },
     },

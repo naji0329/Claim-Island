@@ -39,6 +39,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [selPearl, setSelPearl] = useState({});
   const { isShowing, toggleModal } = useModal();
 
@@ -185,8 +186,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     if (address) {
       const initClams = async () => {
         try {
-          setLoading(true);
-
+          if (isFirstLoading) {
+            setLoading(true);
+            setIsFirstLoading(false);
+          }
           // get staked clams
           const clamsStakedIds = await getStakedClamIds(address);
 
@@ -209,11 +212,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
           setClams(ownedClamsImg);
           setClamsStaked(stakedClamsImg);
-
-          setLoading(false);
         } catch (error) {
-          setLoading(false);
           console.log({ error });
+        } finally {
+          setLoading(false);
         }
       };
 
@@ -240,6 +242,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       <Modal
         isShowing={isShowing}
         onClose={onModalClose}
+        title={modalSelected === MODAL_OPTS.CLAM_DETAILS ? "" : "Choose a Clam"}
         width={modalSelected === MODAL_OPTS.CLAM_DETAILS ? "60rem" : "40rem"}
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
@@ -260,12 +263,9 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
           <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-center">
             <div className="w-full flex flex-col relative pt-24">
               {/* navbar */}
-              <div className="bg-white shadow-xl w-full rounded-xl mx-auto flex flex-row justify-between items-center">
-                <h2 className="px-3 text-3xl font-extrabold font-aristotelica-bold text-blue-500">
-                  My Deposits
-                </h2>
+              <div className="w-full rounded-xl mx-auto flex flex-row-reverse">
                 <div className="p-3">
-                  <button className="btn btn-info" onClick={onDepositClam}>
+                  <button className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-8 py-2 mx-2 font-montserrat" onClick={onDepositClam}>
                     Deposit Clam
                   </button>
                 </div>

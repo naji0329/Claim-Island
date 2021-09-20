@@ -80,16 +80,19 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
 
   return (
     <div className="clam-details">
-      <div className="w-1/2">
-        <img className="w-full p-4" src={img} />
+      <div className="w-1/3">
+        <div className="flex-row">
+          <img className="w-full pr-4" src={img} />
+        </div>
+        <div className="flex-row text-center text-green-400 text-bold"> Rarity???</div>
       </div>
       <div className="details">
         <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
-          <div className="grid-title">Pearl ETA</div>
+          <div className="grid-title">Pearl ETA:</div>
           <div className="grid-value">
             {new Date(remainingTime * 1000).toISOString().substr(11, 8)}
           </div>
-          <div className="grid-title">Lifespan</div>
+          <div className="grid-title">Lifespan:</div>
           <div className="grid-value">
             {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced} pearls
             remaining
@@ -118,10 +121,9 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
 
 const ClamDeposit = ({ clams, updateAccount, account: { address } }) => {
   return (
-    <div className="ClamDeposit max-h-160">
+    <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
       {clams.length ? (
         <div>
-          <h3 className="heading">Choose a Clam</h3>
           {clams.map((clam) => (
             <ClamItem key={clam.clamId} updateAccount={updateAccount} address={address} {...clam} />
           ))}
