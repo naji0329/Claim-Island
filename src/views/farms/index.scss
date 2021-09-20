@@ -99,12 +99,10 @@
 
 .ClamDeposit {
   @apply w-full;
-  .heading {
-    @apply text-black font-bold font-aristotelica text-2xl;
-  }
+
   .clam-details {
     @apply flex flex-row items-center;
-    @apply border-4 border-blue-200 rounded-xl p-4 my-4;
+    @apply border-4 border-opacity-80 border-blue-100 rounded-xl p-2 mb-2;
 
     .details {
       @apply flex flex-1 flex-col;

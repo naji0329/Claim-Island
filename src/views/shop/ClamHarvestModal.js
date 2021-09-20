@@ -161,7 +161,7 @@ const ClamHarvestModal = ({
       );
 
       if (filteredClams.length > 0) {
-        setMessage(`Choose a Clam`);
+        setMessage(``);
         harvestChooseClams({ updateCharacter, setModalToShow }); // character speaks
       } else {
         const hours = formatDuration(+incubationtime);
@@ -185,7 +185,7 @@ const ClamHarvestModal = ({
 
   return (
     <div className="HarvestModal">
-      <Modal isShowing={isShowing} onClose={closeModal} width={"30rem"}>
+      <Modal isShowing={isShowing} onClose={closeModal} width={"30rem"} title={"Choose a Clam"}>
         {isLoading ? (
           <div>
             <h1>Loading ...</h1>
@@ -213,7 +213,7 @@ const ClamHarvestModal = ({
         ) : (
           <div>
             {clams.length && !isLoading ? (
-              <div className="ClamDeposit max-h-160">
+              <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
                 <div>
                   <h3 className="heading">{message}</h3>
                   {clams.map((clam, i) => (
