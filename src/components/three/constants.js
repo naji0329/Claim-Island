@@ -35,8 +35,7 @@ export const ISLAND_OBJECTS = [
     type: "island",
     name: "lighthouse",
     clickable: true,
-    url: "https://clamisland.medium.com/clam-island-essential-visitors-guide-63f2a9984336",
-    urlType: 'external',
+    url: "/info",
     buoyancy: { factor: 2, init: 2 }
   },
   {
