@@ -68,7 +68,7 @@
 }
 
 .withdraw-btn {
-  @apply border-4 border-withdraw text-withdraw hover:bg-withdraw hover:text-white; /* border and text color*/
+  @apply border-4 border-withdraw text-withdraw hover:bg-withdraw hover:text-white disabled:bg-white disabled:text-withdraw disabled:cursor-not-allowed; /* border and text color*/
   @apply font-black font-avenir text-xl; /*font weight and size*/
   @apply rounded-lg w-full; /* button padding, width, radius*/
 }
