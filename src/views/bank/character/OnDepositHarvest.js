@@ -1,4 +1,5 @@
 import { truncate } from "lodash";
+import { WelcomeUserBack } from "./WelcomeUserBack";
 
 export const onDepositHarvestTxn = (updateCharacter) => {
   updateCharacter({
@@ -52,7 +53,10 @@ export const onDepositFeeAlert = (updateCharacter, cb) => {
     },
     buttonAlt: {
       text: "No",
-      dismiss: truncate,
+      alt: {
+        action: "cb",
+        destination: () => WelcomeUserBack({ updateCharacter, suppressSpeechBubble: true }),
+      },
     },
   });
 };

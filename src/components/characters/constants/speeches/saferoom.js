@@ -19,6 +19,7 @@ export const SAFEROOM_SPEECH = {
       next: `congrats`,
       dismiss: false,
       skip: false,
+      hideable: true,
     },
 
     congrats: {
@@ -26,6 +27,7 @@ export const SAFEROOM_SPEECH = {
       next: "collection",
       dismiss: true,
       skip: false,
+      hideable: true,
     },
 
     collection: {
@@ -33,6 +35,7 @@ export const SAFEROOM_SPEECH = {
       next: false,
       dismiss: true,
       skip: false,
+      hideable: true,
     },
 
     collectionProcessing: {
@@ -40,6 +43,7 @@ export const SAFEROOM_SPEECH = {
       next: false,
       dismiss: true,
       skip: false,
+      hideable: true,
     },
 
     congratsCollection: {
@@ -47,6 +51,7 @@ export const SAFEROOM_SPEECH = {
       next: false,
       dismiss: true,
       skip: false,
+      hideable: true,
     },
 
     error: {
@@ -54,6 +59,7 @@ export const SAFEROOM_SPEECH = {
       next: false,
       dismiss: false,
       skip: false,
+      hideable: true,
     },
 
     cancel: {
@@ -61,6 +67,7 @@ export const SAFEROOM_SPEECH = {
       next: "purchase",
       dismiss: false,
       skip: false,
+      hideable: true,
     },
   },
 };
