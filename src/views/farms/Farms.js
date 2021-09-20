@@ -39,6 +39,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [selPearl, setSelPearl] = useState({});
   const { isShowing, toggleModal } = useModal();
 
@@ -181,8 +182,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     if (address) {
       const initClams = async () => {
         try {
-          setLoading(true);
-
+          if (isFirstLoading) {
+            setLoading(true);
+            setIsFirstLoading(false);
+          }
           // get staked clams
           const clamsStakedIds = await getStakedClamIds(address);
 
@@ -205,11 +208,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
           setClams(ownedClamsImg);
           setClamsStaked(stakedClamsImg);
-
-          setLoading(false);
         } catch (error) {
-          setLoading(false);
           console.log({ error });
+        } finally {
+          setLoading(false);
         }
       };
 
