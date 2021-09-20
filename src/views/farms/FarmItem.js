@@ -85,7 +85,7 @@ const FarmItem = ({
         const _pearlProductionTime = +pearlProductionStart + +_productionTimeTotal;
         setPearlProductionTime(_pearlProductionTime);
 
-        const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId);
+        const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId, address);
         setReadyForPearl(!!+rngHashForProducedPearl);
 
         const canProduce = await canCurrentlyProducePearl(clamId);
