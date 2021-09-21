@@ -298,15 +298,17 @@ export const getAllPools = async ({ address, chainId }) => {
   );
 
   const poolsWithApr = await Promise.all(
-    pools.map(async (pool) => {
-      const [apr, tvl, tokenPrice] = await calculateAPRandTVL(pool);
-      return {
-        ...pool,
-        apr,
-        tvl,
-        tokenPrice,
-      };
-    })
+    pools
+      .filter((p) => p)
+      .map(async (pool) => {
+        const [apr, tvl, tokenPrice] = await calculateAPRandTVL(pool);
+        return {
+          ...pool,
+          apr,
+          tvl,
+          tokenPrice,
+        };
+      })
   );
 
   return poolsWithApr.filter((p) => p);

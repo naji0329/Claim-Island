@@ -50,7 +50,7 @@ const Bank = ({
         updateBank({ pools: setUpPools, rewards });
       }
     }, 5000);
-  }, [pools]);
+  }, []);
 
   // CHARACTER SPEAK. functions in ./character folder
   useEffect(async () => {
