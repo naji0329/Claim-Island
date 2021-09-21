@@ -1,4 +1,4 @@
-import clamNFTAbi from "./abi/ClamNFT.json";
+import clamNFTAbi from "./abi/Clam.json";
 import BEP20ABI from "./abi/BEP20.json";
 import ERC721ABI from "./abi/ERC721.json";
 import { shellTokenAddress, clamNFTAddress, bankAddress } from "./constants";
