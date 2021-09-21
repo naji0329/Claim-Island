@@ -29,12 +29,15 @@ const App = () => {
         <div className="h-full absolute p-0 bg-gray-800">
           <div className="mockup-window bg-base-300 m-2">
             <div className="flex flex-col justify-start px-4 py-16 bg-base-200">
-              <h1 className="text-2xl my-4">Oops!</h1>
+              <h1 className="text-2xl my-4"> Ahoy there! It looks like you are on mobile.</h1>
               <p className="text-gray-500">
-                Clam Island is unavailable on mobile at the monent. Our Web app is optmized for
-                desktop viewing only.
+                Clam Island is not optimized for mobile viewing yet - but we are working hard on it!
               </p>
-              <p className="my-4">Please access on Chrome or Brave on your computer.</p>
+              <p className="my-4">
+                In the meantime, we really do recommend that you browse our site on desktop. If you
+                continue on mobile, please be advised that our UI may behave unexpectedly or
+                sometimes may not work at all.
+              </p>
 
               <button
                 className="btn"
