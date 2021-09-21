@@ -1,9 +1,12 @@
 import React from "react";
 
-export default ({ rarity, shape, img }) => {
+export default ({ rarity, shape, img, tokenId }) => {
   return (
     <>
       <div className="bg-white hover:border hover:border-blue-200 rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 flex flex-col justify-between cursor-pointer">
+        <div className="w-1/4 m-2 mx-auto text-center px-4 py-2 badge badge-success">
+          #{tokenId}
+        </div>
         <div className=" flex-1 justify-center  md:flex items-center p-5">
           <img src={img} />
         </div>
