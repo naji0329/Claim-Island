@@ -80,7 +80,7 @@ module.exports = {
   },
   variants: {
     extend: {
-      //opacity: ["disabled"],
+      opacity: ["active"],
       cursor: ["active"],
     },
   },

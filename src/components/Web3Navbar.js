@@ -31,6 +31,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { getUsdPriceOfToken } from "../web3/pancakeRouter";
 import BigNumber from "bignumber.js";
+import NetworkService from "../utils/NetworkService";
 
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
@@ -168,7 +169,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
     }
 
     const initNavBar = async () => {
-      if (account && redux.account.address) {
+      if (account) {
         const gemPrice = await getUsdPriceOfToken(gemTokenAddress, BUSD);
         const gemPriceBigNumber = new BigNumber(gemPrice).toFixed(2);
         const shellPrice = await getUsdPriceOfToken(shellTokenAddress, BUSD);
@@ -182,7 +183,9 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
         setActivateClamBalanceInFarm(stakedClamsInFarm.length);
 
         // get Pearls that are ready to be collected in farm
-        const promises = stakedClamsInFarm.map((clamId) => rngRequestHashForProducedPearl(clamId));
+        const promises = stakedClamsInFarm.map((clamId) =>
+          rngRequestHashForProducedPearl(clamId, account)
+        );
         const pearlsReadyInFarm = await Promise.all(promises);
         const numberOfPearlsReady = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
         setActivatePearlBalanceInFarm(numberOfPearlsReady);
@@ -228,7 +231,16 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                   >
                     Binance Smart Chain
                   </a>{" "}
-                  network.
+                  network. Click{" "}
+                  <a
+                    className="cursor-pointer underline"
+                    onClick={async () => {
+                      await NetworkService.createOrSwitchNetwork();
+                    }}
+                  >
+                    here
+                  </a>{" "}
+                  for add/switch to a Binance network in your Metamask
                 </>
               }
             />

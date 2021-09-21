@@ -1,3 +1,5 @@
+import { truncate } from "lodash";
+
 export const withdrawClamSpeak = ({ updateCharacter }, cb) => {
   updateCharacter({
     name: "al",
@@ -30,21 +32,14 @@ export const withdrawClamSpeak = ({ updateCharacter }, cb) => {
   });
 };
 
-export const WelcomeUser = ({ updateCharacter }) => {
+export const WelcomeUser = ({ updateCharacter, suppressSpeechBubble = false }) => {
   updateCharacter({
     name: "al",
     action: "farms.welcome.text",
+    suppressSpeechBubble,
     button: {
       text: "Dismiss",
-      alt: {
-        action: "cb",
-        destination: () => {
-          updateCharacter({
-            name: "al",
-            action: undefined,
-          });
-        },
-      },
+      dismiss: truncate,
     },
   });
 };

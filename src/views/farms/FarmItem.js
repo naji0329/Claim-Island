@@ -5,8 +5,9 @@ import BigNumber from "bignumber.js";
 import { toast } from "react-toastify";
 
 import { actions } from "store/redux";
-import { useTimer } from "../../hooks/useTimer";
-import { secondsToFormattedTime } from "../../utils/time";
+import { useTimer } from "hooks/useTimer";
+import { secondsToFormattedTime } from "utils/time";
+import { Spinner } from "components/spinner";
 
 import {
   getRemainingPearlProductionTime,
@@ -44,6 +45,7 @@ const FarmItem = ({
   updateCharacter,
   updateAccount,
   account: { address },
+  withdrawingClamId,
 }) => {
   const [inTx, setInTx] = useState(false);
   const [action, setAction] = useState("");
@@ -54,6 +56,7 @@ const FarmItem = ({
   const [canProducePearl, setCanProducePearl] = useState(false);
   const [readyForPearl, setReadyForPearl] = useState(false);
   const [gemsNeededForPearlProd, setGemsNeededForPearl] = useState(0);
+  const isWithdrawing = withdrawingClamId === clamId;
 
   const calculateTimeLeft = useCallback(() => {
     const now = Math.round(Date.now() / 1000);
@@ -77,7 +80,7 @@ const FarmItem = ({
         const _pearlProductionTime = +pearlProductionStart + +_productionTimeTotal;
         setPearlProductionTime(_pearlProductionTime);
 
-        const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId);
+        const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId, address);
         setReadyForPearl(!!+rngHashForProducedPearl);
 
         const canProduce = await canCurrentlyProducePearl(clamId);
@@ -208,10 +211,10 @@ const FarmItem = ({
 
   return (
     <div className="FarmItem">
+      <div className="w-1/4 m-2 mx-auto text-center px-4 py-2 badge badge-success">#{clamId}</div>
       <div className="flex-1 justify-center md:flex items-center p-4">
         <img className="w-auto" src={img} />
       </div>
-
       {clam.processing ? (
         <>
           {/* Progress Bar */}
@@ -241,7 +244,12 @@ const FarmItem = ({
           </div>
 
           <div className="px-4 py-2">
-            <button className="withdraw-btn" onClick={onWithdrawClam}>
+            <button
+              className="withdraw-btn flex justify-center items-center"
+              onClick={onWithdrawClam}
+              disabled={withdrawingClamId}
+            >
+              <Spinner show={isWithdrawing} color="#ff4b47" />
               Withdraw
             </button>
           </div>

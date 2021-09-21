@@ -68,7 +68,7 @@
 }
 
 .withdraw-btn {
-  @apply border-4 border-withdraw text-withdraw hover:bg-withdraw hover:text-white; /* border and text color*/
+  @apply border-4 border-withdraw text-withdraw hover:bg-withdraw hover:text-white disabled:bg-white disabled:text-withdraw disabled:cursor-not-allowed; /* border and text color*/
   @apply font-black font-avenir text-xl; /*font weight and size*/
   @apply rounded-lg w-full; /* button padding, width, radius*/
 }
@@ -99,12 +99,10 @@
 
 .ClamDeposit {
   @apply w-full;
-  .heading {
-    @apply text-black font-bold font-aristotelica text-2xl;
-  }
+
   .clam-details {
     @apply flex flex-row items-center;
-    @apply border-4 border-blue-200 rounded-xl p-4 my-4;
+    @apply border-4 border-opacity-80 border-blue-100 rounded-xl p-2 mb-2;
 
     .details {
       @apply flex flex-1 flex-col;

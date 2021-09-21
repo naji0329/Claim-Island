@@ -109,7 +109,8 @@ const BurnPearlModal = (props) => {
             <p>No pearls available</p>
           )}
         </div>
-        <div className="w-1/2 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160 overflow-y-auto">
+        <div className="w-1/2 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160">
+          <div className="overflow-y-auto">
           <p className="font-bold mb-4">Not available this week</p>
           {notEligiblePearls.length ? (
             notEligiblePearls.map((pearl, i, a) => (
@@ -124,6 +125,7 @@ const BurnPearlModal = (props) => {
           ) : (
             <p>No pearls available</p>
           )}
+          </div>
         </div>
       </div>
     </div>

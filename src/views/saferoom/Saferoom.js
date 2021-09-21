@@ -51,7 +51,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
 
     if (dna.length > 1) {
       const dnaDecoded = await getDecodedDNA(dna);
-      return { dna, dnaDecoded, birthTime };
+      return { dna, dnaDecoded, birthTime, tokenId };
     }
   };
 
@@ -151,7 +151,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
   return (
     <>
       {loading && <LoadingScreen />}
-      <Web3Navbar />
+      <Web3Navbar title="My Saferoom" />
       {/* container */}
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
@@ -164,7 +164,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
       </Modal>
 
       {address && (
-        <div className="flex-1 min-h-full min-w-full flex relative z-10 justify-center items-start">
+        <div className="pt-24 flex-1 min-h-full min-w-full flex relative z-10 justify-center items-start">
           <div className="w-4/5 flex flex-col relative pt-24">
             {/* navbar */}
             <SaferoomNav
@@ -179,7 +179,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
             <div className="w-full my-4 overflow-auto">
               <Switch>
                 <Route exact path={path}>
-                  <Redirect to={`${url}/{tab}`} />;
+                  <Redirect to={`${url}/pearl`} />;
                 </Route>
                 <Route path={`${path}/:tabId`}>
                   <TabContainer
@@ -205,16 +205,11 @@ const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
   };
 
   return (
-    <div className="w-full bg-white shadow-md rounded-xl mx-auto flex flex-row justify-between">
-      <div className="px-3 py-2">
-        <h2 className="text-blue-700 font-semibold text-4xl mb-2">My Saferoom</h2>
-        <p className="text-yellow-700">All your minted NFTs</p>
-      </div>
-
-      <div className="px-3 py-2 flex justify-between">
+    <div className="w-full py-2 mx-auto flex  border-b-2 border-gray-200 border-opacity-80">
+      <div className="flex flex-none bg-gray-900 bg-opacity-80 p-2 rounded ">
         <Link
-          className={`mx-2 px-5 py-6 rounded-xl ${
-            tab === "Clam" ? "bg-blue-400 text-white" : "text-blue-700 bg-grey"
+          className={`px-5 py-2 text-2xl ${
+            tab === "Clam" ? " text-blue-700 bg-gray-200 bg-opacity-80 rounded" : "text-gray-400"
           }`}
           to={`${url}/clam`}
           onClick={() => setTab("Clam")}
@@ -223,22 +218,21 @@ const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
         </Link>
 
         <Link
-          className={`mx-2 px-5 py-6 rounded-xl ${
-            tab === "Pearl" ? "bg-blue-400 text-white" : "text-blue-700"
+          className={`px-5 py-2  text-2xl ${
+            tab === "Pearl" ? "text-blue-700  bg-gray-200 bg-opacity-80 rounded" : "text-gray-400"
           }`}
           to={`${url}/pearl`}
           onClick={() => setTab("Pearl")}
         >
           {showNumberOfAssets(pearlBalance, "Pearl")}
         </Link>
-
-        <Link
-          to="/shop"
-          className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-5 py-6 mx-2"
-        >
-          Shop
-        </Link>
       </div>
+      <div className="flex-grow"></div>
+      <Link to="/shop">
+        <div className="flex-none text-2xl bg-blue-700 hover:bg-blue-500 text-white rounded-xl align-middle shadow-md px-8 py-2 mx-2">
+          Shop
+        </div>
+      </Link>
     </div>
   );
 };
@@ -257,8 +251,9 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
           {clams &&
             clams.map((clam, i) => {
               const rarity = get(clam.dnaDecoded, "rarity");
-              const shape = get(clam.dnaDecoded, "shellShape");
 
+              let shape = get(clam.dnaDecoded, "shellShape");
+              shape = shape.charAt(0).toUpperCase() + shape.slice(1);
               return (
                 <div
                   onClick={() => {
@@ -267,7 +262,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} img={clam.img} />
+                  <NFTItem rarity={rarity} shape={shape} img={clam.img} tokenId={clam.tokenId} />
                 </div>
               );
             })}
@@ -279,8 +274,8 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
           {pearls &&
             pearls.map((pearl, i) => {
               const rarity = get(pearl.dnaDecoded, "rarity");
-              const shape = get(pearl.dnaDecoded, "shape");
-
+              let shape = get(pearl.dnaDecoded, "shape");
+              shape = shape.charAt(0).toUpperCase() + shape.slice(1);
               return (
                 <div
                   onClick={() => {
@@ -289,13 +284,12 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} img={pearl.img} />
+                  <NFTItem rarity={rarity} shape={shape} img={pearl.img} tokenId={pearl.tokenId} />
                 </div>
               );
             })}
         </div>
       )}
-
       {!pearls.length && !clams.length && (
         <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
           You&#39;ve got no clams or pearls &#128542;

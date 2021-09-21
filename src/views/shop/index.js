@@ -72,7 +72,7 @@ const Shop = ({
 
   return (
     <>
-      <Web3Navbar />
+      <Web3Navbar title="Clam Shop" />
       {/* container */}
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
       {/* chat character   */}
