@@ -1,61 +1,5 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_gemToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_pearl",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_clam",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_rng",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_productionTimeReduction",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_treasury",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_clamBonus",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_pearlPrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_burnRateProduction",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_burnRateReclaim",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -232,6 +176,19 @@
       }
     ],
     "name": "PearlProductionTimeReductionSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "rngContractAddress",
+        "type": "address"
+      }
+    ],
+    "name": "RNGSet",
     "type": "event"
   },
   {
@@ -447,6 +404,64 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_gemToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_pearl",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_clam",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_rng",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_productionTimeReduction",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_treasury",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_clamBonus",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_pearlPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_burnRateProduction",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_burnRateReclaim",
+        "type": "uint256"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -777,6 +792,19 @@
       }
     ],
     "name": "setPearlProductionTimeReduction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_rng",
+        "type": "address"
+      }
+    ],
+    "name": "setRng",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

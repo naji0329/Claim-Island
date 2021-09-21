@@ -3,7 +3,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_shellToken",
+        "name": "_clam",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_rng",
         "type": "address"
       },
       {
@@ -13,8 +18,13 @@
       },
       {
         "internalType": "uint256",
-        "name": "_presaleStart",
+        "name": "_beginSale",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_previousPresale",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -26,37 +36,56 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "purchaser",
+        "name": "farmer",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
-    "name": "ShellPurchase",
+    "name": "ClamCollected",
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "CAP",
-    "outputs": [
+    "anonymous": false,
+    "inputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "indexed": true,
+        "internalType": "address",
+        "name": "farmer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "requestHash",
+        "type": "bytes32"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "name": "ClamPurchased",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
   },
   {
     "inputs": [],
@@ -73,33 +102,7 @@
   },
   {
     "inputs": [],
-    "name": "PANCAKE_FACTORY",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "PANCAKE_ROUTER",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "RATE",
+    "name": "MAX_SUPPLY",
     "outputs": [
       {
         "internalType": "uint256",
@@ -112,12 +115,12 @@
   },
   {
     "inputs": [],
-    "name": "WBNB",
+    "name": "beginSale",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "uint256",
         "name": "",
-        "type": "address"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -125,27 +128,27 @@
   },
   {
     "inputs": [],
-    "name": "_pair",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "buyTokens",
+    "name": "buyClam",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "endFirstRound",
+    "name": "clam",
+    "outputs": [
+      {
+        "internalType": "contract IClam",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamsPurchased",
     "outputs": [
       {
         "internalType": "uint256",
@@ -158,7 +161,40 @@
   },
   {
     "inputs": [],
-    "name": "hasEnded",
+    "name": "collectClam",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNFTPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "hasSaleEnded",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "hasSaleStarted",
     "outputs": [
       {
         "internalType": "bool",
@@ -172,17 +208,37 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_beginSale",
+        "type": "uint256"
+      }
+    ],
+    "name": "modifyBeginSale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
         "internalType": "address",
         "name": "",
         "type": "address"
       }
     ],
-    "name": "individualLimit",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bool",
         "name": "",
-        "type": "uint256"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -190,23 +246,10 @@
   },
   {
     "inputs": [],
-    "name": "presaleStart",
+    "name": "previousPresale",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "shellToken",
-    "outputs": [
-      {
-        "internalType": "contract IBEP20",
+        "internalType": "contract IClamPresale",
         "name": "",
         "type": "address"
       }
@@ -216,15 +259,61 @@
   },
   {
     "inputs": [],
-    "name": "startSecondRound",
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "rng",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IRNG",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "rngRequestHashFromBuyersClam",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "togglePauseSale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -241,8 +330,14 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "weiRaised",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "usersPurchasedClam",
     "outputs": [
       {
         "internalType": "uint256",

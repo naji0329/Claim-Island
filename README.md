@@ -74,9 +74,11 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 1. connect contracts to the code
 
 ```
-cd src && ln -s ../../clamswap-contracts/build/contracts contracts
+cd src && ln -s ../../clamswap-contracts/build/contracts contracts && cd ..
 ```
 
 2. Add contract addresses and RPC Url in **.env** file.
 
 3. Web3 code is in **services/web3.js**.
+
+4. Run `yarn updateContracts` to update contract abi's

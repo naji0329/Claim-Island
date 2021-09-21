@@ -60,7 +60,8 @@
     "deploy": "npm run build && firebase deploy",
     "deploy-dev": "npm run build && firebase deploy -P dev",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "updateContracts": "node src/updateContractAbis.js"
   },
   "eslintConfig": {
     "extends": [

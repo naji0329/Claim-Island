@@ -1,0 +1,77 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract IMasterChef",
+        "name": "_masterChef",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minClam",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_pearlFarm",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_boostPercentageBP",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxBoostPercentageBP",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_stakedClams",
+        "type": "uint256"
+      }
+    ],
+    "name": "boost",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "calcMaxClam",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      }
+    ],
+    "name": "downgradeBoost",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

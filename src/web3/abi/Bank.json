@@ -1,44 +1,41 @@
 [
   {
+    "anonymous": false,
     "inputs": [
       {
-        "internalType": "contract IGemToken",
-        "name": "_gem",
-        "type": "address"
-      },
-      {
+        "indexed": false,
         "internalType": "address",
-        "name": "_devaddr",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_feeAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_gemPerBlock",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_startBlock",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_lockUntilBlock",
-        "type": "uint256"
-      },
-      {
-        "internalType": "contract IGemLocker",
-        "name": "_gemLocker",
+        "name": "clamBonus",
         "type": "address"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    "name": "ClamBonusAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "pearlId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ClamBonusRewardAdded",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -94,6 +91,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "gemPerBlock",
+        "type": "uint256"
+      }
+    ],
+    "name": "EmissionRateUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -107,6 +117,115 @@
       }
     ],
     "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "clamId",
+        "type": "uint256"
+      }
+    ],
+    "name": "PearlBonusRewardAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "pearlBurner",
+        "type": "address"
+      }
+    ],
+    "name": "PearlBurnerSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "PearlProductionTimeReductionAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "PoolAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "pid",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "allocationPoint",
+        "type": "uint256"
+      }
+    ],
+    "name": "PoolAllocationSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newPoolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "PoolIdAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "PoolIdRemoved",
     "type": "event"
   },
   {
@@ -132,6 +251,19 @@
       }
     ],
     "name": "RewardPaid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "pearlBurner",
+        "type": "uint256"
+      }
+    ],
+    "name": "SecondsPerBlockSet",
     "type": "event"
   },
   {
@@ -176,19 +308,26 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "gemPerBlock",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
       }
     ],
-    "name": "UpdateEmissionRate",
+    "name": "SpecialTokenAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "SpecialTokenRemoved",
     "type": "event"
   },
   {
@@ -248,16 +387,34 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "user",
+        "name": "_user",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "reward",
+        "name": "_reward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_clamId",
         "type": "uint256"
       }
     ],
-    "name": "addBonusReward",
+    "name": "addClamBonusReward",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "addNativePoolId",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -266,25 +423,45 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_reward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_pearlId",
+        "type": "uint256"
+      }
+    ],
+    "name": "addPearlBonusReward",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_token",
         "type": "address"
       }
     ],
-    "name": "bonusPerUser",
+    "name": "addSpecialToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "bps",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "bonusRemaining",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "startBlock",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "endBlock",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -293,12 +470,12 @@
   },
   {
     "inputs": [],
-    "name": "bonusPoolId",
+    "name": "clamBonus",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -389,6 +566,19 @@
   },
   {
     "inputs": [],
+    "name": "gemLocker",
+    "outputs": [
+      {
+        "internalType": "contract IGemLocker",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "gemPerBlock",
     "outputs": [
       {
@@ -438,8 +628,75 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "contract IGemToken",
+        "name": "_gem",
+        "type": "address"
+      },
+      {
+        "internalType": "contract ShellToken",
+        "name": "_shell",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_devaddr",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_feeAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_gemPerBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_startBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "contract IGemLocker",
+        "name": "_gemLocker",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_productionTimeReduction",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "liquidityProvidersAt",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "lockPercentBP",
+    "name": "liquidityProvidersLength",
     "outputs": [
       {
         "internalType": "uint256",
@@ -452,7 +709,7 @@
   },
   {
     "inputs": [],
-    "name": "lockUntilBlock",
+    "name": "lockPercentBP",
     "outputs": [
       {
         "internalType": "uint256",
@@ -472,7 +729,78 @@
   },
   {
     "inputs": [],
+    "name": "maxDepositFeeBP",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxNumberOfNativePools",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "nativePoolIdsAt",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nativePoolIdsLength",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pearlBurner",
     "outputs": [
       {
         "internalType": "address",
@@ -580,9 +908,61 @@
   },
   {
     "inputs": [],
+    "name": "productionTimeReduction",
+    "outputs": [
+      {
+        "internalType": "contract IPearlProductionTimeReduction",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "removeNativePoolId",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      }
+    ],
+    "name": "removeSpecialToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "secondsPerBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -616,12 +996,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_bonusPoolId",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_clamBonus",
+        "type": "address"
       }
     ],
-    "name": "setBonusPoolId",
+    "name": "setClamBonus",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -642,6 +1022,32 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_pearlBurner",
+        "type": "address"
+      }
+    ],
+    "name": "setPearlBurner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_productionTimeReduction",
+        "type": "address"
+      }
+    ],
+    "name": "setPearlProductionTimeReduction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_secondsPerBlock",
         "type": "uint256"
@@ -650,6 +1056,19 @@
     "name": "setSecondsPerBlock",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "shell",
+    "outputs": [
+      {
+        "internalType": "contract ShellToken",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
