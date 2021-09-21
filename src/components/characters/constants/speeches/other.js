@@ -6,8 +6,14 @@ export const OTHER_SPEECH = {
       dismiss: true,
       skip: false,
     },
+    restore: {
+      text: "Would you like me to start approaching you to offer assistance again without prompting?",
+      next: true,
+      dismiss: true,
+      skip: false,
+    },
     agree: {
-      text: "Ok, no problem, I will let you explore by yourself. Just come talk to me if you need help with anything.",
+      text: "Ok, no problem, I will let you explore by yourself. If you change your mind, just come talk to me and click the \"Restore\" icon any time.",
       next: true,
       dismiss: false,
       skip: false,
@@ -26,6 +32,10 @@ export const OTHER_BUTTONS = {
     propose: {
       next: "Yes please",
       alt: "No, I love talking to you!",
+    },
+    restore: {
+      next: "Yes please!",
+      alt: "No, thanks",
     },
     agree: {
       next: "OK",
