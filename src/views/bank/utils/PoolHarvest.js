@@ -36,7 +36,7 @@ const PoolHarvest = ({
 
   const calculateTimeLeft = () => {
     if (!rewards) return "calculating...";
-    if (!rewards.farmingRewards.length) return "No farming rewards yet";
+    if (!rewards.farmingRewards.length) return "No locked rewards yet";
 
     const startTime = +rewards.startTime * 1000;
     const unlockDay = rewards.farmingRewards[rewards.farmingRewards.length - 1].lockedUntilDay;
@@ -141,26 +141,23 @@ const PoolHarvest = ({
                 <div className="flex justify-end items-baseline text-xs">
                   <img src={arrowDownRight} width={50} />
                   <span className="w-16 text-right opacity-40">
-                    {renderNumber(
-                      +harvestAmount - +rewards.totalLocked + +rewards.availableFarmingRewards,
-                      2
-                    )}
+                    {renderNumber(+harvestAmount + +rewards.availableFarmingRewards, 2)}
                   </span>
-                  <span className="w-36 ml-1 opacity-40">FARMING (locked)</span>
+                  <span className="w-36 ml-1 opacity-40">FARMING</span>
                 </div>
                 <div className="flex justify-end items-baseline text-xs -mt-2">
                   <img src={arrowDownRight} width={50} />
                   <span className="w-16 text-right opacity-40">
                     {renderNumber(+rewards.availableClamRewards, 2)}
                   </span>
-                  <span className="w-36 ml-1 opacity-40">CLAM (staked)</span>
+                  <span className="w-36 ml-1 opacity-40">CLAM</span>
                 </div>
                 <div className="flex justify-end items-baseline text-xs -mt-2">
                   <img src={arrowDownRight} width={50} />
                   <span className="w-16 text-right opacity-40">
                     {renderNumber(+rewards.availablePearlRewards, 2)}
                   </span>
-                  <span className="w-36 ml-1 opacity-40">PEARL (burned)</span>
+                  <span className="w-36 ml-1 opacity-40">PEARL</span>
                 </div>
               </>
             ))}
@@ -217,23 +214,25 @@ const PoolHarvest = ({
           width={"24rem"}
           title="Vested GEM breakdown"
         >
-          <div className="flex justify-between mb-2">
-            <span>Total vesting GEM:</span>
-            <span>{renderNumber(+rewards.totalLocked, 3)}</span>
+          <div className="mb-2">
+            <div className="flex justify-between mb-2">
+              <span>Total vesting GEM:</span>
+              <span>{renderNumber(+rewards.totalLocked, 3)}</span>
+            </div>
+            {rewards.farmingRewards.map((rewardData) =>
+              renderUnlockData(
+                rewardData.lockedUntilDay,
+                rewardData.lockedUntilDay - rewards.currentDay,
+                rewardData.amount
+              )
+            )}
+            {rewards.clamRewards.map((rewardData, i) =>
+              renderUnlockData(i, rewardData.endDay, rewardData.bonusRemaining)
+            )}
+            {rewards.pearlRewards.map((rewardData, i) =>
+              renderUnlockData(i, rewardData.endDay, rewardData.bonusRemainingCorrected)
+            )}
           </div>
-          {rewards.farmingRewards.map((rewardData) =>
-            renderUnlockData(
-              rewardData.lockedUntilDay,
-              rewardData.lockedUntilDay - rewards.currentDay,
-              rewardData.amount
-            )
-          )}
-          {rewards.clamRewards.map((rewardData, i) =>
-            renderUnlockData(i, rewardData.endDay, rewardData.bonusRemaining)
-          )}
-          {rewards.pearlRewards.map((rewardData, i) =>
-            renderUnlockData(i, rewardData.endDay, rewardData.bonusRemainingCorrected)
-          )}
         </Modal>
       )}
     </div>

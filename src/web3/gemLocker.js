@@ -137,8 +137,8 @@ const decodeLockedFarmingRewards = (values) => {
       web3.eth.abi.decodeParameter(
         {
           lockedFarmingRewards: {
-            lockedUntilDay: "uint256",
             amount: "uint256",
+            lockedUntilDay: "uint256",
           },
         },
         values[index]
