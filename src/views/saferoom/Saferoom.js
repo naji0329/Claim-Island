@@ -51,7 +51,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
 
     if (dna.length > 1) {
       const dnaDecoded = await getDecodedDNA(dna);
-      return { dna, dnaDecoded, birthTime };
+      return { dna, dnaDecoded, birthTime, tokenId };
     }
   };
 
@@ -151,7 +151,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
   return (
     <>
       {loading && <LoadingScreen />}
-      <Web3Navbar title="My Saferoom"/>
+      <Web3Navbar title="My Saferoom" />
       {/* container */}
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
@@ -205,39 +205,35 @@ const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
   };
 
   return (
-    <div className="w-full rounded-xl mx-auto flex">
-        <div className="flex flex-none">
-          <Link
-            className={`px-5 py-2 bg-gray-900 bg-opacity-80 text-2xl ${
-              tab === "Clam" ? "text-white" : "text-blue-700"
-            }`}
-            to={`${url}/clam`}
-            onClick={() => setTab("Clam")}
-          >
-            {showNumberOfAssets(clamBalance, "Clam")}
-          </Link>
-
-          <Link
-            className={`px-5 py-2 bg-gray-900 bg-opacity-80 text-2xl ${
-              tab === "Pearl" ? "text-white" : "text-blue-700"
-            }`}
-            to={`${url}/pearl`}
-            onClick={() => setTab("Pearl")}
-          >
-            {showNumberOfAssets(pearlBalance, "Pearl")}
-          </Link>
-        </div>
-        <div className="flex-grow"></div>
+    <div className="w-full py-2 mx-auto flex  border-b-2 border-gray-200 border-opacity-80">
+      <div className="flex flex-none bg-gray-900 bg-opacity-80 p-2 rounded ">
         <Link
-          to="/shop"
+          className={`px-5 py-2 text-2xl ${
+            tab === "Clam" ? " text-blue-700 bg-gray-200 bg-opacity-80 rounded" : "text-gray-400"
+          }`}
+          to={`${url}/clam`}
+          onClick={() => setTab("Clam")}
         >
-          <div className="flex-none bg-blue-700 hover:bg-blue-500 text-white rounded-xl align-middle shadow-md px-8 py-2 mx-2">
-            Shop
-          </div>
-
+          {showNumberOfAssets(clamBalance, "Clam")}
         </Link>
-    </div>
 
+        <Link
+          className={`px-5 py-2  text-2xl ${
+            tab === "Pearl" ? "text-blue-700  bg-gray-200 bg-opacity-80 rounded" : "text-gray-400"
+          }`}
+          to={`${url}/pearl`}
+          onClick={() => setTab("Pearl")}
+        >
+          {showNumberOfAssets(pearlBalance, "Pearl")}
+        </Link>
+      </div>
+      <div className="flex-grow"></div>
+      <Link to="/shop">
+        <div className="flex-none text-2xl bg-blue-700 hover:bg-blue-500 text-white rounded-xl align-middle shadow-md px-8 py-2 mx-2">
+          Shop
+        </div>
+      </Link>
+    </div>
   );
 };
 
@@ -257,7 +253,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
               const rarity = get(clam.dnaDecoded, "rarity");
 
               let shape = get(clam.dnaDecoded, "shellShape");
-              shape = shape.charAt(0).toUpperCase() + shape.slice(1)
+              shape = shape.charAt(0).toUpperCase() + shape.slice(1);
               return (
                 <div
                   onClick={() => {
@@ -266,7 +262,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} img={clam.img} />
+                  <NFTItem rarity={rarity} shape={shape} img={clam.img} tokenId={clam.tokenId} />
                 </div>
               );
             })}
@@ -279,7 +275,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
             pearls.map((pearl, i) => {
               const rarity = get(pearl.dnaDecoded, "rarity");
               let shape = get(pearl.dnaDecoded, "shape");
-              shape = shape.charAt(0).toUpperCase() + shape.slice(1)
+              shape = shape.charAt(0).toUpperCase() + shape.slice(1);
               return (
                 <div
                   onClick={() => {
@@ -288,7 +284,7 @@ const TabContainer = ({ clams, setSelectedAsset, toggle, pearls, setTab }) => {
                   }}
                   key={i}
                 >
-                  <NFTItem rarity={rarity} shape={shape} img={pearl.img} />
+                  <NFTItem rarity={rarity} shape={shape} img={pearl.img} tokenId={pearl.tokenId} />
                 </div>
               );
             })}
