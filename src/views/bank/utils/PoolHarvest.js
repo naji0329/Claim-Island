@@ -85,9 +85,9 @@ const PoolHarvest = ({
     }
   };
 
-  const renderUnlockData = (key, unlockDay, amount) => (
+  const renderUnlockData = (key, unlockDay, type, amount) => (
     <div key={key} className="flex justify-between">
-      <span>{`GEM unlocking in ${unlockDay} days:`}</span>
+      <span>{`GEM unlocking in ${unlockDay} days (${type}):`}</span>
       <span>{renderNumber(amount)}</span>
     </div>
   );
@@ -211,7 +211,7 @@ const PoolHarvest = ({
         <Modal
           isShowing={isShowing}
           onClose={toggleBreakdownModal}
-          width={"24rem"}
+          width={"30rem"}
           title="Vested GEM breakdown"
         >
           <div className="mb-2">
@@ -222,15 +222,26 @@ const PoolHarvest = ({
             {rewards.farmingRewards.map((rewardData) =>
               renderUnlockData(
                 rewardData.lockedUntilDay,
+                "Farming locked",
                 rewardData.lockedUntilDay - rewards.currentDay,
                 rewardData.amount
               )
             )}
             {rewards.clamRewards.map((rewardData, i) =>
-              renderUnlockData(i, rewardData.endDay, rewardData.bonusRemaining)
+              renderUnlockData(
+                `clam-${i}`,
+                rewardData.endDay,
+                "Clam staking",
+                rewardData.bonusRemaining
+              )
             )}
             {rewards.pearlRewards.map((rewardData, i) =>
-              renderUnlockData(i, rewardData.endDay, rewardData.bonusRemainingCorrected)
+              renderUnlockData(
+                `pearl-${i}`,
+                rewardData.endDay,
+                "Pearl burn",
+                rewardData.bonusRemainingCorrected
+              )
             )}
           </div>
         </Modal>
