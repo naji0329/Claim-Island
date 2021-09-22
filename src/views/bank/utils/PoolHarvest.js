@@ -222,8 +222,8 @@ const PoolHarvest = ({
             {rewards.farmingRewards.map((rewardData) =>
               renderUnlockData(
                 rewardData.lockedUntilDay,
-                "Farming locked",
                 rewardData.lockedUntilDay - rewards.currentDay,
+                "Farming locked",
                 rewardData.amount
               )
             )}
