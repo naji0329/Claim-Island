@@ -64,11 +64,32 @@ export const withSkipDialog = (WrappedComponent) => (props) => {
     });
   };
 
+  const onClickSkipRestoreButton = () => {
+    console.log('#######')
+    setSkipModal({
+      action: "skip.restore.text",
+      button: {
+        text: BUTTONS.skip.restore.next,
+        alt: {
+          action: "cb",
+          destination: onSkipDecline,
+        },
+      },
+      buttonAlt: {
+        text: BUTTONS.skip.restore.alt,
+        alt: {
+          action: "cb",
+          destination: onSkipAccept,
+        },
+      },
+    });
+  };
+
   useEffect(() => {
     props.updateCharacter({ skipDialogs: Boolean(localStorage.getItem("skipDialogs")) });
   }, []);
 
   return (
-    <WrappedComponent {...props} onClickSkipDialogButton={onClickSkipDialogButton} {...skipModal} />
+    <WrappedComponent {...props} onClickSkipDialogButton={onClickSkipDialogButton} onClickSkipRestoreButton={onClickSkipRestoreButton} {...skipModal} />
   );
 };

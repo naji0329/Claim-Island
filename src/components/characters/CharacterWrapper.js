@@ -4,7 +4,7 @@ import { get } from "lodash";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinusCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faMinusCircle, faTimesCircle, faEye } from "@fortawesome/free-solid-svg-icons";
 import { SPEECHES, CHARACTERS } from "./constants";
 import { withSkipDialog } from "../../hoc/withSkipDialog";
 import { actions } from "../../store/redux";
@@ -22,6 +22,7 @@ const CharacterWrapper = ({
   onClickButton,
   suppressSpeechBubble,
   onClickSkipDialogButton,
+  onClickSkipRestoreButton,
   skipDialogs,
 }) => {
   const character = get(CHARACTERS, name);
@@ -30,6 +31,7 @@ const CharacterWrapper = ({
     speech = variables ? speech(variables) : speech({});
   }
   const actionPath = action ? action.replace(/\.text$/, "") : "";
+  console.log(actionPath, action)
   const isNeedSkipDialog = get(SPEECHES, `${actionPath}.skip`, false);
   const isDialogHideable = get(SPEECHES, `${actionPath}.hideable`, false);
 
@@ -167,13 +169,22 @@ const CharacterWrapper = ({
                     <FontAwesomeIcon icon={faMinusCircle} />
                   </button>
                 )}
-                {isNeedSkipDialog && (
+                {isNeedSkipDialog && !skipDialogs && (
                   <button
                     data-tip="Don't show again"
                     className="pointer-events-auto tooltip"
                     onClick={onClickSkipDialogButton}
                   >
                     <FontAwesomeIcon icon={faTimesCircle} />
+                  </button>
+                )}
+                {isNeedSkipDialog && skipDialogs && (
+                  <button
+                    data-tip="Show Speech"
+                    className="pointer-events-auto tooltip"
+                    onClick={onClickSkipRestoreButton}
+                  >
+                    <FontAwesomeIcon icon={faEye} />
                   </button>
                 )}
               </div>
