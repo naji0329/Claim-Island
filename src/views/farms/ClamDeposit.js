@@ -16,7 +16,7 @@ import {
   stakePrice,
 } from "../../web3/pearlFarm";
 
-const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
+const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address, dnaDecoded }) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState("Deposit Clam");
   const [inTx, setInTx] = useState(false);
@@ -81,10 +81,10 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
   return (
     <div className="clam-details">
       <div className="w-1/3">
-        <div className="flex-row">
-          <img className="w-full pr-4" src={img} />
+        <div className="flex-row pr-4">
+          <img className="w-full" src={img} />
+          <div className="flex-row text-center text-green-400 text-bold">{dnaDecoded.rarity}</div>
         </div>
-        <div className="flex-row text-center text-green-400 text-bold"> Rarity???</div>
       </div>
       <div className="details">
         <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
