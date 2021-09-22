@@ -33,20 +33,18 @@ const PoolHarvest = ({
   const [pearlBoostYield, setPearlBoostYield] = useState(false);
   const [inTx, setInTx] = useState(false);
   const { isShowing, toggleModal: toggleBreakdownModal } = useModal();
+  const startTime = +rewards.startTime * 1000;
 
   const calculateTimeLeft = () => {
     if (!rewards) return "calculating...";
     if (!rewards.farmingRewards.length) return "No locked rewards yet";
 
-    const startTime = +rewards.startTime * 1000;
     const unlockDay = rewards.farmingRewards[rewards.farmingRewards.length - 1].lockedUntilDay;
 
     const unlockMoment = moment(startTime).add(unlockDay, "d");
     const remainingMs = unlockMoment.diff(moment());
 
-    const duration = formatMsToDuration(remainingMs);
-
-    return duration;
+    return formatMsToDuration(remainingMs);
   };
 
   const { timeLeft } = useTimer(calculateTimeLeft);
@@ -85,12 +83,26 @@ const PoolHarvest = ({
     }
   };
 
-  const renderUnlockData = (key, unlockDay, type, amount) => (
-    <div key={key} className="flex justify-between">
-      <span>{`GEM unlocking in ${unlockDay} days (${type}):`}</span>
-      <span>{renderNumber(amount)}</span>
-    </div>
-  );
+  const UnlockRow = ({ key, type, amount, unlockDay }) => {
+    const calculateTimeLeft = () => {
+      if (!rewards) return "calculating...";
+
+      const unlockMoment = moment(startTime).add(unlockDay, "d");
+      const remainingMs = unlockMoment.diff(moment());
+
+      return formatMsToDuration(remainingMs);
+    };
+
+    const { timeLeft } = useTimer(calculateTimeLeft);
+
+    return (
+      <tr key={key}>
+        <th>{type}</th>
+        <td className="text-right">{amount}</td>
+        <td className="text-right">{timeLeft}</td>
+      </tr>
+    );
+  };
 
   return (
     <div className="w-full" style={{ padding: "0 2%" }}>
@@ -211,38 +223,54 @@ const PoolHarvest = ({
         <Modal
           isShowing={isShowing}
           onClose={toggleBreakdownModal}
-          width={"30rem"}
+          width={"36rem"}
           title="Vested GEM breakdown"
         >
           <div className="mb-2">
-            <div className="flex justify-between mb-2">
-              <span>Total vesting GEM:</span>
-              <span>{renderNumber(+rewards.totalLocked, 3)}</span>
+            <div className="overflow-x-auto">
+              <table className="table w-full">
+                <thead>
+                  <tr>
+                    <th>Reward from</th>
+                    <th>$GEM Amount</th>
+                    <th style={{ minWidth: 180 }}>Fully unlocks in</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rewards.farmingRewards.map((rewardData) => (
+                    <UnlockRow
+                      key={rewardData.lockedUntilDay}
+                      type={"Farming locked"}
+                      amount={renderNumber(rewardData.amount)}
+                      unlockDay={rewardData.lockedUntilDay - rewards.currentDay}
+                    />
+                  ))}
+
+                  {rewards.clamRewards.map((rewardData, i) => (
+                    <UnlockRow
+                      key={`clam-${i}`}
+                      type={"Clam staking"}
+                      amount={renderNumber(rewardData.bonusRemaining)}
+                      unlockDay={rewardData.endDay}
+                    />
+                  ))}
+                  {rewards.pearlRewards.map((rewardData, i) => (
+                    <UnlockRow
+                      key={`pearl-${i}`}
+                      type={"Pearl burn"}
+                      amount={renderNumber(rewardData.bonusRemainingCorrected)}
+                      unlockDay={rewardData.endDay}
+                    />
+                  ))}
+
+                  <tr>
+                    <th>Total vesting GEM:</th>
+                    <td className="text-right">{renderNumber(+rewards.totalLocked, 3)}</td>
+                    <td />
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            {rewards.farmingRewards.map((rewardData) =>
-              renderUnlockData(
-                rewardData.lockedUntilDay,
-                rewardData.lockedUntilDay - rewards.currentDay,
-                "Farming locked",
-                rewardData.amount
-              )
-            )}
-            {rewards.clamRewards.map((rewardData, i) =>
-              renderUnlockData(
-                `clam-${i}`,
-                rewardData.endDay,
-                "Clam staking",
-                rewardData.bonusRemaining
-              )
-            )}
-            {rewards.pearlRewards.map((rewardData, i) =>
-              renderUnlockData(
-                `pearl-${i}`,
-                rewardData.endDay,
-                "Pearl burn",
-                rewardData.bonusRemainingCorrected
-              )
-            )}
           </div>
         </Modal>
       )}
