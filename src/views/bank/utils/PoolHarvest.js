@@ -167,13 +167,13 @@ const PoolHarvest = ({
           <div className="flex flex-col">
             <div className="flex justify-between mx-2">
               <span className="text-right w-1/2">
-                Pending boost:
+                Total locked:
                 <InfoTooltip text="Available from any native pool" />
               </span>
               <span className="text-right w-1/2">{renderNumber(+rewards.totalLocked, 2)} GEM</span>
             </div>
             <div className="flex justify-between mx-2">
-              <span className="text-right w-1/2">Time left:</span>
+              <span className="text-right w-1/2">Fully unlocks in:</span>
               <span className="text-right w-1/2">{timeLeft}</span>
             </div>
           </div>
