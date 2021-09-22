@@ -190,9 +190,7 @@ const getNftRewards = async (chainId, isClam) => {
   const valuesDecoded = decodeLockedNftBonus(lockedNftRewards.returnData);
 
   const rewards = valuesDecoded.map((bonusData) => ({
-    bonusRemaining: +formatEther(
-      isClam ? bonusData.bonusRemaining : bonusData.bonusRemainingCorrected
-    ),
+    bonusRemaining: isClam ? bonusData.bonusRemaining : bonusData.bonusRemainingCorrected,
     startDay: +bonusData.startDay,
     endDay: +bonusData.endDay,
   }));
