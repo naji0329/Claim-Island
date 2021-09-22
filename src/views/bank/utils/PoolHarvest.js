@@ -83,7 +83,7 @@ const PoolHarvest = ({
     }
   };
 
-  const UnlockRow = ({ key, type, amount, unlockDay }) => {
+  const UnlockRow = ({ type, amount, unlockDay }) => {
     const calculateTimeLeft = () => {
       if (!rewards) return "calculating...";
 
@@ -96,7 +96,7 @@ const PoolHarvest = ({
     const { timeLeft } = useTimer(calculateTimeLeft);
 
     return (
-      <tr key={key}>
+      <tr>
         <th>{type}</th>
         <td className="text-right">{amount}</td>
         <td className="text-right">{timeLeft}</td>
