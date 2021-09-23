@@ -81,6 +81,21 @@ export const pearlGenerateNew = ({ updateCharacter, gems }, depositClamCb) => {
   });
 };
 
+export const pearlNotEnoughGems = ({ updateCharacter, gems }, cb) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.pearlNotEnoughGems.text",
+    variables: { gems },
+    button: {
+      text: "Go to Bank",
+      alt: {
+        action: "internal",
+        destination: "/bank",
+      },
+    },
+  });
+};
+
 export const pearlGemPrompt = ({ updateCharacter, gems }, cb) => {
   updateCharacter({
     name: "al",

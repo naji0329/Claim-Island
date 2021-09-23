@@ -34,7 +34,8 @@ import {
   pearlSendToSaferoom,
   pearlGenerateNew,
   pearlGemPrompt,
-  pearlCollectProcessing
+  pearlCollectProcessing,
+  pearlNotEnoughGems
 } from "./character/pearlCollection";
 import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
 
@@ -179,27 +180,31 @@ const FarmItem = ({
 
         // character speaks
         pearlCollectSuccess({ updateCharacter, viewPearl }, () => {
+          setInTx(false);
           pearlSendToSaferoom({ updateCharacter }, () => {
             pearlGenerateNew({ updateCharacter, gems: formatFromWei(gems) }, async () => {
               const pricePerPearlInGem = gemsNeededForPearlProd;
               const gemBalance = await getBalance(address).then((v) => new BigNumber(v)); // from string to BN
-              if (gemBalance.lt(pricePerPearlInGem))
-                throw new Error(
-                  `You need at least ${formatFromWei(pricePerPearlInGem)} $GEM to stake Clam`
-                );
-              await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
-              await infiniteApproveSpending(address, pearlFarmAddress, pricePerPearlInGem);
-
-              const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
-              if (hasClamBeenStakeByUserBefore) {
-                await stakeClamAgain(clamId);
+              if (gemBalance.lt(pricePerPearlInGem)) {
+                const errorMsg = `You need at least ${formatFromWei(pricePerPearlInGem)} $GEM to stake Clam`
+                toast.error(errorMsg);
+                pearlNotEnoughGems({ updateCharacter });
               } else {
-                await stakeClam(clamId);
+                setInTx(true);
+                await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
+                await infiniteApproveSpending(address, pearlFarmAddress, pricePerPearlInGem);
+
+                const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
+                if (hasClamBeenStakeByUserBefore) {
+                  await stakeClamAgain(clamId);
+                } else {
+                  await stakeClam(clamId);
+                }
+                setInTx(false);
               }
             });
           });
         });
-        setInTx(false);
       } catch (err) {
         updateAccount({ error: err.message });
         setInTx(false);

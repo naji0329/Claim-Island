@@ -78,6 +78,13 @@ export const FARM_SPEECH = {
       skip: false,
       hideable: true,
     },
+    pearlNotEnoughGems: {
+      text: `Hold on, it looks like you don’t have enough $GEM. You can purchase some from the Bank, then you can come back and deposit your Clam.`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+      hideable: true,
+    },
     pearl_processing: {
       text: `One moment, just let me unbox this Pearl for you.`,
       next: false,
