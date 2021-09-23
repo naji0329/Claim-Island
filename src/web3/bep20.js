@@ -6,6 +6,8 @@ import { contractFactory } from "./index";
 import { getAccount, MaxUint256 } from "./shared";
 import BigNumber from "bignumber.js";
 
+BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
+
 export const balanceOf = async (address, account) => {
   const token = contractFactory({ abi: BEP20ABI, address });
   const accountBalance = await token.methods.balanceOf(account).call();
@@ -45,7 +47,7 @@ export const approveBankForMaxUint = async (account, tokenAddress, amount) => {
 
   if (new BigNumber(allowance).gte(new BigNumber(amount))) return;
 
-  const method = token.methods.approve(bankAddress, new BigNumber(MaxUint256));
+  const method = token.methods.approve(bankAddress, MaxUint256);
 
   const gasEstimation = await method.estimateGas({
     from: account,
@@ -61,7 +63,6 @@ export const hasMaxUintAllowanceBank = async (owner, tokenAddress) => {
   const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
   const allowance = await token.methods.allowance(owner, bankAddress).call();
   // const allowanceAsHex = web3.utils.toHex(allowance);
-
   return new BigNumber(allowance).isEqualTo(MaxUint256);
 };
 
