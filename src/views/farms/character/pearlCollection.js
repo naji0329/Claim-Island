@@ -81,6 +81,37 @@ export const pearlGenerateNew = ({ updateCharacter, gems }, depositClamCb) => {
   });
 };
 
+export const pearlGemPrompt = ({ updateCharacter, gems }, cb) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.pearlCollectGemprompt.text",
+    variables: { gems },
+    button: {
+      text: "Yes",
+      alt: {
+        action: "cb",
+        destination: () => {
+          cb();
+        },
+      },
+    },
+    buttonAlt: {
+      text: "No thanks",
+      dismiss: true
+    },
+  });
+};
+
+export const pearlCollectProcessing = ({ updateCharacter }, cb) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.pearl_processing.text",
+    button: {
+      text: undefined,
+    }
+  });
+};
+
 export const sendClamToSaferoom = ({ updateCharacter, variant }) => {
   updateCharacter({
     name: "al",

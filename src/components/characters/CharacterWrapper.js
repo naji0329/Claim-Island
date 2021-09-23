@@ -24,6 +24,7 @@ const CharacterWrapper = ({
   onClickSkipDialogButton,
   onClickSkipRestoreButton,
   skipDialogs,
+  forceTop
 }) => {
   const character = get(CHARACTERS, name);
   let speech = get(SPEECHES, action, action);
@@ -121,7 +122,7 @@ const CharacterWrapper = ({
             ? "character-bubble fixed z-999 bottom-8 h-1/3 pointer-events-none w-screen"
             : "character-bubble h-1/3 hide-bubble fixed justify-end"
         }
-        style={{ zIndex: speech ? undefined : 0 }}
+        style={{ zIndex: forceTop ? 9999 : (speech ? undefined : 0) }}
       >
         {speech && (
           <div className="text-bubble flex-col justify-end pointer-events-none">
@@ -207,7 +208,7 @@ const CharacterWrapper = ({
 };
 
 const mapToProps = ({
-  character: { name, action, variables, button, buttonAlt, suppressSpeechBubble, skipDialogs },
+  character: { name, action, variables, button, buttonAlt, suppressSpeechBubble, skipDialogs, forceTop },
 }) => ({
   name,
   action,
@@ -216,6 +217,7 @@ const mapToProps = ({
   buttonAlt,
   suppressSpeechBubble,
   skipDialogs,
+  forceTop
 });
 
 const mapDispatchToProps = () => ({ updateCharacter: actions().updateCharacter });

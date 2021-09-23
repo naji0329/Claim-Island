@@ -243,7 +243,6 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
         isShowing={isShowing}
         onClose={onModalClose}
         title={modalSelected === MODAL_OPTS.CLAM_DETAILS ? "" : "Choose a Clam"}
-        width={modalSelected === MODAL_OPTS.CLAM_DETAILS ? "60rem" : "40rem"}
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
           <ClamDetails
@@ -252,7 +251,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
             updateAccount={updateAccount}
           />
         ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
-          <ClamDeposit clams={clams} />
+          <ClamDeposit clams={clams} updateCharacter={updateCharacter} toggleModal={toggleModal} />
         ) : (
           <PearlView dna={selPearl.dna} dnaDecoded={selPearl.dnaDecoded} />
         )}
