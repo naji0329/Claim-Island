@@ -51,11 +51,11 @@ export const approveSpending = async (ownerAddress, spenderAddress, amount) => {
 export const infiniteApproveSpending = async (ownerAddress, spenderAddress, amount) => {
   const allowance = await getAllowance(ownerAddress, spenderAddress);
 
-  if (new BigNumber(allowance).gte(new BigNumber(amount))) return;
+  if (new BigNumber(allowance).gte(amount)) return;
 
   const gem = contractFactory({ abi: gemAbi, address: gemTokenAddress });
 
-  const method = gem.methods.approve(spenderAddress, MaxUint256);
+  const method = gem.methods.approve(spenderAddress, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
   const gasEstimation = await method.estimateGas({
     from: ownerAddress,

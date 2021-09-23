@@ -45,9 +45,9 @@ export const approveBankForMaxUint = async (account, tokenAddress, amount) => {
 
   const allowance = await token.methods.allowance(account, bankAddress).call();
 
-  if (new BigNumber(allowance).gte(new BigNumber(amount))) return;
+  if (new BigNumber(allowance).gte(amount)) return;
 
-  const method = token.methods.approve(bankAddress, MaxUint256);
+  const method = token.methods.approve(bankAddress, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
   const gasEstimation = await method.estimateGas({
     from: account,
@@ -63,7 +63,7 @@ export const hasMaxUintAllowanceBank = async (owner, tokenAddress) => {
   const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
   const allowance = await token.methods.allowance(owner, bankAddress).call();
   // const allowanceAsHex = web3.utils.toHex(allowance);
-  return new BigNumber(allowance).isEqualTo(MaxUint256);
+  return new BigNumber(allowance, 16).isEqualTo(MaxUint256);
 };
 
 export const accountShellBalance = async (account) => {
