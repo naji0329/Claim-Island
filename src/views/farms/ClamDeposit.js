@@ -15,13 +15,26 @@ import {
   getRemainingPearlProductionTime,
   stakePrice,
 } from "../../web3/pearlFarm";
+import { clamRarityAlreadyStaked } from "./character/DepositClam";
 
-const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address, dnaDecoded }) => {
+const ClamItem = ({
+  clamId,
+  img,
+  clamDataValues,
+  updateAccount,
+  address,
+  dnaDecoded,
+  stakedRarities,
+  updateCharacter,
+  clamBonus,
+}) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState("Deposit Clam");
   const [inTx, setInTx] = useState(false);
   const [gemApproved, setGemApproved] = useState(false);
   const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
+
+  const rarityIsAlreadyStaked = stakedRarities.includes(dnaDecoded.rarity);
 
   useEffect(() => {
     const init = async () => {
@@ -46,9 +59,20 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address, dnaDeco
     init();
   }, [address, inTx]);
 
-  const handleDeposit = async (clamId) => {
+  const handleDeposit = async () => {
+    setInTx(true);
+    if (rarityIsAlreadyStaked) {
+      clamRarityAlreadyStaked(updateCharacter, clamBonus, async () => {
+        await executeDeposit();
+      });
+    } else {
+      await executeDeposit();
+    }
+    setInTx(false);
+  };
+
+  const executeDeposit = async () => {
     try {
-      setInTx(true);
       const gemBalance = await getBalance(address).then((v) => new BigNumber(v)); // from string to BN
 
       if (gemBalance.lt(pearlPrice))
@@ -74,7 +98,6 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address, dnaDeco
     } catch (err) {
       updateAccount({ error: err.message });
       setButtonText("Approve Clam");
-      setInTx(false);
     }
   };
 
@@ -97,6 +120,8 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address, dnaDeco
             {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced} pearls
             remaining
           </div>
+          <div className="grid-title">$GEM boost:</div>
+          <div className="grid-value">{rarityIsAlreadyStaked ? 0 : clamBonus}</div>
         </div>
         <div className="flex flex-col">
           <Link
@@ -109,7 +134,7 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address, dnaDeco
           <button
             disabled={inTx}
             className="btn btn-info mt-4 font-montserrat font-bold"
-            onClick={() => handleDeposit(clamId)}
+            onClick={() => handleDeposit()}
           >
             {buttonText}
           </button>
@@ -119,13 +144,26 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address, dnaDeco
   );
 };
 
-const ClamDeposit = ({ clams, updateAccount, account: { address } }) => {
+const ClamDeposit = ({
+  clams,
+  updateAccount,
+  updateCharacter,
+  account: { address },
+  stakedRarities,
+}) => {
   return (
     <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
       {clams.length ? (
         <div>
           {clams.map((clam) => (
-            <ClamItem key={clam.clamId} updateAccount={updateAccount} address={address} {...clam} />
+            <ClamItem
+              key={clam.clamId}
+              updateAccount={updateAccount}
+              updateCharacter={updateCharacter}
+              address={address}
+              stakedRarities={stakedRarities}
+              {...clam}
+            />
           ))}
         </div>
       ) : (
