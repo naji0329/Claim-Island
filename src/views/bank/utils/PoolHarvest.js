@@ -258,7 +258,7 @@ const PoolHarvest = ({
                     <UnlockRow
                       key={`pearl-${i}`}
                       type={"Pearl burn"}
-                      amount={renderNumber(rewardData.bonusRemainingCorrected)}
+                      amount={renderNumber(rewardData.bonusRemaining)}
                       unlockDay={rewardData.endDay}
                     />
                   ))}
