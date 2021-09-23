@@ -45,7 +45,7 @@ export const approveBankForMaxUint = async (account, tokenAddress, amount) => {
 
   if (new BigNumber(allowance).gte(new BigNumber(amount))) return;
 
-  const method = token.methods.approve(bankAddress, MaxUint256);
+  const method = token.methods.approve(bankAddress, new BigNumber(MaxUint256));
 
   const gasEstimation = await method.estimateGas({
     from: account,

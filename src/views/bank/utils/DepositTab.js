@@ -127,6 +127,7 @@ const DepositTab = ({
               className="text-4xl text-right pt-2 w-full rounded bg-transparent"
               placeholder="Amount"
               type="number"
+              step="any"
               max={get(bank, "balances[0]", "0")}
               min="0"
               value={+depositAmount}
