@@ -21,7 +21,7 @@ export const Modal = ({ isShowing, onClose, className, children, width, title })
         <React.Fragment>
           <div
             className={`fixed w-full inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster`}
-            style={{ background: `rgba(0,0,0,.7)`, zIndex: 1000 }}
+            style={{ background: `rgba(0,0,0,.7)`, zIndex: 998 }} // TODO: temp fix
           >
             <div
               className="border border-blue-500 shadow-lg bg-white w-2/3 md:max-w-11/12 mx-auto rounded-2xl z-50 overflow-y-auto"
