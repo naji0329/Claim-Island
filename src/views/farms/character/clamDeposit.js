@@ -9,6 +9,10 @@ export const depositClamGemPrompt = ({ updateCharacter, gems, dismissModal }, cb
       alt: {
         action: "cb",
         destination: () => {
+          updateCharacter({
+            name: "al",
+            action: undefined,
+          });
           cb();
         },
       },
