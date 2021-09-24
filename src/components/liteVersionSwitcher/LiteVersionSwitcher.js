@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useLocalStorage } from "react-use";
 
-import { checkLiteVersion } from "utils/checkLiteVersion";
+import { IS_LITE_VERSION } from "constants/ui";
 
 import "./LiteVersionSwitcher.css";
 
 export const LiteVersionSwitcher = () => {
-  const [isLiteVersion, setIsLiteVersion] = useState(false);
+  const [isLiteVersion, setIsLiteVersion] = useLocalStorage(IS_LITE_VERSION);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleClick = () => {
-    localStorage.setItem("isLiteVersion", JSON.stringify(!isLiteVersion));
+    setIsDisabled(true);
+    setIsLiteVersion(!isLiteVersion);
     document.location.reload();
   };
 
-  useEffect(() => {
-    const isLiteVersion = checkLiteVersion();
-    setIsLiteVersion(isLiteVersion);
-  }, []);
-
   return (
-    <button className="switcherButton" onClick={handleClick}>
+    <button className="switchButton" onClick={handleClick} disabled={isDisabled}>
       {isLiteVersion ? "Switch to Full version" : "Switch to Lite version"}
     </button>
   );
