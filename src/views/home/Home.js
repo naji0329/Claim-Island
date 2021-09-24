@@ -5,6 +5,7 @@ import "./Home.scss";
 import Map3D from "../../components/three/3DMap";
 import CharacterSpeak from "../../components/characters";
 import { Map2D } from "components/Map2D";
+import { checkLiteVersion } from "utils/checkLiteVersion";
 
 // import ClamIsland from "../../assets/img/clam_island_sign.png";
 // import TgIcon from "../../assets/img/tg-icon.png";
@@ -12,7 +13,7 @@ import { Map2D } from "components/Map2D";
 
 // Main Home Component
 const Home = () => {
-  const isLiteVersion = JSON.parse(localStorage.getItem("isLiteVersion"));
+  const isLiteVersion = checkLiteVersion();
 
   return (
     <>

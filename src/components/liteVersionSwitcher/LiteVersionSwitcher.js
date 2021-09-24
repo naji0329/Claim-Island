@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { checkLiteVersion } from "utils/checkLiteVersion";
+
 import "./LiteVersionSwitcher.css";
 
 export const LiteVersionSwitcher = () => {
@@ -11,7 +13,7 @@ export const LiteVersionSwitcher = () => {
   };
 
   useEffect(() => {
-    const isLiteVersion = JSON.parse(localStorage.getItem("isLiteVersion"));
+    const isLiteVersion = checkLiteVersion();
     setIsLiteVersion(isLiteVersion);
   }, []);
 
