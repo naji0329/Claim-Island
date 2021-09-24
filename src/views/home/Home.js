@@ -4,6 +4,7 @@ import "./Home.scss";
 // import Map from "../../components/Map";
 import Map3D from "../../components/three/3DMap";
 import CharacterSpeak from "../../components/characters";
+import { Map2D } from "components/Map2D";
 
 // import ClamIsland from "../../assets/img/clam_island_sign.png";
 // import TgIcon from "../../assets/img/tg-icon.png";
@@ -11,6 +12,8 @@ import CharacterSpeak from "../../components/characters";
 
 // Main Home Component
 const Home = () => {
+  const isLiteVersion = JSON.parse(localStorage.getItem("isLiteVersion"));
+
   return (
     <>
       {/* <div>
@@ -40,7 +43,7 @@ const Home = () => {
       </div> */}
       <div className="Home" style={{ height: "95.5vh" }}>
         {/* <Map></Map> */}
-        <Map3D></Map3D>
+        {isLiteVersion ? <Map2D /> : <Map3D></Map3D>}
         <CharacterSpeak character={"nacre"} speech={"welcome"} />
       </div>
     </>
