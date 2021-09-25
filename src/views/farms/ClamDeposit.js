@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
+import { get } from "lodash";
 
 import { actions } from "../../store/redux";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
@@ -16,12 +17,13 @@ import {
   stakePrice,
 } from "../../web3/pearlFarm";
 
-const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
+const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address, dnaDecoded }) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState("Deposit Clam");
   const [inTx, setInTx] = useState(false);
   const [gemApproved, setGemApproved] = useState(false);
   const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
+  const rarity = get(dnaDecoded, "rarity", "Rarity???");
 
   useEffect(() => {
     const init = async () => {
@@ -84,7 +86,7 @@ const ClamItem = ({ clamId, img, clamDataValues, updateAccount, address }) => {
         <div className="flex-row">
           <img className="w-full pr-4" src={img} />
         </div>
-        <div className="flex-row text-center text-green-400 text-bold"> Rarity???</div>
+        <div className="flex-row text-center text-green-400 text-bold">{rarity}</div>
       </div>
       <div className="details">
         <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
