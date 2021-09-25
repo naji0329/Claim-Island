@@ -37,9 +37,20 @@ const PoolHarvest = ({
 
   const calculateTimeLeft = () => {
     if (!rewards) return "calculating...";
-    if (!rewards.farmingRewards.length) return "No locked rewards yet";
+    const { farmingRewards, clamRewards, pearlRewards } = rewards;
+    if (!farmingRewards.length && !clamRewards.length && !pearlRewards.length)
+      return "No locked rewards yet";
 
-    const unlockDay = rewards.farmingRewards[rewards.farmingRewards.length - 1].lockedUntilDay;
+    const getUnlockDay = () => {
+      if (clamRewards.length || pearlRewards.length) {
+        const sortedRewards = [...clamRewards, ...pearlRewards].sort((a, b) => b.endDay - a.endDay);
+        return sortedRewards[0].endDay;
+      }
+      if (farmingRewards.length) return farmingRewards[farmingRewards.length - 1].lockedUntilDay;
+    };
+
+    const unlockDay = getUnlockDay();
+    if (!unlockDay) return "No locked rewards yet";
 
     const unlockMoment = moment(startTime).add(unlockDay, "d");
     const remainingMs = unlockMoment.diff(moment());
