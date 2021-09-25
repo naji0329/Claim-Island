@@ -26,6 +26,7 @@ import "./index.scss";
 import FarmItem from "./FarmItem";
 import ClamDetails from "./ClamDetails";
 import ClamDeposit from "./ClamDeposit";
+import { DepositClamCard } from "./depositClamCard";
 
 import PearlView from "./PearlView";
 import { MODAL_OPTS } from "./constants";
@@ -261,20 +262,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       {address && (
         <div className="w-full lg:w-4/5 mx-auto relative z-10">
           <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-center">
-            <div className="w-full flex flex-col relative pt-24">
-              {/* navbar */}
-              <div className="w-full rounded-xl mx-auto flex flex-row-reverse">
-                <div className="p-3">
-                  <button className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-8 py-2 mx-2 font-montserrat" onClick={onDepositClam}>
-                    Deposit Clam
-                  </button>
-                </div>
-              </div>
-            </div>
-
             {/* clams and pears grid */}
-            <div className="w-full my-4 overflow-auto">
+            <div className="w-full my-4">
               <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
+                <DepositClamCard onClick={onDepositClam} />
                 {clamsStaked &&
                   clamsStaked.map((clam, i) => (
                     <FarmItem
