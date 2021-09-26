@@ -32,6 +32,10 @@ import { MODAL_OPTS } from "./constants";
 import { WelcomeUser, withdrawClamSpeak } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
 import { pearlSendToSaferoom } from "./character/pearlCollection";
+import {
+  decodeCalculateBonusRewardsFromMulticall,
+  prepCalculateBonusRewardsMulticall,
+} from "web3/clamBonus";
 
 const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
   let history = useHistory();
@@ -41,6 +45,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   const [loading, setLoading] = useState(false);
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [selPearl, setSelPearl] = useState({});
+  const [stakedRarities, setStakedRarities] = useState([]);
   const { isShowing, toggleModal } = useModal();
 
   const [modalSelected, setModal] = useState("");
@@ -140,16 +145,26 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       tokenIds
     );
 
+    const clamBonusCalls = prepCalculateBonusRewardsMulticall(dnaDecodedDecoded);
+    const clamBonusResult = await aggregate(clamBonusCalls, chainId);
+    const clamBonusDecoded = decodeCalculateBonusRewardsFromMulticall(
+      clamBonusResult.returnData,
+      tokenIds
+    );
+
     const clams = clamDataDecoded.map((clam) => {
       const sameClamDna = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
       const sameClamPearlsProduced = producedPearlIdsDecoded.find(
         ({ clamId }) => clamId === clam.clamId
       );
-      if (sameClamDna && sameClamPearlsProduced) {
+      const sameClamBonus = clamBonusDecoded.find(({ clamId }) => clamId === clam.clamId);
+      if (sameClamDna && sameClamPearlsProduced && sameClamBonus) {
         const dnaDecoded = sameClamDna.dnaDecodedValues;
         const producedPearlIds = sameClamPearlsProduced.producedPearlIds;
         const dna = clam.clamDataValues.dna;
-        return { ...clam, dnaDecoded, producedPearlIds, dna };
+        const { clamBonus } = sameClamBonus;
+
+        return { ...clam, dnaDecoded, producedPearlIds, dna, clamBonus };
       }
       console.error(`Clam ${clam.clamId} from ${address} not found`);
     });
@@ -209,9 +224,11 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
           const ownedClamsImg = await addClamImg(ownedClams);
           const stakedClamsImg = await addClamImg(stakedClams);
+          const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
 
           setClams(ownedClamsImg);
           setClamsStaked(stakedClamsImg);
+          setStakedRarities(rarities);
         } catch (error) {
           console.log({ error });
         } finally {
@@ -252,7 +269,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
             updateAccount={updateAccount}
           />
         ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
-          <ClamDeposit clams={clams} />
+          <ClamDeposit clams={clams} stakedRarities={stakedRarities} />
         ) : (
           <PearlView dna={selPearl.dna} dnaDecoded={selPearl.dnaDecoded} />
         )}
@@ -265,7 +282,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
               {/* navbar */}
               <div className="w-full rounded-xl mx-auto flex flex-row-reverse">
                 <div className="p-3">
-                  <button className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-8 py-2 mx-2 font-montserrat" onClick={onDepositClam}>
+                  <button
+                    className="bg-blue-700 hover:bg-blue-500 text-white rounded-xl shadow-md px-8 py-2 mx-2 font-montserrat"
+                    onClick={onDepositClam}
+                  >
                     Deposit Clam
                   </button>
                 </div>

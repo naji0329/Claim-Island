@@ -5,54 +5,65 @@ import "./index.scss";
 
 import ClamView from "../saferoom/ClamView";
 
-import clamContract from "../../web3/clam";
-import { actions } from "../../store/redux";
-import { getDNADecoded } from "../../web3/dnaDecoder";
+import clamContract from "web3/clam";
+import { actions } from "store/redux";
+import { getDNADecoded } from "web3/dnaDecoder";
+import { calculateBonusRewards } from "web3/clamBonus";
 
 const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) => {
   const [clamDna, setClamDna] = useState("");
   const [clamDnaDecoded, setClamDnaDecoded] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [clamBirthTime, setClamBirthTime] = useState();
+  const [clamBonus, setClamBonus] = useState(0);
 
-  useEffect(async () => {
-    if (!clamToCollect && address) {
-      try {
-        setIsLoading(true);
+  useEffect(() => {
+    const init = async () => {
+      if (!clamToCollect && address) {
+        try {
+          setIsLoading(true);
 
-        const index = Number(clamBalance);
-        const tokenId = await clamContract.getClamByIndex(address, index).catch(async () => {
-          //fallback
-          return clamContract.getClamByIndex(address, index - 1);
-        });
+          const index = Number(clamBalance);
+          const tokenId = await clamContract.getClamByIndex(address, index).catch(async () => {
+            //fallback
+            return clamContract.getClamByIndex(address, index - 1);
+          });
 
-        if (tokenId) {
-          const clamData = await clamContract.getClamData(tokenId);
+          if (tokenId) {
+            const clamData = await clamContract.getClamData(tokenId);
 
-          if (clamData.dna.length > 1) {
-            setClamDna(clamData.dna);
-            setClamBirthTime(clamData.birthTime);
+            if (clamData.dna.length > 1) {
+              setClamDna(clamData.dna);
+              setClamBirthTime(clamData.birthTime);
 
-            const decodedDna = await getDNADecoded(clamData.dna).catch(console.log);
-            console.log({ decodedDna });
-            setClamDnaDecoded(decodedDna);
+              const decodedDna = await getDNADecoded(clamData.dna);
+              setClamDnaDecoded(decodedDna);
+
+              const bonus = await calculateBonusRewards(decodedDna);
+
+              setClamBonus(bonus);
+            }
           }
-        }
 
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
+          setIsLoading(false);
+        } catch (error) {
+          setIsLoading(false);
+        }
       }
-    }
+    };
+    init();
   }, [address]);
 
   return (
     <div className="w-2/3 md:max-w-11/12 mx-auto">
       <div className="bg-white shadow-md rounded-xl p-5 flex-1 justify-center md:flex items-center h-full flex-col w-full">
         {clamDna && clamDnaDecoded && (
-          <>
-            <ClamView dna={clamDna} dnaDecoded={clamDnaDecoded} birthTime={clamBirthTime} />
-          </>
+          <ClamView
+            dna={clamDna}
+            dnaDecoded={clamDnaDecoded}
+            birthTime={clamBirthTime}
+            clamBonus={clamBonus}
+          />
         )}
         {isLoading && (
           <>

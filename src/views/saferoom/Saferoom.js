@@ -4,28 +4,28 @@ import { useAsync } from "react-use";
 import "./index.scss";
 
 import { Link, Switch, Route, useRouteMatch, useParams, Redirect } from "react-router-dom";
-import Character from "../../components/characters/CharacterWrapper";
-import Web3Navbar from "../../components/Web3Navbar";
-import clamIcon from "../../assets/clam-icon.png";
-import { Modal, useModal } from "../../components/Modal";
+import Character from "components/characters/CharacterWrapper";
+import Web3Navbar from "components/Web3Navbar";
+import clamIcon from "assets/clam-icon.png";
+import { Modal, useModal } from "components/Modal";
 import NFTItem from "./NFTItem";
 import ClamView from "./ClamView";
-import NFTUnknown from "../../assets/img/clam_unknown.png";
-import PEARLunknown from "../../assets/img/pearl_unknown.png";
+import NFTUnknown from "assets/img/clam_unknown.png";
+import PEARLunknown from "assets/img/pearl_unknown.png";
 import PearlView from "./PearlView";
 
-import videoImage from "../../assets/locations/Saferoom.jpg";
-import videoMp4 from "../../assets/locations/Saferoom.mp4";
-import videoWebM from "../../assets/locations/Saferoom.webm";
-import VideoBackground from "../../components/VideoBackground";
+import videoImage from "assets/locations/Saferoom.jpg";
+import videoMp4 from "assets/locations/Saferoom.mp4";
+import videoWebM from "assets/locations/Saferoom.webm";
+import VideoBackground from "components/VideoBackground";
 
-import { actions } from "../../store/redux";
+import { actions } from "store/redux";
 
-import clamContract from "../../web3/clam";
-import { getDNADecoded } from "../../web3/dnaDecoder";
-
-import pearlContract from "../../web3/pearl";
-import { getPearlDNADecoded } from "../../web3/pearlDnaDecoder";
+import clamContract from "web3/clam";
+import { getDNADecoded } from "web3/dnaDecoder";
+import pearlContract from "web3/pearl";
+import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
+import { calculateBonusRewards } from "web3/clamBonus";
 
 import { get } from "lodash";
 
@@ -33,7 +33,6 @@ import LoadingScreen from "components/LoadingScreen";
 
 const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateCharacter }) => {
   const [clams, setClams] = useState([]);
-  // const [clams, setClams] = useState(TEST_CLAMS)
   const [pearls, setPearls] = useState([]);
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? "Clam" : "Pearl");
@@ -78,7 +77,13 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
             clamBalance,
             getDNADecoded
           );
-          setClams(clams);
+          const clamsWithBonus = await Promise.all(
+            clams.map(async (clam) => {
+              const clamBonus = await calculateBonusRewards(clam.dnaDecoded);
+              return { ...clam, clamBonus };
+            })
+          );
+          setClams(clamsWithBonus);
         }
         if (+pearlBalance > 0) {
           const pearls = await getNFTs(

@@ -208,6 +208,12 @@ const startTimestamp = async () => {
   return gemLocker().methods.startTimestamp().call();
 };
 
+export const clamHasGeneratedBoost = async (clamId) => {
+  const account = getAccount();
+  const bonusInfo = await gemLocker().methods.lockedClamRewards(account, clamId).call();
+  return +bonusInfo.endDay > 0; // endDay cannot be 0 clam has generated rewards
+};
+
 export const fetchRewards = async (chainId) => {
   const currentDay = await getCurrentDay();
   const farmingRewards = await getFarmingRewards(chainId);
