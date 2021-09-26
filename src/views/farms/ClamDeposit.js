@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
 import { get } from "lodash";
 
+import { toast } from "react-toastify";
 import { actions } from "../../store/redux";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
 import { clamNFTAddress, pearlFarmAddress } from "../../web3/constants";
@@ -102,6 +103,8 @@ const ClamItem = ({
           } else {
             await stakeClam(clamId);
           }
+          setButtonText("Deposit Clam");
+          toast.success("Your clam has been deposited!. You can choose to deposit another clam.")
         } catch (err) {
           updateAccount({ error: err.message });
           setButtonText("Approve Clam");
