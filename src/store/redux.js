@@ -53,6 +53,7 @@ const initialState = {
     },
     suppressSpeechBubble: undefined,
     skipDialogs: false,
+    forceTop: false
   },
   bank: {
     pools: [],
