@@ -16,6 +16,7 @@ import {
   stakePrice,
 } from "../../web3/pearlFarm";
 import { clamRarityAlreadyStaked } from "./character/DepositClam";
+import { depositClamGemPrompt, depositClamError, depositClamGemDeny } from "./character/clamDeposit";
 
 const ClamItem = ({
   clamId,
@@ -78,26 +79,40 @@ const ClamItem = ({
       if (gemBalance.lt(pearlPrice))
         throw new Error(`You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`);
 
-      setButtonText("Approving Clam...");
-      await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
+      // character speaks
+      depositClamGemPrompt({ updateCharacter, gems: formatFromWei(pearlPrice), dismissModal }, async () => {
+        try {
+          setButtonText("Approving Clam...");
+          await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
 
-      if (!gemApproved) {
-        setButtonText("Approving GEM...");
-        console.log(pearlPrice);
-        await infiniteApproveSpending(address, pearlFarmAddress, pearlPrice);
-      }
+          if (!gemApproved) {
+            setButtonText("Approving GEM...");
+            console.log(pearlPrice);
+            await infiniteApproveSpending(address, pearlFarmAddress, pearlPrice);
+          }
 
-      setButtonText("Depositing Clam...");
+          setButtonText("Depositing Clam...");
 
-      const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
-      if (hasClamBeenStakeByUserBefore) {
-        await stakeClamAgain(clamId);
-      } else {
-        await stakeClam(clamId);
-      }
+          const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
+          if (hasClamBeenStakeByUserBefore) {
+            await stakeClamAgain(clamId);
+          } else {
+            await stakeClam(clamId);
+          }
+        } catch (err) {
+          updateAccount({ error: err.message });
+          setButtonText("Approve Clam");
+          setInTx(false);
+          depositClamError({ updateCharacter, err }); // character speaks
+        }
+
+      });
+
     } catch (err) {
       updateAccount({ error: err.message });
       setButtonText("Approve Clam");
+      setInTx(false);
+      depositClamError({ updateCharacter, err }); // character speaks
     }
   };
 
@@ -144,26 +159,13 @@ const ClamItem = ({
   );
 };
 
-const ClamDeposit = ({
-  clams,
-  updateAccount,
-  updateCharacter,
-  account: { address },
-  stakedRarities,
-}) => {
+const ClamDeposit = ({ clams, updateCharacter, toggleModal, updateAccount, account: { address }, stakedRarities }) => {
   return (
     <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
       {clams.length ? (
         <div>
           {clams.map((clam) => (
-            <ClamItem
-              key={clam.clamId}
-              updateAccount={updateAccount}
-              updateCharacter={updateCharacter}
-              address={address}
-              stakedRarities={stakedRarities}
-              {...clam}
-            />
+            <ClamItem key={clam.clamId} updateAccount={updateAccount} address={address} {...clam} updateCharacter={updateCharacter} toggleModal={toggleModal} stakedRarities={stakedRarities} />
           ))}
         </div>
       ) : (

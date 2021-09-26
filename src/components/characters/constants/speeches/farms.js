@@ -18,6 +18,30 @@ export const FARM_SPEECH = {
       dismiss: false,
       skip: false,
     },
+    depositClamGemPrompt: {
+      text: ({ gems }) => `We require a deposit of ${gems} $GEM to produce the Pearl. The deposit will be consumed when a Pearl is produced. Do you want to proceed?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+    },
+    depositClamGemDisagree: {
+      text: `OK. Let me know if you need anything.`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+    },
+    depositClamError: {
+      text: ({ errorMsg }) => `There was an error depositing clams. Error -> ${errorMsg}`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+    },
+    pearlCollectGemprompt: {
+      text: ({ gems }) => `${gems} $GEM will be consumed to produce the pearl. Do you want to proceed?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+    },
     pearlCollectSuccess: {
       text: `Your Pearl has been successfully collected! Would you like to see it now?`,
       next: `purchase`,
@@ -58,7 +82,18 @@ export const FARM_SPEECH = {
       text: (gem) =>
         `You already have a Clam with the same rarity tier in the farm. Depositing this Clam will mean that you permanently lose the $GEM boost of ${gem} associated with it. Are you sure you want to continue?`,
       next: `deposit`,
+    },
+    pearlNotEnoughGems: {
+      text: `Hold on, it looks like you don’t have enough $GEM. You can purchase some from the Bank, then you can come back and deposit your Clam.`,
+      next: `purchase`,
       dismiss: false,
+      skip: false,
+      hideable: true,
+    },
+    pearl_processing: {
+      text: `One moment, just let me unbox this Pearl for you.`,
+      next: false,
+      dismiss: true,
       skip: false,
       hideable: true,
     },
