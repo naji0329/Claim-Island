@@ -29,6 +29,7 @@ const ClamItem = ({
   stakedRarities,
   updateCharacter,
   clamBonus,
+  toggleModal
 }) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState("Deposit Clam");
@@ -82,7 +83,7 @@ const ClamItem = ({
         throw new Error(`You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`);
 
       // character speaks
-      depositClamGemPrompt({ updateCharacter, gems: formatFromWei(pearlPrice), dismissModal }, async () => {
+      depositClamGemPrompt({ updateCharacter, gems: formatFromWei(pearlPrice), dismissModal: toggleModal }, async () => {
         try {
           setButtonText("Approving Clam...");
           await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
