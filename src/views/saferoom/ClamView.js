@@ -8,7 +8,7 @@ import { getCurrentBlockTimestamp } from "web3/index";
 
 import { Clam3DView } from "../../components/clam3DView";
 
-export default ({ dna, dnaDecoded, birthTime }) => {
+export default ({ dna, dnaDecoded, birthTime, clamBonus }) => {
   const [showTraits, setShowTraits] = useState(false);
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
   const lifespan = get(dnaDecoded, "lifespan");
@@ -33,6 +33,7 @@ export default ({ dna, dnaDecoded, birthTime }) => {
           <RowStat label="Rarity" value={get(dnaDecoded, "rarity")} />
           <RowStat label="Lifespan" value={get(dnaDecoded, "lifespan")} />
           <RowStat label="Size" value={get(dnaDecoded, "size")} />
+          <RowStat label="$GEM boost" value={clamBonus} />
         </div>
       ),
     },

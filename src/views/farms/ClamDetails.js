@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useEthers } from "@usedapp/core";
-import { Clam3DView } from "components/clam3DView";
 import { getPearlDataByIds } from "web3/shared";
+import { clamHasGeneratedBoost } from "web3/gemLocker";
+import { Clam3DView } from "components/clam3DView";
 import PearlInfo from "../bank/utils/PearlInfo";
 import { secondsToFormattedTime } from "../../utils/time";
 
 const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
   const [producedPearls, setProducedPearls] = useState([]);
   const [timeLeft, setTimeLeft] = useState(clamProcessing.remainingTime || 0);
+  const [clamHasGeneratedBonus, setClamHasGeneratedBonus] = useState(false);
   const remainingFormattedTime = secondsToFormattedTime(timeLeft);
   const { chainId } = useEthers();
 
@@ -16,6 +18,9 @@ const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
       try {
         const pearls = await getPearlDataByIds(clam.producedPearlIds, chainId);
         setProducedPearls(pearls);
+
+        const hasGeneratedBonus = await clamHasGeneratedBoost(clam.clamId);
+        setClamHasGeneratedBonus(hasGeneratedBonus);
       } catch (err) {
         updateAccount({ error: err.message });
       }
@@ -58,6 +63,8 @@ const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
             <div className="text-right">{clamProcessing.harvestableShell}</div>
             <div>Lifespan Remaining</div>
             <div className="text-right">{clamProcessing.remainingLifeSpan}</div>
+            <div>$GEM boost</div>
+            <div className="text-right">{clamHasGeneratedBonus ? clam.clamBonus : 0}</div>
           </div>
         </div>
 

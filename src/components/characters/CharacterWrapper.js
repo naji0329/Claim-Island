@@ -31,7 +31,6 @@ const CharacterWrapper = ({
     speech = variables ? speech(variables) : speech({});
   }
   const actionPath = action ? action.replace(/\.text$/, "") : "";
-  console.log(actionPath, action)
   const isNeedSkipDialog = get(SPEECHES, `${actionPath}.skip`, false);
   const isDialogHideable = get(SPEECHES, `${actionPath}.hideable`, false);
 
