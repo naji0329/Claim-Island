@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
+import { get } from "lodash";
 
 import { actions } from "../../store/redux";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
@@ -33,6 +34,7 @@ const ClamItem = ({
   const [inTx, setInTx] = useState(false);
   const [gemApproved, setGemApproved] = useState(false);
   const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
+  const rarity = get(dnaDecoded, "rarity", "Rarity???");
 
   const rarityIsAlreadyStaked = stakedRarities.includes(dnaDecoded.rarity);
 
