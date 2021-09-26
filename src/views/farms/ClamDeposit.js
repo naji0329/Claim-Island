@@ -30,14 +30,14 @@ const ClamItem = ({
   stakedRarities,
   updateCharacter,
   clamBonus,
-  toggleModal
+  toggleModal,
+  setRefreshClams
 }) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState("Deposit Clam");
   const [inTx, setInTx] = useState(false);
   const [gemApproved, setGemApproved] = useState(false);
   const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
-  const rarity = get(dnaDecoded, "rarity", "Rarity???");
 
   const rarityIsAlreadyStaked = stakedRarities.includes(dnaDecoded.rarity);
 
@@ -105,6 +105,7 @@ const ClamItem = ({
           }
           setButtonText("Deposit Clam");
           toast.success("Your clam has been deposited!. You can choose to deposit another clam.")
+          setRefreshClams(true);
         } catch (err) {
           updateAccount({ error: err.message });
           setButtonText("Approve Clam");
@@ -165,13 +166,13 @@ const ClamItem = ({
   );
 };
 
-const ClamDeposit = ({ clams, updateCharacter, toggleModal, updateAccount, account: { address }, stakedRarities }) => {
+const ClamDeposit = ({ clams, updateCharacter, toggleModal, updateAccount, account: { address }, stakedRarities, setRefreshClams }) => {
   return (
     <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
       {clams.length ? (
         <div>
           {clams.map((clam) => (
-            <ClamItem key={clam.clamId} updateAccount={updateAccount} address={address} {...clam} updateCharacter={updateCharacter} toggleModal={toggleModal} stakedRarities={stakedRarities} />
+            <ClamItem key={clam.clamId} updateAccount={updateAccount} address={address} {...clam} updateCharacter={updateCharacter} toggleModal={toggleModal} stakedRarities={stakedRarities} setRefreshClams={setRefreshClams} />
           ))}
         </div>
       ) : (

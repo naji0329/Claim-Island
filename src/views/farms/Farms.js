@@ -48,6 +48,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [selPearl, setSelPearl] = useState({});
   const [stakedRarities, setStakedRarities] = useState([]);
+  const [refreshClams, setRefreshClams] = useState(false);
   const { isShowing, toggleModal } = useModal();
 
   const [modalSelected, setModal] = useState("");
@@ -200,9 +201,9 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     return clamsUptd;
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     // wallet is connected
-    if (address) {
+    if (address || refreshClams) {
       const initClams = async () => {
         try {
           if (isFirstLoading) {
@@ -240,9 +241,10 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
         }
       };
 
-      initClams();
+      await initClams();
+      setRefreshClams(false);
     }
-  }, [address, clamBalance]);
+  }, [address, clamBalance, refreshClams]);
 
   useEffect(() => {
     if (!clamsStaked.find(({ clamId }) => clamId === withdrawingClamId)) {
@@ -272,7 +274,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
             updateAccount={updateAccount}
           />
         ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
-          <ClamDeposit clams={clams} updateCharacter={updateCharacter} toggleModal={toggleModal} stakedRarities={stakedRarities} />
+          <ClamDeposit clams={clams} updateCharacter={updateCharacter} toggleModal={toggleModal} stakedRarities={stakedRarities} setRefreshClams={setRefreshClams} />
         ) : (
           <PearlView dna={selPearl.dna} dnaDecoded={selPearl.dnaDecoded} />
         )}
