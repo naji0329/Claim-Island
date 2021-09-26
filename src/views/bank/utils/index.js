@@ -5,11 +5,12 @@ import { formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";
 import pancake from "web3/pancakePair";
 import InfoTooltip from "components/InfoTooltip";
+import { renderUsd } from "utils/number";
 
 // prevent rounding up
 export const formatNumber = (number, decimals) => {
-  const n = number.toFixed(decimals);
-  return n > number ? n - 1 / Math.pow(10, decimals) + "" : n;
+  const n = number.toFixed(decimals + 1);
+  return n.slice(0, -1);
 };
 
 // get the pancakeswap exchange url
@@ -43,23 +44,16 @@ export const getBalancesFormatted = async (account, lpToken, isSingleStake) => {
 };
 
 // POOL DATA component
-export const PoolData = ({ depositFee, urlForExchange, tvl }) => {
+export const PoolData = ({ urlForExchange, tvl }) => {
   const [tvlFmtd, setTVL] = useState("");
 
   useEffect(() => {
-    const formattedTvl = (+tvl).toLocaleString("EN", {
-      style: "currency",
-      currency: "USD",
-    });
+    const formattedTvl = renderUsd(+tvl);
     setTVL(formattedTvl);
   }, [tvl]);
 
   return (
     <div className="w-full px-2">
-      <div className="flex flex-row justify-between">
-        <p className="text-gray-500 font-semibold">Deposit fee:</p>
-        <p className="font-bold text-black text-center">{depositFee}</p>
-      </div>
       <div className="flex flex-row justify-between">
         <div className="text-gray-500 font-semibold">
           TVL:

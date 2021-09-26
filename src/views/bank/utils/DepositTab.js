@@ -87,12 +87,13 @@ const DepositTab = ({
   return (
     <form onSubmit={handleSubmit(handleDeposit)} className="w-full">
       <div className="flex flex-col w-full h-full justify-between">
+        <div className="flex items-center justify-between opacity-40 text-sm">
+          <span>Deposit fee:</span>
+          <span className="mx-2">{depositFee}%</span>
+        </div>
         <div className="flex items-center justify-between opacity-40 text-xl">
-          <div className="">Wallet:</div> {/* TODO: update after deposit */}
-          <div className="flex items-center">
-            <div className="mx-2">{formatNumber(+get(bank, "balances[0]", "0"), 3)}</div>
-            {/* <div className="text-sm">($15.01) </div> */}
-          </div>
+          <span>Wallet:</span>
+          <span className="mx-2">{formatNumber(+get(bank, "balances[0]", "0"), 3)}</span>
         </div>
 
         {/* bank 2.0 feature */}
@@ -126,8 +127,10 @@ const DepositTab = ({
               className="text-4xl text-right pt-2 w-full rounded bg-transparent"
               placeholder="Amount"
               type="number"
+              step="any"
               max={get(bank, "balances[0]", "0")}
-              value={formatNumber(+depositAmount, 3)}
+              min="0"
+              value={+depositAmount}
               onChange={handleDepositChange}
             />
 
@@ -139,7 +142,6 @@ const DepositTab = ({
             isDeposit
             state={{ selectedPool, ...bank }}
             onChange={(newValue) => {
-              console.log({ newValue });
               updateBank(newValue);
             }}
           />

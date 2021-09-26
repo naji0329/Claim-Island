@@ -1,10 +1,12 @@
-import clamNFTAbi from "./abi/ClamNFT.json";
+import clamNFTAbi from "./abi/Clam.json";
 import BEP20ABI from "./abi/BEP20.json";
 import ERC721ABI from "./abi/ERC721.json";
 import { shellTokenAddress, clamNFTAddress, bankAddress } from "./constants";
 import { contractFactory } from "./index";
 import { getAccount, MaxUint256 } from "./shared";
 import BigNumber from "bignumber.js";
+
+BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 
 export const balanceOf = async (address, account) => {
   const token = contractFactory({ abi: BEP20ABI, address });
@@ -43,9 +45,9 @@ export const approveBankForMaxUint = async (account, tokenAddress, amount) => {
 
   const allowance = await token.methods.allowance(account, bankAddress).call();
 
-  if (new BigNumber(allowance).gte(new BigNumber(amount))) return;
+  if (new BigNumber(allowance).gte(amount)) return;
 
-  const method = token.methods.approve(bankAddress, MaxUint256);
+  const method = token.methods.approve(bankAddress, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
   const gasEstimation = await method.estimateGas({
     from: account,
@@ -61,8 +63,7 @@ export const hasMaxUintAllowanceBank = async (owner, tokenAddress) => {
   const token = contractFactory({ abi: BEP20ABI, address: tokenAddress });
   const allowance = await token.methods.allowance(owner, bankAddress).call();
   // const allowanceAsHex = web3.utils.toHex(allowance);
-
-  return new BigNumber(allowance).isEqualTo(MaxUint256);
+  return new BigNumber(allowance, 16).isEqualTo(MaxUint256);
 };
 
 export const accountShellBalance = async (account) => {

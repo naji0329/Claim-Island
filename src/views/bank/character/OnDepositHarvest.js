@@ -66,7 +66,7 @@ export const onWithdrawPearlRewardsAlert = (updateCharacter, cb) => {
     name: "tanja",
     action: "bank.withdraw_pearl_rewards_alert.text",
     button: {
-      text: "Yes",
+      text: "Yes, I understand",
       alt: {
         action: "cb",
         destination: () => {
@@ -75,7 +75,7 @@ export const onWithdrawPearlRewardsAlert = (updateCharacter, cb) => {
       },
     },
     buttonAlt: {
-      text: "No",
+      text: "No, I won't withdraw now",
       dismiss: truncate,
     },
   });

@@ -1,4 +1,4 @@
-import clamNFTAbi from "./abi/ClamNFT.json";
+import clamNFTAbi from "./abi/Clam.json";
 import clamShopAbi from "./abi/ClamShop.json";
 import { clamNFTAddress, clamShopAddress } from "./constants";
 import { contractFactory } from "./index";

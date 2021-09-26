@@ -73,7 +73,7 @@ export const BANK_SPEECH = {
       skip: false,
     },
     withdraw_pearl_rewards_alert: {
-      text: "Please note that withdrawing from your investment pool while Pearl boost is active will cause you to lose Pearl boost rewards proportionately to your amount of withdrawal. Do you want to continue?",
+      text: "Please note, you will lose your pending pearl boost rewards if you withdraw now. Do you wish to continue?",
       next: false,
       dismiss: true,
       skip: false,

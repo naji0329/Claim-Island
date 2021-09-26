@@ -195,6 +195,7 @@ const calculateAPRandTVL = async (pool) => {
 
   let apr;
   let tvl;
+  let tokenPrice;
   const blocksPerYear = 10512000; // seconds per year / 3
   const supply = +pool.poolLpTokenBalance > 0 ? formatEther(pool.poolLpTokenBalance) : 1;
   const allocationShare = +pool.allocPoint / +pool.totalAllocation;
@@ -211,6 +212,8 @@ const calculateAPRandTVL = async (pool) => {
 
     tvl = getTvl(gemPrice, supply);
 
+    tokenPrice = gemPrice;
+
     // if is SHELL pool
   } else if (pool.lpToken === shellTokenAddress) {
     const shellPrice = await getUsdPriceOfToken(pool.lpToken);
@@ -224,15 +227,16 @@ const calculateAPRandTVL = async (pool) => {
 
     tvl = getTvl(shellPrice, supply);
 
+    tokenPrice = shellPrice;
+
     //if is Pankcae tokens pool
   } else {
-    console.log("lpToken", pool.lpToken);
     const [pairUsdValue, totalLpSupply] = await Promise.all([
       getUsdValueOfPair(pool.lpToken),
       totalSupply(pool.lpToken),
     ]);
 
-    const tokenPrice = new BigNumber(pairUsdValue).dividedBy(formatEther(totalLpSupply));
+    tokenPrice = new BigNumber(pairUsdValue).dividedBy(formatEther(totalLpSupply));
 
     apr = new BigNumber(gemPrice)
       .multipliedBy(gemPerYearByAlloc)
@@ -248,7 +252,7 @@ const calculateAPRandTVL = async (pool) => {
     apr = "∞";
   }
 
-  return [apr, tvl];
+  return [apr, tvl, +tokenPrice];
 };
 
 export const getAllPools = async ({ address, chainId }) => {
@@ -294,14 +298,17 @@ export const getAllPools = async ({ address, chainId }) => {
   );
 
   const poolsWithApr = await Promise.all(
-    pools.map(async (pool) => {
-      const [apr, tvl] = await calculateAPRandTVL(pool);
-      return {
-        ...pool,
-        apr,
-        tvl,
-      };
-    })
+    pools
+      .filter((p) => p)
+      .map(async (pool) => {
+        const [apr, tvl, tokenPrice] = await calculateAPRandTVL(pool);
+        return {
+          ...pool,
+          apr,
+          tvl,
+          tokenPrice,
+        };
+      })
   );
 
   return poolsWithApr.filter((p) => p);

@@ -1,5 +1,46 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_maxBurn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_baseGemRewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_shape",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_colour",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "_clamAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IMasterChef",
+        "name": "_masterChef",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IDNADecoder",
+        "name": "_clamDNADecoder",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -15,20 +56,7 @@
         "type": "uint256"
       }
     ],
-    "name": "BurnPearl",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewPeriodStart",
+    "name": "BurnClam",
     "type": "event"
   },
   {
@@ -56,37 +84,11 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "newPoolId",
-        "type": "uint256"
-      }
-    ],
-    "name": "PoolIdAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "poolId",
-        "type": "uint256"
-      }
-    ],
-    "name": "PoolIdRemoved",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
         "name": "previousCount",
         "type": "uint256"
       }
     ],
-    "name": "PreviousPearlCounterBeforePeriodReset",
+    "name": "ResetClamCounter",
     "type": "event"
   },
   {
@@ -113,19 +115,6 @@
       }
     ],
     "name": "SetMaxBurn",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "periodInSeconds",
-        "type": "uint256"
-      }
-    ],
-    "name": "SetPeriodInSeconds",
     "type": "event"
   },
   {
@@ -162,19 +151,6 @@
   },
   {
     "inputs": [],
-    "name": "bank",
-    "outputs": [
-      {
-        "internalType": "contract IBank",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "baseGemRewards",
     "outputs": [
       {
@@ -190,7 +166,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_pearlId",
+        "name": "_clamId",
         "type": "uint256"
       },
       {
@@ -202,9 +178,14 @@
         "internalType": "string",
         "name": "_colour",
         "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isMaxima",
+        "type": "bool"
       }
     ],
-    "name": "burnPearl",
+    "name": "burnClam",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -218,22 +199,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "lustre",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "nacreQuality",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "surface",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "rarityValue",
+        "name": "lifespan",
         "type": "uint256"
       }
     ],
@@ -242,6 +208,45 @@
       {
         "internalType": "uint256",
         "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamDNADecoder",
+    "outputs": [
+      {
+        "internalType": "contract IDNADecoder",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamsBurned",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_value",
         "type": "uint256"
       }
     ],
@@ -263,89 +268,12 @@
   },
   {
     "inputs": [],
-    "name": "currentPearlColourIndex",
+    "name": "masterChef",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "currentPearlShapeIndex",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "gemLocker",
-    "outputs": [
-      {
-        "internalType": "contract IGemLocker",
+        "internalType": "contract IMasterChef",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_maxBurn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_baseGemRewards",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_pearlAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IBank",
-        "name": "_bank",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IPearlDNADecoder",
-        "name": "_pearlDNADecoder",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IGemLocker",
-        "name": "_gemLocker",
-        "type": "address"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "isCurrentPeriod",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -354,19 +282,6 @@
   {
     "inputs": [],
     "name": "maxBurn",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "maxNumberOfPearlsBurnedPerUserOnRecord",
     "outputs": [
       {
         "internalType": "uint256",
@@ -392,72 +307,7 @@
   },
   {
     "inputs": [],
-    "name": "pearlAddress",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pearlDNADecoder",
-    "outputs": [
-      {
-        "internalType": "contract IPearlDNADecoder",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pearlsBurned",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "periodInSeconds",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "periodIndex",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "periodStart",
+    "name": "poolId",
     "outputs": [
       {
         "internalType": "uint256",
@@ -477,7 +327,7 @@
   },
   {
     "inputs": [],
-    "name": "resetPearlsBurned",
+    "name": "resetclamsBurned",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -504,19 +354,6 @@
       }
     ],
     "name": "setMaxBurn",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_periodInSeconds",
-        "type": "uint256"
-      }
-    ],
-    "name": "setPeriodInSeconds",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

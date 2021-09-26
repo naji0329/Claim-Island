@@ -21,7 +21,7 @@ export const Zero = new BigNumber(0);
 export const One = new BigNumber(1);
 export const WeiPerEther = new BigNumber("1000000000000000000");
 export const MaxUint256 = new BigNumber(
-  "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",16
 );
 export const EmptyBytes = "0x0000000000000000000000000000000000000000000000000000000000000000";
 

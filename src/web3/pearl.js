@@ -1,4 +1,4 @@
-import pearlNFTAbi from "./abi/PearlNFT.json";
+import pearlNFTAbi from "./abi/Pearl.json";
 import { pearlNFTAddress } from "./constants";
 import { contractFactory } from "./index";
 

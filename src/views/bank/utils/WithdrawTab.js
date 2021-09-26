@@ -21,13 +21,13 @@ import {
 
 const WithdrawTab = ({
   account: { address, chainId },
-  bank: { withdrawAmount, selectedPool, ...bank },
+  bank: { withdrawAmount, selectedPool, rewards, ...bank },
   updateBank,
   updateCharacter,
   updateAccount,
 }) => {
-  const [withdrawFee, setWithdrawFee] = useState(false);
   const [inTx, setInTx] = useState(false);
+  const hasPearlRewards = selectedPool.isNative && rewards.hasLockedPearlRewards;
 
   const { handleSubmit, formState } = useForm();
   const { errors } = formState;
@@ -37,7 +37,7 @@ const WithdrawTab = ({
   };
 
   const handleWithdraw = async () => {
-    if (withdrawFee) {
+    if (hasPearlRewards) {
       onWithdrawPearlRewardsAlert(updateCharacter, async () => {
         await executeWithdraw();
       });
@@ -128,7 +128,8 @@ const WithdrawTab = ({
               placeholder="Amount"
               type="number"
               max={get(selectedPool, "userDepositAmountInPool")}
-              value={formatNumber(+withdrawAmount, 3)}
+              min="0"
+              value={+withdrawAmount}
               onChange={handleWithdrawChange}
             />
 
@@ -146,8 +147,14 @@ const WithdrawTab = ({
           {errors.withdrawAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
 
-        <ActionButton style="btn-withdraw" isLoading={inTx} isDisabled={inTx}>
-          Withdraw {get(selectedPool, "name")}
+        <ActionButton
+          style="btn-withdraw"
+          isLoading={inTx}
+          isDisabled={inTx || (selectedPool.isNative && !rewards)}
+        >
+          {selectedPool.isNative && !rewards
+            ? "Loading..."
+            : `Withdraw ${get(selectedPool, "name")}`}
         </ActionButton>
       </div>
     </form>

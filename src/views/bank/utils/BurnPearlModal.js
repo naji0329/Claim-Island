@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAsync } from "react-use";
 import { connect } from "redux-zero/react";
 import moment from "moment";
-import { actions } from "../../../store/redux";
-import { getPearlDataByIds } from "../../../web3/shared";
-import { aggregate } from "../../../web3/multicall";
+import { actions } from "store/redux";
+import { formatMsToDuration } from "utils/time";
+import { getPearlDataByIds } from "web3/shared";
+import { aggregate } from "web3/multicall";
 import {
   prepTokenOfOwnerByIndexMulticall,
   decodeTokenOfOwnerByIndexFromMulticall,
-} from "../../../web3/pearl";
-import { color, shape, periodStart } from "../../../web3/pearlBurner";
-import { useTimer } from "../../../hooks/useTimer";
+} from "web3/pearl";
+import { color, shape, periodStart } from "web3/pearlBurner";
+import { useTimer } from "hooks/useTimer";
 import PearlInfo from "./PearlInfo";
 
 const BurnPearlModal = (props) => {
@@ -31,11 +32,8 @@ const BurnPearlModal = (props) => {
     const startOfWeekMs = +startOfWeek * 1000;
     const nextWeek = moment(startOfWeekMs).add(7, "d");
     const remainingMs = nextWeek.diff(moment());
-    const days = moment.duration(remainingMs).days();
-    const hours = moment.duration(remainingMs).hours();
-    const minutes = moment.duration(remainingMs).minutes();
-    const seconds = moment.duration(remainingMs).seconds();
-    const duration = `${days}d, ${hours}h, ${minutes}m, ${seconds}s`;
+
+    const duration = formatMsToDuration(remainingMs);
 
     return duration;
   };

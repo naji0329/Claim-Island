@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
-import { ChainId } from "@usedapp/core";
 
 import { actions } from "store/redux";
 import videoImage from "assets/locations/Bank.jpg";
@@ -13,8 +12,8 @@ import Web3Navbar from "components/Web3Navbar";
 import VideoBackground from "components/VideoBackground";
 import { Modal, useModal } from "components/Modal";
 
-import { web3 } from "web3";
-import { updatePool, getStartBlock, getAllPools } from "web3/bank";
+import { getAllPools } from "web3/bank";
+import { fetchRewards } from "web3/gemLocker";
 
 import "./bank.scss";
 import PoolItem from "./PoolItem";
@@ -36,7 +35,8 @@ const Bank = ({
   useEffect(async () => {
     if (pools.length === 0 && address) {
       const setUpPools = await getAllPools({ address, chainId });
-      updateBank({ pools: setUpPools });
+      const rewards = await fetchRewards(chainId);
+      updateBank({ pools: setUpPools, rewards });
     }
   }, [pools, address, isBSChain]);
 
@@ -46,7 +46,8 @@ const Bank = ({
       if (chainId && address) {
         const setUpPools = await getAllPools({ address, chainId });
         console.log("updated pools after 5s");
-        updateBank({ pools: setUpPools });
+        const rewards = await fetchRewards(chainId);
+        updateBank({ pools: setUpPools, rewards });
       }
     }, 5000);
   }, []);
@@ -76,31 +77,6 @@ const Bank = ({
           <>
             <div className="w-full lg:w-7/10 mx-auto relative z-10">
               <div className="px-2 md:px-4% py-4 mt-24 flex flex-col">
-                {chainId === ChainId.Localhost && (
-                  <button
-                    // only works if web3.setProvider("ws://localhost:8545"); in getWeb3.js
-                    className="btn mb-2"
-                    onClick={async () => {
-                      await updatePool(0);
-
-                      console.log("current block", await web3.eth.getBlockNumber());
-                      await web3.currentProvider.send(
-                        {
-                          jsonrpc: "2.0",
-                          method: "evm_mine",
-                          id: new Date().getTime(),
-                        },
-                        (err, result) => {
-                          console.log(`err`, err);
-                          console.log(`result`, result);
-                        }
-                      );
-                      console.log("bank start block", await getStartBlock());
-                    }}
-                  >
-                    Advance block + update pool 0
-                  </button>
-                )}
                 {pools &&
                   pools.map((pool, i) => (
                     <PoolItem key={i} pool={pool} toggleModal={toggleModal} />

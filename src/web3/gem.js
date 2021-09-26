@@ -4,6 +4,8 @@ import { gemTokenAddress } from "./constants";
 import { contractFactory } from "./index";
 import { MaxUint256 } from "./shared";
 
+BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
+
 export const getAllowance = async (ownerAddress, spenderAddress) => {
   const gem = contractFactory({ abi: gemAbi, address: gemTokenAddress });
   const value = await gem.methods.allowance(ownerAddress, spenderAddress).call();
@@ -22,7 +24,7 @@ export const approveSpending = async (ownerAddress, spenderAddress, amount) => {
   if (new BigNumber(allowance).gte(new BigNumber(amount))) return;
   const gem = contractFactory({ abi: gemAbi, address: gemTokenAddress });
 
-  const method = gem.methods.approve(spenderAddress, amount);
+  const method = gem.methods.approve(spenderAddress, new BigNumber(amount));
 
   const gasEstimation = await method.estimateGas({
     from: ownerAddress,
@@ -49,11 +51,11 @@ export const approveSpending = async (ownerAddress, spenderAddress, amount) => {
 export const infiniteApproveSpending = async (ownerAddress, spenderAddress, amount) => {
   const allowance = await getAllowance(ownerAddress, spenderAddress);
 
-  if (new BigNumber(allowance).gte(new BigNumber(amount))) return;
+  if (new BigNumber(allowance).gte(amount)) return;
 
   const gem = contractFactory({ abi: gemAbi, address: gemTokenAddress });
 
-  const method = gem.methods.approve(spenderAddress, MaxUint256);
+  const method = gem.methods.approve(spenderAddress, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
   const gasEstimation = await method.estimateGas({
     from: ownerAddress,

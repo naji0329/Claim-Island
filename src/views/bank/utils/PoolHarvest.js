@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "redux-zero/react";
 import { actions } from "store/redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import arrowDownRight from "assets/img/arrow_down_right.png";
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
@@ -8,13 +11,18 @@ import {
   onPearlBoostYieldAlert,
 } from "../character/OnDepositHarvest";
 import { harvest, getAllPools } from "web3/bank";
-
+import { renderNumber } from "utils/number";
+import { formatMsToDuration } from "utils/time";
+import InfoTooltip from "components/InfoTooltip";
+import { Modal, useModal } from "components/Modal";
 import ActionButton from "./ActionButton";
+import moment from "moment";
+import { useTimer } from "hooks/useTimer";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
 const PoolHarvest = ({
   account: { address, chainId },
-  bank: { selectedPool },
+  bank: { selectedPool, rewards },
   updateBank,
   updateCharacter,
   updateAccount,
@@ -24,6 +32,33 @@ const PoolHarvest = ({
   const isNativePool = selectedPool && selectedPool.isNative;
   const [pearlBoostYield, setPearlBoostYield] = useState(false);
   const [inTx, setInTx] = useState(false);
+  const { isShowing, toggleModal: toggleBreakdownModal } = useModal();
+  const startTime = +rewards.startTime * 1000;
+
+  const calculateTimeLeft = () => {
+    if (!rewards) return "calculating...";
+    const { farmingRewards, clamRewards, pearlRewards } = rewards;
+    if (!farmingRewards.length && !clamRewards.length && !pearlRewards.length)
+      return "No locked rewards yet";
+
+    const getUnlockDay = () => {
+      if (clamRewards.length || pearlRewards.length) {
+        const sortedRewards = [...clamRewards, ...pearlRewards].sort((a, b) => b.endDay - a.endDay);
+        return sortedRewards[0].endDay;
+      }
+      if (farmingRewards.length) return farmingRewards[farmingRewards.length - 1].lockedUntilDay;
+    };
+
+    const unlockDay = getUnlockDay();
+    if (!unlockDay) return "No locked rewards yet";
+
+    const unlockMoment = moment(startTime).add(unlockDay, "d");
+    const remainingMs = unlockMoment.diff(moment());
+
+    return formatMsToDuration(remainingMs);
+  };
+
+  const { timeLeft } = useTimer(calculateTimeLeft);
 
   const handleHarvest = async () => {
     setInTx(true);
@@ -57,6 +92,27 @@ const PoolHarvest = ({
       updateAccount({ error: error.message });
       onDepositHarvestError(updateCharacter);
     }
+  };
+
+  const UnlockRow = ({ type, amount, unlockDay }) => {
+    const calculateTimeLeft = () => {
+      if (!rewards) return "calculating...";
+
+      const unlockMoment = moment(startTime).add(unlockDay, "d");
+      const remainingMs = unlockMoment.diff(moment());
+
+      return formatMsToDuration(remainingMs);
+    };
+
+    const { timeLeft } = useTimer(calculateTimeLeft);
+
+    return (
+      <tr>
+        <th>{type}</th>
+        <td className="text-right">{amount}</td>
+        <td className="text-right">{timeLeft}</td>
+      </tr>
+    );
   };
 
   return (
@@ -93,21 +149,142 @@ const PoolHarvest = ({
             </div>
 
             <div className="mx-2 text-4xl">{harvestAmount}</div>
-            <div className="mx-2 text-xl">GEM</div>
+            <div className="mx-2 text-md">GEM EARNED</div>
             {/* TODO convert GEM to dola */}
             {/* <div className="mx-2 text-xs">($12.00)</div> */}
           </div>
+          {selectedPool.isNative &&
+            (!rewards ? (
+              <p className="text-center">Loading rewards data...</p>
+            ) : (
+              <>
+                <div className="flex justify-end items-baseline text-xs -mb-2">
+                  <span className="w-36 ml-1 opacity-40">FROM</span>
+                </div>
+                <div className="flex justify-end items-baseline text-xs">
+                  <img src={arrowDownRight} width={50} />
+                  <span className="w-16 text-right opacity-40">
+                    {renderNumber(+harvestAmount + +rewards.availableFarmingRewards, 2)}
+                  </span>
+                  <span className="w-36 ml-1 opacity-40">FARMING</span>
+                </div>
+                <div className="flex justify-end items-baseline text-xs -mt-2">
+                  <img src={arrowDownRight} width={50} />
+                  <span className="w-16 text-right opacity-40">
+                    {renderNumber(+rewards.availableClamRewards, 2)}
+                  </span>
+                  <span className="w-36 ml-1 opacity-40">CLAM</span>
+                </div>
+                <div className="flex justify-end items-baseline text-xs -mt-2">
+                  <img src={arrowDownRight} width={50} />
+                  <span className="w-16 text-right opacity-40">
+                    {renderNumber(+rewards.availablePearlRewards, 2)}
+                  </span>
+                  <span className="w-36 ml-1 opacity-40">PEARL</span>
+                </div>
+              </>
+            ))}
         </div>
 
-        <ActionButton
-          onClick={handleHarvest}
-          style="btn-harvest"
-          isDisabled={inTx}
-          isLoading={inTx}
-        >
-          Harvest
-        </ActionButton>
+        {selectedPool.isNative && rewards && (
+          <div className="flex flex-col">
+            <div className="flex justify-between mx-2">
+              <span className="text-right w-1/2">
+                Total locked:
+                <InfoTooltip text="Available from any native pool" />
+              </span>
+              <span className="text-right w-1/2">{renderNumber(+rewards.totalLocked, 2)} GEM</span>
+            </div>
+            <div className="flex justify-between mx-2">
+              <span className="text-right w-1/2">Fully unlocks in:</span>
+              <span className="text-right w-1/2">{timeLeft}</span>
+            </div>
+          </div>
+        )}
+
+        <div className="dropdown dropdown-top dropdown-end dropdown-hover">
+          <ActionButton
+            onClick={handleHarvest}
+            style="btn-harvest w-full"
+            isDisabled={inTx}
+            isLoading={inTx}
+          >
+            Harvest
+            <FontAwesomeIcon icon={faInfoCircle} className="ml-1" />
+          </ActionButton>
+          <div className="w-72 p-2 card dropdown-content bg-gray-800 text-primary-content text-sm">
+            <p className="mb-2">
+              50% of GEM earned is locked for a 7-day vesting period. During this time the vesting
+              GEM can still be used to purchase Clams
+            </p>
+            {rewards && (
+              <>
+                <p className="mb-2">
+                  You currently have {renderNumber(+rewards.totalLocked, 2)} GEM rewards vesting.
+                </p>
+                <a className="link" onClick={toggleBreakdownModal}>
+                  View vesting breakdown
+                </a>
+              </>
+            )}
+          </div>
+        </div>
       </div>
+      {rewards && (
+        <Modal
+          isShowing={isShowing}
+          onClose={toggleBreakdownModal}
+          width={"36rem"}
+          title="Vested GEM breakdown"
+        >
+          <div className="mb-2">
+            <div className="overflow-x-auto">
+              <table className="table w-full">
+                <thead>
+                  <tr>
+                    <th>Reward from</th>
+                    <th>$GEM Amount</th>
+                    <th style={{ minWidth: 180 }}>Fully unlocks in</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rewards.farmingRewards.map((rewardData) => (
+                    <UnlockRow
+                      key={rewardData.lockedUntilDay}
+                      type={"Farming locked"}
+                      amount={renderNumber(rewardData.amount)}
+                      unlockDay={rewardData.lockedUntilDay - rewards.currentDay}
+                    />
+                  ))}
+
+                  {rewards.clamRewards.map((rewardData, i) => (
+                    <UnlockRow
+                      key={`clam-${i}`}
+                      type={"Clam staking"}
+                      amount={renderNumber(rewardData.bonusRemaining)}
+                      unlockDay={rewardData.endDay}
+                    />
+                  ))}
+                  {rewards.pearlRewards.map((rewardData, i) => (
+                    <UnlockRow
+                      key={`pearl-${i}`}
+                      type={"Pearl burn"}
+                      amount={renderNumber(rewardData.bonusRemaining)}
+                      unlockDay={rewardData.endDay}
+                    />
+                  ))}
+
+                  <tr>
+                    <th>Total vesting GEM:</th>
+                    <td className="text-right">{renderNumber(+rewards.totalLocked, 3)}</td>
+                    <td />
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
