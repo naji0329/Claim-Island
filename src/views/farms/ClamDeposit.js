@@ -110,7 +110,6 @@ const ClamItem = ({
           <img className="w-full" src={img} />
           <div className="flex-row text-center text-green-400 text-bold">{dnaDecoded.rarity}</div>
         </div>
-        <div className="flex-row text-center text-green-400 text-bold">{rarity}</div>
       </div>
       <div className="details">
         <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
