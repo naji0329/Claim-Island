@@ -73,7 +73,7 @@ export const BANK_SPEECH = {
       skip: false,
     },
     withdraw_pearl_rewards_alert: {
-      text: "Please note, you will lose your pending pearl boost rewards if you withdraw now. Do you wish to continue?",
+      text: "You still have pending Pearl reward boosts available. Withdrawing now will cause your boosted rewards to be reduced proportionally. Are you sure you want to withdraw?",
       next: false,
       dismiss: true,
       skip: false,
