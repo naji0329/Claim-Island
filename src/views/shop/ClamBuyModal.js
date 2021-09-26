@@ -6,7 +6,6 @@ import { formatEther, parseEther } from "@ethersproject/units";
 import BigNumber from "bignumber.js";
 import "./index.scss";
 
-import { sleep } from "utils/time";
 import Card from "components/Card";
 import ClamUnknown from "assets/img/clam_unknown.png";
 import ClamIcon from "assets/clam-icon.png";
@@ -20,7 +19,12 @@ import { infiniteApproveSpending } from "web3/gem";
 import { clamShopAddress } from "web3/constants";
 import { actions } from "store/redux";
 
-import { buyClamError, buyClamSuccess, buyClamProcessing } from "./character/BuyClam";
+import {
+  buyClamError,
+  buyClamSuccess,
+  buyClamProcessing,
+  buyClamWithVested,
+} from "./character/BuyClam";
 import { formatNumber } from "../bank/utils";
 
 const Divider = () => (
@@ -67,6 +71,18 @@ const ClamBuyModal = ({
   }, [gemBalance, clamPrice, lockedGem]);
 
   const onSubmit = async () => {
+    if (new BigNumber(lockedGem).gt(0)) {
+      buyClamWithVested(
+        { address, updateCharacter, gem: formatNumber(+formatEther(lockedGem), 3) },
+        async () => await executeBuy(true),
+        async () => await executeBuy()
+      );
+    } else {
+      await executeBuy();
+    }
+  };
+
+  const executeBuy = async (withVested) => {
     setIsLoading(true);
 
     buyClamProcessing({ updateCharacter }); // character speaks
@@ -74,7 +90,8 @@ const ClamBuyModal = ({
     await infiniteApproveSpending(address, clamShopAddress, clamPrice);
 
     try {
-      lockedGem > 0 ? await buyClamWithVestedTokens(address) : await buyClam(address);
+      withVested ? await buyClamWithVestedTokens(address) : buyClam(address);
+
       buyClamSuccess({ updateCharacter }); // character speaks
       setIsLoading(false);
       setShowHatching(true);

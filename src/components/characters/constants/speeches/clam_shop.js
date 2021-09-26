@@ -100,6 +100,14 @@ export const CLAM_SHOP_SPEECH = {
       skip: false,
       hideable: true,
     },
+
+    can_use_vested: {
+      text: (gem) =>
+        `You have ${gem} locked $GEM rewards, would you like to use these for buying your clam?`,
+      next: false,
+      dismiss: false,
+      skip: false,
+    },
   },
 };
 
