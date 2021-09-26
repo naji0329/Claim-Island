@@ -1,5 +1,13 @@
 import { truncate } from "lodash";
 
+const dismissCharacter = (updateCharacter) => {
+  // dismiss bubble and show modal
+  updateCharacter({
+    name: "al",
+    action: null,
+  });
+};
+
 export const pearlCollectSuccess = ({ updateCharacter, viewPearl }, cb) => {
   updateCharacter({
     name: "al",
@@ -9,11 +17,7 @@ export const pearlCollectSuccess = ({ updateCharacter, viewPearl }, cb) => {
       alt: {
         action: "cb",
         destination: () => {
-          // dismiss bubble and show modal
-          updateCharacter({
-            name: "al",
-            action: null,
-          });
+          dismissCharacter(updateCharacter);
           if (viewPearl) viewPearl();
         },
       },
@@ -65,6 +69,7 @@ export const pearlGenerateNew = ({ updateCharacter, gems }, depositClamCb) => {
       alt: {
         action: "cb",
         destination: () => {
+          dismissCharacter(updateCharacter);
           depositClamCb();
         },
       },

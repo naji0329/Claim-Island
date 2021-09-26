@@ -32,6 +32,7 @@ import { MODAL_OPTS } from "./constants";
 import { WelcomeUser, withdrawClamSpeak } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
 import { pearlSendToSaferoom } from "./character/pearlCollection";
+import { ifPearlSendSaferoom } from './utils';
 
 const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
   let history = useHistory();
@@ -45,6 +46,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
   const [modalSelected, setModal] = useState("");
   const [selectedClam, setSelectedClam] = useState({});
+  const [selectedClamId, setSelectedClamId] = useState({});
   const [withdrawingClamId, setWithdrawingClamId] = useState(null);
 
   const { chainId } = useEthers();
@@ -62,7 +64,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   const onModalClose = async () => {
     toggleModal();
     if (modalSelected === MODAL_OPTS.VIEW_PEARL) {
-      pearlSendToSaferoom({ updateCharacter }, onDepositClam);
+      ifPearlSendSaferoom({ updateCharacter, address, clamId: selectedClamId });
     }
     const ownedClamsImg = await addClamImg(clams);
     const stakedClamsImg = await addClamImg(clamsStaked);
@@ -87,6 +89,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
   // when pearl is ready and is to be viewed
   const onViewPearl = async ({ clamId, dna, dnaDecoded, showPearlModal }) => {
+    setSelectedClamId(clamId);
     if (showPearlModal) {
       setSelPearl({ dna, dnaDecoded });
       setModal(MODAL_OPTS.VIEW_PEARL);
