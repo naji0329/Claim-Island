@@ -42,7 +42,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
 
   const { isShowing, toggleModal } = useModal();
 
-  const getDna = async (getByNFTIndex, getNFTData, account, index, getDecodedDNA) => {
+  const getDna = async (getByNFTIndex, getNFTData, account, index, getDecodedDNA, isClam) => {
     const tokenId = await getByNFTIndex(account, index);
     const data = await getNFTData(tokenId);
 
@@ -50,7 +50,16 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
 
     if (dna.length > 1) {
       const dnaDecoded = await getDecodedDNA(dna);
-      return { dna, dnaDecoded, birthTime, tokenId };
+      return isClam
+        ? {
+            dna,
+            dnaDecoded,
+            birthTime,
+            tokenId,
+            pearlProductionCapacity: data.pearlProductionCapacity,
+            pearlsProduced: data.pearlsProduced,
+          }
+        : { dna, dnaDecoded, birthTime, tokenId };
     }
   };
 
@@ -60,10 +69,10 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
       try {
         setLoading(true);
 
-        const getNFTs = async (getByNFTIndex, getNFTData, nftBalance, getDecodedDNA) => {
+        const getNFTs = async (getByNFTIndex, getNFTData, nftBalance, getDecodedDNA, isClam) => {
           let promises = [];
           for (let i = 0; i < Number(nftBalance); i++) {
-            promises.push(getDna(getByNFTIndex, getNFTData, address, i, getDecodedDNA));
+            promises.push(getDna(getByNFTIndex, getNFTData, address, i, getDecodedDNA, isClam));
           }
 
           return await Promise.all(promises);
@@ -75,7 +84,8 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
             clamContract.getClamByIndex,
             clamContract.getClamData,
             clamBalance,
-            getDNADecoded
+            getDNADecoded,
+            true
           );
           const clamsWithBonus = await Promise.all(
             clams.map(async (clam) => {
