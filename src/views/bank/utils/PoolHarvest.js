@@ -140,64 +140,50 @@ const PoolHarvest = ({
             </button>
           )}
         </div>
-        <div className="flew flex-col">
-          <div className="flex flex-row items-center justify-center">
+        <div className="flex justify-center">
+          <div className="flex items-center">
             <div className="avatar">
               <div className="mx-2 rounded-full w-12 h-12">
                 <img src="https://clamisland.fi/favicon/android-chrome-192x192.png" />
               </div>
             </div>
-
-            <div className="mx-2 text-4xl">{harvestAmount}</div>
-            <div className="mx-2 text-md">GEM EARNED</div>
-            {/* TODO convert GEM to dola */}
-            {/* <div className="mx-2 text-xs">($12.00)</div> */}
           </div>
-          {selectedPool.isNative &&
-            (!rewards ? (
-              <p className="text-center">Loading rewards data...</p>
-            ) : (
-              <>
-                <div className="flex justify-end items-baseline text-xs -mb-2">
-                  <span className="w-36 ml-1 opacity-40">FROM</span>
+
+          <div className="flex flex-col justify-around">
+            <p className="mx-2 text-4xl text-right">{harvestAmount}</p>
+            {selectedPool.isNative &&
+              (!rewards ? (
+                <p className="text-center">Loading rewards data...</p>
+              ) : (
+                <div className="flex flex-row items-center justify-end">
+                  <p className="mx-2 text-3xl text-right">
+                    +
+                    {renderNumber(
+                      +rewards.availableClamRewards + +rewards.availablePearlRewards,
+                      2
+                    )}
+                  </p>
                 </div>
-                <div className="flex justify-end items-baseline text-xs">
-                  <img src={arrowDownRight} width={50} />
-                  <span className="w-16 text-right opacity-40">
-                    {renderNumber(+harvestAmount + +rewards.availableFarmingRewards, 2)}
-                  </span>
-                  <span className="w-36 ml-1 opacity-40">FARMING</span>
-                </div>
-                <div className="flex justify-end items-baseline text-xs -mt-2">
-                  <img src={arrowDownRight} width={50} />
-                  <span className="w-16 text-right opacity-40">
-                    {renderNumber(+rewards.availableClamRewards, 2)}
-                  </span>
-                  <span className="w-36 ml-1 opacity-40">CLAM</span>
-                </div>
-                <div className="flex justify-end items-baseline text-xs -mt-2">
-                  <img src={arrowDownRight} width={50} />
-                  <span className="w-16 text-right opacity-40">
-                    {renderNumber(+rewards.availablePearlRewards, 2)}
-                  </span>
-                  <span className="w-36 ml-1 opacity-40">PEARL</span>
-                </div>
-              </>
-            ))}
+              ))}
+          </div>
+          <div className="flex flex-col justify-around">
+            <p className="mx-2 text-md text-right">GEM EARNED</p>
+            <p className="mx-2 text-md text-right">GEM BOOST</p>
+          </div>
         </div>
 
         {selectedPool.isNative && rewards && (
-          <div className="flex flex-col">
-            <div className="flex justify-between mx-2">
-              <span className="text-right w-1/2">
+          <div className="flex justify-around">
+            <div className="flex flex-col">
+              <p>
                 Total locked:
                 <InfoTooltip text="Available from any native pool" />
-              </span>
-              <span className="text-right w-1/2">{renderNumber(+rewards.totalLocked, 2)} GEM</span>
+              </p>
+              <p>Fully unlocks in:</p>
             </div>
-            <div className="flex justify-between mx-2">
-              <span className="text-right w-1/2">Fully unlocks in:</span>
-              <span className="text-right w-1/2">{timeLeft}</span>
+            <div className="flex flex-col">
+              <p className="text-right">{renderNumber(+rewards.totalLocked, 2)} GEM</p>
+              <p className="text-right">{timeLeft}</p>
             </div>
           </div>
         )}
