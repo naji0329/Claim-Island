@@ -84,6 +84,20 @@ export const BANK_SPEECH = {
       dismiss: true,
       skip: false,
     },
+    burn_pearl_confirmation: {
+      text: ({ gems }) =>
+        `This will forfeit your Pearl in return for a boost of ${gems} $GEM streamed over 30 days. This is irreversible and you will not be able to get your Pearl back. Are you sure you want to continue?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
+    burn_pearl_success: {
+      text: "All done! Your Pearl has been forfeited and your $GEM boost is now streaming.",
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
   },
 };
 
