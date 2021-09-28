@@ -5,6 +5,9 @@ import { get } from "lodash";
 
 import { Pearl3DView } from "../../components/pearl3DView";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+
 const calculateGrade = (grade) => {
   const totalGradePossible = 300;
 
@@ -128,13 +131,15 @@ export default ({ dna, dnaDecoded }) => {
         <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
           <Link to="/bank">
             <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
-              Boost yield
+              Boost yield&nbsp;
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
             </button>
           </Link>
 
           <Link to="/farms">
             <button className="px-4 p-3 rounded-xl shadown-xl bg-green-500 text-white hover:bg-green-300 font-semibold">
-              Produce more pearls
+              Produce more pearls&nbsp;
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
             </button>
           </Link>
         </div>
