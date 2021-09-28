@@ -15,6 +15,8 @@ const initialState = {
     chainId: undefined,
     isWeb3Installed: true,
     address: undefined,
+    clams: [],
+    pearls: [],
   },
   presale: {
     cap: "0",
@@ -53,7 +55,7 @@ const initialState = {
     },
     suppressSpeechBubble: undefined,
     skipDialogs: false,
-    forceTop: false
+    forceTop: false,
   },
   bank: {
     pools: [],
