@@ -3,7 +3,6 @@ import { connect } from "redux-zero/react";
 import { actions } from "store/redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import arrowDownRight from "assets/img/arrow_down_right.png";
 import {
   onDepositHarvestTxn,
   onDepositHarvestError,
@@ -37,13 +36,15 @@ const PoolHarvest = ({
 
   const calculateTimeLeft = () => {
     if (!rewards) return "calculating...";
-    const { farmingRewards, clamRewards, pearlRewards } = rewards;
-    if (!farmingRewards.length && !clamRewards.length && !pearlRewards.length)
+    const { farmingRewards, vestedClamRewards, vestedPearlRewards } = rewards;
+    if (!farmingRewards.length && !vestedClamRewards.length && !vestedPearlRewards.length)
       return "No locked rewards yet";
 
     const getUnlockDay = () => {
-      if (clamRewards.length || pearlRewards.length) {
-        const sortedRewards = [...clamRewards, ...pearlRewards].sort((a, b) => b.endDay - a.endDay);
+      if (vestedClamRewards.length || vestedPearlRewards.length) {
+        const sortedRewards = [...vestedClamRewards, ...vestedPearlRewards].sort(
+          (a, b) => b.endDay - a.endDay
+        );
         return sortedRewards[0].endDay;
       }
       if (farmingRewards.length) return farmingRewards[farmingRewards.length - 1].lockedUntilDay;
@@ -140,64 +141,92 @@ const PoolHarvest = ({
             </button>
           )}
         </div>
-        <div className="flew flex-col">
-          <div className="flex flex-row items-center justify-center">
-            <div className="avatar">
-              <div className="mx-2 rounded-full w-12 h-12">
+        <div className="flex justify-center">
+          <div className="flex items-start">
+            <div className="avatar -mt-1">
+              <div className="rounded-full w-12 h-12">
                 <img src="https://clamisland.fi/favicon/android-chrome-192x192.png" />
               </div>
             </div>
-
-            <div className="mx-2 text-4xl">{harvestAmount}</div>
-            <div className="mx-2 text-md">GEM EARNED</div>
-            {/* TODO convert GEM to dola */}
-            {/* <div className="mx-2 text-xs">($12.00)</div> */}
           </div>
-          {selectedPool.isNative &&
-            (!rewards ? (
-              <p className="text-center">Loading rewards data...</p>
-            ) : (
-              <>
-                <div className="flex justify-end items-baseline text-xs -mb-2">
-                  <span className="w-36 ml-1 opacity-40">FROM</span>
+
+          <div className="flex flex-col justify-around">
+            <div className="mx-2 text-4xl text-right">{harvestAmount}</div>
+            {selectedPool.isNative &&
+              (!rewards ? (
+                <div className="text-center">Loading rewards data...</div>
+              ) : (
+                <div className="flex flex-row items-center justify-end">
+                  <div className="mx-2 text-2xl text-right">
+                    +
+                    {renderNumber(
+                      +rewards.availableClamRewards + +rewards.availablePearlRewards,
+                      2
+                    )}
+                  </div>
                 </div>
-                <div className="flex justify-end items-baseline text-xs">
-                  <img src={arrowDownRight} width={50} />
-                  <span className="w-16 text-right opacity-40">
-                    {renderNumber(+harvestAmount + +rewards.availableFarmingRewards, 2)}
-                  </span>
-                  <span className="w-36 ml-1 opacity-40">FARMING</span>
+              ))}
+          </div>
+          <div className="flex flex-col justify-around">
+            <div className="text-md">GEM EARNED</div>
+            {selectedPool.isNative && rewards && (
+              <div className="dropdown dropdown-bottom dropdown-end dropdown-hover">
+                <div className="flex text-sm items-center">
+                  GEM BOOST
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
                 </div>
-                <div className="flex justify-end items-baseline text-xs -mt-2">
-                  <img src={arrowDownRight} width={50} />
-                  <span className="w-16 text-right opacity-40">
-                    {renderNumber(+rewards.availableClamRewards, 2)}
-                  </span>
-                  <span className="w-36 ml-1 opacity-40">CLAM</span>
+
+                <div className="w-64 p-2 card dropdown-content bg-gray-800 text-primary-content text-sm">
+                  <div className="flex flex-col">
+                    <div className="flex justify-between p-2">
+                      <span>from Clams:</span>
+                      <span>{renderNumber(+rewards.availableClamRewards, 2)}</span>
+                    </div>
+                    <div className="flex justify-between p-2">
+                      <span>from Pearls:</span>
+                      <span>{renderNumber(+rewards.availablePearlRewards, 2)}</span>
+                    </div>
+                    <div className="flex justify-between p-2">
+                      <span>total ready to harvest:</span>
+                      <span>
+                        {renderNumber(
+                          +rewards.availableClamRewards + +rewards.availablePearlRewards,
+                          2
+                        )}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-end items-baseline text-xs -mt-2">
-                  <img src={arrowDownRight} width={50} />
-                  <span className="w-16 text-right opacity-40">
-                    {renderNumber(+rewards.availablePearlRewards, 2)}
-                  </span>
-                  <span className="w-36 ml-1 opacity-40">PEARL</span>
-                </div>
-              </>
-            ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {selectedPool.isNative && rewards && (
-          <div className="flex flex-col">
-            <div className="flex justify-between mx-2">
-              <span className="text-right w-1/2">
+          <div className="flex justify-around">
+            <div className="flex flex-col">
+              <div>
                 Total locked:
                 <InfoTooltip text="Available from any native pool" />
-              </span>
-              <span className="text-right w-1/2">{renderNumber(+rewards.totalLocked, 2)} GEM</span>
+              </div>
+              <div>Fully unlocks in:</div>
             </div>
-            <div className="flex justify-between mx-2">
-              <span className="text-right w-1/2">Fully unlocks in:</span>
-              <span className="text-right w-1/2">{timeLeft}</span>
+            <div className="flex flex-col">
+              <div className="text-right">{renderNumber(+rewards.totalLocked, 2)} GEM</div>
+              <div className="text-right">{timeLeft}</div>
             </div>
           </div>
         )}
@@ -257,7 +286,7 @@ const PoolHarvest = ({
                     />
                   ))}
 
-                  {rewards.clamRewards.map((rewardData, i) => (
+                  {rewards.vestedClamRewards.map((rewardData, i) => (
                     <UnlockRow
                       key={`clam-${i}`}
                       type={"Clam staking"}
@@ -265,7 +294,7 @@ const PoolHarvest = ({
                       unlockDay={rewardData.endDay}
                     />
                   ))}
-                  {rewards.pearlRewards.map((rewardData, i) => (
+                  {rewards.vestedPearlRewards.map((rewardData, i) => (
                     <UnlockRow
                       key={`pearl-${i}`}
                       type={"Pearl burn"}
