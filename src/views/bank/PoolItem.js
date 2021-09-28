@@ -93,7 +93,7 @@ const PoolItem = ({
         </div>
 
         <div className="block text-sm">
-          <Tooltip text="Relative to other investment pools - higher means more volatility of capital value fluctuation">
+          <Tooltip text="Relative to other investment pools - higher means more likelihood of capital value fluctuation">
             <p className={riskClass(pool.risk)}>{getFormattedRisk(pool.risk)}</p>
           </Tooltip>
         </div>
