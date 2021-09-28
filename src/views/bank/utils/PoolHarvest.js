@@ -170,7 +170,7 @@ const PoolHarvest = ({
           <div className="flex flex-col justify-around">
             <div className="text-md">GEM EARNED</div>
             {selectedPool.isNative && rewards && (
-              <div className="dropdown dropdown-top dropdown-end dropdown-hover">
+              <div className="dropdown dropdown-bottom dropdown-end dropdown-hover">
                 <div className="flex text-sm items-center">
                   GEM BOOST
                   <svg
