@@ -8,6 +8,7 @@ import NFTUnknown from "assets/img/pearl_unknown.png";
 import classnames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import {faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
 
 import { burnPearlConfirmation, onBurnPearlSuccess } from "../character/BurnPearl";
 import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepositHarvest";
@@ -76,7 +77,7 @@ const PearlInfo = ({
           <InfoLine
             label={
               <>
-                $GEM yield
+                $GEM yield&nbsp;
                 <button data-tip="Streamed over 30 days" className="pointer-events-auto tooltip">
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
@@ -101,7 +102,8 @@ const PearlInfo = ({
               </button>
             )}
             <Link to={"/saferoom/pearl"} className="btn btn-outline btn-secondary ml-1">
-              View in saferoom
+              View Details&nbsp;
+              <FontAwesomeIcon icon={faExternalLinkAlt} />
             </Link>
           </div>
         </div>
