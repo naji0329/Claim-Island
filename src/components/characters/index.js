@@ -265,7 +265,7 @@ const CharacterSpeak = (props) => {
       //setButtonText(btnTrack[trackCount+1]);
       //const newCount = trackCount + 1;
       //setTrackCount(newCount);
-      characterWrap.current.style.marginTop = "0px";
+      //characterWrap.current.style.marginTop = "0px";
     } else {
     }
   };
@@ -299,7 +299,7 @@ const CharacterSpeak = (props) => {
       <div className="text-bubble">
         <div className="text-wrapper">
           <div className="name">{charName}</div>
-          <div className="absolute top-4 right-8 text-white">
+          <div className="absolute mt-4 right-8 text-white">
             <button
               data-tip="Hide"
               className="mr-2 pointer-events-auto tooltip"
