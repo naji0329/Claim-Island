@@ -33,11 +33,16 @@ import {
   pearlGenerateNew,
   pearlGemPrompt,
   pearlCollectProcessing,
-  pearlNotEnoughGems
+  pearlNotEnoughGems,
+  pearlOpenClam,
+  pearlError,
+  pearlCollectReadyPrompt,
 } from "./character/pearlCollection";
 import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
 
-import { ifPearlSendSaferoom } from './utils';
+import { ifPearlSendSaferoom } from "./utils";
+
+import ActionButton from "views/bank/utils/ActionButton";
 
 const FarmItem = ({
   clamId,
@@ -74,9 +79,9 @@ const FarmItem = ({
     !+pearlProductionTime || !timeLeft
       ? 100
       : +(
-        ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
-        100
-      ).toFixed(2);
+          ((now - pearlProductionStart) / (pearlProductionTime - pearlProductionStart)) *
+          100
+        ).toFixed(2);
 
   useEffect(() => {
     const init = async () => {
@@ -142,10 +147,15 @@ const FarmItem = ({
     try {
       setInTx(true);
       setButtonText("Hold on ...");
+      pearlOpenClam({ updateCharacter });
       await propClamOpenForPearl(clamId);
       setInTx(false);
+      pearlCollectReadyPrompt({ updateCharacter }, async () => {
+        return onClickCollectPearl();
+      });
     } catch (err) {
       updateAccount({ error: err.message });
+      pearlError({ updateCharacter });
       setButtonText("Open Clam");
       setAction("open");
       setInTx(false);
@@ -153,51 +163,58 @@ const FarmItem = ({
   };
 
   const onClickCollectPearl = async () => {
-    const gems = gemsNeededForPearlProd;
-    pearlGemPrompt({ updateCharacter, gems: formatFromWei(gems) }, async () => {
-      pearlCollectProcessing({ updateCharacter });
-      try {
-        setInTx(true);
-        setButtonText("Hold on ...");
+    try {
+      const gems = gemsNeededForPearlProd;
+      pearlGemPrompt({ updateCharacter, gems: formatFromWei(gems) }, async () => {
+        pearlCollectProcessing({ updateCharacter });
+        try {
+          setInTx(true);
+          setButtonText("Hold on ...");
 
-        const pearlId = await nextPearlId();
+          const pearlId = await nextPearlId();
 
-        await collectPearl(clamId);
-        const { dna: pearlDna } = await getPearlData(pearlId);
-        const pearlDnaDecoded = await getPearlDNADecoded(pearlDna);
+          await collectPearl(clamId);
+          const { dna: pearlDna } = await getPearlData(pearlId);
+          const pearlDnaDecoded = await getPearlDNADecoded(pearlDna);
 
-        const viewPearl = () => {
-          onViewPearl({
-            clamId,
-            dna: pearlDna,
-            dnaDecoded: pearlDnaDecoded,
-            showPearlModal: true
+          const viewPearl = () => {
+            onViewPearl({
+              clamId,
+              dna: pearlDna,
+              dnaDecoded: pearlDnaDecoded,
+              showPearlModal: true,
+            });
+          };
+
+          setInTx(false);
+
+          // character speaks
+          pearlCollectSuccess({ updateCharacter, viewPearl }, () => {
+            ifPearlSendSaferoom({
+              updateCharacter,
+              address,
+              clamId,
+              setInTx,
+            });
           });
-        };
-
-        // character speaks
-        pearlCollectSuccess({ updateCharacter, viewPearl }, () => {
-          ifPearlSendSaferoom({
-            updateCharacter,
-            address,
-            clamId,
-            setInTx
-          });
-        });
-      } catch (err) {
-        updateAccount({ error: err.message });
-        setInTx(false);
-        setButtonText("Collect Pearl");
-        setAction("collect");
-        const errorMsg = JSON.parse(err.message.split("\n").slice(1).join(""));
-        toast.error(
-          <>
-            <p>There was an error collecting your pearl.</p>
-            <p>{errorMsg.message}</p>
-          </>
-        );
-      }
-    });
+        } catch (err) {
+          updateAccount({ error: err.message });
+          setInTx(false);
+          setButtonText("Collect Pearl");
+          setAction("collect");
+          const errorMsg = JSON.parse(err.message.split("\n").slice(1).join(""));
+          toast.error(
+            <>
+              <p>There was an error collecting your pearl.</p>
+              <p>{errorMsg.message}</p>
+            </>
+          );
+        }
+      });
+    } catch (err) {
+      updateAccount({ error: err.message });
+      pearlError({ updateCharacter });
+    }
   };
 
   const getClamFunction = () => {
@@ -260,13 +277,14 @@ const FarmItem = ({
         </>
       ) : (
         <div className="px-4 py-2">
-          <button
-            className={clsx("view-pearl-btn", (!canProducePearl || inTx) && "btn-disabled")}
+          <ActionButton
             onClick={getClamFunction}
-            disabled={!canProducePearl || inTx}
+            style="btn-harvest w-full"
+            isDisabled={!canProducePearl || inTx}
+            isLoading={inTx}
           >
             {buttonText}
-          </button>
+          </ActionButton>
         </div>
       )}
     </div>
