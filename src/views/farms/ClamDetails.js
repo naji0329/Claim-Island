@@ -38,8 +38,8 @@ const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
 
   return (
     <div className="ClamDetails flex flex-row">
-      <div className="flex flex-1 flex-col items-center">
-        <p className="font-extrabold text-green-600 text-center text-lg font-avenir mb-2">
+      <div className="flex flex-1 flex-col items-start">
+        <p className="font-extrabold text-green-600 text-center text-lg font-avenir mb-2" style={{width: "400px"}}>
           {clamProcessing.heading}
         </p>
         <Clam3DView
