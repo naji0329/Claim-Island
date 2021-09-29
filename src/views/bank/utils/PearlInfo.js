@@ -8,10 +8,17 @@ import NFTUnknown from "assets/img/pearl_unknown.png";
 import classnames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import {faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 import { burnPearlConfirmation, onBurnPearlSuccess } from "../character/BurnPearl";
 import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepositHarvest";
+
+const InfoLine = ({ label, value }) => (
+  <div className="w-full flex justify-between">
+    <span className="text-gray-500">{label}</span>
+    <span className="text-gray-500">{value}</span>
+  </div>
+);
 
 const PearlInfo = ({
   pearl,
@@ -59,13 +66,6 @@ const PearlInfo = ({
 
     getPearlImage();
   }, []);
-
-  const InfoLine = ({ label, value }) => (
-    <div className="w-full flex justify-between">
-      <span className="text-gray-500">{label}</span>
-      <span className="text-gray-500">{value}</span>
-    </div>
-  );
 
   return (
     <>

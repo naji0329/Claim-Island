@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAsync } from "react-use";
 import { connect } from "redux-zero/react";
 import moment from "moment";
@@ -62,11 +62,19 @@ const BurnPearlModal = (props) => {
     }
   });
 
-  const eligiblePearls = pearls.filter(
-    ({ dnaDecoded }) => dnaDecoded.shape === eligibleShape && dnaDecoded.color === eligibleColor
+  const eligiblePearls = useMemo(
+    () =>
+      pearls.filter(
+        ({ dnaDecoded }) => dnaDecoded.shape === eligibleShape && dnaDecoded.color === eligibleColor
+      ),
+    [pearls, eligibleShape, eligibleColor]
   );
-  const notEligiblePearls = pearls.filter(
-    ({ dnaDecoded }) => dnaDecoded.shape !== eligibleShape || dnaDecoded.color !== eligibleColor
+  const notEligiblePearls = useMemo(
+    () =>
+      pearls.filter(
+        ({ dnaDecoded }) => dnaDecoded.shape !== eligibleShape || dnaDecoded.color !== eligibleColor
+      ),
+    [pearls, eligibleShape, eligibleColor]
   );
 
   return (
@@ -97,7 +105,7 @@ const BurnPearlModal = (props) => {
           {eligiblePearls.length ? (
             eligiblePearls.map((pearl, i, a) => (
               <PearlInfo
-                key={i}
+                key={pearl.pearlId}
                 pearl={pearl}
                 isLast={i === a.length - 1}
                 isEligible
@@ -111,20 +119,20 @@ const BurnPearlModal = (props) => {
         </div>
         <div className="w-1/2 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160">
           <div className="overflow-y-auto">
-          <p className="font-bold mb-4">Not available this week</p>
-          {notEligiblePearls.length ? (
-            notEligiblePearls.map((pearl, i, a) => (
-              <PearlInfo
-                key={i}
-                pearl={pearl}
-                isLast={i === a.length - 1}
-                isNativeStaker={isNativeStaker}
-                showBurn
-              />
-            ))
-          ) : (
-            <p>No pearls available</p>
-          )}
+            <p className="font-bold mb-4">Not available this week</p>
+            {notEligiblePearls.length ? (
+              notEligiblePearls.map((pearl, i, a) => (
+                <PearlInfo
+                  key={i}
+                  pearl={pearl}
+                  isLast={i === a.length - 1}
+                  isNativeStaker={isNativeStaker}
+                  showBurn
+                />
+              ))
+            ) : (
+              <p>No pearls available</p>
+            )}
           </div>
         </div>
       </div>
