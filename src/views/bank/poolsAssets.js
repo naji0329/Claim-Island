@@ -76,9 +76,10 @@ export const poolAssets = {
     isNative: true,
     risk: "High Risk",
   },
-  "0xe0e92035077c39594793e61802a350347c320cf2": {
-    // testnet
-    // "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16": { // mainnet
+  // "0xe0e92035077c39594793e61802a350347c320cf2": {
+  // testnet
+  "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16": {
+    // mainnet
     name: `BNB - BUSD`, // real
     apy: `82.3%`,
     multiplier: `40x`,
