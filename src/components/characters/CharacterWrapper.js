@@ -110,7 +110,7 @@ const CharacterWrapper = ({
   return (
     <div
       className={classNames(
-        "flex-1 min-h-full min-w-full md:flex items-center ",
+        "flex-1 min-w-full md:flex items-center ",
         { "z-30": showBubble },
         { "z-0": !showBubble }
       )}
