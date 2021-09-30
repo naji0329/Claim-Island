@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { connect } from "redux-zero/react";
-import clsx from "clsx";
-import BigNumber from "bignumber.js";
 import { toast } from "react-toastify";
 
 import { actions } from "store/redux";
 import { useTimer } from "hooks/useTimer";
+import { ifPearlSendSaferoom } from "./utils";
 import { secondsToFormattedTime } from "utils/time";
 import { Spinner } from "components/spinner";
 
@@ -14,33 +13,22 @@ import {
   collectPearl,
   rngRequestHashForProducedPearl,
   propClamOpenForPearl,
-  stakeClam,
-  stakeClamAgain,
   stakePrice,
-  hasClamBeenStakedBeforeByUser,
+  gemsTransferred,
 } from "web3/pearlFarm";
 import { canCurrentlyProducePearl, canStillProducePearls } from "web3/clam";
 import { nextPearlId, getPearlData } from "web3/pearl";
-
-import { getBalance, infiniteApproveSpending } from "web3/gem";
-import { approveContractForMaxUintErc721 } from "web3/bep20";
-import { clamNFTAddress, pearlFarmAddress } from "web3/constants";
 import { formatFromWei } from "web3/shared";
+import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
 
 import {
   pearlCollectSuccess,
-  pearlSendToSaferoom,
-  pearlGenerateNew,
   pearlGemPrompt,
   pearlCollectProcessing,
-  pearlNotEnoughGems,
   pearlOpenClam,
   pearlError,
   pearlCollectReadyPrompt,
 } from "./character/pearlCollection";
-import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
-
-import { ifPearlSendSaferoom } from "./utils";
 
 import ActionButton from "views/bank/utils/ActionButton";
 
@@ -164,7 +152,7 @@ const FarmItem = ({
 
   const onClickCollectPearl = async () => {
     try {
-      const gems = gemsNeededForPearlProd;
+      const gems = await gemsTransferred(address, clamId);
       pearlGemPrompt({ updateCharacter, gems: formatFromWei(gems) }, async () => {
         pearlCollectProcessing({ updateCharacter });
         try {

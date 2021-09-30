@@ -105,3 +105,7 @@ export const clamIdToStaker = async (clamId) => {
 export const rngRequestHashForProducedPearl = async (clamId, account) => {
   return pearlFarm().methods.rngRequestHashForProducedPearl(account, clamId).call();
 };
+
+export const gemsTransferred = async (account, clamId) => {
+  return pearlFarm().methods.gemsTransferred(account, clamId).call();
+};
