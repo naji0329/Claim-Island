@@ -44,10 +44,32 @@ const NavigationButton = () => {
     });
     return (<>
       {icons}
-      <div className="nav-access-btn" onClick={toggle}>
-        <button className="nav-icon">
-          <img src={IMG_LOC + "cancel.svg"} />
-        </button>
+      <div className="flex flex-row space-x-4">
+        <div className="nav-access-btn" onClick={toggle}>
+          <button className="nav-icon">
+            <img src={IMG_LOC + "cancel.svg"} />
+          </button>
+        </div>
+        <a className="social-btn" href="https://t.me/clamisland" target="_blank" rel="noreferrer">
+          <button className="nav-icon" style={{ width: '75px' }}>
+            <img src={IMG_LOC + "telegram.svg"} />
+          </button>
+        </a>
+        <a className="social-btn" href="https://twitter.com/clam_island" target="_blank" rel="noreferrer">
+          <button className="nav-icon" style={{ width: '75px' }}>
+            <img src={IMG_LOC + "twitter.svg"} />
+          </button>
+        </a>
+        <a className="social-btn" href="https://discord.com/invite/aH6U2hjby7" target="_blank" rel="noreferrer">
+          <button className="nav-icon">
+            <img src={IMG_LOC + "discord.svg"} />
+          </button>
+        </a>
+        <a className="social-btn" href="https://clamisland.medium.com/" target="_blank" rel="noreferrer">
+          <button className="nav-icon">
+            <img src={IMG_LOC + "medium-64.png"} />
+          </button>
+        </a>
       </div>
     </>
     )

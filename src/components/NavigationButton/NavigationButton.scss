@@ -6,7 +6,7 @@
 }
 
 .nav-access-btn {
-	@apply flex flex-row mb-4 ml-4;
+  @apply flex flex-row mb-4 ml-4;
 
   .nav-icon {
     @include nav-icon;
@@ -26,6 +26,13 @@
 
   p {
     @apply mt-6 ml-5 font-aristotelica font-bold text-2xl text-white drop-shadow-border;
+  }
+}
+
+.social-btn {
+  @apply flex flex-row mb-4 ml-4;
+  .nav-icon {
+    width: 64px;
   }
 }
 
