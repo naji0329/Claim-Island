@@ -1,11 +1,16 @@
 export const FARM_SPEECH = {
   farms: {
     welcome: {
-      text: `Hello There! Welcome to the place where you can farm pearls.`,
-      dismiss: true,
-      skip: true,
-      hideable: true,
+      text: `Welcome to the Clam Farm! You can deposit your Clams here to produce Pearls, or check on the progress of Clams you have already deposited.`,
+      dismiss: false,
     },
+
+    welcome_next: {
+      text: ({ gem }) =>
+        `It will just cost ${gem} $GEM to produce a Pearl. Remember that each Clam can only produce a specific number of Pearls before it dies!`,
+      dismiss: true,
+    },
+
     connect: {
       text: `Excellent! First, let's get your wallet connected. You will need to do this in order to see your Clams. Press the "Connect Wallet" button in the top right of the screen.`,
       next: `purchase`,
