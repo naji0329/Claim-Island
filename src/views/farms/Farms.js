@@ -19,8 +19,9 @@ import NFTUnknown from "assets/img/clam_unknown.png";
 
 import clamContract from "web3/clam";
 import { prepGetDnaDecodedMulticall, decodeGetDnaDecodedFromMulticall } from "web3/dnaDecoder";
-import { getStakedClamIds, unstakeClam, collectPearl } from "web3/pearlFarm";
+import { getStakedClamIds, unstakeClam, collectPearl, stakePrice } from "web3/pearlFarm";
 import { aggregate } from "web3/multicall";
+import { formatFromWei } from "web3/shared";
 
 import "./index.scss";
 import FarmItem from "./FarmItem";
@@ -30,14 +31,19 @@ import { DepositClamCard } from "./depositClamCard";
 
 import PearlView from "./PearlView";
 import { MODAL_OPTS } from "./constants";
-import { WelcomeUser, withdrawClamSpeak } from "./character/WithdrawClam";
+import {
+  WelcomeUser,
+  withdrawClamSpeak,
+  speechWelcome,
+  speechWelcomeNext,
+} from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
 import { pearlSendToSaferoom } from "./character/pearlCollection";
 import {
   decodeCalculateBonusRewardsFromMulticall,
   prepCalculateBonusRewardsMulticall,
 } from "web3/clamBonus";
-import { ifPearlSendSaferoom } from './utils';
+import { ifPearlSendSaferoom } from "./utils";
 
 const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
   let history = useHistory();
@@ -253,7 +259,14 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   }, [clamsStaked]);
 
   useAsync(async () => {
-    WelcomeUser({ updateCharacter });
+    const priceForPearlInGem = await stakePrice();
+    const price = formatFromWei(priceForPearlInGem);
+    console.log({ price });
+
+    speechWelcome({ updateCharacter }, async () => {
+      //     [get Pearl production price in $GEM]
+      return speechWelcomeNext({ updateCharacter, gem: price });
+    });
   });
 
   return (
@@ -275,7 +288,13 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
             updateAccount={updateAccount}
           />
         ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
-          <ClamDeposit clams={clams} updateCharacter={updateCharacter} toggleModal={toggleModal} stakedRarities={stakedRarities} setRefreshClams={setRefreshClams} />
+          <ClamDeposit
+            clams={clams}
+            updateCharacter={updateCharacter}
+            toggleModal={toggleModal}
+            stakedRarities={stakedRarities}
+            setRefreshClams={setRefreshClams}
+          />
         ) : (
           <PearlView dna={selPearl.dna} dnaDecoded={selPearl.dnaDecoded} />
         )}

@@ -1,11 +1,16 @@
 export const FARM_SPEECH = {
   farms: {
     welcome: {
-      text: `Hello There! Welcome to the place where you can farm pearls.`,
-      dismiss: true,
-      skip: true,
-      hideable: true,
+      text: `Welcome to the Clam Farm! You can deposit your Clams here to produce Pearls, or check on the progress of Clams you have already deposited.`,
+      dismiss: false,
     },
+
+    welcome_next: {
+      text: ({ gem }) =>
+        `It will just cost ${gem} $GEM to produce a Pearl. Remember that each Clam can only produce a specific number of Pearls before it dies!`,
+      dismiss: true,
+    },
+
     connect: {
       text: `Excellent! First, let's get your wallet connected. You will need to do this in order to see your Clams. Press the "Connect Wallet" button in the top right of the screen.`,
       next: `purchase`,
@@ -19,7 +24,8 @@ export const FARM_SPEECH = {
       skip: false,
     },
     depositClamGemPrompt: {
-      text: ({ gems }) => `We require a deposit of ${gems} $GEM to produce the Pearl. The deposit will be consumed when a Pearl is produced. Do you want to proceed?`,
+      text: ({ gems }) =>
+        `We require a deposit of ${gems} $GEM to produce the Pearl. The deposit will be consumed when a Pearl is produced. Do you want to proceed?`,
       next: `purchase`,
       dismiss: false,
       skip: false,
@@ -37,7 +43,8 @@ export const FARM_SPEECH = {
       skip: false,
     },
     pearlCollectGemprompt: {
-      text: ({ gems }) => `${gems} $GEM will be consumed to produce the pearl. Do you want to proceed?`,
+      text: ({ gems }) =>
+        `Your ${gems} $GEM deposit will be consumed to collect the pearl. Do you want to proceed?`,
       next: `purchase`,
       dismiss: false,
       skip: false,
@@ -91,11 +98,40 @@ export const FARM_SPEECH = {
       hideable: true,
     },
     pearl_processing: {
-      text: `One moment, just let me unbox this Pearl for you.`,
+      text: `Alrighty, give me a moment, this is a delicate operation...`,
       next: false,
       dismiss: true,
       skip: false,
       hideable: true,
+    },
+
+    pearl_collect_ready_prompt: {
+      text: `Aha, I can see a Pearl. Would you like to collect it?`,
+      dismiss: false,
+      skip: false,
+      hideable: false,
+    },
+
+    pearl_collect_ready_prompt_cancel: {
+      text: ` No worries, we will leave the Clam here for now, you can come back and collect it at any time. Please note that your Clam will not produce any more Pearls until you collect this one.`,
+      dismiss: true,
+      skip: false,
+      hideable: false,
+    },
+
+    open_clam: {
+      text: `Alrighty, let me open this Clam up for you. One moment please.`,
+      next: false,
+      dismiss: false,
+      skip: false,
+      hideable: false,
+    },
+    error: {
+      text: `I'm sorry, something went wrong. Please try again.`,
+      next: false,
+      dismiss: false,
+      skip: false,
+      hideable: false,
     },
   },
 };

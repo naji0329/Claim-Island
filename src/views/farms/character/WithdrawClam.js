@@ -13,7 +13,7 @@ export const withdrawClamSpeak = ({ updateCharacter }, cb) => {
         dismiss: true,
         destination: () => {
           cb();
-        }
+        },
       },
     },
     buttonAlt: {
@@ -40,6 +40,35 @@ export const WelcomeUser = ({ updateCharacter, suppressSpeechBubble = false }) =
     button: {
       text: "Dismiss",
       dismiss: truncate,
+    },
+  });
+};
+
+export const speechWelcome = ({ updateCharacter }, cb) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.welcome.text",
+    button: {
+      text: "Cool!",
+      alt: {
+        action: "cb",
+        dismiss: true,
+        destination: () => {
+          cb();
+        },
+      },
+    },
+  });
+};
+
+export const speechWelcomeNext = ({ updateCharacter, gem }) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.welcome_next.text",
+    variables: { gem },
+    button: {
+      text: "Dismiss",
+      dismiss: true,
     },
   });
 };

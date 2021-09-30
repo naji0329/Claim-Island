@@ -117,7 +117,39 @@ export const pearlGemPrompt = ({ updateCharacter, gems }, cb) => {
     },
     buttonAlt: {
       text: "No thanks",
-      dismiss: true
+      dismiss: true,
+    },
+  });
+};
+
+export const pearlCollectReadyPrompt = ({ updateCharacter }, cb) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.pearl_collect_ready_prompt.text",
+    button: {
+      text: "Yes",
+      alt: {
+        action: "cb",
+        destination: () => {
+          cb();
+        },
+      },
+    },
+    buttonAlt: {
+      text: "Not yet",
+      alt: {
+        action: "cb",
+        destination: () => {
+          updateCharacter({
+            name: "al",
+            action: "farms.pearl_collect_ready_prompt_cancel.text",
+            button: {
+              text: "Ok",
+              dismiss: true,
+            },
+          });
+        },
+      },
     },
   });
 };
@@ -128,7 +160,27 @@ export const pearlCollectProcessing = ({ updateCharacter }, cb) => {
     action: "farms.pearl_processing.text",
     button: {
       text: undefined,
-    }
+    },
+  });
+};
+
+export const pearlOpenClam = ({ updateCharacter }) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.open_clam.text",
+    button: {
+      text: undefined,
+    },
+  });
+};
+
+export const pearlError = ({ updateCharacter }) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.error.text",
+    button: {
+      text: undefined,
+    },
   });
 };
 
