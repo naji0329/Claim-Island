@@ -24,6 +24,15 @@
 .three-container {
     background-color: #000;
 }
+
+.three-container:hover {
+    cursor: grab;
+}
+
+.three-container:active {
+    cursor: grabbing;
+}
+
 .three-container.hover {
     cursor: pointer;
 }

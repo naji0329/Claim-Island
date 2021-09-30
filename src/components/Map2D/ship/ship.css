@@ -1,0 +1,54 @@
+.shipImage {
+    width: 300px;
+    position: absolute;
+    top: 0;
+    left: 10%;
+    z-index: 5;
+    transform: translateY(50%);
+}
+
+@media screen and (max-width: 1880px) {
+    .shipImage {
+        transform: translateY(50%) scale(0.95);
+    }
+}
+
+@media screen and (max-width: 1620px) {
+    .shipImage {
+        transform: translateY(50%) scale(0.9);
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    .shipImage {
+        transform: translateY(50%) scale(0.75);
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .shipImage {
+        transform: translateY(50%) scale(0.75);
+        left: 5%;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .shipImage {
+        transform: translateY(50%) scale(0.6);
+        top: 5%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .shipImage {
+        transform: translateY(50%) scale(0.6);
+        left: 0;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .shipImage {
+        transform: translateY(50%) scale(0.5);
+        left: -5%;
+    }
+}
