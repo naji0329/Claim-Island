@@ -17,6 +17,10 @@ export const WELCOME_SPEECH = {
 
     dismiss: {
       text: ({ date }) => `Nice place, right? Only ${date} left till open time!`,
+      hideable: true,
+      next: false,
+      dismiss: true,
+      skip: true,
     },
 
     first: {

@@ -42,19 +42,13 @@ export const speechLaunchCountdown = ({ updateCharacter }, cb) => {
   });
 };
 
-export const speechLaunchTwo = ({ updateCharacter }, cb) => {
+export const speechLaunchTwo = ({ updateCharacter }) => {
   updateCharacter({
     name: "nacre",
     action: "home.launch_two.text",
     button: {
       text: "Sounds good!",
       dismiss: true,
-      alt: {
-        action: "cb",
-        destination: () => {
-          cb();
-        },
-      },
     },
   });
 };
