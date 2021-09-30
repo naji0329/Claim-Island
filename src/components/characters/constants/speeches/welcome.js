@@ -7,7 +7,7 @@ export const WELCOME_SPEECH = {
       skip: false,
     },
     first: {
-      text: `The island is open. Note that if you have clams or pearls, you can go see them in the Saferoom.`,
+      text: `Ahoy there, traveller! Welcome to Clam Island. We are now open - you can buy some Clams in the Shop, or go to the Bank to get $GEM and $SHELL tokens and to invest. If you need some help, try visiting Janet in the Infocenter.`,
       next: "second",
       dismiss: false,
       skip: false,
@@ -37,8 +37,8 @@ export const WELCOME_BUTTONS = {
       next: "Explore Island",
       alt: {
         action: "url_internal",
-        destination: "/saferoom/clams",
-        text: "Go to Saferoom",
+        destination: "/info",
+        text: "Go to Infocenter",
       },
     },
     second: {
