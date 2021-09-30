@@ -19,7 +19,7 @@ import loadGLTF from "./loaders/gltf_loader";
 import "./3d_map.scss";
 import createWater from "./create_water";
 import createSky from "./create_sky";
-import clamIcon from "../../assets/clam-icon.png";
+import { LiteVersionSwitcher } from "../liteVersionSwitcher";
 
 import { ISLAND_OBJECTS } from './constants';
 import LoadingScreen from "components/LoadingScreen";
@@ -199,16 +199,16 @@ const Map3D = () => {
     }
   };
 
-  const flyingSeagulls = (t) => {
+  const flyingSeagulls = () => {
     const seagulls = modelObjs.find(k => k.type === 'seagull').model;
     if (seagulls) {
-      seagulls.forEach((seagull, i) => {
+      seagulls.forEach((seagull) => {
         seagull.pivot.rotation.y += seagull.pivot.userData.speed + 0.01;
       });
     }
   };
 
-  const swimmingDolphins = (t) => {
+  const swimmingDolphins = () => {
     const dolphins = modelObjs.find(k => k.type === 'dolphin').model;
     if (dolphins) {
       dolphins.forEach((dolphin, i) => {
@@ -329,7 +329,12 @@ const Map3D = () => {
 
   return (
     <div>
-      {loading && <LoadingScreen text="Taking you to Clam Island..." />}
+      {loading && (
+        <>
+          <LoadingScreen text="Taking you to Clam Island..." />
+          <LiteVersionSwitcher />
+        </>
+      )}
       <button className="zoom-btn zoom-in text-blue-500" onClick={zoomIn}>
         <FontAwesomeIcon icon={faSearchPlus} />
       </button>

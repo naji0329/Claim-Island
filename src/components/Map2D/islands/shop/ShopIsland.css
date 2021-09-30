@@ -1,0 +1,22 @@
+.shopIsland {
+    position: absolute;
+    width: 400px;
+    height: 200px;
+    top: 65%;
+    left: 30%;
+    z-index: 10;
+}
+
+.shopBuilding {
+    position: absolute;
+    width: 200px;
+    left: 100px;
+    top: 20px;
+}
+
+.shopSign {
+    position: absolute;
+    width: 100px;
+    top: -80px;
+    left: 140px;
+}
