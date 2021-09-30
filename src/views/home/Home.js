@@ -44,7 +44,7 @@ const Home = ({ updateCharacter }) => {
     return now >= launch;
   };
 
-  const wait = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
+  // const wait = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
   useAsync(async () => {
     if (isOpen(launchDate)) {
@@ -54,8 +54,8 @@ const Home = ({ updateCharacter }) => {
         return speechLaunchCountdown({ updateCharacter }, async () => {
           speechLaunchTwo({ updateCharacter });
 
-          await wait(1000);
-          speechDismiss({ updateCharacter, date: launchCountdown(launchDate) });
+          // await wait(1000);
+          // speechDismiss({ updateCharacter, date: launchCountdown(launchDate) });
         });
       });
 
