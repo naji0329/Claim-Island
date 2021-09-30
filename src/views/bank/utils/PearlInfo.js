@@ -78,7 +78,10 @@ const PearlInfo = ({
             label={
               <>
                 $GEM yield&nbsp;
-                <button data-tip="Streamed over 30 days" className="pointer-events-auto tooltip">
+                <button
+                  data-tip="Streamed over 30 days"
+                  className="pointer-events-auto tooltip tooltip-bottom"
+                >
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
               </>
