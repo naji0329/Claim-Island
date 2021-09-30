@@ -147,7 +147,7 @@ canvas {
 }
 .csstooltip:hover:after{
   @apply text-xs;
-  position: fixed;
+  position: absolute;
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: center;
