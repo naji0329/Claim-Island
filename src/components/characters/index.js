@@ -19,14 +19,10 @@ const CharacterSpeak = (props) => {
   const speechTrack = SPEECHES[props.speech];
   const btnTrack = BUTTONS[props.speech];
 
-  // console.log(speechTrack);
-  // console.log(btnTrack);
-
-  const [charImg, setCharImg] = useState(character.charImg);
-  const [charName, setCharName] = useState(character.name);
+  const [charImg] = useState(character.charImg);
+  const [charName] = useState(character.name);
   const [showBubble, setShowBubble] = useState(true);
   let [trackCount, setTrackCount] = useState(Object.keys(speechTrack)[0]);
-  // console.log(trackCount);
 
   const [speech, setSpeech] = useState(speechTrack[trackCount].text);
   const [buttonNextText, setButtonNextText] = useState(btnTrack[trackCount].next);
@@ -38,14 +34,6 @@ const CharacterSpeak = (props) => {
   const btnNext = useRef();
   const characterImg = useRef();
   const characterWrap = useRef();
-  /*
-    useEffect(()=>{
-      if(!props.web3) {
-        setSpeech('Please install a ethereum wallet and reload the page.');
-      }
-    }, [])
-
-    */
 
   const onClickNextSkip = () => {
     if (skipDialog === "propose") {
@@ -147,11 +135,11 @@ const CharacterSpeak = (props) => {
       }, timeOut);
     }
 
-    if (speechTrack[trackCount].next == "connect") {
+    if (speechTrack[trackCount].next === "connect") {
       props.setConnect(true);
     }
 
-    if (speechTrack[trackCount].next == "vote" || speechTrack[trackCount].showVote) {
+    if (speechTrack[trackCount].next === "vote" || speechTrack[trackCount].showVote) {
       props.setVote(true);
     }
   };
@@ -230,7 +218,7 @@ const CharacterSpeak = (props) => {
     votingWalletConnected,
   ]);
 
-  const onClickAlt = (e) => {
+  const onClickAlt = () => {
     if (skipDialog) {
       onClickAltSkip();
       return;
@@ -258,16 +246,8 @@ const CharacterSpeak = (props) => {
     }
   };
 
-  const onClickCharacter = (e) => {
-    if (!showBubble) {
-      setShowBubble(true);
-      //setSpeech(speechTrack[trackCount+1]);
-      //setButtonText(btnTrack[trackCount+1]);
-      //const newCount = trackCount + 1;
-      //setTrackCount(newCount);
-      characterWrap.current.style.marginTop = "0px";
-    } else {
-    }
+  const onClickCharacter = () => {
+    setShowBubble(!showBubble);
   };
 
   const onClickMinimizedButton = () => {
@@ -299,7 +279,7 @@ const CharacterSpeak = (props) => {
       <div className="text-bubble">
         <div className="text-wrapper">
           <div className="name">{charName}</div>
-          <div className="absolute top-4 right-8 text-white">
+          <div className="absolute mt-4 right-8 text-white">
             <button
               data-tip="Hide"
               className="mr-2 pointer-events-auto tooltip"
@@ -314,7 +294,8 @@ const CharacterSpeak = (props) => {
                 onClick={onClickSkipDialogButton}
               >
                 <FontAwesomeIcon icon={faTimesCircle} />
-              </button>)}
+              </button>
+            )}
             {skipDialogs && (
               <button
                 data-tip="Show Speech"
@@ -322,7 +303,8 @@ const CharacterSpeak = (props) => {
                 onClick={onClickSkipRestoreButton}
               >
                 <FontAwesomeIcon icon={faEye} />
-              </button>)}
+              </button>
+            )}
           </div>
           <div className="speech">
             <p className="speech-text">{speech}</p>
@@ -331,7 +313,7 @@ const CharacterSpeak = (props) => {
             ["shell_voting", "shell_voted_already", "shell_voting_complete"].indexOf(
               props.speech
             ) !== -1) ||
-            ["shell_voting", "shell_voted_already", "shell_voting_complete"].indexOf(props.speech) ===
+          ["shell_voting", "shell_voted_already", "shell_voting_complete"].indexOf(props.speech) ===
             -1 ? (
             <div className="buttons">
               <button className="btn character-btn" id="btn-alt" ref={btnAlt} onClick={onClickAlt}>
@@ -354,11 +336,15 @@ const CharacterSpeak = (props) => {
 
       <div className="character-container">
         <div className="character-wrap" ref={characterWrap}>
-          <img src={charImg} className="character" onClick={onClickCharacter} />
+          <img
+            src={charImg}
+            className="character cursor-pointer pointer-events-auto"
+            onClick={onClickCharacter}
+          />
         </div>
       </div>
       <button className="btn character-container-round" onClick={onClickCharacter}>
-        <img src={charImg} className="character" ref={characterImg} />
+        <img src={charImg} className="character cursor-pointer" ref={characterImg} />
       </button>
     </div>
   );

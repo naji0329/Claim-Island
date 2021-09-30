@@ -7,6 +7,7 @@ import { useEthers } from "@usedapp/core";
 import { exchangeUrl, getBalancesFormatted, PoolData } from "./utils";
 import PoolHarvest from "./utils/PoolHarvest";
 import PoolDepositWithdraw from "./utils/PoolDepositWithdraw";
+import { getFormattedRisk } from "./utils/getFormattedRisk";
 
 import { renderPercentage, renderUsd } from "utils/number";
 import InfoTooltip from "components/InfoTooltip";
@@ -92,8 +93,8 @@ const PoolItem = ({
         </div>
 
         <div className="block text-sm">
-          <Tooltip text="Relative to other investment pools - higher means more risk of capital value fluctuation">
-            <p className={riskClass(pool.risk)}>{pool.risk}</p>
+          <Tooltip text="Relative to other investment pools - higher means more likelihood of capital value fluctuation">
+            <p className={riskClass(pool.risk)}>{getFormattedRisk(pool.risk)}</p>
           </Tooltip>
         </div>
         <div className="block text-sm">

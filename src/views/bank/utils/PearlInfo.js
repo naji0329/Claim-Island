@@ -1,16 +1,55 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "redux-zero/react";
+import { actions } from "store/redux";
+
 import { burnPearl } from "web3/pearlBurner";
 import NFTUnknown from "assets/img/pearl_unknown.png";
+import classnames from "classnames";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker, showBurn }) => {
-  const hours = 720; // hours in 30 days
-  const gemPerHour = (+pearl.bonusRewards / hours).toFixed(2);
-  const handleBurn = async () => {
+import { burnPearlConfirmation, onBurnPearlSuccess } from "../character/BurnPearl";
+import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepositHarvest";
+
+const InfoLine = ({ label, value }) => (
+  <div className="w-full flex justify-between">
+    <span className="text-gray-500">{label}</span>
+    <span className="text-gray-500">{value}</span>
+  </div>
+);
+
+const PearlInfo = ({
+  pearl,
+  isEligible,
+  isLast,
+  isNativeStaker,
+  showBurn,
+  updateCharacter,
+  updateAccount,
+}) => {
+  const [inTx, setInTx] = useState(false);
+
+  const handleBurn = () => {
+    return burnPearlConfirmation(updateCharacter, pearl.bonusRewards, async () => {
+      await executeBurnPearl();
+    });
+  };
+
+  const executeBurnPearl = async () => {
     try {
+      setInTx(true);
+      onDepositHarvestTxn(updateCharacter);
+
       await burnPearl(pearl.pearlId, pearl.dnaDecoded.shape, pearl.dnaDecoded.color);
+
+      toast.success("Your pearl has been burned!");
+      onBurnPearlSuccess(updateCharacter); // character speak
     } catch (err) {
+      onDepositHarvestError(updateCharacter);
       updateAccount({ error: err.message });
+      setInTx(false);
     }
   };
 
@@ -28,13 +67,6 @@ const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker, showBurn }) => {
     getPearlImage();
   }, []);
 
-  const InfoLine = ({ label, value }) => (
-    <div className="w-full flex justify-between">
-      <span className="text-gray-500">{label}</span>
-      <span className="text-gray-500">{value}</span>
-    </div>
-  );
-
   return (
     <>
       <div className="w-full flex">
@@ -42,25 +74,36 @@ const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker, showBurn }) => {
           <img src={image} className="rounded-full" />
         </div>
         <div className="w-3/5">
-          <InfoLine label="$Gem/hr" value={gemPerHour} />
-          <InfoLine label="Duration (hrs):" value={hours} />
+          <InfoLine
+            label={
+              <>
+                $GEM yield&nbsp;
+                <button data-tip="Streamed over 30 days" className="pointer-events-auto tooltip">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </button>
+              </>
+            }
+            value={+pearl.bonusRewards}
+          />
+
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
           <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
-          <div className="w-full flex justify-between">
+          <div className="w-full flex justify-between my-2">
             {showBurn && (
               <button
                 onClick={handleBurn}
-                className={
-                  "font-montserrat underline font-bold " +
-                  (isEligible ? "text-blue-700" : "text-gray-500")
-                }
-                disabled={!isNativeStaker || !isEligible}
+                className={classnames("mr-1", {
+                  "btn btn-disabled": !isEligible,
+                  "btn btn-outline btn-primary": isEligible,
+                })}
+                disabled={!isNativeStaker || !isEligible || inTx}
               >
                 Use
               </button>
             )}
-            <Link to={"/saferoom/pearl"} className="font-montserrat underline text-gray-500">
-              View in saferoom
+            <Link to={"/saferoom/pearl"} className="btn btn-outline btn-secondary ml-1">
+              View Details&nbsp;
+              <FontAwesomeIcon icon={faExternalLinkAlt} />
             </Link>
           </div>
         </div>
@@ -70,4 +113,5 @@ const PearlInfo = ({ pearl, isEligible, isLast, isNativeStaker, showBurn }) => {
   );
 };
 
-export default PearlInfo;
+const mapToProps = (state) => state;
+export default connect(mapToProps, actions)(PearlInfo);

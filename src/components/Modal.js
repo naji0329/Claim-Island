@@ -15,7 +15,7 @@ export const useModal = (props) => {
   };
 };
 
-export const Modal = ({ isShowing, onClose, className, children, width, title }) =>
+export const Modal = ({ isShowing, onClose, className, children, width, maxWidth, title }) =>
   isShowing
     ? ReactDOM.createPortal(
       <React.Fragment>
@@ -25,7 +25,7 @@ export const Modal = ({ isShowing, onClose, className, children, width, title })
         >
           <div
             className="border border-blue-500 shadow-lg bg-white w-2/3 md:max-w-11/12 mx-auto rounded-2xl z-50 overflow-y-auto"
-            style={{ width: width ? width : undefined, maxHeight: '95%' }}
+            style={{ width: width ? width : undefined, maxHeight: '95%', maxWidth: maxWidth ? maxWidth : undefined }}
           >
             <div className="py-4 px-6">
               <div className="cursor-pointer z-50 flex flex-row-reverse" onClick={onClose}>

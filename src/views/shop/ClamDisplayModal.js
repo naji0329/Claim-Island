@@ -11,11 +11,8 @@ import { getDNADecoded } from "web3/dnaDecoder";
 import { calculateBonusRewards } from "web3/clamBonus";
 
 const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) => {
-  const [clamDna, setClamDna] = useState("");
-  const [clamDnaDecoded, setClamDnaDecoded] = useState(null);
+  const [clam, setClam] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [clamBirthTime, setClamBirthTime] = useState();
-  const [clamBonus, setClamBonus] = useState(0);
 
   useEffect(() => {
     const init = async () => {
@@ -33,15 +30,14 @@ const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) 
             const clamData = await clamContract.getClamData(tokenId);
 
             if (clamData.dna.length > 1) {
-              setClamDna(clamData.dna);
-              setClamBirthTime(clamData.birthTime);
+              const dnaDecoded = await getDNADecoded(clamData.dna);
+              const clamBonus = await calculateBonusRewards(dnaDecoded);
 
-              const decodedDna = await getDNADecoded(clamData.dna);
-              setClamDnaDecoded(decodedDna);
-
-              const bonus = await calculateBonusRewards(decodedDna);
-
-              setClamBonus(bonus);
+              setClam({
+                ...clamData,
+                dnaDecoded,
+                clamBonus,
+              });
             }
           }
 
@@ -57,14 +53,7 @@ const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) 
   return (
     <div className="w-2/3 md:max-w-11/12 mx-auto">
       <div className="bg-white shadow-md rounded-xl p-5 flex-1 justify-center md:flex items-center h-full flex-col w-full">
-        {clamDna && clamDnaDecoded && (
-          <ClamView
-            dna={clamDna}
-            dnaDecoded={clamDnaDecoded}
-            birthTime={clamBirthTime}
-            clamBonus={clamBonus}
-          />
-        )}
+        {clam && <ClamView {...clam} />}
         {isLoading && (
           <>
             <svg

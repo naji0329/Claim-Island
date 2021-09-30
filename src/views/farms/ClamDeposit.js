@@ -3,7 +3,8 @@ import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
 import { get } from "lodash";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { actions } from "../../store/redux";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
@@ -142,7 +143,11 @@ const ClamItem = ({
             {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced} pearls
             remaining
           </div>
-          <div className="grid-title">$GEM boost:</div>
+          <div className="grid-title">$GEM boost:&nbsp;
+          <button data-tip="Boost only available the first time the Clam is deposited and only if no other Clams of the same rarity tier was deposited at the time. Boost amount will otherwise show as zero." className="pointer-events-auto tooltip">
+            <FontAwesomeIcon icon={faInfoCircle} />
+          </button>
+          </div>
           <div className="grid-value">{rarityIsAlreadyStaked ? 0 : clamBonus}</div>
         </div>
         <div className="flex flex-col">

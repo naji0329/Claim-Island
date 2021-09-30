@@ -19,7 +19,7 @@ import loadGLTF from "./loaders/gltf_loader";
 import "./3d_map.scss";
 import createWater from "./create_water";
 import createSky from "./create_sky";
-import clamIcon from "../../assets/clam-icon.png";
+import { LiteVersionSwitcher } from "../liteVersionSwitcher";
 
 import { ISLAND_OBJECTS } from './constants';
 import LoadingScreen from "components/LoadingScreen";
@@ -176,8 +176,8 @@ const Map3D = () => {
     requestAnimationFrame(animate);
     if (water) water.material.uniforms["time"].value += 1.0 / 60.0;
 
+    const tDelta = clock.getDelta();
     let t = clock.getElapsedTime();
-    const tdelta = clock.getDelta();
 
     modelObjs.forEach(k => {
       if (k.buoyancy) {
@@ -185,8 +185,8 @@ const Map3D = () => {
       }
     });
 
-    flyingSeagulls(tdelta);
-    swimmingDolphins(t);
+    flyingSeagulls(tDelta);
+    swimmingDolphins(tDelta);
 
     composer.render();
   };
@@ -199,26 +199,27 @@ const Map3D = () => {
     }
   };
 
-  const flyingSeagulls = (t) => {
+  const flyingSeagulls = (tDelta) => {
     const seagulls = modelObjs.find(k => k.type === 'seagull').model;
     if (seagulls) {
-      seagulls.forEach((seagull, i) => {
-        seagull.pivot.rotation.y += seagull.pivot.userData.speed + 0.01;
+      seagulls.forEach((seagull) => {
+        seagull.pivot.rotation.y += seagull.pivot.userData.speed + tDelta / 2;
       });
     }
   };
 
-  const swimmingDolphins = (t) => {
+  const swimmingDolphins = (tDelta) => {
     const dolphins = modelObjs.find(k => k.type === 'dolphin').model;
     if (dolphins) {
       dolphins.forEach((dolphin, i) => {
-        dolphin.pivot.rotation.x += 0.02;
+        dolphin.pivot.rotation.x += tDelta;
+        let zpos, xpos;
         if (i < 2) {
-          var zpos = Math.random() * 225 - 500;
-          var xpos = Math.random() * 70 - 150;
+          zpos = Math.random() * 225 - 500;
+          xpos = Math.random() * 70 - 150;
         } else {
-          var zpos = Math.random() * 100 + 350;
-          var xpos = Math.random() * 100 - 250;
+          zpos = Math.random() * 100 + 350;
+          xpos = Math.random() * 100 - 250;
         }
         if (THREE.Math.radToDeg(dolphin.pivot.rotation.x) % 360 > 120 && !dolphin.pivot.under) {
           dolphin.pivot.position.z = zpos;
@@ -263,7 +264,7 @@ const Map3D = () => {
     }
   };
 
-  const checkIntersection = (event) => {
+  const checkIntersection = () => {
     raycaster.setFromCamera(mouse, camera);
     const intersect = raycaster.intersectObjects(outlineMeshes, true)[0];
     if (intersect) {
@@ -308,6 +309,9 @@ const Map3D = () => {
         default:
           console.error("intersect obj is not found");
       }
+      if (currentHover !== hoverStr) {
+        setHoverName(hoverStr);
+      }
 
       // if (currentHover !== hoverStr) {
       //   setHoverName(hoverStr);
@@ -329,7 +333,12 @@ const Map3D = () => {
 
   return (
     <div>
-      {loading && <LoadingScreen text="Taking you to Clam Island..." />}
+      {loading && (
+        <>
+          <LoadingScreen text="Taking you to Clam Island..." />
+          <LiteVersionSwitcher />
+        </>
+      )}
       <button className="zoom-btn zoom-in text-blue-500" onClick={zoomIn}>
         <FontAwesomeIcon icon={faSearchPlus} />
       </button>

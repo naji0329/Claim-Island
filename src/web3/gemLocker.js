@@ -214,11 +214,27 @@ export const clamHasGeneratedBoost = async (clamId) => {
   return +bonusInfo.endDay > 0; // endDay cannot be 0 clam has generated rewards
 };
 
+const getVestedNftRewards = async (chainId, isClam) => {
+  const rewards = await getNftRewards(chainId, isClam);
+  let availableRewards = isClam ? +(await pendingClamRewards()) : +(await pendingPearlRewards());
+
+  return rewards.reduce((acc, curr) => {
+    if (availableRewards >= curr.bonusRemaining) {
+      availableRewards -= curr.bonusRemaining;
+    } else {
+      curr.bonusRemaining -= availableRewards;
+      availableRewards = 0;
+      acc.push(curr);
+    }
+    return acc;
+  }, []);
+};
+
 export const fetchRewards = async (chainId) => {
   const currentDay = await getCurrentDay();
   const farmingRewards = await getFarmingRewards(chainId);
-  const clamRewards = await getNftRewards(chainId, true);
-  const pearlRewards = await getNftRewards(chainId);
+  const vestedClamRewards = await getVestedNftRewards(chainId, true);
+  const vestedPearlRewards = await getVestedNftRewards(chainId);
   const totalLocked = await totalLockedRewards();
   const availableFarmingRewards = await pendingFarmingRewards();
   const availableClamRewards = await pendingClamRewards();
@@ -230,8 +246,8 @@ export const fetchRewards = async (chainId) => {
     startTime,
     currentDay,
     farmingRewards,
-    clamRewards,
-    pearlRewards,
+    vestedClamRewards,
+    vestedPearlRewards,
     totalLocked,
     availableFarmingRewards,
     availableClamRewards,

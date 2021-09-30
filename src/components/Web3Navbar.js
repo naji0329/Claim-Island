@@ -28,7 +28,7 @@ import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm
 import Web3Avatar from "./Web3Avatar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { getUsdPriceOfToken } from "../web3/pancakeRouter";
 import BigNumber from "bignumber.js";
 import NetworkService from "../utils/NetworkService";
@@ -293,7 +293,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
                       Safe: {activateClamBalanceInSafe} Clams | {activatePearlBalanceInSafe} Pearls
                       {location.pathname.indexOf("saferoom") === -1 && (
-                        <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
+                        <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
                       )}
                     </span>
                   </Link>
@@ -309,7 +309,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
                       Farm: {activateClamBalanceInFarm} Clams | {activatePearlBalanceInFarm} Pearls
                       {location.pathname.indexOf("farms") === -1 && (
-                        <FontAwesomeIcon icon={faSignInAlt} className="ml-1" />
+                        <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
                       )}
                     </span>
                   </Link>

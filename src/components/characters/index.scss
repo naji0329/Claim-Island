@@ -4,7 +4,7 @@
   z-index: 999;
   bottom: 2rem;
   width: 100vw;
-  height: 33%;
+  height: 100vh;
   pointer-events: none;
   padding-left: 5rem;
   justify-content: flex-end;
@@ -22,7 +22,7 @@
   }
 
   .character-container {
-    pointer-events: auto;
+    pointer-events: none;
     opacity: 1;
     height: 100%;
     width: 15%;
@@ -42,13 +42,17 @@
     transition: width 1s, bottom 1s, ease-out;
 
     .character-wrap {
-      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      //position: absolute;
+      margin-top: 0;
       bottom: 0;
       right: 0;
       width: 100%;
       height: 100%;
       text-align: right;
-      //transition: clip-path 1s, width 1s, height 1s, background-color 1s, ease-out;
+      transition: all 0.6s ease-out;
 
       .character {
         height: 100%;
@@ -57,8 +61,8 @@
         object-position: bottom;
         clip-path: circle(200% at 50% 38px);
         background-color: hsla(0, 0%, 100%, 0);
-        margin-top: 0px;
-        padding-top: 0px;
+        margin-top: 0;
+        padding-top: 0;
         //clip-path: circle(200% at 50% 38px);
         transition: all 0.6s ease-in-out;
       }
@@ -109,7 +113,7 @@
     //padding-top: 28em;
     margin-right: 40px;
     float: right;
-    top: 0px;
+    top: 0;
     transition: all 0.6s ease-in-out;
     font-family: AristotelicaBold !important;
 
@@ -117,9 +121,13 @@
       width: 75%;
     }
 
+    @media screen and (max-width: 992px) {
+      margin-right: 100px;
+    }
+
     .text-wrapper {
       height: auto;
-      min-height: 100%;
+      min-height: 33%;
       display: flex;
       flex-direction: column;
       border-radius: 15px;
@@ -279,7 +287,7 @@
             transition-duration: 0.02s;
             transform: translate(0px, 1px);
             background-color: #50bcd0;
-            box-shadow: 0 0px 5px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
           }
         }
       }
@@ -312,10 +320,10 @@
       //width: 1%;
       //height: 1%;
       //background-color: hsla(0,0%,100%,0.7);
-
+      margin-top: 100px;
       .character {
         width: 80px;
-        height: 216.2px;
+        height: 216px;
         clip-path: circle(38px at 50% 38px);
         background-color: hsla(0, 0%, 100%, 0.7);
         padding-top: 10px;

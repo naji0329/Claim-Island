@@ -118,8 +118,8 @@ const CharacterWrapper = ({
       <div
         className={
           showBubble
-            ? "character-bubble fixed z-999 bottom-8 h-1/3 pointer-events-none w-screen"
-            : "character-bubble h-1/3 hide-bubble fixed justify-end"
+            ? "character-bubble fixed z-999 bottom-8 pointer-events-none w-screen"
+            : "character-bubble hide-bubble fixed justify-end"
         }
         style={{ zIndex: forceTop ? 9999 : (speech ? undefined : 0) }}
       >
@@ -159,7 +159,7 @@ const CharacterWrapper = ({
                   </button>
                 )}
               </div>
-              <div className="absolute top-4 right-8 text-white">
+              <div className="absolute mt-4 right-8 text-white">
                 {isDialogHideable && (
                   <button
                     data-tip="Hide"
