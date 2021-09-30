@@ -28,7 +28,7 @@ export const ISLAND_OBJECTS = [
     name: "vault",
     clickable: true,
     url: "/saferoom",
-    buoyancy: { factor: 2, init: -5 }
+    buoyancy: { factor: 2, init: -4 }
   },
   {
     objectUrl: "glb_files/Info_Island.glb",

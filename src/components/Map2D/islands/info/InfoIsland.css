@@ -1,0 +1,27 @@
+.infoIsland {
+    position: absolute;
+    width: 350px;
+    height: 200px;
+    top: 30%;
+    left: 40%;
+}
+
+.infoBuilding {
+    position: absolute;
+    width: 180px;
+    left: 75px;
+    top: 0;
+}
+
+.infoSign {
+    position: absolute;
+    width: 100px;
+    top: -70px;
+    left: 125px;
+}
+
+@media screen and (max-width: 1024px) {
+    .infoIsland {
+        top: 35%;
+    }
+}

@@ -1,0 +1,21 @@
+.safeIsland {
+    position: absolute;
+    width: 400px;
+    height: 200px;
+    top: 75%;
+    left: 65%;
+}
+
+.safeBuilding {
+    position: absolute;
+    width: 200px;
+    left: 100px;
+    top: 27px;
+}
+
+.safeSign {
+    position: absolute;
+    width: 120px;
+    top: -65px;
+    left: 150px;
+}
