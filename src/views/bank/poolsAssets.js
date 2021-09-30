@@ -89,7 +89,7 @@ export const poolAssets = {
     ],
     risk: "Low Risk",
   },
-  "0xea26b78255df2bbc31c1ebf60010d78670185bd0": {
+  "0xEa26B78255Df2bBC31C1eBf60010D78670185bD0": {
     name: `ETH - USDC`, // real usdc-eth
     apy: `82.3%`,
     multiplier: `40x`,
