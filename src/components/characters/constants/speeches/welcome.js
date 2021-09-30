@@ -12,15 +12,13 @@ export const WELCOME_SPEECH = {
     },
 
     launch_two: {
-      text: `If you have won some Clams or Pearls that you haven't claimed yet, you will be able to get them from the Shop when the island opens. In the meantime, please feel free to look around!`,
+      text: `If you have won some Clams or Pearls that you haven't claimed yet, you will be able to get them from the Shop after the island opens. In the meantime, please feel free to look around!`,
+      dismiss: true,
+      skip: false,
     },
 
     dismiss: {
       text: ({ date }) => `Nice place, right? Only ${date} left till open time!`,
-      hideable: true,
-      next: false,
-      dismiss: true,
-      skip: true,
     },
 
     first: {
