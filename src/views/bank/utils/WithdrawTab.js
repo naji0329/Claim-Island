@@ -128,6 +128,7 @@ const WithdrawTab = ({
               placeholder="Amount"
               type="number"
               max={get(selectedPool, "userDepositAmountInPool")}
+              step="any"
               min="0"
               value={+withdrawAmount}
               onChange={handleWithdrawChange}
