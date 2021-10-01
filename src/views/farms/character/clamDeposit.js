@@ -35,7 +35,7 @@ export const depositClamGemPrompt = ({ updateCharacter, gems, dismissModal }, cb
 
 export const depositClamError = ({ updateCharacter, err }) => {
   updateCharacter({
-    name: 'al',
+    name: "al",
     action: 'farms.depositClamError.text',
     variables: { errorMsg: err.message },
     button: {
@@ -47,11 +47,56 @@ export const depositClamError = ({ updateCharacter, err }) => {
 
 export const depositClamGemDeny = ({ updateCharacter, err }) => {
   updateCharacter({
-    name: 'al',
+    name: "al",
     action: "farms.depositClamGemDisagree.text",
     button: {
       text: "OK",
       dismiss: true,
+    },
+  });
+};
+
+export const depositClamSuccess = ({ updateCharacter }) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.depositClamSuccess.text",
+    button: {
+      text: "OK",
+      dismiss: true,
+    },
+  });
+};
+
+export const depositWithoutStaking = ({ updateCharacter, dismissModal }, cb) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.depositWithoutStaking.text",
+    forceTop: true,
+    button: {
+      text: "Yes",
+      alt: {
+        action: "cb",
+        destination: () => {
+          updateCharacter({
+            name: "al",
+            action: undefined,
+          });
+          cb();
+        },
+      },
+    },
+    buttonAlt: {
+      text: "No thanks",
+      alt: {
+        action: "cb",
+        destination: () => {
+          updateCharacter({
+            name: "al",
+            action: undefined,
+          });
+          dismissModal();
+        },
+      },
     },
   });
 };

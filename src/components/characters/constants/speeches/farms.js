@@ -25,7 +25,7 @@ export const FARM_SPEECH = {
     },
     depositClamGemPrompt: {
       text: ({ gems }) =>
-        `We require a deposit of ${gems} $GEM to produce the Pearl. The deposit will be consumed when a Pearl is produced. Do you want to proceed?`,
+        `We require a deposit of ${gems} $GEM to produce the Pearl. The deposit will be consumed when a Pearl is produced. If you withdrew your Clam without producing a Pearl and without a refund of your deposit, then you won't need to pay the deposit again. Do you want to proceed?`,
       next: `purchase`,
       dismiss: false,
       skip: false,
@@ -38,6 +38,24 @@ export const FARM_SPEECH = {
     },
     depositClamError: {
       text: ({ errorMsg }) => `There was an error depositing clams. Error -> ${errorMsg}`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+    },
+    depositWithoutStaking: {
+      text: `Depositing clams without staking in a native pool will cause gem boost to be lost permanently. Do you want to proceed ?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+    },
+    depositClamGemDisagree: {
+      text: `OK. Let me know if you need anything.`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+    },
+    depositClamSuccess: {
+      text: `Your clam has been deposited!. You can choose to deposit another clam.`,
       next: `purchase`,
       dismiss: false,
       skip: false,
