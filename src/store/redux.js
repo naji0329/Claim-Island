@@ -38,7 +38,7 @@ const initialState = {
   },
   communityRewardsData: {
     isAwardee: undefined,
-    userClaimedReward: false,
+    userRewards: "0",
     rng: undefined, // f  rom call rngRequestHashFromBuyersClam
     hashRequest: undefined,
   },

@@ -86,13 +86,13 @@ export const isAwardee = async (account) => {
   return isClaimer;
 };
 
-export const userClaimedReward = async (address) => {
+export const userRewards = async (address) => {
   if (address) {
     const CommunityAwardee = contractFactory({
       abi: communityRewardsAbi,
       address: communityRewardsAddress,
     });
-    const value = await CommunityAwardee.methods.userClaimedReward(address).call();
+    const value = await CommunityAwardee.methods.userRewards(address).call();
     return value;
   }
 };
@@ -116,6 +116,6 @@ export default {
   claimReward,
   collectReward,
   isAwardee,
-  userClaimedReward,
+  userRewards,
   rngRequestHashFromRewardBeneficiary,
 };

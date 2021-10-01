@@ -15,10 +15,10 @@ const ClaimRewardModal = ({
   account: { address },
   updateCharacter,
   updateAccount,
-  communityRewardsData: { userClaimedReward },
+  communityRewardsData: { userRewards },
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const disableButton = userClaimedReward;
+  const disableButton = Number(userRewards) === 0;
 
   const { handleSubmit } = useForm();
 
@@ -79,6 +79,7 @@ const ClaimRewardModal = ({
                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   ></path>
                 </svg>
+                <label>You&apos;ve got {userRewards} rewards to claim</label>
               </div>
             </div>
 
@@ -107,7 +108,7 @@ const ClaimRewardModal = ({
                 type="submit"
                 className="disabled cursor-not-allowed block uppercase text-center shadow bg-red-300  focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl"
               >
-                Already claimed Reward
+                Already Claimed Reward
               </button>
             ) : (
               <>

@@ -97,6 +97,19 @@
         "type": "address[]"
       }
     ],
+    "name": "addClamAwardee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "accounts",
+        "type": "address[]"
+      }
+    ],
     "name": "addClamMaximaAwardee",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -111,6 +124,60 @@
       }
     ],
     "name": "addPearlAwardee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rewardAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "changeUserClamMaximaRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rewardAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "changeUserClamRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rewardAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "changeUserPearlRewards",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -143,12 +210,12 @@
         "type": "address"
       }
     ],
-    "name": "clamAwardee",
+    "name": "clamAwardeeRewards",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -162,12 +229,12 @@
         "type": "address"
       }
     ],
-    "name": "clamMaximaAwardee",
+    "name": "clamMaximaAwardeeRewards",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -259,12 +326,12 @@
         "type": "address"
       }
     ],
-    "name": "pearlAwardee",
+    "name": "pearlAwardeeRewards",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -333,16 +400,16 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "claimer",
         "type": "address"
       }
     ],
-    "name": "userClaimedReward",
+    "name": "userRewards",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
