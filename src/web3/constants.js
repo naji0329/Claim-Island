@@ -10,7 +10,6 @@ const localhostMulticallAddress =
     ? "0x28d387c0405Fb8eE7bBeB92A6D783A8436076487"
     : "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1";
 
-//// add test contracts here
 export const shellTokenAddress = "0x01c16da6E041Cf203959624Ade1F39652973D0EB";
 export const clamNFTAddress = "0x77ab76cc8193cafbe7ec748d52e57b25d184b311";
 export const gemTokenAddress = "0x9fb4DEF63f8caEC83Cb3EBcC22Ba0795258C988a";
@@ -27,14 +26,7 @@ export const clamLotteryAddress = "0x5b9d7dCC720f6B1bE1c8f8fAd54e89DBa57B2036";
 export const clamShopAddress = "0xb073dD56EDc93Ea80Bd3cBbB62eB2093aDAa5903";
 export const pearlFarmAddress = "0x6e4942Cc0FF4138A5148f96efc68F95C2f14F973";
 
-//// end of test contracts
-
-//// contracts already deployed to mainnet
-// export const shellTokenAddress = "0x01c16da6E041Cf203959624Ade1F39652973D0EB";
-// export const clamNFTAddress = "0x77ab76cc8193cafbe7ec748d52e57b25d184b311";
-// export const rngAddress = "0xbacdF6F20DC405574C7c1e1a7cbAB06107d94DEc";
-// export const dnaDecoderAddress = "0xb9cCd96b2D6B9733b97Ad17BA4395Ee37ef0312f";
-//// end
+export const communityRewardsAddress = "0x6684C3Fb0a85cE9B05187c770c4aa6A824Ed590C";
 
 export const multicallAddress = {
   [ClamIslandChain.BSC]: "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1",

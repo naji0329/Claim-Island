@@ -36,6 +36,12 @@ const initialState = {
     rng: undefined, // from call rngRequestHashFromBuyersClam
     hashRequest: undefined,
   },
+  communityRewardsData: {
+    isAwardee: undefined,
+    userRewards: "0",
+    rng: undefined, // f  rom call rngRequestHashFromBuyersClam
+    hashRequest: undefined,
+  },
   character: {
     name: undefined,
     action: undefined,
@@ -53,7 +59,7 @@ const initialState = {
     },
     suppressSpeechBubble: undefined,
     skipDialogs: false,
-    forceTop: false
+    forceTop: false,
   },
   bank: {
     pools: [],
@@ -98,6 +104,14 @@ export const actions = (store) => ({
     return {
       clamClaimerData: {
         ...state.clamClaimerData,
+        ...value,
+      },
+    };
+  },
+  updateCommunityRewards: (state, value) => {
+    return {
+      communityRewardsData: {
+        ...state.communityRewardsData,
         ...value,
       },
     };
