@@ -22,3 +22,7 @@
 .btn-harvest {
   @apply bg-blue-500 hover:bg-blue-400;
 }
+
+.btn-unclickable {
+  pointer-events: none;
+}

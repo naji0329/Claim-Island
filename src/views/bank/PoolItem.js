@@ -116,14 +116,14 @@ const PoolItem = ({
 
         <div className="block text-sm">
           <p className="mb-1 text-xs font-semibold leading-none text-gray-500">Deposited</p>
-          <p className="font-bold text-center text-gray-300">
+          <p className="font-bold text-center text-black-300">
             {renderUsd(pool.userDepositAmountInPool * pool.tokenPrice)}
           </p>
         </div>
 
         <div className="block text-sm">
           <p className="mb-1 text-xs font-semibold leading-none text-gray-500">$GEM to harvest</p>
-          <p className="font-bold text-center text-gray-300">{pool.userRewardAmountInPool}</p>
+          <p className="font-bold text-center text-black-300">{pool.userRewardAmountInPool}</p>
         </div>
 
         <div className="block text-sm">

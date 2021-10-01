@@ -2,8 +2,11 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-export const ExternalLinksBlock = () => (
+export const ExternalLinksBlock = ({ totalTVL }) => (
   <div className="flex">
+    <div className="mr-2 btn btn-secondary drop-shadow-button btn-unclickable">
+      Total TVL {totalTVL}
+    </div>
     <a
       className="mr-2 btn btn-secondary drop-shadow-button"
       href="https://pancakeswap.finance/swap?outputCurrency=0x01c16da6E041Cf203959624Ade1F39652973D0EB"
