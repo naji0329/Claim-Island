@@ -13,7 +13,14 @@ const SliderWithPercentages = ({ state, isDeposit, onChange }) => {
       isDeposit ? "balances[0]" : "selectedPool.userDepositAmountInPool",
       "0"
     );
-    const absolute = formatNumber((percentage / 100) * +balance, 6);
+
+    const absolute = formatNumber((percentage / 100) * +balance, 12);
+    console.log({
+      state: state.selectedPool.userDepositAmountInPool,
+      state: state.balance,
+      balance,
+      absolute,
+    });
     // setSharedState({ ...state, [stateProp]: absolute });
 
     onChange({ [stateProp]: absolute });
