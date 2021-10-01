@@ -193,7 +193,7 @@ const CharacterWrapper = ({
         )}
         <div className="character-container flex items-end">
           <img
-            className="max-h-full cursor-pointer"
+            className="max-h-full cursor-pointer pointer-events-auto"
             src={character.charImg}
             onClick={handleClickCharacter}
           />
