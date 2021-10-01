@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
-import { get } from "lodash";
+import { chain, get } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
@@ -18,8 +18,15 @@ import {
   getRemainingPearlProductionTime,
   stakePrice,
 } from "../../web3/pearlFarm";
+import { getAllPools } from "web3/bank";
 import { clamRarityAlreadyStaked } from "./character/DepositClam";
-import { depositClamGemPrompt, depositClamError, depositClamGemDeny } from "./character/clamDeposit";
+import {
+  depositClamGemPrompt,
+  depositClamError,
+  depositClamSuccess,
+  depositWithoutStaking,
+} from "./character/clamDeposit";
+import { useEthers } from "@usedapp/core";
 
 const ClamItem = ({
   clamId,
@@ -32,13 +39,21 @@ const ClamItem = ({
   updateCharacter,
   clamBonus,
   toggleModal,
-  setRefreshClams
+  setRefreshClams,
 }) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState("Deposit Clam");
   const [inTx, setInTx] = useState(false);
   const [gemApproved, setGemApproved] = useState(false);
   const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
+  const [isNativeStaker, setIsNativeStaker] = useState(false);
+
+  const { chainId } = useEthers();
+  getAllPools({ address, chainId }).then((pools) => {
+    const isNativeStaker =
+      pools.length && pools.some((p) => p.isNative && +p.userDepositAmountInPool > 0);
+    setIsNativeStaker(isNativeStaker);
+  });
 
   const rarityIsAlreadyStaked = stakedRarities.includes(dnaDecoded.rarity);
 
@@ -85,37 +100,45 @@ const ClamItem = ({
         throw new Error(`You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`);
 
       // character speaks
-      depositClamGemPrompt({ updateCharacter, gems: formatFromWei(pearlPrice), dismissModal: toggleModal }, async () => {
-        try {
-          setButtonText("Approving Clam...");
-          await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
+      depositClamGemPrompt(
+        { updateCharacter, gems: formatFromWei(pearlPrice), dismissModal: toggleModal },
+        async () => {
+          try {
+            setButtonText("Approving Clam...");
+            await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
 
-          if (!gemApproved) {
-            setButtonText("Approving GEM...");
-            console.log(pearlPrice);
-            await infiniteApproveSpending(address, pearlFarmAddress, pearlPrice);
+            if (!gemApproved) {
+              setButtonText("Approving GEM...");
+              console.log(pearlPrice);
+              await infiniteApproveSpending(address, pearlFarmAddress, pearlPrice);
+            }
+
+            setButtonText("Depositing Clam...");
+
+            const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
+            if (hasClamBeenStakeByUserBefore) {
+              await stakeClamAgain(clamId);
+            } else {
+              if (!isNativeStaker) {
+                depositWithoutStaking({ updateCharacter, dismissModal: toggleModal }, async () => {
+                  await stakeClam(clamId);
+                });
+              } else {
+                await stakeClam(clamId);
+              }
+            }
+            setButtonText("Deposit Clam");
+            toast.success("Your clam has been deposited!. You can choose to deposit another clam.");
+            depositClamSuccess({ updateCharacter });
+            setRefreshClams(true);
+          } catch (err) {
+            updateAccount({ error: err.message });
+            setButtonText("Approve Clam");
+            setInTx(false);
+            depositClamError({ updateCharacter, err }); // character speaks
           }
-
-          setButtonText("Depositing Clam...");
-
-          const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
-          if (hasClamBeenStakeByUserBefore) {
-            await stakeClamAgain(clamId);
-          } else {
-            await stakeClam(clamId);
-          }
-          setButtonText("Deposit Clam");
-          toast.success("Your clam has been deposited!. You can choose to deposit another clam.")
-          setRefreshClams(true);
-        } catch (err) {
-          updateAccount({ error: err.message });
-          setButtonText("Approve Clam");
-          setInTx(false);
-          depositClamError({ updateCharacter, err }); // character speaks
         }
-
-      });
-
+      );
     } catch (err) {
       updateAccount({ error: err.message });
       setButtonText("Approve Clam");
@@ -143,10 +166,14 @@ const ClamItem = ({
             {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced} pearls
             remaining
           </div>
-          <div className="grid-title">$GEM boost:&nbsp;
-          <button data-tip="Boost only available the first time the Clam is deposited and only if no other Clams of the same rarity tier was deposited at the time. Boost amount will otherwise show as zero." className="pointer-events-auto tooltip">
-            <FontAwesomeIcon icon={faInfoCircle} />
-          </button>
+          <div className="grid-title">
+            $GEM boost:&nbsp;
+            <button
+              data-tip="Boost only available the first time the Clam is deposited and only if no other Clams of the same rarity tier was deposited at the time. Boost amount will otherwise show as zero."
+              className="pointer-events-auto tooltip"
+            >
+              <FontAwesomeIcon icon={faInfoCircle} />
+            </button>
           </div>
           <div className="grid-value">{rarityIsAlreadyStaked ? 0 : clamBonus}</div>
         </div>
@@ -171,13 +198,30 @@ const ClamItem = ({
   );
 };
 
-const ClamDeposit = ({ clams, updateCharacter, toggleModal, updateAccount, account: { address }, stakedRarities, setRefreshClams }) => {
+const ClamDeposit = ({
+  clams,
+  updateCharacter,
+  toggleModal,
+  updateAccount,
+  account: { address },
+  stakedRarities,
+  setRefreshClams,
+}) => {
   return (
     <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
       {clams.length ? (
         <div>
           {clams.map((clam) => (
-            <ClamItem key={clam.clamId} updateAccount={updateAccount} address={address} {...clam} updateCharacter={updateCharacter} toggleModal={toggleModal} stakedRarities={stakedRarities} setRefreshClams={setRefreshClams} />
+            <ClamItem
+              key={clam.clamId}
+              updateAccount={updateAccount}
+              address={address}
+              {...clam}
+              updateCharacter={updateCharacter}
+              toggleModal={toggleModal}
+              stakedRarities={stakedRarities}
+              setRefreshClams={setRefreshClams}
+            />
           ))}
         </div>
       ) : (
