@@ -21,6 +21,10 @@ export const periodStart = async () => {
   return await pearlBurner().methods.periodStart().call();
 };
 
+export const periodInSeconds = async () => {
+  return await pearlBurner().methods.periodInSeconds().call();
+};
+
 export const burnPearl = async (pearlId, shape, color) => {
   const account = getAccount();
   const method = pearlBurner().methods.burnPearl(pearlId, shape, color);

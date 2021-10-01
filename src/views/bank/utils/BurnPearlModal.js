@@ -10,7 +10,7 @@ import {
   prepTokenOfOwnerByIndexMulticall,
   decodeTokenOfOwnerByIndexFromMulticall,
 } from "web3/pearl";
-import { color, shape, periodStart } from "web3/pearlBurner";
+import { color, shape, periodStart, periodInSeconds } from "web3/pearlBurner";
 import { useTimer } from "hooks/useTimer";
 import PearlInfo from "./PearlInfo";
 
@@ -25,12 +25,13 @@ const BurnPearlModal = (props) => {
   const [eligibleShape, setEligibleShape] = useState("");
   const [eligibleColor, setEligibleColor] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
+  const [periodInSecs, setPeriodInSecs] = useState("");
 
   const calculateTimeLeft = () => {
     if (startOfWeek === "") return "calculating...";
 
     const startOfWeekMs = +startOfWeek * 1000;
-    const nextWeek = moment(startOfWeekMs).add(7, "d");
+    const nextWeek = moment(startOfWeekMs).add(periodInSecs, "s");
     const remainingMs = nextWeek.diff(moment());
 
     const duration = formatMsToDuration(remainingMs);
@@ -56,6 +57,9 @@ const BurnPearlModal = (props) => {
 
       const start = await periodStart();
       setStartOfWeek(start);
+
+      const periodInSecs = await periodInSeconds();
+      setPeriodInSecs(periodInSecs);
     } catch (err) {
       console.error(err);
       updateAccount({ error: err.message });
