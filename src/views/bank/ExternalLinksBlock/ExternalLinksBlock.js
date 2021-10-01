@@ -2,8 +2,11 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-export const ExternalLinksBlock = () => (
+export const ExternalLinksBlock = ({ totalTVL }) => (
   <div className="flex">
+    <div className="p-2 mr-2 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
+      Total TVL {totalTVL}
+    </div>
     <a
       className="p-2 mr-2 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
       href="https://pancakeswap.finance/swap?outputCurrency=0x01c16da6E041Cf203959624Ade1F39652973D0EB"

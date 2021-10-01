@@ -20,6 +20,8 @@ import "./bank.scss";
 import PoolItem from "./PoolItem";
 import BurnPearlModal from "./utils/BurnPearlModal";
 import { ExternalLinksBlock } from "./ExternalLinksBlock";
+import BigNumber from "bignumber.js";
+import { renderUsd } from "utils/number";
 
 const Bank = ({
   account: { address, chainId, isBSChain, isWeb3Installed, isConnected },
@@ -30,6 +32,7 @@ const Bank = ({
   const [assistantAcknowledged] = useState(
     window.localStorage.getItem("bankAssistantAcknowledged") === "true"
   );
+  const [totalTVL, setTotalTVL] = useState(0);
   const { isShowing, toggleModal } = useModal();
   const isNativeStaker =
     pools.length && pools.some((p) => p.isNative && +p.userDepositAmountInPool > 0);
@@ -37,6 +40,14 @@ const Bank = ({
   useEffect(async () => {
     if (pools.length === 0 && address) {
       const setUpPools = await getAllPools({ address, chainId });
+      const calcTotalTVL = setUpPools.reduce((prev, curr) => {
+        if (curr.tvl) {
+          return prev.plus(curr.tvl);
+        }
+      }, new BigNumber(0));
+
+      setTotalTVL(renderUsd(+calcTotalTVL));
+
       const rewards = await fetchRewards(chainId);
       updateBank({ pools: setUpPools, rewards });
     }
@@ -44,9 +55,18 @@ const Bank = ({
 
   // update pools data every 5 seconds
   useEffect(async () => {
+    const zero = new BigNumber(0);
     setInterval(async () => {
       if (chainId && address) {
         const setUpPools = await getAllPools({ address, chainId });
+
+        const calcTotalTVL = setUpPools.reduce((prev, curr) => {
+          if (curr.tvl) {
+            return prev.plus(curr.tvl);
+          }
+        }, zero);
+
+        setTotalTVL(renderUsd(+calcTotalTVL));
         console.log("updated pools after 5s");
         const rewards = await fetchRewards(chainId);
         updateBank({ pools: setUpPools, rewards });
@@ -79,7 +99,7 @@ const Bank = ({
         <div className="w-full lg:w-7/10 mx-auto relative z-10 mt-24 px-2 md:px-4%">
           <div className="flex justify-between items-center">
             <PageTitle title="Clam Bank" />
-            <ExternalLinksBlock />
+            <ExternalLinksBlock totalTVL={totalTVL} />
           </div>
           {address && (
             <div className="py-4 flex flex-col">
