@@ -4,7 +4,7 @@ import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 export const ExternalLinksBlock = ({ totalTVL }) => (
   <div className="flex">
-    <div className="p-2 mr-2 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
+    <div className="mr-2 btn btn-secondary drop-shadow-button btn-unclickable">
       Total TVL {totalTVL}
     </div>
     <a
