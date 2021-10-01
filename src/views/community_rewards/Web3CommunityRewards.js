@@ -34,12 +34,6 @@ const Web3CommunityRewards = ({ updateCommunityRewards }) => {
           rng = await getRNGFromHashRequest(hashRequest);
         }
 
-        console.log("updateCommunityRewards", {
-          isAwardee,
-          rng,
-          userRewards,
-        });
-
         updateCommunityRewards({
           isAwardee,
           userRewards,

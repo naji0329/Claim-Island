@@ -1,7 +1,16 @@
 import moment from "moment";
 
-export const secondsToFormattedTime = (seconds) =>
-  seconds > 0 ? new Date(seconds * 1000).toISOString().substr(11, 8) : "00:00:00";
+export const secondsToFormattedTime = (seconds) => {
+  if (seconds === 0) return "00:00:00";
+
+  const isoTime = new Date(seconds * 1000).toISOString();
+  const daysLeft = isoTime.substr(8, 2);
+  const ending = daysLeft > 1 ? "s" : "";
+
+  return +daysLeft > 0
+    ? `${daysLeft} day${ending} ${isoTime.substr(11, 8)}`
+    : isoTime.substr(11, 8);
+};
 
 export const formatMsToDuration = (remainingMs) => {
   const days = moment.duration(remainingMs).days();

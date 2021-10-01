@@ -39,7 +39,10 @@ const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
   return (
     <div className="ClamDetails flex flex-row">
       <div className="flex flex-1 flex-col items-start">
-        <p className="font-extrabold text-green-600 text-center text-lg font-avenir mb-2" style={{width: "400px"}}>
+        <p
+          className="font-extrabold text-green-600 text-center text-lg font-avenir mb-2"
+          style={{ width: "400px" }}
+        >
           {clamProcessing.heading}
         </p>
         <Clam3DView
@@ -61,7 +64,7 @@ const ClamDetails = ({ clam, clamProcessing, updateAccount }) => {
           <div className="grid md:grid-cols-2 md:grid-rows-2 gap-1 mt-2">
             <div>Harvestable $SHELL</div>
             <div className="text-right">{clamProcessing.harvestableShell}</div>
-            <div>Lifespan Remaining</div>
+            <div>Pearls Remaining</div>
             <div className="text-right">{clamProcessing.remainingLifeSpan}</div>
             <div>$GEM boost</div>
             <div className="text-right">{clamHasGeneratedBonus ? clam.clamBonus : 0}</div>
