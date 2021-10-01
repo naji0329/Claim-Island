@@ -120,16 +120,16 @@ const FarmItem = ({
     dnaDecoded,
     heading: dnaDecoded.rarity,
     harvestableShell: 1 + pearlsProduced * 0.1,
-    remainingLifeSpan: pearlProductionCapacity - pearlsProduced,
+    remainingLifeSpan: +pearlProductionCapacity - +pearlsProduced,
   };
 
-  const onClickViewPearl = async () => {
-    setButtonText("Hold on ...");
-    const success = await onViewPearl(clamId);
-    if (!success) {
-      setButtonText("View Pearl");
-    }
-  };
+  // const onClickViewPearl = async () => {
+  //   setButtonText("Hold on ...");
+  //   const success = await onViewPearl(clamId);
+  //   if (!success) {
+  //     setButtonText("View Pearl");
+  //   }
+  // };
 
   const onClickOpenClam = async () => {
     try {

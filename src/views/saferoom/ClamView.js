@@ -16,9 +16,8 @@ export default ({
   pearlProductionCapacity,
   pearlsProduced,
 }) => {
-  const [showTraits, setShowTraits] = useState(false);
+  const [showTraits] = useState(false);
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
-  const lifespan = get(dnaDecoded, "lifespan");
 
   const RowStat = ({ label, value }) => (
     <div className="text-sm flex flex-row justify-between my-1">
@@ -73,12 +72,14 @@ export default ({
       const currentBlockTimestamp = await getCurrentBlockTimestamp();
 
       const isClamAvailableForHarvest =
-        lifespan !== "0" && birthTime && currentBlockTimestamp > +birthTime + +incubationTime;
+        +pearlsProduced < +pearlProductionCapacity &&
+        birthTime &&
+        currentBlockTimestamp > +birthTime + +incubationTime;
       setIsClamAvailableForHarvest(isClamAvailableForHarvest);
     };
 
     initClamView();
-  }, [birthTime, lifespan]);
+  }, [birthTime, pearlsProduced, pearlProductionCapacity]);
   return (
     <>
       <div className="flex flex-col justify-between w-full">

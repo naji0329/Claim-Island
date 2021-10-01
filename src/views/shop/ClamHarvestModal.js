@@ -14,12 +14,9 @@ import {
 
 import { getCurrentBlockTimestamp } from "../../web3";
 
-import { getDNADecoded } from "../../web3/dnaDecoder";
-
 import "./index.scss";
 
 import { actions } from "../../store/redux";
-import { get } from "lodash";
 import { Modal, useModal } from "components/Modal";
 
 import {
@@ -33,7 +30,7 @@ import {
 const formatShell = (value) => (value ? formatUnits(value, 18) : "0");
 
 const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
-  const { dnaDecoded, tokenId, img } = clam;
+  const { tokenId, img, pearlProductionCapacity, pearlsProduced } = clam;
   return (
     <div className="clam-details">
       <div className="w-1/2">
@@ -44,7 +41,7 @@ const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
           <div className="grid-title">$SHELL</div>
           <div className="grid-value">{formatShell(clamValueInShellToken)}</div>
           <div className="grid-title">Lifespan</div>
-          <div className="grid-value">{get(dnaDecoded, "lifespan")} pearls</div>
+          <div className="grid-value">{+pearlProductionCapacity - +pearlsProduced} pearls</div>
         </div>
         <div className="flex flex-col">
           <Link
@@ -68,12 +65,9 @@ const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
 
 const getUserClamDnaByIndex = async (account, index) => {
   const tokenId = await getClamByIndex(account, index);
-  const { dna, birthTime } = await getClamData(tokenId);
+  const { dna, birthTime, pearlProductionCapacity, pearlsProduced } = await getClamData(tokenId);
 
-  if (dna.length > 1) {
-    const dnaDecoded = await getDNADecoded(dna);
-    return { dna, dnaDecoded, tokenId, birthTime };
-  }
+  return { dna, tokenId, birthTime, pearlProductionCapacity, pearlsProduced };
 };
 
 const formatDuration = (totalSeconds) => {
@@ -151,12 +145,11 @@ const ClamHarvestModal = ({
       }
       let clams = await Promise.all(promises);
       clams = await addClamImg(clams);
-
       const currentBlockTimestamp = await getCurrentBlockTimestamp();
 
       const filteredClams = clams.filter(
-        ({ dnaDecoded, birthTime }) =>
-          get(dnaDecoded, "lifespan") !== "0" &&
+        ({ pearlProductionCapacity, pearlsProduced, birthTime }) =>
+          +pearlsProduced < +pearlProductionCapacity &&
           currentBlockTimestamp > +birthTime + +incubationtime
       );
 
