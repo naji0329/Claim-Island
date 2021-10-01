@@ -11,6 +11,7 @@ import Character from "components/characters/CharacterWrapper";
 import Web3Navbar from "components/Web3Navbar";
 import VideoBackground from "components/VideoBackground";
 import { Modal, useModal } from "components/Modal";
+import { PageTitle } from "components/PageTitle";
 
 import { getAllPools } from "web3/bank";
 import { fetchRewards } from "web3/gemLocker";
@@ -18,6 +19,7 @@ import { fetchRewards } from "web3/gemLocker";
 import "./bank.scss";
 import PoolItem from "./PoolItem";
 import BurnPearlModal from "./utils/BurnPearlModal";
+import { ExternalLinksBlock } from "./ExternalLinksBlock";
 
 const Bank = ({
   account: { address, chainId, isBSChain, isWeb3Installed, isConnected },
@@ -25,7 +27,7 @@ const Bank = ({
   updateCharacter,
   updateBank,
 }) => {
-  const [assistantAcknowledged, setAssistantAcknowledged] = useState(
+  const [assistantAcknowledged] = useState(
     window.localStorage.getItem("bankAssistantAcknowledged") === "true"
   );
   const { isShowing, toggleModal } = useModal();
@@ -69,22 +71,23 @@ const Bank = ({
         <Modal isShowing={isShowing} onClose={toggleModal} width={"60rem"}>
           <BurnPearlModal isNativeStaker={isNativeStaker} chainId={chainId} />
         </Modal>
-        <Web3Navbar title="Clam Bank" />
+        <Web3Navbar />
         {/* container */}
         {/* video */}
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
-        {address && (
-          <>
-            <div className="w-full lg:w-7/10 mx-auto relative z-10">
-              <div className="px-2 md:px-4% py-4 mt-24 flex flex-col">
-                {pools &&
-                  pools.map((pool, i) => (
-                    <PoolItem key={i} pool={pool} toggleModal={toggleModal} />
-                  ))}
-              </div>
+
+        <div className="w-full lg:w-7/10 mx-auto relative z-10 mt-24 px-2 md:px-4%">
+          <div className="flex justify-between items-center">
+            <PageTitle title="Clam Bank" />
+            <ExternalLinksBlock />
+          </div>
+          {address && (
+            <div className="py-4 flex flex-col">
+              {pools &&
+                pools.map((pool, i) => <PoolItem key={i} pool={pool} toggleModal={toggleModal} />)}
             </div>
-          </>
-        )}
+          )}
+        </div>
       </div>
 
       {/* chat character   */}
