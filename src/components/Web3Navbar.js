@@ -58,7 +58,7 @@ const ErrorAlert = ({ title, description, onClose }) => (
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 18 18"
         >
-          <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+          <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
         </svg>
       </div>
     </div>
@@ -69,7 +69,7 @@ const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
 const formatNFT = (value) => (value ? formatUnits(value, 0) : "0");
 const formatGem = (value) => (value ? formatUnits(value, 18) : "0");
 
-const Web3Navbar = ({ title, updateAccount, ...redux }) => {
+const Web3Navbar = ({ updateAccount, ...redux }) => {
   //  is called several times thus need a state to lower the renders
   const [activateError, setActivateError] = useState("");
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
@@ -126,7 +126,7 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
       pearlBalance: activatePearlBalanceInSafe,
       error: isBSChain ? null : activateError,
       address: account,
-      isConnected: account ? true : false,
+      isConnected: !!account,
       isBSChain,
       chainId: netId,
     });
@@ -248,19 +248,8 @@ const Web3Navbar = ({ title, updateAccount, ...redux }) => {
         </>
       )}
 
-      <nav className="flex min-h-48 min-w-full items-center fixed px-6 py-4 bg-transparent mt-2 z-20">
-        {/* this push menu to right side */}
-        <div className="flex justify-between lg:w-auto w-full  pl-6 pr-2 pb-0 lg:pb-2"></div>
-
-        <div className="w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
-          <div className="flex-grow">
-            {title && (
-              <h1 className="text-6xl text-shadow font-extrabold font-aristotelica-bold text-white">
-                {title}
-              </h1>
-            )}
-          </div>
-
+      <nav className="flex min-h-48 min-w-full justify-end fixed px-6 py-4 bg-transparent mt-2 z-20">
+        <div className="w-full lg:block lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
           <div className="flex">
             {!account && (
               <button

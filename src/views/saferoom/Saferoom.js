@@ -6,7 +6,6 @@ import "./index.scss";
 import { Link, Switch, Route, useRouteMatch, useParams, Redirect } from "react-router-dom";
 import Character from "components/characters/CharacterWrapper";
 import Web3Navbar from "components/Web3Navbar";
-import clamIcon from "assets/clam-icon.png";
 import { Modal, useModal } from "components/Modal";
 import NFTItem from "./NFTItem";
 import ClamView from "./ClamView";
@@ -18,6 +17,7 @@ import videoImage from "assets/locations/Saferoom.jpg";
 import videoMp4 from "assets/locations/Saferoom.mp4";
 import videoWebM from "assets/locations/Saferoom.webm";
 import VideoBackground from "components/VideoBackground";
+import { PageTitle } from "components/PageTitle";
 
 import { actions } from "store/redux";
 
@@ -166,7 +166,7 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
   return (
     <>
       {loading && <LoadingScreen />}
-      <Web3Navbar title="My Saferoom" />
+      <Web3Navbar />
       {/* container */}
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
@@ -177,39 +177,41 @@ const Saferoom = ({ account: { clamBalance, pearlBalance, address }, updateChara
         {tab === "Clam" && <ClamView {...selectedAsset} />}
         {tab === "Pearl" && <PearlView {...selectedAsset} />}
       </Modal>
+      <div className="flex-1 min-h-full min-w-full flex relative z-10 justify-center items-start">
+        <div className="w-4/5 flex flex-col relative pt-24">
+          <PageTitle title="My Saferoom" />
+          {address && (
+            <>
+              {/* navbar */}
+              <SaferoomNav
+                setTab={setTab}
+                tab={tab}
+                url={url}
+                clamBalance={clamBalance}
+                pearlBalance={pearlBalance}
+              />
 
-      {address && (
-        <div className="pt-24 flex-1 min-h-full min-w-full flex relative z-10 justify-center items-start">
-          <div className="w-4/5 flex flex-col relative pt-24">
-            {/* navbar */}
-            <SaferoomNav
-              setTab={setTab}
-              tab={tab}
-              url={url}
-              clamBalance={clamBalance}
-              pearlBalance={pearlBalance}
-            />
-
-            {/* clams and pears grid */}
-            <div className="w-full my-4 overflow-auto">
-              <Switch>
-                <Route exact path={path}>
-                  <Redirect to={`${url}/pearl`} />;
-                </Route>
-                <Route path={`${path}/:tabId`}>
-                  <TabContainer
-                    clams={clams}
-                    setSelectedAsset={setSelectedAsset}
-                    toggle={toggleModal}
-                    setTab={setTab}
-                    pearls={pearls}
-                  />
-                </Route>
-              </Switch>
-            </div>
-          </div>
+              {/* clams and pears grid */}
+              <div className="w-full my-4 overflow-auto">
+                <Switch>
+                  <Route exact path={path}>
+                    <Redirect to={`${url}/pearl`} />;
+                  </Route>
+                  <Route path={`${path}/:tabId`}>
+                    <TabContainer
+                      clams={clams}
+                      setSelectedAsset={setSelectedAsset}
+                      toggle={toggleModal}
+                      setTab={setTab}
+                      pearls={pearls}
+                    />
+                  </Route>
+                </Switch>
+              </div>
+            </>
+          )}
         </div>
-      )}
+      </div>
     </>
   );
 };
@@ -242,7 +244,7 @@ const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
           {showNumberOfAssets(pearlBalance, "Pearl")}
         </Link>
       </div>
-      <div className="flex-grow"></div>
+      <div className="flex-grow" />
       <Link to="/shop">
         <div className="flex-none text-2xl bg-blue-700 hover:bg-blue-500 text-white rounded-xl align-middle shadow-md px-8 py-2 mx-2">
           Shop

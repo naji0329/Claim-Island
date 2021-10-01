@@ -58,9 +58,9 @@ const WithdrawTab = ({
         selectedPool.isSingleStake
       );
 
-      const currentDepositBN = new BigNumber(selectedPool.userDepositAmountInPool);
-      const depositBN = new BigNumber(withdrawAmount);
-      const newDepositBN = currentDepositBN.minus(depositBN).toString();
+      const currentWithdrawlAmount = new BigNumber(selectedPool.userDepositAmountInPool);
+      const withdrawAmountBigNumber = new BigNumber(withdrawAmount);
+      const newWithdrawlAmount = currentWithdrawlAmount.minus(withdrawAmountBigNumber).toString();
 
       const setUpPools = await getAllPools({ address, chainId });
 
@@ -70,7 +70,7 @@ const WithdrawTab = ({
         withdrawAmount: "0",
         selectedPool: {
           ...selectedPool,
-          userDepositAmountInPool: newDepositBN,
+          userDepositAmountInPool: newWithdrawlAmount,
         },
       });
       setInTx(false);

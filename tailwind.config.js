@@ -72,6 +72,7 @@ module.exports = {
       dropShadow: {
         center: "0 0 5px rgba(0, 0, 0, 0.5)",
         border: "0 0 1px rgba(0, 0, 0, 1)",
+        button: "0 2px 3px black",
       },
       spacing: {
         "4%": "4%",
@@ -80,7 +81,7 @@ module.exports = {
   },
   variants: {
     extend: {
-      opacity: ["active"],
+      //opacity: ["disabled"],
       cursor: ["active"],
     },
   },

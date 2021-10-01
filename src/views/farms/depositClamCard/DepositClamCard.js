@@ -7,7 +7,7 @@ import "./DepositClamCard.scss";
 
 export const DepositClamCard = ({ onClick }) => {
   return (
-    <button className="FarmItem depositClamCard mt-24 md:mt-0" onClick={onClick}>
+    <button className="FarmItem depositClamCard md:mt-0" onClick={onClick}>
       <div className="cardContent">
         <FontAwesomeIcon className="cardIcon" icon={faPlus} />
         <span className="cardText">Deposit Clam</span>

@@ -10,11 +10,11 @@ import Character from "components/characters/CharacterWrapper";
 import Web3Navbar from "components/Web3Navbar";
 import { Modal, useModal } from "components/Modal";
 import VideoBackground from "components/VideoBackground";
+import { PageTitle } from "components/PageTitle";
 
 import videoImage from "assets/locations/Farm.jpg";
 import videoMp4 from "assets/locations/Farm.mp4";
 import videoWebM from "assets/locations/Farm.webm";
-import clamIcon from "assets/clam-icon.png";
 import NFTUnknown from "assets/img/clam_unknown.png";
 
 import clamContract from "web3/clam";
@@ -38,7 +38,6 @@ import {
   speechWelcomeNext,
 } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
-import { pearlSendToSaferoom } from "./character/pearlCollection";
 import {
   decodeCalculateBonusRewardsFromMulticall,
   prepCalculateBonusRewardsMulticall,
@@ -272,7 +271,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   return (
     <div className="overflow-x-hidden">
       {loading && <LoadingScreen />}
-      <Web3Navbar title="Clam Farms" />
+      <Web3Navbar />
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
       <Modal
@@ -302,7 +301,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
       {address && (
         <div className="w-full lg:w-4/5 mx-auto relative z-10">
-          <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-center">
+          <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-start">
+            <PageTitle title="Clam Farms" />
             {/* clams and pears grid */}
             <div className="w-full my-4">
               <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">

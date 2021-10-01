@@ -5,6 +5,7 @@ import { useHistory, useLocation } from "react-router-dom";
 
 import Character from "../../components/characters/CharacterWrapper";
 import Web3Navbar from "../../components/Web3Navbar";
+import { PageTitle } from "components/PageTitle";
 
 import { actions } from "../../store/redux";
 import { checkHasClamToCollect } from "../../web3/clam";
@@ -72,12 +73,14 @@ const Shop = ({
 
   return (
     <>
-      <Web3Navbar title="Clam Shop" />
+      <Web3Navbar />
       {/* container */}
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
       {/* chat character   */}
       <Character name="diego" />
-
+      <div className="absolute left-8 top-7">
+        <PageTitle title="Clam Shop" />
+      </div>
       {/* wallet is connected */}
       {address && userReady && (
         <div className="flex relative z-20  justify-center items-start top-40 w-full">
