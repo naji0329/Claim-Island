@@ -85,7 +85,7 @@ const WithdrawTab = ({
   return (
     <form onSubmit={handleSubmit(handleWithdraw)} className="w-full">
       <div className="flex flex-col w-full h-full justify-between">
-        <div className="flex items-center justify-between opacity-40 text-xl">
+        <div className="flex items-center justify-between text-xl">
           <div className="">Vault:</div>
           <div className="flex items-center">
             <div className="mx-2">

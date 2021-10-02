@@ -83,6 +83,7 @@ module.exports = {
     extend: {
       //opacity: ["disabled"],
       cursor: ["active"],
+      backdropBlur: ["hover"],
     },
   },
   plugins: [require("daisyui")],

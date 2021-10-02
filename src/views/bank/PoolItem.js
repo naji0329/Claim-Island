@@ -73,7 +73,7 @@ const PoolItem = ({
   };
 
   return (
-    <div className="flex flex-col justify-between mb-4 bg-white border-2 border-gray-800 shadow-md rounded-xl">
+    <div className="flex flex-col justify-between mb-4 glass bg-white hover:bg-white bg-opacity-50 hover:bg-opacity-50 backdrop-blur-lg hover:backdrop-blur-lg border-2 border-gray-800 shadow-md rounded-xl">
       <div
         className="flex items-center justify-between px-4 py-1 cursor-pointer"
         onClick={handleClick}
@@ -98,7 +98,7 @@ const PoolItem = ({
           </Tooltip>
         </div>
         <div className="block text-sm">
-          <p className="mb-1 text-xs font-semibold leading-none text-gray-500">Reward Share</p>
+          <p className="mb-1 text-xs font-semibold leading-none">Reward Share</p>
           <div className="font-bold text-center text-black">
             {pool.multiplier}%
             <InfoTooltip text="The share of overall rewards allocated to this pool" />
@@ -106,7 +106,7 @@ const PoolItem = ({
         </div>
 
         <div className="block text-sm">
-          <p className="mb-1 text-xs font-semibold leading-none text-center text-gray-500">APR</p>
+          <p className="mb-1 text-xs font-semibold leading-none text-center">APR</p>
 
           <div className="items-center font-bold text-black">
             {pool.apr ? renderPercentage(+pool.apr, 2) : "loading..."}
@@ -115,14 +115,14 @@ const PoolItem = ({
         </div>
 
         <div className="block text-sm">
-          <p className="mb-1 text-xs font-semibold leading-none text-gray-500">Deposited</p>
+          <p className="mb-1 text-xs font-semibold leading-none">Deposited</p>
           <p className="font-bold text-center text-black-300">
             {renderUsd(pool.userDepositAmountInPool * pool.tokenPrice)}
           </p>
         </div>
 
         <div className="block text-sm">
-          <p className="mb-1 text-xs font-semibold leading-none text-gray-500">$GEM to harvest</p>
+          <p className="mb-1 text-xs font-semibold leading-none">$GEM to harvest</p>
           <p className="font-bold text-center text-black-300">{pool.userRewardAmountInPool}</p>
         </div>
 
