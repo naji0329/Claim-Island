@@ -87,11 +87,11 @@ const DepositTab = ({
   return (
     <form onSubmit={handleSubmit(handleDeposit)} className="w-full">
       <div className="flex flex-col w-full h-full justify-between">
-        <div className="flex items-center justify-between opacity-40 text-sm">
+        <div className="flex items-center justify-between text-sm">
           <span>Deposit fee:</span>
           <span className="mx-2">{depositFee}%</span>
         </div>
-        <div className="flex items-center justify-between opacity-40 text-xl">
+        <div className="flex items-center justify-between text-xl">
           <span>Wallet:</span>
           <span className="mx-2">{formatNumber(+get(bank, "balances[0]", "0"), 3)}</span>
         </div>

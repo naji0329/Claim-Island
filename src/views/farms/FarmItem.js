@@ -211,7 +211,7 @@ const FarmItem = ({
   };
 
   return (
-    <div className="FarmItem">
+    <div className="FarmItem bg-opacity-90">
       <div className="w-1/4 m-2 mx-auto text-center px-4 py-2 badge badge-success">#{clamId}</div>
       <div className="flex-1 justify-center md:flex items-center p-4">
         <button onClick={(e) => onViewDetails(e, clam)}>

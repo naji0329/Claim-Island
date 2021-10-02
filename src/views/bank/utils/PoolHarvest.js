@@ -118,7 +118,7 @@ const PoolHarvest = ({
 
   return (
     <div className="w-full" style={{ padding: "0 2%" }}>
-      <div className="flex flex-col justify-between h-full px-4 py-4 rounded-xl bg-gray-200">
+      <div className="flex flex-col justify-between h-full px-4 py-4 rounded-xl bg-gray-100">
         <div className="w-full flex flex-row justify-between items-center">
           <p className="font-aristotelica-bold text-2xl">Harvest</p>
           {isNativePool && (
@@ -225,7 +225,7 @@ const PoolHarvest = ({
               <div>Fully unlocks in:</div>
             </div>
             <div className="flex flex-col">
-              <div className="text-right">{renderNumber(+rewards.totalLocked, 2)} GEM</div>
+              <div className="text-right">{renderNumber(+rewards.totalVested, 2)} GEM</div>
               <div className="text-right">{timeLeft}</div>
             </div>
           </div>
@@ -241,7 +241,7 @@ const PoolHarvest = ({
             Harvest
             <FontAwesomeIcon icon={faInfoCircle} className="ml-1" />
           </ActionButton>
-          <div className="w-72 p-2 card dropdown-content bg-gray-800 text-primary-content text-sm">
+          <div className="w-72 p-4 card dropdown-content bg-gray-800 text-primary-content text-sm">
             <p className="mb-2">
               50% of GEM earned is locked for a 7-day vesting period. During this time the vesting
               GEM can still be used to purchase Clams
@@ -249,7 +249,7 @@ const PoolHarvest = ({
             {rewards && (
               <>
                 <p className="mb-2">
-                  You currently have {renderNumber(+rewards.totalLocked, 2)} GEM rewards vesting.
+                  You currently have {renderNumber(+rewards.totalVested, 2)} GEM rewards vesting.
                 </p>
                 <a className="link" onClick={toggleBreakdownModal}>
                   View vesting breakdown
@@ -282,7 +282,7 @@ const PoolHarvest = ({
                       key={rewardData.lockedUntilDay}
                       type={"Farming locked"}
                       amount={renderNumber(rewardData.amount)}
-                      unlockDay={rewardData.lockedUntilDay - rewards.currentDay}
+                      unlockDay={rewardData.lockedUntilDay}
                     />
                   ))}
 
@@ -305,7 +305,7 @@ const PoolHarvest = ({
 
                   <tr>
                     <th>Total vesting GEM:</th>
-                    <td className="text-right">{renderNumber(+rewards.totalLocked, 3)}</td>
+                    <td className="text-right">{renderNumber(+rewards.totalVested, 3)}</td>
                     <td />
                   </tr>
                 </tbody>
