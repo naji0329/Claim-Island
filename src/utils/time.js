@@ -1,15 +1,20 @@
 import moment from "moment";
 
-export const secondsToFormattedTime = (seconds) => {
-  if (seconds === 0) return "00:00:00";
+export const secondsToFormattedTime = (timeinSeconds) => {
+  let seconds = Math.floor(Number(timeinSeconds));
+  const days = Math.floor(seconds / (24 * 60 * 60));
+  seconds -= Math.floor(days * (24 * 60 * 60));
+  const hours = Math.floor(seconds / (60 * 60));
+  seconds -= Math.floor(hours * (60 * 60));
+  const minutes = Math.floor(seconds / 60);
+  seconds -= Math.floor(minutes * 60);
 
-  const isoTime = new Date(seconds * 1000).toISOString();
-  const daysLeft = isoTime.substr(8, 2);
-  const ending = daysLeft > 1 ? "s" : "";
+  const dDisplay = days > 0 ? days + (days == 1 ? " day, " : " days, ") : "";
+  const hDisplay = hours > 0 ? hours + ":" : "";
+  const mDisplay = minutes > 0 ? minutes + ":" : "";
+  const sDisplay = seconds > 0 ? seconds : "";
 
-  return +daysLeft > 0
-    ? `${daysLeft} day${ending} ${isoTime.substr(11, 8)}`
-    : isoTime.substr(11, 8);
+  return dDisplay + hDisplay + mDisplay + sDisplay;
 };
 
 export const formatMsToDuration = (remainingMs) => {
