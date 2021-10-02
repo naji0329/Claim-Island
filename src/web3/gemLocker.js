@@ -242,6 +242,11 @@ export const fetchRewards = async (chainId) => {
   const startTime = await startTimestamp();
   const hasLockedPearlRewards = +(await totalPearlRewardsLocked()) > 0;
 
+  const totalFarmingRewards = farmingRewards.reduce((acc, curr) => acc + curr.amount, 0);
+  const totalClamRewards = vestedClamRewards.reduce((acc, curr) => acc + +curr.bonusRemaining, 0);
+  const totalPearlRewards = vestedPearlRewards.reduce((acc, curr) => acc + +curr.bonusRemaining, 0);
+  const totalVested = totalFarmingRewards + totalClamRewards + totalPearlRewards;
+
   const rewards = {
     startTime,
     currentDay,
@@ -253,6 +258,7 @@ export const fetchRewards = async (chainId) => {
     availableClamRewards,
     availablePearlRewards,
     hasLockedPearlRewards,
+    totalVested,
   };
 
   return rewards;

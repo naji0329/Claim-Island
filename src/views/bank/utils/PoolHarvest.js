@@ -225,7 +225,7 @@ const PoolHarvest = ({
               <div>Fully unlocks in:</div>
             </div>
             <div className="flex flex-col">
-              <div className="text-right">{renderNumber(+rewards.totalLocked, 2)} GEM</div>
+              <div className="text-right">{renderNumber(+rewards.totalVested, 2)} GEM</div>
               <div className="text-right">{timeLeft}</div>
             </div>
           </div>
@@ -249,7 +249,7 @@ const PoolHarvest = ({
             {rewards && (
               <>
                 <p className="mb-2">
-                  You currently have {renderNumber(+rewards.totalLocked, 2)} GEM rewards vesting.
+                  You currently have {renderNumber(+rewards.totalVested, 2)} GEM rewards vesting.
                 </p>
                 <a className="link" onClick={toggleBreakdownModal}>
                   View vesting breakdown
@@ -282,7 +282,7 @@ const PoolHarvest = ({
                       key={rewardData.lockedUntilDay}
                       type={"Farming locked"}
                       amount={renderNumber(rewardData.amount)}
-                      unlockDay={rewardData.lockedUntilDay - rewards.currentDay}
+                      unlockDay={rewardData.lockedUntilDay}
                     />
                   ))}
 
@@ -305,7 +305,7 @@ const PoolHarvest = ({
 
                   <tr>
                     <th>Total vesting GEM:</th>
-                    <td className="text-right">{renderNumber(+rewards.totalLocked, 3)}</td>
+                    <td className="text-right">{renderNumber(+rewards.totalVested, 3)}</td>
                     <td />
                   </tr>
                 </tbody>
