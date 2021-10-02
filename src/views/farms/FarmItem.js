@@ -102,7 +102,7 @@ const FarmItem = ({
     if (readyForPearl) {
       setButtonText("Collect Pearl");
       setAction("collect");
-    } else if (canProducePearl) {
+    } else if (timeLeft === 0 && canProducePearl) {
       setButtonText("Open Clam");
       setAction("open");
     }
