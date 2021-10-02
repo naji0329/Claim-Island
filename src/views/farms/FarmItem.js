@@ -75,7 +75,7 @@ const FarmItem = ({
     const init = async () => {
       try {
         const _productionTimeTotal = await getRemainingPearlProductionTime(clamId);
-        const _pearlProductionTime = +pearlProductionStart + +_productionTimeTotal;
+        const _pearlProductionTime = +now + +_productionTimeTotal;
         setPearlProductionTime(_pearlProductionTime);
 
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId, address);
@@ -122,14 +122,6 @@ const FarmItem = ({
     harvestableShell: 1 + pearlsProduced * 0.1,
     remainingLifeSpan: +pearlProductionCapacity - +pearlsProduced,
   };
-
-  // const onClickViewPearl = async () => {
-  //   setButtonText("Hold on ...");
-  //   const success = await onViewPearl(clamId);
-  //   if (!success) {
-  //     setButtonText("View Pearl");
-  //   }
-  // };
 
   const onClickOpenClam = async () => {
     try {

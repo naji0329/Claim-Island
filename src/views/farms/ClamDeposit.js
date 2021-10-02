@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
-import { chain, get } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
@@ -27,6 +26,7 @@ import {
   depositWithoutStaking,
 } from "./character/clamDeposit";
 import { useEthers } from "@usedapp/core";
+import { secondsToFormattedTime } from "utils/time";
 
 const ClamItem = ({
   clamId,
@@ -158,9 +158,7 @@ const ClamItem = ({
       <div className="details">
         <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
           <div className="grid-title">Pearl ETA:</div>
-          <div className="grid-value">
-            {new Date(remainingTime * 1000).toISOString().substr(11, 8)}
-          </div>
+          <div className="grid-value">{secondsToFormattedTime(remainingTime)}</div>
           <div className="grid-title">Lifespan:</div>
           <div className="grid-value">
             {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced} pearls
