@@ -9,7 +9,7 @@ export const secondsToFormattedTime = (timeinSeconds) => {
   const minutes = Math.floor(seconds / 60);
   seconds -= Math.floor(minutes * 60);
 
-  const dDisplay = days > 0 ? days + (days == 1 ? " day, " : " days, ") : "";
+  const dDisplay = days + "d, ";
   const hDisplay = hours > 0 ? hours + ":" : "";
   const mDisplay = minutes > 0 ? minutes + ":" : "";
   const sDisplay = seconds > 0 ? seconds : "";
