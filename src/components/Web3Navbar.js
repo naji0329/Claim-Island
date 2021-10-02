@@ -67,7 +67,7 @@ const ErrorAlert = ({ title, description, onClose }) => (
 
 const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
 const formatNFT = (value) => (value ? formatUnits(value, 0) : "0");
-const formatGem = (value) => (value ? formatUnits(value, 18) : "0");
+const formatBEP20 = (value) => (value ? formatUnits(value, 18) : "0");
 
 const Web3Navbar = ({ updateAccount, ...redux }) => {
   //  is called several times thus need a state to lower the renders
@@ -75,17 +75,19 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   const [activateBnbBalance, setActivateBnbBalance] = useState("0");
   const [activateClamBalanceInSafe, setActivateClamBalanceInSafe] = useState("0");
   const [activateClamBalanceInFarm, setActivateClamBalanceInFarm] = useState("0");
-  const [activateGemBalance, setActivateGemBalance] = useState("0");
   const [activatePearlBalanceInSafe, setActivatePearlBalanceInSafe] = useState("0");
   const [activatePearlBalanceInFarm, setActivatePearlBalanceInFarm] = useState("0");
   const [activateChainId, setActivateChainId] = useState();
   const [activateGemPrice, setActivateGemPrice] = useState("0");
   const [activateShellPrice, setActivateShellPrice] = useState("0");
+  const [activateGemBalance, setActivateGemBalance] = useState("0");
+  const [activateShellBalance, setActivateShellBalance] = useState("0");
 
   const { activateBrowserWallet, account, error } = useEthers();
   const clamBalance = useTokenBalance(clamNFTAddress, account);
   const pearlBalance = useTokenBalance(pearlNFTAddress, account);
   const gemBalance = useTokenBalance(gemTokenAddress, account);
+  const shellBalance = useTokenBalance(shellTokenAddress, account);
   const bnbBalance = useEtherBalance(account);
   const web3 = getWeb3();
   const location = useLocation();
@@ -122,6 +124,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
     updateAccount({
       bnbBalance: activateBnbBalance,
       gemBalance: activateGemBalance,
+      shellBalance: activateShellBalance,
       clamBalance: activateClamBalanceInSafe,
       pearlBalance: activatePearlBalanceInSafe,
       error: isBSChain ? null : activateError,
@@ -197,11 +200,17 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
 
   useEffect(() => {
     // gemBalance is bignumber
-    const balance = formatGem(gemBalance);
-    // console.log("useEffect", { balance });
-    if (balance !== activateGemBalance) {
-      // balance is string
-      setActivateGemBalance(balance);
+    const gemBal = formatBEP20(gemBalance);
+    const shellBal = formatBEP20(shellBalance);
+
+    if (gemBal !== activateGemBalance) {
+      // gemBal is string
+      setActivateGemBalance(new BigNumber(gemBal).toFixed(2));
+    }
+
+    if (shellBal !== activateShellBalance) {
+      // shellBal is string
+      setActivateShellBalance(new BigNumber(shellBal).toFixed(2));
     }
   }, [gemBalance]);
 
@@ -267,6 +276,11 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <span className="p-1 text-sm text-gray-200 font-bold font-sans">
                     Gem Price: $ {activateGemPrice} | Shell Price: $ {activateShellPrice}
+                  </span>
+                </div>
+                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
+                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                    Gem Balance: $ {activateGemBalance} | Shell Balance: $ {activateShellBalance}
                   </span>
                 </div>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">

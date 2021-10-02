@@ -8,6 +8,7 @@ const initialState = {
     clamBalance: "0",
     pearlBalance: "0",
     gemBalance: "0",
+    shellBalance: "0",
     clamToCollect: null,
     error: undefined,
     isConnected: undefined,
