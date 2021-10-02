@@ -8,6 +8,12 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ROUTES from "./router";
 import NavigationButton from "./components/NavigationButton";
 
+// Google Analytics
+import ReactGA from "react-ga";
+ReactGA.initialize("G-G719EPWR37");
+
+import RouteChangeTracker from "./components/utils/RouteChangeTracker";
+
 // Main App Component
 const App = () => {
   const { account, connect } = useWallet();
@@ -59,6 +65,7 @@ const App = () => {
               })}
             </Switch>
           </div>
+          <RouteChangeTracker />
           <NavigationButton />
           <ToastContainer />
         </Router>

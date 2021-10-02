@@ -6,7 +6,7 @@ import { ModalProvider } from "@pancakeswap-libs/uikit";
 // import { UseWalletProvider } from '@binance-chain/bsc-use-wallet'
 import * as bsc from "@binance-chain/bsc-use-wallet";
 import { ThemeProvider } from "styled-components";
-import { light, dark } from "@pancakeswap-libs/uikit";
+import { dark } from "@pancakeswap-libs/uikit";
 import { ChainId, DAppProvider } from "@usedapp/core";
 
 import { Provider } from "redux-zero/react";
