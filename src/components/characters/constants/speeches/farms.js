@@ -3,12 +3,16 @@ export const FARM_SPEECH = {
     welcome: {
       text: `Welcome to the Clam Farm! You can deposit your Clams here to produce Pearls, or check on the progress of Clams you have already deposited.`,
       dismiss: false,
+      skip: true,
+      hideable: true,
     },
 
     welcome_next: {
       text: ({ gem }) =>
         `It will just cost ${gem} $GEM to produce a Pearl. Remember that each Clam can only produce a specific number of Pearls before it dies!`,
       dismiss: true,
+      skip: true,
+      hideable: true,
     },
 
     connect: {
@@ -43,7 +47,7 @@ export const FARM_SPEECH = {
       skip: false,
     },
     depositWithoutStaking: {
-      text: `Depositing clams without staking in a native pool will cause gem boost to be lost permanently. Do you want to proceed ?`,
+      text: `Depositing a Clam without any deposits in native investment pools in the Bank will cause its GEM boost to be lost permanently. Are you sure you want to proceed?`,
       next: `purchase`,
       dismiss: false,
       skip: false,
