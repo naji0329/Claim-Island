@@ -36,12 +36,12 @@ export const depositClamGemPrompt = ({ updateCharacter, gems, dismissModal }, cb
 export const depositClamError = ({ updateCharacter, err }) => {
   updateCharacter({
     name: "al",
-    action: 'farms.depositClamError.text',
+    action: "farms.depositClamError.text",
     variables: { errorMsg: err.message },
     button: {
       text: "Dismiss",
-      dismiss: true
-    }
+      dismiss: true,
+    },
   });
 };
 

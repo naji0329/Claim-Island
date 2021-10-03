@@ -92,6 +92,12 @@ const ClamItem = ({
     setInTx(false);
   };
 
+  const triggerClamDepositSuccess = () => {
+    setButtonText("Deposit Clam");
+    toast.success("Your clam has been deposited!. You can choose to deposit another clam.");
+    depositClamSuccess({ updateCharacter });
+  };
+
   const executeDeposit = async () => {
     try {
       const gemBalance = await getBalance(address).then((v) => new BigNumber(v)); // from string to BN
@@ -118,18 +124,19 @@ const ClamItem = ({
             const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
             if (hasClamBeenStakeByUserBefore) {
               await stakeClamAgain(clamId);
+              triggerClamDepositSuccess();
             } else {
               if (!isNativeStaker) {
                 depositWithoutStaking({ updateCharacter, dismissModal: toggleModal }, async () => {
                   await stakeClam(clamId);
+                  triggerClamDepositSuccess();
                 });
               } else {
                 await stakeClam(clamId);
+                triggerClamDepositSuccess();
               }
             }
-            setButtonText("Deposit Clam");
-            toast.success("Your clam has been deposited!. You can choose to deposit another clam.");
-            depositClamSuccess({ updateCharacter });
+
             setRefreshClams(true);
           } catch (err) {
             updateAccount({ error: err.message });

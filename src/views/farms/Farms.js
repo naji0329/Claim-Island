@@ -85,7 +85,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     setClamsStaked(stakedClamsImg);
   };
 
-  // When Deposit Clam Butto is clicked - open the modal to show list of clams
+  // When Deposit Clam Button is clicked - open the modal to show list of clams
   const onDepositClam = () => {
     setModal(MODAL_OPTS.DEPOSIT_CLAM);
     toggleModal();
