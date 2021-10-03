@@ -14,7 +14,7 @@ export default function Model(props) {
           castShadow
           receiveShadow
           geometry={nodes.t_spiral2.geometry}
-          position={[-0.006743, -0.025817, -0.083647]}
+          position={[-0.006743, -0.023918, -0.083647]}
           scale={0.323871}
         >
           <meshStandardMaterial
