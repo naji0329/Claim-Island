@@ -90,10 +90,10 @@ export default ({ dna, dnaDecoded }) => {
       ),
     },
     {
-      title: "Grade",
+      title: "Grading",
       description: (
         <div>
-          <RowStat label="Status" value={grade} />
+          <RowStat label="Grade" value={grade} />
           <RowStat label="Surface" value={get(dnaDecoded, "surface")} />
           <RowStat label="Lustre" value={get(dnaDecoded, "lustre")} />
           <RowStat label="Nacre Quality" value={get(dnaDecoded, "nacreQuality")} />
