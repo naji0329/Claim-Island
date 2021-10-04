@@ -230,6 +230,19 @@ const getVestedNftRewards = async (chainId, isClam) => {
   }, []);
 };
 
+export const getVestedGem = async (chainId) => {
+  const farmingRewards = await getFarmingRewards(chainId);
+  const vestedClamRewards = await getVestedNftRewards(chainId, true);
+  const vestedPearlRewards = await getVestedNftRewards(chainId);
+
+  const totalFarmingRewards = farmingRewards.reduce((acc, curr) => acc + curr.amount, 0);
+  const totalClamRewards = vestedClamRewards.reduce((acc, curr) => acc + +curr.bonusRemaining, 0);
+  const totalPearlRewards = vestedPearlRewards.reduce((acc, curr) => acc + +curr.bonusRemaining, 0);
+  const totalVested = totalFarmingRewards + totalClamRewards + totalPearlRewards;
+
+  return totalVested;
+};
+
 export const fetchRewards = async (chainId) => {
   const currentDay = await getCurrentDay();
   const farmingRewards = await getFarmingRewards(chainId);
