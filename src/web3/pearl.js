@@ -42,6 +42,12 @@ export const getPearlByIndex = async (account, index) => {
   return value;
 };
 
+export const ownerOf = async (tokenId) => {
+  const pearlNft = contractFactory({ abi: pearlNFTAbi, address: pearlNFTAddress });
+  const value = await pearlNft.methods.ownerOf(tokenId).call();
+  return value;
+}
+
 export const prepTokenOfOwnerByIndexMulticall = (address, length) => {
   const contractCalls = [];
   for (let index = 0; index < Number(length); index++) {
