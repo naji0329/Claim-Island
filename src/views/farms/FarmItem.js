@@ -17,7 +17,7 @@ import {
   gemsTransferred,
 } from "web3/pearlFarm";
 import { canCurrentlyProducePearl, canStillProducePearls } from "web3/clam";
-import { nextPearlId, getPearlData, ownerOf } from "web3/pearl";
+import { getPearlData, tokenOfOwnerByIndex, accountPearlBalance } from "web3/pearl";
 import { formatFromWei } from "web3/shared";
 import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
 
@@ -151,17 +151,12 @@ const FarmItem = ({
           setInTx(true);
           setButtonText("Hold on ...");
 
-          const nextPearlId = await nextPearlId();
-
           await collectPearl(clamId);
-          let ownerMatch = false;
-          let pearlId = nextPearlId - 1;
-          while(!ownerMatch) {
-            pearlId++;
-            let pearlOwner = await ownerOf(pearlId);
-            address == pearlOwner ? ownerMatch = true : ownerMatch = false;
-          }
-          const { dna: pearlDna } = await getPearlData(pearlId);
+
+          const userBalanceOfPearls = await accountPearlBalance(address);
+          const lastUsersPearlId = await tokenOfOwnerByIndex(address, +userBalanceOfPearls - 1);
+
+          const { dna: pearlDna } = await getPearlData(lastUsersPearlId);
           const pearlDnaDecoded = await getPearlDNADecoded(pearlDna);
 
           const viewPearl = () => {
