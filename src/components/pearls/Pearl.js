@@ -70,7 +70,7 @@ export const Pearl = (props) => {
       envMap.dispose();
       emissiveMap.dispose();
     };
-  }, [map, envMap, emissiveMap]);
+  }, [map, envMap, emissiveMap, pearlDna]);
 
   // check if cache api image exists
   const checkImgExists = async (cache) => {

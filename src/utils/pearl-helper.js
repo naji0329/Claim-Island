@@ -69,3 +69,9 @@ export const getEmissiveIntensity = (bodyHSV, overtoneHSV, lustre) => {
 
   return eInt;
 };
+
+export const getPearlProductionTime = (pearlProductionStart, productionTimeTotal) => {
+  const pearlProductionTime = +pearlProductionStart + +productionTimeTotal;
+  const now = Math.round(Date.now() / 1000);
+  return now > pearlProductionTime ? 0 : pearlProductionTime - now;
+};

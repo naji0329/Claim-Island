@@ -43,9 +43,11 @@ export const Clam = (props) => {
   useEffect(() => {
     renderImg();
     return () => {
-      textures.forEach((texture) => {
-        texture.dispose();
-      });
+      if (textures) {
+        textures.forEach((texture) => {
+          texture.dispose();
+        });
+      }
     };
   }, []);
 

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Accordion from "../../components/Accordion";
+import Accordion from "components/Accordion";
 import { get } from "lodash";
 
-import { Pearl3DView } from "../../components/pearl3DView";
+import { Pearl3DView } from "components/pearl3DView";
+import { Controls3DView } from "components/controls3DView";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
@@ -46,7 +47,7 @@ const calculateSize = (size) => {
   }
 };
 
-export default ({ dna, dnaDecoded }) => {
+export default ({ dna, dnaDecoded, onClickNext, onClickPrev }) => {
   const [showTraits, setShowTraits] = useState(false);
   const [grade, setGrade] = useState(0);
   const [size, setSize] = useState(0);
@@ -143,6 +144,8 @@ export default ({ dna, dnaDecoded }) => {
             </button>
           </Link>
         </div>
+
+        <Controls3DView onClickNext={onClickNext} onClickPrev={onClickPrev} />
       </div>
     </>
   );

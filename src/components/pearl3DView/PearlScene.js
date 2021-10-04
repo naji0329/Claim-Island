@@ -27,7 +27,7 @@ export const PearlScene = (props) => {
       }}
     >
       <CameraControls />
-      <Suspense fallback={<Loading3DView />}>
+      <Suspense fallback={<Loading3DView styles={{ transform: "translate(0, -120px)" }} />}>
         {children}
         <PearlBackground />
       </Suspense>

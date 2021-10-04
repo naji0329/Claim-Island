@@ -92,7 +92,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   };
 
   // when "View Pearl" is clicked - open the modal for the selected pearl
-  const onViewDetails = (clam, clamProcessing) => {
+  const onViewDetails = (clam) => {
     setClamProcessing(clamProcessing);
     setSelectedClam(clam);
     setModal(MODAL_OPTS.CLAM_DETAILS);
@@ -206,6 +206,19 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     return clamsUptd;
   };
 
+  const isPrevButtonShown = selectedClam !== clamsStaked[0];
+  const isNextButtonShown = selectedClam !== clamsStaked[clamsStaked.length - 1];
+
+  const onClickNext = () => {
+    const currentClamIndex = clamsStaked.findIndex((clam) => clam === selectedClam);
+    setSelectedClam(clamsStaked[currentClamIndex + 1]);
+  };
+
+  const onClickPrev = () => {
+    const currentAssetIndex = clamsStaked.findIndex((clam) => clam === selectedClam);
+    setSelectedClam(clamsStaked[currentAssetIndex - 1]);
+  };
+
   useEffect(async () => {
     // wallet is connected
     if (address || refreshClams) {
@@ -285,6 +298,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
             clam={selectedClam}
             clamProcessing={clamProcessing}
             updateAccount={updateAccount}
+            onClickPrev={isPrevButtonShown && onClickPrev}
+            onClickNext={isNextButtonShown && onClickNext}
           />
         ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
           <ClamDeposit
@@ -312,7 +327,7 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
                     <FarmItem
                       key={i}
                       {...clam}
-                      onViewDetails={(e, clamProcessing) => onViewDetails(clam, clamProcessing, i)}
+                      onViewDetails={() => onViewDetails(clam)}
                       onWithdrawClam={() => onWithdrawClam(clam)}
                       onViewPearl={onViewPearl}
                       updateCharacter={updateCharacter}
