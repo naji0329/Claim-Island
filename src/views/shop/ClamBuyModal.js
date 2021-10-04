@@ -191,7 +191,7 @@ const ClamBuyModal = ({
                           </div>
                           <div className="flex justify-between">
                             <span>Vested:</span>
-                            <span>{formatNumber(+formatEther(lockedGem), 3)} GEM</span>
+                            <span>{formatNumber(+lockedGem, 3)} GEM</span>
                           </div>
                           <div className="flex justify-between">
                             <span>1 CLAM =</span>
@@ -255,7 +255,7 @@ const ClamBuyModal = ({
                   ) : (
                     <button
                       type="submit"
-                      className={`block uppercase text-center shadow hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl 
+                      className={`block uppercase text-center shadow hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl
                         ${canBuy ? "bg-blue-600" : "btn-disabled bg-grey-light"}
                         `}
                     >
