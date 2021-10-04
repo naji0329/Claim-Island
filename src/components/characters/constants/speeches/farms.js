@@ -66,7 +66,7 @@ export const FARM_SPEECH = {
     },
     pearlCollectGemprompt: {
       text: ({ gems }) =>
-        `Your ${gems} $GEM deposit will be consumed to collect the pearl. Do you want to proceed?`,
+        `Remember When you deposited your clam here you added ${gems} $GEM with it? So this $GEM will be spent now to collect the pearl. Do you want to proceed?`,
       next: `purchase`,
       dismiss: false,
       skip: false,

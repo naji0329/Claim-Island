@@ -24,9 +24,9 @@ export const totalPearlSupply = async () => {
   return totalSupply;
 };
 
-export const nextPearlId = async () => {
+export const tokenOfOwnerByIndex = async (account, index) => {
   const pearlNft = contractFactory({ abi: pearlNFTAbi, address: pearlNFTAddress });
-  const value = await pearlNft.methods.nextPearlId().call();
+  const value = await pearlNft.methods.tokenOfOwnerByIndex(account, index).call();
   return value;
 };
 
@@ -39,6 +39,12 @@ export const getPearlData = async (tokenId) => {
 export const getPearlByIndex = async (account, index) => {
   const pearlNft = contractFactory({ abi: pearlNFTAbi, address: pearlNFTAddress });
   const value = await pearlNft.methods.tokenOfOwnerByIndex(account, index).call();
+  return value;
+};
+
+export const ownerOf = async (tokenId) => {
+  const pearlNft = contractFactory({ abi: pearlNFTAbi, address: pearlNFTAddress });
+  const value = await pearlNft.methods.ownerOf(tokenId).call();
   return value;
 };
 
