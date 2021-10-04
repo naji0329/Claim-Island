@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useEthers } from "@usedapp/core";
+import { Skeleton } from "@pancakeswap-libs/uikit";
+
 import { getPearlDataByIds } from "web3/shared";
 import { clamHasGeneratedBoost } from "web3/gemLocker";
 import { getRemainingPearlProductionTime } from "web3/pearlFarm";
 import { Clam3DView } from "components/clam3DView";
 import { Controls3DView } from "components/controls3DView";
+import { secondsToFormattedTime } from "utils/time";
+
 import PearlInfo from "../bank/utils/PearlInfo";
-import { secondsToFormattedTime } from "../../utils/time";
-import { getPearlProductionTime } from "utils/pearl-helper";
-import { Skeleton } from "@pancakeswap-libs/uikit";
 
 const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
   const [producedPearls, setProducedPearls] = useState([]);
@@ -18,7 +19,7 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
   const remainingFormattedTime = secondsToFormattedTime(timeLeft);
   const { chainId } = useEthers();
   const { clamDataValues } = clam;
-  const { dna, pearlsProduced, pearlProductionCapacity, pearlProductionStart } = clamDataValues;
+  const { dna, pearlsProduced, pearlProductionCapacity } = clamDataValues;
   const harvestableShell = 1 + pearlsProduced * 0.1;
   const remainingLifeSpan = pearlProductionCapacity - pearlsProduced;
 
@@ -32,12 +33,8 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
         const hasGeneratedBonus = await clamHasGeneratedBoost(clam.clamId);
         setClamHasGeneratedBonus(hasGeneratedBonus);
 
-        const productionTimeTotal = await getRemainingPearlProductionTime(clam.clamId);
-        const pearlProductionTime = getPearlProductionTime(
-          pearlProductionStart,
-          productionTimeTotal
-        );
-        setTimeLeft(pearlProductionTime);
+        const remainingPearlProductionTime = await getRemainingPearlProductionTime(clam.clamId);
+        setTimeLeft(remainingPearlProductionTime);
       } catch (err) {
         updateAccount({ error: err.message });
       } finally {
@@ -50,7 +47,9 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeLeft(timeLeft - 1);
+      if (timeLeft > 0) {
+        setTimeLeft(timeLeft - 1);
+      }
     }, 1000);
     return () => clearInterval(interval);
   }, [timeLeft, clam]);

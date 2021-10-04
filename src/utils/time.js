@@ -1,20 +1,16 @@
 import moment from "moment";
 
 export const secondsToFormattedTime = (timeinSeconds) => {
-  let seconds = Math.floor(Number(timeinSeconds));
-  const days = Math.floor(seconds / (24 * 60 * 60));
-  seconds -= Math.floor(days * (24 * 60 * 60));
-  const hours = Math.floor(seconds / (60 * 60));
-  seconds -= Math.floor(hours * (60 * 60));
-  const minutes = Math.floor(seconds / 60);
-  seconds -= Math.floor(minutes * 60);
+  const seconds = Math.floor(Number(timeinSeconds));
 
-  const dDisplay = days + "d, ";
-  const hDisplay = hours > 0 ? hours + ":" : "";
-  const mDisplay = minutes > 0 ? minutes + ":" : "";
-  const sDisplay = seconds > 0 ? seconds : "";
+  if (seconds <= 0) {
+    return "";
+  }
 
-  return dDisplay + hDisplay + mDisplay + sDisplay;
+  const dDisplay = Math.floor(seconds / (24 * 60 * 60)) + "d, ";
+  const hhmmssDisplay = new Date(timeinSeconds * 1000).toISOString().substr(11, 8);
+
+  return dDisplay + hhmmssDisplay;
 };
 
 export const formatMsToDuration = (remainingMs) => {
