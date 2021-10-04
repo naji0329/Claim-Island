@@ -66,7 +66,7 @@ const ClamBuyModal = ({
 
   useEffect(() => {
     const balanceBN = new BigNumber(parseEther(gemBalance).toString());
-    const lockedBN = new BigNumber(lockedGem);
+    const lockedBN = new BigNumber(lockedGem*10e18);
     const totalBN = balanceBN.plus(lockedBN);
     setCanBuy(totalBN.isGreaterThanOrEqualTo(new BigNumber(clamPrice)));
   }, [gemBalance, clamPrice, lockedGem]);
@@ -74,7 +74,7 @@ const ClamBuyModal = ({
   const onSubmit = async () => {
     if (new BigNumber(lockedGem).gt(0)) {
       buyClamWithVested(
-        { address, updateCharacter, gem: formatNumber(+formatEther(lockedGem), 3) },
+        { address, updateCharacter, gem: formatNumber(+lockedGem, 3) },
         async () => await executeBuy(true),
         async () => await executeBuy()
       );
