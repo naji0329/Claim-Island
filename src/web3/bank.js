@@ -11,6 +11,7 @@ import { aggregate } from "./multicall";
 import { poolAssets } from "../views/bank/poolsAssets";
 import { getUsdValueOfPair, getGemPrice, getUsdPriceOfToken } from "./pancakeRouter";
 import { totalSupply } from "./bep20";
+import { formatNumber } from "views/bank/utils";
 
 const bank = () =>
   contractFactory({
@@ -288,9 +289,8 @@ export const getAllPools = async ({ address, chainId }) => {
 
           totalAllocation,
           multiplier: ((Number(poolInfo.allocPoint) / Number(totalAllocation)) * 100).toFixed(1),
-          userDepositAmountInPool:
-            Math.round(formatFromWei(userInfoValues[index].userValues.amount) * 100) / 100,
-          userRewardAmountInPool: Math.round(formatFromWei(pending) * 100) / 100,
+          userDepositAmountInPool: +formatFromWei(userInfoValues[index].userValues.amount),
+          userRewardAmountInPool: +formatFromWei(pending),
           poolLpTokenBalance: poolLpTokenBalances[index],
         };
       }
