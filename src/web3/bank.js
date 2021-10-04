@@ -289,11 +289,8 @@ export const getAllPools = async ({ address, chainId }) => {
 
           totalAllocation,
           multiplier: ((Number(poolInfo.allocPoint) / Number(totalAllocation)) * 100).toFixed(1),
-          userDepositAmountInPool: formatNumber(
-            +formatFromWei(userInfoValues[index].userValues.amount),
-            2
-          ),
-          userRewardAmountInPool: Math.round(formatFromWei(pending) * 100) / 100,
+          userDepositAmountInPool: +formatFromWei(userInfoValues[index].userValues.amount),
+          userRewardAmountInPool: +formatFromWei(pending),
           poolLpTokenBalance: poolLpTokenBalances[index],
         };
       }
