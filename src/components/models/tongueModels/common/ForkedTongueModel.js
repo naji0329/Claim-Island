@@ -9,7 +9,7 @@ export default function Model(props) {
 
   return (
     <group ref={group} {...rest}>
-      <group position={[0, 0, -0.01]} scale={0.281405}>
+      <group position={[0, 0, -0.012]} scale={0.281405} rotation={[-0.0314159, 0, -0.115192]}>
         <mesh
           castShadow
           receiveShadow

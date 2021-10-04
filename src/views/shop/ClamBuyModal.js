@@ -26,6 +26,7 @@ import {
   buyClamWithVested,
 } from "./character/BuyClam";
 import { formatNumber } from "../bank/utils";
+import { getVestedGem } from "web3/gemLocker";
 
 const Divider = () => (
   <div className="w-full flex flex-col justify-center items-center my-2">
@@ -36,7 +37,7 @@ const Divider = () => (
 );
 
 const ClamBuyModal = ({
-  account: { gemBalance, address },
+  account: { gemBalance, address, chainId },
   presale: { usersPurchasedClam },
   updateCharacter,
   updateAccount,
@@ -57,7 +58,7 @@ const ClamBuyModal = ({
     const fetchData = async () => {
       const price = await getPrice();
       setClamPrice(price);
-      const locked = await canUnlockGemVestedAmount(address);
+      const locked = await getVestedGem(chainId);
       setLockedGem(locked);
     };
     fetchData();

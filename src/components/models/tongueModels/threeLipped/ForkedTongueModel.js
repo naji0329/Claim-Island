@@ -18,9 +18,9 @@ export default function Model(props) {
           castShadow
           receiveShadow
           geometry={nodes.cc_forked4.geometry}
-          position={[0.003499, -0.002939, -0.006437]}
-          rotation={[1.467179, 0, -Math.PI]}
-          scale={0.518769}
+          position={[0, -0.013, -0.026]}
+          rotation={[1.240231, 0, -Math.PI]}
+          scale={0.518769, 0.439, 0.399}
         >
           <meshStandardMaterial
             attach="material"

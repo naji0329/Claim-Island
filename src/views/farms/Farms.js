@@ -277,8 +277,8 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       <Modal
         isShowing={isShowing}
         onClose={onModalClose}
-        title={modalSelected === MODAL_OPTS.CLAM_DETAILS ? "" : "Choose a Clam"}
-        maxWidth={modalSelected === MODAL_OPTS.CLAM_DETAILS ? "1000px" : "33%"}
+        title={modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL ? "" : "Choose a Clam"}
+        maxWidth={modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL ? "1000px" : "33%"}
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
           <ClamDetails

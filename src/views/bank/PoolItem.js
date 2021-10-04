@@ -9,7 +9,7 @@ import PoolHarvest from "./utils/PoolHarvest";
 import PoolDepositWithdraw from "./utils/PoolDepositWithdraw";
 import { getFormattedRisk } from "./utils/getFormattedRisk";
 
-import { renderPercentage, renderUsd } from "utils/number";
+import { renderPercentage, renderUsd, renderNumber } from "utils/number";
 import InfoTooltip from "components/InfoTooltip";
 import Tooltip from "components/Tooltip";
 
@@ -34,6 +34,7 @@ const PoolItem = ({
 }) => {
   const depositFee = pool.depositFeeBP / 100;
   const isAdditionalInfoVisible = selectedPool?.poolId === pool.poolId;
+  const userRewardsInPool = renderNumber(pool.userRewardAmountInPool, 2);
 
   const [urlForExchange, setUrlForExchange] = useState("");
 
@@ -123,7 +124,7 @@ const PoolItem = ({
 
         <div className="block text-sm">
           <p className="mb-1 text-xs font-semibold leading-none">$GEM to harvest</p>
-          <p className="font-bold text-center text-black-300">{pool.userRewardAmountInPool}</p>
+          <p className="font-bold text-center text-black-300">{userRewardsInPool}</p>
         </div>
 
         <div className="block text-sm">
@@ -161,7 +162,7 @@ const PoolItem = ({
           </div>
 
           <div className="flex w-2/5 h-full">
-            <PoolHarvest toggleModal={toggleModal} harvestAmount={pool.userRewardAmountInPool} />
+            <PoolHarvest toggleModal={toggleModal} harvestAmount={userRewardsInPool} />
           </div>
         </div>
       )}
