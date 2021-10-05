@@ -22,7 +22,6 @@ const Clam3DViewComponent = memo((props) => {
   } = props;
   const [textures, setTextures] = useState();
   const traits = clamViewer ? clamTraits : decodeDna(decodedDna);
-  // const traits = clamTraits;
   const clamType = traits.shellShape.toLowerCase();
   const tongueType = traits.tongue.toLowerCase();
 
