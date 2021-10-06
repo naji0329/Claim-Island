@@ -66,21 +66,22 @@ const ClamBuyModal = ({
 
   useEffect(() => {
     const balanceBN = new BigNumber(parseEther(gemBalance).toString());
-    const lockedBN = new BigNumber(lockedGem*10e18);
+    const lockedBN = 0;
+    //const lockedBN = new BigNumber(lockedGem * 1e18);
     const totalBN = balanceBN.plus(lockedBN);
     setCanBuy(totalBN.isGreaterThanOrEqualTo(new BigNumber(clamPrice)));
   }, [gemBalance, clamPrice, lockedGem]);
 
   const onSubmit = async () => {
-    if (new BigNumber(lockedGem).gt(0)) {
+    /*if (new BigNumber(lockedGem).gt(0)) {
       buyClamWithVested(
         { address, updateCharacter, gem: formatNumber(+lockedGem, 3) },
         async () => await executeBuy(true),
         async () => await executeBuy()
       );
-    } else {
+    } else {*/
       await executeBuy();
-    }
+    //}
   };
 
   const executeBuy = async (withVested) => {
@@ -91,7 +92,7 @@ const ClamBuyModal = ({
     await infiniteApproveSpending(address, clamShopAddress, clamPrice);
 
     try {
-      withVested ? await buyClamWithVestedTokens(address) : buyClam(address);
+      withVested ? await buyClamWithVestedTokens(address) : await buyClam(address);
 
       buyClamSuccess({ updateCharacter }); // character speaks
       setIsLoading(false);
