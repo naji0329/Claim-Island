@@ -37,7 +37,7 @@ const Divider = () => (
 );
 
 const ClamBuyModal = ({
-  account: { gemBalance, address, chainId },
+  account: { gemBalance, address, chainId, clamToCollect },
   presale: { usersPurchasedClam },
   updateCharacter,
   updateAccount,
@@ -52,7 +52,7 @@ const ClamBuyModal = ({
   const [lockedGem, setLockedGem] = useState(0);
   const [canBuy, setCanBuy] = useState(false);
 
-  const { register, handleSubmit } = useForm();
+  const { handleSubmit } = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,28 +60,38 @@ const ClamBuyModal = ({
       setClamPrice(price);
       const locked = await getVestedGem(chainId);
       setLockedGem(locked);
+      if (address) {
+        const clamToCollect = await checkHasClamToCollect(address);
+        updateAccount({
+          clamToCollect: clamToCollect === zeroHash ? null : clamToCollect,
+        });
+      }
     };
     fetchData();
   }, []);
 
   useEffect(() => {
     const balanceBN = new BigNumber(parseEther(gemBalance).toString());
-    const lockedBN = 0;
-    //const lockedBN = new BigNumber(lockedGem * 1e18);
+    const lockedBN = new BigNumber(lockedGem * 1e18);
     const totalBN = balanceBN.plus(lockedBN);
     setCanBuy(totalBN.isGreaterThanOrEqualTo(new BigNumber(clamPrice)));
-  }, [gemBalance, clamPrice, lockedGem]);
+
+    if (clamToCollect) {
+      setShowHatching(false);
+      setModalToShow("collect");
+    }
+  }, [gemBalance, clamPrice, lockedGem, clamToCollect]);
 
   const onSubmit = async () => {
-    /*if (new BigNumber(lockedGem).gt(0)) {
+    if (new BigNumber(lockedGem).gt(0)) {
       buyClamWithVested(
         { address, updateCharacter, gem: formatNumber(+lockedGem, 3) },
         async () => await executeBuy(true),
         async () => await executeBuy()
       );
-    } else {*/
+    } else {
       await executeBuy();
-    //}
+    }
   };
 
   const executeBuy = async (withVested) => {
@@ -97,9 +107,6 @@ const ClamBuyModal = ({
       buyClamSuccess({ updateCharacter }); // character speaks
       setIsLoading(false);
       setShowHatching(true);
-
-      setShowHatching(false);
-      setModalToShow("collect");
     } catch (e) {
       console.log("error", e.message);
       setIsLoading(false);
