@@ -3,8 +3,8 @@ import Web3 from "web3";
 import { store } from "../store/redux";
 import BigNumber from "bignumber.js";
 import { aggregate } from "./multicall";
-import { prepPearlDataMulticall, decodePearlDataFromMulticall } from "./pearl";
-import { prepGetDnaDecodedMulticall, decodeGetDnaDecodedFromMulticall } from "./pearlDnaDecoder";
+import pearlShared from "./pearl";
+import pearlDnaDecoder from "./pearlDnaDecoder";
 import clamDnaDecoder from "./dnaDecoder";
 import { prepBonusRewardsMulticall, decodeBonusRewardsFromMulticall } from "./pearlBurner";
 import {
@@ -35,14 +35,20 @@ export const MaxUint256 = new BigNumber(
 export const EmptyBytes = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
 export const getPearlDataByIds = async (tokenIds, chainId) => {
-  const pearlDataCalls = prepPearlDataMulticall(tokenIds);
+  const pearlDataCalls = pearlShared.prepPearlDataMulticall(tokenIds);
   const pearlDataResult = await aggregate(pearlDataCalls, chainId);
-  const pearlDataDecoded = decodePearlDataFromMulticall(pearlDataResult.returnData, tokenIds);
+  const pearlDataDecoded = pearlShared.decodePearlDataFromMulticall(
+    pearlDataResult.returnData,
+    tokenIds
+  );
   const pearlDnas = pearlDataDecoded.map((data) => data.pearlDataValues.dna);
 
-  const dnaDecodedCalls = prepGetDnaDecodedMulticall(pearlDnas);
+  const dnaDecodedCalls = pearlDnaDecoder.prepGetDnaDecodedMulticall(pearlDnas);
   const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
-  const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(dnaDecodedResult.returnData, tokenIds);
+  const dnaDecodedDecoded = pearlDnaDecoder.decodeGetDnaDecodedFromMulticall(
+    dnaDecodedResult.returnData,
+    tokenIds
+  );
 
   const traits = dnaDecodedDecoded.map(
     ({ dnaDecodedValues: { size, lustre, nacreQuality, surface, rarityValue } }) => ({
@@ -62,13 +68,20 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
   );
 
   const pearls = pearlDataDecoded.map((pearl) => {
+    console.log({ pearl });
     const samePearl = dnaDecodedDecoded.find(({ pearlId }) => pearlId === pearl.pearlId);
     const sameBonus = bonusRewardsDecoded.find(({ pearlId }) => pearlId === pearl.pearlId);
 
     if (samePearl && sameBonus) {
       const dnaDecoded = samePearl.dnaDecodedValues;
       const { bonusRewards } = sameBonus;
-      return { ...pearl, dnaDecoded, bonusRewards };
+      return {
+        ...pearl,
+        dnaDecoded,
+        bonusRewards,
+        tokenId: pearl.pearlId,
+        dna: pearl.pearlDataValues.dna,
+      };
     }
     console.error(`Pearl ${pearl.pearlId} from ${address} not found`);
   });
@@ -236,4 +249,40 @@ export const getOwnedClams = async ({ chainId, address, balance, clamContract })
   // const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
 
   return ownedClamsImg;
+};
+
+export const getOwnedPearls = async ({ chainId, address, balance }) => {
+  const addImagesToPearls = async (pearls) => {
+    const cache = await caches.open("clam-island");
+    const promises = await Promise.all(
+      pearls.map((pearl) => {
+        const dna = pearl.pearlDataValues["1"];
+        return cache.match(`/pearls/${dna}`);
+      })
+    );
+    const images = await Promise.all(
+      promises.map((resp) => {
+        return resp ? resp.json() : "";
+      })
+    );
+    const updated = pearls.map((pearl, index) => {
+      let pearlImg = images[index];
+      pearlImg = pearlImg ? pearlImg.img : pearlImg;
+      pearl.img = pearlImg || PEARLunknown;
+      return pearl;
+    });
+    return updated;
+  };
+
+  const tokenIdsCalls = pearlShared.prepTokenOfOwnerByIndexMulticall(address, +balance);
+  const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
+  const tokenIdsDecoded = pearlShared.decodeTokenOfOwnerByIndexFromMulticall(
+    tokenIdsResult.returnData
+  );
+
+  const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainId);
+
+  const ownedPearlsWithImg = await addImagesToPearls(ownedPearls);
+
+  return ownedPearlsWithImg;
 };

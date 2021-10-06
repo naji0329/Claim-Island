@@ -22,12 +22,8 @@ import {
 } from "../web3/constants.js";
 
 import getWeb3 from "../web3/getWeb3";
-import { EmptyBytes, getNFTs, getOwnedClams } from "web3/shared";
+import { EmptyBytes, getOwnedClams, getOwnedPearls } from "web3/shared";
 import clamContract from "web3/clam";
-import pearlContract from "web3/pearl";
-import { getDNADecoded } from "web3/dnaDecoder";
-import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
-import { calculateBonusRewards } from "web3/clamBonus";
 
 import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm";
 
@@ -242,14 +238,12 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
     }
 
     if (account && activatePearlBalanceInSafe !== "0" && activatePearls.length === 0) {
-      const pearls = await getNFTs({
+      const pearls = await getOwnedPearls({
+        chainId: activateChainId,
         address: account,
-        getByNFTIndex: pearlContract.getPearlByIndex,
-        getNFTData: pearlContract.getPearlData,
-        nftBalance: pearlBalance,
-        getDecodedDNA: getPearlDNADecoded,
-        isClam: false,
+        balance: pearlBalance,
       });
+
       setActivatePearls(pearls);
     }
   }, [clamBalance, pearlBalance]);
