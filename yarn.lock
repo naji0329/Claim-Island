@@ -13563,10 +13563,10 @@ react-feather@^2.0.3:
   dependencies:
     prop-types "^15.7.2"
 
-react-ga@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-3.3.0.tgz#c91f407198adcb3b49e2bc5c12b3fe460039b3ca"
-  integrity sha512-o8RScHj6Lb8cwy3GMrVH6NJvL+y0zpJvKtc0+wmH7Bt23rszJmnqEQxRbyrqUzk9DTJIHoP42bfO5rswC9SWBQ==
+react-ga4@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-ga4/-/react-ga4-1.1.1.tgz#3800decc791d858d27ba064d91d2b073ac50b6e7"
+  integrity sha512-x06O0Tg3nVGyBbsU27Px06sOv6u9VLXK4bDYVlMafLgK9pJYHVwhHlvwtR83mJvZRHK5HBkHwI9rdNPWM/vSWw==
 
 react-hook-form@^7.8.2:
   version "7.10.1"
