@@ -104,7 +104,10 @@ const PearlInfo = ({
                 Use
               </button>
             )}
-            <Link to={"/saferoom/pearl"} className="btn btn-outline btn-secondary ml-1">
+            <Link
+              to={`/saferoom/pearl?id=${pearl.pearlId}`}
+              className="btn btn-outline btn-secondary ml-1"
+            >
               View Details&nbsp;
               <FontAwesomeIcon icon={faExternalLinkAlt} />
             </Link>

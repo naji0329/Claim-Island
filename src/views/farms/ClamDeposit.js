@@ -184,7 +184,7 @@ const ClamItem = ({
         </div>
         <div className="flex flex-col">
           <Link
-            to={"/saferoom/clam"}
+            to={`/saferoom/clam?id=${clamId}`}
             className="font-montserrat underline"
             style={{ color: "#757575" }}
           >

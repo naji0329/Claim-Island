@@ -45,7 +45,7 @@ const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
         </div>
         <div className="flex flex-col">
           <Link
-            to={"/saferoom/clam"}
+            to={`/saferoom/clam?id=${tokenId}`}
             className="font-montserrat underline"
             style={{ color: "#757575" }}
           >

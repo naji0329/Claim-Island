@@ -67,7 +67,7 @@ const Shop = ({
     if (address && paramValue === "harvest") {
       setModalToShow("harvest");
       setUserReady(true);
-      history.push("/shop");
+      history.replace("/shop");
     }
   }, [search, address]);
 
