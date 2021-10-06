@@ -7,12 +7,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import ROUTES from "./router";
 import NavigationButton from "./components/NavigationButton";
-
-// Google Analytics
-import ReactGA from "react-ga";
-ReactGA.initialize("G-G719EPWR37");
-
-import RouteChangeTracker from "./components/utils/RouteChangeTracker";
+import { GoogleAnalytics4 } from "./components/googleAnalytics4";
 
 // Main App Component
 const App = () => {
@@ -65,7 +60,7 @@ const App = () => {
               })}
             </Switch>
           </div>
-          <RouteChangeTracker />
+          <GoogleAnalytics4 />
           <NavigationButton />
           <ToastContainer />
         </Router>
