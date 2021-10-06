@@ -77,6 +77,9 @@ module.exports = {
       spacing: {
         "4%": "4%",
       },
+      inset: {
+        "1/10": "10%",
+      },
     },
   },
   variants: {

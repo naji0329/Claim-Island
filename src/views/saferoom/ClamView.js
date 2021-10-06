@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Accordion from "../../components/Accordion";
 import { get } from "lodash";
 
 import { getClamIncubationTime } from "web3/clam";
 import { getCurrentBlockTimestamp } from "web3/index";
 
-import { Clam3DView } from "../../components/clam3DView";
+import { Clam3DView } from "components/clam3DView";
+import Accordion from "components/Accordion";
+import { Controls3DView } from "components/controls3DView";
 
 export default ({
   dna,
@@ -15,6 +16,8 @@ export default ({
   clamBonus,
   pearlProductionCapacity,
   pearlsProduced,
+  onClickNext,
+  onClickPrev,
 }) => {
   const [showTraits] = useState(false);
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
@@ -122,6 +125,7 @@ export default ({
             Sell
           </button>
         </div>
+        <Controls3DView onClickNext={onClickNext} onClickPrev={onClickPrev} />
       </div>
     </>
   );

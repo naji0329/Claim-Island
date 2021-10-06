@@ -1,14 +1,11 @@
 import { Html } from "@react-three/drei";
 
-export const Loading3DView = () => (
-  <Html>
+export const Loading3DView = ({ styles = {} }) => (
+  <Html center>
     <div
+      className="bg-gray-800 text-white px-4 py-3 rounded-lg"
       style={{
-        background: "#202035",
-        color: "white",
-        padding: "10px 15px",
-        borderRadius: "5px",
-        transform: "translate(-50%, -50%)",
+        ...styles,
       }}
     >
       LOADING

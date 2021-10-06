@@ -208,7 +208,7 @@ const FarmItem = ({
     <div className="FarmItem bg-opacity-90">
       <div className="w-1/4 m-2 mx-auto text-center px-4 py-2 badge badge-success">#{clamId}</div>
       <div className="flex-1 justify-center md:flex items-center p-4">
-        <button onClick={(e) => onViewDetails(e, clam)}>
+        <button onClick={(e) => onViewDetails(e)}>
           <img className="w-auto" src={img} />
         </button>
       </div>
@@ -252,7 +252,7 @@ const FarmItem = ({
           </div>
 
           <div className="px-4 py-2 text-center">
-            <button className="view-details" onClick={(e) => onViewDetails(e, clam)}>
+            <button className="view-details" onClick={(e) => onViewDetails(e)}>
               View Details
             </button>
           </div>

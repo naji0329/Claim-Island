@@ -65,7 +65,7 @@ const PearlInfo = ({
     };
 
     getPearlImage();
-  }, []);
+  }, [pearl]);
 
   return (
     <>
