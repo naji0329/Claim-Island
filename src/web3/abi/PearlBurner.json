@@ -431,6 +431,13 @@
   },
   {
     "inputs": [],
+    "name": "periodCheckpoint",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "periodInSeconds",
     "outputs": [
       {

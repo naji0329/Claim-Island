@@ -200,7 +200,7 @@ const PoolHarvest = ({
                       <span>{renderNumber(+rewards.availablePearlRewards, 2)}</span>
                     </div>
                     <div className="flex justify-between p-2">
-                      <span>total ready to harvest:</span>
+                      <span>total to harvest when unlocked:</span>
                       <span>
                         {renderNumber(
                           +rewards.availableClamRewards + +rewards.availablePearlRewards,

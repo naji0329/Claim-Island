@@ -26,6 +26,7 @@ import {
   buyClamWithVested,
 } from "./character/BuyClam";
 import { formatNumber } from "../bank/utils";
+import { getVestedGem } from "web3/gemLocker";
 
 const Divider = () => (
   <div className="w-full flex flex-col justify-center items-center my-2">
@@ -36,7 +37,7 @@ const Divider = () => (
 );
 
 const ClamBuyModal = ({
-  account: { gemBalance, address },
+  account: { gemBalance, address, chainId },
   presale: { usersPurchasedClam },
   updateCharacter,
   updateAccount,
@@ -57,7 +58,7 @@ const ClamBuyModal = ({
     const fetchData = async () => {
       const price = await getPrice();
       setClamPrice(price);
-      const locked = await canUnlockGemVestedAmount(address);
+      const locked = await getVestedGem(chainId);
       setLockedGem(locked);
     };
     fetchData();
@@ -65,21 +66,22 @@ const ClamBuyModal = ({
 
   useEffect(() => {
     const balanceBN = new BigNumber(parseEther(gemBalance).toString());
-    const lockedBN = new BigNumber(lockedGem);
+    const lockedBN = 0;
+    //const lockedBN = new BigNumber(lockedGem * 1e18);
     const totalBN = balanceBN.plus(lockedBN);
     setCanBuy(totalBN.isGreaterThanOrEqualTo(new BigNumber(clamPrice)));
   }, [gemBalance, clamPrice, lockedGem]);
 
   const onSubmit = async () => {
-    if (new BigNumber(lockedGem).gt(0)) {
+    /*if (new BigNumber(lockedGem).gt(0)) {
       buyClamWithVested(
-        { address, updateCharacter, gem: formatNumber(+formatEther(lockedGem), 3) },
+        { address, updateCharacter, gem: formatNumber(+lockedGem, 3) },
         async () => await executeBuy(true),
         async () => await executeBuy()
       );
-    } else {
+    } else {*/
       await executeBuy();
-    }
+    //}
   };
 
   const executeBuy = async (withVested) => {
@@ -90,7 +92,7 @@ const ClamBuyModal = ({
     await infiniteApproveSpending(address, clamShopAddress, clamPrice);
 
     try {
-      withVested ? await buyClamWithVestedTokens(address) : buyClam(address);
+      withVested ? await buyClamWithVestedTokens(address) : await buyClam(address);
 
       buyClamSuccess({ updateCharacter }); // character speaks
       setIsLoading(false);
@@ -190,7 +192,7 @@ const ClamBuyModal = ({
                           </div>
                           <div className="flex justify-between">
                             <span>Vested:</span>
-                            <span>{formatNumber(+formatEther(lockedGem), 3)} GEM</span>
+                            <span>{formatNumber(+lockedGem, 3)} GEM</span>
                           </div>
                           <div className="flex justify-between">
                             <span>1 CLAM =</span>
@@ -254,7 +256,7 @@ const ClamBuyModal = ({
                   ) : (
                     <button
                       type="submit"
-                      className={`block uppercase text-center shadow hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl 
+                      className={`block uppercase text-center shadow hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-xl py-3 px-10 rounded-xl
                         ${canBuy ? "bg-blue-600" : "btn-disabled bg-grey-light"}
                         `}
                     >

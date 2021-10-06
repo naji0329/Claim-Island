@@ -33,6 +33,14 @@ export const burnPearl = async (pearlId, shape, color) => {
   await method.send({ from: account, gas: gasEstimation });
 };
 
+export const periodCheckpoint = async () => {
+  const account = getAccount();
+  const method = pearlBurner().methods.periodCheckpoint();
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation });
+};
+
 export const prepBonusRewardsMulticall = (traits) => {
   const contractCalls = [];
   for (let index = 0; index < traits.length; index++) {
