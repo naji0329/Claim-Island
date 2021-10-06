@@ -22,7 +22,13 @@ import {
 } from "../web3/constants.js";
 
 import getWeb3 from "../web3/getWeb3";
-import { EmptyBytes } from "web3/shared";
+import { EmptyBytes, getNFTs } from "web3/shared";
+import clamContract from "web3/clam";
+import pearlContract from "web3/pearl";
+import { getDNADecoded } from "web3/dnaDecoder";
+import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
+import { calculateBonusRewards } from "web3/clamBonus";
+
 import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm";
 
 import Web3Avatar from "./Web3Avatar";
@@ -83,6 +89,9 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   const [activateGemBalance, setActivateGemBalance] = useState("0");
   const [activateShellBalance, setActivateShellBalance] = useState("0");
 
+  const [activateClams, setActivateClams] = useState([]);
+  const [activatePearls, setActivatePearls] = useState([]);
+
   const { activateBrowserWallet, account, error } = useEthers();
   const clamBalance = useTokenBalance(clamNFTAddress, account);
   const pearlBalance = useTokenBalance(pearlNFTAddress, account);
@@ -132,6 +141,8 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
       isConnected: !!account,
       isBSChain,
       chainId: netId,
+      clams: activateClams,
+      pearls: activatePearls,
     });
   }, [
     account,
@@ -140,6 +151,8 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
     activateBnbBalance,
     activateClamBalanceInSafe,
     activatePearlBalanceInSafe,
+    activateClams,
+    activatePearls,
   ]);
 
   useEffect(() => {
@@ -213,6 +226,41 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
       setActivateShellBalance(new BigNumber(shellBal).toFixed(2));
     }
   }, [gemBalance]);
+
+  // get clam and pearls data
+  useEffect(async () => {
+    // wallet is connected and has no clams downloaded
+    if (account && activateClamBalanceInSafe !== "0" && activateClams.length === 0) {
+      const clams = await getNFTs({
+        address: account,
+        getByNFTIndex: clamContract.getClamByIndex,
+        getNFTData: clamContract.getClamData,
+        nftBalance: clamBalance,
+        getDecodedDNA: getDNADecoded,
+        isClam: true,
+      });
+
+      const clamsWithBonus = await Promise.all(
+        clams.map(async (clam) => {
+          const clamBonus = await calculateBonusRewards(clam.dnaDecoded);
+          return { ...clam, clamBonus };
+        })
+      );
+      setActivateClams(clamsWithBonus);
+    }
+
+    if (account && activatePearlBalanceInSafe !== "0" && activatePearls.length === 0) {
+      const pearls = await getNFTs({
+        address: account,
+        getByNFTIndex: pearlContract.getPearlByIndex,
+        getNFTData: pearlContract.getPearlData,
+        nftBalance: pearlBalance,
+        getDecodedDNA: getPearlDNADecoded,
+        isClam: false,
+      });
+      setActivatePearls(pearls);
+    }
+  }, [clamBalance, pearlBalance]);
 
   return (
     <>
