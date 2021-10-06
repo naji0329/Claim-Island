@@ -22,7 +22,6 @@ const Clam3DViewComponent = memo((props) => {
   } = props;
   const [textures, setTextures] = useState();
   const traits = clamViewer ? clamTraits : decodeDna(decodedDna);
-  // const traits = clamTraits;
   const clamType = traits.shellShape.toLowerCase();
   const tongueType = traits.tongue.toLowerCase();
 
@@ -48,7 +47,7 @@ const Clam3DViewComponent = memo((props) => {
   }, [clamDna]);
 
   return (
-    <div style={{ width: "100%", height, maxWidth: width, position: "relative" }}>
+    <div className="w-full relative cursor-grab active:cursor-grabbing" style={{ height, maxWidth: width }}>
       <div
         className="absolute bg-gray-800 text-white px-4 py-3 rounded-lg top-1/2 left-1/2"
         style={{
