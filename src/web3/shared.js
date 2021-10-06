@@ -5,7 +5,12 @@ import BigNumber from "bignumber.js";
 import { aggregate } from "./multicall";
 import { prepPearlDataMulticall, decodePearlDataFromMulticall } from "./pearl";
 import { prepGetDnaDecodedMulticall, decodeGetDnaDecodedFromMulticall } from "./pearlDnaDecoder";
+import clamDnaDecoder from "./dnaDecoder";
 import { prepBonusRewardsMulticall, decodeBonusRewardsFromMulticall } from "./pearlBurner";
+import {
+  decodeCalculateBonusRewardsFromMulticall,
+  prepCalculateBonusRewardsMulticall,
+} from "./clamBonus";
 
 import NFTUnknown from "assets/img/clam_unknown.png";
 import PEARLunknown from "assets/img/pearl_unknown.png";
@@ -137,4 +142,98 @@ export const getNFTs = async ({
   }
 
   return Promise.all(promises);
+};
+
+const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => {
+  const clamDataCalls = clamContract.prepClamDataMulticall(tokenIds);
+  const clamDataResult = await aggregate(clamDataCalls, chainId);
+  const clamDataDecoded = clamContract.decodeClamDataFromMulticall(
+    clamDataResult.returnData,
+    tokenIds
+  );
+  const clamDnas = clamDataDecoded.map((data) => data.clamDataValues.dna);
+
+  const producedPearlIdsCalls = clamContract.prepClamProducedPearlIds(tokenIds);
+  const producedPearlIdsResult = await aggregate(producedPearlIdsCalls, chainId);
+  const producedPearlIdsDecoded = clamContract.decodeProducedPearlIdsFromMulticall(
+    producedPearlIdsResult.returnData,
+    tokenIds
+  );
+
+  const dnaDecodedCalls = clamDnaDecoder.prepGetDnaDecodedMulticall(clamDnas);
+  const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
+  const dnaDecodedDecoded = clamDnaDecoder.decodeGetDnaDecodedFromMulticall(
+    dnaDecodedResult.returnData,
+    tokenIds
+  );
+
+  const clamBonusCalls = prepCalculateBonusRewardsMulticall(dnaDecodedDecoded);
+  const clamBonusResult = await aggregate(clamBonusCalls, chainId);
+  const clamBonusDecoded = decodeCalculateBonusRewardsFromMulticall(
+    clamBonusResult.returnData,
+    tokenIds
+  );
+
+  const clams = clamDataDecoded.map((clam) => {
+    const sameClamDna = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
+    const sameClamPearlsProduced = producedPearlIdsDecoded.find(
+      ({ clamId }) => clamId === clam.clamId
+    );
+    const sameClamBonus = clamBonusDecoded.find(({ clamId }) => clamId === clam.clamId);
+    if (sameClamDna && sameClamPearlsProduced && sameClamBonus) {
+      const dnaDecoded = sameClamDna.dnaDecodedValues;
+      const producedPearlIds = sameClamPearlsProduced.producedPearlIds;
+      const dna = clam.clamDataValues.dna;
+      const { clamBonus } = sameClamBonus;
+
+      return { ...clam, dnaDecoded, producedPearlIds, dna, clamBonus };
+    }
+    console.error(`Clam ${clam.clamId} from ${address} not found`);
+  });
+
+  const clamsFiltered = clams.filter((c) => c);
+
+  return clamsFiltered;
+};
+
+export const getOwnedClams = async ({ chainId, address, balance, clamContract }) => {
+  const addImagesToClams = async ({ clams }) => {
+    const cache = await caches.open("clam-island");
+    const promises = await Promise.all(
+      clams.map((clam) => {
+        const dna = clam.clamDataValues.dna;
+        return cache.match(`/clams/${dna}`);
+      })
+    );
+    const images = await Promise.all(
+      promises.map((resp) => {
+        return resp ? resp.json() : "";
+      })
+    );
+    const clamsUptd = clams.map((clam, index) => {
+      let clamImg = images[index];
+      clamImg = clamImg ? clamImg.img : clamImg;
+      clam.img = clamImg || NFTUnknown;
+      return clam;
+    });
+    return clamsUptd;
+  };
+
+  console.log("getOwnedClams", { chainId, address, balan: +balance, clamContract });
+  // get owned clams
+  const tokenIdsCalls = clamContract.prepTokenOfOwnerByIndexMulticall(address, +balance);
+  const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
+  const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
+    tokenIdsResult.returnData
+  );
+  const [ownedClams] = await Promise.all([
+    getClamsDataByIds({ tokenIds: tokenIdsDecoded, chainId, clamContract }),
+    // getClamsDataByIds(clamsStakedIds),
+  ]);
+
+  const ownedClamsImg = await addImagesToClams({ clams: ownedClams });
+  // const stakedClamsImg = await addClamImg(stakedClams);
+  // const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
+
+  return ownedClamsImg;
 };

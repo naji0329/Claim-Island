@@ -22,7 +22,7 @@ import {
 } from "../web3/constants.js";
 
 import getWeb3 from "../web3/getWeb3";
-import { EmptyBytes, getNFTs } from "web3/shared";
+import { EmptyBytes, getNFTs, getOwnedClams } from "web3/shared";
 import clamContract from "web3/clam";
 import pearlContract from "web3/pearl";
 import { getDNADecoded } from "web3/dnaDecoder";
@@ -231,22 +231,14 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   useEffect(async () => {
     // wallet is connected and has no clams downloaded
     if (account && activateClamBalanceInSafe !== "0" && activateClams.length === 0) {
-      const clams = await getNFTs({
+      const clams = await getOwnedClams({
+        chainId: activateChainId,
         address: account,
-        getByNFTIndex: clamContract.getClamByIndex,
-        getNFTData: clamContract.getClamData,
-        nftBalance: clamBalance,
-        getDecodedDNA: getDNADecoded,
-        isClam: true,
+        balance: clamBalance,
+        clamContract,
       });
 
-      const clamsWithBonus = await Promise.all(
-        clams.map(async (clam) => {
-          const clamBonus = await calculateBonusRewards(clam.dnaDecoded);
-          return { ...clam, clamBonus };
-        })
-      );
-      setActivateClams(clamsWithBonus);
+      setActivateClams(clams);
     }
 
     if (account && activatePearlBalanceInSafe !== "0" && activatePearls.length === 0) {
