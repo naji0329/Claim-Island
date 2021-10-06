@@ -10,7 +10,7 @@ import {
   prepTokenOfOwnerByIndexMulticall,
   decodeTokenOfOwnerByIndexFromMulticall,
 } from "web3/pearl";
-import { color, shape, periodStart, periodInSeconds } from "web3/pearlBurner";
+import { color, shape, periodStart, periodInSeconds, periodCheckpoint } from "web3/pearlBurner";
 import { useTimer } from "hooks/useTimer";
 import PearlInfo from "./PearlInfo";
 
@@ -40,6 +40,10 @@ const BurnPearlModal = (props) => {
   };
 
   const { timeLeft } = useTimer(calculateTimeLeft);
+
+  const handlePeriodCheckpoint = async () => {
+    await periodCheckpoint();
+  };
 
   useAsync(async () => {
     try {
@@ -98,10 +102,18 @@ const BurnPearlModal = (props) => {
             <span className="text-gray-500">{eligibleColor}</span>
           </div>
         </div>
-        <div className="flex flex-col w-2/5 items-end">
-          <span className="font-bold">Changes in</span>
-          <span className="text-gray-500">{timeLeft}</span>
-        </div>
+        {timeLeft.includes("-") ? (
+          <div className="flex flex-col w-2/5 items-end">
+            <button onClick={handlePeriodCheckpoint} className="btn btn-outline btn-primary">
+              Update Pearl Boost Traits
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col w-2/5 items-end">
+            <span className="font-bold">Changes in</span>
+            <span className="text-gray-500">{timeLeft}</span>
+          </div>
+        )}
       </div>
       <div className="w-full flex justify-between">
         <div className="w-1/2 mr-8 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160 overflow-y-auto">
