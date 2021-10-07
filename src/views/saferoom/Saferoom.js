@@ -45,7 +45,7 @@ const Saferoom = ({
 
   useEffect(async () => {
     // wallet is connected and has clams
-    if (address) {
+    if (address && (+clamBalance > 0 || +pearlBalance > 0)) {
       try {
         setLoading(true);
         // for first time needs to wait to downlaod all clams
