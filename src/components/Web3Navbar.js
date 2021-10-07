@@ -226,7 +226,12 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   // get clam and pearls data
   useEffect(async () => {
     // wallet is connected and has no clams downloaded
-    if (account && activateClamBalanceInSafe !== "0" && activateClams.length === 0) {
+    if (
+      account &&
+      activateChainId &&
+      activateClamBalanceInSafe !== "0" &&
+      activateClams.length === 0
+    ) {
       const clams = await getOwnedClams({
         chainId: activateChainId,
         address: account,
@@ -237,7 +242,12 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
       setActivateClams(clams);
     }
 
-    if (account && activatePearlBalanceInSafe !== "0" && activatePearls.length === 0) {
+    if (
+      account &&
+      activateChainId &&
+      activatePearlBalanceInSafe !== "0" &&
+      activatePearls.length === 0
+    ) {
       const pearls = await getOwnedPearls({
         chainId: activateChainId,
         address: account,
