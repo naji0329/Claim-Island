@@ -8,8 +8,6 @@ import Character from "components/characters/CharacterWrapper";
 import Web3Navbar from "components/Web3Navbar";
 import { Modal, useModal } from "components/Modal";
 import ClamView from "./ClamView";
-import NFTUnknown from "assets/img/clam_unknown.png";
-import PEARLunknown from "assets/img/pearl_unknown.png";
 import PearlView from "./PearlView";
 import { TabContainer } from "./TabContainer";
 import { SaferoomNav } from "./SaferoomNav";
@@ -22,12 +20,6 @@ import { PageTitle } from "components/PageTitle";
 import { SAFEROOM_TABS as TABS } from "constants/ui";
 
 import { actions } from "store/redux";
-
-import clamContract from "web3/clam";
-import { getDNADecoded } from "web3/dnaDecoder";
-import pearlContract from "web3/pearl";
-import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
-import { calculateBonusRewards } from "web3/clamBonus";
 
 import LoadingScreen from "components/LoadingScreen";
 

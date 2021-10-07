@@ -256,6 +256,17 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
 
       setActivatePearls(pearls);
     }
+
+    // handle when change to an wallet that does not have clams or pealrs
+    if (account && activateChainId) {
+      if (activateClamBalanceInSafe === "0" && activateClams.length !== 0) {
+        setActivateClams([]);
+      }
+
+      if (activatePearlBalanceInSafe === "0" && activatePearls.length !== 0) {
+        setActivatePearls([]);
+      }
+    }
   }, [clamBalance, pearlBalance]);
 
   return (
