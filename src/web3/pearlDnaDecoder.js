@@ -65,3 +65,9 @@ export const decodeGetDnaDecodedFromMulticall = (values, tokenIds) => {
 
   return result;
 };
+
+export default {
+  decodeGetDnaDecodedFromMulticall,
+  prepGetDnaDecodedMulticall,
+  getPearlDNADecoded,
+};

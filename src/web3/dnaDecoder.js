@@ -70,3 +70,9 @@ export const decodeGetDnaDecodedFromMulticall = (values, tokenIds) => {
 
   return result;
 };
+
+export default {
+  getDNADecoded,
+  prepGetDnaDecodedMulticall,
+  decodeGetDnaDecodedFromMulticall,
+};
