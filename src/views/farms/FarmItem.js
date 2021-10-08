@@ -46,6 +46,8 @@ const FarmItem = ({
   withdrawingClamId,
 }) => {
   const [inTx, setInTx] = useState(false);
+  const [isInitLoading, setIsInitLoading] = useState(false);
+
   const [action, setAction] = useState("");
   const [buttonText, setButtonText] = useState("");
   const now = Math.round(new Date().getTime() / 1000);
@@ -73,6 +75,7 @@ const FarmItem = ({
 
   useEffect(() => {
     const init = async () => {
+      setIsInitLoading(true);
       try {
         const _productionTimeTotal = await getRemainingPearlProductionTime(clamId);
         const _pearlProductionTime = +now + +_productionTimeTotal;
@@ -89,8 +92,11 @@ const FarmItem = ({
 
         const priceForPearlInGem = await stakePrice();
         setGemsNeededForPearl(priceForPearlInGem);
+
+        setIsInitLoading(false);
       } catch (err) {
         updateAccount({ error: err.message });
+        setIsInitLoading(false);
       }
     };
 
@@ -98,19 +104,18 @@ const FarmItem = ({
   }, [inTx, address]);
 
   useEffect(() => {
-    setButtonText("Hold on ...");
-    if (readyForPearl) {
-      setButtonText("Collect Pearl");
-      setAction("collect");
-    } else if (timeLeft === 0 && canProducePearl) {
-      setButtonText("Open Clam");
-      setAction("open");
+    if (!isInitLoading) {
+      if (readyForPearl) {
+        setButtonText("Collect Pearl");
+        setAction("collect");
+      } else if (timeLeft === 0 && canProducePearl) {
+        setButtonText("Open Clam");
+        setAction("open");
+      } else if (!canStillProducePearl) {
+        setButtonText("Can't produce anymore!");
+      }
     }
-
-    if (!canStillProducePearl) {
-      setButtonText("Can't produce anymore!");
-    }
-  }, [readyForPearl, canProducePearl, canStillProducePearl]);
+  }, [readyForPearl, canProducePearl, canStillProducePearl, isInitLoading]);
 
   const clam = {
     remainingFormattedTime: secondsToFormattedTime(timeLeft),
@@ -259,14 +264,18 @@ const FarmItem = ({
         </>
       ) : (
         <div className="px-4 py-2">
-          <ActionButton
-            onClick={getClamFunction}
-            style="btn-harvest w-full"
-            isDisabled={!canProducePearl || inTx}
-            isLoading={inTx}
-          >
-            {buttonText}
-          </ActionButton>
+          {isInitLoading ? (
+            <div className="text-center">Loading...</div>
+          ) : (
+            <ActionButton
+              onClick={getClamFunction}
+              style={action === "open" ? "btn-deposit w-full" : "btn-harvest w-full"}
+              isDisabled={!canProducePearl || inTx}
+              isLoading={inTx}
+            >
+              {buttonText}
+            </ActionButton>
+          )}
         </div>
       )}
     </div>
