@@ -225,40 +225,30 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
 
   // get clam and pearls data
   useEffect(async () => {
-    // wallet is connected and has no clams downloaded
-    if (
-      account &&
-      activateChainId &&
-      activateClamBalanceInSafe !== "0" &&
-      activateClams.length === 0
-    ) {
-      const clams = await getOwnedClams({
-        chainId: activateChainId,
-        address: account,
-        balance: clamBalance,
-        clamContract,
-      });
-
-      setActivateClams(clams);
-    }
-
-    if (
-      account &&
-      activateChainId &&
-      activatePearlBalanceInSafe !== "0" &&
-      activatePearls.length === 0
-    ) {
-      const pearls = await getOwnedPearls({
-        chainId: activateChainId,
-        address: account,
-        balance: pearlBalance,
-      });
-
-      setActivatePearls(pearls);
-    }
-
-    // handle when change to an wallet that does not have clams or pealrs
     if (account && activateChainId) {
+      // handle when change to an wallet that does not have clams or pealrs
+      if (activateClamBalanceInSafe !== "0" && activateClams.length === 0) {
+        const clams = await getOwnedClams({
+          chainId: activateChainId,
+          address: account,
+          balance: clamBalance,
+          clamContract,
+        });
+
+        setActivateClams(clams);
+      }
+
+      if (activatePearlBalanceInSafe !== "0" && activatePearls.length === 0) {
+        const pearls = await getOwnedPearls({
+          chainId: activateChainId,
+          address: account,
+          balance: pearlBalance,
+        });
+
+        setActivatePearls(pearls);
+      }
+
+      // wallet is connected and has no clams downloaded
       if (activateClamBalanceInSafe === "0" && activateClams.length !== 0) {
         setActivateClams([]);
       }
