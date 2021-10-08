@@ -14,7 +14,7 @@ import ArrowDown from "assets/img/arrow-down.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import { buyClam, getPrice, canUnlockGemVestedAmount, buyClamWithVestedTokens } from "web3/clam";
+import { buyClam, getPrice, checkHasClamToCollect, buyClamWithVestedTokens } from "web3/clam";
 import { infiniteApproveSpending } from "web3/gem";
 import { clamShopAddress } from "web3/constants";
 import { actions } from "store/redux";
