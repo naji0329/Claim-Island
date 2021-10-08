@@ -79,7 +79,7 @@ export const CLAM_SHOP_SPEECH = {
 
     harvest_no_clams: {
       text: (d) =>
-        `I'm sorry, you don't have any Clams that can be harvested right now. New Clams need to be incubated for ${d.incubationTime} in the Saferoom before they can be harvested for $SHELL or farmed for Pearls.`,
+        `I'm sorry, you don't have any Clams that can be harvested right now. New Clams need to be incubated for ${d.incubationTime} in the Saferoom before they can be harvested for $SHELL.`,
       next: false,
       dismiss: true,
       skip: false,

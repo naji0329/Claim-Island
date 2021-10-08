@@ -21,7 +21,7 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
   const { clamDataValues } = clam;
   const { dna, pearlsProduced, pearlProductionCapacity } = clamDataValues;
   const harvestableShell = 1 + pearlsProduced * 0.1;
-  const remainingLifeSpan = pearlProductionCapacity - pearlsProduced;
+  const remainingLifeSpan = +pearlProductionCapacity - +pearlsProduced;
 
   useEffect(() => {
     const init = async () => {
