@@ -193,25 +193,25 @@ canvas {
   @apply rounded-xl shadow-xl p-2 justify-center; /* button padding, width, radius*/
 }
 
-  .btn-deposit {
-    @apply bg-green-500 hover:bg-green-400; /* border and text color*/
-  }
+.btn-deposit {
+  @apply bg-green-500 hover:bg-green-400; /* border and text color*/
+}
 
-  .btn-withdraw {
-    @apply bg-red-500 hover:bg-red-400; /* border and text color*/
-    // @apply text-white text-center text-2xl; /*font weight and size*/
-    // @apply rounded-xl shadow-xl p-2 justify-center; /* button padding, width, radius*/
-  }
+.btn-withdraw {
+  @apply bg-red-500 hover:bg-red-400; /* border and text color*/
+  // @apply text-white text-center text-2xl; /*font weight and size*/
+  // @apply rounded-xl shadow-xl p-2 justify-center; /* button padding, width, radius*/
+}
 
-  .btn-harvest {
-    @apply bg-blue-500 hover:bg-blue-400;
-  }
+.btn-harvest {
+  @apply bg-blue-500 hover:bg-blue-400;
+}
 
-  .btn-unclickable {
-    pointer-events: none;
-  }
+.btn-unclickable {
+  pointer-events: none;
+}
 
-  .btn-disabled{
-    @apply bg-gray-200 cursor-not-allowed;
-  }
+.btn-disabled{
+  @apply bg-gray-200 cursor-not-allowed;
+}
 
