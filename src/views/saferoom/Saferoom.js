@@ -41,7 +41,7 @@ const Saferoom = ({
       try {
         setLoading(true);
         // for first time needs to wait to downlaod all clams
-        if (clams.length > 0 && pearls.length > 0) {
+        if (clams.length > 0 || pearls.length > 0) {
           setLoading(false);
         }
       } catch (error) {
