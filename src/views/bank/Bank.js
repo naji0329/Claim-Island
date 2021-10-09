@@ -13,7 +13,7 @@ import VideoBackground from "components/VideoBackground";
 import { Modal, useModal } from "components/Modal";
 import { PageTitle } from "components/PageTitle";
 
-import { getAllPools } from "web3/bank";
+import { getAllPools, harvestAllPools } from "web3/bank";
 import { fetchRewards } from "web3/gemLocker";
 
 import "./bank.scss";
@@ -99,7 +99,7 @@ const Bank = ({
         <div className="w-full lg:w-7/10 mx-auto relative z-10 mt-24 px-2 md:px-4%">
           <div className="flex justify-between items-center">
             <PageTitle title="Clam Bank" />
-            <ExternalLinksBlock totalTVL={totalTVL} />
+            <ExternalLinksBlock totalTVL={totalTVL} harvestAllPools={harvestAllPools} />
           </div>
           {address && (
             <div className="py-4 flex flex-col">

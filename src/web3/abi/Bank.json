@@ -628,6 +628,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "harvestAllPools",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "contract IGemToken",
