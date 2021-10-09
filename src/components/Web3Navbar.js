@@ -71,6 +71,12 @@ const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
 const formatNFT = (value) => (value ? formatUnits(value, 0) : "0");
 const formatBEP20 = (value) => (value ? formatUnits(value, 18) : "0");
 
+const IconTip = ({ children, text }) => (
+  <span data-tip={text} className="cursor-pointer tooltip">
+    {children}
+  </span>
+);
+
 const Web3Navbar = ({ updateAccount, ...redux }) => {
   //  is called several times thus need a state to lower the renders
   const [activateError, setActivateError] = useState("");
@@ -320,14 +326,18 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
               <>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    Gem Price: $ {activateGemPrice} | Shell Price: $ {activateShellPrice}
+                    Balance: {activateGemBalance} <IconTip text="$GEM Balance">💎</IconTip> |{" "}
+                    {activateShellBalance} <IconTip text="$SHELL Balance">🐚</IconTip>
                   </span>
                 </div>
+
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    Gem Balance: {activateGemBalance} | Shell Balance: {activateShellBalance}
+                    Price: <IconTip text="Price of 1 $GEM">💎</IconTip> = $ {activateGemPrice} |{" "}
+                    <IconTip text="Price of 1 $SHELL">🐚</IconTip> = $ {activateShellPrice}
                   </span>
                 </div>
+
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <Link
                     to="/saferoom/clam"
@@ -339,7 +349,9 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Safe: {activateClamBalanceInSafe} Clams | {activatePearlBalanceInSafe} Pearls
+                      Safe: {activateClamBalanceInSafe} <IconTip text="Clams owned">🦪</IconTip> |{" "}
+                      {activatePearlBalanceInSafe}
+                      <IconTip text="Pearls owned">💍 </IconTip>{" "}
                       {location.pathname.indexOf("saferoom") === -1 && (
                         <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
                       )}
@@ -355,7 +367,8 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Farm: {activateClamBalanceInFarm} Clams | {activatePearlBalanceInFarm} Pearls
+                      Farm: {activateClamBalanceInFarm} <IconTip text="Clams staked">🦪</IconTip> |{" "}
+                      {activatePearlBalanceInFarm} <IconTip text="Pearls staked">💍</IconTip>
                       {location.pathname.indexOf("farms") === -1 && (
                         <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
                       )}
