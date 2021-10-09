@@ -151,9 +151,9 @@ export const deposit = async (pid, amount) => {
   await method.send({ from: account, gas: gasEstimation }).once("Deposit", eventCallback);
 };
 
-export const harvestAllPools = async (pid, amount) => {
+export const harvestAllPools = async () => {
   const account = getAccount();
-  const method = bank().methods.harvestAllPools(pid, amount);
+  const method = bank().methods.harvestAllPools();
   const gasEstimation = await method.estimateGas({ from: account });
 
   await method.send({ from: account, gas: gasEstimation }).once("Deposit", eventCallback);
