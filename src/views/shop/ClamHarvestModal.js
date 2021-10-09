@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { formatUnits } from "@ethersproject/units";
 import { Link } from "react-router-dom";
-import NFTUnknown from "assets/img/clam_unknown.png";
 
 import {
-  getClamByIndex,
-  getClamData,
   getClamValueInShellToken,
   harvestClamForShell,
   getClamIncubationTime,
@@ -63,13 +60,6 @@ const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
   );
 };
 
-const getUserClamDnaByIndex = async (account, index) => {
-  const tokenId = await getClamByIndex(account, index);
-  const { dna, birthTime, pearlProductionCapacity, pearlsProduced } = await getClamData(tokenId);
-
-  return { dna, tokenId, birthTime, pearlProductionCapacity, pearlsProduced };
-};
-
 const formatDuration = (totalSeconds) => {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -80,7 +70,7 @@ const formatDuration = (totalSeconds) => {
 
 const ClamHarvestModal = ({
   setModalToShow,
-  account: { address, clamBalance },
+  account: { address, clamBalance, ...stateAccount },
   updateCharacter,
   updateAccount,
 }) => {
@@ -112,42 +102,14 @@ const ClamHarvestModal = ({
     setModalToShow(null);
   };
 
-  const addClamImg = async (clams) => {
-    const cache = await caches.open("clam-island");
-    const promises = await Promise.all(
-      clams.map((clam) => {
-        const dna = clam.dna;
-        return cache.match(`/clams/${dna}`);
-      })
-    );
-    const images = await Promise.all(
-      promises.map((resp) => {
-        return resp ? resp.json() : "";
-      })
-    );
-    const clamsUptd = clams.map((clam, index) => {
-      let clamImg = images[index];
-      clamImg = clamImg ? clamImg.img : clamImg;
-      clam.img = clamImg || NFTUnknown;
-      return clam;
-    });
-    return clamsUptd;
-  };
-
   useEffect(async () => {
     setIsLoading(true);
     const incubationtime = await getClamIncubationTime();
 
     if (+clamBalance > 0) {
-      let promises = [];
-      for (let index = 0; index < Number(clamBalance); index++) {
-        promises.push(getUserClamDnaByIndex(address, index));
-      }
-      let clams = await Promise.all(promises);
-      clams = await addClamImg(clams);
       const currentBlockTimestamp = await getCurrentBlockTimestamp();
 
-      const filteredClams = clams.filter(
+      const filteredClams = stateAccount.clams.filter(
         ({ pearlProductionCapacity, pearlsProduced, birthTime }) =>
           +pearlsProduced < +pearlProductionCapacity &&
           currentBlockTimestamp > +birthTime + +incubationtime

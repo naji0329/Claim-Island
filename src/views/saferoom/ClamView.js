@@ -14,8 +14,7 @@ export default ({
   dnaDecoded,
   birthTime,
   clamBonus,
-  pearlProductionCapacity,
-  pearlsProduced,
+  clamDataValues: { pearlProductionCapacity, pearlsProduced },
   onClickNext,
   onClickPrev,
 }) => {

@@ -16,6 +16,8 @@ const initialState = {
     chainId: undefined,
     isWeb3Installed: true,
     address: undefined,
+    clams: [],
+    pearls: [],
   },
   presale: {
     cap: "0",

@@ -138,4 +138,8 @@ export default {
   totalPearlSupply,
   getPearlData,
   getPearlByIndex,
+  decodePearlDataFromMulticall,
+  prepPearlDataMulticall,
+  decodeTokenOfOwnerByIndexFromMulticall,
+  prepTokenOfOwnerByIndexMulticall,
 };
