@@ -154,6 +154,32 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "duration",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetFarmingRewardsLockDuration",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "max",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetMaxRewardsLock",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "account",
@@ -225,6 +251,52 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_accounts",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_clamIds",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "values",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "changeUserLockedClamRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_accounts",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_pearlIds",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "values",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "changeUserLockedPearlRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -324,7 +396,7 @@
     "name": "gem",
     "outputs": [
       {
-        "internalType": "contract IBEP20",
+        "internalType": "contract IGemToken",
         "name": "",
         "type": "address"
       }
@@ -452,7 +524,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IBEP20",
+        "internalType": "contract IGemToken",
         "name": "_gem",
         "type": "address"
       }
@@ -560,6 +632,11 @@
         "internalType": "uint256",
         "name": "endDay",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastRewardDay",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -646,6 +723,11 @@
       {
         "internalType": "uint256",
         "name": "endDay",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastRewardDay",
         "type": "uint256"
       }
     ],
@@ -825,6 +907,32 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "duration",
+        "type": "uint256"
+      }
+    ],
+    "name": "setFarmingRewardsLockDuration",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "max",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMaxRewardsLock",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

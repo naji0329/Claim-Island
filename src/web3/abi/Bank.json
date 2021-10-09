@@ -503,7 +503,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_devaddr",
+        "name": "_devAddr",
         "type": "address"
       }
     ],
@@ -514,7 +514,7 @@
   },
   {
     "inputs": [],
-    "name": "devaddr",
+    "name": "devAddr",
     "outputs": [
       {
         "internalType": "address",
@@ -641,7 +641,7 @@
       },
       {
         "internalType": "address",
-        "name": "_devaddr",
+        "name": "_devAddr",
         "type": "address"
       },
       {
