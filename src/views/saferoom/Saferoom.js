@@ -122,11 +122,6 @@ const Saferoom = ({
   };
 
   useEffect(() => {
-    setClamsPreview();
-    setPearlsPreview();
-  }, [!isShowing, loading]);
-
-  useEffect(() => {
     const query = new URLSearchParams(search);
     const id = query.get("id");
 
