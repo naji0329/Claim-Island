@@ -11,7 +11,6 @@ import { aggregate } from "./multicall";
 import { poolAssets } from "../views/bank/poolsAssets";
 import { getUsdValueOfPair, getGemPrice, getUsdPriceOfToken } from "./pancakeRouter";
 import { totalSupply } from "./bep20";
-import { formatNumber } from "views/bank/utils";
 
 const bank = () =>
   contractFactory({

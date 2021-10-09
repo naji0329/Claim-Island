@@ -100,7 +100,9 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
                 <div>Pearls Remaining</div>
                 <div className="text-right">{remainingLifeSpan}</div>
                 <div>$GEM boost</div>
-                <div className="text-right">{clamHasGeneratedBonus ? clam.clamBonus : 0}</div>
+                <div className="text-right">
+                  {clamHasGeneratedBonus ? formatUnits(String(clam.clamBonus), 18) : 0}
+                </div>
               </div>
             </>
           )}

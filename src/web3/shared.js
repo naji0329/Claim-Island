@@ -10,6 +10,7 @@ import { prepBonusRewardsMulticall, decodeBonusRewardsFromMulticall } from "./pe
 import {
   decodeCalculateBonusRewardsFromMulticall,
   prepCalculateBonusRewardsMulticall,
+  currentClamBaseGemRewards,
 } from "./clamBonus";
 
 import NFTUnknown from "assets/img/clam_unknown.png";
@@ -80,7 +81,7 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
   );
 
   const clamBonusCalls = prepCalculateBonusRewardsMulticall(
-    "15" + "000000000000000000",
+    await currentClamBaseGemRewards(),
     dnaDecodedDecoded
   );
   const clamBonusResult = await aggregate(clamBonusCalls, chainId);
@@ -141,7 +142,10 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
     })
   );
 
-  const bonusRewardsCalls = prepBonusRewardsMulticall("125" + "00000000000000000", traits);
+  const bonusRewardsCalls = prepBonusRewardsMulticall(
+    await pearlShared.currentPearlBaseGemRewards(),
+    traits
+  );
   const bonusRewardsResult = await aggregate(bonusRewardsCalls, chainId);
   const bonusRewardsDecoded = decodeBonusRewardsFromMulticall(
     bonusRewardsResult.returnData,

@@ -1,16 +1,25 @@
 import { contractFactory } from "./index";
-import clamBonusAbi from "./abi/ClamBonus.json";
-import { clamBonusAddress, clamNFTAddress } from "./constants";
+import clamAbi from "./abi/Clam.json";
+import { clamNFTAddress } from "./constants";
 
-const clamBonus = () =>
+const clam = () =>
   contractFactory({
-    abi: clamBonusAbi,
-    address: clamBonusAddress,
+    abi: clamAbi,
+    address: clamNFTAddress,
   });
 
 export const calculateBonusRewards = async (dnaDecoded) => {
   const { size, lifespan, rarityValue } = dnaDecoded;
-  return clamBonus().methods.calculateBonusRewards(size, lifespan, rarityValue).call();
+
+  const baseRewards = currentClamBaseGemRewards();
+
+  return clam().methods.calculateBonusRewards(baseRewards, size, lifespan, rarityValue).call();
+};
+
+export const currentClamBaseGemRewards = async () => {
+  const value = await clam().methods.currentBaseGemRewards().call();
+
+  return value;
 };
 
 export const prepCalculateBonusRewardsMulticall = (baseRewards, dnasDecoded) => {
