@@ -83,6 +83,7 @@ const Farms = ({ account: { clamBalance, address, clams }, updateCharacter, upda
   const onDepositClam = () => {
     setModal(MODAL_OPTS.DEPOSIT_CLAM);
     toggleModal();
+    setRefreshClams(true);
   };
 
   // when "View Pearl" is clicked - open the modal for the selected pearl
@@ -179,7 +180,6 @@ const Farms = ({ account: { clamBalance, address, clams }, updateCharacter, upda
   useAsync(async () => {
     const priceForPearlInGem = await stakePrice();
     const price = formatFromWei(priceForPearlInGem);
-    console.log({ price });
 
     speechWelcome({ updateCharacter }, async () => {
       //     [get Pearl production price in $GEM]

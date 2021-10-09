@@ -27,10 +27,14 @@ import {
 const formatShell = (value) => (value ? formatUnits(value, 18) : "0");
 
 const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
-  const { tokenId, img, pearlProductionCapacity, pearlsProduced } = clam;
+  const { tokenId, img } = clam;
+  const { pearlProductionCapacity, pearlsProduced } = clam.clamDataValues;
   return (
     <div className="clam-details">
       <div className="w-1/2">
+        <div className="flex items-center w-1/4 m-2 mx-auto text-center px-4 py-2 badge badge-success">
+          #{tokenId}
+        </div>
         <img className="w-full p-4" src={img} />
       </div>
       <div className="details">
@@ -110,9 +114,12 @@ const ClamHarvestModal = ({
       const currentBlockTimestamp = await getCurrentBlockTimestamp();
 
       const filteredClams = stateAccount.clams.filter(
-        ({ pearlProductionCapacity, pearlsProduced, birthTime }) =>
-          +pearlsProduced < +pearlProductionCapacity &&
-          currentBlockTimestamp > +birthTime + +incubationtime
+        ({ clamDataValues: { pearlProductionCapacity, pearlsProduced, birthTime } }) => {
+          return (
+            +pearlsProduced < +pearlProductionCapacity &&
+            currentBlockTimestamp > +birthTime + +incubationtime
+          );
+        }
       );
 
       if (filteredClams.length > 0) {
