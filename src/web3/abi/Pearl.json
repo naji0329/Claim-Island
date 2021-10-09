@@ -167,6 +167,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "baseGemRewards",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetCurrentBaseGemRewards",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "from",
@@ -314,6 +327,63 @@
     "name": "burn",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "baseGemRewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "size",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lustre",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nacreQuality",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "surface",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rarityValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculateBonusRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "currentBaseGemRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -584,13 +654,6 @@
   },
   {
     "inputs": [],
-    "name": "pause",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "paused",
     "outputs": [
       {
@@ -638,6 +701,11 @@
       {
         "internalType": "uint256",
         "name": "pearlsRemaining",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "gemBoost",
         "type": "uint256"
       }
     ],
@@ -745,6 +813,19 @@
       }
     ],
     "name": "setApprovalForAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "baseGemRewards",
+        "type": "uint256"
+      }
+    ],
+    "name": "setCurrentBaseGemRewards",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -901,13 +982,6 @@
       }
     ],
     "name": "transferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "unpause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

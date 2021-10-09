@@ -34,7 +34,7 @@ export const getClamIncubationTime = async () => {
 
 export const getClamData = async (tokenId) => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
-  const value = await clamNft.methods.clamData(tokenId).call();
+  const value = await clamNft.methods.getClamData(tokenId).call();
   return value;
 };
 
@@ -211,12 +211,12 @@ export const prepClamDataMulticall = (tokenIds) => {
       clamNFTAddress,
       web3.eth.abi.encodeFunctionCall(
         {
-          name: "clamData",
+          name: "getClamData",
           type: "function",
           inputs: [
             {
               type: "uint256",
-              name: "",
+              name: "clamId",
             },
           ],
         },
@@ -292,6 +292,8 @@ export const decodeClamDataFromMulticall = (values, tokenIds) => {
             pearlProductionCapacity: "uint256",
             dna: "uint256",
             pearlProductionStart: "uint256",
+            producedPearlIds: "uint256[]",
+            gemBoost: "uint256",
           },
         },
         values[index]

@@ -79,7 +79,10 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
     tokenIds
   );
 
-  const clamBonusCalls = prepCalculateBonusRewardsMulticall(dnaDecodedDecoded);
+  const clamBonusCalls = prepCalculateBonusRewardsMulticall(
+    "15" + "000000000000000000",
+    dnaDecodedDecoded
+  );
   const clamBonusResult = await aggregate(clamBonusCalls, chainId);
   const clamBonusDecoded = decodeCalculateBonusRewardsFromMulticall(
     clamBonusResult.returnData,
@@ -138,7 +141,7 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
     })
   );
 
-  const bonusRewardsCalls = prepBonusRewardsMulticall(traits);
+  const bonusRewardsCalls = prepBonusRewardsMulticall("125" + "00000000000000000", traits);
   const bonusRewardsResult = await aggregate(bonusRewardsCalls, chainId);
   const bonusRewardsDecoded = decodeBonusRewardsFromMulticall(
     bonusRewardsResult.returnData,

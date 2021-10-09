@@ -1,6 +1,6 @@
 import { contractFactory } from "./index";
 import clamBonusAbi from "./abi/ClamBonus.json";
-import { clamBonusAddress } from "./constants";
+import { clamBonusAddress, clamNFTAddress } from "./constants";
 
 const clamBonus = () =>
   contractFactory({
@@ -13,23 +13,24 @@ export const calculateBonusRewards = async (dnaDecoded) => {
   return clamBonus().methods.calculateBonusRewards(size, lifespan, rarityValue).call();
 };
 
-export const prepCalculateBonusRewardsMulticall = (dnasDecoded) => {
+export const prepCalculateBonusRewardsMulticall = (baseRewards, dnasDecoded) => {
   const contractCalls = [];
   for (let index = 0; index < dnasDecoded.length; index++) {
     const { size, lifespan, rarityValue } = dnasDecoded[index].dnaDecodedValues;
     contractCalls.push([
-      clamBonusAddress,
+      clamNFTAddress,
       web3.eth.abi.encodeFunctionCall(
         {
           name: "calculateBonusRewards",
           type: "function",
           inputs: [
+            { name: "baseGemRewards", type: "uint256" },
             { name: "size", type: "uint256" },
             { name: "lifespan", type: "uint256" },
             { name: "rarityValue", type: "uint256" },
           ],
         },
-        [size, lifespan, rarityValue]
+        [baseRewards, size, lifespan, rarityValue]
       ),
     ]);
   }
