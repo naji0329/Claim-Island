@@ -311,6 +311,15 @@ export const getClamValueInShellToken = async () => {
   return clamNft.methods.clamPriceForShell().call();
 };
 
+export const getPearlValueInShellToken = async () => {
+  const clamNft = contractFactory({
+    abi: clamNFTAbi,
+    address: clamNFTAddress,
+  });
+
+  return clamNft.methods.pearlPriceForShell().call();
+};
+
 export const harvestClamForShell = async (tokenId, account) => {
   if (!account) {
     throw new Error("There is no account connected!");
@@ -364,6 +373,7 @@ export default {
   prepClamDataMulticall,
   decodeClamDataFromMulticall,
   getClamValueInShellToken,
+  getPearlValueInShellToken,
   harvestClamForShell,
   prepClamProducedPearlIds,
   decodeProducedPearlIdsFromMulticall,
