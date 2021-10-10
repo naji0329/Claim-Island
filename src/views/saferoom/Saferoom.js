@@ -3,7 +3,7 @@ import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
 import "./index.scss";
 
-import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
+import { Switch, Route, useRouteMatch, Redirect, useLocation, useHistory } from "react-router-dom";
 import Character from "components/characters/CharacterWrapper";
 import Web3Navbar from "components/Web3Navbar";
 import { Modal, useModal } from "components/Modal";
@@ -32,6 +32,8 @@ const Saferoom = ({
   const [loading, setLoading] = useState(false);
 
   let { path, url } = useRouteMatch();
+  const { search, pathname } = useLocation();
+  const history = useHistory();
 
   const { isShowing, toggleModal } = useModal();
 
@@ -118,6 +120,24 @@ const Saferoom = ({
     setSelectedAsset(item);
     toggleModal();
   };
+
+  useEffect(() => {
+    const query = new URLSearchParams(search);
+    const id = query.get("id");
+
+    if (address && id) {
+      let asset;
+      if (tab === TABS.pearl) {
+        asset = pearls.find(({ tokenId }) => tokenId === id);
+      } else {
+        asset = clams.find(({ tokenId }) => tokenId === id);
+      }
+      if (asset) {
+        history.replace(pathname);
+        openDetailedInfo(asset);
+      }
+    }
+  }, [address, search, pearls, clams]);
 
   return (
     <>

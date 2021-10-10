@@ -13,6 +13,8 @@ import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { burnPearlConfirmation, onBurnPearlSuccess } from "../character/BurnPearl";
 import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepositHarvest";
 
+import { formatUnits } from "@ethersproject/units";
+
 const InfoLine = ({ label, value }) => (
   <div className="w-full flex justify-between">
     <span className="text-gray-500">{label}</span>
@@ -32,9 +34,13 @@ const PearlInfo = ({
   const [inTx, setInTx] = useState(false);
 
   const handleBurn = () => {
-    return burnPearlConfirmation(updateCharacter, pearl.bonusRewards, async () => {
-      await executeBurnPearl();
-    });
+    return burnPearlConfirmation(
+      updateCharacter,
+      Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2),
+      async () => {
+        await executeBurnPearl();
+      }
+    );
   };
 
   const executeBurnPearl = async () => {
@@ -86,7 +92,7 @@ const PearlInfo = ({
                 </button>
               </>
             }
-            value={+pearl.bonusRewards}
+            value={Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2)}
           />
 
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
@@ -104,7 +110,10 @@ const PearlInfo = ({
                 Use
               </button>
             )}
-            <Link to={"/saferoom/pearl"} className="btn btn-outline btn-secondary ml-1">
+            <Link
+              to={`/saferoom/pearl?id=${pearl.pearlId}`}
+              className="btn btn-outline btn-secondary ml-1"
+            >
               View Details&nbsp;
               <FontAwesomeIcon icon={faExternalLinkAlt} />
             </Link>

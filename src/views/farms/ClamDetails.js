@@ -5,23 +5,32 @@ import { Skeleton } from "@pancakeswap-libs/uikit";
 import { getPearlDataByIds } from "web3/shared";
 import { clamHasGeneratedBoost } from "web3/gemLocker";
 import { getRemainingPearlProductionTime } from "web3/pearlFarm";
+import { getClamValueInShellToken, getPearlValueInShellToken } from "../../web3/clam";
 import { Clam3DView } from "components/clam3DView";
 import { Controls3DView } from "components/controls3DView";
 import { secondsToFormattedTime } from "utils/time";
+import { formatUnits } from "@ethersproject/units";
 
 import PearlInfo from "../bank/utils/PearlInfo";
+
+const formatShell = (value) => (value ? formatUnits(String(value), 18) : "0");
 
 const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
   const [producedPearls, setProducedPearls] = useState([]);
   const [timeLeft, setTimeLeft] = useState(0);
   const [clamHasGeneratedBonus, setClamHasGeneratedBonus] = useState(false);
+  const [clamValueInShellToken, setClamValueInShellToken] = useState("0");
+  const [pearlValueInShellToken, setPearlValueInShellToken] = useState("0");
   const [isLoading, setIsLoading] = useState(false);
   const remainingFormattedTime = secondsToFormattedTime(timeLeft);
   const { chainId } = useEthers();
   const { clamDataValues } = clam;
   const { dna, pearlsProduced, pearlProductionCapacity } = clamDataValues;
-  const harvestableShell = 1 + pearlsProduced * 0.1;
-  const remainingLifeSpan = pearlProductionCapacity - pearlsProduced;
+  const harvestableShell =
+    +clamValueInShellToken > 0
+      ? +clamValueInShellToken + +pearlsProduced * +pearlValueInShellToken
+      : "0";
+  const remainingLifeSpan = +pearlProductionCapacity - +pearlsProduced;
 
   useEffect(() => {
     const init = async () => {
@@ -35,6 +44,8 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
 
         const remainingPearlProductionTime = await getRemainingPearlProductionTime(clam.clamId);
         setTimeLeft(remainingPearlProductionTime);
+        setClamValueInShellToken(await getClamValueInShellToken());
+        setPearlValueInShellToken(await getPearlValueInShellToken());
       } catch (err) {
         updateAccount({ error: err.message });
       } finally {
@@ -85,11 +96,13 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
             <>
               <div className="grid md:grid-cols-2 md:grid-rows-2 gap-1 mt-2">
                 <div>Harvestable $SHELL</div>
-                <div className="text-right">{harvestableShell}</div>
+                <div className="text-right">{formatShell(harvestableShell)}</div>
                 <div>Pearls Remaining</div>
                 <div className="text-right">{remainingLifeSpan}</div>
                 <div>$GEM boost</div>
-                <div className="text-right">{clamHasGeneratedBonus ? clam.clamBonus : 0}</div>
+                <div className="text-right">
+                  {clamHasGeneratedBonus ? formatUnits(String(clam.clamBonus), 18) : 0}
+                </div>
               </div>
             </>
           )}

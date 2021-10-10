@@ -15,13 +15,10 @@ import { PageTitle } from "components/PageTitle";
 import videoImage from "assets/locations/Farm.jpg";
 import videoMp4 from "assets/locations/Farm.mp4";
 import videoWebM from "assets/locations/Farm.webm";
-import NFTUnknown from "assets/img/clam_unknown.png";
 
 import clamContract from "web3/clam";
-import { prepGetDnaDecodedMulticall, decodeGetDnaDecodedFromMulticall } from "web3/dnaDecoder";
 import { getStakedClamIds, unstakeClam, collectPearl, stakePrice } from "web3/pearlFarm";
-import { aggregate } from "web3/multicall";
-import { formatFromWei } from "web3/shared";
+import { formatFromWei, getClamsDataByIds } from "web3/shared";
 
 import "./index.scss";
 import FarmItem from "./FarmItem";
@@ -38,15 +35,12 @@ import {
   speechWelcomeNext,
 } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
-import {
-  decodeCalculateBonusRewardsFromMulticall,
-  prepCalculateBonusRewardsMulticall,
-} from "web3/clamBonus";
+
 import { ifPearlSendSaferoom } from "./utils";
 
-const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccount }) => {
+const Farms = ({ account: { clamBalance, address, clams }, updateCharacter, updateAccount }) => {
   let history = useHistory();
-  const [clams, setClams] = useState([]);
+  // const [clams, setClams] = useState([]);
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -63,6 +57,9 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
 
   const { chainId } = useEthers();
 
+  const isPrevButtonShown = selectedClam !== clamsStaked[0];
+  const isNextButtonShown = selectedClam !== clamsStaked[clamsStaked.length - 1];
+
   const handleWithdraw = async (clamId) => {
     try {
       setWithdrawingClamId(clamId);
@@ -78,17 +75,15 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     if (modalSelected === MODAL_OPTS.VIEW_PEARL) {
       ifPearlSendSaferoom({ updateCharacter, address, clamId: selectedClamId });
     }
-    const ownedClamsImg = await addClamImg(clams);
-    const stakedClamsImg = await addClamImg(clamsStaked);
 
-    setClams(ownedClamsImg);
-    setClamsStaked(stakedClamsImg);
+    setRefreshClams(true);
   };
 
   // When Deposit Clam Button is clicked - open the modal to show list of clams
   const onDepositClam = () => {
     setModal(MODAL_OPTS.DEPOSIT_CLAM);
     toggleModal();
+    setRefreshClams(true);
   };
 
   // when "View Pearl" is clicked - open the modal for the selected pearl
@@ -132,83 +127,6 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
     });
   };
 
-  const getClamsDataByIds = async (tokenIds) => {
-    const clamDataCalls = clamContract.prepClamDataMulticall(tokenIds);
-    const clamDataResult = await aggregate(clamDataCalls, chainId);
-    const clamDataDecoded = clamContract.decodeClamDataFromMulticall(
-      clamDataResult.returnData,
-      tokenIds
-    );
-    const clamDnas = clamDataDecoded.map((data) => data.clamDataValues.dna);
-
-    const producedPearlIdsCalls = clamContract.prepClamProducedPearlIds(tokenIds);
-    const producedPearlIdsResult = await aggregate(producedPearlIdsCalls, chainId);
-    const producedPearlIdsDecoded = clamContract.decodeProducedPearlIdsFromMulticall(
-      producedPearlIdsResult.returnData,
-      tokenIds
-    );
-
-    const dnaDecodedCalls = prepGetDnaDecodedMulticall(clamDnas);
-    const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
-    const dnaDecodedDecoded = decodeGetDnaDecodedFromMulticall(
-      dnaDecodedResult.returnData,
-      tokenIds
-    );
-
-    const clamBonusCalls = prepCalculateBonusRewardsMulticall(dnaDecodedDecoded);
-    const clamBonusResult = await aggregate(clamBonusCalls, chainId);
-    const clamBonusDecoded = decodeCalculateBonusRewardsFromMulticall(
-      clamBonusResult.returnData,
-      tokenIds
-    );
-
-    const clams = clamDataDecoded.map((clam) => {
-      const sameClamDna = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
-      const sameClamPearlsProduced = producedPearlIdsDecoded.find(
-        ({ clamId }) => clamId === clam.clamId
-      );
-      const sameClamBonus = clamBonusDecoded.find(({ clamId }) => clamId === clam.clamId);
-      if (sameClamDna && sameClamPearlsProduced && sameClamBonus) {
-        const dnaDecoded = sameClamDna.dnaDecodedValues;
-        const producedPearlIds = sameClamPearlsProduced.producedPearlIds;
-        const dna = clam.clamDataValues.dna;
-        const { clamBonus } = sameClamBonus;
-
-        return { ...clam, dnaDecoded, producedPearlIds, dna, clamBonus };
-      }
-      console.error(`Clam ${clam.clamId} from ${address} not found`);
-    });
-
-    const clamsFiltered = clams.filter((c) => c);
-
-    return clamsFiltered;
-  };
-
-  const addClamImg = async (clams) => {
-    const cache = await caches.open("clam-island");
-    const promises = await Promise.all(
-      clams.map((clam) => {
-        const dna = clam.clamDataValues.dna;
-        return cache.match(`/clams/${dna}`);
-      })
-    );
-    const images = await Promise.all(
-      promises.map((resp) => {
-        return resp ? resp.json() : "";
-      })
-    );
-    const clamsUptd = clams.map((clam, index) => {
-      let clamImg = images[index];
-      clamImg = clamImg ? clamImg.img : clamImg;
-      clam.img = clamImg || NFTUnknown;
-      return clam;
-    });
-    return clamsUptd;
-  };
-
-  const isPrevButtonShown = selectedClam !== clamsStaked[0];
-  const isNextButtonShown = selectedClam !== clamsStaked[clamsStaked.length - 1];
-
   const onClickNext = () => {
     const currentClamIndex = clamsStaked.findIndex((clam) => clam === selectedClam);
     setSelectedClam(clamsStaked[currentClamIndex + 1]);
@@ -230,30 +148,19 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
           }
           // get staked clams
           const clamsStakedIds = await getStakedClamIds(address);
+          const stakedClams = await getClamsDataByIds({
+            tokenIds: clamsStakedIds,
+            chainId,
+            clamContract,
+          });
 
-          // get owned clams
-          const tokenIdsCalls = clamContract.prepTokenOfOwnerByIndexMulticall(
-            address,
-            +clamBalance
-          );
-          const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
-          const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
-            tokenIdsResult.returnData
-          );
-          const [ownedClams, stakedClams] = await Promise.all([
-            getClamsDataByIds(tokenIdsDecoded),
-            getClamsDataByIds(clamsStakedIds),
-          ]);
-
-          const ownedClamsImg = await addClamImg(ownedClams);
-          const stakedClamsImg = await addClamImg(stakedClams);
           const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
 
-          setClams(ownedClamsImg);
-          setClamsStaked(stakedClamsImg);
+          setClamsStaked(stakedClams);
           setStakedRarities(rarities);
         } catch (error) {
-          console.log({ error });
+          console.error({ error });
+          updateAccount({ error: error.message });
         } finally {
           setLoading(false);
         }
@@ -273,7 +180,6 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
   useAsync(async () => {
     const priceForPearlInGem = await stakePrice();
     const price = formatFromWei(priceForPearlInGem);
-    console.log({ price });
 
     speechWelcome({ updateCharacter }, async () => {
       //     [get Pearl production price in $GEM]
@@ -290,8 +196,16 @@ const Farms = ({ account: { clamBalance, address }, updateCharacter, updateAccou
       <Modal
         isShowing={isShowing}
         onClose={onModalClose}
-        title={modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL ? "" : "Choose a Clam"}
-        maxWidth={modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL ? "1000px" : "33%"}
+        title={
+          modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL
+            ? ""
+            : "Choose a Clam"
+        }
+        maxWidth={
+          modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL
+            ? "1000px"
+            : "33%"
+        }
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
           <ClamDetails

@@ -196,7 +196,7 @@ export const sendClamToSaferoom = ({ updateCharacter, variant }) => {
       text: "Go to Saferoom",
       alt: {
         action: "internal",
-        destination: "/saferoom/clams",
+        destination: "/saferoom/clam",
       },
     },
   });

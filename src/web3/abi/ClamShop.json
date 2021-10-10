@@ -107,11 +107,37 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "newClamsPerWeekCheckerNum",
+        "type": "uint256"
+      }
+    ],
+    "name": "ClamsPerWeekCheckerNumSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "clamsPerWeek",
         "type": "uint256"
       }
     ],
     "name": "ClamsPerWeekSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newClamsPerWeekSubtractNum",
+        "type": "uint256"
+      }
+    ],
+    "name": "ClamsPerWeekSubtractNumSet",
     "type": "event"
   },
   {
@@ -221,6 +247,32 @@
   {
     "inputs": [],
     "name": "clamsPerWeek",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamsPerWeekCheckerNum",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamsPerWeekSubtractNum",
     "outputs": [
       {
         "internalType": "uint256",
@@ -459,6 +511,32 @@
       }
     ],
     "name": "setClamsPerWeek",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_clamsPerWeekCheckerNum",
+        "type": "uint256"
+      }
+    ],
+    "name": "setClamsPerWeekCheckerNum",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_clamsPerWeekSubtractNum",
+        "type": "uint256"
+      }
+    ],
+    "name": "setClamsPerWeekSubtractNum",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

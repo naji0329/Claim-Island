@@ -28,6 +28,8 @@ import {
 import { useEthers } from "@usedapp/core";
 import { secondsToFormattedTime } from "utils/time";
 
+import { formatUnits } from "@ethersproject/units";
+
 const ClamItem = ({
   clamId,
   img,
@@ -83,7 +85,7 @@ const ClamItem = ({
   const handleDeposit = async () => {
     setInTx(true);
     if (rarityIsAlreadyStaked) {
-      clamRarityAlreadyStaked(updateCharacter, clamBonus, async () => {
+      clamRarityAlreadyStaked(updateCharacter, formatUnits(String(clamBonus), 18), async () => {
         await executeDeposit();
       });
     } else {
@@ -180,11 +182,13 @@ const ClamItem = ({
               <FontAwesomeIcon icon={faInfoCircle} />
             </button>
           </div>
-          <div className="grid-value">{rarityIsAlreadyStaked ? 0 : clamBonus}</div>
+          <div className="grid-value">
+            {rarityIsAlreadyStaked ? 0 : formatUnits(String(clamBonus), 18)}
+          </div>
         </div>
         <div className="flex flex-col">
           <Link
-            to={"/saferoom/clam"}
+            to={`/saferoom/clam?id=${clamId}`}
             className="font-montserrat underline"
             style={{ color: "#757575" }}
           >

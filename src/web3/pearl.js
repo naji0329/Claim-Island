@@ -86,6 +86,13 @@ export const decodeTokenOfOwnerByIndexFromMulticall = (values) => {
   return result;
 };
 
+export const currentPearlBaseGemRewards = async () => {
+  const pearlNft = contractFactory({ abi: pearlNFTAbi, address: pearlNFTAddress });
+  const value = await pearlNft.methods.currentBaseGemRewards().call();
+
+  return value;
+};
+
 export const prepPearlDataMulticall = (tokenIds) => {
   const contractCalls = [];
   for (let index = 0; index < tokenIds.length; index++) {
@@ -142,4 +149,5 @@ export default {
   prepPearlDataMulticall,
   decodeTokenOfOwnerByIndexFromMulticall,
   prepTokenOfOwnerByIndexMulticall,
+  currentPearlBaseGemRewards,
 };

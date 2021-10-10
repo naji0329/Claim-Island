@@ -1,35 +1,45 @@
 import { contractFactory } from "./index";
-import clamBonusAbi from "./abi/ClamBonus.json";
-import { clamBonusAddress } from "./constants";
+import clamAbi from "./abi/Clam.json";
+import { clamNFTAddress } from "./constants";
 
-const clamBonus = () =>
+const clam = () =>
   contractFactory({
-    abi: clamBonusAbi,
-    address: clamBonusAddress,
+    abi: clamAbi,
+    address: clamNFTAddress,
   });
 
 export const calculateBonusRewards = async (dnaDecoded) => {
   const { size, lifespan, rarityValue } = dnaDecoded;
-  return clamBonus().methods.calculateBonusRewards(size, lifespan, rarityValue).call();
+
+  const baseRewards = currentClamBaseGemRewards();
+
+  return clam().methods.calculateBonusRewards(baseRewards, size, lifespan, rarityValue).call();
 };
 
-export const prepCalculateBonusRewardsMulticall = (dnasDecoded) => {
+export const currentClamBaseGemRewards = async () => {
+  const value = await clam().methods.currentBaseGemRewards().call();
+
+  return value;
+};
+
+export const prepCalculateBonusRewardsMulticall = (baseRewards, dnasDecoded) => {
   const contractCalls = [];
   for (let index = 0; index < dnasDecoded.length; index++) {
     const { size, lifespan, rarityValue } = dnasDecoded[index].dnaDecodedValues;
     contractCalls.push([
-      clamBonusAddress,
+      clamNFTAddress,
       web3.eth.abi.encodeFunctionCall(
         {
           name: "calculateBonusRewards",
           type: "function",
           inputs: [
+            { name: "baseGemRewards", type: "uint256" },
             { name: "size", type: "uint256" },
             { name: "lifespan", type: "uint256" },
             { name: "rarityValue", type: "uint256" },
           ],
         },
-        [size, lifespan, rarityValue]
+        [baseRewards, size, lifespan, rarityValue]
       ),
     ]);
   }

@@ -24,7 +24,7 @@ export const WELCOME_SPEECH = {
       dismiss: false,
       skip: false,
     },
-  }
+  },
 };
 
 export const WELCOME_BUTTONS = {
@@ -49,9 +49,9 @@ export const WELCOME_BUTTONS = {
       next: "Keep Exploring",
       alt: {
         action: "url_internal",
-        destination: "/saferoom/clams",
+        destination: "/saferoom/clam",
         text: "Go to Saferoom",
       },
     },
-  }
+  },
 };

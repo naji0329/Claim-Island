@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 import { buyClam, getPrice, checkHasClamToCollect, buyClamWithVestedTokens } from "web3/clam";
+import { zeroHash } from "web3/constants";
 import { infiniteApproveSpending } from "web3/gem";
 import { clamShopAddress } from "web3/constants";
 import { actions } from "store/redux";

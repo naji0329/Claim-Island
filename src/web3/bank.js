@@ -11,7 +11,6 @@ import { aggregate } from "./multicall";
 import { poolAssets } from "../views/bank/poolsAssets";
 import { getUsdValueOfPair, getGemPrice, getUsdPriceOfToken } from "./pancakeRouter";
 import { totalSupply } from "./bep20";
-import { formatNumber } from "views/bank/utils";
 
 const bank = () =>
   contractFactory({
@@ -147,6 +146,14 @@ export const getPoolsLength = async () => {
 export const deposit = async (pid, amount) => {
   const account = getAccount();
   const method = bank().methods.deposit(pid, amount);
+  const gasEstimation = await method.estimateGas({ from: account });
+
+  await method.send({ from: account, gas: gasEstimation }).once("Deposit", eventCallback);
+};
+
+export const harvestAllPools = async () => {
+  const account = getAccount();
+  const method = bank().methods.harvestAllPools();
   const gasEstimation = await method.estimateGas({ from: account });
 
   await method.send({ from: account, gas: gasEstimation }).once("Deposit", eventCallback);

@@ -51,13 +51,17 @@ const Shop = ({
   }, [address, userReady, clamToCollect]);
 
   useEffect(() => {
-    if (address) {
-      checkHasClamToCollect(address).then((clamToCollect) => {
+    const fetchHasClamToCollectData = async () => {
+      if (address) {
+        const clamToCollect = await checkHasClamToCollect(address);
         updateAccount({
           clamToCollect: clamToCollect === zeroHash ? null : clamToCollect,
         });
-      });
-    }
+      }
+    };
+    setInterval(() => {
+      fetchHasClamToCollectData();
+    }, 1500);
   }, [address, modalToShow]);
 
   useEffect(() => {
@@ -67,7 +71,7 @@ const Shop = ({
     if (address && paramValue === "harvest") {
       setModalToShow("harvest");
       setUserReady(true);
-      history.push("/shop");
+      history.replace("/shop");
     }
   }, [search, address]);
 

@@ -69,8 +69,8 @@ const Map3D = ({ guideFeature }) => {
   };
 
   const create3DScene = async (element, setLoading) => {
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.shadowMap.enabled = false;
+    renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
+    renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setSize(window.innerWidth, window.innerHeight);
 
