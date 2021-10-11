@@ -91,9 +91,9 @@ const Shop = ({
           {/* step 1 */}
           {modalToShow === "buy" && <ClamBuyModal setModalToShow={setModalToShow} />}
           {/* step 2 */}
-          {modalToShow === "collect" && clamToCollect && (
-            <ClamCollectModal setModalToShow={setModalToShow} />
-          )}
+          {modalToShow === "collect" &&
+            !!clamToCollect &&
+            clamToCollect != zeroHash(<ClamCollectModal setModalToShow={setModalToShow} />)}
           {/* step 3 */}
           {modalToShow === "display" && <ClamDisplayModal setModalToShow={setModalToShow} />}
           {/* step 4 */}

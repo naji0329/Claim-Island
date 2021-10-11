@@ -77,7 +77,7 @@ const ClamBuyModal = ({
     const totalBN = balanceBN.plus(lockedBN);
     setCanBuy(totalBN.isGreaterThanOrEqualTo(new BigNumber(clamPrice)));
 
-    if (clamToCollect) {
+    if (!!clamToCollect && clamToCollect != zeroHash) {
       setShowHatching(false);
       setModalToShow("collect");
     }
