@@ -14,9 +14,8 @@ import { formatUnits } from "@ethersproject/units";
 export default ({
   dna,
   dnaDecoded,
-  birthTime,
   clamBonus,
-  clamDataValues: { pearlProductionCapacity, pearlsProduced },
+  clamDataValues: { pearlProductionCapacity, pearlsProduced, birthTime },
   onClickNext,
   onClickPrev,
 }) => {
@@ -74,6 +73,14 @@ export default ({
     const initClamView = async () => {
       const incubationTime = await getClamIncubationTime();
       const currentBlockTimestamp = await getCurrentBlockTimestamp();
+
+      console.log({
+        incubationTime: +incubationTime,
+        currentBlockTimestamp: +currentBlockTimestamp,
+        pearlsProduced: +pearlsProduced,
+        pearlProductionCapacity: +pearlProductionCapacity,
+        birthTime: +birthTime,
+      });
 
       const isClamAvailableForHarvest =
         +pearlsProduced < +pearlProductionCapacity &&
