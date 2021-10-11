@@ -47,7 +47,7 @@ const FarmItem = ({
   withdrawingClamId,
 }) => {
   const [inTx, setInTx] = useState(false);
-  const [isInitLoading, setIsInitLoading] = useState(false);
+  const [isInitLoading, setIsInitLoading] = useState(true);
 
   const [action, setAction] = useState("");
   const [buttonText, setButtonText] = useState("");
@@ -58,7 +58,6 @@ const FarmItem = ({
   const [readyForPearl, setReadyForPearl] = useState(false);
   const [gemsNeededForPearlProd, setGemsNeededForPearl] = useState(0);
   const isWithdrawing = withdrawingClamId === clamId;
-
   const calculateTimeLeft = useCallback(() => {
     const now = Math.round(Date.now() / 1000);
     return now > pearlProductionTime ? 0 : pearlProductionTime - now;
@@ -76,33 +75,45 @@ const FarmItem = ({
 
   useEffect(() => {
     const init = async () => {
-      setIsInitLoading(true);
+      //setIsInitLoading(true);
       try {
         const _productionTimeTotal = await getRemainingPearlProductionTime(clamId);
         const _pearlProductionTime = +now + +_productionTimeTotal;
         setPearlProductionTime(_pearlProductionTime);
+        console.log(_pearlProductionTime);
 
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId, address);
+<<<<<<< Updated upstream
         const isReadyForPearl = rngHashForProducedPearl !== zeroHash && !!rngHashForProducedPearl;
         setReadyForPearl(isReadyForPearl);
+=======
+        setReadyForPearl(!!+rngHashForProducedPearl);
+        console.log(!!+rngHashForProducedPearl);
+>>>>>>> Stashed changes
 
         const canProduce = await canCurrentlyProducePearl(clamId);
         setCanProducePearl(canProduce);
+        console.log(canProduce);
 
         const canStillProduce = await canStillProducePearls(clamId);
         setCanStillProducePearl(canStillProduce);
+        console.log(canStillProduce);
 
         const priceForPearlInGem = await stakePrice();
         setGemsNeededForPearl(priceForPearlInGem);
+        console.log(priceForPearlInGem);
 
-        setIsInitLoading(false);
+        //setIsInitLoading(false);
       } catch (err) {
         updateAccount({ error: err.message });
-        setIsInitLoading(false);
+        //setIsInitLoading(false);
       }
     };
 
-    init();
+    init().then(() => {
+      setIsInitLoading(false);
+      console.log('isInitLoading:' + isInitLoading);
+    });
   }, [inTx, address]);
 
   useEffect(() => {
@@ -110,11 +121,13 @@ const FarmItem = ({
       if (readyForPearl) {
         setButtonText("Collect Pearl");
         setAction("collect");
-      } else if (timeLeft === 0 && canProducePearl) {
+      } else if (now > pearlProductionTime && canProducePearl) {
         setButtonText("Open Clam");
         setAction("open");
       } else if (!canStillProducePearl) {
         setButtonText("Can't produce anymore!");
+      } else {
+        setButtonText("Loading...");
       }
     }
   }, [readyForPearl, canProducePearl, canStillProducePearl, isInitLoading]);
@@ -219,7 +232,7 @@ const FarmItem = ({
           <img className="w-auto" src={img} />
         </button>
       </div>
-      {clam.processing ? (
+      {clam.processing && !isInitLoading ? (
         <>
           {/* Progress Bar */}
           <div className="progress-bar">
@@ -267,15 +280,22 @@ const FarmItem = ({
       ) : (
         <div className="px-4 py-2">
           {isInitLoading ? (
-            <div className="text-center">Loading...</div>
+            <ActionButton
+              onClick={getClamFunction}
+              style={action === "open" ? "btn-deposit w-full" : "btn-harvest w-full"}
+              isDisabled="true"
+              isLoading={inTx}
+            >
+              <Spinner show={isWithdrawing} color="#333333" /> Loading...
+            </ActionButton>
           ) : (
             <ActionButton
               onClick={getClamFunction}
               style={action === "open" ? "btn-deposit w-full" : "btn-harvest w-full"}
-              isDisabled={!canProducePearl || inTx}
+              isDisabled={!canProducePearl || inTx || now <= pearlProductionTime}
               isLoading={inTx}
             >
-              {buttonText}
+              {!canProducePearl || inTx || now <= pearlProductionTime ? <Spinner show="true" color="#333333" /> : ""} {buttonText}
             </ActionButton>
           )}
         </div>
