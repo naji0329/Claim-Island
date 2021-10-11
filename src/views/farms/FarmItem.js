@@ -19,6 +19,7 @@ import {
 import { canCurrentlyProducePearl, canStillProducePearls } from "web3/clam";
 import { getPearlData, tokenOfOwnerByIndex, accountPearlBalance } from "web3/pearl";
 import { formatFromWei } from "web3/shared";
+import { zeroHash } from "web3/constants";
 import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
 
 import {
@@ -82,7 +83,8 @@ const FarmItem = ({
         setPearlProductionTime(_pearlProductionTime);
 
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId, address);
-        setReadyForPearl(!!+rngHashForProducedPearl);
+        const isReadyForPearl = rngHashForProducedPearl !== zeroHash && !!rngHashForProducedPearl;
+        setReadyForPearl(isReadyForPearl);
 
         const canProduce = await canCurrentlyProducePearl(clamId);
         setCanProducePearl(canProduce);

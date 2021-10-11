@@ -98,6 +98,7 @@ const ClamItem = ({
     setButtonText("Deposit Clam");
     toast.success("Your clam has been deposited!. You can choose to deposit another clam.");
     depositClamSuccess({ updateCharacter });
+    setRefreshClams(true);
   };
 
   const executeDeposit = async () => {
@@ -138,8 +139,6 @@ const ClamItem = ({
                 triggerClamDepositSuccess();
               }
             }
-
-            setRefreshClams(true);
           } catch (err) {
             updateAccount({ error: err.message });
             setButtonText("Approve Clam");
