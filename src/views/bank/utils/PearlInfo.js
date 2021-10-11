@@ -34,13 +34,10 @@ const PearlInfo = ({
   const [inTx, setInTx] = useState(false);
 
   const handleBurn = () => {
-    return burnPearlConfirmation(
-      updateCharacter,
-      Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2),
-      async () => {
-        await executeBurnPearl();
-      }
-    );
+    const bonusReward = Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2);
+    return burnPearlConfirmation(updateCharacter, String(bonusReward), async () => {
+      await executeBurnPearl();
+    });
   };
 
   const executeBurnPearl = async () => {
