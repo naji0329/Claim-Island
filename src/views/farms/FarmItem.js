@@ -75,44 +75,33 @@ const FarmItem = ({
 
   useEffect(() => {
     const init = async () => {
-      //setIsInitLoading(true);
       try {
         const _productionTimeTotal = await getRemainingPearlProductionTime(clamId);
         const _pearlProductionTime = +now + +_productionTimeTotal;
         setPearlProductionTime(_pearlProductionTime);
-        console.log(_pearlProductionTime);
 
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId, address);
-<<<<<<< Updated upstream
+
         const isReadyForPearl = rngHashForProducedPearl !== zeroHash && !!rngHashForProducedPearl;
         setReadyForPearl(isReadyForPearl);
-=======
-        setReadyForPearl(!!+rngHashForProducedPearl);
-        console.log(!!+rngHashForProducedPearl);
->>>>>>> Stashed changes
 
         const canProduce = await canCurrentlyProducePearl(clamId);
         setCanProducePearl(canProduce);
-        console.log(canProduce);
 
         const canStillProduce = await canStillProducePearls(clamId);
         setCanStillProducePearl(canStillProduce);
-        console.log(canStillProduce);
 
         const priceForPearlInGem = await stakePrice();
         setGemsNeededForPearl(priceForPearlInGem);
-        console.log(priceForPearlInGem);
 
-        //setIsInitLoading(false);
       } catch (err) {
         updateAccount({ error: err.message });
-        //setIsInitLoading(false);
+
       }
     };
 
     init().then(() => {
       setIsInitLoading(false);
-      console.log('isInitLoading:' + isInitLoading);
     });
   }, [inTx, address]);
 
