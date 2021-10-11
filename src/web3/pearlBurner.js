@@ -25,6 +25,10 @@ export const periodInSeconds = async () => {
   return await pearlBurner().methods.periodInSeconds().call();
 };
 
+export const pearlLegacyBaseGemRewards = async () => {
+  return await pearlBurner().methods.baseGemRewards().call();
+};
+
 export const burnPearl = async (pearlId, shape, color) => {
   const account = getAccount();
   const method = pearlBurner().methods.burnPearl(pearlId, shape, color);
@@ -78,7 +82,7 @@ export const prepBonusRewardsMulticall = (baseRewards, traits) => {
             },
           ],
         },
-        [baseRewards, size, lustre, nacreQuality, surface, rarityValue]
+        [baseRewards[index], size, lustre, nacreQuality, surface, rarityValue]
       ),
     ]);
   }

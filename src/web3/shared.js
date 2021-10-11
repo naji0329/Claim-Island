@@ -6,11 +6,15 @@ import { aggregate } from "./multicall";
 import pearlShared from "./pearl";
 import pearlDnaDecoder from "./pearlDnaDecoder";
 import clamDnaDecoder from "./dnaDecoder";
-import { prepBonusRewardsMulticall, decodeBonusRewardsFromMulticall } from "./pearlBurner";
+import {
+  prepBonusRewardsMulticall,
+  decodeBonusRewardsFromMulticall,
+  pearlLegacyBaseGemRewards,
+} from "./pearlBurner";
 import {
   decodeCalculateBonusRewardsFromMulticall,
   prepCalculateBonusRewardsMulticall,
-  currentClamBaseGemRewards,
+  clamLegacyBaseGemRewards,
 } from "./clamBonus";
 
 import NFTUnknown from "assets/img/clam_unknown.png";
@@ -66,6 +70,16 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
   );
   const clamDnas = clamDataDecoded.map((data) => data.clamDataValues.dna);
 
+  const clamLegacyBaseGEMRewards = await clamLegacyBaseGemRewards();
+  const clamGemBoost = clamDataDecoded.map((data) => {
+    const boost = data.clamDataValues.gemBoost;
+    if (+boost === 0) {
+      return String(+clamLegacyBaseGEMRewards * 1e18);
+    } else {
+      return boost;
+    }
+  });
+
   const producedPearlIdsCalls = clamContract.prepClamProducedPearlIds(tokenIds);
   const producedPearlIdsResult = await aggregate(producedPearlIdsCalls, chainId);
   const producedPearlIdsDecoded = clamContract.decodeProducedPearlIdsFromMulticall(
@@ -80,10 +94,7 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
     tokenIds
   );
 
-  const clamBonusCalls = prepCalculateBonusRewardsMulticall(
-    await currentClamBaseGemRewards(),
-    dnaDecodedDecoded
-  );
+  const clamBonusCalls = prepCalculateBonusRewardsMulticall(clamGemBoost, dnaDecodedDecoded);
   const clamBonusResult = await aggregate(clamBonusCalls, chainId);
   const clamBonusDecoded = decodeCalculateBonusRewardsFromMulticall(
     clamBonusResult.returnData,
@@ -125,6 +136,16 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
   );
   const pearlDnas = pearlDataDecoded.map((data) => data.pearlDataValues.dna);
 
+  const legacyBaseGEMRewards = await pearlLegacyBaseGemRewards();
+  const pearlGemBoost = pearlDataDecoded.map((data) => {
+    const boost = data.pearlDataValues.gemBoost;
+    if (+boost === 0) {
+      return String(+legacyBaseGEMRewards * 1e18);
+    } else {
+      return boost;
+    }
+  });
+
   const dnaDecodedCalls = pearlDnaDecoder.prepGetDnaDecodedMulticall(pearlDnas);
   const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
   const dnaDecodedDecoded = pearlDnaDecoder.decodeGetDnaDecodedFromMulticall(
@@ -142,10 +163,7 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
     })
   );
 
-  const bonusRewardsCalls = prepBonusRewardsMulticall(
-    await pearlShared.currentPearlBaseGemRewards(),
-    traits
-  );
+  const bonusRewardsCalls = prepBonusRewardsMulticall(pearlGemBoost, traits);
   const bonusRewardsResult = await aggregate(bonusRewardsCalls, chainId);
   const bonusRewardsDecoded = decodeBonusRewardsFromMulticall(
     bonusRewardsResult.returnData,
