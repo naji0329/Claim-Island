@@ -131,6 +131,24 @@ export const getPrice = async () => {
   return value;
 };
 
+export const getWeekSupply = async () => {
+  const clamShop = contractFactory({
+    abi: clamShopAbi,
+    address: clamShopAddress,
+  });
+  const value = await clamShop.methods.clamsPerWeek().call();
+  return value;
+};
+
+export const getWeekPurchased = async () => {
+  const clamShop = contractFactory({
+    abi: clamShopAbi,
+    address: clamShopAddress,
+  });
+  const value = await clamShop.methods.mintedThisWeek().call();
+  return value;
+};
+
 export const canUnlockGemVestedAmount = async (account) => {
   const clamShop = contractFactory({ abi: clamShopAbi, address: clamShopAddress });
   const value = await clamShop.methods.canUnlockGemVestedAmount(account).call();

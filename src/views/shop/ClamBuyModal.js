@@ -53,8 +53,8 @@ const ClamBuyModal = ({
   const [clamPrice, setClamPrice] = useState(0);
   const [lockedGem, setLockedGem] = useState(0);
   const [canBuy, setCanBuy] = useState(false);
-  const [mintedThisWeek, setMintedThisWeek] = useState(0);
-  const [clamsPerWeek, setClamsPerWeek] = useState(0);
+  const [mintedThisWeek, setMintedThisWeek] = useState('...');
+  const [clamsPerWeek, setClamsPerWeek] = useState('...');
 
   const { handleSubmit } = useForm();
 
@@ -64,6 +64,7 @@ const ClamBuyModal = ({
       setClamPrice(price);
       const locked = await getVestedGem(chainId);
       setLockedGem(locked);
+
 
       setClamsPerWeek(await getClamsPerWeek());
       setMintedThisWeek(await getMintedThisWeek());
@@ -202,20 +203,6 @@ const ClamBuyModal = ({
                         </div>
                         <div className="flex flex-col my-2 pl-4 w-1/2">
                           <div className="flex justify-between">
-                            <span>Clam Weekly</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Remaining:</span>
-                            <span>{+clamsPerWeek - +mintedThisWeek}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Minted:</span>
-                            <span>{mintedThisWeek}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Your GEM</span>
-                          </div>
-                          <div className="flex justify-between">
                             <span>Wallet:</span>
                             <span>{formatNumber(+gemBalance, 3)} GEM</span>
                           </div>
@@ -231,6 +218,9 @@ const ClamBuyModal = ({
                       </div>
                     </div>
                   </div>
+                  <div className="text-md font-semibold my-2">
+                  {mintedThisWeek} of {clamsPerWeek} available Clams purchased this week
+                  </div>
                 </div>
               </div>
             </div>
@@ -239,7 +229,7 @@ const ClamBuyModal = ({
 
             {/* output */}
             <div className="flex flex-col justify-center items-center">
-              <img className="w-1/2" src={ClamUnknown} />
+              <img className="w-1/3" src={ClamUnknown} />
             </div>
 
             <div className="py-2 flex flex-col">
