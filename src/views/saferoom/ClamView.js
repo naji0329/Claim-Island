@@ -74,14 +74,6 @@ export default ({
       const incubationTime = await getClamIncubationTime();
       const currentBlockTimestamp = await getCurrentBlockTimestamp();
 
-      console.log({
-        incubationTime: +incubationTime,
-        currentBlockTimestamp: +currentBlockTimestamp,
-        pearlsProduced: +pearlsProduced,
-        pearlProductionCapacity: +pearlProductionCapacity,
-        birthTime: +birthTime,
-      });
-
       const isClamAvailableForHarvest =
         +pearlsProduced < +pearlProductionCapacity &&
         birthTime &&
