@@ -17,6 +17,7 @@ import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { buyClam, getPrice, checkHasClamToCollect, buyClamWithVestedTokens } from "web3/clam";
 import { zeroHash } from "web3/constants";
 import { infiniteApproveSpending } from "web3/gem";
+import { getMintedThisWeek, getClamsPerWeek } from "web3/clamShop";
 import { clamShopAddress } from "web3/constants";
 import { actions } from "store/redux";
 
@@ -52,6 +53,8 @@ const ClamBuyModal = ({
   const [clamPrice, setClamPrice] = useState(0);
   const [lockedGem, setLockedGem] = useState(0);
   const [canBuy, setCanBuy] = useState(false);
+  const [mintedThisWeek, setMintedThisWeek] = useState(0);
+  const [clamsPerWeek, setClamsPerWeek] = useState(0);
 
   const { handleSubmit } = useForm();
 
@@ -61,6 +64,10 @@ const ClamBuyModal = ({
       setClamPrice(price);
       const locked = await getVestedGem(chainId);
       setLockedGem(locked);
+
+      setClamsPerWeek(await getClamsPerWeek());
+      setMintedThisWeek(await getMintedThisWeek());
+
       if (address) {
         const clamToCollect = await checkHasClamToCollect(address);
         updateAccount({
@@ -194,6 +201,20 @@ const ClamBuyModal = ({
                           </span>
                         </div>
                         <div className="flex flex-col my-2 pl-4 w-1/2">
+                          <div className="flex justify-between">
+                            <span>Clam Weekly</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Remaining:</span>
+                            <span>{+clamsPerWeek - +mintedThisWeek}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Minted:</span>
+                            <span>{mintedThisWeek}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Your GEM</span>
+                          </div>
                           <div className="flex justify-between">
                             <span>Wallet:</span>
                             <span>{formatNumber(+gemBalance, 3)} GEM</span>
