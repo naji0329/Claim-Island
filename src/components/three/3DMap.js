@@ -84,6 +84,7 @@ const Map3D = ({ guideFeature }) => {
     controls.minDistance = 800;
     controls.maxDistance = 1500;
     controls.maxPolarAngle = 1.5;
+    controls.mouseButtons.right = CameraControls.ACTION.NONE;
     controls.saveState();
     cameraControls.current = controls;
 
