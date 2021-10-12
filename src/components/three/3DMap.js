@@ -173,9 +173,10 @@ const Map3D = ({ guideFeature }) => {
       ...vaultOutlineMeshes,
     ];
   };
-
+  let now = Date.now();
   const animate = () => {
-    const tDelta = clock.getDelta();
+    let tDelta = (Date.now() - now) / 1000;
+    now = Date.now();
     let t = clock.getElapsedTime();
     if (cameraControls.current) {
       cameraControls.current.update(tDelta);
