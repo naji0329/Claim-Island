@@ -9,6 +9,7 @@ import classnames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 import { burnPearlConfirmation, onBurnPearlSuccess } from "../character/BurnPearl";
 import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepositHarvest";
