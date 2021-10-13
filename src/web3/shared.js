@@ -73,10 +73,10 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
   const clamLegacyBaseGEMRewards = await clamLegacyBaseGemRewards();
   const clamGemBoost = clamDataDecoded.map((data) => {
     const boost = data.clamDataValues.gemBoost;
-    if (+boost === 0) {
-      return String(+clamLegacyBaseGEMRewards * 1e18);
-    } else {
+    if (+boost > 0) {
       return boost;
+    } else {
+      return String(+clamLegacyBaseGEMRewards * 1e18);
     }
   });
 
@@ -139,10 +139,10 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
   const legacyBaseGEMRewards = await pearlLegacyBaseGemRewards();
   const pearlGemBoost = pearlDataDecoded.map((data) => {
     const boost = data.pearlDataValues.gemBoost;
-    if (+boost === 0) {
-      return String(+legacyBaseGEMRewards * 1e18);
-    } else {
+    if (+boost > 0) {
       return boost;
+    } else {
+      return String(+legacyBaseGEMRewards * 1e18);
     }
   });
 
