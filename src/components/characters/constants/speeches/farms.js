@@ -52,12 +52,6 @@ export const FARM_SPEECH = {
       dismiss: false,
       skip: false,
     },
-    depositClamGemDisagree: {
-      text: `OK. Let me know if you need anything.`,
-      next: `purchase`,
-      dismiss: false,
-      skip: false,
-    },
     depositClamSuccess: {
       text: `Your clam has been deposited!. You can choose to deposit another clam.`,
       next: `purchase`,

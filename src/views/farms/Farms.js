@@ -178,14 +178,23 @@ const Farms = ({ account: { clamBalance, address, clams }, updateCharacter, upda
   }, [clamsStaked]);
 
   useAsync(async () => {
-    const priceForPearlInGem = await stakePrice();
-    const price = formatFromWei(priceForPearlInGem);
-
-    speechWelcome({ updateCharacter }, async () => {
-      //     [get Pearl production price in $GEM]
-      return speechWelcomeNext({ updateCharacter, gem: price });
-    });
-  });
+    if (address) {
+      const priceForPearlInGem = await stakePrice();
+      const price = formatFromWei(priceForPearlInGem);
+      speechWelcome({ updateCharacter }, async () => {
+        //     [get Pearl production price in $GEM]
+        return speechWelcomeNext({ updateCharacter, gem: price });
+      });
+    } else {
+      updateCharacter({
+        name: "al",
+        action: "farms.connect.text",
+        button: {
+          text: undefined,
+        },
+      });
+    }
+  }, [address]);
 
   return (
     <div className="overflow-x-hidden">
