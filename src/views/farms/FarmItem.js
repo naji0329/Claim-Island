@@ -275,7 +275,7 @@ const FarmItem = ({
               isDisabled="true"
               isLoading={inTx}
             >
-              <Spinner show={isWithdrawing} color="#333333" /> Loading...
+              <Spinner show="true" color="#333333" /> Loading...
             </ActionButton>
           ) : (
             <ActionButton
@@ -284,7 +284,7 @@ const FarmItem = ({
               isDisabled={!canProducePearl || inTx || now <= pearlProductionTime}
               isLoading={inTx}
             >
-              {!canProducePearl || inTx || now <= pearlProductionTime ? <Spinner show="true" color="#333333" /> : ""} {buttonText}
+             {buttonText}
             </ActionButton>
           )}
         </div>
