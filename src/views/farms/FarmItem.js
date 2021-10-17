@@ -93,10 +93,8 @@ const FarmItem = ({
 
         const priceForPearlInGem = await stakePrice();
         setGemsNeededForPearl(priceForPearlInGem);
-
       } catch (err) {
         updateAccount({ error: err.message });
-
       }
     };
 
@@ -253,7 +251,7 @@ const FarmItem = ({
             <button
               className="withdraw-btn flex justify-center items-center"
               onClick={onWithdrawClam}
-              disabled={withdrawingClamId}
+              disabled={isWithdrawing}
             >
               <Spinner show={isWithdrawing} color="#ff4b47" />
               Withdraw
@@ -284,7 +282,7 @@ const FarmItem = ({
               isDisabled={!canProducePearl || inTx || now <= pearlProductionTime}
               isLoading={inTx}
             >
-             {buttonText}
+              {buttonText}
             </ActionButton>
           )}
         </div>
