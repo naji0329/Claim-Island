@@ -19,7 +19,7 @@ export const MapGuider = (props) => {
   const [isGuideStarted, setIsGuideStarted] = useState(false);
   const updateCharacter = useAction(updateCharacterAC);
   const hideSpeechBubble = useAction(suppressSpeechBubbleAC);
-  const [_, setIsGuidedTourPassed] = useLocalStorage(IS_GUIDED_TOUR_PASSED);
+  const [, setIsGuidedTourPassed] = useLocalStorage(IS_GUIDED_TOUR_PASSED);
   const completeGuideTour = () => setIsGuidedTourPassed(true);
 
   useEffect(() => {

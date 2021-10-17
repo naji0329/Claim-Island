@@ -7,7 +7,7 @@ import { CAMERA_SETTINGS } from "constants/mapCameraSettings";
 
 export function* GuidTourCameraFlow(controls, models) {
   controls.minPolarAngle = 1;
-  controls.minDistance = 100;
+  controls.minDistance = 200;
 
   yield fitModel(controls, models, ISLANDS_NAMES.lighthouse);
   yield fitModel(controls, models, ISLANDS_NAMES.bank);
