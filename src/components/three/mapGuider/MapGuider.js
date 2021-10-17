@@ -1,30 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useAction } from "redux-zero/react";
+import { useLocalStorage } from "react-use";
 
 import Character from "components/characters/CharacterWrapper";
 import { actions } from "store/redux";
 
-import { ISLANDS_NAMES } from "../constants";
-import { fitModel } from "../utils/fitModel";
-import { guideGreeting } from "utils/mapGuide";
+import { GuidTourSpeechFlow, GuidTourCameraFlow } from "utils/guidTourFlow";
+import { IS_GUIDED_TOUR_PASSED } from "constants/ui";
 
 const updateCharacterAC = actions().updateCharacter;
-
-function* generator(controls, models) {
-  controls.minPolarAngle = 1;
-  controls.minDistance = 100;
-
-  yield fitModel(controls, models, ISLANDS_NAMES.lighthouse);
-  yield fitModel(controls, models, ISLANDS_NAMES.farm);
-  yield fitModel(controls, models, ISLANDS_NAMES.bank);
-  yield fitModel(controls, models, ISLANDS_NAMES.market);
-  yield fitModel(controls, models, ISLANDS_NAMES.vault);
-  controls.reset();
-  controls.minDistance = 800;
-  controls.maxDistance = 1500;
-  controls.maxPolarAngle = 1.5;
-  controls.minPolarAngle = 0;
-}
+const suppressSpeechBubbleAC = actions().suppressSpeechBubbleAction;
 
 export const MapGuider = (props) => {
   const {
@@ -33,12 +18,16 @@ export const MapGuider = (props) => {
   } = props;
   const [isGuideStarted, setIsGuideStarted] = useState(false);
   const updateCharacter = useAction(updateCharacterAC);
+  const hideSpeechBubble = useAction(suppressSpeechBubbleAC);
+  const [_, setIsGuidedTourPassed] = useLocalStorage(IS_GUIDED_TOUR_PASSED);
+  const completeGuideTour = () => setIsGuidedTourPassed(true);
 
   useEffect(() => {
     if (controls && islandModels.length && !isGuideStarted) {
-      const guide = generator(controls, islandModels);
+      const guide = GuidTourCameraFlow(controls, islandModels);
       setIsGuideStarted(true);
-      guideGreeting(updateCharacter, guide)
+      const guidTourSpeechFlow = new GuidTourSpeechFlow(guide, updateCharacter, completeGuideTour, hideSpeechBubble);
+      guidTourSpeechFlow.startTour();
     }
   }, [controls, islandModels]);
 

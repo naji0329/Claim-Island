@@ -6,7 +6,7 @@ import "./Home.scss";
 import Map3D from "../../components/three/3DMap";
 import CharacterSpeak from "../../components/characters";
 import { Map2D } from "components/Map2D";
-import { IS_GUIDE_FEATURE_ENABLED, IS_LITE_VERSION } from "constants/ui";
+import { IS_GUIDED_TOUR_PASSED, IS_LITE_VERSION } from "constants/ui";
 
 // import ClamIsland from "../../assets/img/clam_island_sign.png";
 // import TgIcon from "../../assets/img/tg-icon.png";
@@ -15,7 +15,7 @@ import { IS_GUIDE_FEATURE_ENABLED, IS_LITE_VERSION } from "constants/ui";
 // Main Home Component
 const Home = () => {
   const [isLiteVersion] = useLocalStorage(IS_LITE_VERSION);
-  const [guideFeature] = useLocalStorage(IS_GUIDE_FEATURE_ENABLED);
+  const [isGuidedTourPassed] = useLocalStorage(IS_GUIDED_TOUR_PASSED);
 
   return (
     <>
@@ -46,8 +46,8 @@ const Home = () => {
       </div> */}
       <div className="Home" style={{ height: "95.5vh" }}>
         {/* <Map></Map> */}
-        {isLiteVersion ? <Map2D /> : <Map3D guideFeature={guideFeature} />}
-        {!guideFeature && <CharacterSpeak character={"nacre"} speech={"welcome"} />}
+        {isLiteVersion ? <Map2D /> : <Map3D isGuidedTourPassed={isGuidedTourPassed} />}
+        {isGuidedTourPassed && <CharacterSpeak character={"nacre"} speech={"welcome"} />}
       </div>
     </>
   );

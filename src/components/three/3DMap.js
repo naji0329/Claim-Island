@@ -20,6 +20,7 @@ import "./3d_map.scss";
 import createWater from "./create_water";
 import createSky from "./create_sky";
 import { LiteVersionSwitcher } from "../liteVersionSwitcher";
+import { CAMERA_SETTINGS } from "constants/mapCameraSettings";
 
 import { ISLAND_OBJECTS, ISLANDS_NAMES } from './constants';
 import LoadingScreen from "components/LoadingScreen";
@@ -30,7 +31,7 @@ const clock = new THREE.Clock();
 THREE.Cache.enabled = true;
 CameraControls.install( { THREE: THREE } );
 
-const Map3D = ({ guideFeature }) => {
+const Map3D = ({ isGuidedTourPassed }) => {
   const mapRef = useRef(null);
   const hoverLabelRef = useRef(null);
   const cameraControls = useRef(null);
@@ -81,9 +82,10 @@ const Map3D = ({ guideFeature }) => {
     camera.position.set(650, 350, 500);
 
     const controls = new CameraControls( camera, renderer.domElement );
-    controls.minDistance = 800;
-    controls.maxDistance = 1500;
-    controls.maxPolarAngle = 1.5;
+    controls.minDistance = CAMERA_SETTINGS.minDistance;
+    controls.maxDistance = CAMERA_SETTINGS.maxDistance;
+    controls.minPolarAngle = CAMERA_SETTINGS.minPolarAngle;
+    controls.maxPolarAngle = CAMERA_SETTINGS.maxPolarAngle;
     controls.mouseButtons.right = CameraControls.ACTION.NONE;
     controls.saveState();
     cameraControls.current = controls;
@@ -349,7 +351,7 @@ const Map3D = ({ guideFeature }) => {
         ref={mapRef}
       />
       <div id="hoverLabel" ref={hoverLabelRef}>Opening Soon</div>
-      {guideFeature && <MapGuider controls={cameraControls.current} islandModels={modelObjs.current} />}
+      {!isGuidedTourPassed && <MapGuider controls={cameraControls.current} islandModels={modelObjs.current} />}
     </div>
   );
 };

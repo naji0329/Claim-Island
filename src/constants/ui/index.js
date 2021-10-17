@@ -5,4 +5,4 @@ export const SAFEROOM_TABS = {
   pearl: "Pearl",
 };
 
-export const IS_GUIDE_FEATURE_ENABLED = "guideFeature";
+export const IS_GUIDED_TOUR_PASSED = "isGuidedTourPassed";
