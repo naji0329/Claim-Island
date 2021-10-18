@@ -15,7 +15,7 @@ import { IS_GUIDED_TOUR_PASSED, IS_LITE_VERSION } from "constants/ui";
 // Main Home Component
 const Home = () => {
   const [isLiteVersion] = useLocalStorage(IS_LITE_VERSION);
-  const [isGuidedTourPassed] = useLocalStorage(IS_GUIDED_TOUR_PASSED);
+  const [isGuidedTourPassed, setIsGuidedTourPassed] = useLocalStorage(IS_GUIDED_TOUR_PASSED);
 
   return (
     <>
@@ -46,7 +46,14 @@ const Home = () => {
       </div> */}
       <div className="Home" style={{ height: "95.5vh" }}>
         {/* <Map></Map> */}
-        {isLiteVersion ? <Map2D /> : <Map3D isGuidedTourPassed={isGuidedTourPassed} />}
+        {isLiteVersion ? (
+          <Map2D />
+        ) : (
+          <Map3D
+            isGuidedTourPassed={isGuidedTourPassed}
+            setIsGuidedTourPassed={setIsGuidedTourPassed}
+          />
+        )}
         {isGuidedTourPassed && <CharacterSpeak character={"nacre"} speech={"welcome"} />}
       </div>
     </>

@@ -79,6 +79,10 @@ const CharacterWrapper = ({
         const callback = button.alt.destination;
         callback();
         break;
+      case "internalWithCallback":
+        button.alt.cb();
+        history.push(button.alt.destination);
+        break;
     }
   };
 

@@ -25,13 +25,14 @@ import { CAMERA_SETTINGS } from "constants/mapCameraSettings";
 import { ISLAND_OBJECTS, ISLANDS_NAMES } from './constants';
 import LoadingScreen from "components/LoadingScreen";
 import { MapGuider } from "./mapGuider";
+import { GuidedTourButton } from "./mapGuider/GuidedTourButton";
 
 const clock = new THREE.Clock();
 
 THREE.Cache.enabled = true;
 CameraControls.install( { THREE: THREE } );
 
-const Map3D = ({ isGuidedTourPassed }) => {
+const Map3D = ({ isGuidedTourPassed, setIsGuidedTourPassed }) => {
   const mapRef = useRef(null);
   const hoverLabelRef = useRef(null);
   const cameraControls = useRef(null);
@@ -351,7 +352,8 @@ const Map3D = ({ isGuidedTourPassed }) => {
         ref={mapRef}
       />
       <div id="hoverLabel" ref={hoverLabelRef}>Opening Soon</div>
-      {!isGuidedTourPassed && <MapGuider controls={cameraControls.current} islandModels={modelObjs.current} />}
+      {!isGuidedTourPassed && <MapGuider controls={cameraControls.current} islandModels={modelObjs.current} setIsGuidedTourPassed={setIsGuidedTourPassed} />}
+      {isGuidedTourPassed && <GuidedTourButton setIsGuidedTourPassed={setIsGuidedTourPassed} />}
     </div>
   );
 };

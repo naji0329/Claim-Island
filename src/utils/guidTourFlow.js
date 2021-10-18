@@ -14,7 +14,7 @@ export function* GuidTourCameraFlow(controls, models) {
   yield fitModel(controls, models, ISLANDS_NAMES.market);
   yield fitModel(controls, models, ISLANDS_NAMES.vault);
   yield fitModel(controls, models, ISLANDS_NAMES.farm);
-  controls.reset();
+  controls.reset(true);
   controls.minDistance = CAMERA_SETTINGS.minDistance;
   controls.maxDistance = CAMERA_SETTINGS.maxDistance;
   controls.minPolarAngle = CAMERA_SETTINGS.minPolarAngle;
@@ -43,7 +43,6 @@ export class GuidTourSpeechFlow {
           action: "cb",
           destination: () => {
             this.step3();
-            this.completeGuideTour();
           },
         },
       },
@@ -68,6 +67,7 @@ export class GuidTourSpeechFlow {
         alt: {
           action: "cb",
           destination: () => {
+            this.completeGuideTour();
             this.hideSpeechBubble(true);
           },
         },
@@ -75,8 +75,11 @@ export class GuidTourSpeechFlow {
       buttonAlt: {
         text: BUTTONS.mapGuide.step3.next,
         alt: {
-          action: "internal",
+          action: "internalWithCallback",
           destination: "/info",
+          cb: () => {
+            this.completeGuideTour();
+          },
         },
       },
     });
