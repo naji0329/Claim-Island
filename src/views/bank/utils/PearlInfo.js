@@ -9,6 +9,7 @@ import classnames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 import { burnPearlConfirmation, onBurnPearlSuccess } from "../character/BurnPearl";
 import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepositHarvest";
@@ -34,13 +35,10 @@ const PearlInfo = ({
   const [inTx, setInTx] = useState(false);
 
   const handleBurn = () => {
-    return burnPearlConfirmation(
-      updateCharacter,
-      Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2),
-      async () => {
-        await executeBurnPearl();
-      }
-    );
+    const bonusReward = Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2);
+    return burnPearlConfirmation(updateCharacter, String(bonusReward), async () => {
+      await executeBurnPearl();
+    });
   };
 
   const executeBurnPearl = async () => {

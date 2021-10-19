@@ -11,6 +11,7 @@ import Web3Navbar from "components/Web3Navbar";
 import { Modal, useModal } from "components/Modal";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
+import { sortClamsById } from "utils/clams";
 
 import videoImage from "assets/locations/Farm.jpg";
 import videoMp4 from "assets/locations/Farm.mp4";
@@ -38,9 +39,13 @@ import LoadingScreen from "components/LoadingScreen";
 
 import { ifPearlSendSaferoom } from "./utils";
 
-const Farms = ({ account: { clamBalance, address, clams }, updateCharacter, updateAccount }) => {
+const Farms = ({
+  account: { clamBalance, address, clams = [] },
+  updateCharacter,
+  updateAccount,
+}) => {
   let history = useHistory();
-  // const [clams, setClams] = useState([]);
+  const availableClamsForDepositing = [...clams].sort(sortClamsById);
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -178,14 +183,23 @@ const Farms = ({ account: { clamBalance, address, clams }, updateCharacter, upda
   }, [clamsStaked]);
 
   useAsync(async () => {
-    const priceForPearlInGem = await stakePrice();
-    const price = formatFromWei(priceForPearlInGem);
-
-    speechWelcome({ updateCharacter }, async () => {
-      //     [get Pearl production price in $GEM]
-      return speechWelcomeNext({ updateCharacter, gem: price });
-    });
-  });
+    if (address) {
+      const priceForPearlInGem = await stakePrice();
+      const price = formatFromWei(priceForPearlInGem);
+      speechWelcome({ updateCharacter }, async () => {
+        //     [get Pearl production price in $GEM]
+        return speechWelcomeNext({ updateCharacter, gem: price });
+      });
+    } else {
+      updateCharacter({
+        name: "al",
+        action: "farms.connect.text",
+        button: {
+          text: undefined,
+        },
+      });
+    }
+  }, [address]);
 
   return (
     <div className="overflow-x-hidden">
@@ -217,7 +231,7 @@ const Farms = ({ account: { clamBalance, address, clams }, updateCharacter, upda
           />
         ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
           <ClamDeposit
-            clams={clams}
+            clams={availableClamsForDepositing}
             updateCharacter={updateCharacter}
             toggleModal={toggleModal}
             stakedRarities={stakedRarities}

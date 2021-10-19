@@ -228,10 +228,18 @@ const CharacterSpeak = (props) => {
     switch (btnTrack[trackCount].alt.action) {
       case "url_internal":
         window.location.href = destination;
+        if(btnTrack[trackCount].alt.next) {
+          setSpeech(speechTrack[btnTrack[trackCount].alt.next].text);
+          setTrackCount(btnTrack[trackCount].alt.next);
+        }
         break;
 
       case "url":
         window.open(destination, "_blank");
+        if(btnTrack[trackCount].alt.next) {
+          setSpeech(speechTrack[btnTrack[trackCount].alt.next].text);
+          setTrackCount(btnTrack[trackCount].alt.next);
+        }
         break;
 
       case "speech":

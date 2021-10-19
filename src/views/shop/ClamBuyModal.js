@@ -17,6 +17,7 @@ import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { buyClam, getPrice, checkHasClamToCollect, buyClamWithVestedTokens } from "web3/clam";
 import { zeroHash } from "web3/constants";
 import { infiniteApproveSpending } from "web3/gem";
+import { getMintedThisWeek, getClamsPerWeek } from "web3/clamShop";
 import { clamShopAddress } from "web3/constants";
 import { actions } from "store/redux";
 
@@ -52,6 +53,8 @@ const ClamBuyModal = ({
   const [clamPrice, setClamPrice] = useState(0);
   const [lockedGem, setLockedGem] = useState(0);
   const [canBuy, setCanBuy] = useState(false);
+  const [mintedThisWeek, setMintedThisWeek] = useState('...');
+  const [clamsPerWeek, setClamsPerWeek] = useState('...');
 
   const { handleSubmit } = useForm();
 
@@ -61,6 +64,11 @@ const ClamBuyModal = ({
       setClamPrice(price);
       const locked = await getVestedGem(chainId);
       setLockedGem(locked);
+
+
+      setClamsPerWeek(await getClamsPerWeek());
+      setMintedThisWeek(await getMintedThisWeek());
+
       if (address) {
         const clamToCollect = await checkHasClamToCollect(address);
         updateAccount({
@@ -77,7 +85,7 @@ const ClamBuyModal = ({
     const totalBN = balanceBN.plus(lockedBN);
     setCanBuy(totalBN.isGreaterThanOrEqualTo(new BigNumber(clamPrice)));
 
-    if (clamToCollect) {
+    if (!!clamToCollect && clamToCollect != zeroHash) {
       setShowHatching(false);
       setModalToShow("collect");
     }
@@ -210,6 +218,9 @@ const ClamBuyModal = ({
                       </div>
                     </div>
                   </div>
+                  <div className="text-md font-semibold my-2">
+                  {mintedThisWeek} of {clamsPerWeek} available Clams purchased this week
+                  </div>
                 </div>
               </div>
             </div>
@@ -218,7 +229,7 @@ const ClamBuyModal = ({
 
             {/* output */}
             <div className="flex flex-col justify-center items-center">
-              <img className="w-1/2" src={ClamUnknown} />
+              <img className="w-1/3" src={ClamUnknown} />
             </div>
 
             <div className="py-2 flex flex-col">

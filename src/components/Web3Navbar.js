@@ -5,7 +5,6 @@ import {
   useTokenBalance,
   useEtherBalance,
   ChainId,
-  shortenAddress,
 } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { actions } from "../store/redux";
@@ -27,13 +26,12 @@ import clamContract from "web3/clam";
 
 import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm";
 
-import Web3Avatar from "./Web3Avatar";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { getUsdPriceOfToken } from "../web3/pancakeRouter";
 import BigNumber from "bignumber.js";
 import NetworkService from "../utils/NetworkService";
+import { NavBarUserProfile } from "./navBarUserProfile";
 
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
@@ -88,7 +86,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   const [activateClams, setActivateClams] = useState([]);
   const [activatePearls, setActivatePearls] = useState([]);
 
-  const { activateBrowserWallet, account, error } = useEthers();
+  const { activateBrowserWallet, account, error, deactivate } = useEthers();
   const clamBalance = useTokenBalance(clamNFTAddress, account);
   const pearlBalance = useTokenBalance(pearlNFTAddress, account);
   const gemBalance = useTokenBalance(gemTokenAddress, account);
@@ -310,7 +308,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                 // style={{ fontFamily: "AristotelicaBold", lineHeight: "0.7rem" }}
                 type="button"
                 className="focus:outline-none block text-md px-4 ml-2 py-2 rounded-xl bg-gray-800 text-white font-bold hover:text-white hover:bg-gray-700"
-                onClick={() => activateBrowserWallet()}
+                onClick={activateBrowserWallet}
               >
                 Connect Wallet
               </button>
@@ -362,12 +360,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                     </span>
                   </Link>
                 </div>
-
-                <div className="flex lg:mt-0 px-4 py-2 bg-gray-900 mr-2 rounded-xl shadow bg-black bg-opacity-80">
-                  <div className="p-1 text-sm text-gray-200">{shortenAddress(account)}</div>
-
-                  <Web3Avatar address={account} size={30} />
-                </div>
+                <NavBarUserProfile account={account} disconnect={deactivate} />
               </>
             )}
           </div>

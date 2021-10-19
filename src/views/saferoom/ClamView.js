@@ -14,9 +14,8 @@ import { formatUnits } from "@ethersproject/units";
 export default ({
   dna,
   dnaDecoded,
-  birthTime,
   clamBonus,
-  clamDataValues: { pearlProductionCapacity, pearlsProduced },
+  clamDataValues: { pearlProductionCapacity, pearlsProduced, birthTime },
   onClickNext,
   onClickPrev,
 }) => {

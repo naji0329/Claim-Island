@@ -49,6 +49,7 @@ const ClamItem = ({
   const [gemApproved, setGemApproved] = useState(false);
   const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
   const [isNativeStaker, setIsNativeStaker] = useState(false);
+  const [isClamDeposited, setIsClamDeposited] = useState(false);
 
   const { chainId } = useEthers();
   getAllPools({ address, chainId }).then((pools) => {
@@ -83,7 +84,6 @@ const ClamItem = ({
   }, [address, inTx]);
 
   const handleDeposit = async () => {
-    setInTx(true);
     if (rarityIsAlreadyStaked) {
       clamRarityAlreadyStaked(updateCharacter, formatUnits(String(clamBonus), 18), async () => {
         await executeDeposit();
@@ -91,13 +91,13 @@ const ClamItem = ({
     } else {
       await executeDeposit();
     }
-    setInTx(false);
   };
 
   const triggerClamDepositSuccess = () => {
-    setButtonText("Deposit Clam");
     toast.success("Your clam has been deposited!. You can choose to deposit another clam.");
     depositClamSuccess({ updateCharacter });
+    setRefreshClams(true);
+    setIsClamDeposited(true);
   };
 
   const executeDeposit = async () => {
@@ -112,6 +112,7 @@ const ClamItem = ({
         { updateCharacter, gems: formatFromWei(pearlPrice), dismissModal: toggleModal },
         async () => {
           try {
+            setInTx(true);
             setButtonText("Approving Clam...");
             await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
 
@@ -138,8 +139,6 @@ const ClamItem = ({
                 triggerClamDepositSuccess();
               }
             }
-
-            setRefreshClams(true);
           } catch (err) {
             updateAccount({ error: err.message });
             setButtonText("Approve Clam");
@@ -155,6 +154,10 @@ const ClamItem = ({
       depositClamError({ updateCharacter, err }); // character speaks
     }
   };
+
+  if (isClamDeposited) {
+    return null;
+  }
 
   return (
     <div className="clam-details">
