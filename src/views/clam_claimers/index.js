@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import "./index.scss";
 import CharacterWrapper from "../../components/characters/CharacterWrapper";
-import Web3Navbar from "../../components/Web3Navbar";
 import ClamUnknown from "../../assets/img/clam_unknown.png";
 import Card from "../../components/Card";
 // import Shop from "../../assets/locations/shop_animated.mp4";
@@ -207,7 +206,6 @@ const ClamPresale = ({
 
   return (
     <>
-      <Web3Navbar />
       <Web3ClamClaimers />
       {/* container */}
       <div className="shop-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">

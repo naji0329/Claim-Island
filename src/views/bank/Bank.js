@@ -8,7 +8,6 @@ import videoWebM from "assets/locations/Bank.webm";
 
 import { WalletConnectAndAssist } from "./character/WalletConnectAndAssist";
 import Character from "components/characters/CharacterWrapper";
-import Web3Navbar from "components/Web3Navbar";
 import VideoBackground from "components/VideoBackground";
 import { Modal, useModal } from "components/Modal";
 import { PageTitle } from "components/PageTitle";
@@ -91,7 +90,6 @@ const Bank = ({
         <Modal isShowing={isShowing} onClose={toggleModal} width={"60rem"}>
           <BurnPearlModal isNativeStaker={isNativeStaker} chainId={chainId} />
         </Modal>
-        <Web3Navbar />
         {/* container */}
         {/* video */}
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />

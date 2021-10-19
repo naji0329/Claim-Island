@@ -1,6 +1,5 @@
 import React from "react";
 
-import Web3Navbar from "components/Web3Navbar";
 import VideoBackground from "components/VideoBackground";
 import Character from "components/characters/CharacterWrapper";
 import { PageTitle } from "components/PageTitle";
@@ -13,7 +12,6 @@ import { InfocenterContent } from "./InfocenterContent";
 export const Infocenter = () => {
   return (
     <>
-      <Web3Navbar />
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
       <Character name="janet" />
       <div className="absolute left-8 top-7">

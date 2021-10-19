@@ -7,7 +7,6 @@ import { useEthers } from "@usedapp/core";
 
 import { actions } from "store/redux";
 import Character from "components/characters/CharacterWrapper";
-import Web3Navbar from "components/Web3Navbar";
 import { Modal, useModal } from "components/Modal";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
@@ -204,7 +203,6 @@ const Farms = ({
   return (
     <div className="overflow-x-hidden">
       {loading && <LoadingScreen />}
-      <Web3Navbar />
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
       <Modal
