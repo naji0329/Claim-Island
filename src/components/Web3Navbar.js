@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAsync } from "react-use";
-import {
-  useEthers,
-  useTokenBalance,
-  useEtherBalance,
-  ChainId,
-} from "@usedapp/core";
+import { useEthers, useTokenBalance, useEtherBalance, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { actions } from "../store/redux";
 import { Link, useLocation } from "react-router-dom";
@@ -96,17 +91,62 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   const location = useLocation();
 
   useAsync(async () => {
-    console.log("loaded");
+    // console.log("loaded");
     const netId = await web3.eth.net.getId();
     if (netId !== activateChainId) {
       setActivateChainId(netId);
+    }
+
+    if (account) {
+      const gemPrice = await getUsdPriceOfToken(gemTokenAddress, BUSD);
+      const gemPriceBigNumber = new BigNumber(gemPrice).toFixed(2);
+      const shellPrice = await getUsdPriceOfToken(shellTokenAddress, BUSD);
+      const shellPriceBigNumber = new BigNumber(shellPrice).toFixed(2);
+
+      // console.log({ reason: "gem price" });
+      setActivateGemPrice(gemPriceBigNumber);
+      // console.log({ reason: "shell price" });
+      setActivateShellPrice(shellPriceBigNumber);
+
+      // get Clam in farm
+      const stakedClamsInFarm = await getStakedClamIds(account);
+      // console.log({ reason: "clams in farm" });
+      setActivateClamBalanceInFarm(stakedClamsInFarm.length);
+
+      // get Pearls that are ready to be collected in farm
+      const promises = stakedClamsInFarm.map((clamId) =>
+        rngRequestHashForProducedPearl(clamId, account)
+      );
+      const pearlsReadyInFarm = await Promise.all(promises);
+      const numberOfPearlsReady = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
+      // console.log({ reason: "pearls in farm" });
+      setActivatePearlBalanceInFarm(numberOfPearlsReady);
+
+      if (activateClams.length !== +clamBalance) {
+        const clams = await getOwnedClams({
+          chainId: netId,
+          address: account,
+          balance: clamBalance,
+          clamContract,
+        });
+        setActivateClams(clams);
+      }
+
+      if (activateClams.length !== +clamBalance) {
+        const pearls = await getOwnedPearls({
+          chainId: netId,
+          address: account,
+          balance: pearlBalance,
+        });
+        setActivatePearls(pearls);
+      }
     }
   });
 
   if (window.ethereum) {
     window.ethereum.on("chainChanged", (networkId) => {
       const newChainId = parseInt(networkId);
-      console.log("chainChanged", newChainId);
+      // console.log("chainChanged", newChainId);
       if (newChainId !== activateChainId) {
         setActivateChainId(newChainId);
       }
@@ -115,6 +155,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
 
   useEffect(async () => {
     if (!web3) {
+      console.log({ reason: "not connected" });
       return updateAccount({ web3Installed: false, error: "Metamask not installed" });
     }
     const netId = await web3.eth.net.getId();
@@ -151,6 +192,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
 
   useEffect(() => {
     if (error) {
+      console.log({ reason: "has an error" });
       setActivateError(error.message);
     }
   }, [error]);
@@ -161,6 +203,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
     // console.log("useEffect", { balance });
     if (balance !== activateBnbBalance) {
       // balance is string
+      // console.log({ reason: "bnb balance update" });
       setActivateBnbBalance(balance);
     }
   }, [bnbBalance]);
@@ -170,39 +213,15 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
     const balanceOfClams = formatNFT(clamBalance);
     if (balanceOfClams !== activateClamBalanceInSafe) {
       // balanceOfClams is string
+      // console.log({ reason: "clams nft update" });
       setActivateClamBalanceInSafe(balanceOfClams);
     }
 
     const balanceOfPearls = formatNFT(pearlBalance);
     if (balanceOfPearls !== activatePearlBalanceInSafe) {
+      // console.log({ reason: "pearls nft update" });
       setActivatePearlBalanceInSafe(balanceOfPearls);
     }
-
-    const initNavBar = async () => {
-      if (account) {
-        const gemPrice = await getUsdPriceOfToken(gemTokenAddress, BUSD);
-        const gemPriceBigNumber = new BigNumber(gemPrice).toFixed(2);
-        const shellPrice = await getUsdPriceOfToken(shellTokenAddress, BUSD);
-        const shellPriceBigNumber = new BigNumber(shellPrice).toFixed(2);
-
-        setActivateGemPrice(gemPriceBigNumber);
-        setActivateShellPrice(shellPriceBigNumber);
-
-        // get Clam in farm
-        const stakedClamsInFarm = await getStakedClamIds(account);
-        setActivateClamBalanceInFarm(stakedClamsInFarm.length);
-
-        // get Pearls that are ready to be collected in farm
-        const promises = stakedClamsInFarm.map((clamId) =>
-          rngRequestHashForProducedPearl(clamId, account)
-        );
-        const pearlsReadyInFarm = await Promise.all(promises);
-        const numberOfPearlsReady = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
-        setActivatePearlBalanceInFarm(numberOfPearlsReady);
-      }
-    };
-
-    initNavBar();
   }, [clamBalance, pearlBalance, account]);
 
   useEffect(() => {
@@ -210,52 +229,19 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
     const gemBal = formatBEP20(gemBalance);
     const shellBal = formatBEP20(shellBalance);
 
-    if (gemBal !== activateGemBalance) {
+    if (Number(gemBal).toFixed(2) !== Number(activateGemBalance).toFixed(2)) {
       // gemBal is string
+      // console.log({ gemBal, activateGemBalance });
+      // console.log({ reason: "gem balance" });
       setActivateGemBalance(new BigNumber(gemBal).toFixed(2));
     }
 
-    if (shellBal !== activateShellBalance) {
+    if (Number(shellBal).toFixed(2) !== Number(activateShellBalance).toFixed(2)) {
       // shellBal is string
+      // console.log({ reason: "shell balance" });
       setActivateShellBalance(new BigNumber(shellBal).toFixed(2));
     }
   }, [gemBalance]);
-
-  // get clam and pearls data
-  useEffect(async () => {
-    if (account && activateChainId) {
-      // handle when change to an wallet that does not have clams or pealrs
-      if (activateClamBalanceInSafe !== "0" && activateClams.length === 0) {
-        const clams = await getOwnedClams({
-          chainId: activateChainId,
-          address: account,
-          balance: clamBalance,
-          clamContract,
-        });
-
-        setActivateClams(clams);
-      }
-
-      if (activatePearlBalanceInSafe !== "0" && activatePearls.length === 0) {
-        const pearls = await getOwnedPearls({
-          chainId: activateChainId,
-          address: account,
-          balance: pearlBalance,
-        });
-
-        setActivatePearls(pearls);
-      }
-
-      // wallet is connected and has no clams downloaded
-      if (activateClamBalanceInSafe === "0" && activateClams.length !== 0) {
-        setActivateClams([]);
-      }
-
-      if (activatePearlBalanceInSafe === "0" && activatePearls.length !== 0) {
-        setActivatePearls([]);
-      }
-    }
-  }, [clamBalance, pearlBalance]);
 
   return (
     <>
