@@ -30,7 +30,33 @@ export class GuidTourSpeechFlow {
   }
 
   startTour() {
-    this.updateCharacterDraft(this.step2, "greeting", false, "greeting");
+    localStorage.getItem('notFirstTime') ?
+      this.updateCharacter({
+        name: "nacre",
+        action: "mapGuide.greeting_alt.text",
+        button: {
+          text: BUTTONS.mapGuide.greeting_alt.alt,
+          alt: {
+            action: "cb",
+            destination: () => {
+              this.step3();
+            },
+          },
+        },
+        buttonAlt: {
+          text: BUTTONS.mapGuide.greeting_alt.next,
+          alt: {
+            action: "cb",
+            destination: () => {
+              this.step4();
+            },
+          },
+        },
+      })
+
+      :
+
+      this.updateCharacterDraft(this.step2, "greeting", false, "greeting");
   }
 
   step2 = () => {
@@ -83,6 +109,7 @@ export class GuidTourSpeechFlow {
         },
       },
     });
+    localStorage.setItem('notFirstTime', true);
   };
 
   step4 = () => {
@@ -149,6 +176,30 @@ export class GuidTourSpeechFlow {
     this.updateCharacterDraft(this.step20, "step19", true);
   };
 
+  step19 = () => {
+    this.updateCharacter({
+      name: "nacre",
+      action: "mapGuide.step19.text",
+      button: {
+        text: BUTTONS.mapGuide.step19.alt,
+        alt: {
+          action: "url",
+          destination: "https://clamisland.medium.com/clarification-on-the-clam-island-arcidae-update-7cdc44ea8991",
+        },
+      },
+      buttonAlt: {
+        text: BUTTONS.mapGuide.step19.next,
+        alt: {
+          action: "cb",
+          destination: () => {
+            this.step20();
+            this.mapController.next();
+          },
+        },
+      },
+    });
+  };
+
   step20 = () => {
     this.updateCharacterDraft(this.step21, "step20");
   };
@@ -160,6 +211,7 @@ export class GuidTourSpeechFlow {
   lastStep = () => {
     this.hideSpeechBubble(true);
     this.completeGuideTour();
+    localStorage.setItem('notFirstTime', true);
   };
 
   updateCharacterDraft(nextSpeech, action, isNeedControlMap, button = "nextStep") {

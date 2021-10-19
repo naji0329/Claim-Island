@@ -5,6 +5,11 @@ export const MAP_SPEECH = {
       next: false,
       hideable: false,
     },
+    greeting_alt: {
+      text: "Hmmm? Oh, you want me to take you on a quick tour of the island?",
+      next: false,
+      hideable: false,
+    },
     step2: {
       text: "I see that this is your first time here – would you like me to give you a quick tour?",
       skip: false,
@@ -16,7 +21,7 @@ export const MAP_SPEECH = {
       hideable: false,
     },
     step4: {
-      text: "Great! Let’s head off then.",
+      text: "Alright! Let’s head off then.",
       skip: false,
       hideable: false,
     },
@@ -71,7 +76,7 @@ export const MAP_SPEECH = {
       hideable: false,
     },
     step15: {
-      text: "You will also soon be able to inspect any Clam or Pearl on Clam Island from within the comfort of the Saferoom.",
+      text: "You will also soon be able to inspect any Clam or Pearl on Clam Island from within the comfort of the Saferoom - this feature is currently under construction.",
       skip: false,
       hideable: false,
     },
@@ -91,7 +96,7 @@ export const MAP_SPEECH = {
       hideable: false,
     },
     step19: {
-      text: "Clams can also boost your investment returns in the Bank the first time you deposit them in the Farm. You should go to the Farm and speak to Al, our resident Clam Farmer, about the specifics.",
+      text: "Clams can also boost your investment returns in the Bank. If you want to dive in to the details, you can find out more on our Medium page.",
       skip: false,
       hideable: false,
     },
@@ -114,6 +119,10 @@ export const MAP_BUTTONS = {
       next: "Cool!",
       alt: false,
     },
+    greeting_alt: {
+      next: "Yes please!",
+      alt: "No thank you",
+    },
     step2: {
       next: "Sure!",
       alt: "No thanks",
@@ -121,6 +130,10 @@ export const MAP_BUTTONS = {
     step3: {
       next: "Go to Infocenter",
       alt: "Great, thanks!",
+    },
+    step19: {
+      next: "Next",
+      alt: "Find out more",
     },
     step21: {
       next: "Finish Tour",
