@@ -61,7 +61,13 @@ const Home = () => {
             setIsGuidedTourPassed={setIsGuidedTourPassed}
           />
         )}
-        {isGuidedTourPassed && <CharacterSpeak character={"nacre"} speech={"welcome"} isNeedSkipFirstWelcome={isUserVisitedTourThisSession} />}
+        {isGuidedTourPassed && (
+          <CharacterSpeak
+            character={"nacre"}
+            speech={"welcome"}
+            isNeedSkipFirstWelcome={isUserVisitedTourThisSession}
+          />
+        )}
       </div>
     </>
   );
