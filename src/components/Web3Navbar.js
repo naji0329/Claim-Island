@@ -122,26 +122,22 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
       // console.log({ reason: "pearls in farm" });
       setActivatePearlBalanceInFarm(numberOfPearlsReady);
 
-      if (activateClams.length !== +clamBalance) {
-        const clams = await getOwnedClams({
-          chainId: netId,
-          address: account,
-          balance: clamBalance,
-          clamContract,
-        });
-        setActivateClams(clams);
-      }
+      const clams = await getOwnedClams({
+        chainId: netId,
+        address: account,
+        balance: clamBalance,
+        clamContract,
+      });
+      setActivateClams(clams);
 
-      if (activateClams.length !== +clamBalance) {
-        const pearls = await getOwnedPearls({
-          chainId: netId,
-          address: account,
-          balance: pearlBalance,
-        });
-        setActivatePearls(pearls);
-      }
+      const pearls = await getOwnedPearls({
+        chainId: netId,
+        address: account,
+        balance: pearlBalance,
+      });
+      setActivatePearls(pearls);
     }
-  });
+  }, [account]);
 
   if (window.ethereum) {
     window.ethereum.on("chainChanged", (networkId) => {
