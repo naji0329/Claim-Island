@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocalStorage } from "react-use";
 
 import "./Home.scss";
@@ -16,6 +16,13 @@ import { IS_GUIDED_TOUR_PASSED, IS_LITE_VERSION } from "constants/ui";
 const Home = () => {
   const [isLiteVersion] = useLocalStorage(IS_LITE_VERSION);
   const [isGuidedTourPassed, setIsGuidedTourPassed] = useLocalStorage(IS_GUIDED_TOUR_PASSED);
+  const [isUserVisitedTourThisSession, setIsUserVisitedTourThisSession] = useState(false);
+
+  useEffect(() => {
+    if (!isGuidedTourPassed) {
+      setIsUserVisitedTourThisSession(true);
+    }
+  }, [isGuidedTourPassed]);
 
   return (
     <>
@@ -54,7 +61,7 @@ const Home = () => {
             setIsGuidedTourPassed={setIsGuidedTourPassed}
           />
         )}
-        {isGuidedTourPassed && <CharacterSpeak character={"nacre"} speech={"welcome"} />}
+        {isGuidedTourPassed && <CharacterSpeak character={"nacre"} speech={"welcome"} isNeedSkipFirstWelcome={isUserVisitedTourThisSession} />}
       </div>
     </>
   );
