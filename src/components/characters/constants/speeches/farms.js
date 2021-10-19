@@ -149,6 +149,11 @@ export const FARM_SPEECH = {
       skip: false,
       hideable: false,
     },
+    refundDepositedGem: {
+      text: "Do you want to refund your deposited $GEM ?",
+      dismiss: false,
+      skip: false,
+    },
   },
 };
 

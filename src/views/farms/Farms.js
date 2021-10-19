@@ -18,7 +18,14 @@ import videoMp4 from "assets/locations/Farm.mp4";
 import videoWebM from "assets/locations/Farm.webm";
 
 import clamContract from "web3/clam";
-import { getStakedClamIds, unstakeClam, collectPearl, stakePrice } from "web3/pearlFarm";
+import {
+  getStakedClamIds,
+  unstakeClam,
+  collectPearl,
+  stakePrice,
+  prepareReclaiming,
+  reclaimGems,
+} from "web3/pearlFarm";
 import { formatFromWei, getClamsDataByIds } from "web3/shared";
 
 import "./index.scss";
@@ -34,6 +41,7 @@ import {
   withdrawClamSpeak,
   speechWelcome,
   speechWelcomeNext,
+  refundDepositedGemSpeak,
 } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
 
@@ -124,11 +132,26 @@ const Farms = ({
     }
   };
 
+  const refundDepositedGem = (clamId) => {
+    refundDepositedGemSpeak(
+      { updateCharacter },
+      async () => {
+        await handleWithdraw(clamId);
+        await prepareReclaiming(clamId);
+        await reclaimGems(clamId);
+        WelcomeUser({ updateCharacter, suppressSpeechBubble: true });
+      },
+      () => {
+        handleWithdraw(clamId);
+        WelcomeUser({ updateCharacter, suppressSpeechBubble: true });
+      }
+    );
+  };
+
   // when "Withdraw" is clicked - open the modal
   const onWithdrawClam = (clam) => {
     withdrawClamSpeak({ updateCharacter }, () => {
-      handleWithdraw(clam.clamId);
-      WelcomeUser({ updateCharacter, suppressSpeechBubble: true });
+      refundDepositedGem(clam.clamId);
     });
   };
 

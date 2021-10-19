@@ -6,7 +6,6 @@ export const withdrawClamSpeak = ({ updateCharacter }, cb) => {
     action: "farms.withdraw.text",
     show: true,
     button: {
-      // text: undefined,
       text: "Withdraw",
       alt: {
         action: "cb",
@@ -22,6 +21,38 @@ export const withdrawClamSpeak = ({ updateCharacter }, cb) => {
         action: "cb",
         dismiss: true,
         destination: () => {
+          updateCharacter({
+            name: "al",
+            action: undefined,
+          });
+        },
+      },
+    },
+  });
+};
+
+export const refundDepositedGemSpeak = ({ updateCharacter }, cbAccept, cdDecline) => {
+  updateCharacter({
+    name: "al",
+    action: "farms.refundDepositedGem.text",
+    show: true,
+    button: {
+      text: "Refund",
+      alt: {
+        action: "cb",
+        dismiss: true,
+        destination: () => {
+          cbAccept();
+        },
+      },
+    },
+    buttonAlt: {
+      text: "No",
+      alt: {
+        action: "cb",
+        dismiss: true,
+        destination: () => {
+          cdDecline();
           updateCharacter({
             name: "al",
             action: undefined,
