@@ -36,34 +36,52 @@ const ClamItem = ({ clam, clamValueInShellToken, pearlValueInShellToken, harvest
       : "0";
 
   return (
-    <div className="clam-details">
-      <div className="w-1/2">
-        <div className="flex items-center w-1/4 m-2 mx-auto text-center px-4 py-2 badge badge-success">
-          #{tokenId}
+    <div>
+      <div className="flex flex-col shadow-lg overflow-hidden w-full hover:border-4 hover:border-blue-200 rounded-xl">
+        <div className="flex-shrink-0">
+          <img className="h-64 w-full object-fill" src={img} alt="" />
         </div>
-        <img className="w-full p-4" src={img} />
-      </div>
-      <div className="details">
-        <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
-          <div className="grid-title">$SHELL</div>
-          <div className="grid-value">{formatShell(harvestableShell)}</div>
-          <div className="grid-title">Lifespan</div>
-          <div className="grid-value">{+pearlProductionCapacity - +pearlsProduced} pearls</div>
-        </div>
-        <div className="flex flex-col">
-          <Link
-            to={`/saferoom/clam?id=${tokenId}`}
-            className="font-montserrat underline"
-            style={{ color: "#757575" }}
-          >
-            View in saferoom
-          </Link>
-          <button
-            className="btn btn-info mt-4 font-montserrat font-bold"
-            onClick={() => harvestClam(tokenId)}
-          >
-            Harvest
-          </button>
+        <div className="flex-1 bg-white p-6 flex flex-col justify-between">
+          <div className="flex-1">
+            <div className="text-sm font-medium flex justify-between">
+              <div className="px-4 py-2 badge badge-success">#{tokenId}</div>
+              <Link
+                to={`/saferoom/clam?id=${tokenId}`}
+                className="font-montserrat underline"
+                style={{ color: "#757575" }}
+              >
+                View in saferoom
+              </Link>
+            </div>
+            <div className="block mt-2">
+              <div className="border rounded border-gray-200">
+                <dl>
+                  <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">$SHELL</dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {formatShell(harvestableShell)}
+                    </dd>
+                  </div>
+                  <div className="bg-gray-100 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">Lifespan</dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {+pearlProductionCapacity - +pearlsProduced} pearls
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <div className="w-full">
+              <button
+                className="btn btn-info mt-4 font-montserrat font-bold w-full"
+                onClick={() => harvestClam(tokenId)}
+              >
+                Harvest
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -114,48 +132,54 @@ const ClamHarvestModal = ({
   };
 
   useEffect(async () => {
-    setIsLoading(true);
-    const incubationtime = await getClamIncubationTime();
+    try {
+      setIsLoading(true);
+      const incubationtime = await getClamIncubationTime();
 
-    if (+clamBalance > 0) {
-      const currentBlockTimestamp = await getCurrentBlockTimestamp();
+      if (+clamBalance > 0) {
+        const currentBlockTimestamp = await getCurrentBlockTimestamp();
 
-      const filteredClams = stateAccount.clams.filter(
-        ({ clamDataValues: { pearlProductionCapacity, pearlsProduced, birthTime } }) => {
-          return (
-            +pearlsProduced < +pearlProductionCapacity &&
-            currentBlockTimestamp > +birthTime + +incubationtime
-          );
-        }
-      );
-
-      if (filteredClams.length > 0) {
-        setMessage(``);
-        harvestChooseClams({ updateCharacter, setModalToShow }); // character speaks
-      } else {
-        const hours = formatDuration(+incubationtime);
-        setMessage(
-          `None of your clams are able to be harvested.
-           They must be either alive or be past the ${hours} incubation period once they have been farmed.`
+        const filteredClams = stateAccount.clams.filter(
+          ({ clamDataValues: { pearlProductionCapacity, pearlsProduced, birthTime } }) => {
+            return (
+              +pearlsProduced < +pearlProductionCapacity &&
+              currentBlockTimestamp > +birthTime + +incubationtime
+            );
+          }
         );
-        harvestNoClamsAvailable({ updateCharacter, setModalToShow, hours }); // character speaks
-      }
-      setClams(filteredClams);
-      setIsLoading(false);
-    } else {
-      // clam balance is zero
-      const hours = formatDuration(+incubationtime);
-      harvestNoClamsAvailable({ updateCharacter, setModalToShow, hours }); // character speaks
-      setIsLoading(false);
-    }
 
-    setClamValueInShellToken(await getClamValueInShellToken());
-    setPearlValueInShellToken(await getPearlValueInShellToken());
+        setClams(filteredClams);
+
+        if (filteredClams.length > 0) {
+          setMessage(``);
+          harvestChooseClams({ updateCharacter, setModalToShow }); // character speaks
+        } else {
+          const hours = formatDuration(+incubationtime);
+          setMessage(
+            `None of your clams are able to be harvested.
+           They must be either alive or be past the ${hours} incubation period once they have been farmed.`
+          );
+          harvestNoClamsAvailable({ updateCharacter, setModalToShow, hours }); // character speaks
+        }
+
+        setIsLoading(false);
+      } else {
+        // clam balance is zero
+        const hours = formatDuration(+incubationtime);
+        harvestNoClamsAvailable({ updateCharacter, setModalToShow, hours }); // character speaks
+        setIsLoading(false);
+      }
+
+      setClamValueInShellToken(await getClamValueInShellToken());
+      setPearlValueInShellToken(await getPearlValueInShellToken());
+    } catch (error) {
+      console.log({ error });
+    }
   }, [address, clamBalance]);
 
   return (
     <div className="HarvestModal">
-      <Modal isShowing={isShowing} onClose={closeModal} width={"30rem"} title={"Choose a Clam"}>
+      <Modal isShowing={isShowing} onClose={closeModal} width={"90rem"} title={"Choose a Clam"}>
         {isLoading ? (
           <div>
             <h1>Loading ...</h1>
@@ -186,15 +210,17 @@ const ClamHarvestModal = ({
               <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
                 <div>
                   <h3 className="heading">{message}</h3>
-                  {clams.map((clam, i) => (
-                    <ClamItem
-                      key={i}
-                      clam={clam}
-                      harvestClam={harvestClam}
-                      clamValueInShellToken={clamValueInShellToken}
-                      pearlValueInShellToken={pearlValueInShellToken}
-                    />
-                  ))}
+                  <div className="grid md:grid-cols-4 grid-cols-1 gap-4 flex-2">
+                    {clams.map((clam, i) => (
+                      <ClamItem
+                        key={i}
+                        clam={clam}
+                        harvestClam={harvestClam}
+                        clamValueInShellToken={clamValueInShellToken}
+                        pearlValueInShellToken={pearlValueInShellToken}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             ) : (
