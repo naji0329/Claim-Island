@@ -176,7 +176,12 @@ export const withdraw = async (pid, amount) => {
 };
 
 export const pendingGem = async (pid) => {
-  const account = getAccount();
+  let account;
+  try {
+    account = getAccount();
+  } catch {
+    return 0;
+  }
   const gemPending = await bank().methods.pendingGem(pid, account).call();
 
   return gemPending;
@@ -263,6 +268,25 @@ const calculateAPRandTVL = async (pool) => {
   return [apr, tvl, +tokenPrice];
 };
 
+const getPoolInfoValues = async (poolLength, chainId) => {
+  const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
+  const poolInfo = await aggregate(poolInfocalls, chainId);
+  const poolInfoValues = decodePoolInfoReturnFromMulticall(poolInfo.returnData);
+
+  return poolInfoValues;
+};
+
+const getUserInfoValues = async (address, poolLength, chainId) => {
+  if (!address) {
+    return [];
+  }
+  const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
+  const userInfo = await aggregate(userInfocalls, chainId);
+  const userInfoValues = decodeUserInfoReturnFromMulticall(userInfo.returnData);
+
+  return userInfoValues;
+};
+
 export const getAllPools = async ({ address, chainId }) => {
   const [poolLength, poolLpTokenBalances, totalAllocation] = await Promise.all([
     getPoolsLength(),
@@ -270,16 +294,10 @@ export const getAllPools = async ({ address, chainId }) => {
     totalAllocPoint(),
   ]);
 
-  const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
-  const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
-
-  const [poolInfo, userInfo] = await Promise.all([
-    aggregate(poolInfocalls, chainId),
-    aggregate(userInfocalls, chainId),
+  const [poolInfoValues, userInfoValues] = await Promise.all([
+    getPoolInfoValues(poolLength, chainId),
+    getUserInfoValues(address, poolLength, chainId),
   ]);
-
-  const poolInfoValues = decodePoolInfoReturnFromMulticall(poolInfo.returnData);
-  const userInfoValues = decodeUserInfoReturnFromMulticall(userInfo.returnData);
 
   const pools = await Promise.all(
     poolInfoValues.map(async (pool, index) => {
@@ -290,13 +308,12 @@ export const getAllPools = async ({ address, chainId }) => {
       if (poolAsset) {
         return {
           poolId: pool.poolId,
-          pendingGem: pending,
           ...pick(poolAsset, ["name", "apy", "images", "risk", "isSingleStake", "isNative"]),
           ...pick(poolInfo, ["lpToken", "allocPoint", "depositFeeBP", "lastRewardBlock"]),
 
           totalAllocation,
           multiplier: ((Number(poolInfo.allocPoint) / Number(totalAllocation)) * 100).toFixed(1),
-          userDepositAmountInPool: +formatFromWei(userInfoValues[index].userValues.amount),
+          userDepositAmountInPool: +formatFromWei(userInfoValues[index]?.userValues?.amount),
           userRewardAmountInPool: +formatFromWei(pending),
           poolLpTokenBalance: poolLpTokenBalances[index],
         };

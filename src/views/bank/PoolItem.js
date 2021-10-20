@@ -41,7 +41,10 @@ const PoolItem = ({
   const { activateBrowserWallet } = useEthers();
 
   const handleOpen = async () => {
-    const balances = await getBalancesFormatted(address, pool.lpToken, pool.isSingleStake);
+    let balances;
+    if (address) {
+      balances = await getBalancesFormatted(address, pool.lpToken, pool.isSingleStake);
+    }
 
     const url = await exchangeUrl({
       tokenAddress: pool.lpToken,
@@ -76,7 +79,7 @@ const PoolItem = ({
   return (
     <div className="flex flex-col justify-between mb-4 glass bg-white hover:bg-white bg-opacity-50 hover:bg-opacity-50 backdrop-blur-lg hover:backdrop-blur-lg border-2 border-gray-800 shadow-md rounded-xl">
       <div
-        className="flex items-center justify-between px-4 py-1 cursor-pointer"
+        className={`flex items-center justify-between px-4 py-1 ${address ? "cursor-pointer" : ""}`}
         onClick={handleClick}
       >
         <div className="flex items-center justify-start min-w-xs">
@@ -141,12 +144,12 @@ const PoolItem = ({
               </svg>
             </button>
           ) : (
-            <p
-              className="mb-1 text-xs font-semibold leading-none text-gray-500"
+            <button
+              className="mb-2 text-xs font-semibold leading-none text-gray-500"
               onClick={() => activateBrowserWallet()}
             >
               Connect Wallet
-            </p>
+            </button>
           )}
         </div>
       </div>
@@ -158,7 +161,7 @@ const PoolItem = ({
           </div>
 
           <div className="flex w-2/5 h-full">
-            <PoolDepositWithdraw depositFee={depositFee} />
+            <PoolDepositWithdraw depositFee={depositFee} disabled={!address} />
           </div>
 
           <div className="flex w-2/5 h-full">

@@ -14,6 +14,7 @@ import { renderNumber } from "utils/number";
 import { formatMsToDuration } from "utils/time";
 import InfoTooltip from "components/InfoTooltip";
 import { Modal, useModal } from "components/Modal";
+import { CONNECT_WALLET_TIP } from "constants/ui";
 import ActionButton from "./ActionButton";
 import moment from "moment";
 import { useTimer } from "hooks/useTimer";
@@ -32,7 +33,7 @@ const PoolHarvest = ({
   const [pearlBoostYield, setPearlBoostYield] = useState(false);
   const [inTx, setInTx] = useState(false);
   const { isShowing, toggleModal: toggleBreakdownModal } = useModal();
-  const startTime = +rewards.startTime * 1000;
+  const startTime = +rewards?.startTime * 1000;
 
   const calculateTimeLeft = () => {
     if (!rewards) return "calculating...";
@@ -53,7 +54,7 @@ const PoolHarvest = ({
     const unlockDay = getUnlockDay();
     if (!unlockDay) return "No locked rewards yet";
 
-    const unlockMoment = moment(startTime).add(unlockDay+1, "d");
+    const unlockMoment = moment(startTime).add(unlockDay + 1, "d");
     const remainingMs = unlockMoment.diff(moment());
 
     return formatMsToDuration(remainingMs);
@@ -99,10 +100,10 @@ const PoolHarvest = ({
     const calculateTimeLeft = () => {
       if (!rewards) return "calculating...";
 
-      const unlockMoment = moment(startTime).add(unlockDay+1, "d");
+      const unlockMoment = moment(startTime).add(unlockDay + 1, "d");
       const remainingMs = unlockMoment.diff(moment());
 
-      return (remainingMs > 0) ? formatMsToDuration(remainingMs) : "Unlocked";
+      return remainingMs > 0 ? formatMsToDuration(remainingMs) : "Unlocked";
     };
 
     const { timeLeft } = useTimer(calculateTimeLeft);
@@ -122,23 +123,25 @@ const PoolHarvest = ({
         <div className="w-full flex flex-row justify-between items-center">
           <p className="font-aristotelica-bold text-xl">Harvest Rewards</p>
           {isNativePool && (
-            <button className="btn btn-info" onClick={toggleModal}>
-              Boost Rewards
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="inline-block w-6 h-6 ml-2 stroke-current"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                />
-              </svg>
-            </button>
+            <div data-tip={CONNECT_WALLET_TIP} className={!address ? "tooltip" : ""}>
+              <button className="btn btn-info" onClick={toggleModal} disabled={!address}>
+                Boost Rewards
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="inline-block w-6 h-6 ml-2 stroke-current"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                  />
+                </svg>
+              </button>
+            </div>
           )}
         </div>
         <div className="flex justify-center">
@@ -153,6 +156,7 @@ const PoolHarvest = ({
           <div className="flex flex-col justify-around">
             <div className="mx-2 text-4xl text-right">{harvestAmount}</div>
             {selectedPool.isNative &&
+              address &&
               (!rewards ? (
                 <div className="text-center">Loading rewards data...</div>
               ) : (
@@ -191,9 +195,9 @@ const PoolHarvest = ({
 
                 <div className="w-64 p-2 card dropdown-content bg-gray-800 text-primary-content text-sm">
                   <div className="flex flex-col">
-                  <div className="flex justify-between p-2">
-                    Unlocked boost available for harvest from:
-                  </div>
+                    <div className="flex justify-between p-2">
+                      Unlocked boost available for harvest from:
+                    </div>
                     <div className="flex justify-between p-2">
                       <span>Clams:</span>
                       <span>{renderNumber(+rewards.availableClamRewards, 2)}</span>
@@ -203,9 +207,9 @@ const PoolHarvest = ({
                       <span>{renderNumber(+rewards.availablePearlRewards, 2)}</span>
                     </div>
                     <div className="flex justify-between p-2">
-                    <a className="link" onClick={toggleBreakdownModal}>
-                      View vesting rewards
-                    </a>
+                      <a className="link" onClick={toggleBreakdownModal}>
+                        View vesting rewards
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -219,7 +223,10 @@ const PoolHarvest = ({
             <div className="flex flex-col">
               <div>
                 Total locked:
-                <InfoTooltip className="text-left" text="Must be harvested from native pools when unlocked" />
+                <InfoTooltip
+                  className="text-left"
+                  text="Must be harvested from native pools when unlocked"
+                />
               </div>
               <div>Fully unlocks in:</div>
             </div>
@@ -234,28 +241,34 @@ const PoolHarvest = ({
           <ActionButton
             onClick={handleHarvest}
             style="btn-harvest w-full"
-            isDisabled={inTx}
+            isDisabled={inTx || !address}
             isLoading={inTx}
           >
             Harvest
             <FontAwesomeIcon icon={faInfoCircle} className="ml-1" />
           </ActionButton>
-          <div className="w-72 p-4 card dropdown-content bg-gray-800 text-primary-content text-sm">
-            <p className="mb-2">
-              50% of GEM earned is locked for a 7-day vesting period starting from the following day. During this time the vesting
-              GEM can still be used to purchase Clams.
-            </p>
-            {rewards && (
-              <>
-                <p className="mb-2">
-                  You currently have {renderNumber(+rewards.totalVested, 2)} GEM rewards vesting.
-                </p>
-                <a className="link" onClick={toggleBreakdownModal}>
-                  View vesting breakdown
-                </a>
-              </>
-            )}
-          </div>
+          {address ? (
+            <div className="w-72 p-4 card dropdown-content bg-gray-800 text-primary-content text-sm">
+              <p className="mb-2">
+                50% of GEM earned is locked for a 7-day vesting period starting from the following
+                day. During this time the vesting GEM can still be used to purchase Clams.
+              </p>
+              {rewards && (
+                <>
+                  <p className="mb-2">
+                    You currently have {renderNumber(+rewards.totalVested, 2)} GEM rewards vesting.
+                  </p>
+                  <a className="link" onClick={toggleBreakdownModal}>
+                    View vesting breakdown
+                  </a>
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="p-2 dropdown-content bg-gray-800 text-primary-content text-sm">
+              {CONNECT_WALLET_TIP}
+            </div>
+          )}
         </div>
       </div>
       {rewards && (
