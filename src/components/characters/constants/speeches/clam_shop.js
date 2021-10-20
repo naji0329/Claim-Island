@@ -1,11 +1,84 @@
 export const CLAM_SHOP_SPEECH = {
   clam_shop: {
     welcome: {
-      text: `Howdy friend. Welcome to my Clam Shop! Here you can buy Clams using $GEM and harvest them for $SHELL. Let's get to it!`,
+      text: `Howdy friend. Welcome to my Clam Shop! Here you can buy Clams using $GEM and harvest them for $SHELL. Would you like more information on how this works?`,
       next: "connect",
       dismiss: false,
       skip: true,
       hideable: true,
+    },
+
+    intro: {
+      step1: {
+        text: `Alright, so first of all, $GEM is the native currency here at Clam Island, so you need to buy or earn some $GEM before you can buy Clams. You can do this at the Bank, if you haven't checked it out already.`,
+        next: "second",
+        dismiss: false,
+        skip: true,
+        hideable: true,
+      },
+      step2: {
+        text: `Once you have enough $GEM, you can come and buy a Clam from me. My Clams are always available at market prices depending on demand.`,
+        next: "second",
+        dismiss: false,
+        skip: true,
+        hideable: true,
+      },
+      step3: {
+        text: `My Clams are very unique! There are billions of possible trait combinations and 6 different rarity tiers. What you will get when you buy a Clam is completely random - not even I know what it will be!`,
+        next: "second",
+        dismiss: false,
+        skip: true,
+        hideable: true,
+      },
+      step4: {
+        text: `The Clams that you buy can be deposited over at the Farm in order to produce Pearls. Pearls also have billions of possible trait combinations and are grouped into the same 6 rarity tiers.`,
+        next: "second",
+        dismiss: false,
+        skip: true,
+        hideable: true,
+      },
+      step5: {
+        text: `Each Clam can only produce a limited number of Pearls in its lifespan, and producing the very last Pearl will kill the Clam. Don't worry, dead Clams are still yours and still can be traded! But they can't produce any more Pearls, and they can't be harvested for $SHELL.`,
+        next: "second",
+        dismiss: false,
+        skip: true,
+        hideable: true,
+      },
+      step6: {
+        text: `$SHELL is the Clam Island governance token. $SHELL supply can only be increased by harvesting live Clams that are older than 48 hours. The harvesting process will destroy your Clam, so choose wisely!`,
+        next: "second",
+        dismiss: false,
+        skip: true,
+        hideable: true,
+      },
+      step7: {
+        text: `The amount of $SHELL a Clam can be harvested for starts at 1, and increases by 0.1 for every new Pearl produced by the Clam that does not kill it.`,
+        next: "second",
+        dismiss: false,
+        skip: true,
+        hideable: true,
+      },
+      step8: {
+        text: `However, Pearls produced by a Clam towards the end of its lifespan have a higher chance of being a rare one. So that last Pearl that will kill your Clam, also has the highest chance of being rare!`,
+        next: "second",
+        dismiss: false,
+        skip: true,
+        hideable: true,
+      },
+      step9: {
+        text: `Now, to the really good part. I have a special arrangement with the Bank and the Farm, and that's what makes Clam Island so special. My Clams can earn you $GEM rewards in the Bank, and so can the Pearls that they produce!`,
+        next: "second",
+        dismiss: false,
+        skip: true,
+        hideable: true,
+      },
+      step10: {
+        text: `The $GEM rewards depend on the traits of each Clam and Pearl, but on average they earn more $GEM than they cost. This means that by buying my Clams and farming Pearls, not only will you own unique Clams and Pearls on Clam Island, you could also actually profit!`,
+        next: "second",
+        dismiss: false,
+        skip: true,
+        hideable: true,
+      },
     },
 
     connect: {
