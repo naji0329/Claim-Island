@@ -16,6 +16,7 @@ import { CLAM_CLAIMERS_SPEECH, CLAM_CLAIMERS_BUTTONS } from "./speeches/clam_cla
 import { COMMUNITY_REWARDS_SPEECH, COMMUNITY_REWARDS_BUTTONS } from "./speeches/community_rewards";
 import { OTHER_SPEECH, OTHER_BUTTONS } from "./speeches/other";
 import { INFOCENTER_SPEECH, INFOCENTER_BUTTONS } from "./speeches/infocenter";
+import { MAP_SPEECH, MAP_BUTTONS } from "./speeches/map";
 
 export const CHARACTERS = {
   nacre: {
@@ -53,6 +54,7 @@ export const SPEECHES = {
   ...SAFEROOM_SPEECH,
   ...OTHER_SPEECH,
   ...INFOCENTER_SPEECH,
+  ...MAP_SPEECH,
 };
 
 export const BUTTONS = {
@@ -68,4 +70,5 @@ export const BUTTONS = {
   ...CLAM_SHOP_BUTTONS,
   ...OTHER_BUTTONS,
   ...INFOCENTER_BUTTONS,
+  ...MAP_BUTTONS,
 };
