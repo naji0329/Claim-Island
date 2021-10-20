@@ -3,14 +3,10 @@ import Web3 from "web3";
 import { store } from "../store/redux";
 import BigNumber from "bignumber.js";
 import { aggregate } from "./multicall";
-import pearlShared from "./pearl";
+import pearlShared, { calculateBonusRewards } from "./pearl";
 import pearlDnaDecoder from "./pearlDnaDecoder";
 import clamDnaDecoder from "./dnaDecoder";
-import {
-  prepBonusRewardsMulticall,
-  decodeBonusRewardsFromMulticall,
-  pearlLegacyBaseGemRewards,
-} from "./pearlBurner";
+import { pearlLegacyBaseGemRewards } from "./pearlBurner";
 import {
   decodeCalculateBonusRewardsFromMulticall,
   prepCalculateBonusRewardsMulticall,
@@ -136,16 +132,6 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
   );
   const pearlDnas = pearlDataDecoded.map((data) => data.pearlDataValues.dna);
 
-  const legacyBaseGEMRewards = await pearlLegacyBaseGemRewards();
-  const pearlGemBoost = pearlDataDecoded.map((data) => {
-    const boost = data.pearlDataValues.gemBoost;
-    if (+boost > 0) {
-      return boost;
-    } else {
-      return String(+legacyBaseGEMRewards * 1e18);
-    }
-  });
-
   const dnaDecodedCalls = pearlDnaDecoder.prepGetDnaDecodedMulticall(pearlDnas);
   const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
   const dnaDecodedDecoded = pearlDnaDecoder.decodeGetDnaDecodedFromMulticall(
@@ -153,32 +139,20 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
     tokenIds
   );
 
-  const traits = dnaDecodedDecoded.map(
-    ({ dnaDecodedValues: { size, lustre, nacreQuality, surface, rarityValue } }) => ({
-      size,
-      lustre,
-      nacreQuality,
-      surface,
-      rarityValue,
-    })
-  );
-
-  const bonusRewardsCalls = prepBonusRewardsMulticall(pearlGemBoost, traits);
-  const bonusRewardsResult = await aggregate(bonusRewardsCalls, chainId);
-  const bonusRewardsDecoded = decodeBonusRewardsFromMulticall(
-    bonusRewardsResult.returnData,
-    tokenIds
-  );
-
   const pearls = await Promise.all(
     pearlDataDecoded.map(async (pearl) => {
       const samePearl = dnaDecodedDecoded.find(({ pearlId }) => pearlId === pearl.pearlId);
-      const sameBonus = bonusRewardsDecoded.find(({ pearlId }) => pearlId === pearl.pearlId);
 
-      if (samePearl && sameBonus) {
+      if (samePearl) {
         const dnaDecoded = samePearl.dnaDecodedValues;
         const { dna } = pearl.pearlDataValues;
-        const { bonusRewards } = sameBonus;
+
+        const legacyBaseGEMRewards = await pearlLegacyBaseGemRewards();
+        const isLegacyPearl = new BigNumber(pearl.pearlDataValues.gemBoost).eq(0);
+
+        const bonusRewards = isLegacyPearl
+          ? await calculateBonusRewards(+legacyBaseGEMRewards * 1e18, dnaDecoded)
+          : pearl.pearlDataValues.gemBoost;
 
         const img = await getPearlImageFromCache({ dna });
 
