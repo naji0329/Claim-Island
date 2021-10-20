@@ -1,7 +1,7 @@
 export const CLAM_SHOP_SPEECH = {
   clam_shop: {
     welcome: {
-      text: `Howdy friend. Welcome to my Clam Shop! Here you can buy Clams using $GEM and harvest them for $SHELL. Would you like more information on how this works?`,
+      text: `Howdy friend. Welcome to my Clam Shop! Here you can buy Clams using $GEM and harvest them for $SHELL. Let's get into it then!`,
       next: "connect",
       dismiss: false,
       skip: true,
