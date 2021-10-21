@@ -137,7 +137,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
       });
       setActivatePearls(pearls);
     }
-  }, [account]);
+  }, [account, activateClamBalanceInSafe]);
 
   if (window.ethereum) {
     window.ethereum.on("chainChanged", (networkId) => {
