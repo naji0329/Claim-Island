@@ -35,6 +35,14 @@ import { getUsdPriceOfToken } from "../web3/pancakeRouter";
 import BigNumber from "bignumber.js";
 import NetworkService from "../utils/NetworkService";
 
+import ClamIcon from "../assets/img/clam_icon.png";
+import PearlIcon from "../assets/img/pearl_icon.png";
+import GemIcon from "../assets/img/gems_icon.png";
+import ShellIcon from "../assets/img/shell_icon.png";
+
+
+
+
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
     <div
@@ -326,15 +334,15 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
               <>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    Balance: {activateGemBalance} <IconTip text="$GEM Balance">💎</IconTip> |{" "}
-                    {activateShellBalance} <IconTip text="$SHELL Balance">🐚</IconTip>
+                    Balance: {activateGemBalance} <IconTip text="$GEM Balance"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={GemIcon} /></IconTip> |{" "}
+                    {activateShellBalance} <IconTip text="$SHELL Balance"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={ShellIcon} /></IconTip>
                   </span>
                 </div>
 
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    Price: <IconTip text="Price of 1 $GEM">💎</IconTip> = $ {activateGemPrice} |{" "}
-                    <IconTip text="Price of 1 $SHELL">🐚</IconTip> = $ {activateShellPrice}
+                    Price: <IconTip text="Price of 1 $GEM"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={GemIcon} /></IconTip> = $ {activateGemPrice} |{" "}
+                    <IconTip text="Price of 1 $SHELL"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={ShellIcon} /></IconTip> = $ {activateShellPrice}
                   </span>
                 </div>
 
@@ -349,9 +357,8 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Safe: {activateClamBalanceInSafe} <IconTip text="Clams owned">🦪</IconTip> |{" "}
-                      {activatePearlBalanceInSafe}
-                      <IconTip text="Pearls owned">💍 </IconTip>{" "}
+                      Safe: {activateClamBalanceInSafe} <IconTip text="Clams owned"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={ClamIcon} /></IconTip> |{" "}
+                      {activatePearlBalanceInSafe} <IconTip text="Pearls owned"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={PearlIcon} /> </IconTip>{" "}
                       {location.pathname.indexOf("saferoom") === -1 && (
                         <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
                       )}
@@ -367,8 +374,8 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Farm: {activateClamBalanceInFarm} <IconTip text="Clams staked">🦪</IconTip> |{" "}
-                      {activatePearlBalanceInFarm} <IconTip text="Pearls staked">💍</IconTip>
+                      Farm: {activateClamBalanceInFarm} <IconTip text="Clams deposited"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={ClamIcon} /></IconTip> |{" "}
+                      {activatePearlBalanceInFarm} <IconTip text="Pearls for collection"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={PearlIcon} /></IconTip>
                       {location.pathname.indexOf("farms") === -1 && (
                         <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
                       )}
