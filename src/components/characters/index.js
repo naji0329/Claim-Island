@@ -14,6 +14,7 @@ const CharacterSpeak = (props) => {
   const votingError = VotingStore.useState((s) => s.error);
   const votingAlreadyVoted = VotingStore.useState((s) => s.alreadyVoted);
   const votingWalletConnected = VotingStore.useState((s) => s.walletConnected);
+  const { isNeedSkipFirstWelcome } = props;
 
   const character = CHARACTERS[props.character];
   const speechTrack = SPEECHES[props.speech];
@@ -22,8 +23,9 @@ const CharacterSpeak = (props) => {
   const [charImg] = useState(character.charImg);
   const [charName] = useState(character.name);
   const [showBubble, setShowBubble] = useState(true);
-  let [trackCount, setTrackCount] = useState(Object.keys(speechTrack)[0]);
-
+  let [trackCount, setTrackCount] = useState(
+    Object.keys(speechTrack)[isNeedSkipFirstWelcome ? 2 : 0]
+  );
   const [speech, setSpeech] = useState(speechTrack[trackCount].text);
   const [buttonNextText, setButtonNextText] = useState(btnTrack[trackCount].next);
   const [buttonAltText, setButtonAltText] = useState(btnTrack[trackCount].alt.text);
@@ -34,7 +36,6 @@ const CharacterSpeak = (props) => {
   const btnNext = useRef();
   const characterImg = useRef();
   const characterWrap = useRef();
-
   const onClickNextSkip = () => {
     if (skipDialog === "propose") {
       setSpeech(SPEECHES.skip.agree.text);
@@ -228,10 +229,18 @@ const CharacterSpeak = (props) => {
     switch (btnTrack[trackCount].alt.action) {
       case "url_internal":
         window.location.href = destination;
+        if(btnTrack[trackCount].alt.next) {
+          setSpeech(speechTrack[btnTrack[trackCount].alt.next].text);
+          setTrackCount(btnTrack[trackCount].alt.next);
+        }
         break;
 
       case "url":
         window.open(destination, "_blank");
+        if(btnTrack[trackCount].alt.next) {
+          setSpeech(speechTrack[btnTrack[trackCount].alt.next].text);
+          setTrackCount(btnTrack[trackCount].alt.next);
+        }
         break;
 
       case "speech":
@@ -316,7 +325,13 @@ const CharacterSpeak = (props) => {
           ["shell_voting", "shell_voted_already", "shell_voting_complete"].indexOf(props.speech) ===
             -1 ? (
             <div className="buttons">
-              <button className="btn character-btn" id="btn-alt" ref={btnAlt} onClick={onClickAlt}>
+              <button
+                style={{ ...(trackCount === "second" ? { display: "block" } : {}) }}
+                className="btn character-btn"
+                id="btn-alt"
+                ref={btnAlt}
+                onClick={onClickAlt}
+              >
                 {buttonAltText}
               </button>
               <button

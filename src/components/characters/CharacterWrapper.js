@@ -24,7 +24,8 @@ const CharacterWrapper = ({
   onClickSkipDialogButton,
   onClickSkipRestoreButton,
   skipDialogs,
-  forceTop
+  forceTop,
+  suppressSpeechBubbleAction,
 }) => {
   const character = get(CHARACTERS, name);
   let speech = get(SPEECHES, action, action);
@@ -78,19 +79,19 @@ const CharacterWrapper = ({
         const callback = button.alt.destination;
         callback();
         break;
+      case "internalWithCallback":
+        button.alt.cb();
+        history.push(button.alt.destination);
+        break;
     }
   };
 
-  const handleClickCharacter = (e) => {
-    setShowBubble(!showBubble);
-  };
-
-  const dismissCharacter = (e) => {
-    setShowBubble(false);
+  const handleClickCharacter = () => {
+    suppressSpeechBubbleAction(showBubble);
   };
 
   const onClickMinimizedButton = () => {
-    setShowBubble(false);
+    suppressSpeechBubbleAction(true);
   };
 
   useEffect(() => {
@@ -103,7 +104,7 @@ const CharacterWrapper = ({
 
   useEffect(() => {
     if (isNeedSkipDialog && skipDialogs) {
-      setShowBubble(false);
+      suppressSpeechBubbleAction(true);
     }
   }, [isNeedSkipDialog, actionPath]);
 
@@ -207,7 +208,16 @@ const CharacterWrapper = ({
 };
 
 const mapToProps = ({
-  character: { name, action, variables, button, buttonAlt, suppressSpeechBubble, skipDialogs, forceTop },
+  character: {
+    name,
+    action,
+    variables,
+    button,
+    buttonAlt,
+    suppressSpeechBubble,
+    skipDialogs,
+    forceTop,
+  },
 }) => ({
   name,
   action,
@@ -216,9 +226,12 @@ const mapToProps = ({
   buttonAlt,
   suppressSpeechBubble,
   skipDialogs,
-  forceTop
+  forceTop,
 });
 
-const mapDispatchToProps = () => ({ updateCharacter: actions().updateCharacter });
+const mapDispatchToProps = () => ({
+  updateCharacter: actions().updateCharacter,
+  suppressSpeechBubbleAction: actions().suppressSpeechBubbleAction,
+});
 
 export default connect(mapToProps, mapDispatchToProps)(withSkipDialog(CharacterWrapper));

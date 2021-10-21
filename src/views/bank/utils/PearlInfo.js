@@ -9,9 +9,12 @@ import classnames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 import { burnPearlConfirmation, onBurnPearlSuccess } from "../character/BurnPearl";
 import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepositHarvest";
+
+import { formatUnits } from "@ethersproject/units";
 
 const InfoLine = ({ label, value }) => (
   <div className="w-full flex justify-between">
@@ -32,7 +35,8 @@ const PearlInfo = ({
   const [inTx, setInTx] = useState(false);
 
   const handleBurn = () => {
-    return burnPearlConfirmation(updateCharacter, pearl.bonusRewards, async () => {
+    const bonusReward = Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2);
+    return burnPearlConfirmation(updateCharacter, String(bonusReward), async () => {
       await executeBurnPearl();
     });
   };
@@ -86,7 +90,7 @@ const PearlInfo = ({
                 </button>
               </>
             }
-            value={+pearl.bonusRewards}
+            value={Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2)}
           />
 
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />

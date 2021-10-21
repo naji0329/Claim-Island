@@ -9,7 +9,7 @@ import { deposit, getAllPools } from "../../../web3/bank";
 import { approveBankForMaxUint } from "../../../web3/bep20";
 import { formatToWei } from "../../../web3/shared";
 
-import { formatNumber, getBalancesFormatted } from ".";
+import { formatNumber, getBalancesFormatted } from "./";
 
 import {
   onDepositHarvestTxn,

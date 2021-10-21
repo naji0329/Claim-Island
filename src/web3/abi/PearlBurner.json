@@ -210,45 +210,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "size",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lustre",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "nacreQuality",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "surface",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "rarityValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "calculateBonusRewards",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "colour",
     "outputs": [

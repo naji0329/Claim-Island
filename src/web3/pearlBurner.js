@@ -1,5 +1,5 @@
 import PearlBurnerAbi from "./abi/PearlBurner.json";
-import { pearlBurnerAddress } from "./constants";
+import { pearlBurnerAddress, pearlNFTAddress } from "./constants";
 import { contractFactory } from "./index";
 import { getAccount } from "./shared";
 
@@ -25,6 +25,10 @@ export const periodInSeconds = async () => {
   return await pearlBurner().methods.periodInSeconds().call();
 };
 
+export const pearlLegacyBaseGemRewards = async () => {
+  return await pearlBurner().methods.baseGemRewards().call();
+};
+
 export const burnPearl = async (pearlId, shape, color) => {
   const account = getAccount();
   const method = pearlBurner().methods.burnPearl(pearlId, shape, color);
@@ -41,17 +45,21 @@ export const periodCheckpoint = async () => {
   await method.send({ from: account, gas: gasEstimation });
 };
 
-export const prepBonusRewardsMulticall = (traits) => {
+export const prepBonusRewardsMulticall = (baseRewards, traits) => {
   const contractCalls = [];
   for (let index = 0; index < traits.length; index++) {
     const { size, lustre, nacreQuality, surface, rarityValue } = traits[index];
     contractCalls.push([
-      pearlBurnerAddress,
+      pearlNFTAddress,
       web3.eth.abi.encodeFunctionCall(
         {
           name: "calculateBonusRewards",
           type: "function",
           inputs: [
+            {
+              name: "baseGemRewards",
+              type: "uint256",
+            },
             {
               name: "size",
               type: "uint256",
@@ -74,7 +82,7 @@ export const prepBonusRewardsMulticall = (traits) => {
             },
           ],
         },
-        [size, lustre, nacreQuality, surface, rarityValue]
+        [baseRewards[index], size, lustre, nacreQuality, surface, rarityValue]
       ),
     ]);
   }

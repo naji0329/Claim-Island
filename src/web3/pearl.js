@@ -86,6 +86,13 @@ export const decodeTokenOfOwnerByIndexFromMulticall = (values) => {
   return result;
 };
 
+export const currentPearlBaseGemRewards = async () => {
+  const pearlNft = contractFactory({ abi: pearlNFTAbi, address: pearlNFTAddress });
+  const value = await pearlNft.methods.currentBaseGemRewards().call();
+
+  return value;
+};
+
 export const prepPearlDataMulticall = (tokenIds) => {
   const contractCalls = [];
   for (let index = 0; index < tokenIds.length; index++) {
@@ -122,6 +129,7 @@ export const decodePearlDataFromMulticall = (values, tokenIds) => {
             birthTime: "uint256",
             dna: "uint256",
             pearlsRemaining: "uint256",
+            gemBoost: "uint256",
           },
         },
         values[index]
@@ -130,6 +138,15 @@ export const decodePearlDataFromMulticall = (values, tokenIds) => {
   }
 
   return result;
+};
+
+export const calculateBonusRewards = async (baseGemRewards, dnaDecoded) => {
+  const { size, lustre, nacreQuality, surface, rarityValue } = dnaDecoded;
+  const pearlNft = contractFactory({ abi: pearlNFTAbi, address: pearlNFTAddress });
+
+  return pearlNft.methods
+    .calculateBonusRewards(baseGemRewards, size, lustre, nacreQuality, surface, rarityValue)
+    .call();
 };
 
 export default {
@@ -142,4 +159,5 @@ export default {
   prepPearlDataMulticall,
   decodeTokenOfOwnerByIndexFromMulticall,
   prepTokenOfOwnerByIndexMulticall,
+  currentPearlBaseGemRewards,
 };

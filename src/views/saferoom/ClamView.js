@@ -9,12 +9,13 @@ import { Clam3DView } from "components/clam3DView";
 import Accordion from "components/Accordion";
 import { Controls3DView } from "components/controls3DView";
 
+import { formatUnits } from "@ethersproject/units";
+
 export default ({
   dna,
   dnaDecoded,
-  birthTime,
   clamBonus,
-  clamDataValues: { pearlProductionCapacity, pearlsProduced },
+  clamDataValues: { pearlProductionCapacity, pearlsProduced, birthTime },
   onClickNext,
   onClickPrev,
 }) => {
@@ -41,7 +42,7 @@ export default ({
           <RowStat label="Rarity" value={get(dnaDecoded, "rarity")} />
           <RowStat label="Pearls remaining" value={+pearlProductionCapacity - +pearlsProduced} />
           <RowStat label="Size" value={get(dnaDecoded, "size")} />
-          <RowStat label="$GEM boost" value={clamBonus} />
+          <RowStat label="$GEM boost" value={formatUnits(String(clamBonus), 18)} />
         </div>
       ),
     },

@@ -19,7 +19,7 @@ const InfoTooltip = ({ text }) => {
         />
       </svg>
       <div
-        className="mb-1 opacity-0 w-56 bg-black text-white text-center text-xs rounded-lg py-2 absolute z-50 group-hover:opacity-100 bottom-full px-3 pointer-events-none"
+        className="mb-1 opacity-0 w-56 bg-black text-white text-left text-xs rounded-lg py-2 absolute z-50 group-hover:opacity-100 bottom-full px-3 pointer-events-none"
         style={{ left: "-650%" }}
       >
         {text}

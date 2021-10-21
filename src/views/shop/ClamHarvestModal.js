@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import {
   getClamValueInShellToken,
+  getPearlValueInShellToken,
   harvestClamForShell,
   getClamIncubationTime,
 } from "../../web3/clam";
@@ -24,19 +25,28 @@ import {
   harvestNoClamsAvailable,
 } from "./character/HarvestClam";
 
-const formatShell = (value) => (value ? formatUnits(value, 18) : "0");
+const formatShell = (value) => (value ? formatUnits(String(value), 18) : "0");
 
-const ClamItem = ({ clam, clamValueInShellToken, harvestClam }) => {
-  const { tokenId, img, pearlProductionCapacity, pearlsProduced } = clam;
+const ClamItem = ({ clam, clamValueInShellToken, pearlValueInShellToken, harvestClam }) => {
+  const { tokenId, img } = clam;
+  const { pearlProductionCapacity, pearlsProduced } = clam.clamDataValues;
+  const harvestableShell =
+    +clamValueInShellToken > 0
+      ? +clamValueInShellToken + +pearlsProduced * +pearlValueInShellToken
+      : "0";
+
   return (
     <div className="clam-details">
       <div className="w-1/2">
+        <div className="flex items-center w-1/4 m-2 mx-auto text-center px-4 py-2 badge badge-success">
+          #{tokenId}
+        </div>
         <img className="w-full p-4" src={img} />
       </div>
       <div className="details">
         <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
           <div className="grid-title">$SHELL</div>
-          <div className="grid-value">{formatShell(clamValueInShellToken)}</div>
+          <div className="grid-value">{formatShell(harvestableShell)}</div>
           <div className="grid-title">Lifespan</div>
           <div className="grid-value">{+pearlProductionCapacity - +pearlsProduced} pearls</div>
         </div>
@@ -77,7 +87,8 @@ const ClamHarvestModal = ({
   const [isLoading, setIsLoading] = useState(true);
   const [clams, setClams] = useState([]);
   const [message, setMessage] = useState("Loading...");
-  const [clamValueInShellToken, setClamValueInShellToken] = useState("");
+  const [clamValueInShellToken, setClamValueInShellToken] = useState("0");
+  const [pearlValueInShellToken, setPearlValueInShellToken] = useState("0");
 
   const { isShowing, toggleModal } = useModal({ show: true });
 
@@ -110,9 +121,12 @@ const ClamHarvestModal = ({
       const currentBlockTimestamp = await getCurrentBlockTimestamp();
 
       const filteredClams = stateAccount.clams.filter(
-        ({ pearlProductionCapacity, pearlsProduced, birthTime }) =>
-          +pearlsProduced < +pearlProductionCapacity &&
-          currentBlockTimestamp > +birthTime + +incubationtime
+        ({ clamDataValues: { pearlProductionCapacity, pearlsProduced, birthTime } }) => {
+          return (
+            +pearlsProduced < +pearlProductionCapacity &&
+            currentBlockTimestamp > +birthTime + +incubationtime
+          );
+        }
       );
 
       if (filteredClams.length > 0) {
@@ -136,6 +150,7 @@ const ClamHarvestModal = ({
     }
 
     setClamValueInShellToken(await getClamValueInShellToken());
+    setPearlValueInShellToken(await getPearlValueInShellToken());
   }, [address, clamBalance]);
 
   return (
@@ -177,6 +192,7 @@ const ClamHarvestModal = ({
                       clam={clam}
                       harvestClam={harvestClam}
                       clamValueInShellToken={clamValueInShellToken}
+                      pearlValueInShellToken={pearlValueInShellToken}
                     />
                   ))}
                 </div>

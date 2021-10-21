@@ -53,7 +53,7 @@ const PoolHarvest = ({
     const unlockDay = getUnlockDay();
     if (!unlockDay) return "No locked rewards yet";
 
-    const unlockMoment = moment(startTime).add(unlockDay, "d");
+    const unlockMoment = moment(startTime).add(unlockDay+1, "d");
     const remainingMs = unlockMoment.diff(moment());
 
     return formatMsToDuration(remainingMs);
@@ -99,10 +99,10 @@ const PoolHarvest = ({
     const calculateTimeLeft = () => {
       if (!rewards) return "calculating...";
 
-      const unlockMoment = moment(startTime).add(unlockDay, "d");
+      const unlockMoment = moment(startTime).add(unlockDay+1, "d");
       const remainingMs = unlockMoment.diff(moment());
 
-      return formatMsToDuration(remainingMs);
+      return (remainingMs > 0) ? formatMsToDuration(remainingMs) : "Unlocked";
     };
 
     const { timeLeft } = useTimer(calculateTimeLeft);
@@ -120,10 +120,10 @@ const PoolHarvest = ({
     <div className="w-full" style={{ padding: "0 2%" }}>
       <div className="flex flex-col justify-between h-full px-4 py-4 rounded-xl bg-gray-100">
         <div className="w-full flex flex-row justify-between items-center">
-          <p className="font-aristotelica-bold text-2xl">Harvest</p>
+          <p className="font-aristotelica-bold text-xl">Harvest Rewards</p>
           {isNativePool && (
             <button className="btn btn-info" onClick={toggleModal}>
-              Boost Yield
+              Boost Rewards
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="inline-block w-6 h-6 ml-2 stroke-current"
@@ -191,22 +191,21 @@ const PoolHarvest = ({
 
                 <div className="w-64 p-2 card dropdown-content bg-gray-800 text-primary-content text-sm">
                   <div className="flex flex-col">
+                  <div className="flex justify-between p-2">
+                    Unlocked boost available for harvest from:
+                  </div>
                     <div className="flex justify-between p-2">
-                      <span>from Clams:</span>
+                      <span>Clams:</span>
                       <span>{renderNumber(+rewards.availableClamRewards, 2)}</span>
                     </div>
                     <div className="flex justify-between p-2">
-                      <span>from Pearls:</span>
+                      <span>Pearls:</span>
                       <span>{renderNumber(+rewards.availablePearlRewards, 2)}</span>
                     </div>
                     <div className="flex justify-between p-2">
-                      <span>total to harvest when unlocked:</span>
-                      <span>
-                        {renderNumber(
-                          +rewards.availableClamRewards + +rewards.availablePearlRewards,
-                          2
-                        )}
-                      </span>
+                    <a className="link" onClick={toggleBreakdownModal}>
+                      View vesting rewards
+                    </a>
                     </div>
                   </div>
                 </div>
@@ -220,7 +219,7 @@ const PoolHarvest = ({
             <div className="flex flex-col">
               <div>
                 Total locked:
-                <InfoTooltip text="Available from any native pool" />
+                <InfoTooltip className="text-left" text="Must be harvested from native pools when unlocked" />
               </div>
               <div>Fully unlocks in:</div>
             </div>
@@ -243,8 +242,8 @@ const PoolHarvest = ({
           </ActionButton>
           <div className="w-72 p-4 card dropdown-content bg-gray-800 text-primary-content text-sm">
             <p className="mb-2">
-              50% of GEM earned is locked for a 7-day vesting period. During this time the vesting
-              GEM can still be used to purchase Clams
+              50% of GEM earned is locked for a 7-day vesting period starting from the following day. During this time the vesting
+              GEM can still be used to purchase Clams.
             </p>
             {rewards && (
               <>
@@ -280,7 +279,7 @@ const PoolHarvest = ({
                   {rewards.farmingRewards.map((rewardData) => (
                     <UnlockRow
                       key={rewardData.lockedUntilDay}
-                      type={"Farming locked"}
+                      type={"Bank Harvest"}
                       amount={renderNumber(rewardData.amount)}
                       unlockDay={rewardData.lockedUntilDay}
                     />
@@ -289,7 +288,7 @@ const PoolHarvest = ({
                   {rewards.vestedClamRewards.map((rewardData, i) => (
                     <UnlockRow
                       key={`clam-${i}`}
-                      type={"Clam staking"}
+                      type={"Clam Deposit"}
                       amount={renderNumber(rewardData.bonusRemaining)}
                       unlockDay={rewardData.endDay}
                     />
@@ -297,7 +296,7 @@ const PoolHarvest = ({
                   {rewards.vestedPearlRewards.map((rewardData, i) => (
                     <UnlockRow
                       key={`pearl-${i}`}
-                      type={"Pearl burn"}
+                      type={"Pearl Boost"}
                       amount={renderNumber(rewardData.bonusRemaining)}
                       unlockDay={rewardData.endDay}
                     />
