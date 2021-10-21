@@ -151,7 +151,7 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
         const isLegacyPearl = new BigNumber(pearl.pearlDataValues.gemBoost).eq(0);
 
         const bonusRewards = isLegacyPearl
-          ? await calculateBonusRewards(+legacyBaseGEMRewards * 1e18, dnaDecoded)
+          ? await calculateBonusRewards((+legacyBaseGEMRewards * 1e18).toString(), dnaDecoded)
           : pearl.pearlDataValues.gemBoost;
 
         const img = await getPearlImageFromCache({ dna });
