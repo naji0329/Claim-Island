@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="no"?>
+<!-- Generator: Adobe Fireworks 10, Export SVG Extension by Aaron Beall (http://fireworks.abeall.com) . Version: 0.6.1  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg id="tour-icon.fw-Page%201" viewBox="0 0 97 111" style="background-color:#ffffff00" version="1.1"
+	xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"
+	x="0px" y="0px" width="97px" height="111px"
+>
+	<g id="Layer%201">
+		<path id="Ellipse" d="M 36 15 C 36 8.9248 40.9248 4 47 4 C 53.0752 4 58 8.9248 58 15 C 58 21.0752 53.0752 26 47 26 C 40.9248 26 36 21.0752 36 15 Z" stroke="#ffffff" stroke-width="4" fill="none"/>
+		<path d="M 36 86.1729 L 36 74.5556 C 31.6386 74.4961 31 70.3893 31 66.4444 L 31 41.2099 C 31 37.2279 34.5817 34 39 34 L 55 34 C 59.4183 34 63 37.2279 63 41.2099 L 63 66.4444 C 63 70.4264 62.4183 74.5556 58 74.5556 L 58 86.1729 " stroke="#ffffff" stroke-width="4" fill="none"/>
+		<path d="M 58 95.4815 L 58 101.7901 C 58 105.7721 54.4183 109 50 109 L 44 109 C 39.5817 109 36 105.7721 36 101.7901 L 36 95.4815 " stroke="#ffffff" stroke-width="4" fill="none"/>
+		<path id="Ellipse2" d="M 84.4532 67.194 C 85.4614 68.5334 87 69.9442 87 71.4012 C 87 80.1118 68.7485 87.1729 45 87.1729 C 21.2515 87.1729 2 80.1118 2 71.4012 C 2 65.1925 14.2811 59.0729 28.5 56.5 " stroke="#ffffff" stroke-width="4" fill="none"/>
+		<path id="Polygon" d="M 95 73.3539 L 75.3333 73.6543 L 88.6961 61.3619 L 95 73.3539 Z" stroke="#ffffff" stroke-width="2" fill="#ffffff"/>
+	</g>
+</svg>

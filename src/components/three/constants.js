@@ -1,8 +1,16 @@
+export const ISLANDS_NAMES = {
+  lighthouse: "lighthouse",
+  farm: "farm",
+  vault: "vault",
+  market: "market",
+  bank: "bank",
+}
+
 export const ISLAND_OBJECTS = [
   {
     objectUrl: "glb_files/Bank_Island.glb",
     type: "island",
-    name: "bank",
+    name: ISLANDS_NAMES.bank,
     clickable: true,
     url: "/bank",
     buoyancy: { factor: 2, init: -5 }
@@ -10,14 +18,14 @@ export const ISLAND_OBJECTS = [
   {
     objectUrl: "glb_files/farm_island.glb",
     type: "island",
-    name: "farm",
+    name: ISLANDS_NAMES.farm,
     clickable: true,
     url: "/farms",
   },
   {
     objectUrl: "glb_files/Market_Island.glb",
     type: "island",
-    name: "market",
+    name: ISLANDS_NAMES.market,
     clickable: true,
     url: "/shop",
     buoyancy: { factor: 2, init: 2 }
@@ -25,7 +33,7 @@ export const ISLAND_OBJECTS = [
   {
     objectUrl: "glb_files/Vault_Island.glb",
     type: "island",
-    name: "vault",
+    name: ISLANDS_NAMES.vault,
     clickable: true,
     url: "/saferoom",
     buoyancy: { factor: 2, init: -4 }
@@ -33,7 +41,7 @@ export const ISLAND_OBJECTS = [
   {
     objectUrl: "glb_files/Info_Island.glb",
     type: "island",
-    name: "lighthouse",
+    name: ISLANDS_NAMES.lighthouse,
     clickable: true,
     url: "/info",
     buoyancy: { factor: 2, init: 2 }
