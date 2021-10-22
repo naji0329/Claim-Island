@@ -163,13 +163,14 @@ const ClamItem = ({
   }
 
   return (
-    <div className="flex flex-col shadow-lg overflow-hidden w-full border-4 border-gray-50 hover:border-4 hover:border-blue-200 rounded-xl">
-      <div className="flex-shrink-0">
-        <img className="h-64 w-full object-fill" src={img} alt="" />
-        <div className="flex justify-between px-4 py-2">
-          <div className=" badge badge-success">#{tokenId}</div>
-          <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
-        </div>
+    <div className="card bg-white shadow-lg overflow-hidden w-full border-4 border-gray-50 hover:border-4 hover:border-blue-200 ">
+      <figure>
+        <img className="h-64  w-full object-cover" src={img} alt="" />
+      </figure>
+
+      <div className="flex justify-between px-4 py-2">
+        <div className=" badge badge-success">#{tokenId}</div>
+        <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
       </div>
 
       <div className="flex-1 bg-white p-2 flex flex-col justify-between">
