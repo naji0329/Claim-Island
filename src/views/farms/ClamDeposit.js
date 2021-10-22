@@ -30,6 +30,8 @@ import { secondsToFormattedTime } from "utils/time";
 
 import { formatUnits } from "@ethersproject/units";
 
+import InfoTooltip from "components/Tooltip";
+
 const ClamItem = ({
   tokenId,
   clamId,
@@ -161,7 +163,7 @@ const ClamItem = ({
   }
 
   return (
-    <div className="flex flex-col shadow-lg overflow-hidden w-full hover:border-4 hover:border-blue-200 rounded-xl">
+    <div className="flex flex-col shadow-lg overflow-hidden w-full border-4 border-gray-50 hover:border-4 hover:border-blue-200 rounded-xl">
       <div className="flex-shrink-0">
         <img className="h-64 w-full object-fill" src={img} alt="" />
         <div className="flex justify-between px-4 py-2">
@@ -191,12 +193,9 @@ const ClamItem = ({
               <div className="bg-gray-50  sm:grid sm:grid-cols-3 sm:gap-4 p-2">
                 <dt className="text-sm font-medium text-gray-500">
                   $GEM boost:&nbsp;
-                  <button
-                    data-tip="Boost only available the first time the Clam is deposited and only if no other Clams of the same rarity tier was deposited at the time. Boost amount will otherwise show as zero."
-                    className="pointer-events-auto tooltip"
-                  >
+                  <InfoTooltip text="Boost only available the first time the Clam is deposited and only if no other Clams of the same rarity tier was deposited at the time. Boost amount will otherwise show as zero.">
                     <FontAwesomeIcon icon={faInfoCircle} />
-                  </button>
+                  </InfoTooltip>
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {rarityIsAlreadyStaked ? 0 : formatUnits(String(clamBonus), 18)}
