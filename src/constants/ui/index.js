@@ -5,4 +5,6 @@ export const SAFEROOM_TABS = {
   pearl: "Pearl",
 };
 
+export const IS_GUIDED_TOUR_PASSED = "isGuidedTourPassed";
+
 export const CONNECT_WALLET_TIP = "Connect the wallet first";

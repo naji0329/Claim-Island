@@ -132,6 +132,12 @@ export const actions = (store) => ({
     };
     return obj;
   },
+  suppressSpeechBubbleAction: (state, suppressSpeechBubble) => ({
+    character: {
+      ...state.character,
+      suppressSpeechBubble: suppressSpeechBubble,
+    },
+  }),
   addKonvaObject: (state, value) => {
     return {
       konvaObjects: [...state.konvaObjects, value],

@@ -140,6 +140,15 @@ export const decodePearlDataFromMulticall = (values, tokenIds) => {
   return result;
 };
 
+export const calculateBonusRewards = async (baseGemRewards, dnaDecoded) => {
+  const { size, lustre, nacreQuality, surface, rarityValue } = dnaDecoded;
+  const pearlNft = contractFactory({ abi: pearlNFTAbi, address: pearlNFTAddress });
+
+  return pearlNft.methods
+    .calculateBonusRewards(baseGemRewards, size, lustre, nacreQuality, surface, rarityValue)
+    .call();
+};
+
 export default {
   balanceOf,
   accountPearlBalance,

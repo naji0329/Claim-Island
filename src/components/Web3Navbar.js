@@ -28,6 +28,14 @@ import BigNumber from "bignumber.js";
 import NetworkService from "../utils/NetworkService";
 import { NavBarUserProfile } from "./navBarUserProfile";
 
+import ClamIcon from "../assets/img/clam_icon.png";
+import PearlIcon from "../assets/img/pearl_icon.png";
+import GemIcon from "../assets/img/gems_icon.png";
+import ShellIcon from "../assets/img/shell_icon.png";
+
+
+
+
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
     <div
@@ -63,6 +71,12 @@ const ErrorAlert = ({ title, description, onClose }) => (
 const formatBNB = (value) => (value ? formatUnits(value, 18) : "0");
 const formatNFT = (value) => (value ? formatUnits(value, 0) : "0");
 const formatBEP20 = (value) => (value ? formatUnits(value, 18) : "0");
+
+const IconTip = ({ children, text }) => (
+  <span data-tip={text} className="cursor-pointer tooltip">
+    {children}
+  </span>
+);
 
 const Web3Navbar = ({ updateAccount, ...redux }) => {
   //  is called several times thus need a state to lower the renders
@@ -314,14 +328,18 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
               <>
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    Gem Price: $ {activateGemPrice} | Shell Price: $ {activateShellPrice}
+                    Balance: {activateGemBalance} <IconTip text="$GEM Balance"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={GemIcon} /></IconTip> |{" "}
+                    {activateShellBalance} <IconTip text="$SHELL Balance"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={ShellIcon} /></IconTip>
                   </span>
                 </div>
+
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    Gem Balance: {activateGemBalance} | Shell Balance: {activateShellBalance}
+                    Price: <IconTip text="Price of 1 $GEM"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={GemIcon} /></IconTip> = $ {activateGemPrice} |{" "}
+                    <IconTip text="Price of 1 $SHELL"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={ShellIcon} /></IconTip> = $ {activateShellPrice}
                   </span>
                 </div>
+
                 <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
                   <Link
                     to="/saferoom/clam"
@@ -333,7 +351,8 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Safe: {activateClamBalanceInSafe} Clams | {activatePearlBalanceInSafe} Pearls
+                      Safe: {activateClamBalanceInSafe} <IconTip text="Clams owned"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={ClamIcon} /></IconTip> |{" "}
+                      {activatePearlBalanceInSafe} <IconTip text="Pearls owned"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={PearlIcon} /> </IconTip>{" "}
                       {location.pathname.indexOf("saferoom") === -1 && (
                         <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
                       )}
@@ -349,7 +368,8 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
                     }
                   >
                     <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Farm: {activateClamBalanceInFarm} Clams | {activatePearlBalanceInFarm} Pearls
+                      Farm: {activateClamBalanceInFarm} <IconTip text="Clams deposited"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={ClamIcon} /></IconTip> |{" "}
+                      {activatePearlBalanceInFarm} <IconTip text="Pearls for collection"><img style={{maxHeight: "1rem", marginBottom: "-0.1rem"}} src={PearlIcon} /></IconTip>
                       {location.pathname.indexOf("farms") === -1 && (
                         <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
                       )}
