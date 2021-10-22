@@ -239,7 +239,7 @@ const Farms = ({
         maxWidth={
           modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL
             ? "1000px"
-            : "33%"
+            : "90rem"
         }
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (

@@ -31,6 +31,7 @@ import { secondsToFormattedTime } from "utils/time";
 import { formatUnits } from "@ethersproject/units";
 
 const ClamItem = ({
+  tokenId,
   clamId,
   img,
   clamDataValues,
@@ -160,36 +161,52 @@ const ClamItem = ({
   }
 
   return (
-    <div className="clam-details">
-      <div className="w-1/3">
-        <div className="flex-row pr-4">
-          <img className="w-full" src={img} />
-          <div className="flex-row text-center text-green-400 text-bold">{dnaDecoded.rarity}</div>
+    <div className="flex flex-col shadow-lg overflow-hidden w-full hover:border-4 hover:border-blue-200 rounded-xl">
+      <div className="flex-shrink-0">
+        <img className="h-64 w-full object-fill" src={img} alt="" />
+        <div className="flex justify-between px-4 py-2">
+          <div className=" badge badge-success">#{tokenId}</div>
+          <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
         </div>
       </div>
-      <div className="details">
-        <div className="grid md:grid-cols-2 md:grid-rows-2 gap-4 flex-2">
-          <div className="grid-title">Pearl ETA:</div>
-          <div className="grid-value">{secondsToFormattedTime(remainingTime)}</div>
-          <div className="grid-title">Lifespan:</div>
-          <div className="grid-value">
-            {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced} pearls
-            remaining
-          </div>
-          <div className="grid-title">
-            $GEM boost:&nbsp;
-            <button
-              data-tip="Boost only available the first time the Clam is deposited and only if no other Clams of the same rarity tier was deposited at the time. Boost amount will otherwise show as zero."
-              className="pointer-events-auto tooltip"
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-            </button>
-          </div>
-          <div className="grid-value">
-            {rarityIsAlreadyStaked ? 0 : formatUnits(String(clamBonus), 18)}
+
+      <div className="flex-1 bg-white p-2 flex flex-col justify-between">
+        <div className="block">
+          <div className="border rounded border-gray-200">
+            <dl>
+              <div className="bg-gray-50  sm:grid sm:grid-cols-3 sm:gap-4 p-2">
+                <dt className="text-sm font-medium text-gray-500">Pearl ETA:</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {secondsToFormattedTime(remainingTime)}
+                </dd>
+              </div>
+              <div className="bg-gray-100  sm:grid sm:grid-cols-3 sm:gap-4  p-2">
+                <dt className="text-sm font-medium text-gray-500">Lifespan</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced} pearls
+                  remaining
+                </dd>
+              </div>
+
+              <div className="bg-gray-50  sm:grid sm:grid-cols-3 sm:gap-4 p-2">
+                <dt className="text-sm font-medium text-gray-500">
+                  $GEM boost:&nbsp;
+                  <button
+                    data-tip="Boost only available the first time the Clam is deposited and only if no other Clams of the same rarity tier was deposited at the time. Boost amount will otherwise show as zero."
+                    className="pointer-events-auto tooltip"
+                  >
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </button>
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {rarityIsAlreadyStaked ? 0 : formatUnits(String(clamBonus), 18)}
+                </dd>
+              </div>
+            </dl>
           </div>
         </div>
-        <div className="flex flex-col">
+
+        <div className="flex flex-col items-center justify-items-center">
           <Link
             to={`/saferoom/clam?id=${clamId}`}
             className="font-montserrat underline"
@@ -199,7 +216,7 @@ const ClamItem = ({
           </Link>
           <button
             disabled={inTx}
-            className="btn btn-info mt-4 font-montserrat font-bold"
+            className="btn btn-info mt-4 font-montserrat font-bold w-full"
             onClick={() => handleDeposit()}
           >
             {buttonText}
@@ -222,7 +239,7 @@ const ClamDeposit = ({
   return (
     <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
       {clams.length ? (
-        <div>
+        <div className="grid md:grid-cols-4 grid-cols-1 gap-4 flex-2">
           {clams.map((clam) => (
             <ClamItem
               key={clam.clamId}
