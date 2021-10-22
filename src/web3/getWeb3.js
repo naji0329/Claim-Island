@@ -9,11 +9,13 @@ export default () => {
   let web3;
   if (window.ethereum) {
     web3 = new Web3(window.ethereum);
-    if (process.env.NODE_ENV === 'local') {
+    if (process.env.NODE_ENV === "local") {
       web3.setProvider(RPC_URL);
     }
   } else if (window.web3) {
     web3 = new Web3(window.web3.currentProvider);
+  } else {
+    web3 = new Web3(RPC_URL);
   }
   window.web3 = web3;
   return window.web3;

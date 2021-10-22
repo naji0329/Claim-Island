@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAsync } from "react-use";
-import {
-  useEthers,
-  useTokenBalance,
-  useEtherBalance,
-  ChainId,
-} from "@usedapp/core";
+import { useEthers, useTokenBalance, useEtherBalance, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
 import { actions } from "../store/redux";
 import { Link, useLocation } from "react-router-dom";
@@ -93,6 +88,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   const shellBalance = useTokenBalance(shellTokenAddress, account);
   const bnbBalance = useEtherBalance(account);
   const web3 = getWeb3();
+  const isMetamaskInstalled = web3.currentProvider.isMetaMask === true;
   const location = useLocation();
 
   useAsync(async () => {
@@ -114,7 +110,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   }
 
   useEffect(async () => {
-    if (!web3) {
+    if (!isMetamaskInstalled) {
       return updateAccount({ web3Installed: false, error: "Metamask not installed" });
     }
     const netId = await web3.eth.net.getId();

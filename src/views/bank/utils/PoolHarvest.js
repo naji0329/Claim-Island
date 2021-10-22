@@ -38,7 +38,7 @@ const PoolHarvest = ({
   const calculateTimeLeft = () => {
     if (!rewards) return "calculating...";
     const { farmingRewards, vestedClamRewards, vestedPearlRewards } = rewards;
-    if (!farmingRewards.length && !vestedClamRewards.length && !vestedPearlRewards.length)
+    if (!farmingRewards?.length && !vestedClamRewards?.length && !vestedPearlRewards?.length)
       return "No locked rewards yet";
 
     const getUnlockDay = () => {
@@ -60,7 +60,7 @@ const PoolHarvest = ({
     return formatMsToDuration(remainingMs);
   };
 
-  const { timeLeft } = useTimer(calculateTimeLeft);
+  const { timeLeft } = useTimer(address ? calculateTimeLeft : () => {});
 
   const handleHarvest = async () => {
     setInTx(true);
@@ -289,7 +289,7 @@ const PoolHarvest = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {rewards.farmingRewards.map((rewardData) => (
+                  {rewards.farmingRewards?.map((rewardData) => (
                     <UnlockRow
                       key={rewardData.lockedUntilDay}
                       type={"Bank Harvest"}
@@ -298,7 +298,7 @@ const PoolHarvest = ({
                     />
                   ))}
 
-                  {rewards.vestedClamRewards.map((rewardData, i) => (
+                  {rewards.vestedClamRewards?.map((rewardData, i) => (
                     <UnlockRow
                       key={`clam-${i}`}
                       type={"Clam Deposit"}
@@ -306,7 +306,7 @@ const PoolHarvest = ({
                       unlockDay={rewardData.endDay}
                     />
                   ))}
-                  {rewards.vestedPearlRewards.map((rewardData, i) => (
+                  {rewards.vestedPearlRewards?.map((rewardData, i) => (
                     <UnlockRow
                       key={`pearl-${i}`}
                       type={"Pearl Boost"}
