@@ -236,10 +236,10 @@ const Farms = ({
             ? ""
             : "Choose a Clam"
         }
-        maxWidth={
+        modalClassName={
           modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL
             ? "1000px"
-            : "90rem"
+            : "w-full md:w-4/5"
         }
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
