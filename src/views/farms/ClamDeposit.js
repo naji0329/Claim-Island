@@ -163,7 +163,7 @@ const ClamItem = ({
   }
 
   return (
-    <div className="card bg-white shadow-lg overflow-hidden w-full border-4 border-gray-50 hover:border-4 hover:border-blue-200 ">
+    <div className="card bg-white shadow-lg overflow-visible w-full border-4 border-gray-50 hover:border-4 hover:border-blue-200 ">
       <figure>
         <img className="h-64  w-full object-cover" src={img} alt="" />
       </figure>
@@ -239,7 +239,7 @@ const ClamDeposit = ({
   return (
     <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
       {clams.length ? (
-        <div className="grid md:grid-cols-4 grid-cols-1 gap-4 flex-2">
+        <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 flex-2">
           {clams.map((clam) => (
             <ClamItem
               key={clam.clamId}
