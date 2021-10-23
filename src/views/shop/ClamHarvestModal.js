@@ -37,7 +37,7 @@ const ClamItem = ({ clam, clamValueInShellToken, pearlValueInShellToken, harvest
 
   return (
     <div>
-      <div className="flex flex-col shadow-lg overflow-hidden w-full hover:border-4 hover:border-blue-200 rounded-xl">
+      <div className="card bg-white shadow-lg overflow-visible w-full border-4 border-gray-50 hover:border-4 hover:border-blue-200 ">
         <div className="flex-shrink-0">
           <img className="h-64 w-full object-fill" src={img} alt="" />
         </div>
