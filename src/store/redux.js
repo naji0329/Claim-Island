@@ -19,6 +19,13 @@ const initialState = {
     clams: [],
     pearls: [],
   },
+  price: {
+    gem: "0",
+    shell: "0",
+  },
+  ui: {
+    isFetching: false,
+  },
   presale: {
     cap: "0",
     clamsPurchased: "0",
@@ -92,6 +99,27 @@ export const actions = (store) => ({
         ...state.account,
         ...value,
         ...errorObj,
+      },
+    };
+  },
+  resetAccount: () => {
+    return {
+      account: { ...initialState.account },
+    };
+  },
+  updatePrice: (state, value) => {
+    return {
+      price: {
+        ...state.price,
+        ...value,
+      },
+    };
+  },
+  updateUI: (state, value) => {
+    return {
+      ui: {
+        ...state.ui,
+        ...value,
       },
     };
   },
