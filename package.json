@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@binance-chain/bsc-use-wallet": "^0.8.1",
     "@craco/craco": "^6.1.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
@@ -47,9 +46,10 @@
     "sass": "^1.39.0",
     "styled-components": "^5.2.1",
     "three": "^0.126.1",
-    "use-wallet": "^0.8.1",
+    "use-wallet": "^0.12.3",
     "web-vitals": "^1.0.1",
-    "web3": "^1.6.0"
+    "web3": "^1.6.0",
+    "web3modal": "^1.9.4"
   },
   "scripts": {
     "start": "craco start",
