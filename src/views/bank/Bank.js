@@ -37,7 +37,7 @@ const Bank = ({
     pools.length && pools.some((p) => p.isNative && +p.userDepositAmountInPool > 0);
 
   useEffect(async () => {
-    if (pools.length === 0 && address) {
+    if (pools.length === 0 && chainId) {
       const setUpPools = await getAllPools({ address, chainId });
       const calcTotalTVL = setUpPools.reduce((prev, curr) => {
         if (curr.tvl) {
@@ -47,7 +47,7 @@ const Bank = ({
 
       setTotalTVL(renderUsd(+calcTotalTVL));
 
-      const rewards = await fetchRewards(chainId);
+      const rewards = address ? await fetchRewards(chainId) : {};
       updateBank({ pools: setUpPools, rewards });
     }
   }, [pools, address, isBSChain]);
@@ -56,7 +56,7 @@ const Bank = ({
   useEffect(async () => {
     const zero = new BigNumber(0);
     setInterval(async () => {
-      if (chainId && address) {
+      if (chainId) {
         const setUpPools = await getAllPools({ address, chainId });
 
         const calcTotalTVL = setUpPools.reduce((prev, curr) => {
@@ -67,7 +67,7 @@ const Bank = ({
 
         setTotalTVL(renderUsd(+calcTotalTVL));
         console.log("updated pools after 5s");
-        const rewards = await fetchRewards(chainId);
+        const rewards = address ? await fetchRewards(chainId) : {};
         updateBank({ pools: setUpPools, rewards });
       }
     }, 5000);
@@ -97,14 +97,15 @@ const Bank = ({
         <div className="w-full lg:w-7/10 mx-auto relative z-10 mt-24 px-2 md:px-4%">
           <div className="flex justify-between items-center">
             <PageTitle title="Clam Bank" />
-            <ExternalLinksBlock totalTVL={totalTVL} harvestAllPools={harvestAllPools} />
+            <ExternalLinksBlock
+              totalTVL={totalTVL}
+              harvestAllPools={address ? harvestAllPools : null}
+            />
           </div>
-          {address && (
-            <div className="py-4 flex flex-col">
-              {pools &&
-                pools.map((pool, i) => <PoolItem key={i} pool={pool} toggleModal={toggleModal} />)}
-            </div>
-          )}
+          <div className="py-4 flex flex-col">
+            {pools &&
+              pools.map((pool, i) => <PoolItem key={i} pool={pool} toggleModal={toggleModal} />)}
+          </div>
         </div>
       </div>
 

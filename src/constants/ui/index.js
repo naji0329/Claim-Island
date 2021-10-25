@@ -6,3 +6,5 @@ export const SAFEROOM_TABS = {
 };
 
 export const IS_GUIDED_TOUR_PASSED = "isGuidedTourPassed";
+
+export const CONNECT_WALLET_TIP = "Connect the wallet first";

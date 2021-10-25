@@ -2,6 +2,8 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
+import { CONNECT_WALLET_TIP } from "constants/ui";
+
 export const ExternalLinksBlock = ({ totalTVL, harvestAllPools }) => (
   <div className="flex">
     <div className="mr-2 btn glass drop-shadow-button btn-unclickable">TVL: {totalTVL}</div>
@@ -24,8 +26,14 @@ export const ExternalLinksBlock = ({ totalTVL, harvestAllPools }) => (
       <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
     </a>
 
-    <div className="ml-2 btn btn-secondary drop-shadow-button" onClick={() => harvestAllPools()}>
-      Harvest All Rewards
+    <div data-tip={CONNECT_WALLET_TIP} className={harvestAllPools ? "" : "tooltip"}>
+      <button
+        className="ml-2 btn btn-secondary drop-shadow-button"
+        onClick={harvestAllPools}
+        disabled={!harvestAllPools}
+      >
+        Harvest All Rewards
+      </button>
     </div>
   </div>
 );

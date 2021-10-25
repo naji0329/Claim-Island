@@ -13,7 +13,7 @@ const initialState = {
     error: undefined,
     isConnected: undefined,
     isBSChain: true,
-    chainId: undefined,
+    chainId: 56,
     isWeb3Installed: true,
     address: undefined,
     clams: [],

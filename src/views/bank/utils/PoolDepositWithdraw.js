@@ -3,9 +3,10 @@ import classnames from "classnames";
 
 import DepositTab from "./DepositTab";
 import WithdrawTab from "./WithdrawTab";
+import { CONNECT_WALLET_TIP } from "constants/ui";
 
 // WHEN WITHDRAWING FROM POOL DEPOSIT. CALLED IN ./PoolItem.js
-const PoolDepositWithdraw = ({ depositFee }) => {
+const PoolDepositWithdraw = ({ depositFee, disabled }) => {
   const [tab, setTab] = useState(0);
 
   const StateButton = ({ isActive, children, ...rest }) => (
@@ -21,18 +22,23 @@ const PoolDepositWithdraw = ({ depositFee }) => {
   );
 
   const handleSelect = (i) => {
+    if (disabled) {
+      return;
+    }
     setTab(i);
   };
 
   return (
     <div className="w-full" style={{ padding: "0 2%" }}>
-      <div className="flex flex-row justify-between h-1/5">
-        <StateButton isActive={tab === 0} onClick={() => handleSelect(0)}>
-          Deposit
-        </StateButton>
-        <StateButton isActive={tab === 1} onClick={() => handleSelect(1)}>
-          Withdraw
-        </StateButton>
+      <div data-tip={CONNECT_WALLET_TIP} className={disabled ? "tooltip" : ""}>
+        <div className="flex flex-row justify-between h-1/5">
+          <StateButton isActive={tab === 0} onClick={() => handleSelect(0)}>
+            Deposit
+          </StateButton>
+          <StateButton isActive={tab === 1} onClick={() => handleSelect(1)}>
+            Withdraw
+          </StateButton>
+        </div>
       </div>
 
       <div

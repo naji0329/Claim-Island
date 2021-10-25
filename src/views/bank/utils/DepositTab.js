@@ -20,6 +20,7 @@ import {
 
 import SliderWithPercentages from "./SliderWithPercentages";
 import ActionButton from "./ActionButton";
+import { CONNECT_WALLET_TIP } from "../../../constants/ui";
 
 const DepositTab = ({
   account: { address, chainId },
@@ -149,10 +150,15 @@ const DepositTab = ({
           {/* TODO better validation with Yulp */}
           {errors.depositAmount && <div className="my-2 text-error">Validation Error</div>}
         </div>
-
-        <ActionButton style="btn-deposit" isDisabled={!isValid || inTx} isLoading={inTx}>
-          Deposit {get(selectedPool, "name")}
-        </ActionButton>
+        <div data-tip={CONNECT_WALLET_TIP} className={!address ? "tooltip" : ""}>
+          <ActionButton
+            style="btn-deposit w-full"
+            isDisabled={!isValid || inTx || !address}
+            isLoading={inTx}
+          >
+            Deposit {get(selectedPool, "name")}
+          </ActionButton>
+        </div>
       </div>
     </form>
   );

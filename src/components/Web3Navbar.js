@@ -102,6 +102,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   const shellBalance = useTokenBalance(shellTokenAddress, account);
   const bnbBalance = useEtherBalance(account);
   const web3 = getWeb3();
+  const isMetamaskInstalled = web3.currentProvider.isMetaMask === true;
   const location = useLocation();
 
   useAsync(async () => {
@@ -164,7 +165,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   }
 
   useEffect(async () => {
-    if (!web3) {
+    if (!isMetamaskInstalled) {
       console.log({ reason: "not connected" });
       return updateAccount({ web3Installed: false, error: "Metamask not installed" });
     }
