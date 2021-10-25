@@ -5,7 +5,6 @@ import "./index.scss";
 
 import { Switch, Route, useRouteMatch, Redirect, useLocation, useHistory } from "react-router-dom";
 import Character from "components/characters/CharacterWrapper";
-import Web3Navbar from "components/Web3Navbar";
 import { Modal, useModal } from "components/Modal";
 import ClamView from "./ClamView";
 import PearlView from "./PearlView";
@@ -142,7 +141,7 @@ const Saferoom = ({
   return (
     <>
       {loading && <LoadingScreen />}
-      <Web3Navbar />
+
       {/* container */}
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 

@@ -7,7 +7,6 @@ import { useEthers } from "@usedapp/core";
 
 import { actions } from "store/redux";
 import Character from "components/characters/CharacterWrapper";
-import Web3Navbar from "components/Web3Navbar";
 import { Modal, useModal } from "components/Modal";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
@@ -227,7 +226,6 @@ const Farms = ({
   return (
     <div className="overflow-x-hidden">
       {loading && <LoadingScreen />}
-      <Web3Navbar />
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
       <Modal
@@ -238,10 +236,10 @@ const Farms = ({
             ? ""
             : "Choose a Clam"
         }
-        maxWidth={
+        modalClassName={
           modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL
-            ? "1000px"
-            : "33%"
+            ? "max-w-5xl"
+            : "w-full md:w-4/5"
         }
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (

@@ -4,7 +4,6 @@ import { useEthers } from "@usedapp/core";
 import { useHistory, useLocation } from "react-router-dom";
 
 import Character from "../../components/characters/CharacterWrapper";
-import Web3Navbar from "../../components/Web3Navbar";
 import { PageTitle } from "components/PageTitle";
 
 import { actions } from "../../store/redux";
@@ -77,7 +76,6 @@ const Shop = ({
 
   return (
     <>
-      <Web3Navbar />
       {/* container */}
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
       {/* chat character   */}

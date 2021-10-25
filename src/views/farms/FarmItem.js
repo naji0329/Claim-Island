@@ -108,13 +108,14 @@ const FarmItem = ({
       if (readyForPearl) {
         setButtonText("Collect Pearl");
         setAction("collect");
-      } else if (now > pearlProductionTime && canProducePearl) {
+      } else if (now >= pearlProductionTime && canProducePearl) {
         setButtonText("Open Clam");
         setAction("open");
       } else if (!canStillProducePearl) {
         setButtonText("Can't produce anymore!");
       } else {
         setButtonText("Loading...");
+        console.log(pearlProductionTime + " " + now);
       }
     }
   }, [readyForPearl, canProducePearl, canStillProducePearl, isInitLoading]);
@@ -270,7 +271,7 @@ const FarmItem = ({
             <ActionButton
               onClick={getClamFunction}
               style={action === "open" ? "btn-deposit w-full" : "btn-harvest w-full"}
-              isDisabled="true"
+              isDisabled={true}
               isLoading={inTx}
             >
               <Spinner show="true" color="#333333" /> Loading...

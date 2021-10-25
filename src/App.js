@@ -6,8 +6,9 @@ import { useSessionStorage } from "react-use";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import ROUTES from "./router";
-import NavigationButton from "./components/NavigationButton";
-import { GoogleAnalytics4 } from "./components/googleAnalytics4";
+import NavigationButton from "components/NavigationButton";
+import { GoogleAnalytics4 } from "components/googleAnalytics4";
+import Web3Navbar from "components/Web3Navbar";
 
 // Main App Component
 const App = () => {
@@ -54,6 +55,7 @@ const App = () => {
       ) : (
         <Router>
           <div className="p-0 h-full">
+            <Web3Navbar />
             <Switch>
               {ROUTES.map((k, i) => {
                 return <Route key={i} path={k.url} exact={k.exact} component={k.component} />;

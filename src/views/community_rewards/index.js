@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import "./index.scss";
 import CharacterWrapper from "../../components/characters/CharacterWrapper";
-import Web3Navbar from "../../components/Web3Navbar";
 import RewardUnknown from "../../assets/img/pearl_unknown.png";
 import Card from "../../components/Card";
 
@@ -182,7 +181,6 @@ const CommunityReward = ({
 
   return (
     <>
-      <Web3Navbar />
       <Web3ClamClaimers />
       {/* container */}
       <div className="shop-bg w-full h-screen flex items-center overflow-hidden fixed bg-gradient-to-t from-blue-400 to-green-500">

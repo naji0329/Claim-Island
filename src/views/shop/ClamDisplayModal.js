@@ -7,10 +7,9 @@ import ClamView from "../saferoom/ClamView";
 
 import clamContract from "web3/clam";
 import { actions } from "store/redux";
-import { getDNADecoded } from "web3/dnaDecoder";
-import { calculateBonusRewards } from "web3/clamBonus";
+import { getClamsDataByIds } from "web3/shared";
 
-const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) => {
+const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance, chainId } }) => {
   const [clam, setClam] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,18 +26,15 @@ const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) 
           });
 
           if (tokenId) {
-            const clamData = await clamContract.getClamData(tokenId);
+            const newestClam = await getClamsDataByIds({
+              tokenIds: tokenId,
+              chainId,
+              clamContract,
+            });
 
-            if (clamData.dna.length > 1) {
-              const dnaDecoded = await getDNADecoded(clamData.dna);
-              const clamBonus = await calculateBonusRewards(dnaDecoded);
-
-              setClam({
-                ...clamData,
-                dnaDecoded,
-                clamBonus,
-              });
-            }
+            setClam({
+              ...newestClam,
+            });
           }
 
           setIsLoading(false);

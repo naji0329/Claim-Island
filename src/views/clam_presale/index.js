@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import "./index.scss";
 import CharacterWrapper from "../../components/characters/CharacterWrapper";
-import Web3Navbar from "../../components/Web3Navbar";
 
 import videoImage from "../../assets/locations/Shop.jpg";
 import videoMp4 from "../../assets/locations/Shop.mp4";
@@ -134,8 +133,6 @@ const ClamPresale = ({
 
   return (
     <>
-      {console.log({ isStarted })}
-      <Web3Navbar />
       <Web3ClamPresale />
       {/* container */}
 
