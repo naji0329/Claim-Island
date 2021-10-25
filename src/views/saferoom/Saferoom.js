@@ -23,34 +23,18 @@ import { actions } from "store/redux";
 import LoadingScreen from "components/LoadingScreen";
 
 const Saferoom = ({
+  ui,
   account: { clamBalance, pearlBalance, address, clams, pearls },
   updateCharacter,
 }) => {
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? TABS.clam : TABS.pearl);
-  const [loading, setLoading] = useState(false);
 
   let { path, url } = useRouteMatch();
   const { search, pathname } = useLocation();
   const history = useHistory();
 
   const { isShowing, toggleModal } = useModal();
-
-  useEffect(async () => {
-    // wallet is connected and has clams
-    if (address && (+clamBalance > 0 || +pearlBalance > 0)) {
-      try {
-        setLoading(true);
-        // for first time needs to wait to downlaod all clams
-        if (clams.length > 0 || pearls.length > 0) {
-          setLoading(false);
-        }
-      } catch (error) {
-        setLoading(false);
-        console.log({ error });
-      }
-    }
-  }, [address, clams, pearls]);
 
   useAsync(async () => {
     updateCharacter({
@@ -140,7 +124,7 @@ const Saferoom = ({
 
   return (
     <>
-      {loading && <LoadingScreen />}
+      {ui.isFetching && <LoadingScreen />}
 
       {/* container */}
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
