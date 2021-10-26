@@ -57,11 +57,12 @@ const Bank = ({
   }, [pools, address, isBSChain]);
 
   // update pools data every 5 seconds
+
   useAsync(async () => {
     const zero = new BigNumber(0);
     setInterval(async () => {
-      if (chainId) {
-        console.log("updated pools after 5s");
+      if (chainId && address) {
+        console.log("updated pools after 5s", { chainId, address });
 
         const setUpPools = await getAllPools({ address, chainId });
         const calcTotalTVL = setUpPools.reduce((prev, curr) => {
@@ -71,15 +72,12 @@ const Bank = ({
         }, zero);
 
         setTotalTVL(renderUsd(+calcTotalTVL));
-        updateBank({ pools: setUpPools });
+        const rewards = await fetchRewards(chainId);
 
-        if (address) {
-          const rewards = await fetchRewards(chainId);
-          updateBank({ rewards });
-        }
+        updateBank({ pools: setUpPools, rewards });
       }
     }, 5000);
-  });
+  }, [address]);
 
   // CHARACTER SPEAK. functions in ./character folder
   useEffect(async () => {
