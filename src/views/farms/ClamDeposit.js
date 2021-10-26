@@ -216,7 +216,7 @@ const ClamItem = ({
           </Link>
           <button
             disabled={inTx}
-            className="btn btn-info mt-4 font-montserrat font-bold w-full"
+            className="btn btn-secondary mt-4 font-montserrat font-bold w-full"
             onClick={() => handleDeposit()}
           >
             {buttonText}
