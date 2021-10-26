@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
-
+import { useAsync } from "react-use";
 import { actions } from "store/redux";
 import videoImage from "assets/locations/Bank.jpg";
 import videoMp4 from "assets/locations/Bank.mp4";
@@ -46,19 +46,24 @@ const Bank = ({
       }, new BigNumber(0));
 
       setTotalTVL(renderUsd(+calcTotalTVL));
+      updateBank({ pools: setUpPools });
 
-      const rewards = address ? await fetchRewards(chainId) : {};
-      updateBank({ pools: setUpPools, rewards });
+      if (address) {
+        const rewards = await fetchRewards(chainId);
+        console.log({ rewards });
+        updateBank({ rewards });
+      }
     }
   }, [pools, address, isBSChain]);
 
   // update pools data every 5 seconds
-  useEffect(async () => {
+  useAsync(async () => {
     const zero = new BigNumber(0);
     setInterval(async () => {
       if (chainId) {
-        const setUpPools = await getAllPools({ address, chainId });
+        console.log("updated pools after 5s");
 
+        const setUpPools = await getAllPools({ address, chainId });
         const calcTotalTVL = setUpPools.reduce((prev, curr) => {
           if (curr.tvl) {
             return prev.plus(curr.tvl);
@@ -66,12 +71,15 @@ const Bank = ({
         }, zero);
 
         setTotalTVL(renderUsd(+calcTotalTVL));
-        console.log("updated pools after 5s");
-        const rewards = address ? await fetchRewards(chainId) : {};
-        updateBank({ pools: setUpPools, rewards });
+        updateBank({ pools: setUpPools });
+
+        if (address) {
+          const rewards = await fetchRewards(chainId);
+          updateBank({ rewards });
+        }
       }
     }, 5000);
-  }, []);
+  });
 
   // CHARACTER SPEAK. functions in ./character folder
   useEffect(async () => {
