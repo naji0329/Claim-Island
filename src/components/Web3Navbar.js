@@ -258,7 +258,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
     <>
       {redux.account.error ? (
         <ErrorAlert
-          title="Something Wrong"
+          title="Error"
           description={redux.account.error}
           onClose={() => {
             updateAccount({ error: null });
