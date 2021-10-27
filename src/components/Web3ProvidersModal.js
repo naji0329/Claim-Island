@@ -49,7 +49,7 @@ const Web3ProvidersModal = ({ resetAccount, updateAccount, updatePrice, updateUI
   let web3;
   const web3Modal = new Web3Modal({
     network: "binance",
-    cacheProvider: false, // maybe use true on production
+    cacheProvider: true, // maybe use true on production
     providerOptions: {
       // injected: {
       //   display: {

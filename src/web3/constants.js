@@ -1,4 +1,4 @@
-const ClamIslandChain = {
+export const ClamIslandChain = {
   BSC: 56,
   BSC_TESTNET: 97,
   Localhost: 1337,
