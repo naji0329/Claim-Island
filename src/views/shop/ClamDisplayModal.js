@@ -7,7 +7,7 @@ import ClamView from "../saferoom/ClamView";
 
 import clamContract from "web3/clam";
 import { actions } from "store/redux";
-import { getClamsDataByIds } from "web3/shared";
+import { getClamDataByTokenId } from "web3/shared";
 
 const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance, chainId } }) => {
   const [clam, setClam] = useState();
@@ -18,27 +18,26 @@ const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance, chai
       if (!clamToCollect && address) {
         try {
           setIsLoading(true);
+          console.log({ clamBalance });
+          const index = Number(clamBalance) - 1;
+          console.log({ index });
+          const tokenId = await clamContract.getClamByIndex(address, index);
+          console.log({ tokenId });
 
-          const index = Number(clamBalance);
-          const tokenId = await clamContract.getClamByIndex(address, index).catch(async () => {
-            //fallback
-            return clamContract.getClamByIndex(address, index - 1);
+          const [newestClam] = await getClamDataByTokenId({
+            tokenId,
+            chainId,
+            clamContract,
           });
 
-          if (tokenId) {
-            const newestClam = await getClamsDataByIds({
-              tokenIds: tokenId,
-              chainId,
-              clamContract,
-            });
-
-            setClam({
-              ...newestClam,
-            });
-          }
+          console.log({ newestClam });
+          setClam({
+            ...newestClam,
+          });
 
           setIsLoading(false);
         } catch (error) {
+          console.log(error);
           setIsLoading(false);
         }
       }
