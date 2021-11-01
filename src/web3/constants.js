@@ -42,7 +42,7 @@ export const clamBonusAddress = "0x15b540771a373c0e8a082d0dF4cDBaDddBc106cc";
 export const clamLotteryAddress = "0x5b9d7dCC720f6B1bE1c8f8fAd54e89DBa57B2036";
 export const clamShopAddress = "0xb073dD56EDc93Ea80Bd3cBbB62eB2093aDAa5903";
 export const pearlFarmAddress = "0x6e4942Cc0FF4138A5148f96efc68F95C2f14F973";
-export const pearlHuntAddress = "0xE066BceDea33F58359A92ecc64D3E84c635FE824";
+export const pearlHuntAddress = "0x3CefCe21F06bA801A97f7167E2292ea38854Df96";
 
 export const pancakeRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
 

@@ -4,9 +4,9 @@ import { connect } from "redux-zero/react";
 
 import "./index.scss";
 
-import pearlHuntContract from "../../web3/pearlHunt";
+import pearlHuntContract from "web3/pearlHunt";
 
-import { store, actions } from "../../store/redux";
+import { store, actions } from "store/redux";
 
 const Web3PearlHunt = ({ updatePearlHunt }) => {
   const fetchPearlHuntData = async () => {

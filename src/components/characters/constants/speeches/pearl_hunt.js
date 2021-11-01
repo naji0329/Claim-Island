@@ -18,6 +18,18 @@ export const PEARL_HUNT_SPEECH = {
       dismiss: false,
       skip: false,
     },
+    not_eligible: {
+      text: `You don't appear to have any pearls with the eligible shape and body colour. You won't be able to submit an entry to the Pearl Hunt Event.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    add_tg_handle: {
+      text: `We will also need your Telegram handle. A cryptographic hash of it will be stored on chain as part of your submission. This will allow us to verify you when claiming a winning entry without compromising your privacy.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
     winner: {
       text: `Congrats you won the pearl hunt competition! Please enter in contact with the team on Telegram or Discord.`,
       next: false,
