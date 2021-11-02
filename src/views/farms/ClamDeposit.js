@@ -16,6 +16,7 @@ import {
   stakeClamAgain,
   getRemainingPearlProductionTime,
   stakePrice,
+  gemsTransferred
 } from "../../web3/pearlFarm";
 import { getAllPools } from "web3/bank";
 import { clamRarityAlreadyStaked } from "./character/DepositClam";
@@ -106,8 +107,8 @@ const ClamItem = ({
   const executeDeposit = async () => {
     try {
       const gemBalance = await getBalance(address).then((v) => new BigNumber(v)); // from string to BN
-
-      if (gemBalance.lt(pearlPrice))
+      const pearlDeposit = await gemsTransferred(address, clamId);
+      if (pearlDeposit == 0 && gemBalance.lt(pearlPrice))
         throw new Error(`You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`);
 
       // character speaks

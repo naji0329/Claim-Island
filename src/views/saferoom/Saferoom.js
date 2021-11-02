@@ -28,7 +28,7 @@ const Saferoom = ({
 }) => {
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? TABS.clam : TABS.pearl);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   let { path, url } = useRouteMatch();
   const { search, pathname } = useLocation();
@@ -38,17 +38,19 @@ const Saferoom = ({
 
   useEffect(async () => {
     // wallet is connected and has clams
-    if (address && (+clamBalance > 0 || +pearlBalance > 0)) {
+    if (address && (+clamBalance == clams.length && +pearlBalance == pearls.length)) {
       try {
-        setLoading(true);
+        //setLoading(true);
         // for first time needs to wait to downlaod all clams
-        if (clams.length > 0 || pearls.length > 0) {
+        //if (clams.length > 0 || pearls.length > 0) {
           setLoading(false);
-        }
+        //}
       } catch (error) {
         setLoading(false);
         console.log({ error });
       }
+    } else {
+      setLoading(false);
     }
   }, [address, clams, pearls]);
 
