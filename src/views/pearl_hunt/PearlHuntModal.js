@@ -40,7 +40,7 @@ const PearlHuntModal = ({
       const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainIdentificaiton);
       setPearls(ownedPearls);
 
-      setEligibleShape("baroque");
+      setEligibleShape("ringed");
       setEligibleColor("cream");
       setSecondEligibleColor("black");
     } catch (err) {
@@ -69,7 +69,7 @@ const PearlHuntModal = ({
         name: "diego",
         action: "pearl_hunt.add_tg_handle.text",
         button: {
-          text: null,
+          text: '',
         },
       });
     }
@@ -91,30 +91,30 @@ const PearlHuntModal = ({
             </p>
           )}
           <div className="w-full bg-gray-200 rounded-lg mb-6 p-4 flex justify-between">
-            <div className="flex flex-col w-3/5">
-              <span className="font-bold">Pearls eligible:</span>
+            <div className="flex flex-col w-full">
+              <p className="font-bold mb-4 text-2xl">Eligible Pearl Traits</p>
               <div>
-                <span className="text-gray-500 inline-block w-16">Shape:</span>
-                <span className="text-gray-500">{eligibleShape}</span>
+                <span className="inline-block w-16 font-bold">Shape:</span>
+                <span>{eligibleShape}</span>
               </div>
+              <span>+</span>
               <div>
-                <span className="text-gray-500 inline-block w-16">Color:</span>
-                <span className="text-gray-500">{eligibleColor} </span>
-                <span className="text-gray-500">or {secondEligibleColor}</span>
+                <span className="font-bold inline-block w-16">Color:</span>
+                <span>{eligibleColor} or {secondEligibleColor}</span>
               </div>
             </div>
           </div>
 
           <div className="w-full">
             <div className="bg-gray-200 rounded-lg p-2 flex flex-col max-h-160">
-              <input
-                className="text-2xl"
+              <span>@<input
+                className="text-xl p-1"
                 placeholder="Enter Telegram Handle"
                 type="text"
                 step="any"
                 value={tgHandle}
                 onChange={handleTgHandle}
-              />
+              /></span>
             </div>
           </div>
 
