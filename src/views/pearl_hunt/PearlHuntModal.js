@@ -40,8 +40,8 @@ const PearlHuntModal = ({
       const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainIdentificaiton);
       setPearls(ownedPearls);
 
-      setEligibleShape("ringed");
-      setEligibleColor("cream");
+      setEligibleShape("round");
+      setEligibleColor("white");
       setSecondEligibleColor("black");
     } catch (err) {
       console.error(err);
@@ -84,7 +84,7 @@ const PearlHuntModal = ({
   return (
     <>
       <Card>
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col overflow-auto" style={{maxHeight: "460px"}}>
           {+accountPearlCount > 0 && (
             <p className="text-3xl font-aristotelica-bold text-gray-500 text-center mb-4">
               You have submitted {accountPearlCount} pearl{accountPearlCount > 1 ? "s" : ""}
@@ -105,10 +105,10 @@ const PearlHuntModal = ({
             </div>
           </div>
 
-          <div className="w-full">
+          <div className="w-full mb-6">
             <div className="bg-gray-200 rounded-lg p-2 flex flex-col max-h-160">
               <span>@<input
-                className="text-xl p-1"
+                className="text-xl p-1 rounded"
                 placeholder="Enter Telegram Handle"
                 type="text"
                 step="any"
