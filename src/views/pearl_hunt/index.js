@@ -50,11 +50,11 @@ const PearlHunt = ({ account: { address }, pearlHuntData: { lastWinner }, update
             },
           },
           buttonAlt: {
-            text: "Read Rules",
+            text: "Info & Rules",
             alt: {
               action: "url",
               destination:
-                "https://clamisland.medium.com/announcing-the-clam-island-pearl-hunt-event-e980c7b8f2eb",
+                "https://clamisland.medium.com/pearl-hunt-event-claim-portal-5446328a9a5",
             },
           },
         });

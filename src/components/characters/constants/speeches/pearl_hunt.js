@@ -25,7 +25,7 @@ export const PEARL_HUNT_SPEECH = {
       skip: false,
     },
     add_tg_handle: {
-      text: `We will also need your Telegram handle. A cryptographic hash of it will be stored on chain as part of your submission. This will allow us to verify you when claiming a winning entry without compromising your privacy.`,
+      text: `We will also need your Telegram handle. A cryptographic hash of it will be stored on chain as part of your submission. This will allow us to verify you when claiming a winning entry without compromising your privacy. Please TRIPLE CHECK that you enter this information correctly - if you make a typographical error when submitting, we will NOT be able to make exceptions.`,
       next: false,
       dismiss: true,
       skip: false,
