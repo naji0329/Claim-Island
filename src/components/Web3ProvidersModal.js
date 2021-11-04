@@ -158,63 +158,64 @@ const Web3ProvidersModal = ({ resetAccount, updateAccount, updatePrice, updateUI
   const getAccountAssets = async () => {
     console.log("getAccountAssets");
     const {
-      account: { address, chainId },
+      account: { address, chainId, isBSChain },
     } = store.getState();
 
     updateUI({ isFetching: true });
     try {
-      const [gemPrice, shellPrice] = (
-        await Promise.all([
-          getUsdPriceOfToken(gemTokenAddress, BUSD),
-          getUsdPriceOfToken(shellTokenAddress, BUSD),
-        ])
-      ).map((price) => new BigNumber(price).toFixed(2));
+      if (isBSChain) {
+        const [gemPrice, shellPrice] = (
+          await Promise.all([
+            getUsdPriceOfToken(gemTokenAddress, BUSD),
+            getUsdPriceOfToken(shellTokenAddress, BUSD),
+          ])
+        ).map((price) => new BigNumber(price).toFixed(2));
 
-      updatePrice({ gem: gemPrice, shell: shellPrice });
+        updatePrice({ gem: gemPrice, shell: shellPrice });
+        // get Clam and Pearsm  in farm
+        const stakedClamsInFarm = await getStakedClamIds(address);
+        const pearlsReadyInFarm = await Promise.all(
+          stakedClamsInFarm.map((clamId) => rngRequestHashForProducedPearl(clamId, address))
+        );
+        const pearlBalanceInFarm = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
+        const clamBalanceInFarm = stakedClamsInFarm.length;
 
-      // get Clam and Pearsm  in farm
-      const stakedClamsInFarm = await getStakedClamIds(address);
-      const pearlsReadyInFarm = await Promise.all(
-        stakedClamsInFarm.map((clamId) => rngRequestHashForProducedPearl(clamId, address))
-      );
-      const pearlBalanceInFarm = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
-      const clamBalanceInFarm = stakedClamsInFarm.length;
+        const [clamBalance, pearlBalance, gemBalance, shellBalance] = await Promise.all([
+          balanceOf(clamNFTAddress, address),
+          balanceOf(pearlNFTAddress, address),
+          balanceOf(gemTokenAddress, address).then((b) => formatFromWei(b)),
+          balanceOf(shellTokenAddress, address).then((b) => formatFromWei(b)),
+        ]);
 
-      const [clamBalance, pearlBalance, gemBalance, shellBalance] = await Promise.all([
-        balanceOf(clamNFTAddress, address),
-        balanceOf(pearlNFTAddress, address),
-        balanceOf(gemTokenAddress, address).then((b) => formatFromWei(b)),
-        balanceOf(shellTokenAddress, address).then((b) => formatFromWei(b)),
-      ]);
+        const clams = await getOwnedClams({
+          chainId,
+          address,
+          balance: clamBalance,
+          clamContract,
+        });
 
-      const clams = await getOwnedClams({
-        chainId,
-        address,
-        balance: clamBalance,
-        clamContract,
-      });
+        const pearls = await getOwnedPearls({
+          chainId,
+          address,
+          balance: pearlBalance,
+        });
 
-      const pearls = await getOwnedPearls({
-        chainId,
-        address,
-        balance: pearlBalance,
-      });
+        updateAccount({
+          clamBalanceInFarm,
+          clamBalance,
+          pearlBalanceInFarm,
+          pearlBalance,
+          gemBalance,
+          shellBalance,
+          clams,
+          pearls,
+          reason: "getAccountAssets",
+        });
 
-      updateAccount({
-        clamBalanceInFarm,
-        clamBalance,
-        pearlBalanceInFarm,
-        pearlBalance,
-        gemBalance,
-        shellBalance,
-        clams,
-        pearls,
-        reason: "getAccountAssets",
-      });
-
-      updateUI({ isFetching: false });
+        updateUI({ isFetching: false });
+      }
     } catch (error) {
-      console.error(error);
+      console.error("web3providerModal", { error });
       updateUI({ isFetching: false });
     }
   };
@@ -228,12 +229,6 @@ const Web3ProvidersModal = ({ resetAccount, updateAccount, updatePrice, updateUI
     resetAccount();
     setActiveAddress(undefined);
   };
-
-  // const isMetamaskInstalled = web3.currentProvider.isMetaMask === true;
-  // if (!isMetamaskInstalled) {
-  //   console.log({ reason: "not connected" });
-  //   return updateAccount({ web3Installed: false, error: "Metamask not installed" });
-  // }
 
   return (
     <>
