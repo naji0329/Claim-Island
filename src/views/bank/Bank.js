@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
-import { useAsync } from "react-use";
 import { actions } from "store/redux";
 import videoImage from "assets/locations/Bank.jpg";
 import videoMp4 from "assets/locations/Bank.mp4";
@@ -57,9 +56,11 @@ const Bank = ({
   }, [pools, address, isBSChain]);
 
   // update pools data every 5 seconds
-
-  useAsync(async () => {
+  /* removing is causing memory leak => TODO: replace to api request */
+  /*
+  useEffect(() => {
     const zero = new BigNumber(0);
+
     setInterval(async () => {
       if (chainId && address) {
         console.log("updated pools after 5s", { chainId, address });
@@ -78,6 +79,7 @@ const Bank = ({
       }
     }, 5000);
   }, [address]);
+*/
 
   // CHARACTER SPEAK. functions in ./character folder
   useEffect(async () => {
