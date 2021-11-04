@@ -52,6 +52,10 @@ const initialState = {
     rng: undefined, // f  rom call rngRequestHashFromBuyersClam
     hashRequest: undefined,
   },
+  pearlHuntData: {
+    accountPearlCount: "0",
+    lastWinner: undefined,
+  },
   character: {
     name: undefined,
     action: undefined,
@@ -143,6 +147,14 @@ export const actions = (store) => ({
     return {
       communityRewardsData: {
         ...state.communityRewardsData,
+        ...value,
+      },
+    };
+  },
+  updatePearlHunt: (state, value) => {
+    return {
+      pearlHuntData: {
+        ...state.pearlHuntData,
         ...value,
       },
     };

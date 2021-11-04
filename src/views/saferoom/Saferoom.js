@@ -29,12 +29,12 @@ const Saferoom = ({
 }) => {
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? TABS.clam : TABS.pearl);
-
   let { path, url } = useRouteMatch();
   const { search, pathname } = useLocation();
   const history = useHistory();
 
   const { isShowing, toggleModal } = useModal();
+
 
   useAsync(async () => {
     updateCharacter({

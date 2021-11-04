@@ -222,9 +222,10 @@ export const prepTokenOfOwnerByIndexMulticall = (address, length) => {
   return contractCalls;
 };
 
-export const prepClamDataMulticall = (tokenIds) => {
+export const prepClamDataMulticall = ({ balance, tokenId }) => {
   const contractCalls = [];
-  for (let index = 0; index < tokenIds.length; index++) {
+  console.log("prepClamDataMulticall", { tokenId, balance });
+  if (tokenId) {
     contractCalls.push([
       clamNFTAddress,
       web3.eth.abi.encodeFunctionCall(
@@ -238,17 +239,39 @@ export const prepClamDataMulticall = (tokenIds) => {
             },
           ],
         },
-        [tokenIds[index]]
+        [tokenId]
       ),
     ]);
+  }
+
+  if (balance) {
+    for (let index = 0; index < balance.length; index++) {
+      contractCalls.push([
+        clamNFTAddress,
+        web3.eth.abi.encodeFunctionCall(
+          {
+            name: "getClamData",
+            type: "function",
+            inputs: [
+              {
+                type: "uint256",
+                name: "clamId",
+              },
+            ],
+          },
+          [balance[index]]
+        ),
+      ]);
+    }
   }
 
   return contractCalls;
 };
 
-export const prepClamProducedPearlIds = (tokenIds) => {
+export const prepClamProducedPearlIds = ({ balance, tokenId }) => {
   const contractCalls = [];
-  for (let index = 0; index < tokenIds.length; index++) {
+
+  if (tokenId) {
     contractCalls.push([
       clamNFTAddress,
       web3.eth.abi.encodeFunctionCall(
@@ -262,9 +285,30 @@ export const prepClamProducedPearlIds = (tokenIds) => {
             },
           ],
         },
-        [tokenIds[index]]
+        [tokenId]
       ),
     ]);
+  }
+
+  if (balance) {
+    for (let index = 0; index < balance.length; index++) {
+      contractCalls.push([
+        clamNFTAddress,
+        web3.eth.abi.encodeFunctionCall(
+          {
+            name: "getProducedPearlIds",
+            type: "function",
+            inputs: [
+              {
+                type: "uint256",
+                name: "clamId",
+              },
+            ],
+          },
+          [balance[index]]
+        ),
+      ]);
+    }
   }
 
   return contractCalls;

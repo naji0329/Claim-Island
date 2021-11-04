@@ -238,7 +238,7 @@ const Farms = ({
         }
         modalClassName={
           modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL
-            ? "max-w-5xl"
+            ? "w-4/5 max-w-5xl"
             : "w-full md:w-4/5"
         }
       >

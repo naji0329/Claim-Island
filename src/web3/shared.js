@@ -58,7 +58,7 @@ export const getPearlImageFromCache = async ({ dna }) => {
 };
 
 export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => {
-  const clamDataCalls = clamContract.prepClamDataMulticall(tokenIds);
+  const clamDataCalls = clamContract.prepClamDataMulticall({ balance: tokenIds });
   const clamDataResult = await aggregate(clamDataCalls, chainId);
   const clamDataDecoded = clamContract.decodeClamDataFromMulticall(
     clamDataResult.returnData,
@@ -76,7 +76,7 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
     }
   });
 
-  const producedPearlIdsCalls = clamContract.prepClamProducedPearlIds(tokenIds);
+  const producedPearlIdsCalls = clamContract.prepClamProducedPearlIds({ balance: tokenIds });
   const producedPearlIdsResult = await aggregate(producedPearlIdsCalls, chainId);
   const producedPearlIdsDecoded = clamContract.decodeProducedPearlIdsFromMulticall(
     producedPearlIdsResult.returnData,
@@ -201,4 +201,69 @@ export const getOwnedPearls = async ({ chainId, address, balance }) => {
   const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainId);
 
   return ownedPearls;
+};
+
+export const getClamDataByTokenId = async ({ chainId, tokenId, clamContract }) => {
+  console.log("getClamDataByTokenId", { tokenId });
+  const clamDataCalls = clamContract.prepClamDataMulticall({ tokenId });
+  const clamDataResult = await aggregate(clamDataCalls, chainId);
+  const clamDataDecoded = clamContract.decodeClamDataFromMulticall(clamDataResult.returnData, [
+    tokenId,
+  ]);
+  const clamDnas = clamDataDecoded.map((data) => data.clamDataValues.dna);
+
+  const clamLegacyBaseGEMRewards = await clamLegacyBaseGemRewards();
+  const clamGemBoost = clamDataDecoded.map((data) => {
+    const boost = data.clamDataValues.gemBoost;
+    if (+boost > 0) {
+      return boost;
+    } else {
+      return String(+clamLegacyBaseGEMRewards * 1e18);
+    }
+  });
+
+  const producedPearlIdsCalls = clamContract.prepClamProducedPearlIds({ tokenId });
+  const producedPearlIdsResult = await aggregate(producedPearlIdsCalls, chainId);
+  const producedPearlIdsDecoded = clamContract.decodeProducedPearlIdsFromMulticall(
+    producedPearlIdsResult.returnData,
+    [tokenId]
+  );
+
+  const dnaDecodedCalls = clamDnaDecoder.prepGetDnaDecodedMulticall(clamDnas);
+  const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
+  const dnaDecodedDecoded = clamDnaDecoder.decodeGetDnaDecodedFromMulticall(
+    dnaDecodedResult.returnData,
+    [tokenId]
+  );
+
+  const clamBonusCalls = prepCalculateBonusRewardsMulticall(clamGemBoost, dnaDecodedDecoded);
+  const clamBonusResult = await aggregate(clamBonusCalls, chainId);
+  const clamBonusDecoded = decodeCalculateBonusRewardsFromMulticall(clamBonusResult.returnData, [
+    tokenId,
+  ]);
+
+  const clams = await Promise.all(
+    clamDataDecoded.map(async (clam) => {
+      const sameClamDna = dnaDecodedDecoded.find(({ clamId }) => clamId === clam.clamId);
+      const sameClamPearlsProduced = producedPearlIdsDecoded.find(
+        ({ clamId }) => clamId === clam.clamId
+      );
+      const sameClamBonus = clamBonusDecoded.find(({ clamId }) => clamId === clam.clamId);
+      if (sameClamDna && sameClamPearlsProduced && sameClamBonus) {
+        const dnaDecoded = sameClamDna.dnaDecodedValues;
+        const producedPearlIds = sameClamPearlsProduced.producedPearlIds;
+        const dna = clam.clamDataValues.dna;
+        const { clamBonus } = sameClamBonus;
+
+        const img = await getClamImageFromCache({ dna });
+
+        return { ...clam, dnaDecoded, producedPearlIds, dna, clamBonus, tokenId: clam.clamId, img };
+      }
+      console.error(`Clam ${clam.clamId} from ${address} not found`);
+    })
+  );
+
+  const clamsFiltered = clams.filter((c) => c);
+
+  return clamsFiltered;
 };

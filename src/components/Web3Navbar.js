@@ -165,9 +165,9 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
   }
 
   useEffect(async () => {
-    if (!isMetamaskInstalled) {
+    if (!web3) {
       console.log({ reason: "not connected" });
-      return updateAccount({ web3Installed: false, error: "Metamask not installed" });
+      return updateAccount({ web3Installed: false, error: "Wallet not installed" });
     }
     const netId = await web3.eth.net.getId();
     const bscTestnet = 97;
@@ -203,7 +203,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
 
   useEffect(() => {
     if (error) {
-      console.log({ reason: "has an error" });
+      console.log({ reason: "unknown error" });
       setActivateError(error.message);
     }
   }, [error]);
@@ -258,7 +258,7 @@ const Web3Navbar = ({ updateAccount, ...redux }) => {
     <>
       {redux.account.error ? (
         <ErrorAlert
-          title="Something Wrong"
+          title="Error"
           description={redux.account.error}
           onClose={() => {
             updateAccount({ error: null });
