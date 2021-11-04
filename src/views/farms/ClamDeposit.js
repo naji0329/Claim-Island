@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAsync } from "react-use";
 import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
@@ -16,7 +17,7 @@ import {
   stakeClamAgain,
   getRemainingPearlProductionTime,
   stakePrice,
-  gemsTransferred
+  gemsTransferred,
 } from "../../web3/pearlFarm";
 import { getAllPools } from "web3/bank";
 import { clamRarityAlreadyStaked } from "./character/DepositClam";
@@ -26,7 +27,6 @@ import {
   depositClamSuccess,
   depositWithoutStaking,
 } from "./character/clamDeposit";
-import { useEthers } from "@usedapp/core";
 import { secondsToFormattedTime } from "utils/time";
 
 import { formatUnits } from "@ethersproject/units";
@@ -46,6 +46,7 @@ const ClamItem = ({
   clamBonus,
   toggleModal,
   setRefreshClams,
+  pools,
 }) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState("Deposit Clam");
@@ -55,18 +56,15 @@ const ClamItem = ({
   const [isNativeStaker, setIsNativeStaker] = useState(false);
   const [isClamDeposited, setIsClamDeposited] = useState(false);
 
-  const { chainId } = useEthers();
-  getAllPools({ address, chainId }).then((pools) => {
-    const isNativeStaker =
-      pools.length && pools.some((p) => p.isNative && +p.userDepositAmountInPool > 0);
-    setIsNativeStaker(isNativeStaker);
-  });
-
   const rarityIsAlreadyStaked = stakedRarities.includes(dnaDecoded.rarity);
 
   useEffect(() => {
     const init = async () => {
       try {
+        const isNativeStaker =
+          pools.length && pools.some((p) => p.isNative && +p.userDepositAmountInPool > 0);
+        setIsNativeStaker(isNativeStaker);
+
         const remaining = await getRemainingPearlProductionTime(clamId);
         setRemainingTime(remaining);
 
@@ -233,31 +231,43 @@ const ClamDeposit = ({
   updateCharacter,
   toggleModal,
   updateAccount,
-  account: { address },
+  account: { address, chainId },
   stakedRarities,
   setRefreshClams,
 }) => {
+  const request = useAsync(async () => {
+    const pools = await getAllPools({ address, chainId });
+    return pools;
+  });
+
   return (
     <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
-      {clams.length ? (
-        <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 flex-2">
-          {clams.map((clam) => (
-            <ClamItem
-              key={clam.clamId}
-              updateAccount={updateAccount}
-              address={address}
-              {...clam}
-              updateCharacter={updateCharacter}
-              toggleModal={toggleModal}
-              stakedRarities={stakedRarities}
-              setRefreshClams={setRefreshClams}
-            />
-          ))}
-        </div>
+      {request.loading ? (
+        <div> Loading... </div>
       ) : (
-        <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
-          You&#39;ve got no more clams available to add to farm
-        </div>
+        <>
+          {clams.length ? (
+            <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 flex-2">
+              {clams.map((clam) => (
+                <ClamItem
+                  pools={request.value}
+                  key={clam.clamId}
+                  updateAccount={updateAccount}
+                  address={address}
+                  {...clam}
+                  updateCharacter={updateCharacter}
+                  toggleModal={toggleModal}
+                  stakedRarities={stakedRarities}
+                  setRefreshClams={setRefreshClams}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
+              You&#39;ve got no more clams available to add to farm
+            </div>
+          )}
+        </>
       )}
     </div>
   );
