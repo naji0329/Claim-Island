@@ -30,7 +30,7 @@ const WaitingOracle = () => (
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
-          <label>If takes too long please refresh this page</label>
+          <label>If you see this message for more than 30 seconds, please refresh this page.</label>
         </div>
       </div>
     </div>
