@@ -47,6 +47,7 @@ const ClamItem = ({
   toggleModal,
   setRefreshClams,
   pools,
+  dispatchFetchAccountAssets,
 }) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState("Deposit Clam");
@@ -95,11 +96,13 @@ const ClamItem = ({
     }
   };
 
-  const triggerClamDepositSuccess = () => {
+  const triggerClamDepositSuccess = async () => {
     toast.success("Your clam has been deposited!. You can choose to deposit another clam.");
     depositClamSuccess({ updateCharacter });
     setRefreshClams(true);
     setIsClamDeposited(true);
+
+    await dispatchFetchAccountAssets();
   };
 
   const executeDeposit = async () => {
@@ -129,16 +132,16 @@ const ClamItem = ({
             const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
             if (hasClamBeenStakeByUserBefore) {
               await stakeClamAgain(clamId);
-              triggerClamDepositSuccess();
+              await triggerClamDepositSuccess();
             } else {
               if (!isNativeStaker) {
                 depositWithoutStaking({ updateCharacter, dismissModal: toggleModal }, async () => {
                   await stakeClam(clamId);
-                  triggerClamDepositSuccess();
+                  await triggerClamDepositSuccess();
                 });
               } else {
                 await stakeClam(clamId);
-                triggerClamDepositSuccess();
+                await triggerClamDepositSuccess();
               }
             }
           } catch (err) {
@@ -229,6 +232,7 @@ const ClamItem = ({
 const ClamDeposit = ({
   clams,
   updateCharacter,
+  dispatchFetchAccountAssets,
   toggleModal,
   updateAccount,
   account: { address, chainId },
@@ -259,6 +263,7 @@ const ClamDeposit = ({
                   toggleModal={toggleModal}
                   stakedRarities={stakedRarities}
                   setRefreshClams={setRefreshClams}
+                  dispatchFetchAccountAssets={dispatchFetchAccountAssets}
                 />
               ))}
             </div>

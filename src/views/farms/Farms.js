@@ -49,6 +49,7 @@ const Farms = ({
   account: { clamBalance, chainId, isBSChain, address, clams = [] },
   updateCharacter,
   updateAccount,
+  dispatchFetchAccountAssets,
 }) => {
   let history = useHistory();
   const availableClamsForDepositing = [...clams].sort(sortClamsById);
@@ -73,6 +74,7 @@ const Farms = ({
     try {
       setWithdrawingClamId(clamId);
       await unstakeClam(clamId);
+      await dispatchFetchAccountAssets();
     } catch (err) {
       updateAccount({ error: err.message });
       setWithdrawingClamId(null);
@@ -185,6 +187,10 @@ const Farms = ({
 
               setClamsStaked(stakedClams);
               setStakedRarities(rarities);
+            } else {
+              console.log("when no clams staked");
+              setClamsStaked([]);
+              setStakedRarities([]);
             }
           }
         } catch (error) {
