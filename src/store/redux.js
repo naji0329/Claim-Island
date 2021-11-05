@@ -3,16 +3,13 @@ import { applyMiddleware } from "redux-zero/middleware";
 import { connect } from "redux-zero/devtools";
 
 // dispatcher imports
-import BigNumber from "bignumber.js";
 import clamContract from "web3/clam";
 import {
   gemTokenAddress,
   shellTokenAddress,
-  BUSD,
   clamNFTAddress,
   pearlNFTAddress,
 } from "web3/constants";
-import { getUsdPriceOfToken } from "web3/pancakeRouter";
 import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm";
 import { EmptyBytes, getOwnedClams, getOwnedPearls, formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";

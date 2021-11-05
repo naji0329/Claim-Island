@@ -11,19 +11,8 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 // import { convertUtf8ToHex } from "@walletconnect/utils";
 import { useAsync } from "react-use";
 
-import clamContract from "web3/clam";
-import {
-  ClamIslandChain,
-  gemTokenAddress,
-  shellTokenAddress,
-  BUSD,
-  clamNFTAddress,
-  pearlNFTAddress,
-} from "web3/constants";
+import { ClamIslandChain, gemTokenAddress, shellTokenAddress, BUSD } from "web3/constants";
 import { getUsdPriceOfToken } from "web3/pancakeRouter";
-import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm";
-import { EmptyBytes, getOwnedClams, getOwnedPearls, formatFromWei } from "web3/shared";
-import { balanceOf } from "web3/bep20";
 
 import Navbar from "components/Navbar";
 
@@ -43,7 +32,13 @@ function initWeb3(provider) {
   return web3;
 }
 
-const Web3ProvidersModal = ({ resetAccount, updateAccount, updatePrice, updateUI }) => {
+const Web3ProvidersModal = ({
+  resetAccount,
+  updateAccount,
+  updatePrice,
+  updateUI,
+  dispatchFetchAccountAssets,
+}) => {
   const [activeAddress, setActiveAddress] = useState();
 
   let web3;
@@ -158,7 +153,7 @@ const Web3ProvidersModal = ({ resetAccount, updateAccount, updatePrice, updateUI
   const getAccountAssets = async () => {
     console.log("getAccountAssets");
     const {
-      account: { address, chainId, isBSChain },
+      account: { isBSChain },
     } = store.getState();
 
     updateUI({ isFetching: true });
@@ -172,45 +167,8 @@ const Web3ProvidersModal = ({ resetAccount, updateAccount, updatePrice, updateUI
         ).map((price) => new BigNumber(price).toFixed(2));
 
         updatePrice({ gem: gemPrice, shell: shellPrice });
-        // get Clam and Pearsm  in farm
-        const stakedClamsInFarm = await getStakedClamIds(address);
-        const pearlsReadyInFarm = await Promise.all(
-          stakedClamsInFarm.map((clamId) => rngRequestHashForProducedPearl(clamId, address))
-        );
-        const pearlBalanceInFarm = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
-        const clamBalanceInFarm = stakedClamsInFarm.length;
 
-        const [clamBalance, pearlBalance, gemBalance, shellBalance] = await Promise.all([
-          balanceOf(clamNFTAddress, address),
-          balanceOf(pearlNFTAddress, address),
-          balanceOf(gemTokenAddress, address).then((b) => formatFromWei(b)),
-          balanceOf(shellTokenAddress, address).then((b) => formatFromWei(b)),
-        ]);
-
-        const clams = await getOwnedClams({
-          chainId,
-          address,
-          balance: clamBalance,
-          clamContract,
-        });
-
-        const pearls = await getOwnedPearls({
-          chainId,
-          address,
-          balance: pearlBalance,
-        });
-
-        updateAccount({
-          clamBalanceInFarm,
-          clamBalance,
-          pearlBalanceInFarm,
-          pearlBalance,
-          gemBalance,
-          shellBalance,
-          clams,
-          pearls,
-          reason: "getAccountAssets",
-        });
+        await dispatchFetchAccountAssets();
 
         updateUI({ isFetching: false });
       } else {
