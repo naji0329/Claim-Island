@@ -213,6 +213,8 @@ const Web3ProvidersModal = ({ resetAccount, updateAccount, updatePrice, updateUI
         });
 
         updateUI({ isFetching: false });
+      } else {
+        updateUI({ isFetching: false });
       }
     } catch (error) {
       console.error("web3providerModal", { error });
