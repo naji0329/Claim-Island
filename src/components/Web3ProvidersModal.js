@@ -6,7 +6,7 @@ import { actions, store } from "store/redux";
 import BigNumber from "bignumber.js";
 
 import Web3 from "web3";
-import Web3Modal from "web3modal";
+import Web3Modal, { connectors } from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 // import { convertUtf8ToHex } from "@walletconnect/utils";
 import { useAsync } from "react-use";
@@ -70,6 +70,28 @@ const Web3ProvidersModal = ({
         //   network: "binance",
         //   chainId: 97,
         // },
+      },
+      "custom-twt": {
+        display: {
+          name: "Trust",
+          description: "Trust Wallet",
+          logo: "https://trustwallet.com/assets/images/favicon.png",
+        },
+        package: "twt",
+        connector: connectors.injected,
+      },
+      "custom-binance": {
+        display: {
+          name: "Binance",
+          description: "Binance Chain Wallet",
+          logo: "https://zeroheight-uploads.s3-accelerate.amazonaws.com/10130f38006eb6d73d4bb2?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJXTVUC4XZENV3LPQ%2F20211105%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20211105T140330Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=20a675ead3a7d80efacbfc5c7f8120c45037550fa6f9793280d7790c4add8af3",
+        },
+        package: "binance",
+        connector: async (ProviderPackage, options) => {
+          const provider = window.BinanceChain;
+          await provider.enable();
+          return provider;
+        },
       },
     },
   });
