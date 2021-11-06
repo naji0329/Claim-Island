@@ -25,6 +25,7 @@ const WithdrawTab = ({
   updateBank,
   updateCharacter,
   updateAccount,
+  dispatchFetchAccountAssets,
 }) => {
   const [inTx, setInTx] = useState(false);
   const hasPearlRewards = selectedPool.isNative && rewards.hasLockedPearlRewards;
@@ -73,6 +74,9 @@ const WithdrawTab = ({
           userDepositAmountInPool: newWithdrawlAmount,
         },
       });
+
+      await dispatchFetchAccountAssets();
+
       setInTx(false);
       onDepositHarvestSuccess(updateCharacter);
     } catch (error) {

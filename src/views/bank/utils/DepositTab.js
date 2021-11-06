@@ -28,6 +28,7 @@ const DepositTab = ({
   updateBank,
   updateCharacter,
   updateAccount,
+  dispatchFetchAccountAssets,
   depositFee,
 }) => {
   const [inTx, setInTx] = useState(false);
@@ -76,6 +77,8 @@ const DepositTab = ({
           userDepositAmountInPool: newDepositBN,
         },
       });
+
+      await dispatchFetchAccountAssets();
       setInTx(false);
       onDepositHarvestSuccess(updateCharacter); // character speak
     } catch (error) {
