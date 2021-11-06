@@ -3,12 +3,13 @@ import { useForm } from "react-hook-form";
 import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
 
-import { collectClam } from "../../web3/clam";
+import { collectClam } from "web3/clam";
 
-import Card from "../../components/Card";
+import Card from "components/Card";
 
-import ClamPic from "../../assets/img/clam_unknown.png";
-import { actions } from "../../store/redux";
+import ClamPic from "assets/img/clam_unknown.png";
+import ClamUnknown from "assets/img/clam_unknown.png";
+import { actions } from "store/redux";
 
 import "./index.scss";
 import {
@@ -20,7 +21,7 @@ import {
 
 const ClamCollectModal = ({
   setModalToShow,
-  account: { address },
+  account: { address, clamToCollect },
   updateCharacter,
   updateAccount,
 }) => {
@@ -33,7 +34,6 @@ const ClamCollectModal = ({
 
   // on form submit
   const onSubmit = async (data) => {
-    console.log({ data, address });
     setIsLoading(true);
     collectClamProcessing({ updateCharacter }); // character speaks
 
@@ -55,26 +55,37 @@ const ClamCollectModal = ({
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Card>
-          <div className="bg-white flex-1 justify-center  md:flex items-center">
-            <img src={ClamPic} width="300" />
+      <Card>
+        {clamToCollect === null ? (
+          <div className="flex flex-col mb-4">
+            <div className="bg-white flex-1 justify-center  md:flex items-center">
+              <img src={ClamUnknown} width="300" />
+            </div>
+            <div className="block text-white text-center shadow text-xl py-3 px-10 rounded-xl bg-gray-600">
+              Fetching your clam...
+            </div>
           </div>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="bg-white flex-1 justify-center  md:flex items-center">
+              <img src={ClamPic} width="300" />
+            </div>
 
-          <div className="py-2 flex flex-col">
-            {isLoading ? (
-              <button disabled={isLoading} type="submit" className="flex sending-txn-btn">
-                <SVGSpinner />
-                Sending transaction...
-              </button>
-            ) : (
-              <button type="submit" className="collect-clam-btn">
-                Collect Clam
-              </button>
-            )}
-          </div>
-        </Card>
-      </form>
+            <div className="py-2 flex flex-col">
+              {isLoading ? (
+                <button disabled={isLoading} type="submit" className="flex sending-txn-btn">
+                  <SVGSpinner />
+                  Sending transaction...
+                </button>
+              ) : (
+                <button type="submit" className="collect-clam-btn">
+                  Collect Clam
+                </button>
+              )}
+            </div>
+          </form>
+        )}
+      </Card>
     </>
   );
 };

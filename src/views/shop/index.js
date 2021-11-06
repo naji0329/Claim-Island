@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
+import { useInterval } from "react-use";
 import { useEthers } from "@usedapp/core";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -49,19 +50,18 @@ const Shop = ({
     }
   }, [address, userReady, clamToCollect]);
 
-  useEffect(() => {
-    const fetchHasClamToCollectData = async () => {
-      if (address) {
+  useInterval(
+    async () => {
+      console.log("interval", { clamToCollect });
+      if (modalToShow === "collect" && clamToCollect === null) {
         const clamToCollect = await checkHasClamToCollect(address);
         updateAccount({
           clamToCollect: clamToCollect === zeroHash ? null : clamToCollect,
         });
       }
-    };
-    setInterval(() => {
-      fetchHasClamToCollectData();
-    }, 1500);
-  }, [address, modalToShow]);
+    },
+    modalToShow === "collect" ? 1500 : null
+  );
 
   useEffect(() => {
     const query = new URLSearchParams(search);
@@ -76,7 +76,6 @@ const Shop = ({
 
   return (
     <>
-      {/* container */}
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
       {/* chat character   */}
       <Character name="diego" />
@@ -89,9 +88,7 @@ const Shop = ({
           {/* step 1 */}
           {modalToShow === "buy" && <ClamBuyModal setModalToShow={setModalToShow} />}
           {/* step 2 */}
-          {modalToShow === "collect" && !!clamToCollect && clamToCollect != zeroHash && (
-            <ClamCollectModal setModalToShow={setModalToShow} />
-          )}
+          {modalToShow === "collect" && <ClamCollectModal setModalToShow={setModalToShow} />}
           {/* step 3 */}
           {modalToShow === "display" && <ClamDisplayModal setModalToShow={setModalToShow} />}
           {/* step 4 */}
