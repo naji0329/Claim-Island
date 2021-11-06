@@ -6,8 +6,11 @@ import "./index.scss";
 import ClamView from "../saferoom/ClamView";
 
 import clamContract from "web3/clam";
+import { accountClamBalance } from "web3/clam";
 import { actions } from "store/redux";
 import { getClamDataByTokenId } from "web3/shared";
+
+
 
 const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance, chainId } }) => {
   const [clam, setClam] = useState();
@@ -18,8 +21,9 @@ const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance, chai
       if (!clamToCollect && address) {
         try {
           setIsLoading(true);
-          console.log({ clamBalance });
-          const index = Number(clamBalance) - 1;
+          const newClamBalance = await accountClamBalance(address);
+          console.log({ clamBalance, newClamBalance });
+          const index = Number(newClamBalance) - 1;
           console.log({ index });
           const tokenId = await clamContract.getClamByIndex(address, index);
           console.log({ tokenId });
