@@ -16,6 +16,7 @@ import {
   stakePrice,
   gemsTransferred,
 } from "web3/pearlFarm";
+import { getRNGFromHashRequest } from "web3/rng";
 import { canCurrentlyProducePearl, canStillProducePearls } from "web3/clam";
 import { getPearlData, tokenOfOwnerByIndex, accountPearlBalance } from "web3/pearl";
 import { formatFromWei } from "web3/shared";
@@ -81,9 +82,12 @@ const FarmItem = ({
         setPearlProductionTime(_pearlProductionTime);
 
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId, address);
-
-        const isReadyForPearl = rngHashForProducedPearl !== zeroHash && !!rngHashForProducedPearl;
-        setReadyForPearl(isReadyForPearl);
+        if(rngHashForProducedPearl !== zeroHash && !!rngHashForProducedPearl) {
+          const dna = await getRNGFromHashRequest(rngHashForProducedPearl);
+          if(dna !== zeroHash && !!dna) {
+            setReadyForPearl(true);
+          }
+        };
 
         const canProduce = await canCurrentlyProducePearl(clamId);
         setCanProducePearl(canProduce);
@@ -158,10 +162,10 @@ const FarmItem = ({
         try {
           setInTx(true);
           setButtonText("Hold on ...");
-
           await collectPearl(clamId);
 
           const userBalanceOfPearls = await accountPearlBalance(address);
+          updateAccount({pearlBalance: userBalanceOfPearls});
           const lastUsersPearlId = await tokenOfOwnerByIndex(address, +userBalanceOfPearls - 1);
 
           const { dna: pearlDna } = await getPearlData(lastUsersPearlId);
