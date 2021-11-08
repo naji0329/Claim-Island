@@ -224,6 +224,13 @@ const Web3ProvidersModal = ({
     dispatchFetchAccountAssets,
   });
 
+  useAsync(async () => {
+    console.log("on init check for web3");
+    if (window.ethereum || window.web3) {
+      onConnect();
+    }
+  });
+
   return (
     <>
       {address ? (
