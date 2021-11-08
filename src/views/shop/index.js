@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { useInterval } from "react-use";
-import { useEthers } from "@usedapp/core";
 import { useHistory, useLocation } from "react-router-dom";
+import { actions } from "store/redux";
+import { checkHasClamToCollect } from "web3/clam";
+import { zeroHash } from "web3/constants";
 
-import Character from "../../components/characters/CharacterWrapper";
+import Character from "components/characters/CharacterWrapper";
 import { PageTitle } from "components/PageTitle";
+import VideoBackground from "components/VideoBackground";
+import { useWeb3Modal } from "components/Web3ProvidersModal";
 
-import { actions } from "../../store/redux";
-import { checkHasClamToCollect } from "../../web3/clam";
-import { zeroHash } from "../../web3/constants";
-
-import videoImage from "../../assets/locations/Shop.jpg";
-import videoMp4 from "../../assets/locations/Shop.mp4";
-import videoWebM from "../../assets/locations/Shop.webm";
-import VideoBackground from "../../components/VideoBackground";
+import videoImage from "assets/locations/Shop.jpg";
+import videoMp4 from "assets/locations/Shop.mp4";
+import videoWebM from "assets/locations/Shop.webm";
 
 import "./index.scss";
 import ClamBuyModal from "./ClamBuyModal";
@@ -28,19 +27,21 @@ const Shop = ({
   updateCharacter,
   updateAccount,
   character,
+  ...state
 }) => {
   const [modalToShow, setModalToShow] = useState(null);
   const [userReady, setUserReady] = useState(false);
   const { search } = useLocation();
   const history = useHistory();
-  const { activateBrowserWallet } = useEthers();
+
+  const { onConnect } = useWeb3Modal({ ...state, updateAccount });
 
   useEffect(() => {
     if (!userReady) {
       // character greets
       WelcomeUser({
         updateCharacter,
-        activateBrowserWallet,
+        onConnect,
         address,
         setModalToShow,
         setUserReady,

@@ -86,7 +86,7 @@ const buyClamsBtn = ({ updateCharacter, setUserReady, setModalToShow, clamToColl
   };
 };
 
-const connectWallet = ({ updateCharacter, activateBrowserWallet }) => {
+const connectWallet = ({ updateCharacter, onConnect }) => {
   updateCharacter({
     name: "diego",
     action: "clam_presale.connect.text",
@@ -94,7 +94,7 @@ const connectWallet = ({ updateCharacter, activateBrowserWallet }) => {
       text: "Connect",
       alt: {
         action: "cb",
-        destination: activateBrowserWallet,
+        destination: onConnect,
       },
     },
   });
@@ -102,7 +102,7 @@ const connectWallet = ({ updateCharacter, activateBrowserWallet }) => {
 
 export const WelcomeUser = ({
   updateCharacter,
-  activateBrowserWallet,
+  onConnect,
   address,
   setModalToShow,
   setUserReady,
@@ -125,7 +125,7 @@ export const WelcomeUser = ({
     } else {
       connectWallet({
         updateCharacter,
-        activateBrowserWallet,
+        onConnect,
       });
     }
   } else {
@@ -152,7 +152,7 @@ export const WelcomeUser = ({
             } else {
               connectWallet({
                 updateCharacter,
-                activateBrowserWallet,
+                onConnect,
               });
             }
           },
@@ -162,92 +162,95 @@ export const WelcomeUser = ({
         text: "What's the deal with Clams?",
         alt: {
           action: "cb",
-          destination: (step=1) => {
-
-              updateCharacter({
-                name: "diego",
-                action: "clam_shop.intro.step" + step + ".text",
-                button: {
-                  text: "Next",
-                  alt: {
-                    action: "cb",
-                    destination: () => {
-                      if(step < 10) {
-                        if(step == 2) {
-                          updateCharacter({
-                            name: "diego",
-                            action: "clam_shop.intro.step" + (step+1) + ".text",
-                            buttonAlt: {
-                              text: "Next",
-                              alt: {
-                                action: "cb",
-                                destination: () => {
-                                  step++;
-                                  updateCharacter({
-                                    name: "diego",
-                                    action: "clam_shop.intro.step" + (step+1) + ".text",
-                                    button: {
-                                      text: "Next",
-                                      alt: {
-                                        action: "cb",
-                                        destination: () => {
-                                          step++;
-                                          if(step < 10){
+          destination: (step = 1) => {
+            updateCharacter({
+              name: "diego",
+              action: "clam_shop.intro.step" + step + ".text",
+              button: {
+                text: "Next",
+                alt: {
+                  action: "cb",
+                  destination: () => {
+                    if (step < 10) {
+                      if (step == 2) {
+                        updateCharacter({
+                          name: "diego",
+                          action: "clam_shop.intro.step" + (step + 1) + ".text",
+                          buttonAlt: {
+                            text: "Next",
+                            alt: {
+                              action: "cb",
+                              destination: () => {
+                                step++;
+                                updateCharacter({
+                                  name: "diego",
+                                  action: "clam_shop.intro.step" + (step + 1) + ".text",
+                                  button: {
+                                    text: "Next",
+                                    alt: {
+                                      action: "cb",
+                                      destination: () => {
+                                        step++;
+                                        if (step < 10) {
+                                          updateCharacter({
+                                            name: "diego",
+                                            action: "clam_shop.intro.step" + (step + 1) + ".text",
+                                          });
+                                        } else {
+                                          if (address) {
                                             updateCharacter({
                                               name: "diego",
-                                              action: "clam_shop.intro.step" + (step+1) + ".text",
+                                              action: "clam_shop.choose_path.text",
+                                              buttonAlt: harvestClamsBtn({
+                                                updateCharacter,
+                                                setUserReady,
+                                                setModalToShow,
+                                              }),
+                                              button: buyClamsBtn({
+                                                updateCharacter,
+                                                setUserReady,
+                                                setModalToShow,
+                                                clamToCollect,
+                                              }),
                                             });
                                           } else {
-                                            if (address) {
-                                              updateCharacter({
-                                                name: "diego",
-                                                action: "clam_shop.choose_path.text",
-                                                buttonAlt: harvestClamsBtn({ updateCharacter, setUserReady, setModalToShow }),
-                                                button: buyClamsBtn({
-                                                  updateCharacter,
-                                                  setUserReady,
-                                                  setModalToShow,
-                                                  clamToCollect,
-                                                }),
-                                              });
-                                            } else {
-                                              connectWallet({
-                                                updateCharacter,
-                                                activateBrowserWallet,
-                                              });
-                                            }
+                                            connectWallet({
+                                              updateCharacter,
+                                              onConnect,
+                                            });
                                           }
                                         }
-                                      }
-                                    }
-                                  });
-                                }
-                              }
+                                      },
+                                    },
+                                  },
+                                });
+                              },
                             },
-                            button: {
-                              text: "Find out more",
-                              alt: {
-                                action: "url",
-                                destination: "https://clamisland.medium.com/drop-rates-for-clam-traits-d62553430877",
-                              }
-                            }
-                          });
-                        } else {
-                          updateCharacter({
-                            name: "diego",
-                            action: "clam_shop.intro.step" + (step+1) + ".text",
-                          });
-                          step++;
-                        }
-
-                      } 
+                          },
+                          button: {
+                            text: "Find out more",
+                            alt: {
+                              action: "url",
+                              destination:
+                                "https://clamisland.medium.com/drop-rates-for-clam-traits-d62553430877",
+                            },
+                          },
+                        });
+                      } else {
+                        updateCharacter({
+                          name: "diego",
+                          action: "clam_shop.intro.step" + (step + 1) + ".text",
+                        });
+                        step++;
+                      }
                     }
-                  }
-                }
-              });
-          }
-        }
-      }
+                  },
+                },
+              },
+            });
+          },
+        },
+      },
     });
   }
 };
