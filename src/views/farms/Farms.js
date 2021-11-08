@@ -252,6 +252,7 @@ const Farms = ({
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
           <ClamDetails
+            chainId={chainId}
             clam={selectedClam}
             clamProcessing={clamProcessing}
             updateAccount={updateAccount}
