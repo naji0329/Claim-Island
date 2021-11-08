@@ -14,10 +14,8 @@ const clam = () =>
     address: clamNFTAddress,
   });
 
-export const calculateBonusRewards = async (dnaDecoded) => {
+export const calculateClamBonusRewards = async (baseRewards, dnaDecoded) => {
   const { size, lifespan, rarityValue } = dnaDecoded;
-
-  const baseRewards = currentClamBaseGemRewards();
 
   return clam().methods.calculateBonusRewards(baseRewards, size, lifespan, rarityValue).call();
 };
