@@ -150,7 +150,7 @@ export const FARM_SPEECH = {
       hideable: false,
     },
     refundDepositedGem: {
-      text: "Do you want to refund your deposited $GEM ?",
+      text: "Do you want to refund your deposited $GEM? Choosing to refund your $GEM deposit will reset the Pearl production process, and you will lose 10% of the deposit.",
       dismiss: false,
       skip: false,
     },

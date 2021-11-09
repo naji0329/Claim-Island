@@ -3,8 +3,6 @@ import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useEthers } from "@usedapp/core";
-
 import { actions } from "store/redux";
 import Character from "components/characters/CharacterWrapper";
 import { Modal, useModal } from "components/Modal";
@@ -45,11 +43,13 @@ import {
 import LoadingScreen from "components/LoadingScreen";
 
 import { ifPearlSendSaferoom } from "./utils";
+import { isEmpty } from "lodash";
 
 const Farms = ({
-  account: { clamBalance, address, clams = [] },
+  account: { clamBalance, chainId, isBSChain, address, clams = [] },
   updateCharacter,
   updateAccount,
+  dispatchFetchAccountAssets,
 }) => {
   let history = useHistory();
   const availableClamsForDepositing = [...clams].sort(sortClamsById);
@@ -67,8 +67,6 @@ const Farms = ({
   const [selectedClamId, setSelectedClamId] = useState({});
   const [withdrawingClamId, setWithdrawingClamId] = useState(null);
 
-  const { chainId } = useEthers();
-
   const isPrevButtonShown = selectedClam !== clamsStaked[0];
   const isNextButtonShown = selectedClam !== clamsStaked[clamsStaked.length - 1];
 
@@ -76,6 +74,7 @@ const Farms = ({
     try {
       setWithdrawingClamId(clamId);
       await unstakeClam(clamId);
+      await dispatchFetchAccountAssets();
     } catch (err) {
       updateAccount({ error: err.message });
       setWithdrawingClamId(null);
@@ -173,20 +172,29 @@ const Farms = ({
             setLoading(true);
             setIsFirstLoading(false);
           }
-          // get staked clams
-          const clamsStakedIds = await getStakedClamIds(address);
-          const stakedClams = await getClamsDataByIds({
-            tokenIds: clamsStakedIds,
-            chainId,
-            clamContract,
-          });
 
-          const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
+          if (isBSChain) {
+            // get staked clams
+            const clamsStakedIds = await getStakedClamIds(address);
+            if (!isEmpty(clamsStakedIds)) {
+              const stakedClams = await getClamsDataByIds({
+                tokenIds: clamsStakedIds,
+                chainId,
+                clamContract,
+              });
 
-          setClamsStaked(stakedClams);
-          setStakedRarities(rarities);
+              const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
+
+              setClamsStaked(stakedClams);
+              setStakedRarities(rarities);
+            } else {
+              console.log("when no clams staked");
+              setClamsStaked([]);
+              setStakedRarities([]);
+            }
+          }
         } catch (error) {
-          console.error({ error });
+          console.error("farms", { error });
           updateAccount({ error: error.message });
         } finally {
           setLoading(false);
@@ -244,6 +252,7 @@ const Farms = ({
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
           <ClamDetails
+            chainId={chainId}
             clam={selectedClam}
             clamProcessing={clamProcessing}
             updateAccount={updateAccount}

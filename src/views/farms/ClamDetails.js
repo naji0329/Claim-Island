@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useEthers } from "@usedapp/core";
 import { Skeleton } from "@pancakeswap-libs/uikit";
 
 import { getPearlDataByIds } from "web3/shared";
@@ -15,7 +14,7 @@ import PearlInfo from "../bank/utils/PearlInfo";
 
 const formatShell = (value) => (value ? formatUnits(String(value), 18) : "0");
 
-const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
+const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev }) => {
   const [producedPearls, setProducedPearls] = useState([]);
   const [timeLeft, setTimeLeft] = useState(0);
   const [clamHasGeneratedBonus, setClamHasGeneratedBonus] = useState(false);
@@ -23,7 +22,6 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
   const [pearlValueInShellToken, setPearlValueInShellToken] = useState("0");
   const [isLoading, setIsLoading] = useState(false);
   const remainingFormattedTime = secondsToFormattedTime(timeLeft);
-  const { chainId } = useEthers();
   const { clamDataValues } = clam;
   const { dna, pearlsProduced, pearlProductionCapacity } = clamDataValues;
   const harvestableShell =

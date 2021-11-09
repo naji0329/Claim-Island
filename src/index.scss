@@ -216,3 +216,12 @@ canvas {
 .btn-disabled{
   @apply bg-gray-200 cursor-not-allowed;
 }
+
+
+// overwrite web3modal style
+.web3modal-modal-lightbox{
+  z-index: 999999999 !important;
+}
+.web3modal-modal-card {
+  top: -25%;
+}

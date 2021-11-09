@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useWallet } from "@binance-chain/bsc-use-wallet";
+import React from "react";
 import { ToastContainer } from "react-toastify";
 import { isMobile } from "react-device-detect";
 import { useSessionStorage } from "react-use";
@@ -8,22 +7,14 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ROUTES from "./router";
 import NavigationButton from "components/NavigationButton";
 import { GoogleAnalytics4 } from "components/googleAnalytics4";
-import Web3Navbar from "components/Web3Navbar";
+import Web3ProvidersModal from "components/Web3ProvidersModal";
 
 // Main App Component
 const App = () => {
-  const { account, connect } = useWallet();
-
   const [continueMobileAnyway, setContinueMobileAnyway] = useSessionStorage(
     "continueMobileAnyway",
     false
   );
-
-  useEffect(() => {
-    if (!account && window.localStorage.getItem("accountStatus")) {
-      connect("injected");
-    }
-  }, [account, connect]);
 
   return (
     <>
@@ -55,7 +46,7 @@ const App = () => {
       ) : (
         <Router>
           <div className="p-0 h-full">
-            <Web3Navbar />
+            <Web3ProvidersModal />
             <Switch>
               {ROUTES.map((k, i) => {
                 return <Route key={i} path={k.url} exact={k.exact} component={k.component} />;

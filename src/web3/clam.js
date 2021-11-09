@@ -3,6 +3,8 @@ import clamShopAbi from "./abi/ClamShop.json";
 import { clamNFTAddress, clamShopAddress } from "./constants";
 import { contractFactory } from "./index";
 import { getOracleFee } from "./rng";
+import { getRNGFromHashRequest } from "./rng";
+import { zeroHash } from "./constants";
 
 const balanceOf = async ({ account, abi, address }) => {
   const token = contractFactory({ abi, address });
@@ -161,8 +163,12 @@ export const checkHasClamToCollect = async (address) => {
     address: clamShopAddress,
   });
 
-  const value = await clamShop.methods.rngRequestHashForFarmedClam(address).call();
-  return value;
+  const requestHash = await clamShop.methods.rngRequestHashForFarmedClam(address).call();
+  if(requestHash === zeroHash) {
+    return requestHash;
+  }
+  const rng = await getRNGFromHashRequest(requestHash);
+  return rng;
 };
 
 export const collectClam = async (account) => {

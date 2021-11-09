@@ -1,4 +1,4 @@
-const ClamIslandChain = {
+export const ClamIslandChain = {
   BSC: 56,
   BSC_TESTNET: 97,
   Localhost: 1337,
@@ -51,21 +51,22 @@ export const wBNB = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
 export const BUSD = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
 
 // TESTNET
-// export const shellTokenAddress = "0x5B31460B33838Be9F4eDac5411a366D81ff293B7";
-// export const clamNFTAddress = "0xE066BceDea33F58359A92ecc64D3E84c635FE824";
-// export const gemTokenAddress = "0x3211dD0Fb28f22fcBFC6eDE725B817b88bD41205";
-// export const gemLockerAddress = "0xfC0946780eBF7383029154289176658e9f8065d2";
-// export const pearlProductionTimeReductionAddress = "0x017141b0A5dB74E4f6b19985B390abE3F0A0a48a";
-// export const bankAddress = "0x3CefCe21F06bA801A97f7167E2292ea38854Df96";
-// export const pearlDnaDecoderAddress = "0x949614b457a2E6ab00bfDF6D6FaCC8ef0cD6B95A";
-// export const pearlNFTAddress = "0x09CA3eB7bf5Ef931F6c74E4e8df2C5e4EF00bC67";
-// export const pearlBurnerAddress = "0x73a79246C462afE704dE1DF5ac66C5F4f4590c99";
-// export const rngAddress = "0x895520BcA9D05B71F7c29452e83B25A1e85fa83f";
-// export const dnaDecoderAddress = "0x47845a3669969b2521D56575E7E6484dE454958F";
-// export const clamBonusAddress = "0xeA4C0a9f370C3EFf7dDf56fBcB0ACd1F6a0657B4";
-// export const clamLotteryAddress = "0x0e95c7e8ca99EBb89fc24DD6C4BB476C11C6E05A";
-// export const clamShopAddress = "0xd64296b4562dAe211ecE4006e1e5f4241398BBfC";
-// export const pearlFarmAddress = "0x7C506b9c7B03D140F4285D59BEd5872e3fa68F5D";
+// export const shellTokenAddress = "0xC8d7C49F49c06C7a3465D5bC9B9Af97ad2d31C61";
+// export const clamNFTAddress = "0xe1E28cdA41a5348922fB5d2B1dAeBb8D526C0494";
+// export const gemTokenAddress = "0x0CF406BBb2415a6ea6A57A4439b46916aF79061f";
+// export const gemLockerAddress = "0x71bb123eB78c4D553dfEe1afb58d7701390Ba128";
+// export const pearlProductionTimeReductionAddress = "0x50aCE598e79eC2C1d1B66EC21DE85a6Be83a4C86";
+// export const bankAddress = "0xDeCD364C7575E22c646Fc6668636d8BCc9a4D4B4";
+// export const pearlDnaDecoderAddress = "0xD3CeE2722623698f23de0c26eDF3abF023ceD3fc";
+// export const pearlNFTAddress = "0xe2E7d90244c46514f6bdc00514C575f39a433eD5";
+// export const pearlBurnerAddress = "0xAace232017f0aD3649EBdB4336783099899c0D4B";
+// export const rngAddress = "0xdE0Acb8C4246712C58072332F758E259490Af987";
+// export const dnaDecoderAddress = "0x44145b5e34740BD9c9905aA09337bAb957c45cB7";
+// export const clamBonusAddress = "0x007fc94e13cb744769c422752433b8Fb2b41F447";
+// export const clamLotteryAddress = "0x2AE7618E2f8Da79379809398Ea46288723969079";
+// export const clamShopAddress = "0x0677C3c008f1890314016Ee30053c66aeb730898";
+// export const pearlFarmAddress = "0x477bf9151547b9F11729D0B9238BE799b12262d6";
+// export const pearlHuntAddress = "0x9c02C8be30720ab2Ca2D9CDE4B6f320d5106bD4b";
 
 // export const pancakeRouterAddress = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3";
 
