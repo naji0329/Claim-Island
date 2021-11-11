@@ -14,6 +14,12 @@ import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm
 import { EmptyBytes, getOwnedClams, getOwnedPearls, formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";
 
+import { getClamsSortFunction } from "utils/clamsSort";
+import { getPearlsSortFunction } from "utils/pearlsSort";
+import { getSortedClams } from "utils/clamsSort";
+import { getSortedPearls } from "utils/pearlsSort";
+import { SORT_ORDER_CLAMS_KEY, SORT_ORDER_PEARLS_KEY } from "constants/sorting";
+
 const initialState = {
   account: {
     bnbBalance: "0",
@@ -247,6 +253,9 @@ export const actions = (store) => ({
         balance: pearlBalance,
       });
 
+      const clamsSorting = JSON.parse(localStorage.getItem(SORT_ORDER_CLAMS_KEY)) || {};
+      const pearlsSorting = JSON.parse(localStorage.getItem(SORT_ORDER_PEARLS_KEY)) || {};
+
       return {
         account: {
           ...state.account,
@@ -256,12 +265,28 @@ export const actions = (store) => ({
           pearlBalance,
           gemBalance,
           shellBalance,
-          clams,
-          pearls,
+          clams: getSortedClams(clams, clamsSorting.value, clamsSorting.order),
+          pearls: getSortedPearls(pearls, pearlsSorting.value, pearlsSorting.order),
           reason: "dispatchFetchAccountAssets",
         },
       };
     }
+  },
+  sortCalms: (state, value, order) => {
+    return {
+      account: {
+        ...state.account,
+        clams: state.account.clams.sort(getClamsSortFunction(value, order)),
+      },
+    };
+  },
+  sortPearls: (state, value, order) => {
+    return {
+      account: {
+        ...state.account,
+        pearls: state.account.pearls.sort(getPearlsSortFunction(value, order)),
+      },
+    };
   },
 });
 

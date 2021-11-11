@@ -59,6 +59,7 @@ module.exports = {
       },
       minWidth: {
         xs: "15rem",
+        180: "180px",
       },
       maxWidth: {
         canvas: "400px",
