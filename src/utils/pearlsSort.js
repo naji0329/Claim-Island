@@ -101,7 +101,7 @@ const SORT_FUNCTIONS = {
 export const getPearlsSortFunction = (sortValue, order) => SORT_FUNCTIONS[sortValue][order];
 
 export const getSortedPearls = (pearls, sortValue, order) => {
-  if (pearls?.length && sortValue && order) {
+  if (pearls?.length && sortValue && order && order !== SORT_ORDERS.none) {
     return pearls.sort(getPearlsSortFunction(sortValue, order));
   }
 

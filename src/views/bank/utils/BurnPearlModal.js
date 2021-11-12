@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useAsync } from "react-use";
+import { useAsync, useLocalStorage } from "react-use";
 import { connect } from "redux-zero/react";
 import moment from "moment";
 import { actions } from "store/redux";
@@ -13,6 +13,8 @@ import {
 import { color, shape, periodStart, periodInSeconds, periodCheckpoint } from "web3/pearlBurner";
 import { useTimer } from "hooks/useTimer";
 import PearlInfo from "./PearlInfo";
+import { SORT_ORDER_PEARLS_KEY } from "constants/sorting";
+import { getSortedPearls } from "utils/pearlsSort";
 
 const BurnPearlModal = (props) => {
   const {
@@ -26,6 +28,7 @@ const BurnPearlModal = (props) => {
   const [eligibleColor, setEligibleColor] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
   const [periodInSecs, setPeriodInSecs] = useState("");
+  const [sortOrderPearls = {}] = useLocalStorage(SORT_ORDER_PEARLS_KEY);
 
   const calculateTimeLeft = () => {
     if (startOfWeek === "") return "calculating...";
@@ -52,7 +55,12 @@ const BurnPearlModal = (props) => {
       const tokenIdsDecoded = decodeTokenOfOwnerByIndexFromMulticall(tokenIdsResult.returnData);
 
       const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainId);
-      setPearls(ownedPearls);
+      const sortedOwnedPearls = getSortedPearls(
+        ownedPearls,
+        sortOrderPearls.value,
+        sortOrderPearls.order
+      );
+      setPearls(sortedOwnedPearls);
 
       const elShape = await shape();
       const elColor = await color();

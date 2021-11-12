@@ -116,7 +116,7 @@ const SORT_FUNCTIONS = {
 export const getClamsSortFunction = (sortValue, order) => SORT_FUNCTIONS[sortValue][order];
 
 export const getSortedClams = (clams, sortValue, order) => {
-  if (clams?.length && sortValue && order) {
+  if (clams?.length && sortValue && order && order !== SORT_ORDERS.none) {
     return clams.sort(getClamsSortFunction(sortValue, order));
   }
 

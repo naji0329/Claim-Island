@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
-import { useAsync } from "react-use";
+import { useAsync, useLocalStorage } from "react-use";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "store/redux";
+import { isEmpty } from "lodash";
+
 import Character from "components/characters/CharacterWrapper";
 import { Modal, useModal } from "components/Modal";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
-import { sortClamsById } from "utils/clams";
+import { SORT_ORDER_CLAMS_KEY } from "constants/sorting";
 
 import videoImage from "assets/locations/Farm.jpg";
 import videoMp4 from "assets/locations/Farm.mp4";
@@ -43,7 +45,7 @@ import {
 import LoadingScreen from "components/LoadingScreen";
 
 import { ifPearlSendSaferoom } from "./utils";
-import { isEmpty } from "lodash";
+import { getSortedClams } from "utils/clamsSort";
 
 const Farms = ({
   account: { clamBalance, chainId, isBSChain, address, clams = [] },
@@ -52,7 +54,7 @@ const Farms = ({
   dispatchFetchAccountAssets,
 }) => {
   let history = useHistory();
-  const availableClamsForDepositing = [...clams].sort(sortClamsById);
+  const availableClamsForDepositing = clams;
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -66,6 +68,7 @@ const Farms = ({
   const [selectedClam, setSelectedClam] = useState({});
   const [selectedClamId, setSelectedClamId] = useState({});
   const [withdrawingClamId, setWithdrawingClamId] = useState(null);
+  const [sortOrderClams = {}] = useLocalStorage(SORT_ORDER_CLAMS_KEY);
 
   const isPrevButtonShown = selectedClam !== clamsStaked[0];
   const isNextButtonShown = selectedClam !== clamsStaked[clamsStaked.length - 1];
@@ -184,9 +187,14 @@ const Farms = ({
               });
 
               const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
-
-              setClamsStaked(stakedClams);
               setStakedRarities(rarities);
+
+              const sortedStakedClams = getSortedClams(
+                stakedClams,
+                sortOrderClams.value,
+                sortOrderClams.order
+              );
+              setClamsStaked(sortedStakedClams);
             } else {
               console.log("when no clams staked");
               setClamsStaked([]);
