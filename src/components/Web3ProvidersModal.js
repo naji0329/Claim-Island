@@ -56,14 +56,14 @@ export function useWeb3Modal({
     updateUI({ isFetching: true });
     try {
       if (isBSChain) {
-        /*const [gemPrice, shellPrice] = (
+        const [gemPrice, shellPrice] = (
           await Promise.all([
             getUsdPriceOfToken(gemTokenAddress, BUSD),
             getUsdPriceOfToken(shellTokenAddress, BUSD),
           ])
         ).map((price) => new BigNumber(price).toFixed(2));
 
-        updatePrice({ gem: gemPrice, shell: shellPrice });*/
+        updatePrice({ gem: gemPrice, shell: shellPrice });
 
         await dispatchFetchAccountAssets();
 
