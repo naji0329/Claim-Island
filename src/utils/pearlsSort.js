@@ -30,17 +30,17 @@ const sortPearlsByShapeDesc = (pearl1, pearl2) => {
 };
 
 const sortPearlsByColourAsc = (pearl1, pearl2) => {
-  const shape1 = get(pearl1, ["dnaDecoded", "color"]);
-  const shape2 = get(pearl2, ["dnaDecoded", "color"]);
+  const color1 = get(pearl1, ["dnaDecoded", "color"]);
+  const color2 = get(pearl2, ["dnaDecoded", "color"]);
 
-  return shape1 === shape2 ? 0 : shape1 < shape2 ? -1 : 1;
+  return color1 === color2 ? 0 : color1 < color2 ? -1 : 1;
 };
 
 const sortPearlsByColourDesc = (pearl1, pearl2) => {
-  const shape1 = get(pearl1, ["dnaDecoded", "color"]);
-  const shape2 = get(pearl2, ["dnaDecoded", "color"]);
+  const color1 = get(pearl1, ["dnaDecoded", "color"]);
+  const color2 = get(pearl2, ["dnaDecoded", "color"]);
 
-  return shape1 === shape2 ? 0 : shape1 < shape2 ? 1 : -1;
+  return color1 === color2 ? 0 : color1 < color2 ? 1 : -1;
 };
 
 const calculateGrade = ({ lustre, nacreQuality, surface }) =>

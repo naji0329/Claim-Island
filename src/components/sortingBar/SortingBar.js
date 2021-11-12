@@ -1,11 +1,11 @@
 import React from "react";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSort, faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
+import { faSort, faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 
 const ICONS_MAP = {
-  asc: faSortUp,
-  desc: faSortDown,
+  asc: faCaretUp,
+  desc: faCaretDown,
   default: faSort,
 };
 
@@ -49,7 +49,7 @@ export const SortingBar = (props) => {
         >
           <FontAwesomeIcon icon={ICONS_MAP[order] || ICONS_MAP.default} />
         </button>
-        Sort by: {selectedFilterName}
+        Sort by: {selectedFilterName || "N/A"}
       </div>
       <ul tabIndex="0" className="menu w-full dropdown-content rounded bg-gray-900 bg-opacity-80">
         {sortButtonComponents}

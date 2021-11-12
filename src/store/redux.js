@@ -18,7 +18,7 @@ import { getClamsSortFunction } from "utils/clamsSort";
 import { getPearlsSortFunction } from "utils/pearlsSort";
 import { getSortedClams } from "utils/clamsSort";
 import { getSortedPearls } from "utils/pearlsSort";
-import { SORT_ORDER_CLAMS_KEY, SORT_ORDER_PEARLS_KEY } from "constants/sorting";
+import { SORT_ORDER_CLAMS_KEY, SORT_ORDER_PEARLS_KEY, SORT_ORDERS } from "constants/sorting";
 
 const initialState = {
   account: {
@@ -35,7 +35,9 @@ const initialState = {
     isWeb3Installed: true,
     address: undefined,
     clams: [],
+    unsortedClams: [],
     pearls: [],
+    unsortedPearls: [],
   },
   price: {
     gem: "0",
@@ -265,18 +267,24 @@ export const actions = (store) => ({
           pearlBalance,
           gemBalance,
           shellBalance,
-          clams: getSortedClams(clams, clamsSorting.value, clamsSorting.order),
-          pearls: getSortedPearls(pearls, pearlsSorting.value, pearlsSorting.order),
+          unsortedClams: [...clams],
+          unsortedPearls: [...pearls],
+          clams: [...getSortedClams(clams, clamsSorting.value, clamsSorting.order)],
+          pearls: [...getSortedPearls(pearls, pearlsSorting.value, pearlsSorting.order)],
           reason: "dispatchFetchAccountAssets",
         },
       };
     }
   },
   sortCalms: (state, value, order) => {
+
     return {
       account: {
         ...state.account,
-        clams: state.account.clams.sort(getClamsSortFunction(value, order)),
+        clams:
+          order && order !== SORT_ORDERS.none
+            ? [...state.account.clams.sort(getClamsSortFunction(value, order))]
+            : [...state.account.unsortedClams],
       },
     };
   },
@@ -284,7 +292,10 @@ export const actions = (store) => ({
     return {
       account: {
         ...state.account,
-        pearls: state.account.pearls.sort(getPearlsSortFunction(value, order)),
+        pearls:
+          order && order !== SORT_ORDERS.none
+            ? [...state.account.pearls.sort(getPearlsSortFunction(value, order))]
+            : [...state.account.unsortedPearls],
       },
     };
   },

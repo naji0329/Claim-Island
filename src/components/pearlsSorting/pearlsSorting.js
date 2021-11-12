@@ -4,7 +4,11 @@ import { useAction } from "redux-zero/react";
 
 import { actions } from "store/redux";
 import { SortingBar } from "components/sortingBar";
-import { SORT_ORDER_PEARLS_KEY, PEARLS_SORT_BUTTONS, SORT_ORDERS } from "constants/sorting";
+import {
+  SORT_ORDER_PEARLS_KEY,
+  PEARLS_SORT_BUTTONS,
+  SORT_ORDERS_SEQUENCE_MAP,
+} from "constants/sorting";
 
 const { sortPearls: sortPearlsAC } = actions();
 
@@ -23,7 +27,7 @@ export const PearlsSorting = () => {
     if (order) {
       setSortOrderPearls({
         value,
-        order: SORT_ORDERS.asc === order ? SORT_ORDERS.desc : SORT_ORDERS.asc,
+        order: SORT_ORDERS_SEQUENCE_MAP[order],
       });
     }
   };

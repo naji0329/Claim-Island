@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Accordion from "components/Accordion";
 import { get } from "lodash";
+import { formatUnits } from "@ethersproject/units";
 
 import { Pearl3DView } from "components/pearl3DView";
 import { Controls3DView } from "components/controls3DView";
@@ -47,7 +48,7 @@ const calculateSize = (size) => {
   }
 };
 
-export default ({ dna, dnaDecoded, onClickNext, onClickPrev }) => {
+export default ({ dna, dnaDecoded, pearlDataValues, onClickNext, onClickPrev }) => {
   const [showTraits, setShowTraits] = useState(false);
   const [grade, setGrade] = useState(0);
   const [size, setSize] = useState(0);
@@ -87,6 +88,12 @@ export default ({ dna, dnaDecoded, onClickNext, onClickPrev }) => {
           <RowStat label="Color" value={get(dnaDecoded, "color")} />
           <RowStat label="Overtone" value={get(dnaDecoded, "overtone")} />
           <RowStat label="Rarity" value={get(dnaDecoded, "rarity").toLowerCase()} />
+          {pearlDataValues && (
+            <RowStat
+              label="$GEM boost"
+              value={Number(formatUnits(get(pearlDataValues, "gemBoost", "0"), 18)).toFixed(2)}
+            />
+          )}
         </div>
       ),
     },

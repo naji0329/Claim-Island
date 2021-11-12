@@ -67,15 +67,27 @@ const getUniqueColors = (clam1, clam2) => {
 };
 
 const sortClamsByColourAsc = (clam1, clam2) => {
-  const [uniqueColors1, uniqueColors2] = getUniqueColors(clam1, clam2);
+  const { shellColor: shellColor1 } = clam1.dnaDecoded;
+  const { shellColor: shellColor2 } = clam2.dnaDecoded;
 
-  return uniqueColors2 - uniqueColors1;
+  if (shellColor1 === shellColor2) {
+    const [uniqueColors1, uniqueColors2] = getUniqueColors(clam1, clam2);
+    return uniqueColors2 - uniqueColors1;
+  }
+
+  return shellColor1 === shellColor2 ? 0 : shellColor1 < shellColor2 ? -1 : 1;
 };
 
 const sortClamsByColourDesc = (clam1, clam2) => {
-  const [uniqueColors1, uniqueColors2] = getUniqueColors(clam1, clam2);
+  const { shellColor: shellColor1 } = clam1.dnaDecoded;
+  const { shellColor: shellColor2 } = clam2.dnaDecoded;
 
-  return uniqueColors1 - uniqueColors2;
+  if (shellColor1 === shellColor2) {
+    const [uniqueColors1, uniqueColors2] = getUniqueColors(clam1, clam2);
+    return uniqueColors1 - uniqueColors2;
+  }
+
+  return shellColor1 === shellColor2 ? 0 : shellColor1 < shellColor2 ? 1 : -1;
 };
 
 const SORT_FUNCTIONS = {

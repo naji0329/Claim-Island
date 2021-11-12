@@ -4,6 +4,13 @@ export const SORT_ORDER_PEARLS_KEY = "sortOrderPearls";
 export const SORT_ORDERS = {
   asc: "asc",
   desc: "desc",
+  none: "none",
+};
+
+export const SORT_ORDERS_SEQUENCE_MAP = {
+  [SORT_ORDERS.asc]: SORT_ORDERS.desc,
+  [SORT_ORDERS.desc]: SORT_ORDERS.none,
+  [SORT_ORDERS.none]: SORT_ORDERS.asc,
 };
 
 export const SORT_CLAMS_OPTIONS = {
