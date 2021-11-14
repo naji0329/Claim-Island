@@ -8,6 +8,7 @@ import {
   SORT_ORDER_CLAMS_KEY,
   CLAMS_SORT_BUTTONS,
   SORT_ORDERS_SEQUENCE_MAP,
+  SORT_ORDERS,
 } from "constants/sorting";
 
 const { sortCalms: sortCalmsAC } = actions();
@@ -38,7 +39,7 @@ export const ClamsSorting = () => {
 
   return (
     <SortingBar
-      selected={value}
+      selected={SORT_ORDERS.none !== order && value}
       order={order}
       sortButtons={CLAMS_SORT_BUTTONS}
       onSortValueClick={onSortValueClick}

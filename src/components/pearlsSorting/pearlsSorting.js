@@ -8,6 +8,7 @@ import {
   SORT_ORDER_PEARLS_KEY,
   PEARLS_SORT_BUTTONS,
   SORT_ORDERS_SEQUENCE_MAP,
+  SORT_ORDERS,
 } from "constants/sorting";
 
 const { sortPearls: sortPearlsAC } = actions();
@@ -38,7 +39,7 @@ export const PearlsSorting = () => {
 
   return (
     <SortingBar
-      selected={value}
+      selected={SORT_ORDERS.none !== order && value}
       order={order}
       sortButtons={PEARLS_SORT_BUTTONS}
       onSortValueClick={onSortValueClick}

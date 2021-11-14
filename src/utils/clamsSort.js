@@ -90,6 +90,13 @@ const sortClamsByColourDesc = (clam1, clam2) => {
   return shellColor1 === shellColor2 ? 0 : shellColor1 < shellColor2 ? 1 : -1;
 };
 
+const sortClamsByClaimableShellAsc = (clam1, clam2) => {
+  return clam1.harvestShellValue - clam2.harvestShellValue;
+};
+const sortClamsByClaimableShellDesc = (clam1, clam2) => {
+  return clam2.harvestShellValue - clam1.harvestShellValue;
+};
+
 const SORT_FUNCTIONS = {
   [SORT_CLAMS_OPTIONS.id]: {
     [SORT_ORDERS.asc]: sortClamsByIdAsc,
@@ -110,6 +117,10 @@ const SORT_FUNCTIONS = {
   [SORT_CLAMS_OPTIONS.colour]: {
     [SORT_ORDERS.asc]: sortClamsByColourAsc,
     [SORT_ORDERS.desc]: sortClamsByColourDesc,
+  },
+  [SORT_CLAMS_OPTIONS.shell]: {
+    [SORT_ORDERS.asc]: sortClamsByClaimableShellAsc,
+    [SORT_ORDERS.desc]: sortClamsByClaimableShellDesc,
   },
 };
 

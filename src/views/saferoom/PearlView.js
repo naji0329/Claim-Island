@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 import Accordion from "components/Accordion";
 import { get } from "lodash";
 import { formatUnits } from "@ethersproject/units";
+import BigNumber from "bignumber.js";
 
 import { Pearl3DView } from "components/pearl3DView";
 import { Controls3DView } from "components/controls3DView";
+import { pearlLegacyBaseGemRewards } from "web3/pearlBurner";
+import { calculateBonusRewards } from "web3/pearl";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
@@ -48,10 +51,11 @@ const calculateSize = (size) => {
   }
 };
 
-export default ({ dna, dnaDecoded, pearlDataValues, onClickNext, onClickPrev }) => {
+export default ({ dna, dnaDecoded, gemBoost, onClickNext, onClickPrev }) => {
   const [showTraits, setShowTraits] = useState(false);
   const [grade, setGrade] = useState(0);
   const [size, setSize] = useState(0);
+  const [formattedGemBoost, setFormattedGemBoost] = useState();
 
   useEffect(() => {
     if (dnaDecoded.length) {
@@ -66,6 +70,26 @@ export default ({ dna, dnaDecoded, pearlDataValues, onClickNext, onClickPrev }) 
       setSize(size_);
     }
   }, [dnaDecoded]);
+
+  useEffect(() => {
+    if (gemBoost !== undefined) {
+      const calculateGemBoost = async () => {
+        const isLegacyPearl = new BigNumber(gemBoost).eq(0);
+        let calculatedGemBoost = gemBoost;
+
+        if (isLegacyPearl) {
+          const legacyBaseGEMRewards = await pearlLegacyBaseGemRewards();
+          calculatedGemBoost = await calculateBonusRewards(
+            (+legacyBaseGEMRewards * 1e18).toString(),
+            dnaDecoded
+          );
+        }
+
+        setFormattedGemBoost(Number(formatUnits(calculatedGemBoost, 18)).toFixed(2));
+      };
+      calculateGemBoost();
+    }
+  }, [gemBoost]);
 
   const RowStat = ({ label, value }) => (
     <div className="text-sm flex flex-row justify-between my-1">
@@ -88,12 +112,7 @@ export default ({ dna, dnaDecoded, pearlDataValues, onClickNext, onClickPrev }) 
           <RowStat label="Color" value={get(dnaDecoded, "color")} />
           <RowStat label="Overtone" value={get(dnaDecoded, "overtone")} />
           <RowStat label="Rarity" value={get(dnaDecoded, "rarity").toLowerCase()} />
-          {pearlDataValues && (
-            <RowStat
-              label="$GEM boost"
-              value={Number(formatUnits(get(pearlDataValues, "gemBoost", "0"), 18)).toFixed(2)}
-            />
-          )}
+          {formattedGemBoost && <RowStat label="$GEM boost" value={formattedGemBoost} />}
         </div>
       ),
     },

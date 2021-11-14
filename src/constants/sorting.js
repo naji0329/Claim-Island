@@ -19,6 +19,7 @@ export const SORT_CLAMS_OPTIONS = {
   pearls: "pearls",
   shape: "shape",
   colour: "colour",
+  shell: "shell",
 };
 
 export const SORT_PEARLS_OPTIONS = {
@@ -50,6 +51,10 @@ export const CLAMS_SORT_BUTTONS = [
   {
     value: SORT_CLAMS_OPTIONS.colour,
     displayValue: "Colour",
+  },
+  {
+    value: SORT_CLAMS_OPTIONS.shell,
+    displayValue: "Claimable $SHELL",
   },
 ];
 

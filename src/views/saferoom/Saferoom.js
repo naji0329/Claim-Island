@@ -143,6 +143,7 @@ const Saferoom = ({
         {tab === "Pearl" && (
           <PearlView
             {...selectedAsset}
+            gemBoost={selectedAsset?.pearlDataValues?.gemBoost}
             onClickNext={isNextButtonShown() && onClickNext}
             onClickPrev={isPrevButtonShown() && onClickPrev}
           />

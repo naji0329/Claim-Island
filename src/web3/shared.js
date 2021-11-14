@@ -11,6 +11,7 @@ import { clamLegacyBaseGemRewards, calculateClamBonusRewards } from "./clamBonus
 
 import NFTUnknown from "assets/img/clam_unknown.png";
 import PEARLunknown from "assets/img/pearl_unknown.png";
+import { getClamValueInShellToken, getPearlValueInShellToken } from "./clam";
 
 export const formatFromWei = (value) => (value ? formatUnits(value, 18) : "0");
 
@@ -169,12 +170,21 @@ export const getOwnedClams = async ({ chainId, address, balance, clamContract })
   const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
     tokenIdsResult.returnData
   );
+  const clamValueInShellToken = await getClamValueInShellToken();
+  const pearlValueInShellToken = await getPearlValueInShellToken();
   const [ownedClams] = await Promise.all([
     getClamsDataByIds({ tokenIds: tokenIdsDecoded, chainId, clamContract }),
     // getClamsDataByIds(clamsStakedIds),
   ]);
   // const stakedClamsImg = await addClamImg(stakedClams);
   // const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
+
+  for (let clam of ownedClams) {
+    clam.harvestShellValue =
+      +clamValueInShellToken > 0
+        ? +clamValueInShellToken + +clam.clamDataValues.pearlsProduced * +pearlValueInShellToken
+        : 0;
+  }
 
   return ownedClams;
 };
