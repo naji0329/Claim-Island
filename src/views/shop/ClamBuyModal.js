@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ReactGA from "react-ga4";
 import { useForm } from "react-hook-form";
 import { getExplorerAddressLink, ChainId } from "@usedapp/core";
 import { connect } from "redux-zero/react";
@@ -20,6 +21,7 @@ import { infiniteApproveSpending } from "web3/gem";
 import { getMintedThisWeek, getClamsPerWeek } from "web3/clamShop";
 import { clamShopAddress } from "web3/constants";
 import { actions } from "store/redux";
+import { ACTIONS, CATEGORIES } from "constants/googleAnalytics";
 
 import {
   buyClamError,
@@ -112,6 +114,8 @@ const ClamBuyModal = ({
       withVested ? await buyClamWithVestedTokens(address) : await buyClam(address);
 
       buyClamSuccess({ updateCharacter }); // character speaks
+
+      ReactGA.event({ action: ACTIONS.boughtClam, category: CATEGORIES.shop });
       setIsLoading(false);
       setModalToShow("collect");
     } catch (e) {
