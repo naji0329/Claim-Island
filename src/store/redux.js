@@ -276,7 +276,7 @@ export const actions = (store) => ({
       };
     }
   },
-  sortCalms: (state, value, order) => {
+  sortClams: (state, value, order) => {
     return {
       account: {
         ...state.account,
