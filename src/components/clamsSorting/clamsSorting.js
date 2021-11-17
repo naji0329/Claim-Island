@@ -11,12 +11,12 @@ import {
   SORT_ORDERS,
 } from "constants/sorting";
 
-const { sortCalms: sortCalmsAC } = actions();
+const { sortClams: sortClamsAC } = actions();
 
 export const ClamsSorting = () => {
   const [sortOrderClams = {}, setSortOrderClams] = useLocalStorage(SORT_ORDER_CLAMS_KEY);
   const { value, order } = sortOrderClams;
-  const sortClams = useAction(sortCalmsAC);
+  const sortClams = useAction(sortClamsAC);
 
   useEffect(() => {
     if (value && order) {

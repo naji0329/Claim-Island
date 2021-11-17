@@ -50,7 +50,7 @@ export const CLAMS_SORT_BUTTONS = [
   },
   {
     value: SORT_CLAMS_OPTIONS.colour,
-    displayValue: "Colour",
+    displayValue: "Shell Colour",
   },
   {
     value: SORT_CLAMS_OPTIONS.shell,
