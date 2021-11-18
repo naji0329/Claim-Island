@@ -164,7 +164,7 @@ export const checkHasClamToCollect = async (address) => {
   });
 
   const requestHash = await clamShop.methods.rngRequestHashForFarmedClam(address).call();
-  if(requestHash === zeroHash) {
+  if (requestHash === zeroHash) {
     return requestHash;
   }
   const rng = await getRNGFromHashRequest(requestHash);
@@ -228,10 +228,10 @@ export const prepTokenOfOwnerByIndexMulticall = (address, length) => {
   return contractCalls;
 };
 
-export const prepClamDataMulticall = ({ balance, tokenId }) => {
+export const prepClamDataMulticall = (tokenIds) => {
   const contractCalls = [];
-  console.log("prepClamDataMulticall", { tokenId, balance });
-  if (tokenId) {
+
+  for (let index = 0; index < tokenIds.length; index++) {
     contractCalls.push([
       clamNFTAddress,
       web3.eth.abi.encodeFunctionCall(
@@ -245,39 +245,18 @@ export const prepClamDataMulticall = ({ balance, tokenId }) => {
             },
           ],
         },
-        [tokenId]
+        [tokenIds[index]]
       ),
     ]);
-  }
-
-  if (balance) {
-    for (let index = 0; index < balance.length; index++) {
-      contractCalls.push([
-        clamNFTAddress,
-        web3.eth.abi.encodeFunctionCall(
-          {
-            name: "getClamData",
-            type: "function",
-            inputs: [
-              {
-                type: "uint256",
-                name: "clamId",
-              },
-            ],
-          },
-          [balance[index]]
-        ),
-      ]);
-    }
   }
 
   return contractCalls;
 };
 
-export const prepClamProducedPearlIds = ({ balance, tokenId }) => {
+export const prepClamProducedPearlIds = (tokenIds) => {
   const contractCalls = [];
 
-  if (tokenId) {
+  for (let index = 0; index < tokenIds.length; index++) {
     contractCalls.push([
       clamNFTAddress,
       web3.eth.abi.encodeFunctionCall(
@@ -291,30 +270,9 @@ export const prepClamProducedPearlIds = ({ balance, tokenId }) => {
             },
           ],
         },
-        [tokenId]
+        [tokenIds[index]]
       ),
     ]);
-  }
-
-  if (balance) {
-    for (let index = 0; index < balance.length; index++) {
-      contractCalls.push([
-        clamNFTAddress,
-        web3.eth.abi.encodeFunctionCall(
-          {
-            name: "getProducedPearlIds",
-            type: "function",
-            inputs: [
-              {
-                type: "uint256",
-                name: "clamId",
-              },
-            ],
-          },
-          [balance[index]]
-        ),
-      ]);
-    }
   }
 
   return contractCalls;
@@ -361,7 +319,7 @@ export const decodeClamDataFromMulticall = (values, tokenIds) => {
             dna: "uint256",
             pearlProductionStart: "uint256",
             producedPearlIds: "uint256[]",
-            gemBoost: "uint256",
+            pearlBoostM: "uint256",
           },
         },
         values[index]
@@ -428,6 +386,16 @@ export const canCurrentlyProducePearl = async (clamId) => {
   return await clamNft.methods.canCurrentlyProducePearl(clamId).call();
 };
 
+export const calculatePearlBoost = async (size, lifespan, rarityValue) => {
+  const clamNft = contractFactory({
+    abi: clamNFTAbi,
+    address: clamNFTAddress,
+  });
+
+  const boost = await clamNft.methods.calculatePearlBoost(size, lifespan, rarityValue).call();
+  return boost;
+};
+
 export default {
   balanceOf,
   accountClamBalance,
@@ -447,4 +415,5 @@ export default {
   harvestClamForShell,
   prepClamProducedPearlIds,
   decodeProducedPearlIdsFromMulticall,
+  calculatePearlBoost,
 };
