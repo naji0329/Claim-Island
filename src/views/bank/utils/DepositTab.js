@@ -60,10 +60,9 @@ const DepositTab = ({
       await deposit(selectedPool.poolId, formatToWei(depositAmount));
 
       ReactGA.event({
-        action: selectedPool.isNative
-          ? `${ACTIONS.depositedInBank} in "${selectedPool.name}" pool`
-          : ACTIONS.depositedInBank,
+        action: `${ACTIONS.depositedInBank}_"${selectedPool.name}"`,
         category: CATEGORIES.bank,
+        currency: "USD",
         value: round(selectedPool.tokenPrice * depositAmount, 2),
       });
 

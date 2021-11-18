@@ -1,6 +1,6 @@
 export const ACTIONS = {
-  boughtClam: "User bought clam",
-  depositedInBank: "User deposited into the Bank",
+  boughtClam: "clam_purchase",
+  depositedInBank: "bank_deposit",
 };
 export const CATEGORIES = {
   shop: "Shop",
