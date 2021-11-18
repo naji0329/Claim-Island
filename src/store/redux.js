@@ -97,6 +97,12 @@ const initialState = {
       clams: {},
       pearls: {},
     },
+    farmDepositingModal: {
+      clams: {},
+    },
+    farm: {
+      clams: {},
+    },
   },
 };
 

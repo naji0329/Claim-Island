@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
-import { useAsync, useLocalStorage } from "react-use";
+import { useAsync } from "react-use";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "store/redux";
@@ -10,7 +10,6 @@ import Character from "components/characters/CharacterWrapper";
 import { Modal, useModal } from "components/Modal";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
-import { SORT_ORDER_CLAMS_KEY } from "constants/sorting";
 
 import videoImage from "assets/locations/Farm.jpg";
 import videoMp4 from "assets/locations/Farm.mp4";
@@ -46,12 +45,16 @@ import LoadingScreen from "components/LoadingScreen";
 
 import { ifPearlSendSaferoom } from "./utils";
 import { getSortedClams } from "utils/clamsSort";
+import { ClamsSorting } from "components/clamsSorting";
 
 const Farms = ({
   account: { clamBalance, chainId, isBSChain, address, clams = [] },
   updateCharacter,
   updateAccount,
   dispatchFetchAccountAssets,
+  sorting: {
+    farm: { clams: clamsSortOrder },
+  },
 }) => {
   let history = useHistory();
   const availableClamsForDepositing = clams;
@@ -68,7 +71,6 @@ const Farms = ({
   const [selectedClam, setSelectedClam] = useState({});
   const [selectedClamId, setSelectedClamId] = useState({});
   const [withdrawingClamId, setWithdrawingClamId] = useState(null);
-  const [sortOrderClams = {}] = useLocalStorage(SORT_ORDER_CLAMS_KEY);
 
   const isPrevButtonShown = selectedClam !== clamsStaked[0];
   const isNextButtonShown = selectedClam !== clamsStaked[clamsStaked.length - 1];
@@ -188,13 +190,7 @@ const Farms = ({
 
               const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
               setStakedRarities(rarities);
-
-              const sortedStakedClams = getSortedClams(
-                stakedClams,
-                sortOrderClams.value,
-                sortOrderClams.order
-              );
-              setClamsStaked(sortedStakedClams);
+              setClamsStaked(stakedClams);
             } else {
               console.log("when no clams staked");
               setClamsStaked([]);
@@ -284,22 +280,25 @@ const Farms = ({
         <div className="w-full lg:w-4/5 mx-auto relative z-10">
           <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-start">
             <PageTitle title="Clam Farms" />
+            <ClamsSorting page="farm" />
             {/* clams and pears grid */}
             <div className="w-full my-4">
               <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
                 <DepositClamCard onClick={onDepositClam} />
                 {clamsStaked &&
-                  clamsStaked.map((clam, i) => (
-                    <FarmItem
-                      key={i}
-                      {...clam}
-                      onViewDetails={() => onViewDetails(clam)}
-                      onWithdrawClam={() => onWithdrawClam(clam)}
-                      onViewPearl={onViewPearl}
-                      updateCharacter={updateCharacter}
-                      withdrawingClamId={withdrawingClamId}
-                    />
-                  ))}
+                  getSortedClams(clamsStaked, clamsSortOrder.value, clamsSortOrder.order).map(
+                    (clam, i) => (
+                      <FarmItem
+                        key={i}
+                        {...clam}
+                        onViewDetails={() => onViewDetails(clam)}
+                        onWithdrawClam={() => onWithdrawClam(clam)}
+                        onViewPearl={onViewPearl}
+                        updateCharacter={updateCharacter}
+                        withdrawingClamId={withdrawingClamId}
+                      />
+                    )
+                  )}
 
                 {/* {PEARLS &&
                   PEARLS.map((pearl, i) => (

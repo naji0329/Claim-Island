@@ -3,6 +3,8 @@ export const SORT_ORDER_PEARLS_KEY = "sortOrderPearls";
 
 export const SORT_ORDER_CLAMS_KEYS = {
   saferoom: "saferoomSortOrderClams",
+  farmDepositingModal: "farmDepositingModalSortOrderClams",
+  farm: "farmSortOrderClams",
 };
 export const SORT_ORDER_PEARLS_KEYS = {
   saferoom: "saferoomSortOrderPearls",

@@ -32,6 +32,8 @@ import { secondsToFormattedTime } from "utils/time";
 import { formatUnits } from "@ethersproject/units";
 
 import InfoTooltip from "components/Tooltip";
+import { ClamsSorting } from "components/clamsSorting";
+import { getSortedClams } from "utils/clamsSort";
 
 const ClamItem = ({
   tokenId,
@@ -230,7 +232,7 @@ const ClamItem = ({
 };
 
 const ClamDeposit = ({
-  clams,
+  clams: unsortedClams,
   updateCharacter,
   dispatchFetchAccountAssets,
   toggleModal,
@@ -238,11 +240,21 @@ const ClamDeposit = ({
   account: { address, chainId },
   stakedRarities,
   setRefreshClams,
+  sorting: {
+    farmDepositingModal: { clams: clamsSortOrder },
+  },
 }) => {
+  const [clams, setClams] = useState([]);
   const request = useAsync(async () => {
     const pools = await getAllPools({ address, chainId });
     return pools;
   });
+
+  useEffect(() => {
+    const { order, value } = clamsSortOrder;
+    const sortedClams = getSortedClams(unsortedClams, value, order);
+    setClams(sortedClams);
+  }, [unsortedClams, clamsSortOrder.order, clamsSortOrder.value]);
 
   return (
     <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
@@ -250,8 +262,9 @@ const ClamDeposit = ({
         <div> Loading... </div>
       ) : (
         <>
+          <ClamsSorting page="farmDepositingModal" />
           {clams.length ? (
-            <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 flex-2">
+            <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 flex-2 mt-2">
               {clams.map((clam) => (
                 <ClamItem
                   pools={request.value}
