@@ -3,7 +3,7 @@ import Web3 from "web3";
 import { store } from "../store/redux";
 import BigNumber from "bignumber.js";
 import { aggregate } from "./multicall";
-import pearlShared, { calculateBonusRewards } from "./pearl";
+import pearlShared, { legacyCalculateBonusRewards } from "./pearl";
 import pearlDnaDecoder from "./pearlDnaDecoder";
 import clamDnaDecoder from "./dnaDecoder";
 import { pearlLegacyBaseGemRewards } from "./pearlBurner";
@@ -143,7 +143,7 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
         const isLegacyPearl = new BigNumber(pearl.pearlDataValues.gemBoost).eq(0);
 
         const bonusRewards = isLegacyPearl
-          ? await calculateBonusRewards((+legacyBaseGEMRewards * 1e18).toString(), dnaDecoded)
+          ? await legacyCalculateBonusRewards((+legacyBaseGEMRewards * 1e18).toString(), dnaDecoded)
           : pearl.pearlDataValues.gemBoost;
 
         const img = await getPearlImageFromCache({ dna });

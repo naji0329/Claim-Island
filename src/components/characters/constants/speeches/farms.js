@@ -46,12 +46,6 @@ export const FARM_SPEECH = {
       dismiss: false,
       skip: false,
     },
-    depositWithoutStaking: {
-      text: `Depositing a Clam without any deposits in native investment pools in the Bank will cause its GEM boost to be lost permanently. Are you sure you want to proceed?`,
-      next: `purchase`,
-      dismiss: false,
-      skip: false,
-    },
     depositClamSuccess: {
       text: `Your clam has been deposited!. You can choose to deposit another clam.`,
       next: `purchase`,
@@ -122,7 +116,8 @@ export const FARM_SPEECH = {
     },
 
     pearl_collect_ready_prompt: {
-      text: `Aha, I can see a Pearl. Would you like to collect it?`,
+      text: ({ pearlPrice }) =>
+        `Aha, I can see a Pearl. Would you like to collect it for ${pearlPrice} $GEM?`,
       dismiss: false,
       skip: false,
       hideable: false,
