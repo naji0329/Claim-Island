@@ -76,6 +76,8 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
     dnaDecodedResult.returnData,
     tokenIds
   );
+  const clamValueInShellToken = await getClamValueInShellToken();
+  const pearlValueInShellToken = await getPearlValueInShellToken();
 
   const clams = await Promise.all(
     clamDataDecoded.map(async (clam) => {
@@ -106,6 +108,13 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
       console.error(`Clam ${clam.clamId} from ${address} not found`);
     })
   );
+
+  for (let clam of clams) {
+    clam.harvestShellValue =
+      +clamValueInShellToken > 0
+        ? +clamValueInShellToken + +clam.clamDataValues.pearlsProduced * +pearlValueInShellToken
+        : 0;
+  }
 
   const clamsFiltered = clams.filter((c) => c);
 

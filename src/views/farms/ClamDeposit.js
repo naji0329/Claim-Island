@@ -262,24 +262,26 @@ const ClamDeposit = ({
         <div> Loading... </div>
       ) : (
         <>
-          <ClamsSorting page="farmDepositingModal" />
           {clams.length ? (
-            <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 flex-2 mt-2">
-              {clams.map((clam) => (
-                <ClamItem
-                  pools={request.value}
-                  key={clam.clamId}
-                  updateAccount={updateAccount}
-                  address={address}
-                  {...clam}
-                  updateCharacter={updateCharacter}
-                  toggleModal={toggleModal}
-                  stakedRarities={stakedRarities}
-                  setRefreshClams={setRefreshClams}
-                  dispatchFetchAccountAssets={dispatchFetchAccountAssets}
-                />
-              ))}
-            </div>
+            <>
+              <ClamsSorting page="farmDepositingModal" />
+              <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 flex-2 mt-2">
+                {clams.map((clam) => (
+                  <ClamItem
+                    pools={request.value}
+                    key={clam.clamId}
+                    updateAccount={updateAccount}
+                    address={address}
+                    {...clam}
+                    updateCharacter={updateCharacter}
+                    toggleModal={toggleModal}
+                    stakedRarities={stakedRarities}
+                    setRefreshClams={setRefreshClams}
+                    dispatchFetchAccountAssets={dispatchFetchAccountAssets}
+                  />
+                ))}
+              </div>
+            </>
           ) : (
             <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
               You&#39;ve got no more clams available to add to farm
