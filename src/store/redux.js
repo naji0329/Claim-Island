@@ -14,12 +14,6 @@ import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm
 import { EmptyBytes, getOwnedClams, getOwnedPearls, formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";
 
-import { getClamsSortFunction } from "utils/clamsSort";
-import { getPearlsSortFunction } from "utils/pearlsSort";
-import { getSortedClams } from "utils/clamsSort";
-import { getSortedPearls } from "utils/pearlsSort";
-import { SORT_ORDER_CLAMS_KEY, SORT_ORDER_PEARLS_KEY, SORT_ORDERS } from "constants/sorting";
-
 const initialState = {
   account: {
     bnbBalance: "0",
@@ -35,9 +29,7 @@ const initialState = {
     isWeb3Installed: true,
     address: undefined,
     clams: [],
-    unsortedClams: [],
     pearls: [],
-    unsortedPearls: [],
   },
   price: {
     gem: "0",
@@ -100,6 +92,12 @@ const initialState = {
     selectedPool: undefined,
   },
   konvaObjects: [],
+  sorting: {
+    saferoom: {
+      clams: {},
+      pearls: {},
+    },
+  },
 };
 
 const middlewares = connect ? applyMiddleware(connect(initialState)) : [];
@@ -255,9 +253,6 @@ export const actions = (store) => ({
         balance: pearlBalance,
       });
 
-      const clamsSorting = JSON.parse(localStorage.getItem(SORT_ORDER_CLAMS_KEY)) || {};
-      const pearlsSorting = JSON.parse(localStorage.getItem(SORT_ORDER_PEARLS_KEY)) || {};
-
       return {
         account: {
           ...state.account,
@@ -267,37 +262,22 @@ export const actions = (store) => ({
           pearlBalance,
           gemBalance,
           shellBalance,
-          unsortedClams: [...clams],
-          unsortedPearls: [...pearls],
-          clams: [...getSortedClams(clams, clamsSorting.value, clamsSorting.order)],
-          pearls: [...getSortedPearls(pearls, pearlsSorting.value, pearlsSorting.order)],
+          clams,
+          pearls,
           reason: "dispatchFetchAccountAssets",
         },
       };
     }
   },
-  sortClams: (state, value, order) => {
-    return {
-      account: {
-        ...state.account,
-        clams:
-          order && order !== SORT_ORDERS.none
-            ? [...state.account.clams.sort(getClamsSortFunction(value, order))]
-            : [...state.account.unsortedClams],
+  updateSortOrder: (state, sortOrder = {}, page, entity) => ({
+    sorting: {
+      ...state.sorting,
+      [page]: {
+        ...state.sorting[page],
+        [entity]: sortOrder,
       },
-    };
-  },
-  sortPearls: (state, value, order) => {
-    return {
-      account: {
-        ...state.account,
-        pearls:
-          order && order !== SORT_ORDERS.none
-            ? [...state.account.pearls.sort(getPearlsSortFunction(value, order))]
-            : [...state.account.unsortedPearls],
-      },
-    };
-  },
+    },
+  }),
 });
 
 export default { store, actions };

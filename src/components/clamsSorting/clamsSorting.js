@@ -1,40 +1,53 @@
 import React, { useEffect } from "react";
 import { useLocalStorage } from "react-use";
-import { useAction } from "redux-zero/react";
+import { useAction, useSelector } from "redux-zero/react";
 
 import { actions } from "store/redux";
 import { SortingBar } from "components/sortingBar";
 import {
-  SORT_ORDER_CLAMS_KEY,
+  SORT_ORDER_CLAMS_KEYS,
   CLAMS_SORT_BUTTONS,
   SORT_ORDERS_SEQUENCE_MAP,
   SORT_ORDERS,
 } from "constants/sorting";
+import { sortingOrderSelectors } from "selectors/sorting";
 
-const { sortClams: sortClamsAC } = actions();
+const { updateSortOrder: updateSortOrderAC } = actions();
 
-export const ClamsSorting = () => {
-  const [sortOrderClams = {}, setSortOrderClams] = useLocalStorage(SORT_ORDER_CLAMS_KEY);
-  const { value, order } = sortOrderClams;
-  const sortClams = useAction(sortClamsAC);
+export const ClamsSorting = ({ page }) => {
+  const [sortOrderClamsLS, setSortOrderClamsLS] = useLocalStorage(SORT_ORDER_CLAMS_KEYS[page]);
+  const updateSortOrder = useAction(updateSortOrderAC);
+  const sortOrderClams = useSelector(sortingOrderSelectors[page].clams);
+  const { order, value } = sortOrderClams;
 
   useEffect(() => {
-    if (value && order) {
-      sortClams(value, order);
+    if (sortOrderClamsLS) {
+      updateSortOrder(sortOrderClamsLS, page, "clams");
     }
-  }, [sortOrderClams]);
+  }, []);
+
+  useEffect(() => {
+    if (order && value) {
+      setSortOrderClamsLS({ order, value });
+    }
+  }, [order, value]);
 
   const onSortOrderClick = () => {
     if (order) {
-      setSortOrderClams({
+      const newSortingOrder = {
         value,
         order: SORT_ORDERS_SEQUENCE_MAP[order],
-      });
+      };
+      updateSortOrder(newSortingOrder, page, "clams");
     }
   };
 
-  const onSortValueClick = (value) => {
-    setSortOrderClams({ value, order: "asc" });
+  const onSortValueClick = (sortValue) => {
+    const newSortingOrder = {
+      value: sortValue,
+      order: SORT_ORDERS.asc,
+    };
+    updateSortOrder(newSortingOrder, page, "clams");
   };
 
   return (

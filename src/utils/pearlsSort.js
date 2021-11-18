@@ -102,7 +102,7 @@ export const getPearlsSortFunction = (sortValue, order) => SORT_FUNCTIONS[sortVa
 
 export const getSortedPearls = (pearls, sortValue, order) => {
   if (pearls?.length && sortValue && order && order !== SORT_ORDERS.none) {
-    return pearls.sort(getPearlsSortFunction(sortValue, order));
+    return [...pearls].sort(getPearlsSortFunction(sortValue, order));
   }
 
   return pearls;

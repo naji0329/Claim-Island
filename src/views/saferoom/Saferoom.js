@@ -17,6 +17,8 @@ import videoWebM from "assets/locations/Saferoom.webm";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
 import { SAFEROOM_TABS as TABS } from "constants/ui";
+import { getSortedClams } from "utils/clamsSort";
+import { getSortedPearls } from "utils/pearlsSort";
 
 import { actions } from "store/redux";
 
@@ -24,17 +26,19 @@ import LoadingScreen from "components/LoadingScreen";
 
 const Saferoom = ({
   ui,
-  account: { clamBalance, pearlBalance, address, clams, pearls },
+  account: { clamBalance, pearlBalance, address, clams: unsortedCalms, pearls: unsortedPearls },
   updateCharacter,
+  sorting: { saferoom: saferoomSorting },
 }) => {
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? TABS.clam : TABS.pearl);
+  const [clams, setClams] = useState([]);
+  const [pearls, setPearls] = useState([]);
   let { path, url } = useRouteMatch();
   const { search, pathname } = useLocation();
   const history = useHistory();
 
   const { isShowing, toggleModal } = useModal();
-
 
   useAsync(async () => {
     updateCharacter({
@@ -121,6 +125,18 @@ const Saferoom = ({
       }
     }
   }, [address, search, pearls, clams]);
+
+  useEffect(() => {
+    const { order, value } = saferoomSorting.clams;
+    const sortedClams = getSortedClams(unsortedCalms, value, order);
+    setClams(sortedClams);
+  }, [unsortedCalms, saferoomSorting.clams.order, saferoomSorting.clams.value]);
+
+  useEffect(() => {
+    const { order, value } = saferoomSorting.pearls;
+    const sortedPearls = getSortedPearls(unsortedPearls, value, order);
+    setPearls(sortedPearls);
+  }, [unsortedPearls, saferoomSorting.pearls.order, saferoomSorting.pearls.value]);
 
   return (
     <>

@@ -1,6 +1,13 @@
 export const SORT_ORDER_CLAMS_KEY = "sortOrderClams";
 export const SORT_ORDER_PEARLS_KEY = "sortOrderPearls";
 
+export const SORT_ORDER_CLAMS_KEYS = {
+  saferoom: "saferoomSortOrderClams",
+};
+export const SORT_ORDER_PEARLS_KEYS = {
+  saferoom: "saferoomSortOrderPearls",
+};
+
 export const SORT_ORDERS = {
   asc: "asc",
   desc: "desc",

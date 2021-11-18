@@ -35,7 +35,7 @@ export const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => 
           {showNumberOfAssets(pearlBalance, TABS.pearl)}
         </Link>
       </div>
-      {tab === TABS.clam ? <ClamsSorting /> : <PearlsSorting />}
+      {tab === TABS.clam ? <ClamsSorting page="saferoom" /> : <PearlsSorting page="saferoom" />}
       <div className="flex-grow" />
       <Link to="/shop">
         <div className="flex-none text-2xl bg-blue-700 hover:bg-blue-500 text-white rounded-xl align-middle shadow-md px-8 py-2 mx-2">
