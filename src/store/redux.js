@@ -103,6 +103,9 @@ const initialState = {
     farm: {
       clams: {},
     },
+    shop: {
+      clams: {},
+    },
   },
 };
 
