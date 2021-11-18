@@ -106,6 +106,9 @@ const initialState = {
     shop: {
       clams: {},
     },
+    bank: {
+      pearls: {},
+    },
   },
 };
 

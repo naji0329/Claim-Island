@@ -9,6 +9,7 @@ const selectFarmDepositingModalSorting = (state) =>
 
 const selectFarmSorting = (state) => get(state, ["sorting", "farm", "clams"], {});
 const selectShopSorting = (state) => get(state, ["sorting", "shop", "clams"], {});
+const selectBankSorting = (state) => get(state, ["sorting", "bank", "pearls"], {});
 
 export const sortingOrderSelectors = {
   saferoom: {
@@ -23,5 +24,8 @@ export const sortingOrderSelectors = {
   },
   shop: {
     clams: selectShopSorting,
+  },
+  bank: {
+    pearls: selectBankSorting,
   },
 };

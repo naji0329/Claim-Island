@@ -15,6 +15,7 @@ import { useTimer } from "hooks/useTimer";
 import PearlInfo from "./PearlInfo";
 import { SORT_ORDER_PEARLS_KEY } from "constants/sorting";
 import { getSortedPearls } from "utils/pearlsSort";
+import { PearlsSorting } from "components/pearlsSorting";
 
 const BurnPearlModal = (props) => {
   const {
@@ -22,6 +23,9 @@ const BurnPearlModal = (props) => {
     updateAccount,
     isNativeStaker,
     chainId,
+    sorting: {
+      bank: { pearls: pearlsSortOrder },
+    },
   } = props;
   const [pearls, setPearls] = useState([]);
   const [eligibleShape, setEligibleShape] = useState("");
@@ -123,20 +127,25 @@ const BurnPearlModal = (props) => {
           </div>
         )}
       </div>
-      <div className="w-full flex justify-between">
+      <div className="max-w-325">
+        <PearlsSorting page="bank" />
+      </div>
+      <div className="w-full flex justify-between mt-2">
         <div className="w-1/2 mr-8 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160 overflow-y-auto">
           <p className="font-bold mb-4">Available for boost</p>
           {eligiblePearls.length ? (
-            eligiblePearls.map((pearl, i, a) => (
-              <PearlInfo
-                key={pearl.pearlId}
-                pearl={pearl}
-                isLast={i === a.length - 1}
-                isEligible
-                isNativeStaker={isNativeStaker}
-                showBurn
-              />
-            ))
+            getSortedPearls(eligiblePearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
+              (pearl, i, a) => (
+                <PearlInfo
+                  key={pearl.pearlId}
+                  pearl={pearl}
+                  isLast={i === a.length - 1}
+                  isEligible
+                  isNativeStaker={isNativeStaker}
+                  showBurn
+                />
+              )
+            )
           ) : (
             <p>No pearls available</p>
           )}
@@ -145,15 +154,17 @@ const BurnPearlModal = (props) => {
           <div className="overflow-y-auto">
             <p className="font-bold mb-4">Not available this week</p>
             {notEligiblePearls.length ? (
-              notEligiblePearls.map((pearl, i, a) => (
-                <PearlInfo
-                  key={i}
-                  pearl={pearl}
-                  isLast={i === a.length - 1}
-                  isNativeStaker={isNativeStaker}
-                  showBurn
-                />
-              ))
+              getSortedPearls(notEligiblePearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
+                (pearl, i, a) => (
+                  <PearlInfo
+                    key={i}
+                    pearl={pearl}
+                    isLast={i === a.length - 1}
+                    isNativeStaker={isNativeStaker}
+                    showBurn
+                  />
+                )
+              )
             ) : (
               <p>No pearls available</p>
             )}

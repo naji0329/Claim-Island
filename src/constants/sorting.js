@@ -9,6 +9,7 @@ export const SORT_ORDER_CLAMS_KEYS = {
 };
 export const SORT_ORDER_PEARLS_KEYS = {
   saferoom: "saferoomSortOrderPearls",
+  bank: "bankSortOrderPearls",
 };
 
 export const SORT_ORDERS = {
