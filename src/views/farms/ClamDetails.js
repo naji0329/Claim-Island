@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { Skeleton } from "@pancakeswap-libs/uikit";
 
 import { getPearlDataByIds } from "web3/shared";
-import { clamHasGeneratedBoost } from "web3/gemLocker";
 import { getRemainingPearlProductionTime } from "web3/pearlFarm";
-import { getClamValueInShellToken, getPearlValueInShellToken } from "../../web3/clam";
+import {
+  getClamValueInShellToken,
+  getPearlValueInShellToken,
+  getPearlBoost,
+} from "../../web3/clam";
 import { Clam3DView } from "components/clam3DView";
 import { Controls3DView } from "components/controls3DView";
 import { secondsToFormattedTime } from "utils/time";
@@ -17,7 +20,7 @@ const formatShell = (value) => (value ? formatUnits(String(value), 18) : "0");
 const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev }) => {
   const [producedPearls, setProducedPearls] = useState([]);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [clamHasGeneratedBonus, setClamHasGeneratedBonus] = useState(false);
+  const [pearlBoost, setPearlBoost] = useState(0);
   const [clamValueInShellToken, setClamValueInShellToken] = useState("0");
   const [pearlValueInShellToken, setPearlValueInShellToken] = useState("0");
   const [isLoading, setIsLoading] = useState(false);
@@ -37,9 +40,8 @@ const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev })
         const pearls = await getPearlDataByIds(clam.producedPearlIds, chainId);
         setProducedPearls(pearls);
 
-        const hasGeneratedBonus = await clamHasGeneratedBoost(clam.clamId);
-        setClamHasGeneratedBonus(hasGeneratedBonus);
-
+        const boost = await getPearlBoost(clam.clamId);
+        setPearlBoost(boost);
         const remainingPearlProductionTime = await getRemainingPearlProductionTime(clam.clamId);
         setTimeLeft(remainingPearlProductionTime);
         setClamValueInShellToken(await getClamValueInShellToken());
@@ -97,10 +99,8 @@ const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev })
                 <div className="text-right">{formatShell(harvestableShell)}</div>
                 <div>Pearls Remaining</div>
                 <div className="text-right">{remainingLifeSpan}</div>
-                <div>$GEM boost</div>
-                <div className="text-right">
-                  {clamHasGeneratedBonus ? formatUnits(String(clam.clamBonus), 18) : 0}
-                </div>
+                <div>Pearl boost</div>
+                <div className="text-right">{pearlBoost}</div>
               </div>
             </>
           )}

@@ -20,7 +20,6 @@ import {
   gemsTransferred,
 } from "../../web3/pearlFarm";
 import { getAllPools } from "web3/bank";
-import { clamRarityAlreadyStaked } from "./character/DepositClam";
 import {
   depositClamGemPrompt,
   depositClamError,
@@ -28,8 +27,6 @@ import {
   depositWithoutStaking,
 } from "./character/clamDeposit";
 import { secondsToFormattedTime } from "utils/time";
-
-import { formatUnits } from "@ethersproject/units";
 
 import InfoTooltip from "components/Tooltip";
 
@@ -41,9 +38,8 @@ const ClamItem = ({
   updateAccount,
   address,
   dnaDecoded,
-  stakedRarities,
   updateCharacter,
-  clamBonus,
+  pearlBoost,
   toggleModal,
   setRefreshClams,
   pools,
@@ -56,8 +52,6 @@ const ClamItem = ({
   const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
   const [isNativeStaker, setIsNativeStaker] = useState(false);
   const [isClamDeposited, setIsClamDeposited] = useState(false);
-
-  const rarityIsAlreadyStaked = stakedRarities.includes(dnaDecoded.rarity);
 
   useEffect(() => {
     const init = async () => {
@@ -87,13 +81,7 @@ const ClamItem = ({
   }, [address, inTx]);
 
   const handleDeposit = async () => {
-    if (rarityIsAlreadyStaked) {
-      clamRarityAlreadyStaked(updateCharacter, formatUnits(String(clamBonus), 18), async () => {
-        await executeDeposit();
-      });
-    } else {
-      await executeDeposit();
-    }
+    await executeDeposit();
   };
 
   const triggerClamDepositSuccess = async () => {
@@ -195,14 +183,12 @@ const ClamItem = ({
 
               <div className="bg-gray-50  sm:grid sm:grid-cols-3 sm:gap-4 p-2">
                 <dt className="text-sm font-medium text-gray-500">
-                  $GEM boost:&nbsp;
+                  Pearl boost:&nbsp;
                   <InfoTooltip text="Boost only available the first time the Clam is deposited and only if no other Clams of the same rarity tier was deposited at the time. Boost amount will otherwise show as zero.">
                     <FontAwesomeIcon icon={faInfoCircle} />
                   </InfoTooltip>
                 </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {rarityIsAlreadyStaked ? 0 : formatUnits(String(clamBonus), 18)}
-                </dd>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{pearlBoost}</dd>
               </div>
             </dl>
           </div>
@@ -236,7 +222,6 @@ const ClamDeposit = ({
   toggleModal,
   updateAccount,
   account: { address, chainId },
-  stakedRarities,
   setRefreshClams,
 }) => {
   const request = useAsync(async () => {
@@ -261,7 +246,6 @@ const ClamDeposit = ({
                   {...clam}
                   updateCharacter={updateCharacter}
                   toggleModal={toggleModal}
-                  stakedRarities={stakedRarities}
                   setRefreshClams={setRefreshClams}
                   dispatchFetchAccountAssets={dispatchFetchAccountAssets}
                 />

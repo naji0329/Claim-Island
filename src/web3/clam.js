@@ -5,6 +5,8 @@ import { contractFactory } from "./index";
 import { getOracleFee } from "./rng";
 import { getRNGFromHashRequest } from "./rng";
 import { zeroHash } from "./constants";
+import { getDNADecoded } from "./dnaDecoder";
+import BigNumber from "bignumber.js";
 
 const balanceOf = async ({ account, abi, address }) => {
   const token = contractFactory({ abi, address });
@@ -384,6 +386,15 @@ export const canCurrentlyProducePearl = async (clamId) => {
     address: clamNFTAddress,
   });
   return await clamNft.methods.canCurrentlyProducePearl(clamId).call();
+};
+
+export const getPearlBoost = async (clamId) => {
+  const { dna, pearlBoost } = await getClamData(clamId);
+  if (new BigNumber(pearlBoost).gt(0)) return pearlBoost;
+
+  const dnaDecoded = await getDNADecoded(dna);
+  const { size, lifespan, rarityValue } = dnaDecoded;
+  return await calculatePearlBoost(size, lifespan, rarityValue);
 };
 
 export const calculatePearlBoost = async (size, lifespan, rarityValue) => {

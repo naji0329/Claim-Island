@@ -58,7 +58,6 @@ const Farms = ({
   const [loading, setLoading] = useState(false);
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [selPearl, setSelPearl] = useState({});
-  const [stakedRarities, setStakedRarities] = useState([]);
   const [refreshClams, setRefreshClams] = useState(false);
   const { isShowing, toggleModal } = useModal();
 
@@ -183,14 +182,10 @@ const Farms = ({
                 clamContract,
               });
 
-              const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
-
               setClamsStaked(stakedClams);
-              setStakedRarities(rarities);
             } else {
               console.log("when no clams staked");
               setClamsStaked([]);
-              setStakedRarities([]);
             }
           }
         } catch (error) {
@@ -264,7 +259,6 @@ const Farms = ({
             clams={availableClamsForDepositing}
             updateCharacter={updateCharacter}
             toggleModal={toggleModal}
-            stakedRarities={stakedRarities}
             setRefreshClams={setRefreshClams}
           />
         ) : (

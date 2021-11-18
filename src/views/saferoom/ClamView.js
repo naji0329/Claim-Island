@@ -14,7 +14,7 @@ import { formatUnits } from "@ethersproject/units";
 export default ({
   dna,
   dnaDecoded,
-  clamBonus,
+  pearlBoost,
   clamDataValues: { pearlProductionCapacity, pearlsProduced, birthTime },
   onClickNext,
   onClickPrev,
@@ -23,9 +23,9 @@ export default ({
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
 
   const RowStat = ({ label, value }) => (
-    <div className="text-sm flex flex-row justify-between my-1">
+    <div className="flex flex-row justify-between my-1 text-sm">
       <div className="block">
-        <p className="text-gray-500 font-semibold">{label}</p>
+        <p className="font-semibold text-gray-500">{label}</p>
       </div>
 
       <div className="block">
@@ -42,7 +42,7 @@ export default ({
           <RowStat label="Rarity" value={get(dnaDecoded, "rarity")} />
           <RowStat label="Pearls remaining" value={+pearlProductionCapacity - +pearlsProduced} />
           <RowStat label="Size" value={get(dnaDecoded, "size")} />
-          <RowStat label="$GEM boost" value={formatUnits(String(clamBonus), 18)} />
+          <RowStat label="Pearl boost" value={formatUnits(String(pearlBoost), 18)} />
         </div>
       ),
     },
