@@ -22,8 +22,8 @@ const BurnPearlModal = (props) => {
     chainId,
   } = props;
   const [pearls, setPearls] = useState([]);
-  const [eligibleShape, setEligibleShape] = useState("");
-  const [eligibleColor, setEligibleColor] = useState("");
+  const [boostedShape, setBoostedShape] = useState("");
+  const [boostedColor, setBoostedColor] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
   const [periodInSecs, setPeriodInSecs] = useState("");
 
@@ -56,8 +56,8 @@ const BurnPearlModal = (props) => {
 
       const elShape = await shape();
       const elColor = await color();
-      setEligibleShape(elShape);
-      setEligibleColor(elColor);
+      setBoostedShape(elShape);
+      setBoostedColor(elColor);
 
       const start = await periodStart();
       setStartOfWeek(start);
@@ -70,85 +70,70 @@ const BurnPearlModal = (props) => {
     }
   });
 
-  const eligiblePearls = useMemo(
+  const boostedPearls = useMemo(
     () =>
       pearls.filter(
-        ({ dnaDecoded }) => dnaDecoded.shape === eligibleShape && dnaDecoded.color === eligibleColor
+        ({ dnaDecoded }) => dnaDecoded.shape === boostedShape && dnaDecoded.color === boostedColor
       ),
-    [pearls, eligibleShape, eligibleColor]
+    [pearls, boostedShape, boostedColor]
   );
-  const notEligiblePearls = useMemo(
+  const regularPearls = useMemo(
     () =>
       pearls.filter(
-        ({ dnaDecoded }) => dnaDecoded.shape !== eligibleShape || dnaDecoded.color !== eligibleColor
+        ({ dnaDecoded }) => dnaDecoded.shape !== boostedShape || dnaDecoded.color !== boostedColor
       ),
-    [pearls, eligibleShape, eligibleColor]
+    [pearls, boostedShape, boostedColor]
+  );
+
+  const renderPearl = (pearl, i, a) => (
+    <PearlInfo
+      key={pearl.pearlId}
+      pearl={pearl}
+      isLast={i === a.length - 1}
+      isNativeStaker={isNativeStaker}
+      showBurn
+    />
   );
 
   return (
-    <div className="w-full flex flex-col">
-      <h1 className="text-3xl font-aristotelica-bold text-gray-500 text-center mb-4">
+    <div className="flex flex-col w-full">
+      <h1 className="mb-4 text-3xl text-center text-gray-500 font-aristotelica-bold">
         Choose a pearl
       </h1>
-      <div className="w-full bg-gray-200 rounded-lg mb-6 p-4 flex justify-between">
+      <div className="flex justify-between w-full p-4 mb-6 bg-gray-200 rounded-lg">
         <div className="flex flex-col w-3/5">
           <span className="font-bold">Pearls with these traits are available:</span>
           <div>
-            <span className="text-gray-500 inline-block w-16">Shape:</span>
-            <span className="text-gray-500">{eligibleShape}</span>
+            <span className="inline-block w-16 text-gray-500">Shape:</span>
+            <span className="text-gray-500">{boostedShape}</span>
           </div>
           <div>
-            <span className="text-gray-500 inline-block w-16">Color:</span>
-            <span className="text-gray-500">{eligibleColor}</span>
+            <span className="inline-block w-16 text-gray-500">Color:</span>
+            <span className="text-gray-500">{boostedColor}</span>
           </div>
         </div>
         {timeLeft.includes("-") ? (
-          <div className="flex flex-col w-2/5 items-end">
+          <div className="flex flex-col items-end w-2/5">
             <button onClick={handlePeriodCheckpoint} className="btn btn-outline btn-primary">
               Update Pearl Boost Traits
             </button>
           </div>
         ) : (
-          <div className="flex flex-col w-2/5 items-end">
+          <div className="flex flex-col items-end w-2/5">
             <span className="font-bold">Changes in</span>
             <span className="text-gray-500">{timeLeft}</span>
           </div>
         )}
       </div>
-      <div className="w-full flex justify-between">
-        <div className="w-1/2 mr-8 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160 overflow-y-auto">
-          <p className="font-bold mb-4">Available for boost</p>
-          {eligiblePearls.length ? (
-            eligiblePearls.map((pearl, i, a) => (
-              <PearlInfo
-                key={pearl.pearlId}
-                pearl={pearl}
-                isLast={i === a.length - 1}
-                isEligible
-                isNativeStaker={isNativeStaker}
-                showBurn
-              />
-            ))
-          ) : (
-            <p>No pearls available</p>
-          )}
+      <div className="flex justify-between w-full">
+        <div className="flex flex-col w-1/2 p-4 mr-8 overflow-y-auto bg-gray-200 rounded-lg max-h-160">
+          <p className="mb-4 font-bold">Available for boost</p>
+          {boostedPearls.length ? boostedPearls.map(renderPearl) : <p>No pearls available</p>}
         </div>
-        <div className="w-1/2 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160">
+        <div className="flex flex-col w-1/2 p-4 bg-gray-200 rounded-lg max-h-160">
           <div className="overflow-y-auto">
-            <p className="font-bold mb-4">Not available this week</p>
-            {notEligiblePearls.length ? (
-              notEligiblePearls.map((pearl, i, a) => (
-                <PearlInfo
-                  key={i}
-                  pearl={pearl}
-                  isLast={i === a.length - 1}
-                  isNativeStaker={isNativeStaker}
-                  showBurn
-                />
-              ))
-            ) : (
-              <p>No pearls available</p>
-            )}
+            <p className="mb-4 font-bold">Not available this week</p>
+            {regularPearls.length ? regularPearls.map(renderPearl) : <p>No pearls available</p>}
           </div>
         </div>
       </div>

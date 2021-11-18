@@ -19,8 +19,7 @@ export const getStakedClamIds = async (account) => {
 };
 
 export const hasClamBeenStakedBeforeByUser = async (clamId) => {
-  const account = getAccount();
-  return await pearlFarm().methods.hasClamBeenStakedBeforeByUser(account, clamId).call();
+  return await pearlFarm().methods.clamHasBeenStaked(clamId).call();
 };
 
 export const stakeClam = async (clamId) => {

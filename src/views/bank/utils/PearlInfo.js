@@ -5,7 +5,6 @@ import { actions } from "store/redux";
 
 import { burnPearl } from "web3/pearlBurner";
 import NFTUnknown from "assets/img/pearl_unknown.png";
-import classnames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
@@ -17,21 +16,13 @@ import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepos
 import { formatUnits } from "@ethersproject/units";
 
 const InfoLine = ({ label, value }) => (
-  <div className="w-full flex justify-between">
+  <div className="flex justify-between w-full">
     <span className="text-gray-500">{label}</span>
     <span className="text-gray-500">{value}</span>
   </div>
 );
 
-const PearlInfo = ({
-  pearl,
-  isEligible,
-  isLast,
-  isNativeStaker,
-  showBurn,
-  updateCharacter,
-  updateAccount,
-}) => {
+const PearlInfo = ({ pearl, isLast, isNativeStaker, showBurn, updateCharacter, updateAccount }) => {
   const [inTx, setInTx] = useState(false);
 
   const handleBurn = () => {
@@ -46,7 +37,7 @@ const PearlInfo = ({
       setInTx(true);
       onDepositHarvestTxn(updateCharacter);
 
-      await burnPearl(pearl.pearlId, pearl.dnaDecoded.shape, pearl.dnaDecoded.color);
+      await burnPearl(pearl.pearlId, false); // TODO: forfeitPearl
 
       toast.success("Your pearl has been burned!");
       onBurnPearlSuccess(updateCharacter); // character speak
@@ -73,8 +64,8 @@ const PearlInfo = ({
 
   return (
     <>
-      <div className="w-full flex">
-        <div className="w-32 mr-4 h-32 overflow-hidden">
+      <div className="flex w-full">
+        <div className="w-32 h-32 mr-4 overflow-hidden">
           <img src={image} className="rounded-full" />
         </div>
         <div className="w-3/5">
@@ -95,22 +86,19 @@ const PearlInfo = ({
 
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
           <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
-          <div className="w-full flex justify-between my-2">
+          <div className="flex justify-between w-full my-2">
             {showBurn && (
               <button
-                onClick={handleBurn}
-                className={classnames("mr-1", {
-                  "btn btn-disabled": !isEligible,
-                  "btn btn-outline btn-primary": isEligible,
-                })}
-                disabled={!isNativeStaker || !isEligible || inTx}
+                onClick={() => handleBurn()}
+                className="mr-1 btn btn-outline btn-primary"
+                disabled={!isNativeStaker || inTx}
               >
                 Use
               </button>
             )}
             <Link
               to={`/saferoom/pearl?id=${pearl.pearlId}`}
-              className="btn btn-outline btn-secondary ml-1"
+              className="ml-1 btn btn-outline btn-secondary"
             >
               View Details&nbsp;
               <FontAwesomeIcon icon={faExternalLinkAlt} />
@@ -118,7 +106,7 @@ const PearlInfo = ({
           </div>
         </div>
       </div>
-      {!isLast && <div className="bg-gray-400 py-px mx-8 my-4 rounded-xl" />}
+      {!isLast && <div className="py-px mx-8 my-4 bg-gray-400 rounded-xl" />}
     </>
   );
 };
