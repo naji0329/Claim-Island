@@ -194,14 +194,9 @@
         "type": "uint256"
       },
       {
-        "internalType": "string",
-        "name": "_shape",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_colour",
-        "type": "string"
+        "internalType": "bool",
+        "name": "_forfeitPearl",
+        "type": "bool"
       }
     ],
     "name": "burnPearl",
@@ -302,6 +297,30 @@
   {
     "inputs": [],
     "name": "isCurrentPeriod",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_shape",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_colour",
+        "type": "string"
+      }
+    ],
+    "name": "isCurrentShapeAndColour",
     "outputs": [
       {
         "internalType": "bool",

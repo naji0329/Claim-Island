@@ -1,0 +1,106 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8[10]",
+        "name": "",
+        "type": "uint8[10]"
+      },
+      {
+        "internalType": "uint8[6]",
+        "name": "",
+        "type": "uint8[6]"
+      }
+    ],
+    "name": "decodeTraitsFromDNA",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "getDNADecoded",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "shape",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "color",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "overtone",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "size",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lustre",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nacreQuality",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "surface",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "glow",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "rarity",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rarityValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[3][2]",
+            "name": "HSV",
+            "type": "uint256[3][2]"
+          }
+        ],
+        "internalType": "struct IPearlDNADecoder.Traits",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
