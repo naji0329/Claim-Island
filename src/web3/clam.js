@@ -389,12 +389,9 @@ export const canCurrentlyProducePearl = async (clamId) => {
 };
 
 export const getPearlBoost = async (clamId) => {
-  const { dna, pearlBoost } = await getClamData(clamId);
+  const { pearlBoost } = await getClamData(clamId);
   if (new BigNumber(pearlBoost).gt(0)) return pearlBoost;
-
-  const dnaDecoded = await getDNADecoded(dna);
-  const { size, lifespan, rarityValue } = dnaDecoded;
-  return await calculatePearlBoost(size, lifespan, rarityValue);
+  return "0";
 };
 
 export const calculatePearlBoost = async (size, lifespan, rarityValue) => {

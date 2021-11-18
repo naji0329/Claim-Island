@@ -87,13 +87,12 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
 
         const producedPearlIds = sameClamPearlsProduced.producedPearlIds;
         const { dna, pearlBoostM } = clam.clamDataValues;
-        const { size, lifespan, rarityValue } = dnaDecoded;
 
         const isLegacyClam = new BigNumber(pearlBoostM).eq(0);
 
-        const pearlBoost = isLegacyClam
-          ? await clamContract.calculatePearlBoost(size, lifespan, rarityValue)
-          : pearlBoostM.div(1_000_000).toString(); // TODO: deploy contracts and test
+        const pearlBoost = !isLegacyClam
+          ? pearlBoostM.div(1_000_000).toString() // TODO: deploy contracts and test
+          : "0";
 
         const img = await getClamImageFromCache({ dna });
 
