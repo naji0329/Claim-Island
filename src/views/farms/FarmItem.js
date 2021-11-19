@@ -9,7 +9,6 @@ import { secondsToFormattedTime } from "utils/time";
 import { Spinner } from "components/spinner";
 
 import {
-  getRemainingPearlProductionTime,
   collectPearl,
   rngRequestHashForProducedPearl,
   propClamOpenForPearl,
@@ -46,6 +45,7 @@ const FarmItem = ({
   updateAccount,
   account: { address },
   withdrawingClamId,
+  pearlProductionTime,
 }) => {
   const [inTx, setInTx] = useState(false);
   const [isInitLoading, setIsInitLoading] = useState(true);
@@ -53,7 +53,6 @@ const FarmItem = ({
   const [action, setAction] = useState("");
   const [buttonText, setButtonText] = useState("");
   const now = Math.round(new Date().getTime() / 1000);
-  const [pearlProductionTime, setPearlProductionTime] = useState("");
   const [canStillProducePearl, setCanStillProducePearl] = useState(false);
   const [canProducePearl, setCanProducePearl] = useState(false);
   const [readyForPearl, setReadyForPearl] = useState(false);
@@ -78,10 +77,6 @@ const FarmItem = ({
   useEffect(() => {
     const init = async () => {
       try {
-        const _productionTimeTotal = await getRemainingPearlProductionTime(clamId);
-        const _pearlProductionTime = +now + +_productionTimeTotal;
-        setPearlProductionTime(_pearlProductionTime);
-
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId, address);
         if(rngHashForProducedPearl !== zeroHash && !!rngHashForProducedPearl) {
           const dna = await getRNGFromHashRequest(rngHashForProducedPearl);

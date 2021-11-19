@@ -97,6 +97,13 @@ const sortClamsByClaimableShellDesc = (clam1, clam2) => {
   return clam2.harvestShellValue - clam1.harvestShellValue;
 };
 
+const sortClamsByTimeTillPearlAsc = (clam1, clam2) => {
+  return clam1.pearlProductionTimeLeft - clam2.pearlProductionTimeLeft;
+};
+const sortClamsByTimeTillPearlDesc = (clam1, clam2) => {
+  return clam2.pearlProductionTimeLeft - clam1.pearlProductionTimeLeft;
+};
+
 const SORT_FUNCTIONS = {
   [SORT_CLAMS_OPTIONS.id]: {
     [SORT_ORDERS.asc]: sortClamsByIdAsc,
@@ -121,6 +128,10 @@ const SORT_FUNCTIONS = {
   [SORT_CLAMS_OPTIONS.shell]: {
     [SORT_ORDERS.asc]: sortClamsByClaimableShellAsc,
     [SORT_ORDERS.desc]: sortClamsByClaimableShellDesc,
+  },
+  [SORT_CLAMS_OPTIONS.pearlTime]: {
+    [SORT_ORDERS.asc]: sortClamsByTimeTillPearlAsc,
+    [SORT_ORDERS.desc]: sortClamsByTimeTillPearlDesc,
   },
 };
 

@@ -23,6 +23,7 @@ import {
   stakePrice,
   prepareReclaiming,
   reclaimGems,
+  getRemainingPearlProductionTime,
 } from "web3/pearlFarm";
 import { formatFromWei, getClamsDataByIds } from "web3/shared";
 
@@ -60,6 +61,7 @@ const Farms = ({
   const availableClamsForDepositing = clams;
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
+  const [clamsStakedSorted, setClamsStakedSorted] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [selPearl, setSelPearl] = useState({});
@@ -72,8 +74,8 @@ const Farms = ({
   const [selectedClamId, setSelectedClamId] = useState({});
   const [withdrawingClamId, setWithdrawingClamId] = useState(null);
 
-  const isPrevButtonShown = selectedClam !== clamsStaked[0];
-  const isNextButtonShown = selectedClam !== clamsStaked[clamsStaked.length - 1];
+  const isPrevButtonShown = selectedClam !== clamsStakedSorted[0];
+  const isNextButtonShown = selectedClam !== clamsStakedSorted[clamsStakedSorted.length - 1];
 
   const handleWithdraw = async (clamId) => {
     try {
@@ -159,13 +161,13 @@ const Farms = ({
   };
 
   const onClickNext = () => {
-    const currentClamIndex = clamsStaked.findIndex((clam) => clam === selectedClam);
-    setSelectedClam(clamsStaked[currentClamIndex + 1]);
+    const currentClamIndex = clamsStakedSorted.findIndex((clam) => clam === selectedClam);
+    setSelectedClam(clamsStakedSorted[currentClamIndex + 1]);
   };
 
   const onClickPrev = () => {
-    const currentAssetIndex = clamsStaked.findIndex((clam) => clam === selectedClam);
-    setSelectedClam(clamsStaked[currentAssetIndex - 1]);
+    const currentAssetIndex = clamsStakedSorted.findIndex((clam) => clam === selectedClam);
+    setSelectedClam(clamsStakedSorted[currentAssetIndex - 1]);
   };
 
   useEffect(async () => {
@@ -187,6 +189,15 @@ const Farms = ({
                 chainId,
                 clamContract,
               });
+
+              const now = Math.round(new Date().getTime() / 1000);
+              const productionTimesTotal = await Promise.all(
+                stakedClams.map(({ clamId }) => getRemainingPearlProductionTime(clamId))
+              );
+              for (let i = 0; i < stakedClams.length; i++) {
+                stakedClams[i].pearlProductionTime = +productionTimesTotal[i] + +now;
+                stakedClams[i].pearlProductionTimeLeft = +productionTimesTotal[i];
+              }
 
               const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
               setStakedRarities(rarities);
@@ -211,10 +222,20 @@ const Farms = ({
   }, [address, clamBalance, refreshClams]);
 
   useEffect(() => {
-    if (!clamsStaked.find(({ clamId }) => clamId === withdrawingClamId)) {
+    if (!clamsStakedSorted.find(({ clamId }) => clamId === withdrawingClamId)) {
       setWithdrawingClamId(null);
     }
-  }, [clamsStaked]);
+  }, [clamsStakedSorted]);
+
+  useEffect(() => {
+    const clamsReadyToCollect = clamsStaked.filter((clam) => clam.pearlProductionTimeLeft === 0);
+    const clamsNotReadyToCollect = clamsStaked.filter((clam) => clam.pearlProductionTimeLeft !== 0);
+    const sortedClams = [
+      ...clamsReadyToCollect,
+      ...getSortedClams(clamsNotReadyToCollect, clamsSortOrder.value, clamsSortOrder.order),
+    ];
+    setClamsStakedSorted(sortedClams);
+  }, [clamsStaked, clamsSortOrder.value, clamsSortOrder.order]);
 
   useAsync(async () => {
     if (address) {
@@ -285,20 +306,17 @@ const Farms = ({
             <div className="w-full my-4">
               <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
                 <DepositClamCard onClick={onDepositClam} />
-                {clamsStaked &&
-                  getSortedClams(clamsStaked, clamsSortOrder.value, clamsSortOrder.order).map(
-                    (clam, i) => (
-                      <FarmItem
-                        key={i}
-                        {...clam}
-                        onViewDetails={() => onViewDetails(clam)}
-                        onWithdrawClam={() => onWithdrawClam(clam)}
-                        onViewPearl={onViewPearl}
-                        updateCharacter={updateCharacter}
-                        withdrawingClamId={withdrawingClamId}
-                      />
-                    )
-                  )}
+                {clamsStakedSorted.map((clam, i) => (
+                  <FarmItem
+                    key={i}
+                    {...clam}
+                    onViewDetails={() => onViewDetails(clam)}
+                    onWithdrawClam={() => onWithdrawClam(clam)}
+                    onViewPearl={onViewPearl}
+                    updateCharacter={updateCharacter}
+                    withdrawingClamId={withdrawingClamId}
+                  />
+                ))}
 
                 {/* {PEARLS &&
                   PEARLS.map((pearl, i) => (

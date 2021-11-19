@@ -9,6 +9,7 @@ import {
   CLAMS_SORT_BUTTONS,
   SORT_ORDERS_SEQUENCE_MAP,
   SORT_ORDERS,
+  FARM_CLAMS_SORT_BUTTONS,
 } from "constants/sorting";
 import { sortingOrderSelectors } from "selectors/sorting";
 
@@ -49,12 +50,12 @@ export const ClamsSorting = ({ page }) => {
     };
     updateSortOrder(newSortingOrder, page, "clams");
   };
-
+  console.log(page === "farm" ? FARM_CLAMS_SORT_BUTTONS : CLAMS_SORT_BUTTONS);
   return (
     <SortingBar
       selected={SORT_ORDERS.none !== order && value}
       order={order}
-      sortButtons={CLAMS_SORT_BUTTONS}
+      sortButtons={page === "farm" ? FARM_CLAMS_SORT_BUTTONS : CLAMS_SORT_BUTTONS}
       onSortValueClick={onSortValueClick}
       onSortOrderClick={onSortOrderClick}
     />

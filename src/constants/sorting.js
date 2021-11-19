@@ -31,6 +31,7 @@ export const SORT_CLAMS_OPTIONS = {
   shape: "shape",
   colour: "colour",
   shell: "shell",
+  pearlTime: "pearlTime",
 };
 
 export const SORT_PEARLS_OPTIONS = {
@@ -66,6 +67,14 @@ export const CLAMS_SORT_BUTTONS = [
   {
     value: SORT_CLAMS_OPTIONS.shell,
     displayValue: "Claimable $SHELL",
+  },
+];
+
+export const FARM_CLAMS_SORT_BUTTONS = [
+  ...CLAMS_SORT_BUTTONS,
+  {
+    value: SORT_CLAMS_OPTIONS.pearlTime,
+    displayValue: "TIME TILL PEARL",
   },
 ];
 
