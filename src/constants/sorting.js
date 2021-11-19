@@ -74,7 +74,7 @@ export const FARM_CLAMS_SORT_BUTTONS = [
   ...CLAMS_SORT_BUTTONS,
   {
     value: SORT_CLAMS_OPTIONS.pearlTime,
-    displayValue: "TIME TILL PEARL",
+    displayValue: "Time Till Pearl",
   },
 ];
 
