@@ -50,7 +50,7 @@ export const ClamsSorting = ({ page }) => {
     };
     updateSortOrder(newSortingOrder, page, "clams");
   };
-  console.log(page === "farm" ? FARM_CLAMS_SORT_BUTTONS : CLAMS_SORT_BUTTONS);
+
   return (
     <SortingBar
       selected={SORT_ORDERS.none !== order && value}
