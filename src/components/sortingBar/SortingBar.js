@@ -40,7 +40,7 @@ export const SortingBar = (props) => {
     <div className="dropdown dropdown-hover text-white h-full cursor-pointer min-w-180">
       <div
         tabIndex="0"
-        className="flex flex-none bg-gray-900 bg-opacity-80 p-2 rounded text-2xl py-4"
+        className="flex flex-none bg-gray-900 bg-opacity-90 p-4 rounded-xl text-2xl"
       >
         <button
           data-tip="Сhange the sorting order"
@@ -51,7 +51,7 @@ export const SortingBar = (props) => {
         </button>
         Sort by: {selectedFilterName || "N/A"}
       </div>
-      <ul tabIndex="0" className="menu w-full dropdown-content rounded bg-gray-900 bg-opacity-80">
+      <ul tabIndex="0" className="menu w-full dropdown-content rounded-xl bg-gray-900 bg-opacity-90">
         {sortButtonComponents}
       </ul>
     </div>
