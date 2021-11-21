@@ -101,11 +101,11 @@ export const pearlNotEnoughGems = ({ updateCharacter, gems }, cb) => {
   });
 };
 
-export const pearlGemPrompt = ({ updateCharacter, gems }, cb) => {
+export const pearlGemPrompt = ({ updateCharacter, pearlPrice, gems }, cb) => {
   updateCharacter({
     name: "al",
-    action: "farms.pearlCollectGemprompt.text",
-    variables: { gems },
+    action: gems ? "farms.legacyPearlCollectGemprompt.text" : "farms.pearlCollectGemprompt.text",
+    variables: { pearlPrice, gems },
     button: {
       text: "Yes",
       alt: {

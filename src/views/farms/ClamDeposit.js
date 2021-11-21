@@ -2,32 +2,21 @@ import { useEffect, useState } from "react";
 import { useAsync } from "react-use";
 import { connect } from "redux-zero/react";
 import { Link } from "react-router-dom";
-import BigNumber from "bignumber.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { actions } from "../../store/redux";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
 import { clamNFTAddress, pearlFarmAddress } from "../../web3/constants";
-import { formatFromWei } from "../../web3/shared";
-import { getBalance, infiniteApproveSpending, getAllowance } from "../../web3/gem";
 import {
   stakeClam,
   hasClamBeenStakedBeforeByUser,
   stakeClamAgain,
   getRemainingPearlProductionTime,
-  stakePrice,
-  gemsTransferred,
 } from "../../web3/pearlFarm";
 import { getAllPools } from "web3/bank";
-import {
-  depositClamGemPrompt,
-  depositClamError,
-  depositClamSuccess,
-  depositWithoutStaking,
-} from "./character/clamDeposit";
+import { depositClamError, depositClamSuccess } from "./character/clamDeposit";
 import { secondsToFormattedTime } from "utils/time";
-
 import InfoTooltip from "components/Tooltip";
 
 const ClamItem = ({
@@ -40,38 +29,22 @@ const ClamItem = ({
   dnaDecoded,
   updateCharacter,
   pearlBoost,
-  toggleModal,
   setRefreshClams,
-  pools,
   dispatchFetchAccountAssets,
 }) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState("Deposit Clam");
   const [inTx, setInTx] = useState(false);
-  const [gemApproved, setGemApproved] = useState(false);
-  const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
-  const [isNativeStaker, setIsNativeStaker] = useState(false);
+  // const [gemApproved, setGemApproved] = useState(false);
+  // const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
+
   const [isClamDeposited, setIsClamDeposited] = useState(false);
 
   useEffect(() => {
     const init = async () => {
       try {
-        const isNativeStaker =
-          pools.length && pools.some((p) => p.isNative && +p.userDepositAmountInPool > 0);
-        setIsNativeStaker(isNativeStaker);
-
         const remaining = await getRemainingPearlProductionTime(clamId);
         setRemainingTime(remaining);
-
-        const pPrice = await stakePrice(); // price as string
-        setPearlPrice(pPrice);
-
-        // set up for GEM approval comparison check
-        const pPriceAsBigNumber = new BigNumber(pPrice);
-        const gemAllowance = await getAllowance(address, pearlFarmAddress).then(
-          (v) => new BigNumber(v)
-        );
-        setGemApproved(pPriceAsBigNumber.lt(gemAllowance));
       } catch (err) {
         updateAccount({ error: err.message });
       }
@@ -95,51 +68,20 @@ const ClamItem = ({
 
   const executeDeposit = async () => {
     try {
-      const gemBalance = await getBalance(address).then((v) => new BigNumber(v)); // from string to BN
-      const pearlDeposit = await gemsTransferred(address, clamId);
-      if (pearlDeposit == 0 && gemBalance.lt(pearlPrice))
-        throw new Error(`You need at least ${formatFromWei(pearlPrice)} GEM to stake Clam`);
+      setInTx(true);
+      setButtonText("Approving Clam...");
+      await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
 
-      // character speaks
-      depositClamGemPrompt(
-        { updateCharacter, gems: formatFromWei(pearlPrice), dismissModal: toggleModal },
-        async () => {
-          try {
-            setInTx(true);
-            setButtonText("Approving Clam...");
-            await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
+      setButtonText("Depositing Clam...");
 
-            if (!gemApproved) {
-              setButtonText("Approving GEM...");
-              console.log(pearlPrice);
-              await infiniteApproveSpending(address, pearlFarmAddress, pearlPrice);
-            }
-
-            setButtonText("Depositing Clam...");
-
-            const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
-            if (hasClamBeenStakeByUserBefore) {
-              await stakeClamAgain(clamId);
-              await triggerClamDepositSuccess();
-            } else {
-              if (!isNativeStaker) {
-                depositWithoutStaking({ updateCharacter, dismissModal: toggleModal }, async () => {
-                  await stakeClam(clamId);
-                  await triggerClamDepositSuccess();
-                });
-              } else {
-                await stakeClam(clamId);
-                await triggerClamDepositSuccess();
-              }
-            }
-          } catch (err) {
-            updateAccount({ error: err.message });
-            setButtonText("Approve Clam");
-            setInTx(false);
-            depositClamError({ updateCharacter, err }); // character speaks
-          }
-        }
-      );
+      const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
+      if (hasClamBeenStakeByUserBefore) {
+        await stakeClamAgain(clamId);
+        await triggerClamDepositSuccess();
+      } else {
+        await stakeClam(clamId);
+        await triggerClamDepositSuccess();
+      }
     } catch (err) {
       updateAccount({ error: err.message });
       setButtonText("Approve Clam");

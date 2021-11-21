@@ -53,6 +53,13 @@ export const FARM_SPEECH = {
       skip: false,
     },
     pearlCollectGemprompt: {
+      text: ({ pearlPrice }) =>
+        `It costs ${pearlPrice} $GEM to collect the pearl. Do you want to proceed?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+    },
+    legacyPearlCollectGemprompt: {
       text: ({ gems }) =>
         `Remember When you deposited your clam here you added ${gems} $GEM with it? So this $GEM will be spent now to collect the pearl. Do you want to proceed?`,
       next: `purchase`,
@@ -116,8 +123,7 @@ export const FARM_SPEECH = {
     },
 
     pearl_collect_ready_prompt: {
-      text: ({ pearlPrice }) =>
-        `Aha, I can see a Pearl. Would you like to collect it for ${pearlPrice} $GEM?`,
+      text: `Aha, I can see a Pearl. Would you like to collect it?`,
       dismiss: false,
       skip: false,
       hideable: false,

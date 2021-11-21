@@ -17,6 +17,7 @@ import {
   gemsTransferred,
 } from "web3/pearlFarm";
 import { getRNGFromHashRequest } from "web3/rng";
+import { getBalance } from "web3/gem";
 import { canCurrentlyProducePearl, canStillProducePearls } from "web3/clam";
 import { getPearlData, tokenOfOwnerByIndex, accountPearlBalance } from "web3/pearl";
 import { formatFromWei } from "web3/shared";
@@ -57,7 +58,8 @@ const FarmItem = ({
   const [canStillProducePearl, setCanStillProducePearl] = useState(false);
   const [canProducePearl, setCanProducePearl] = useState(false);
   const [readyForPearl, setReadyForPearl] = useState(false);
-  const [gemsNeededForPearlProd, setGemsNeededForPearl] = useState(0);
+  const [gemApproved, setGemApproved] = useState(false);
+  const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
   const [isPearlCollected, setIsPearlCollected] = useState(false);
   const isWithdrawing = withdrawingClamId === clamId;
   const calculateTimeLeft = useCallback(() => {
@@ -83,12 +85,12 @@ const FarmItem = ({
         setPearlProductionTime(_pearlProductionTime);
 
         const rngHashForProducedPearl = await rngRequestHashForProducedPearl(clamId, address);
-        if(rngHashForProducedPearl !== zeroHash && !!rngHashForProducedPearl) {
+        if (rngHashForProducedPearl !== zeroHash && !!rngHashForProducedPearl) {
           const dna = await getRNGFromHashRequest(rngHashForProducedPearl);
-          if(dna !== zeroHash && !!dna) {
+          if (dna !== zeroHash && !!dna) {
             setReadyForPearl(true);
           }
-        };
+        }
 
         const canProduce = await canCurrentlyProducePearl(clamId);
         setCanProducePearl(canProduce);
@@ -96,8 +98,15 @@ const FarmItem = ({
         const canStillProduce = await canStillProducePearls(clamId);
         setCanStillProducePearl(canStillProduce);
 
-        const priceForPearlInGem = await stakePrice();
-        setGemsNeededForPearl(priceForPearlInGem);
+        const pPrice = await stakePrice(); // price as string
+        setPearlPrice(pPrice);
+
+        // set up for GEM approval comparison check
+        const pPriceAsBigNumber = new BigNumber(pPrice);
+        const gemAllowance = await getAllowance(address, pearlFarmAddress).then(
+          (v) => new BigNumber(v)
+        );
+        setGemApproved(pPriceAsBigNumber.lt(gemAllowance));
       } catch (err) {
         updateAccount({ error: err.message });
       }
@@ -143,7 +152,7 @@ const FarmItem = ({
       pearlOpenClam({ updateCharacter });
       await propClamOpenForPearl(clamId);
       setInTx(false);
-      pearlCollectReadyPrompt({ updateCharacter }, async () => {
+      pearlCollectReadyPrompt({ updateCharacter, pearlPrice }, async () => {
         return onClickCollectPearl();
       });
     } catch (err) {
@@ -158,55 +167,78 @@ const FarmItem = ({
   const onClickCollectPearl = async () => {
     try {
       const gems = await gemsTransferred(address, clamId);
-      pearlGemPrompt({ updateCharacter, gems: formatFromWei(gems) }, async () => {
-        pearlCollectProcessing({ updateCharacter });
-        try {
-          setInTx(true);
-          setButtonText("Hold on ...");
-          await collectPearl(clamId);
+      const isLegacyPearl = gems.gte(0);
+      pearlGemPrompt(
+        {
+          updateCharacter,
+          pearlPrice: formatFromWei(pearlPrice),
+          gems: isLegacyPearl ? formatFromWei(gems) : "",
+        },
+        async () => {
+          pearlCollectProcessing({ updateCharacter });
+          try {
+            setInTx(true);
+            setButtonText("Hold on ...");
 
-          const userBalanceOfPearls = await accountPearlBalance(address);
-          updateAccount({pearlBalance: userBalanceOfPearls});
-          const lastUsersPearlId = await tokenOfOwnerByIndex(address, +userBalanceOfPearls - 1);
+            if (!isLegacyPearl) {
+              const gemBalance = await getBalance(address).then((v) => new BigNumber(v)); // from string to BN
+              if (gemBalance.lt(pearlPrice))
+                throw new Error(
+                  `You need at least ${formatFromWei(pearlPrice)} GEM to collect Pearl`
+                );
 
-          const { dna: pearlDna } = await getPearlData(lastUsersPearlId);
-          const pearlDnaDecoded = await getPearlDNADecoded(pearlDna);
+              if (!gemApproved) {
+                setButtonText("Approving GEM...");
+                console.log(pearlPrice);
+                await infiniteApproveSpending(address, pearlFarmAddress, pearlPrice);
+              }
+            }
 
-          const viewPearl = () => {
-            onViewPearl({
-              clamId,
-              dna: pearlDna,
-              dnaDecoded: pearlDnaDecoded,
-              showPearlModal: true,
+            await collectPearl(clamId);
+
+            const userBalanceOfPearls = await accountPearlBalance(address);
+            updateAccount({ pearlBalance: userBalanceOfPearls });
+            const lastUsersPearlId = await tokenOfOwnerByIndex(address, +userBalanceOfPearls - 1);
+
+            const { dna: pearlDna } = await getPearlData(lastUsersPearlId);
+            const pearlDnaDecoded = await getPearlDNADecoded(pearlDna);
+
+            const viewPearl = () => {
+              onViewPearl({
+                clamId,
+                dna: pearlDna,
+                dnaDecoded: pearlDnaDecoded,
+                showPearlModal: true,
+              });
+            };
+
+            setInTx(false);
+
+            // character speaks
+            pearlCollectSuccess({ updateCharacter, viewPearl }, () => {
+              ifPearlSendSaferoom({
+                updateCharacter,
+                address,
+                clamId,
+                setInTx,
+              });
             });
-          };
-
-          setInTx(false);
-
-          // character speaks
-          pearlCollectSuccess({ updateCharacter, viewPearl }, () => {
-            ifPearlSendSaferoom({
-              updateCharacter,
-              address,
-              clamId,
-              setInTx,
-            });
-          });
-          setIsPearlCollected(true);
-        } catch (err) {
-          updateAccount({ error: err.message });
-          setInTx(false);
-          setButtonText("Collect Pearl");
-          setAction("collect");
-          const errorMsg = JSON.parse(err.message.split("\n").slice(1).join(""));
-          toast.error(
-            <>
-              <p>There was an error collecting your pearl.</p>
-              <p>{errorMsg.message}</p>
-            </>
-          );
+            setIsPearlCollected(true);
+          } catch (err) {
+            updateAccount({ error: err.message });
+            setInTx(false);
+            setButtonText("Collect Pearl");
+            setAction("collect");
+            const errorMsg = JSON.parse(err.message.split("\n").slice(1).join(""));
+            toast.error(
+              <>
+                <p>There was an error collecting your pearl.</p>
+                <p>{errorMsg.message}</p>
+              </>
+            );
+          }
         }
-      });
+      );
     } catch (err) {
       updateAccount({ error: err.message });
       pearlError({ updateCharacter });
