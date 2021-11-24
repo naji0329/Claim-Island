@@ -1,6 +1,7 @@
 import mainnetAddresses from "./mainnet";
 import testnetAddresses from "./testnet";
 
+// this sets addresses of testnet when running locally. Change this if mainnet addresses are desired
 const addresses = process.env.NODE_ENV === "development" ? testnetAddresses : mainnetAddresses;
 
 export const ClamIslandChain = {

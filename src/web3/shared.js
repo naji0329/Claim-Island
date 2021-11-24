@@ -90,9 +90,7 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
 
         const isLegacyClam = new BigNumber(pearlBoostM).eq(0);
 
-        const pearlBoost = !isLegacyClam
-          ? pearlBoostM.div(1_000_000).toString() // TODO: deploy contracts and test
-          : "0";
+        const pearlBoost = !isLegacyClam ? pearlBoostM / (1_000_000).toString() : "0";
 
         const img = await getClamImageFromCache({ dna });
 
