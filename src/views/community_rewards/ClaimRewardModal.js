@@ -8,7 +8,7 @@ import Card from "../../components/Card";
 import RewardUnknown from "../../assets/img/pearl_unknown.png";
 
 import { claimReward } from "../../web3/communityRewards";
-import { communityRewardsAddress } from "../../web3/constants";
+import { communityRewardsAddress } from "../../constants/constants";
 import { actions } from "../../store/redux";
 
 const ClaimRewardModal = ({

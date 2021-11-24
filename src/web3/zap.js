@@ -1,5 +1,5 @@
 import zapAbi from "./abi/Zap.json";
-import { zapAddress } from "./constants";
+import { zapAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 
 export const estimateSwap = async ({ destToken, originToken, amountIn }) => {

@@ -1,5 +1,5 @@
 import multicallAbi from "./abi/MultiCall.json";
-import { multicallAddress } from "./constants";
+import { multicallAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 
 const multicall = (chainId) =>

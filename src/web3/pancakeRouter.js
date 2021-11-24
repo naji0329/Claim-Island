@@ -1,6 +1,6 @@
 import { formatEther, parseEther } from "@ethersproject/units";
 import pancakeRouterAbi from "./abi/PancakeRouter.json";
-import { pancakeRouterAddress, wBNB, BUSD, gemTokenAddress } from "./constants";
+import { pancakeRouterAddress, wBNB, BUSD, gemTokenAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 import { getLPTokens, getReserves } from "./pancakePair";
 import BigNumber from "bignumber.js";

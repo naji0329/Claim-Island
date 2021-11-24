@@ -11,7 +11,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 // import { convertUtf8ToHex } from "@walletconnect/utils";
 import { useAsync } from "react-use";
 
-import { ClamIslandChain, gemTokenAddress, shellTokenAddress, BUSD } from "web3/constants";
+import { ClamIslandChain, gemTokenAddress, shellTokenAddress, BUSD } from "constants/constants";
 import { getUsdPriceOfToken } from "web3/pancakeRouter";
 
 import Navbar from "components/Navbar";

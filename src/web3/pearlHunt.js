@@ -1,5 +1,5 @@
 import pearlHuntAbi from "./abi/PearlHunt.json";
-import { pearlHuntAddress } from "./constants";
+import { pearlHuntAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 
 export const enterPearlHuntCompetition = async (account, pearlId, hashTgHandle) => {

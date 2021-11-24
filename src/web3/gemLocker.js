@@ -1,7 +1,7 @@
 import { formatEther } from "@ethersproject/units";
 import { contractFactory } from "./index";
 import gemLockerAbi from "./abi/GemLocker.json";
-import { gemLockerAddress } from "./constants";
+import { gemLockerAddress } from "../constants/constants";
 import { getAccount } from "./shared";
 import { aggregate } from "./multicall";
 

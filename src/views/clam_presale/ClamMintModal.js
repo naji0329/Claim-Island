@@ -10,7 +10,7 @@ import BNBLogo from "../../assets/img/binance-coin-bnb-logo.png";
 import ArrowDown from "../../assets/img/arrow-down.svg";
 
 import { buyClamPresale } from "../../web3/buyClamPresale";
-import { clamPresaleAddress } from "../../web3/constants";
+import { clamPresaleAddress } from "../../constants/constants";
 import { actions } from "../../store/redux";
 
 const Divider = () => (

@@ -1,5 +1,5 @@
 import PearlBurnerAbi from "./abi/PearlBurner.json";
-import { pearlBurnerAddress, pearlNFTAddress } from "./constants";
+import { pearlBurnerAddress, pearlNFTAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 import { getAccount } from "./shared";
 

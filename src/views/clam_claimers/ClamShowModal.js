@@ -6,7 +6,7 @@ import "./index.scss";
 
 import Card from "../../components/Card";
 
-import { clamNFTAddress } from "../../web3/constants";
+import { clamNFTAddress } from "../../constants/constants";
 import clamContract from "../../web3/clam";
 import { actions } from "../../store/redux";
 import { getDNADecoded } from "../../web3/dnaDecoder";
@@ -94,12 +94,7 @@ const ClamShowModal = ({
 
           <div className="bg-white flex-1 justify-center md:flex items-center h-full">
             {clamDna && (
-              <Clam3DView
-                width={400}
-                height={400}
-                clamDna={clamDna}
-                decodedDna={clamDnaDecoded}
-              />
+              <Clam3DView width={400} height={400} clamDna={clamDna} decodedDna={clamDnaDecoded} />
             )}
             {isLoading && (
               <>

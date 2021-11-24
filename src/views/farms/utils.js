@@ -1,9 +1,9 @@
 import {
   pearlSendToSaferoom,
   pearlGenerateNew,
-  pearlNotEnoughGems
+  pearlNotEnoughGems,
 } from "./character/pearlCollection";
-import { clamNFTAddress, pearlFarmAddress } from "web3/constants";
+import { clamNFTAddress, pearlFarmAddress } from "constants/constants";
 import { getBalance, infiniteApproveSpending } from "web3/gem";
 import { formatFromWei } from "web3/shared";
 import { approveContractForMaxUintErc721 } from "web3/bep20";
@@ -16,12 +16,7 @@ import {
 import BigNumber from "bignumber.js";
 import { toast } from "react-toastify";
 
-export const ifPearlSendSaferoom = async ({
-  updateCharacter,
-  address,
-  clamId,
-  setInTx
-}) => {
+export const ifPearlSendSaferoom = async ({ updateCharacter, address, clamId, setInTx }) => {
   const gems = await stakePrice();
   if (setInTx) setInTx(false);
   pearlSendToSaferoom({ updateCharacter }, () => {
@@ -29,7 +24,9 @@ export const ifPearlSendSaferoom = async ({
       const pricePerPearlInGem = gems;
       const gemBalance = await getBalance(address).then((v) => new BigNumber(v)); // from string to BN
       if (gemBalance.lt(pricePerPearlInGem)) {
-        const errorMsg = `You need at least ${formatFromWei(pricePerPearlInGem)} $GEM to stake Clam`
+        const errorMsg = `You need at least ${formatFromWei(
+          pricePerPearlInGem
+        )} $GEM to stake Clam`;
         toast.error(errorMsg);
         pearlNotEnoughGems({ updateCharacter });
       } else {

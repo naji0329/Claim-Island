@@ -9,7 +9,7 @@ import {
   shellTokenAddress,
   clamNFTAddress,
   pearlNFTAddress,
-} from "web3/constants";
+} from "constants/constants";
 import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm";
 import { EmptyBytes, getOwnedClams, getOwnedPearls, formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";

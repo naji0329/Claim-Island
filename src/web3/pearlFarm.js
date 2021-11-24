@@ -1,6 +1,6 @@
 import pearlFarmAbi from "./abi/PearlFarm.json";
 import { contractFactory } from "./index";
-import { pearlFarmAddress } from "./constants";
+import { pearlFarmAddress } from "../constants/constants";
 import { getAccount } from "./shared";
 import { getOracleFee } from "./rng";
 

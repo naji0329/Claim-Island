@@ -1,5 +1,5 @@
 import dnaDecoderAbi from "./abi/DNADecoder.json";
-import { dnaDecoderAddress } from "./constants";
+import { dnaDecoderAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 
 export const getDNADecoded = async (dna) => {

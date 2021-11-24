@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { bankAddress, wBNB } from "web3/constants";
+import { bankAddress, wBNB } from "constants/constants";
 import { formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";
 import pancake from "web3/pancakePair";

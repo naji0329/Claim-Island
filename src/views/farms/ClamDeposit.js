@@ -7,7 +7,7 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { actions } from "../../store/redux";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
-import { clamNFTAddress, pearlFarmAddress } from "../../web3/constants";
+import { clamNFTAddress, pearlFarmAddress } from "../../constants/constants";
 import {
   stakeClam,
   hasClamBeenStakedBeforeByUser,

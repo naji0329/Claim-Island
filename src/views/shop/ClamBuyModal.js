@@ -15,10 +15,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 import { buyClam, getPrice, checkHasClamToCollect, buyClamWithVestedTokens } from "web3/clam";
-import { zeroHash } from "web3/constants";
+import { zeroHash } from "constants/constants";
 import { infiniteApproveSpending } from "web3/gem";
 import { getMintedThisWeek, getClamsPerWeek } from "web3/clamShop";
-import { clamShopAddress } from "web3/constants";
+import { clamShopAddress } from "constants/constants";
 import { actions } from "store/redux";
 
 import {

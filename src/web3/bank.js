@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 import { formatEther } from "@ethersproject/units";
 
 import bankAbi from "./abi/Bank.json";
-import { bankAddress, gemTokenAddress, shellTokenAddress } from "./constants";
+import { bankAddress, gemTokenAddress, shellTokenAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 import { getAccount, formatFromWei } from "./shared";
 

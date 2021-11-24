@@ -4,7 +4,7 @@ import { useInterval } from "react-use";
 import { useHistory, useLocation } from "react-router-dom";
 import { actions } from "store/redux";
 import { checkHasClamToCollect } from "web3/clam";
-import { zeroHash } from "web3/constants";
+import { zeroHash } from "constants/constants";
 
 import Character from "components/characters/CharacterWrapper";
 import { PageTitle } from "components/PageTitle";

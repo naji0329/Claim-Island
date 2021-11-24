@@ -21,7 +21,7 @@ import { getBalance } from "web3/gem";
 import { canCurrentlyProducePearl, canStillProducePearls } from "web3/clam";
 import { getPearlData, tokenOfOwnerByIndex, accountPearlBalance } from "web3/pearl";
 import { formatFromWei } from "web3/shared";
-import { zeroHash } from "web3/constants";
+import { zeroHash } from "constants/constants";
 import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
 
 import {

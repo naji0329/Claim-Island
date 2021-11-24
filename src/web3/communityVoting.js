@@ -1,5 +1,5 @@
 import communityVotingAbi from "./abi/CommunityVoting.json";
-import { communityVotingAddress } from "./constants";
+import { communityVotingAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 
 export const voteOptionOne = async (account) => {

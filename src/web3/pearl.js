@@ -1,5 +1,5 @@
 import pearlNFTAbi from "./abi/Pearl.json";
-import { pearlNFTAddress } from "./constants";
+import { pearlNFTAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 
 const balanceOf = async ({ account, abi, address }) => {

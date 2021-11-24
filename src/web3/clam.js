@@ -1,10 +1,10 @@
 import clamNFTAbi from "./abi/Clam.json";
 import clamShopAbi from "./abi/ClamShop.json";
-import { clamNFTAddress, clamShopAddress } from "./constants";
+import { clamNFTAddress, clamShopAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 import { getOracleFee } from "./rng";
 import { getRNGFromHashRequest } from "./rng";
-import { zeroHash } from "./constants";
+import { zeroHash } from "../constants/constants";
 import { getDNADecoded } from "./dnaDecoder";
 import BigNumber from "bignumber.js";
 
