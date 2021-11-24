@@ -3,7 +3,7 @@ import { useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import convert from "color-convert";
 
-import { PEARLS_SHAPES } from "../../constants/pearls";
+import { PEARLS_SHAPES } from "../../constants/ui/pearls";
 import BaroquePearlModel from "../models/pearlModels/BaroquePearlModel";
 import ButtonPearlModel from "../models/pearlModels/ButtonPearlModel";
 import DropPearlModel from "../models/pearlModels/DropPearlModel";

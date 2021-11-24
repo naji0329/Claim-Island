@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import * as L from "leaflet";
 
 import mapImg from "../assets/img/clamswap_navigation_map_tr.png";
-import { HOME_ICONS } from "../constants";
+import { HOME_ICONS } from "../constants/ui";
 
 // Main Map Component
 const Map = (props) => {
