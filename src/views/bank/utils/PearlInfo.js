@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "redux-zero/react";
 import { actions } from "store/redux";
+import ReactTooltip from "react-tooltip";
 
 import { burnPearl } from "web3/pearlBurner";
+import { formatFromWei } from "web3/shared";
 import NFTUnknown from "assets/img/pearl_unknown.png";
 import classnames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import { formatMsToDuration } from "utils/time";
 
 import { burnPearlConfirmation, onBurnPearlSuccess } from "../character/BurnPearl";
 import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepositHarvest";
@@ -31,7 +34,11 @@ const PearlInfo = ({
   showBurn,
   updateCharacter,
   updateAccount,
+  maxBoostIn,
+  pearlPrice,
 }) => {
+  const maxBoostInDays = maxBoostIn / (1000 * 60 * 60 * 24);
+  const maxApr = (formatFromWei(pearlPrice) / Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2) / (maxBoostInDays + 30) * 365).toFixed(2);
   const [inTx, setInTx] = useState(false);
 
   const handleBurn = () => {
@@ -73,6 +80,7 @@ const PearlInfo = ({
 
   return (
     <>
+      <ReactTooltip multiline={true} />
       <div className="w-full flex">
         <div className="w-32 mr-4 h-32 overflow-hidden">
           <img src={image} className="rounded-full" />
@@ -81,11 +89,8 @@ const PearlInfo = ({
           <InfoLine
             label={
               <>
-                $GEM yield&nbsp;
-                <button
-                  data-tip="Streamed over 30 days"
-                  className="pointer-events-auto tooltip tooltip-bottom"
-                >
+                Max GEM Boost&nbsp;
+                <button data-tip="Streamed linearly over 30 days.<br />Max GEM Boost is available when traits match with the Bank's requirements.<br />Claiming the boost without a match will result in a 50% reduction of GEM Boost.">
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
               </>
@@ -93,6 +98,18 @@ const PearlInfo = ({
             value={Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2)}
           />
 
+          <InfoLine
+            label={
+              <>
+                Max APR&nbsp;
+                <button data-tip="GEM APR assuming the Pearl is redeemed for maximum boost as early as possible">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </button>
+              </>
+            }
+            value={maxApr}
+          />
+          <InfoLine label="Max boost in:" value={formatMsToDuration(maxBoostIn)} />
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
           <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
           <div className="w-full flex justify-between my-2">
