@@ -12,6 +12,7 @@ import {
 } from "web3/pearl";
 import { color, shape, periodStart, periodInSeconds, periodCheckpoint } from "web3/pearlBurner";
 import { stakePrice } from "web3/pearlFarm";
+import { getGemPrice } from "web3/pancakeRouter";
 import { useTimer } from "hooks/useTimer";
 import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
 import PearlInfo from "./PearlInfo";
@@ -28,6 +29,8 @@ const BurnPearlModal = (props) => {
   const [eligibleColor, setEligibleColor] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
   const [periodInSecs, setPeriodInSecs] = useState("");
+  const [pearlPrice, setPearlPrice] = useState(0);
+  const [gemPriceUSD, setGemPriceUSD] = useState(1);
 
   const calculateTimeLeft = () => {
     if (startOfWeek === "") return "calculating...";
@@ -65,6 +68,15 @@ const BurnPearlModal = (props) => {
 
       const periodInSecs = await periodInSeconds();
       setPeriodInSecs(periodInSecs);
+    } catch (err) {
+      console.error(err);
+      updateAccount({ error: err.message });
+    }
+
+    try {
+      const [priceForPearlInGem, gemPrice] = await Promise.all([stakePrice(), getGemPrice()]);
+      setPearlPrice(priceForPearlInGem);
+      setGemPriceUSD(Number(Number(Number(gemPrice).toFixed(2)).toLocaleString()));
     } catch (err) {
       console.error(err);
       updateAccount({ error: err.message });
@@ -136,6 +148,8 @@ const BurnPearlModal = (props) => {
                   period: periodInSecs,
                   startOfWeek,
                 })}
+                pearlPrice={pearlPrice}
+                gemPriceUSD={gemPriceUSD}
               />
             ))
           ) : (
@@ -161,6 +175,8 @@ const BurnPearlModal = (props) => {
                     period: periodInSecs,
                     startOfWeek,
                   })}
+                  pearlPrice={pearlPrice}
+                  gemPriceUSD={gemPriceUSD}
                 />
               ))
             ) : (

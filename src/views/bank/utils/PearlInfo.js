@@ -28,7 +28,6 @@ const InfoLine = ({ label, value }) => (
   </div>
 );
 
-
 const PearlInfo = ({
   pearl,
   isEligible,
@@ -38,19 +37,20 @@ const PearlInfo = ({
   updateCharacter,
   updateAccount,
   maxBoostIn,
+  pearlPrice,
+  gemPriceUSD,
 }) => {
-  const [gemPriceUSD, setGemPriceUSD] = useState(1);
-
-  const fetchGemPrice = async () => {
-    const gemPrice = await getGemPrice();
-    setGemPriceUSD(Number(Number(Number(gemPrice).toFixed(2)).toLocaleString()));
-  }
-
-  fetchGemPrice();
-
   const maxBoostInDays = maxBoostIn / (1000 * 60 * 60 * 24);
 
-  const maxApr = Number((Number(formatUnits(String(pearl.bonusRewards), 18)) / formatFromWei(pearlPrice) / (maxBoostInDays + 30) * 365 * 100).toFixed(2)).toLocaleString();
+  const maxApr = Number(
+    (
+      (Number(formatUnits(String(pearl.bonusRewards), 18)) /
+        formatFromWei(pearlPrice) /
+        (maxBoostInDays + 30)) *
+      365 *
+      100
+    ).toFixed(2)
+  ).toLocaleString();
 
   const [inTx, setInTx] = useState(false);
 
