@@ -19,12 +19,15 @@ import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepos
 
 import { formatUnits } from "@ethersproject/units";
 
+import { getGemPrice } from "web3/pancakeRouter";
+
 const InfoLine = ({ label, value }) => (
   <div className="w-full flex justify-between">
     <span className="text-gray-500">{label}</span>
     <span className="text-gray-500">{value}</span>
   </div>
 );
+
 
 const PearlInfo = ({
   pearl,
@@ -36,6 +39,19 @@ const PearlInfo = ({
   updateAccount,
   maxBoostIn,
 }) => {
+  const [gemPriceUSD, setGemPriceUSD] = useState(1);
+
+  const fetchGemPrice = async () => {
+    const gemPrice = await getGemPrice();
+    setGemPriceUSD(Number(Number(Number(gemPrice).toFixed(2)).toLocaleString()));
+  }
+
+  fetchGemPrice();
+
+  const maxBoostInDays = maxBoostIn / (1000 * 60 * 60 * 24);
+
+  const maxApr = Number((Number(formatUnits(String(pearl.bonusRewards), 18)) / formatFromWei(pearlPrice) / (maxBoostInDays + 30) * 365 * 100).toFixed(2)).toLocaleString();
+
   const [inTx, setInTx] = useState(false);
 
   const handleBurn = () => {
@@ -86,13 +102,18 @@ const PearlInfo = ({
           <InfoLine
             label={
               <>
-                Max GEM Boost&nbsp;
-                <button data-tip="Streamed linearly over 30 days.<br />Max GEM Boost is available when traits match with the Bank's requirements.<br />Claiming the boost without a match will result in a 50% reduction of GEM Boost.">
+                Max GEM Yield&nbsp;
+                <button data-tip="Streamed linearly over 30 days.<br />Max GEM Yield is available when traits match with the Bank's requirements.<br />Claiming the boost without a match will result in a 50% reduction of GEM Yield.">
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
               </>
             }
-            value={Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2)}
+            value={
+              <>
+              {Number(Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2)).toLocaleString()}
+              &nbsp;(${Number((gemPriceUSD * Number(formatUnits(String(pearl.bonusRewards), 18))).toFixed(2)).toLocaleString()})
+              </>
+            }
           />
 
           <InfoLine
@@ -104,7 +125,11 @@ const PearlInfo = ({
                 </button>
               </>
             }
-            value="N/A"
+            value={
+              <>
+                {maxApr}%
+              </>
+            }
           />
           <InfoLine label="Max boost in:" value={formatMsToDuration(maxBoostIn)} />
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
