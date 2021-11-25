@@ -35,10 +35,7 @@ const PearlInfo = ({
   updateCharacter,
   updateAccount,
   maxBoostIn,
-  pearlPrice,
 }) => {
-  const maxBoostInDays = maxBoostIn / (1000 * 60 * 60 * 24);
-  const maxApr = (formatFromWei(pearlPrice) / Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2) / (maxBoostInDays + 30) * 365).toFixed(2);
   const [inTx, setInTx] = useState(false);
 
   const handleBurn = () => {
@@ -85,7 +82,7 @@ const PearlInfo = ({
         <div className="w-32 mr-4 h-32 overflow-hidden">
           <img src={image} className="rounded-full" />
         </div>
-        <div className="w-3/5">
+        <div className="flex-grow">
           <InfoLine
             label={
               <>
@@ -107,7 +104,7 @@ const PearlInfo = ({
                 </button>
               </>
             }
-            value={maxApr}
+            value="N/A"
           />
           <InfoLine label="Max boost in:" value={formatMsToDuration(maxBoostIn)} />
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />

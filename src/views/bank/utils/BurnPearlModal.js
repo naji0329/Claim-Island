@@ -28,7 +28,6 @@ const BurnPearlModal = (props) => {
   const [eligibleColor, setEligibleColor] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
   const [periodInSecs, setPeriodInSecs] = useState("");
-  const [pearlPrice, setPearlPrice] = useState(0);
 
   const calculateTimeLeft = () => {
     if (startOfWeek === "") return "calculating...";
@@ -55,8 +54,7 @@ const BurnPearlModal = (props) => {
 
       const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainId);
       setPearls(ownedPearls);
-      const priceForPearlInGem = await stakePrice();
-      setPearlPrice(priceForPearlInGem);
+
       const elShape = await shape();
       const elColor = await color();
       setEligibleShape(elShape);
@@ -138,14 +136,13 @@ const BurnPearlModal = (props) => {
                   period: periodInSecs,
                   startOfWeek,
                 })}
-                pearlPrice={pearlPrice}
               />
             ))
           ) : (
             <p>No pearls available</p>
           )}
         </div>
-        <div className="w-1/2 bg-gray-200 rounded-lg p-3 flex flex-col max-h-160">
+        <div className="w-1/2 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160">
           <div className="overflow-y-auto">
             <p className="font-bold mb-4">Not available this week</p>
             {notEligiblePearls.length ? (
@@ -164,7 +161,6 @@ const BurnPearlModal = (props) => {
                     period: periodInSecs,
                     startOfWeek,
                   })}
-                  pearlPrice={pearlPrice}
                 />
               ))
             ) : (
