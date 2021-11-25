@@ -38,7 +38,9 @@ const PearlInfo = ({
   pearlPrice,
 }) => {
   const maxBoostInDays = maxBoostIn / (1000 * 60 * 60 * 24);
-  const maxApr = (formatFromWei(pearlPrice) / Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2) / (maxBoostInDays + 30) * 365).toFixed(2);
+
+  const maxApr = Number((Number(formatUnits(String(pearl.bonusRewards), 18)) / formatFromWei(pearlPrice) / (maxBoostInDays + 30) * 365 * 100).toFixed(2)).toLocaleString();
+
   const [inTx, setInTx] = useState(false);
 
   const handleBurn = () => {
@@ -89,7 +91,7 @@ const PearlInfo = ({
           <InfoLine
             label={
               <>
-                Max GEM Boost&nbsp;
+                Max GEM Yield&nbsp;
                 <button data-tip="Streamed linearly over 30 days.<br />Max GEM Boost is available when traits match with the Bank's requirements.<br />Claiming the boost without a match will result in a 50% reduction of GEM Boost.">
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
@@ -107,7 +109,11 @@ const PearlInfo = ({
                 </button>
               </>
             }
-            value={maxApr}
+            value={
+              <>
+                {maxApr}%
+              </>
+            }
           />
           <InfoLine label="Max boost in:" value={formatMsToDuration(maxBoostIn)} />
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
