@@ -44,9 +44,9 @@ const PearlInfo = ({
 
   const maxApr = Number(
     (
-      (Number(formatUnits(String(pearl.bonusRewards), 18)) /
+      ((Number(formatUnits(String(pearl.bonusRewards), 18)) - formatFromWei(pearlPrice)) /
         formatFromWei(pearlPrice) /
-        (maxBoostInDays + 30)) *
+        ((Math.ceil((Date.now() - pearl.pearlDataValues.birthTime) / (1000 * 60 * 60 * 24)) + maxBoostInDays) % 72 + 30)) *
       365 *
       100
     ).toFixed(2)
