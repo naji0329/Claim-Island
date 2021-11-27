@@ -17,11 +17,11 @@ import {
   gemsTransferred,
 } from "web3/pearlFarm";
 import { getRNGFromHashRequest } from "web3/rng";
-import { getBalance } from "web3/gem";
+import { getAllowance, getBalance } from "web3/gem";
 import { canCurrentlyProducePearl, canStillProducePearls } from "web3/clam";
 import { getPearlData, tokenOfOwnerByIndex, accountPearlBalance } from "web3/pearl";
 import { formatFromWei } from "web3/shared";
-import { zeroHash } from "constants/constants";
+import { pearlFarmAddress, zeroHash } from "constants/constants";
 import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
 
 import {
@@ -34,6 +34,7 @@ import {
 } from "./character/pearlCollection";
 
 import ActionButton from "views/bank/utils/ActionButton";
+import BigNumber from "bignumber.js";
 
 const FarmItem = ({
   clamId,
@@ -59,7 +60,7 @@ const FarmItem = ({
   const [canProducePearl, setCanProducePearl] = useState(false);
   const [readyForPearl, setReadyForPearl] = useState(false);
   const [gemApproved, setGemApproved] = useState(false);
-  const [pearlPrice, setPearlPrice] = useState(new BigNumber(0));
+  const [pearlPrice, setPearlPrice] = useState("0");
   const [isPearlCollected, setIsPearlCollected] = useState(false);
   const isWithdrawing = withdrawingClamId === clamId;
   const calculateTimeLeft = useCallback(() => {
@@ -106,6 +107,7 @@ const FarmItem = ({
         const gemAllowance = await getAllowance(address, pearlFarmAddress).then(
           (v) => new BigNumber(v)
         );
+
         setGemApproved(pPriceAsBigNumber.lt(gemAllowance));
       } catch (err) {
         updateAccount({ error: err.message });

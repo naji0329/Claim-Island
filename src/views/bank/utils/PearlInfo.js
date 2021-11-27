@@ -10,10 +10,15 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
-import { burnPearlConfirmation, onBurnPearlSuccess } from "../character/BurnPearl";
+import {
+  burnPearlConfirmation,
+  onBurnPearlSuccess,
+  forfeitPearlConfirmation,
+} from "../character/BurnPearl";
 import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepositHarvest";
 
 import { formatUnits } from "@ethersproject/units";
+import BigNumber from "bignumber.js";
 
 const InfoLine = ({ label, value }) => (
   <div className="flex justify-between w-full">
@@ -22,25 +27,43 @@ const InfoLine = ({ label, value }) => (
   </div>
 );
 
-const PearlInfo = ({ pearl, isLast, isNativeStaker, showBurn, updateCharacter, updateAccount }) => {
+const PearlInfo = ({
+  pearl,
+  isLast,
+  isNativeStaker,
+  showBurn,
+  updateCharacter,
+  updateAccount,
+  boosted,
+}) => {
   const [inTx, setInTx] = useState(false);
+  const bonusReward = boosted
+    ? pearl.bonusRewards
+    : new BigNumber(pearl.bonusRewards).div(2).toString();
+
+  const bonusRewardFormatted = Number(formatUnits(bonusReward, 18)).toFixed(2);
 
   const handleBurn = () => {
-    const bonusReward = Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2);
-    return burnPearlConfirmation(updateCharacter, String(bonusReward), async () => {
-      await executeBurnPearl();
+    return burnPearlConfirmation(updateCharacter, bonusRewardFormatted, () => {
+      forfeitPearlConfirmation(
+        updateCharacter,
+        bonusRewardFormatted,
+        (+bonusRewardFormatted / 2).toFixed(2),
+        async () => await executeBurnPearl(false),
+        async () => await executeBurnPearl(true)
+      );
     });
   };
 
-  const executeBurnPearl = async () => {
+  const executeBurnPearl = async (forfeit) => {
     try {
       setInTx(true);
       onDepositHarvestTxn(updateCharacter);
 
-      await burnPearl(pearl.pearlId, false); // TODO: forfeitPearl
+      await burnPearl(pearl.pearlId, forfeit);
 
       toast.success("Your pearl has been burned!");
-      onBurnPearlSuccess(updateCharacter); // character speak
+      onBurnPearlSuccess(updateCharacter, forfeit); // character speak
     } catch (err) {
       onDepositHarvestError(updateCharacter);
       updateAccount({ error: err.message });
@@ -73,15 +96,17 @@ const PearlInfo = ({ pearl, isLast, isNativeStaker, showBurn, updateCharacter, u
             label={
               <>
                 $GEM yield&nbsp;
-                <button
-                  data-tip="Streamed over 30 days"
+                <div
+                  data-tip={`Streamed over 30 days${
+                    !boosted && ". Yield is half of what it would be, if boosted."
+                  }`}
                   className="pointer-events-auto tooltip tooltip-bottom"
                 >
                   <FontAwesomeIcon icon={faInfoCircle} />
-                </button>
+                </div>
               </>
             }
-            value={Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2)}
+            value={bonusRewardFormatted}
           />
 
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />

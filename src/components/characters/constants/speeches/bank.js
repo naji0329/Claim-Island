@@ -85,15 +85,23 @@ export const BANK_SPEECH = {
       skip: false,
     },
     burn_pearl_confirmation: {
-      text: ({ gems }) =>
-        `This will forfeit your Pearl in return for a boost of ${gems} $GEM streamed over 30 days. This is irreversible and you will not be able to get your Pearl back. Are you sure you want to continue?`,
+      text: "This will forfeit your Pearl. This is irreversible and you will not be able to get your Pearl back. Are you sure you want to continue?",
       next: false,
       dismiss: true,
       skip: false,
     },
-
+    forfeit_pearl: {
+      text: ({ fullReward, halfReward }) =>
+        `Do you want to stream ${fullReward} $GEM over 30 days? Or forfeit half of the rewards and get ${halfReward} $GEM now?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
     burn_pearl_success: {
-      text: "All done! Your Pearl has been forfeited and your $GEM boost is now streaming.",
+      text: ({ forfeit }) =>
+        `All done! Your Pearl has been forfeited and your $GEM boost ${
+          forfeit ? "has been transferred" : "is now streaming"
+        }.`,
       next: false,
       dismiss: true,
       skip: false,

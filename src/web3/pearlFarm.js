@@ -11,7 +11,7 @@ const pearlFarm = () =>
   });
 
 export const stakePrice = async () => {
-  return await pearlFarm().methods.pearlPrice().call();
+  return await pearlFarm().methods.getUpdatedPearlPrice().call();
 };
 
 export const getStakedClamIds = async (account) => {

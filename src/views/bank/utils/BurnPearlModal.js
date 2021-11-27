@@ -85,16 +85,6 @@ const BurnPearlModal = (props) => {
     [pearls, boostedShape, boostedColor]
   );
 
-  const renderPearl = (pearl, i, a) => (
-    <PearlInfo
-      key={pearl.pearlId}
-      pearl={pearl}
-      isLast={i === a.length - 1}
-      isNativeStaker={isNativeStaker}
-      showBurn
-    />
-  );
-
   return (
     <div className="w-full flex flex-col">
       <h1 className="text-3xl font-aristotelica-bold text-gray-500 text-center mb-4">
@@ -102,7 +92,7 @@ const BurnPearlModal = (props) => {
       </h1>
       <div className="w-full bg-gray-200 rounded-lg mb-6 p-4 flex justify-between">
         <div className="flex flex-col w-3/5">
-          <span className="font-bold">Pearls with these traits are available:</span>
+          <span className="font-bold">Pearls with these traits are boosted:</span>
           <div>
             <span className="text-gray-500 inline-block w-16">Shape:</span>
             <span className="text-gray-500">{boostedShape}</span>
@@ -128,12 +118,37 @@ const BurnPearlModal = (props) => {
       <div className="w-full flex justify-between">
         <div className="w-1/2 mr-8 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160 overflow-y-auto">
           <p className="font-bold mb-4">Available for boost</p>
-          {boostedPearls.length ? boostedPearls.map(renderPearl) : <p>No pearls available</p>}
+          {boostedPearls.length ? (
+            boostedPearls.map((pearl, i, a) => (
+              <PearlInfo
+                key={pearl.pearlId}
+                pearl={pearl}
+                isLast={i === a.length - 1}
+                isNativeStaker={isNativeStaker}
+                showBurn
+                boosted
+              />
+            ))
+          ) : (
+            <p>No pearls available</p>
+          )}
         </div>
         <div className="w-1/2 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160">
           <div className="overflow-y-auto">
-            <p className="font-bold mb-4">Not available this week</p>
-            {regularPearls.length ? regularPearls.map(renderPearl) : <p>No pearls available</p>}
+            <p className="font-bold mb-4">Not boosted this week &nbsp;</p>
+            {regularPearls.length ? (
+              regularPearls.map((pearl, i, a) => (
+                <PearlInfo
+                  key={pearl.pearlId}
+                  pearl={pearl}
+                  isLast={i === a.length - 1}
+                  isNativeStaker={isNativeStaker}
+                  showBurn
+                />
+              ))
+            ) : (
+              <p>No pearls available</p>
+            )}
           </div>
         </div>
       </div>
