@@ -135,6 +135,15 @@ export const getPrice = async () => {
   return value;
 };
 
+export const getPriceUsd = async () => {
+  const clamShop = contractFactory({
+    abi: clamShopAbi,
+    address: clamShopAddress,
+  });
+  const value = await clamShop.methods.priceUsd().call();
+  return value;
+};
+
 export const getWeekSupply = async () => {
   const clamShop = contractFactory({
     abi: clamShopAbi,

@@ -14,7 +14,13 @@ import ArrowDown from "assets/img/arrow-down.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import { buyClam, getPrice, checkHasClamToCollect, buyClamWithVestedTokens } from "web3/clam";
+import {
+  buyClam,
+  getPrice,
+  getPriceUsd,
+  checkHasClamToCollect,
+  buyClamWithVestedTokens,
+} from "web3/clam";
 import { zeroHash } from "constants/constants";
 import { infiniteApproveSpending } from "web3/gem";
 import { getMintedThisWeek, getClamsPerWeek } from "web3/clamShop";
@@ -51,6 +57,7 @@ const ClamBuyModal = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [clamPrice, setClamPrice] = useState(0);
+  const [clamPriceUsd, setClamPriceUsd] = useState(0);
   const [lockedGem, setLockedGem] = useState(0);
   const [canBuy, setCanBuy] = useState(false);
   const [mintedThisWeek, setMintedThisWeek] = useState("...");
@@ -62,6 +69,8 @@ const ClamBuyModal = ({
     const fetchData = async () => {
       const price = await getPrice();
       setClamPrice(price);
+      const priceUsd = await getPriceUsd();
+      setClamPriceUsd(priceUsd);
       const locked = await getVestedGem(chainId);
       setLockedGem(locked);
 
@@ -179,14 +188,18 @@ const ClamBuyModal = ({
                 <div className="flex flex-col text-sm text-gray-600">
                   <div className="flex flex-col">
                     <div className="flex flex-row items-center justify-between">
-                      <div className="flex">
-                        <img className="w-12 mr-2" src={ClamIcon} />
-                        <div className="text-center text-xl w-20 text-black p-2 font-extrabold">
-                          {renderNumber(+formatEther(clamPrice), 2)}
+                      <div className="flex items-center text-xl">
+                        <img className="w-12 h-12 mr-2" src={ClamIcon} />
+                        <div className="flex flex-col text-right w-20 text-black p-2 font-extrabold">
+                          <span>{renderNumber(+formatEther(clamPrice), 2)}</span>
+                          <span className="text-sm">
+                            {renderNumber(+formatEther(clamPriceUsd), 0)}
+                          </span>
                         </div>
-                        <span className="flex items-center text-lg font-extrabold font-sans mx-1">
-                          GEM
-                        </span>
+                        <div className="flex flex-col items-start font-sans mx-1">
+                          <span className="text-lg">GEM</span>
+                          <span className="text-sm ">USD</span>
+                        </div>
                       </div>
                       <div className="flex flex-col my-2 pl-4 w-1/2">
                         <div className="flex justify-between">
