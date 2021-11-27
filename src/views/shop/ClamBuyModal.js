@@ -29,6 +29,7 @@ import {
 } from "./character/BuyClam";
 import { formatNumber } from "../bank/utils";
 import { getVestedGem } from "web3/gemLocker";
+import { renderNumber } from "utils/number";
 
 const Divider = () => (
   <div className="w-full flex flex-col justify-center items-center my-2">
@@ -181,7 +182,7 @@ const ClamBuyModal = ({
                       <div className="flex">
                         <img className="w-12 mr-2" src={ClamIcon} />
                         <div className="text-center text-xl w-20 text-black p-2 font-extrabold">
-                          {formatEther(clamPrice)}
+                          {renderNumber(+formatEther(clamPrice), 2)}
                         </div>
                         <span className="flex items-center text-lg font-extrabold font-sans mx-1">
                           GEM
@@ -198,7 +199,10 @@ const ClamBuyModal = ({
                         </div>
                         <div className="flex justify-between">
                           <span>1 CLAM =</span>
-                          <span>{formatEther(clamPrice)} GEM</span>
+                          <span>
+                            {renderNumber(+formatEther(clamPrice), 2)}
+                            GEM
+                          </span>
                         </div>
                       </div>
                     </div>

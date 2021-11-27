@@ -42,7 +42,7 @@ export default ({
           <RowStat label="Rarity" value={get(dnaDecoded, "rarity")} />
           <RowStat label="Pearls remaining" value={+pearlProductionCapacity - +pearlsProduced} />
           <RowStat label="Size" value={get(dnaDecoded, "size")} />
-          <RowStat label="Pearl boost" value={formatUnits(String(pearlBoost), 18)} />
+          <RowStat label="Pearl boost" value={pearlBoost} />
         </div>
       ),
     },
