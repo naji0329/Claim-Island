@@ -8,7 +8,7 @@ import { contractFactory } from "./index";
 import { getAccount, formatFromWei } from "./shared";
 
 import { aggregate } from "./multicall";
-import { poolAssets } from "../views/bank/poolsAssets";
+import poolAssets from "../views/bank/poolsAssets";
 import { getUsdValueOfPair, getGemPrice, getUsdPriceOfToken } from "./pancakeRouter";
 import { totalSupply } from "./bep20";
 

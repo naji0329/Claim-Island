@@ -53,6 +53,7 @@
   },
   "scripts": {
     "start": "craco start",
+    "start:local": "export REACT_APP_BSC_TESTNET_FORK=true && craco start",
     "local": "NODE_ENV=local craco start",
     "build": "craco build",
     "test": "craco test",

@@ -1,6 +1,6 @@
 import { gemTokenAddress, shellTokenAddress } from "constants/constants";
 
-export const poolAssets = {
+const mainnetPools = {
   [gemTokenAddress]: {
     name: `$GEM`,
     images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
@@ -33,26 +33,6 @@ export const poolAssets = {
     isNative: true,
     risk: "High Risk",
   },
-  // "0xd7f3F922578480a8E6AD71f020C202505A2BCcb5": {
-  //   // testnet
-  //   name: `SHELL - BNB`, // dummy bnb - carapace
-  //   images: [
-  //     "https://clamisland.fi/favicon/android-chrome-192x192.png",
-  //     "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
-  //   ],
-  //   isNative: true,
-  //   risk: "High Risk",
-  // },
-  // "0xe981Bd77432db9F596eAA3836EbE3Fc2E2264039": {
-  //   // testnet
-  //   name: `GEM - BNB`, // dummy  bnb - jade
-  //   images: [
-  //     "https://clamisland.fi/favicon/android-chrome-192x192.png",
-  //     "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
-  //   ],
-  //   isNative: true,
-  //   risk: "High Risk",
-  // },
   "0xdD901faf9652D474b0A70263E13DA294990d49AE": {
     name: `BOG - BNB`, // real
     images: [
@@ -138,3 +118,42 @@ export const poolAssets = {
     risk: "Very Low Risk",
   },
 };
+
+const testnetPools = {
+  [gemTokenAddress]: {
+    name: `$GEM`,
+    images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
+    risk: "High Risk",
+    isSingleStake: true,
+    isNative: true,
+  },
+  [shellTokenAddress]: {
+    name: `$SHELL`,
+    images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
+    risk: "High Risk",
+    isSingleStake: true,
+    isNative: true,
+  },
+  "0xC5080b85bd6F7e926730892D2ED7dE24D574F4D2": {
+    name: `GEM - BNB`,
+    images: [
+      "https://clamisland.fi/favicon/android-chrome-192x192.png",
+      "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
+    ],
+    isNative: true,
+    risk: "High Risk",
+  },
+  "0x3783898F93dc4eF532Dc7128906f4E75FE29Ed87": {
+    // testnet
+    name: `SHELL - BNB`, // dummy bnb - carapace
+    images: [
+      "https://clamisland.fi/favicon/android-chrome-192x192.png",
+      "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
+    ],
+    isNative: true,
+    risk: "High Risk",
+  },
+};
+
+// this sets addresses of testnet when running locally. Change this if mainnet addresses are desired
+export default process.env.NODE_ENV === "development" ? testnetPools : mainnetPools;
