@@ -156,4 +156,7 @@ const testnetPools = {
 };
 
 // this sets addresses of testnet when running locally. Change this if mainnet addresses are desired
-export default process.env.NODE_ENV === "development" ? testnetPools : mainnetPools;
+export default process.env.NODE_ENV === "development" ||
+window.location.hostname === "clam-island-beta.web.app"
+  ? testnetPools
+  : mainnetPools;

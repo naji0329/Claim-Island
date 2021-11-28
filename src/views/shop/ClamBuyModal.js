@@ -46,7 +46,7 @@ const Divider = () => (
 );
 
 const ClamBuyModal = ({
-  account: { gemBalance, address, chainId, clamToCollect },
+  account: { gemBalance, address, clamToCollect },
   presale: { usersPurchasedClam },
   updateCharacter,
   updateAccount,
@@ -71,7 +71,7 @@ const ClamBuyModal = ({
       setClamPrice(price);
       const priceUsd = await getPriceUsd();
       setClamPriceUsd(priceUsd);
-      const locked = await getVestedGem(chainId);
+      const locked = await getVestedGem();
       setLockedGem(locked);
 
       setClamsPerWeek(await getClamsPerWeek());

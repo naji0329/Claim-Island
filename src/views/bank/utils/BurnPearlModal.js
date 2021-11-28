@@ -19,7 +19,6 @@ const BurnPearlModal = (props) => {
     account: { address, pearlBalance },
     updateAccount,
     isNativeStaker,
-    chainId,
   } = props;
   const [pearls, setPearls] = useState([]);
   const [boostedShape, setBoostedShape] = useState("");
@@ -48,10 +47,10 @@ const BurnPearlModal = (props) => {
   useAsync(async () => {
     try {
       const tokenIdsCalls = prepTokenOfOwnerByIndexMulticall(address, +pearlBalance);
-      const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
+      const tokenIdsResult = await aggregate(tokenIdsCalls);
       const tokenIdsDecoded = decodeTokenOfOwnerByIndexFromMulticall(tokenIdsResult.returnData);
 
-      const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainId);
+      const ownedPearls = await getPearlDataByIds(tokenIdsDecoded);
       setPearls(ownedPearls);
 
       const elShape = await shape();

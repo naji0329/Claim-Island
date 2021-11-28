@@ -17,7 +17,7 @@ import PearlInfo from "../bank/utils/PearlInfo";
 
 const formatShell = (value) => (value ? formatUnits(String(value), 18) : "0");
 
-const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev }) => {
+const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
   const [producedPearls, setProducedPearls] = useState([]);
   const [timeLeft, setTimeLeft] = useState(0);
   const [pearlBoost, setPearlBoost] = useState(0);
@@ -37,7 +37,7 @@ const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev })
     const init = async () => {
       setIsLoading(true);
       try {
-        const pearls = await getPearlDataByIds(clam.producedPearlIds, chainId);
+        const pearls = await getPearlDataByIds(clam.producedPearlIds);
         setProducedPearls(pearls);
 
         const boost = await getPearlBoost(clam.clamId);

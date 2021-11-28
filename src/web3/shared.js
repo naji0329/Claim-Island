@@ -52,9 +52,9 @@ export const getPearlImageFromCache = async ({ dna }) => {
   }
 };
 
-export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => {
+export const getClamsDataByIds = async ({ tokenIds, clamContract }) => {
   const clamDataCalls = clamContract.prepClamDataMulticall(tokenIds);
-  const clamDataResult = await aggregate(clamDataCalls, chainId);
+  const clamDataResult = await aggregate(clamDataCalls);
   const clamDataDecoded = clamContract.decodeClamDataFromMulticall(
     clamDataResult.returnData,
     tokenIds
@@ -62,14 +62,14 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
   const clamDnas = clamDataDecoded.map((data) => data.clamDataValues.dna);
 
   const producedPearlIdsCalls = clamContract.prepClamProducedPearlIds(tokenIds);
-  const producedPearlIdsResult = await aggregate(producedPearlIdsCalls, chainId);
+  const producedPearlIdsResult = await aggregate(producedPearlIdsCalls);
   const producedPearlIdsDecoded = clamContract.decodeProducedPearlIdsFromMulticall(
     producedPearlIdsResult.returnData,
     tokenIds
   );
 
   const dnaDecodedCalls = clamDnaDecoder.prepGetDnaDecodedMulticall(clamDnas);
-  const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
+  const dnaDecodedResult = await aggregate(dnaDecodedCalls);
   const dnaDecodedDecoded = clamDnaDecoder.decodeGetDnaDecodedFromMulticall(
     dnaDecodedResult.returnData,
     tokenIds
@@ -113,9 +113,9 @@ export const getClamsDataByIds = async ({ chainId, tokenIds, clamContract }) => 
   return clamsFiltered;
 };
 
-export const getPearlDataByIds = async (tokenIds, chainId) => {
+export const getPearlDataByIds = async (tokenIds) => {
   const pearlDataCalls = pearlShared.prepPearlDataMulticall(tokenIds);
-  const pearlDataResult = await aggregate(pearlDataCalls, chainId);
+  const pearlDataResult = await aggregate(pearlDataCalls);
   const pearlDataDecoded = pearlShared.decodePearlDataFromMulticall(
     pearlDataResult.returnData,
     tokenIds
@@ -123,7 +123,7 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
   const pearlDnas = pearlDataDecoded.map((data) => data.pearlDataValues.dna);
 
   const dnaDecodedCalls = pearlDnaDecoder.prepGetDnaDecodedMulticall(pearlDnas);
-  const dnaDecodedResult = await aggregate(dnaDecodedCalls, chainId);
+  const dnaDecodedResult = await aggregate(dnaDecodedCalls);
   const dnaDecodedDecoded = pearlDnaDecoder.decodeGetDnaDecodedFromMulticall(
     dnaDecodedResult.returnData,
     tokenIds
@@ -164,15 +164,15 @@ export const getPearlDataByIds = async (tokenIds, chainId) => {
   return pearlsFiltered;
 };
 
-export const getOwnedClams = async ({ chainId, address, balance, clamContract }) => {
+export const getOwnedClams = async ({ address, balance, clamContract }) => {
   // get owned clams
   const tokenIdsCalls = clamContract.prepTokenOfOwnerByIndexMulticall(address, +balance);
-  const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
+  const tokenIdsResult = await aggregate(tokenIdsCalls);
   const tokenIdsDecoded = clamContract.decodeTokenOfOwnerByIndexFromMulticall(
     tokenIdsResult.returnData
   );
   const [ownedClams] = await Promise.all([
-    getClamsDataByIds({ tokenIds: tokenIdsDecoded, chainId, clamContract }),
+    getClamsDataByIds({ tokenIds: tokenIdsDecoded, clamContract }),
   ]);
   // const stakedClamsImg = await addClamImg(stakedClams);
   // const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
@@ -180,14 +180,14 @@ export const getOwnedClams = async ({ chainId, address, balance, clamContract })
   return ownedClams;
 };
 
-export const getOwnedPearls = async ({ chainId, address, balance }) => {
+export const getOwnedPearls = async ({ address, balance }) => {
   const tokenIdsCalls = pearlShared.prepTokenOfOwnerByIndexMulticall(address, +balance);
-  const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
+  const tokenIdsResult = await aggregate(tokenIdsCalls);
   const tokenIdsDecoded = pearlShared.decodeTokenOfOwnerByIndexFromMulticall(
     tokenIdsResult.returnData
   );
 
-  const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainId);
+  const ownedPearls = await getPearlDataByIds(tokenIdsDecoded);
 
   return ownedPearls;
 };

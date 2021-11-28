@@ -23,7 +23,7 @@ import ActionButton from "./ActionButton";
 import { CONNECT_WALLET_TIP } from "../../../constants/ui";
 
 const DepositTab = ({
-  account: { address, chainId },
+  account: { address },
   bank: { depositAmount, selectedPool, ...bank },
   updateBank,
   updateCharacter,
@@ -66,7 +66,7 @@ const DepositTab = ({
       const depositBN = new BigNumber(depositAmount);
       const newDepositBN = currentDepositBN.plus(depositBN).toString();
 
-      const setUpPools = await getAllPools({ address, chainId });
+      const setUpPools = await getAllPools({ address });
 
       updateBank({
         pools: setUpPools, //update all pools

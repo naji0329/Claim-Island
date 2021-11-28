@@ -2,7 +2,10 @@ import mainnetAddresses from "./mainnet";
 import testnetAddresses from "./testnet";
 
 // this sets addresses of testnet when running locally. Change this if mainnet addresses are desired
-const addresses = process.env.NODE_ENV === "development" ? testnetAddresses : mainnetAddresses;
+const addresses =
+  process.env.NODE_ENV === "development" || window.location.hostname === "clam-island-beta.web.app"
+    ? testnetAddresses
+    : mainnetAddresses;
 
 export const ClamIslandChain = {
   BSC: 56,
@@ -11,16 +14,6 @@ export const ClamIslandChain = {
   Hardhat: 31337,
 };
 
-const localhostMulticallAddress =
-  process.env.REACT_APP_BSC_TESTNET_FORK === "true"
-    ? "0x28d387c0405Fb8eE7bBeB92A6D783A8436076487"
-    : "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1";
-
-export const multicallAddress = {
-  [ClamIslandChain.BSC]: "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1",
-  [ClamIslandChain.Localhost]: localhostMulticallAddress,
-  [ClamIslandChain.BSC_TESTNET]: "0x28d387c0405Fb8eE7bBeB92A6D783A8436076487",
-};
 // legacy contracts
 export const clamPresaleAddress = "0xAAEB1Ea585DbeF06349ac371EBBA54efa0713D1D";
 export const shellPresaleAddress = "0x28D51F0E6CC2138fB134986423cb7429E713763E";
@@ -50,6 +43,7 @@ export const pearlFarmAddress = addresses.pearlFarmAddress;
 export const pearlHuntAddress = addresses.pearlHuntAddress;
 
 export const pancakeRouterAddress = addresses.pancakeRouterAddress;
+export const multicallAddress = addresses.multicallAddress;
 
 export const wBNB = addresses.wBNB;
 export const BUSD = addresses.BUSD;

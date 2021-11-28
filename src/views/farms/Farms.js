@@ -46,7 +46,7 @@ import { ifPearlSendSaferoom } from "./utils";
 import { isEmpty } from "lodash";
 
 const Farms = ({
-  account: { clamBalance, chainId, isBSChain, address, clams = [] },
+  account: { clamBalance, isBSChain, address, clams = [] },
   updateCharacter,
   updateAccount,
   dispatchFetchAccountAssets,
@@ -178,7 +178,6 @@ const Farms = ({
             if (!isEmpty(clamsStakedIds)) {
               const stakedClams = await getClamsDataByIds({
                 tokenIds: clamsStakedIds,
-                chainId,
                 clamContract,
               });
 
@@ -247,7 +246,6 @@ const Farms = ({
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
           <ClamDetails
-            chainId={chainId}
             clam={selectedClam}
             clamProcessing={clamProcessing}
             updateAccount={updateAccount}

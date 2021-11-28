@@ -163,11 +163,11 @@ const ClamDeposit = ({
   dispatchFetchAccountAssets,
   toggleModal,
   updateAccount,
-  account: { address, chainId },
+  account: { address },
   setRefreshClams,
 }) => {
   const request = useAsync(async () => {
-    const pools = await getAllPools({ address, chainId });
+    const pools = await getAllPools({ address });
     return pools;
   });
 

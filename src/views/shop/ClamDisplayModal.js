@@ -10,7 +10,7 @@ import { accountClamBalance } from "web3/clam";
 import { actions } from "store/redux";
 import { getClamsDataByIds } from "web3/shared";
 
-const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance, chainId } }) => {
+const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance } }) => {
   const [clam, setClam] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,7 +28,6 @@ const ClamDisplayModal = ({ account: { address, clamToCollect, clamBalance, chai
 
           const [newestClam] = await getClamsDataByIds({
             tokenIds: [tokenId],
-            chainId,
             clamContract,
           });
 

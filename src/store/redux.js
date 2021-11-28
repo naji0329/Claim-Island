@@ -215,7 +215,7 @@ export const actions = (store) => ({
   dispatchFetchAccountAssets: async (state, value) => {
     console.log("dispatchFetchAccountAssets");
     const {
-      account: { address, chainId, isBSChain },
+      account: { address, isBSChain },
     } = state;
 
     if (isBSChain) {
@@ -235,14 +235,12 @@ export const actions = (store) => ({
       ]);
 
       const clams = await getOwnedClams({
-        chainId,
         address,
         balance: clamBalance,
         clamContract,
       });
 
       const pearls = await getOwnedPearls({
-        chainId,
         address,
         balance: pearlBalance,
       });
