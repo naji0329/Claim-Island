@@ -53,7 +53,6 @@ const Shop = ({
 
   useInterval(
     async () => {
-      console.log("interval", { clamToCollect });
       if (modalToShow === "collect" && clamToCollect === null) {
         const clamToCollect = await checkHasClamToCollect(address);
         updateAccount({

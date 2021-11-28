@@ -9,8 +9,6 @@ import { Clam3DView } from "components/clam3DView";
 import Accordion from "components/Accordion";
 import { Controls3DView } from "components/controls3DView";
 
-import { formatUnits } from "@ethersproject/units";
-
 export default ({
   dna,
   dnaDecoded,
