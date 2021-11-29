@@ -130,6 +130,7 @@ export const decodePearlDataFromMulticall = (values, tokenIds) => {
             dna: "uint256",
             pearlsRemaining: "uint256",
             gemBoost: "uint256",
+            pearlPrice: "uint256",
           },
         },
         values[index]

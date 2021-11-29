@@ -11,7 +11,6 @@ import {
   decodeTokenOfOwnerByIndexFromMulticall,
 } from "web3/pearl";
 import { color, shape, periodStart, periodInSeconds, periodCheckpoint } from "web3/pearlBurner";
-import { stakePrice } from "web3/pearlFarm";
 import { getGemPrice } from "web3/pancakeRouter";
 import { useTimer } from "hooks/useTimer";
 import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
@@ -28,7 +27,6 @@ const BurnPearlModal = (props) => {
   const [boostedColor, setBoostedColor] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
   const [periodInSecs, setPeriodInSecs] = useState("");
-  const [pearlPrice, setPearlPrice] = useState(0);
   const [gemPriceUSD, setGemPriceUSD] = useState(1);
 
   const calculateTimeLeft = () => {
@@ -57,24 +55,18 @@ const BurnPearlModal = (props) => {
       const ownedPearls = await getPearlDataByIds(tokenIdsDecoded);
       setPearls(ownedPearls);
 
-      const elShape = await shape();
-      const elColor = await color();
-      setBoostedShape(elShape);
-      setBoostedColor(elColor);
+      const _shape = await shape();
+      const _color = await color();
+      setBoostedShape(_shape);
+      setBoostedColor(_color);
 
       const start = await periodStart();
       setStartOfWeek(start);
 
       const periodInSecs = await periodInSeconds();
       setPeriodInSecs(periodInSecs);
-    } catch (err) {
-      console.error(err);
-      updateAccount({ error: err.message });
-    }
 
-    try {
-      const [priceForPearlInGem, gemPrice] = await Promise.all([stakePrice(), getGemPrice()]);
-      setPearlPrice(priceForPearlInGem);
+      const gemPrice = await getGemPrice();
       setGemPriceUSD(gemPrice);
     } catch (err) {
       console.error(err);
@@ -112,7 +104,6 @@ const BurnPearlModal = (props) => {
         period: periodInSecs,
         startOfWeek,
       })}
-      pearlPrice={pearlPrice}
       gemPriceUSD={gemPriceUSD}
     />
   );

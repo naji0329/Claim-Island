@@ -362,7 +362,7 @@
   },
   {
     "inputs": [],
-    "name": "currentBaseGemRewards_deprecated",
+    "name": "currentBaseGemRewards",
     "outputs": [
       {
         "internalType": "uint256",
@@ -747,6 +747,11 @@
       {
         "internalType": "uint256",
         "name": "gemBoost",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pearlPrice",
         "type": "uint256"
       }
     ],

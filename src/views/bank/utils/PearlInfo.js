@@ -38,21 +38,17 @@ const PearlInfo = ({
   updateCharacter,
   updateAccount,
   maxBoostIn,
-  pearlPrice,
   gemPriceUSD,
 }) => {
-  const msInDay = 86400000;
+  const { pearlPrice, birthTime } = pearl.pearlDataValues;
   const pearlPriceBN = new BigNumber(pearlPrice);
+  const showApr = pearlPriceBN.gt(0);
+  const msInDay = 86400000;
 
   const maxApr = new BigNumber(pearl.bonusRewards)
     .minus(pearlPriceBN)
     .div(pearlPriceBN)
-    .div(
-      ((Math.ceil((Date.now() - pearl.pearlDataValues.birthTime) / msInDay) +
-        maxBoostIn / msInDay) %
-        72) +
-        30
-    )
+    .div(((Math.ceil((Date.now() - birthTime) / msInDay) + maxBoostIn / msInDay) % 72) + 30)
     .multipliedBy(365 * 100)
     .toFormat(2)
     .toString();
@@ -139,7 +135,7 @@ const PearlInfo = ({
                 </button>
               </>
             }
-            value={<>{maxApr}%</>}
+            value={`${showApr ? maxApr : "?"}%`}
           />
           <InfoLine label="Max boost in:" value={formatMsToDuration(maxBoostIn)} />
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
