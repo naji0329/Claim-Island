@@ -41,13 +41,20 @@ const PearlInfo = ({
   pearlPrice,
   gemPriceUSD,
 }) => {
-  const maxBoostInDays = maxBoostIn / (1000 * 60 * 60 * 24);
+  const msInDay = 86400000;
+  const pearlPriceBN = new BigNumber(pearlPrice);
 
-  const maxApr = new BigNumber(pearlPrice)
-    .div(new BigNumber(pearl.bonusRewards))
-    .div(maxBoostInDays + 30)
-    .multipliedBy(365)
-    .toFormat(3)
+  const maxApr = new BigNumber(pearl.bonusRewards)
+    .minus(pearlPriceBN)
+    .div(pearlPriceBN)
+    .div(
+      ((Math.ceil((Date.now() - pearl.pearlDataValues.birthTime) / msInDay) +
+        maxBoostIn / msInDay) %
+        72) +
+        30
+    )
+    .multipliedBy(365 * 100)
+    .toFormat(2)
     .toString();
 
   const [inTx, setInTx] = useState(false);
