@@ -1,6 +1,6 @@
 import moment from "moment";
 
-import { pearlBoostOrder } from "constants/pearls";
+import { pearlBoostOrder } from "constants/ui/pearls";
 
 export const getPearlsMaxBoostTime = ({
   shape,

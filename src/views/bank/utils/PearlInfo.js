@@ -5,7 +5,6 @@ import { actions } from "store/redux";
 import ReactTooltip from "react-tooltip";
 
 import { burnPearl } from "web3/pearlBurner";
-import { formatFromWei } from "web3/shared";
 import NFTUnknown from "assets/img/pearl_unknown.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
@@ -22,6 +21,7 @@ import { onDepositHarvestTxn, onDepositHarvestError } from "../character/OnDepos
 
 import { formatUnits } from "@ethersproject/units";
 import BigNumber from "bignumber.js";
+import { renderNumber } from "utils/number";
 
 const InfoLine = ({ label, value }) => (
   <div className="flex justify-between w-full">
@@ -37,32 +37,22 @@ const PearlInfo = ({
   showBurn,
   updateCharacter,
   updateAccount,
-  boosted,
   maxBoostIn,
   pearlPrice,
   gemPriceUSD,
 }) => {
   const maxBoostInDays = maxBoostIn / (1000 * 60 * 60 * 24);
 
-  const maxApr = Number(
-    (
-      ((Number(formatUnits(String(pearl.bonusRewards), 18)) - formatFromWei(pearlPrice)) /
-        formatFromWei(pearlPrice) /
-        (((Math.ceil((Date.now() - pearl.pearlDataValues.birthTime) / (1000 * 60 * 60 * 24)) +
-          maxBoostInDays) %
-          72) +
-          30)) *
-      365 *
-      100
-    ).toFixed(2)
-  ).toLocaleString();
+  const maxApr = new BigNumber(pearlPrice)
+    .div(new BigNumber(pearl.bonusRewards))
+    .div(maxBoostInDays + 30)
+    .multipliedBy(365)
+    .toFormat(3)
+    .toString();
 
   const [inTx, setInTx] = useState(false);
-  const bonusReward = boosted
-    ? pearl.bonusRewards
-    : new BigNumber(pearl.bonusRewards).div(2).toString();
 
-  const bonusRewardFormatted = Number(formatUnits(bonusReward, 18)).toFixed(2);
+  const bonusRewardFormatted = Number(formatUnits(pearl.bonusRewards, 18)).toFixed(2);
 
   const handleBurn = () => {
     return burnPearlConfirmation(updateCharacter, bonusRewardFormatted, () => {
@@ -126,14 +116,9 @@ const PearlInfo = ({
             // value={bonusRewardFormatted}
             value={
               <>
-                {Number(
-                  Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2)
-                ).toLocaleString()}
+                {bonusRewardFormatted}
                 &nbsp;($
-                {Number(
-                  (gemPriceUSD * Number(formatUnits(String(pearl.bonusRewards), 18))).toFixed(2)
-                ).toLocaleString()}
-                )
+                {renderNumber(+(gemPriceUSD * +bonusRewardFormatted), 2)})
               </>
             }
           />

@@ -75,7 +75,7 @@ const BurnPearlModal = (props) => {
     try {
       const [priceForPearlInGem, gemPrice] = await Promise.all([stakePrice(), getGemPrice()]);
       setPearlPrice(priceForPearlInGem);
-      setGemPriceUSD(Number(Number(Number(gemPrice).toFixed(2)).toLocaleString()));
+      setGemPriceUSD(gemPrice);
     } catch (err) {
       console.error(err);
       updateAccount({ error: err.message });
@@ -95,6 +95,26 @@ const BurnPearlModal = (props) => {
         ({ dnaDecoded }) => dnaDecoded.shape !== boostedShape || dnaDecoded.color !== boostedColor
       ),
     [pearls, boostedShape, boostedColor]
+  );
+
+  const renderPearl = (pearl, i, a) => (
+    <PearlInfo
+      key={pearl.pearlId}
+      pearl={pearl}
+      isLast={i === a.length - 1}
+      isNativeStaker={isNativeStaker}
+      showBurn
+      maxBoostIn={getPearlsMaxBoostTime({
+        shape: pearl.dnaDecoded.shape,
+        colour: pearl.dnaDecoded.color,
+        currentBoostColour: boostedColor,
+        currentBoostShape: boostedShape,
+        period: periodInSecs,
+        startOfWeek,
+      })}
+      pearlPrice={pearlPrice}
+      gemPriceUSD={gemPriceUSD}
+    />
   );
 
   return (
@@ -130,57 +150,12 @@ const BurnPearlModal = (props) => {
       <div className="w-full flex justify-between">
         <div className="w-1/2 mr-8 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160 overflow-y-auto">
           <p className="font-bold mb-4">Available for boost</p>
-          {boostedPearls.length ? (
-            boostedPearls.map((pearl, i, a) => (
-              <PearlInfo
-                key={pearl.pearlId}
-                pearl={pearl}
-                isLast={i === a.length - 1}
-                isNativeStaker={isNativeStaker}
-                showBurn
-                boosted
-                maxBoostIn={getPearlsMaxBoostTime({
-                  shape: pearl.dnaDecoded.shape,
-                  colour: pearl.dnaDecoded.color,
-                  currentBoostColour: eligibleColor,
-                  currentBoostShape: eligibleShape,
-                  period: periodInSecs,
-                  startOfWeek,
-                })}
-                pearlPrice={pearlPrice}
-                gemPriceUSD={gemPriceUSD}
-              />
-            ))
-          ) : (
-            <p>No pearls available</p>
-          )}
+          {boostedPearls.length ? boostedPearls.map(renderPearl) : <p>No pearls available</p>}
         </div>
         <div className="w-1/2 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160">
           <div className="overflow-y-auto">
             <p className="font-bold mb-4">Not boosted this week &nbsp;</p>
-            {regularPearls.length ? (
-              regularPearls.map((pearl, i, a) => (
-                <PearlInfo
-                  key={pearl.pearlId}
-                  pearl={pearl}
-                  isLast={i === a.length - 1}
-                  isNativeStaker={isNativeStaker}
-                  showBurn
-                  maxBoostIn={getPearlsMaxBoostTime({
-                    shape: pearl.dnaDecoded.shape,
-                    colour: pearl.dnaDecoded.color,
-                    currentBoostColour: eligibleColor,
-                    currentBoostShape: eligibleShape,
-                    period: periodInSecs,
-                    startOfWeek,
-                  })}
-                  pearlPrice={pearlPrice}
-                  gemPriceUSD={gemPriceUSD}
-                />
-              ))
-            ) : (
-              <p>No pearls available</p>
-            )}
+            {regularPearls.length ? regularPearls.map(renderPearl) : <p>No pearls available</p>}
           </div>
         </div>
       </div>
