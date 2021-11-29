@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "redux-zero/react";
 import { actions } from "store/redux";
+import ReactTooltip from "react-tooltip";
 
 import { burnPearl } from "web3/pearlBurner";
+import { formatFromWei } from "web3/shared";
 import NFTUnknown from "assets/img/pearl_unknown.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import { formatMsToDuration } from "utils/time";
 
 import {
   burnPearlConfirmation,
@@ -35,7 +38,25 @@ const PearlInfo = ({
   updateCharacter,
   updateAccount,
   boosted,
+  maxBoostIn,
+  pearlPrice,
+  gemPriceUSD,
 }) => {
+  const maxBoostInDays = maxBoostIn / (1000 * 60 * 60 * 24);
+
+  const maxApr = Number(
+    (
+      ((Number(formatUnits(String(pearl.bonusRewards), 18)) - formatFromWei(pearlPrice)) /
+        formatFromWei(pearlPrice) /
+        (((Math.ceil((Date.now() - pearl.pearlDataValues.birthTime) / (1000 * 60 * 60 * 24)) +
+          maxBoostInDays) %
+          72) +
+          30)) *
+      365 *
+      100
+    ).toFixed(2)
+  ).toLocaleString();
+
   const [inTx, setInTx] = useState(false);
   const bonusReward = boosted
     ? pearl.bonusRewards
@@ -87,28 +108,48 @@ const PearlInfo = ({
 
   return (
     <>
-      <div className="flex w-full">
-        <div className="w-32 h-32 mr-4 overflow-hidden">
+      <ReactTooltip multiline={true} />
+      <div className="w-full flex">
+        <div className="w-32 mr-4 h-32 overflow-hidden">
           <img src={image} className="rounded-full" />
         </div>
-        <div className="w-3/5">
+        <div className="flex-grow">
           <InfoLine
             label={
               <>
-                $GEM yield&nbsp;
-                <div
-                  data-tip={`Streamed over 30 days${
-                    !boosted && ". Yield is half of what it would be, if boosted."
-                  }`}
-                  className="pointer-events-auto tooltip tooltip-bottom"
-                >
+                Max GEM Yield&nbsp;
+                <button data-tip="Streamed linearly over 30 days.<br />Max GEM Yield is available when traits match with the Bank's requirements.<br />Claiming the boost without a match will result in a 50% reduction of GEM Yield.">
                   <FontAwesomeIcon icon={faInfoCircle} />
-                </div>
+                </button>
               </>
             }
-            value={bonusRewardFormatted}
+            // value={bonusRewardFormatted}
+            value={
+              <>
+                {Number(
+                  Number(formatUnits(String(pearl.bonusRewards), 18)).toFixed(2)
+                ).toLocaleString()}
+                &nbsp;($
+                {Number(
+                  (gemPriceUSD * Number(formatUnits(String(pearl.bonusRewards), 18))).toFixed(2)
+                ).toLocaleString()}
+                )
+              </>
+            }
           />
 
+          <InfoLine
+            label={
+              <>
+                Max APR&nbsp;
+                <button data-tip="GEM APR assuming the Pearl is redeemed for maximum boost as early as possible">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </button>
+              </>
+            }
+            value={<>{maxApr}%</>}
+          />
+          <InfoLine label="Max boost in:" value={formatMsToDuration(maxBoostIn)} />
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
           <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
           <div className="flex justify-between w-full my-2">

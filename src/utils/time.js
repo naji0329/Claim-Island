@@ -14,11 +14,11 @@ export const secondsToFormattedTime = (timeinSeconds) => {
 };
 
 export const formatMsToDuration = (remainingMs) => {
-  const days = moment.duration(remainingMs).days();
+  const days = Math.floor(moment.duration(remainingMs).asDays());
   const hours = moment.duration(remainingMs).hours();
   const minutes = moment.duration(remainingMs).minutes();
   const seconds = moment.duration(remainingMs).seconds();
-  const duration = `${days}d, ${hours}h, ${minutes}m, ${seconds}s`;
+  const duration = `${days}d ${hours}:${minutes}:${seconds}`;
 
   return duration;
 };

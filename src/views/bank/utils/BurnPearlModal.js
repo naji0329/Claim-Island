@@ -11,7 +11,10 @@ import {
   decodeTokenOfOwnerByIndexFromMulticall,
 } from "web3/pearl";
 import { color, shape, periodStart, periodInSeconds, periodCheckpoint } from "web3/pearlBurner";
+import { stakePrice } from "web3/pearlFarm";
+import { getGemPrice } from "web3/pancakeRouter";
 import { useTimer } from "hooks/useTimer";
+import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
 import PearlInfo from "./PearlInfo";
 
 const BurnPearlModal = (props) => {
@@ -25,6 +28,8 @@ const BurnPearlModal = (props) => {
   const [boostedColor, setBoostedColor] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
   const [periodInSecs, setPeriodInSecs] = useState("");
+  const [pearlPrice, setPearlPrice] = useState(0);
+  const [gemPriceUSD, setGemPriceUSD] = useState(1);
 
   const calculateTimeLeft = () => {
     if (startOfWeek === "") return "calculating...";
@@ -39,7 +44,6 @@ const BurnPearlModal = (props) => {
   };
 
   const { timeLeft } = useTimer(calculateTimeLeft);
-
   const handlePeriodCheckpoint = async () => {
     await periodCheckpoint();
   };
@@ -63,6 +67,15 @@ const BurnPearlModal = (props) => {
 
       const periodInSecs = await periodInSeconds();
       setPeriodInSecs(periodInSecs);
+    } catch (err) {
+      console.error(err);
+      updateAccount({ error: err.message });
+    }
+
+    try {
+      const [priceForPearlInGem, gemPrice] = await Promise.all([stakePrice(), getGemPrice()]);
+      setPearlPrice(priceForPearlInGem);
+      setGemPriceUSD(Number(Number(Number(gemPrice).toFixed(2)).toLocaleString()));
     } catch (err) {
       console.error(err);
       updateAccount({ error: err.message });
@@ -126,6 +139,16 @@ const BurnPearlModal = (props) => {
                 isNativeStaker={isNativeStaker}
                 showBurn
                 boosted
+                maxBoostIn={getPearlsMaxBoostTime({
+                  shape: pearl.dnaDecoded.shape,
+                  colour: pearl.dnaDecoded.color,
+                  currentBoostColour: eligibleColor,
+                  currentBoostShape: eligibleShape,
+                  period: periodInSecs,
+                  startOfWeek,
+                })}
+                pearlPrice={pearlPrice}
+                gemPriceUSD={gemPriceUSD}
               />
             ))
           ) : (
@@ -143,6 +166,16 @@ const BurnPearlModal = (props) => {
                   isLast={i === a.length - 1}
                   isNativeStaker={isNativeStaker}
                   showBurn
+                  maxBoostIn={getPearlsMaxBoostTime({
+                    shape: pearl.dnaDecoded.shape,
+                    colour: pearl.dnaDecoded.color,
+                    currentBoostColour: eligibleColor,
+                    currentBoostShape: eligibleShape,
+                    period: periodInSecs,
+                    startOfWeek,
+                  })}
+                  pearlPrice={pearlPrice}
+                  gemPriceUSD={gemPriceUSD}
                 />
               ))
             ) : (
