@@ -17,7 +17,7 @@ import {
   gemsTransferred,
 } from "web3/pearlFarm";
 import { getRNGFromHashRequest } from "web3/rng";
-import { getAllowance, getBalance } from "web3/gem";
+import { getAllowance, getBalance, infiniteApproveSpending } from "web3/gem";
 import { canCurrentlyProducePearl, canStillProducePearls } from "web3/clam";
 import { getPearlData, tokenOfOwnerByIndex, accountPearlBalance } from "web3/pearl";
 import { formatFromWei } from "web3/shared";
@@ -35,6 +35,7 @@ import {
 
 import ActionButton from "views/bank/utils/ActionButton";
 import BigNumber from "bignumber.js";
+import { renderNumber } from "utils/number";
 
 const FarmItem = ({
   clamId,
@@ -169,12 +170,12 @@ const FarmItem = ({
   const onClickCollectPearl = async () => {
     try {
       const gems = await gemsTransferred(address, clamId);
-      const isLegacyPearl = gems.gte(0);
+      const isLegacyPearl = new BigNumber(gems).gt(0);
       pearlGemPrompt(
         {
           updateCharacter,
-          pearlPrice: formatFromWei(pearlPrice),
-          gems: isLegacyPearl ? formatFromWei(gems) : "",
+          pearlPrice: renderNumber(+formatFromWei(pearlPrice), 3),
+          gems: isLegacyPearl ? renderNumber(+formatFromWei(gems), 3) : "",
         },
         async () => {
           pearlCollectProcessing({ updateCharacter });
@@ -191,7 +192,6 @@ const FarmItem = ({
 
               if (!gemApproved) {
                 setButtonText("Approving GEM...");
-                console.log(pearlPrice);
                 await infiniteApproveSpending(address, pearlFarmAddress, pearlPrice);
               }
             }
