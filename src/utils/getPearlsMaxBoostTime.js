@@ -23,8 +23,8 @@ export const getPearlsMaxBoostTime = ({
   const pearlOrderIndex = pearlBoostOrder.findIndex((trait) => trait === pearlTrait);
   const boostPearlOrderIndex = pearlBoostOrder.findIndex((trait) => trait === boostPearlTrait);
   let traitsDiff;
-  if (pearlOrderIndex < boostPearlOrderIndex) {
-    traitsDiff = boostPearlOrderIndex - pearlOrderIndex - 1;
+  if (pearlOrderIndex > boostPearlOrderIndex) {
+    traitsDiff = pearlOrderIndex - boostPearlOrderIndex - 1;
   } else {
     traitsDiff = boostPearlOrderIndex + pearlBoostOrder.length - pearlOrderIndex - 1;
   }
