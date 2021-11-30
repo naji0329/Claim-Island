@@ -42,10 +42,7 @@ const mainnetPools = {
     isNative: true,
     risk: "High Risk",
   },
-  // "0xe0e92035077c39594793e61802a350347c320cf2": {
-  // testnet
   "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16": {
-    // mainnet
     name: `BNB - BUSD`, // real
     images: [
       "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
@@ -144,7 +141,6 @@ const testnetPools = {
     risk: "High Risk",
   },
   "0x3783898F93dc4eF532Dc7128906f4E75FE29Ed87": {
-    // testnet
     name: `SHELL - BNB`, // dummy bnb - carapace
     images: [
       "https://clamisland.fi/favicon/android-chrome-192x192.png",

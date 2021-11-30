@@ -14,15 +14,11 @@ import ArrowDown from "assets/img/arrow-down.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  buyClam,
-  getPrice,
-  getPriceUsd,
-  checkHasClamToCollect,
-  buyClamWithVestedTokens,
-} from "web3/clam";
+import { buyClam, getPrice, checkHasClamToCollect, buyClamWithVestedTokens } from "web3/clam";
 import { zeroHash } from "constants/constants";
 import { infiniteApproveSpending } from "web3/gem";
+import { getVestedGem } from "web3/gemLocker";
+import { getGemPrice } from "web3/gemOracle";
 import { getMintedThisWeek, getClamsPerWeek } from "web3/clamShop";
 import { clamShopAddress } from "constants/constants";
 import { actions } from "store/redux";
@@ -34,7 +30,6 @@ import {
   buyClamWithVested,
 } from "./character/BuyClam";
 import { formatNumber } from "../bank/utils";
-import { getVestedGem } from "web3/gemLocker";
 import { renderNumber } from "utils/number";
 
 const Divider = () => (
@@ -57,7 +52,7 @@ const ClamBuyModal = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [clamPrice, setClamPrice] = useState(0);
-  const [clamPriceUsd, setClamPriceUsd] = useState(0);
+  const [clamUsdPrice, setClamUsdPrice] = useState(0);
   const [lockedGem, setLockedGem] = useState(0);
   const [canBuy, setCanBuy] = useState(false);
   const [mintedThisWeek, setMintedThisWeek] = useState("...");
@@ -67,15 +62,19 @@ const ClamBuyModal = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const price = await getPrice();
-      setClamPrice(price);
-      const priceUsd = await getPriceUsd();
-      setClamPriceUsd(priceUsd);
-      const locked = await getVestedGem();
-      setLockedGem(locked);
+      const [_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek] = await Promise.all(
+        [getGemPrice(), getPrice(), getVestedGem(), getClamsPerWeek(), getMintedThisWeek()]
+      );
+      setClamPrice(_clamPrice);
+      setLockedGem(_lockedGem);
+      setClamsPerWeek(_clamsPerWeek);
+      setMintedThisWeek(_mintedThisWeek);
 
-      setClamsPerWeek(await getClamsPerWeek());
-      setMintedThisWeek(await getMintedThisWeek());
+      const _clamUsdPrice = new BigNumber(_clamPrice)
+        .multipliedBy(_gemPrice)
+        .div(new BigNumber(10).pow(36)); // remove 18 decimals twice
+
+      setClamUsdPrice(_clamUsdPrice);
 
       if (address) {
         const clamToCollect = await checkHasClamToCollect(address);
@@ -192,9 +191,7 @@ const ClamBuyModal = ({
                         <img className="w-12 h-12 mr-2" src={ClamIcon} />
                         <div className="flex flex-col text-right w-20 text-black p-2 font-extrabold">
                           <span>{renderNumber(+formatEther(clamPrice), 2)}</span>
-                          <span className="text-sm">
-                            {renderNumber(+formatEther(clamPriceUsd), 0)}
-                          </span>
+                          <span className="text-sm">{renderNumber(+clamUsdPrice, 2)}</span>
                         </div>
                         <div className="flex flex-col items-start font-sans mx-1">
                           <span className="text-lg">GEM</span>

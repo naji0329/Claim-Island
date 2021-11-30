@@ -5,7 +5,6 @@ import { contractFactory } from "./index";
 import { getOracleFee } from "./rng";
 import { getRNGFromHashRequest } from "./rng";
 import { zeroHash } from "../constants/constants";
-import { getDNADecoded } from "./dnaDecoder";
 import BigNumber from "bignumber.js";
 
 const balanceOf = async ({ account, abi, address }) => {
@@ -143,7 +142,6 @@ export const getPriceUsd = async () => {
   const value = await clamShop.methods.priceUsd().call();
   return value;
 };
-
 export const getWeekSupply = async () => {
   const clamShop = contractFactory({
     abi: clamShopAbi,

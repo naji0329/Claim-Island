@@ -2,7 +2,6 @@ import BigNumber from "bignumber.js";
 import gemAbi from "./abi/Gem.json";
 import { gemTokenAddress } from "../constants/constants";
 import { contractFactory } from "./index";
-import { MaxUint256 } from "./shared";
 
 BigNumber.config({ EXPONENTIAL_AT: 1e9 });
 

@@ -54,7 +54,6 @@ const Bank = ({
 
     if (address) {
       const rewards = await fetchRewards();
-      console.log({ rewards });
       updateBank({ rewards });
     }
   }, [pools, address, isBSChain]);

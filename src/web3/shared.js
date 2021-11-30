@@ -137,12 +137,19 @@ export const getPearlDataByIds = async (tokenIds) => {
         const dnaDecoded = samePearl.dnaDecodedValues;
         const { dna } = pearl.pearlDataValues;
 
-        const legacyBaseGEMRewards = await pearlLegacyBaseGemRewards();
         const isLegacyPearl = new BigNumber(pearl.pearlDataValues.gemBoost).eq(0);
+        let bonusRewards;
 
-        const bonusRewards = isLegacyPearl
-          ? await legacyCalculateBonusRewards((+legacyBaseGEMRewards * 1e18).toString(), dnaDecoded)
-          : pearl.pearlDataValues.gemBoost;
+        if (isLegacyPearl) {
+          const legacyBaseGEMRewards = await pearlLegacyBaseGemRewards();
+
+          bonusRewards = await legacyCalculateBonusRewards(
+            formatToWei(legacyBaseGEMRewards),
+            dnaDecoded
+          );
+        } else {
+          bonusRewards = pearl.pearlDataValues.gemBoost;
+        }
 
         const img = await getPearlImageFromCache({ dna });
 
