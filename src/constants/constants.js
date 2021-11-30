@@ -41,6 +41,7 @@ export const clamLotteryAddress = addresses.clamLotteryAddress;
 export const clamShopAddress = addresses.clamShopAddress;
 export const pearlFarmAddress = addresses.pearlFarmAddress;
 export const pearlHuntAddress = addresses.pearlHuntAddress;
+export const gemOracleAddress = addresses.gemOracleAddress;
 
 export const pancakeRouterAddress = addresses.pancakeRouterAddress;
 export const multicallAddress = addresses.multicallAddress;

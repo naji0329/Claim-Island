@@ -3,18 +3,18 @@ import { useState } from "react";
 
 import { connect } from "redux-zero/react";
 import { actions, store } from "store/redux";
-import BigNumber from "bignumber.js";
 
 import Web3 from "web3";
 import Web3Modal, { connectors } from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-// import { convertUtf8ToHex } from "@walletconnect/utils";
 import { useAsync } from "react-use";
 
-import { ClamIslandChain, gemTokenAddress, shellTokenAddress, BUSD } from "constants/constants";
+import { ClamIslandChain, shellTokenAddress, BUSD } from "constants/constants";
 import { getUsdPriceOfToken } from "web3/pancakeRouter";
 
 import Navbar from "components/Navbar";
+import { getGemPrice } from "web3/gemOracle";
+import { formatFromWei } from "web3/shared";
 
 let web3;
 let web3Modal;
@@ -56,14 +56,15 @@ export function useWeb3Modal({
     updateUI({ isFetching: true });
     try {
       if (isBSChain) {
-        const [gemPrice, shellPrice] = (
-          await Promise.all([
-            getUsdPriceOfToken(gemTokenAddress, BUSD),
-            getUsdPriceOfToken(shellTokenAddress, BUSD),
-          ])
-        ).map((price) => new BigNumber(price).toFixed(2));
+        const [gemPrice, shellPrice] = await Promise.all([
+          getGemPrice(),
+          getUsdPriceOfToken(shellTokenAddress, BUSD),
+        ]);
 
-        updatePrice({ gem: gemPrice, shell: shellPrice });
+        updatePrice({
+          gem: Number(formatFromWei(gemPrice)).toFixed(2),
+          shell: Number(shellPrice).toFixed(2),
+        });
 
         await dispatchFetchAccountAssets();
 

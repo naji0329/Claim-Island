@@ -15,6 +15,8 @@ export default {
   clamShopAddress: "0xb073dD56EDc93Ea80Bd3cBbB62eB2093aDAa5903",
   pearlFarmAddress: "0x6e4942Cc0FF4138A5148f96efc68F95C2f14F973",
   pearlHuntAddress: "0x3CefCe21F06bA801A97f7167E2292ea38854Df96",
+  gemOracleAddress: "0x364aF36F53089061cEB09db52CB63A2E6aAb6B3D", // TODO: this is testnet address, add mainnet address here when deployed
+  // third party addresses
   pancakeRouterAddress: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
   wBNB: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
   BUSD: "0xe9e7cea3dedca5984780bafc599bd69add087d56",

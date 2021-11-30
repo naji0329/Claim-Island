@@ -11,7 +11,7 @@ import {
   decodeTokenOfOwnerByIndexFromMulticall,
 } from "web3/pearl";
 import { color, shape, periodStart, periodInSeconds, periodCheckpoint } from "web3/pearlBurner";
-import { getGemPrice } from "web3/pancakeRouter";
+import { getGemPrice } from "web3/gemOracle";
 import { useTimer } from "hooks/useTimer";
 import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
 import PearlInfo from "./PearlInfo";
