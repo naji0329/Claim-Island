@@ -102,11 +102,11 @@ const PearlInfo = ({
   return (
     <>
       <ReactTooltip multiline={true} />
-      <div className="w-full flex">
+      <div className="w-full flex justify-between px-5">
         <div className="w-32 mr-4 h-32 overflow-hidden">
           <img src={image} className="rounded-full" />
         </div>
-        <div className="flex-grow">
+        <div className="w-3/5">
           <InfoLine
             label={
               <>
@@ -160,7 +160,7 @@ const PearlInfo = ({
           </div>
         </div>
       </div>
-      {!isLast && <div className="py-px mx-8 my-4 bg-gray-400 rounded-xl" />}
+      {!isLast && <div className="py-px mx-8 my-4 bg-blue-300 rounded-xl" />}
     </>
   );
 };
