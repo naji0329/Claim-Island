@@ -90,9 +90,16 @@ export const BANK_SPEECH = {
       dismiss: true,
       skip: false,
     },
+    burn_pearl_without_max_gem_yield_confirmation: {
+      text: ({ timer }) =>
+        `This Pearl is not available for max GEM Yield for another ${timer}. Exchanging it now will mean that you can only receive 50% of its max GEM Yield. Are you sure you want to proceed?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
     forfeit_pearl: {
-      text: ({ fullReward, halfReward }) =>
-        `Do you want to stream ${fullReward} $GEM over 30 days? Or forfeit half of the rewards and get ${halfReward} $GEM now?`,
+      text: ({ fullReward }) =>
+        `This will exchange your Pearl in return for ${fullReward} GEM Yield. You can choose to receive your full GEM Yield streamed linearly over 30 days, or you can forfeit half in order to receive your GEM Yield now. How do you want to proceed?`,
       next: false,
       dismiss: true,
       skip: false,
@@ -102,6 +109,20 @@ export const BANK_SPEECH = {
         `All done! Your Pearl has been forfeited and your $GEM boost ${
           forfeit ? "has been transferred" : "is now streaming"
         }.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    stream_burn_pearl_success: {
+      text: ({ fullReward }) =>
+        `Your pearl has been exchanged successfully for a stream of ${fullReward} GEM over 30 days. Any streamed amount will be automatically collected when you harvest from any investment pool. You can check the vesting breakdown to see any remaining amount to be streamed.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    instant_burn_pearl_success: {
+      text: ({ halfReward }) =>
+        `Your pearl has been exchanged successfully for ${halfReward} GEM! The amount should be available in your wallet.`,
       next: false,
       dismiss: true,
       skip: false,

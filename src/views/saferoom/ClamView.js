@@ -9,7 +9,6 @@ import { Clam3DView } from "components/clam3DView";
 import Accordion from "components/Accordion";
 import { Controls3DView } from "components/controls3DView";
 
-import ReactTooltip from "react-tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
@@ -40,21 +39,47 @@ export default ({
     {
       title: "General Stats",
       description: (
-
         <div>
           <RowStat label="Rarity" value={get(dnaDecoded, "rarity")} />
-          <RowStat label="Pearls remaining / Lifespan" value={(+pearlProductionCapacity - +pearlsProduced).toString() + " / " + pearlProductionCapacity.toString()} />
+          <RowStat
+            label="Pearls remaining / Lifespan"
+            value={
+              (+pearlProductionCapacity - +pearlsProduced).toString() +
+              " / " +
+              pearlProductionCapacity.toString()
+            }
+          />
           <RowStat label="Size" value={get(dnaDecoded, "size")} />
-          <RowStat label="Clam boost"
-          value={pearlBoost} />
-          <RowStat label={
-            <>
-              Indicative GEM ROI / APR&nbsp;
-              <button data-tip="Indicative ROI is calculated based on an average Pearl boost of 2x, assuming Pearl production price is fixed at 1/10 Clam price and all Pearls are exchanged for max yield. Your actual ROI will vary.<br />Indicative APR represents annualised returns based on the indicative ROI and the average time it would take to farm all Pearls, exchange them for GEM and receive the 30-day stream for max yield.">
-                <FontAwesomeIcon icon={faInfoCircle} />
-              </button>
-            </>
-          } value={(+Number(((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) / (10 + +pearlProductionCapacity) * 100).toFixed(2)).toLocaleString() + "% / " + (+Number(((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) / (10 + +pearlProductionCapacity) * 100 / (40 * +pearlProductionCapacity / 24 + 18 + 30) * 365).toFixed(2)).toLocaleString() + "%" } />
+          <RowStat label="Clam boost" value={pearlBoost} />
+          <RowStat
+            label={
+              <>
+                Indicative GEM ROI / APR&nbsp;
+                <button
+                  className="tooltip"
+                  data-tip="Indicative ROI is calculated based on an average Pearl boost of 2x, assuming Pearl production price is fixed at 1/10 Clam price and all Pearls are exchanged for max yield. Your actual ROI will vary.<br />Indicative APR represents annualised returns based on the indicative ROI and the average time it would take to farm all Pearls, exchange them for GEM and receive the 30-day stream for max yield."
+                >
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </button>
+              </>
+            }
+            value={
+              (+Number(
+                (((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
+                  (10 + +pearlProductionCapacity)) *
+                  100
+              ).toFixed(2)).toLocaleString() +
+              "% / " +
+              (+Number(
+                (((((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
+                  (10 + +pearlProductionCapacity)) *
+                  100) /
+                  ((40 * +pearlProductionCapacity) / 24 + 18 + 30)) *
+                  365
+              ).toFixed(2)).toLocaleString() +
+              "%"
+            }
+          />
         </div>
       ),
     },
@@ -97,7 +122,6 @@ export default ({
   }, [birthTime, pearlsProduced, pearlProductionCapacity]);
   return (
     <>
-      <ReactTooltip multiline={true} />
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
           {/** 3D Clam with react three fiber */}

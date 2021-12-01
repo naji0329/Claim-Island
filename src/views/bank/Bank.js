@@ -98,7 +98,7 @@ const Bank = ({
   return (
     <>
       <div className="bg-bank overflow-x-hidden">
-        <Modal isShowing={isShowing} onClose={toggleModal} width={"40rem"}>
+        <Modal isShowing={isShowing} onClose={toggleModal} width={"50rem"} modalClassName="overflow-y-hidden">
           <BurnPearlModal isNativeStaker={isNativeStaker} />
         </Modal>
         {/* container */}

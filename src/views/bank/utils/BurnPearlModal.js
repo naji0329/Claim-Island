@@ -137,26 +137,28 @@ const BurnPearlModal = (props) => {
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col">
-        <div className="w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow">
-          <div className="w-full overflow-y-auto">
-            {boostedPearls.length ? (
-              boostedPearls.map(renderPearl)
-            ) : (
-              <p>No pearls available for Max GEM Yield</p>
-            )}
+      <div style={{ height: window.innerHeight * 0.5 }} className="overflow-y-auto p-5">
+        <div className="w-full flex flex-col">
+          <div className="w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow">
+            <div className="w-full">
+              {boostedPearls.length ? (
+                boostedPearls.map(renderPearl)
+              ) : (
+                <p>No pearls available for Max GEM Yield</p>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="w-full p-4 flex flex-col max-h-160 mt-4">
-          <div className="overflow-y-auto">
-            {!!regularPearls.length && (
-              <p className="font-bold mb-4">Not available for Max GEM Yield &nbsp;</p>
-            )}
-            {regularPearls.length ? (
-              regularPearls.map(renderPearl)
-            ) : (
-              <p>No pearls available for GEM Yield</p>
-            )}
+          <div className="w-full p-4 flex flex-col max-h-160 mt-4">
+            <div>
+              {!!regularPearls.length && (
+                <p className="font-bold mb-4">Not available for Max GEM Yield:</p>
+              )}
+              {regularPearls.length ? (
+                regularPearls.map(renderPearl)
+              ) : (
+                <p>No pearls available for GEM Yield</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

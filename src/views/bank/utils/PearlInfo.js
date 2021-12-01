@@ -56,13 +56,15 @@ const PearlInfo = ({
   const [inTx, setInTx] = useState(false);
 
   const bonusRewardFormatted = Number(formatUnits(pearl.bonusRewards, 18)).toFixed(2);
+  const bonusRewardHalf = (+bonusRewardFormatted / 2).toFixed(2);
+  const bonusRewardQuarter = (+bonusRewardFormatted / 4).toFixed(2);
 
   const handleBurn = () => {
-    return burnPearlConfirmation(updateCharacter, bonusRewardFormatted, () => {
+    return burnPearlConfirmation(updateCharacter, bonusRewardFormatted, maxBoostIn, () => {
       forfeitPearlConfirmation(
         updateCharacter,
-        bonusRewardFormatted,
-        (+bonusRewardFormatted / 2).toFixed(2),
+        maxBoostIn ? bonusRewardHalf : bonusRewardFormatted,
+        maxBoostIn ? bonusRewardQuarter : bonusRewardHalf,
         async () => await executeBurnPearl(false),
         async () => await executeBurnPearl(true)
       );
@@ -77,7 +79,12 @@ const PearlInfo = ({
       await burnPearl(pearl.pearlId, forfeit);
 
       toast.success("Your pearl has been burned!");
-      onBurnPearlSuccess(updateCharacter, forfeit); // character speak
+      onBurnPearlSuccess(
+        updateCharacter,
+        forfeit,
+        maxBoostIn ? bonusRewardHalf : bonusRewardFormatted,
+        maxBoostIn ? bonusRewardQuarter : bonusRewardHalf
+      ); // character speak
     } catch (err) {
       onDepositHarvestError(updateCharacter);
       updateAccount({ error: err.message });
