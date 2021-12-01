@@ -99,7 +99,7 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
                 <div className="text-right">{formatShell(harvestableShell)}</div>
                 <div>Pearls Remaining</div>
                 <div className="text-right">{remainingLifeSpan}</div>
-                <div>Pearl boost</div>
+                <div>Clam boost</div>
                 <div className="text-right">{pearlBoost}</div>
               </div>
             </>

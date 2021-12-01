@@ -309,7 +309,7 @@ const PoolHarvest = ({
                   {rewards.vestedPearlRewards?.map((rewardData, i) => (
                     <UnlockRow
                       key={`pearl-${i}`}
-                      type={"Pearl Boost"}
+                      type={"Pearl Yield"}
                       amount={renderNumber(rewardData.bonusRemaining)}
                       unlockDay={rewardData.endDay}
                     />
