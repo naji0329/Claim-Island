@@ -125,7 +125,7 @@ const ClamItem = ({
 
               <div className="bg-gray-50  sm:grid sm:grid-cols-3 sm:gap-4 p-2">
                 <dt className="text-sm font-medium text-gray-500">
-                  Pearl boost:&nbsp;
+                  Clam boost:&nbsp;
                   <InfoTooltip text="Applied as a boost multiplier when calculating the GEM yield for each Pearl produced by this Clam.">
                     <FontAwesomeIcon icon={faInfoCircle} />
                   </InfoTooltip>

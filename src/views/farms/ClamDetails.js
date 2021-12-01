@@ -41,7 +41,7 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
         setProducedPearls(pearls);
 
         const boost = await getPearlBoost(clam.clamId);
-        setPearlBoost(boost);
+        boost > 0 ? setPearlBoost(boost) : setPearlBoost(clam.pearlBoost);
         const remainingPearlProductionTime = await getRemainingPearlProductionTime(clam.clamId);
         setTimeLeft(remainingPearlProductionTime);
         setClamValueInShellToken(await getClamValueInShellToken());
