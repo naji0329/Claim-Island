@@ -23,6 +23,18 @@ export const accountClamBalance = async (account) => {
   return bal;
 };
 
+export const getMinPearlProductionDelay = async () => {
+  const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
+  const minPearlProductionDelay = await clamNft.methods.minPearlProductionDelay().call();
+  return minPearlProductionDelay;
+}
+
+export const getMaxPearlProductionDelay = async () => {
+  const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
+  const maxPearlProductionDelay = await clamNft.methods.maxPearlProductionDelay().call();
+  return maxPearlProductionDelay;
+}
+
 export const totalClamSupply = async () => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
   const totalSupply = await clamNft.methods.totalSupply().call();
