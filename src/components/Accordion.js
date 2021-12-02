@@ -15,7 +15,9 @@ export default ({ data, className }) => {
                 className="flex flex-row justify-between items-center font-semibold p-3 cursor-pointer rounded-xl border border-gray-400"
                 onClick={() => {
                   i === tab ? setTab(-1) : setTab(i);
-                  ReactTooltip.rebuild();
+                  setTimeout(() => {
+                    ReactTooltip.rebuild();
+                  }, 1000);
                 }}
               >
                 <span className="text-black">{row.title}</span>
