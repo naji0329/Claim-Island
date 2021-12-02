@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { get } from "lodash";
+import ReactTooltip from "react-tooltip";
 
 import { getClamIncubationTime } from "web3/clam";
 import { getCurrentBlockTimestamp } from "web3/index";
@@ -55,10 +56,7 @@ export default ({
             label={
               <>
                 Indicative GEM ROI / APR&nbsp;
-                <button
-                  className="tooltip"
-                  data-tip="Indicative ROI is calculated based on an average Pearl boost of 2x, assuming Pearl production price is fixed at 1/10 Clam price and all Pearls are exchanged for max yield. Your actual ROI will vary.<br />Indicative APR represents annualised returns based on the indicative ROI and the average time it would take to farm all Pearls, exchange them for GEM and receive the 30-day stream for max yield."
-                >
+                <button data-tip="Indicative ROI is calculated based on an average Pearl boost of 2x, assuming Pearl production price is fixed at 1/10 Clam price and all Pearls are exchanged for max yield. Your actual ROI will vary.<br />Indicative APR represents annualised returns based on the indicative ROI and the average time it would take to farm all Pearls, exchange them for GEM and receive the 30-day stream for max yield.">
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
               </>
@@ -122,6 +120,7 @@ export default ({
   }, [birthTime, pearlsProduced, pearlProductionCapacity]);
   return (
     <>
+      <ReactTooltip multiline={true} />
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
           {/** 3D Clam with react three fiber */}

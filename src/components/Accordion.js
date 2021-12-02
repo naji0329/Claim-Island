@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import classNames from "classnames";
+import ReactTooltip from "react-tooltip";
 
 export default ({ data, className }) => {
   const [tab, setTab] = useState(false);
@@ -14,6 +15,7 @@ export default ({ data, className }) => {
                 className="flex flex-row justify-between items-center font-semibold p-3 cursor-pointer rounded-xl border border-gray-400"
                 onClick={() => {
                   i === tab ? setTab(-1) : setTab(i);
+                  ReactTooltip.rebuild();
                 }}
               >
                 <span className="text-black">{row.title}</span>
