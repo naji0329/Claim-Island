@@ -149,13 +149,17 @@ const PearlInfo = ({
           <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
           <div className="flex justify-between w-full my-2">
             {showBurn && (
+              <span data-tip-disable={false} data-tip={!isNativeStaker ? "You need to make a deposit in a GEM or SHELL pool before you can exchange Pearls for GEM yield." : ""}>
               <button
                 onClick={() => handleBurn()}
                 className="mr-1 btn btn-outline btn-primary"
                 disabled={!isNativeStaker || inTx}
               >
+
                 Use
+
               </button>
+              </span>
             )}
             <Link
               to={`/saferoom/pearl?id=${pearl.pearlId}`}

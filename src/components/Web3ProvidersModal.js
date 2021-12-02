@@ -60,9 +60,9 @@ export function useWeb3Modal({
           getGemPrice(),
           getUsdPriceOfToken(shellTokenAddress, BUSD),
         ]);
-
+        console.log(gemPrice);
         updatePrice({
-          gem: Number(formatFromWei(gemPrice)).toFixed(2),
+          gem: Number(gemPrice).toFixed(2),
           shell: Number(shellPrice).toFixed(2),
         });
 
