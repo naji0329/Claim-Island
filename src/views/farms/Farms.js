@@ -3,6 +3,8 @@ import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import moment from "moment";
+
 import { actions } from "store/redux";
 import Character from "components/characters/CharacterWrapper";
 import { Modal, useModal } from "components/Modal";
@@ -14,7 +16,7 @@ import videoImage from "assets/locations/Farm.jpg";
 import videoMp4 from "assets/locations/Farm.mp4";
 import videoWebM from "assets/locations/Farm.webm";
 
-import clamContract from "web3/clam";
+import clamContract, { getMinPearlProductionDelay, getMaxPearlProductionDelay } from "web3/clam";
 import {
   getStakedClamIds,
   unstakeClam,
@@ -65,6 +67,9 @@ const Farms = ({
   const [selectedClam, setSelectedClam] = useState({});
   const [selectedClamId, setSelectedClamId] = useState({});
   const [withdrawingClamId, setWithdrawingClamId] = useState(null);
+  const [pearlProductionPrice, setPearlProductionPrice] = useState(0);
+  const [minPearlProductionTime, setMinPearlProductionTime] = useState(0);
+  const [maxPearlProductionTime, setMaxPearlProductionTime] = useState(0);
 
   const isPrevButtonShown = selectedClam !== clamsStaked[0];
   const isNextButtonShown = selectedClam !== clamsStaked[clamsStaked.length - 1];
@@ -210,6 +215,7 @@ const Farms = ({
     if (address) {
       const priceForPearlInGem = await stakePrice();
       const price = formatFromWei(priceForPearlInGem);
+      setPearlProductionPrice(Number(price).toFixed(2));
       speechWelcome({ updateCharacter }, async () => {
         //     [get Pearl production price in $GEM]
         return speechWelcomeNext({ updateCharacter, gem: price });
@@ -224,6 +230,19 @@ const Farms = ({
       });
     }
   }, [address]);
+
+  useEffect(() => {
+    const getPearlProductionTime = async () => {
+      const [minTime, maxTime] = await Promise.all([
+        getMinPearlProductionDelay(),
+        getMaxPearlProductionDelay(),
+      ]);
+      setMinPearlProductionTime(Math.floor(moment.duration(minTime * 1000).asHours()));
+      setMaxPearlProductionTime(Math.floor(moment.duration(maxTime * 1000).asHours()));
+    };
+
+    getPearlProductionTime();
+  }, []);
 
   return (
     <div className="overflow-x-hidden">
@@ -271,7 +290,12 @@ const Farms = ({
             {/* clams and pears grid */}
             <div className="w-full my-4">
               <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
-                <DepositClamCard onClick={onDepositClam} />
+                <DepositClamCard
+                  pearlProductionPrice={pearlProductionPrice}
+                  minPearlProductionTime={minPearlProductionTime}
+                  maxPearlProductionTime={maxPearlProductionTime}
+                  onClick={onDepositClam}
+                />
                 {clamsStaked &&
                   clamsStaked.map((clam, i) => (
                     <FarmItem
