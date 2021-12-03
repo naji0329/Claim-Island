@@ -5,6 +5,8 @@ import { connect } from "redux-zero/react";
 import { formatEther, parseEther } from "@ethersproject/units";
 import BigNumber from "bignumber.js";
 import "./index.scss";
+import ReactTooltip from "react-tooltip";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import Card from "components/Card";
 import ClamUnknown from "assets/img/clam_unknown.png";
@@ -14,12 +16,13 @@ import ArrowDown from "assets/img/arrow-down.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import { buyClam, getPrice, checkHasClamToCollect, buyClamWithVestedTokens } from "web3/clam";
+import { buyClam, getPrice, checkHasClamToCollect, buyClamWithVestedTokens, getMinPearlProductionDelay, getMaxPearlProductionDelay } from "web3/clam";
 import { zeroHash } from "constants/constants";
 import { infiniteApproveSpending } from "web3/gem";
 import { getVestedGem } from "web3/gemLocker";
 import { getGemPrice } from "web3/gemOracle";
 import { getMintedThisWeek, getClamsPerWeek } from "web3/clamShop";
+import { stakePrice } from "web3/pearlFarm";
 import { clamShopAddress } from "constants/constants";
 import { actions } from "store/redux";
 
@@ -31,6 +34,7 @@ import {
 } from "./character/BuyClam";
 import { formatNumber } from "../bank/utils";
 import { renderNumber } from "utils/number";
+import { formatNumberToLocale } from "utils/formatNumberToLocale";
 
 const Divider = () => (
   <div className="w-full flex flex-col justify-center items-center my-2">
@@ -57,8 +61,12 @@ const ClamBuyModal = ({
   const [canBuy, setCanBuy] = useState(false);
   const [mintedThisWeek, setMintedThisWeek] = useState("...");
   const [clamsPerWeek, setClamsPerWeek] = useState("...");
-
+  const [minPearlProductionTime, setMinPearlProductionTime] = useState("...");
+  const [maxPearlProductionTime, setMaxPearlProductionTime] = useState("...");
+  const [pearlPrice, setPearlPrice] = useState("...");
   const { handleSubmit } = useForm();
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,6 +77,24 @@ const ClamBuyModal = ({
       setLockedGem(_lockedGem);
       setClamsPerWeek(_clamsPerWeek);
       setMintedThisWeek(_mintedThisWeek);
+
+      const getPearlProductionTime = async () => {
+        const [minTime, maxTime] = await Promise.all([
+          getMinPearlProductionDelay(),
+          getMaxPearlProductionDelay(),
+        ]);
+        setMinPearlProductionTime(minTime / 3600);
+        setMaxPearlProductionTime(maxTime / 3600);
+      };
+
+      getPearlProductionTime();
+
+      const getPearlPrice = async () => {
+        const pearlPrice = await stakePrice();
+        setPearlPrice(formatNumberToLocale(pearlPrice, 2, true));
+      }
+
+      getPearlPrice();
 
       const _clamUsdPrice = new BigNumber(_clamPrice)
         .multipliedBy(_gemPrice)
@@ -133,6 +159,7 @@ const ClamBuyModal = ({
 
   return (
     <>
+      <ReactTooltip html={true} className="max-w-xl"/>
       <Card>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col mb-4">
@@ -228,8 +255,39 @@ const ClamBuyModal = ({
           <Divider />
 
           {/* output */}
-          <div className="flex flex-col justify-center items-center">
+          <div className="flex flex-row justify-between items-center">
             <img className="w-1/3" src={ClamUnknown} />
+            <div className="w-3/5 grid">
+              <div className="w-full flex flex-row justify-between">
+                <span>Lifespan</span>
+                <span>5-15 Pearls</span>
+              </div>
+              <div className="w-full flex flex-row justify-between">
+                <span>Pearl Production Time</span>
+                <span>{minPearlProductionTime + "-" + maxPearlProductionTime + " hrs"}</span>
+              </div>
+              <div className="w-full flex flex-row justify-between">
+                <span>Pearl Production Price</span>
+                <span>{pearlPrice + " GEM"}</span>
+              </div>
+              <div className="w-full flex flex-row justify-between">
+                <span>Clam Boost&nbsp;
+                  <button data-tip='Dependent on the traits of the Clam purchased. Applied as a multiplier to the GEM yield for every Pearl produced by a Clam, in addition to the Pearl Boost.'>
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </button>
+                </span>
+                <span>0.7-30x</span>
+              </div>
+              <div className="w-full flex flex-row justify-between">
+                <span>Pearl Boost&nbsp;
+                  <button data-tip='Dependent on the traits of the Pearl produced. Applied as a multiplier to the Pearl production price to give a GEM yield for the Pearl.'>
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </button>
+                </span>
+                <span>0.7-30x</span>
+              </div>
+
+            </div>
           </div>
 
           <div className="py-2 flex flex-col">

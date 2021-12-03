@@ -127,7 +127,7 @@ export default ({
   }, [birthTime, pearlsProduced, pearlProductionCapacity]);
   return (
     <>
-      <ReactTooltip html={true} className="max-w-sm"/>
+      <ReactTooltip html={true} className="max-w-xl"/>
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
           {/** 3D Clam with react three fiber */}
