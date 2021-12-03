@@ -125,10 +125,10 @@ const PearlInfo = ({
       <div className="w-full flex justify-between px-5">
         <div className="w-32 mr-4 h-full overflow-hidden">
           <img src={image} className="rounded-full" />
-          <p className="text-center text-sm text-gray-600 pt-2">{pearl.dnaDecoded["rarity"]}</p>
-          <p className="text-center text-sm text-gray-600">{"Grade " + pearlGrade(pearl.dnaDecoded["surface"], pearl.dnaDecoded["lustre"], pearl.dnaDecoded["nacreQuality"])}</p>
+          <p className="text-center text-gray-600 pt-2">{pearl.dnaDecoded["rarity"]}</p>
+          <p className="text-center text-gray-600">{"Grade " + pearlGrade(pearl.dnaDecoded["surface"], pearl.dnaDecoded["lustre"], pearl.dnaDecoded["nacreQuality"])}</p>
         </div>
-        <div className="w-3/5">
+        <div className="w-2/3">
           <InfoLine
             label={
               <>
