@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { get } from "lodash";
 import ReactTooltip from "react-tooltip";
 
+import {formatNumberToLocale} from "utils/formatNumberToLocale"
+
 import { getClamIncubationTime } from "web3/clam";
 import { getCurrentBlockTimestamp } from "web3/index";
 
@@ -51,31 +53,36 @@ export default ({
             }
           />
           <RowStat label="Size" value={get(dnaDecoded, "size")} />
-          <RowStat label="Clam boost" value={pearlBoost} />
+          <RowStat label={
+            <>
+              Clam boost&nbsp;
+              <button data-tip='Applied as a multiplier to the GEM yield for every Pearl produced by this Clam'>
+                <FontAwesomeIcon icon={faInfoCircle} />
+              </button>
+            </>
+          }
+          value={formatNumberToLocale(pearlBoost,2) + "x"} />
           <RowStat
             label={
               <>
                 Indicative GEM ROI / APR&nbsp;
-                <button data-tip="Indicative ROI is calculated based on an average Pearl boost of 2x, assuming Pearl production price is fixed at 1/10 Clam price and all Pearls are exchanged for max yield. Your actual ROI will vary.<br />Indicative APR represents annualised returns based on the indicative ROI and the average time it would take to farm all Pearls, exchange them for GEM and receive the 30-day stream for max yield.">
+                <button data-tip='<p class="mb-4">Indicative ROI is calculated based on an average Pearl boost of 2x, assuming Pearl production price is fixed at 1/10 Clam price and all Pearls are exchanged for max yield. Your actual ROI will vary.</p><p>Indicative APR represents annualised returns based on the indicative ROI and the average time it would take to farm all Pearls, exchange them for GEM and receive the 30-day stream for max yield.</p>'>
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
               </>
             }
             value={
-              (+Number(
-                (((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
+                  formatNumberToLocale((((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
                   (10 + +pearlProductionCapacity)) *
-                  100
-              ).toFixed(2)).toLocaleString() +
+                  100, 2)
+               +
               "% / " +
-              (+Number(
-                (((((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
+                  formatNumberToLocale((((((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
                   (10 + +pearlProductionCapacity)) *
                   100) /
                   ((40 * +pearlProductionCapacity) / 24 + 18 + 30)) *
-                  365
-              ).toFixed(2)).toLocaleString() +
-              "%"
+                  365, 2)
+               + "%"
             }
           />
         </div>
@@ -120,7 +127,7 @@ export default ({
   }, [birthTime, pearlsProduced, pearlProductionCapacity]);
   return (
     <>
-      <ReactTooltip multiline={true} />
+      <ReactTooltip html={true} className="max-w-sm"/>
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
           {/** 3D Clam with react three fiber */}

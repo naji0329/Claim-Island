@@ -289,7 +289,7 @@ const Farms = ({
             <PageTitle title="Clam Farms" />
             {/* clams and pears grid */}
             <div className="w-full my-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
+              <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-20">
                 <DepositClamCard
                   pearlProductionPrice={pearlProductionPrice}
                   minPearlProductionTime={minPearlProductionTime}

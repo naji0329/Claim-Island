@@ -11,6 +11,9 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { formatMsToDuration } from "utils/time";
+import { formatNumberToLocale } from "utils/formatNumberToLocale";
+
+import { pearlGrade } from "../../saferoom/utils/pearlSizeAndGradeValues";
 
 import {
   burnPearlConfirmation,
@@ -24,9 +27,9 @@ import BigNumber from "bignumber.js";
 import { renderNumber } from "utils/number";
 
 const InfoLine = ({ label, value }) => (
-  <div className="flex justify-between w-full">
-    <span className="text-gray-500">{label}</span>
-    <span className="text-gray-500">{value}</span>
+  <div className="flex justify-between w-full pb-1">
+    <span className="text-gray-500 text-left">{label}</span>
+    <span className="text-gray-500 text-right">{value}</span>
   </div>
 );
 
@@ -44,14 +47,24 @@ const PearlInfo = ({
   const pearlPriceBN = new BigNumber(pearlPrice);
   const showApr = pearlPriceBN.gt(0);
   const msInDay = 86400000;
+  console.log(pearl);
 
-  const maxApr = new BigNumber(pearl.bonusRewards)
+
+
+  const maxApr = formatNumberToLocale(
+      new BigNumber(pearl.bonusRewards)
+      .minus(pearlPriceBN)
+      .div(pearlPriceBN)
+      .div(((Math.ceil((Date.now() - birthTime) / msInDay) + maxBoostIn / msInDay) % 72) + 30)
+      .multipliedBy(365 * 100)
+      , 2);
+
+  const maxRoi = formatNumberToLocale(
+    new BigNumber(pearl.bonusRewards)
     .minus(pearlPriceBN)
     .div(pearlPriceBN)
-    .div(((Math.ceil((Date.now() - birthTime) / msInDay) + maxBoostIn / msInDay) % 72) + 30)
-    .multipliedBy(365 * 100)
-    .toFormat(2)
-    .toString();
+    .multipliedBy(100)
+    , 2);
 
   const [inTx, setInTx] = useState(false);
 
@@ -108,17 +121,19 @@ const PearlInfo = ({
 
   return (
     <>
-      <ReactTooltip multiline={true} />
+      <ReactTooltip html={true} className="max-w-xl" />
       <div className="w-full flex justify-between px-5">
-        <div className="w-32 mr-4 h-32 overflow-hidden">
+        <div className="w-32 mr-4 h-full overflow-hidden">
           <img src={image} className="rounded-full" />
+          <p className="text-center text-sm text-gray-600 pt-2">{pearl.dnaDecoded["rarity"]}</p>
+          <p className="text-center text-sm text-gray-600">{"Grade " + pearlGrade(pearl.dnaDecoded["surface"], pearl.dnaDecoded["lustre"], pearl.dnaDecoded["nacreQuality"])}</p>
         </div>
         <div className="w-3/5">
           <InfoLine
             label={
               <>
                 Max GEM Yield&nbsp;
-                <button data-tip="Streamed linearly over 30 days.<br />Max GEM Yield is available when traits match with the Bank's requirements.<br />Claiming the boost without a match will result in a 50% reduction of GEM Yield.">
+                <button data-tip={'<p class="text-left pb-2">Streamed linearly over 30 days.</p><p class="text-left pb-2">Max GEM Yield is available when traits match with the Bank\'s requirements.</p><p class="text-left pb-2">Claiming the boost without a match will result in a 50% reduction of GEM Yield.'}>
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
               </>
@@ -136,15 +151,24 @@ const PearlInfo = ({
           <InfoLine
             label={
               <>
-                Max APR&nbsp;
-                <button data-tip="GEM APR assuming the Pearl is redeemed for maximum boost as early as possible">
+                Max ROI / Max APR&nbsp;
+                <button data-tip='<p class="text-left pb-2">Assumes that the Pearl is exchanged for max GEM yield.</p><p class="text-left pb-2">APR shows annualised returns where the Pearl is exchanged for max GEM yield as soon as it next becomes available.'>
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
               </>
             }
-            value={`${showApr ? maxApr : "?"}%`}
+            value={`${showApr ? maxRoi + "% / " + maxApr : "?% / ?"}%`}
           />
-          <InfoLine label="Max boost in:" value={formatMsToDuration(maxBoostIn)} />
+          <InfoLine
+            label={
+              <>
+                Max yield available in&nbsp;
+                <button data-tip="Shows the time until this Pearl can next be exchanged for max GEM yield">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </button>
+              </>
+            }
+            value={formatMsToDuration(maxBoostIn)} />
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
           <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
           <div className="flex justify-between w-full my-2">
@@ -155,9 +179,7 @@ const PearlInfo = ({
                 className="mr-1 btn btn-outline btn-primary"
                 disabled={!isNativeStaker || inTx}
               >
-
                 Use
-
               </button>
               </span>
             )}

@@ -9,6 +9,7 @@ import { Controls3DView } from "components/controls3DView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
+import { pearlGrade, pearlSize } from "./utils/pearlSizeAndGradeValues"
 const calculateGrade = (grade) => {
   const totalGradePossible = 300;
 
@@ -54,14 +55,14 @@ export default ({ dna, dnaDecoded, onClickNext, onClickPrev }) => {
 
   useEffect(() => {
     if (dnaDecoded.length) {
-      const grade_ = calculateGrade(
-        Number(get(dnaDecoded, "lustre")) +
-          Number(get(dnaDecoded, "surface")) +
-          Number(get(dnaDecoded, "nacreQuality"))
+      const grade_ = pearlGrade(
+        get(dnaDecoded, "lustre"),
+          get(dnaDecoded, "surface"),
+          get(dnaDecoded, "nacreQuality")
       );
       setGrade(grade_);
 
-      const size_ = calculateSize(Number(get(dnaDecoded, "size")));
+      const size_ = pearlSize(get(dnaDecoded, "size"));
       setSize(size_);
     }
   }, [dnaDecoded]);
