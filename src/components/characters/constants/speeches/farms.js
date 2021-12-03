@@ -9,7 +9,7 @@ export const FARM_SPEECH = {
 
     welcome_next: {
       text: ({ gem }) =>
-        `It will just cost ${gem} $GEM to produce a Pearl. Remember that each Clam can only produce a specific number of Pearls before it dies!`,
+        `It will just cost ${gem} $GEM to produce a Pearl, which is payable when you collect the produced Pearl. Remember that each Clam can only produce a specific number of Pearls before it dies!`,
       dismiss: true,
       skip: true,
       hideable: true,

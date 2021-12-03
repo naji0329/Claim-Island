@@ -11,6 +11,7 @@ import { Modal, useModal } from "components/Modal";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
 import { sortClamsById } from "utils/clams";
+import { formatNumberToLocale } from "utils/formatNumberToLocale";
 
 import videoImage from "assets/locations/Farm.jpg";
 import videoMp4 from "assets/locations/Farm.mp4";
@@ -218,7 +219,7 @@ const Farms = ({
       setPearlProductionPrice(Number(price).toFixed(2));
       speechWelcome({ updateCharacter }, async () => {
         //     [get Pearl production price in $GEM]
-        return speechWelcomeNext({ updateCharacter, gem: price });
+        return speechWelcomeNext({ updateCharacter, gem: formatNumberToLocale(price, 2) });
       });
     } else {
       updateCharacter({
