@@ -72,7 +72,7 @@ const ClamBuyModal = ({
 
       const _clamUsdPrice = new BigNumber(_clamPrice)
         .multipliedBy(_gemPrice)
-        .div(new BigNumber(10).pow(36)); // remove 18 decimals twice
+        .div(1e18); // remove 18 decimals once
 
       setClamUsdPrice(_clamUsdPrice);
 
