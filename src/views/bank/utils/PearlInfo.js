@@ -47,24 +47,20 @@ const PearlInfo = ({
   const pearlPriceBN = new BigNumber(pearlPrice);
   const showApr = pearlPriceBN.gt(0);
   const msInDay = 86400000;
-  console.log(pearl);
-
-
 
   const maxApr = formatNumberToLocale(
-      new BigNumber(pearl.bonusRewards)
+    new BigNumber(pearl.bonusRewards)
       .minus(pearlPriceBN)
       .div(pearlPriceBN)
       .div(((Math.ceil((Date.now() - birthTime) / msInDay) + maxBoostIn / msInDay) % 72) + 30)
-      .multipliedBy(365 * 100)
-      , 2);
+      .multipliedBy(365 * 100),
+    2
+  );
 
   const maxRoi = formatNumberToLocale(
-    new BigNumber(pearl.bonusRewards)
-    .minus(pearlPriceBN)
-    .div(pearlPriceBN)
-    .multipliedBy(100)
-    , 2);
+    new BigNumber(pearl.bonusRewards).minus(pearlPriceBN).div(pearlPriceBN).multipliedBy(100),
+    2
+  );
 
   const [inTx, setInTx] = useState(false);
 
@@ -126,14 +122,25 @@ const PearlInfo = ({
         <div className="w-32 mr-4 h-full overflow-hidden">
           <img src={image} className="rounded-full" />
           <p className="text-center text-gray-600 pt-2">{pearl.dnaDecoded["rarity"]}</p>
-          <p className="text-center text-gray-600">{"Grade " + pearlGrade(pearl.dnaDecoded["surface"], pearl.dnaDecoded["lustre"], pearl.dnaDecoded["nacreQuality"])}</p>
+          <p className="text-center text-gray-600">
+            {"Grade " +
+              pearlGrade(
+                pearl.dnaDecoded["surface"],
+                pearl.dnaDecoded["lustre"],
+                pearl.dnaDecoded["nacreQuality"]
+              )}
+          </p>
         </div>
         <div className="w-2/3">
           <InfoLine
             label={
               <>
                 Max GEM Yield&nbsp;
-                <button data-tip={'<p class="text-left pb-2">Streamed linearly over 30 days.</p><p class="text-left pb-2">Max GEM Yield is available when traits match with the Bank\'s requirements.</p><p class="text-left pb-2">Claiming the boost without a match will result in a 50% reduction of GEM Yield.'}>
+                <button
+                  data-tip={
+                    '<p class="text-left pb-2">Streamed linearly over 30 days.</p><p class="text-left pb-2">Max GEM Yield is available when traits match with the Bank\'s requirements.</p><p class="text-left pb-2">Claiming the boost without a match will result in a 50% reduction of GEM Yield.'
+                  }
+                >
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
               </>
@@ -168,19 +175,27 @@ const PearlInfo = ({
                 </button>
               </>
             }
-            value={formatMsToDuration(maxBoostIn)} />
+            value={formatMsToDuration(maxBoostIn)}
+          />
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
           <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
           <div className="flex justify-between w-full my-2">
             {showBurn && (
-              <span data-tip-disable={false} data-tip={!isNativeStaker ? "You need to make a deposit in a GEM or SHELL pool before you can exchange Pearls for GEM yield." : ""}>
-              <button
-                onClick={() => handleBurn()}
-                className="mr-1 btn btn-outline btn-primary"
-                disabled={!isNativeStaker || inTx}
+              <span
+                data-tip-disable={false}
+                data-tip={
+                  !isNativeStaker
+                    ? "You need to make a deposit in a GEM or SHELL pool before you can exchange Pearls for GEM yield."
+                    : ""
+                }
               >
-                Use
-              </button>
+                <button
+                  onClick={() => handleBurn()}
+                  className="mr-1 btn btn-outline btn-primary"
+                  disabled={!isNativeStaker || inTx}
+                >
+                  Use
+                </button>
               </span>
             )}
             <Link
