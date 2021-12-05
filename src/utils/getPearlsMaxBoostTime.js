@@ -26,7 +26,7 @@ export const getPearlsMaxBoostTime = ({
   if (pearlOrderIndex > boostPearlOrderIndex) {
     traitsDiff = pearlOrderIndex - boostPearlOrderIndex - 1;
   } else {
-    traitsDiff = boostPearlOrderIndex + pearlBoostOrder.length - pearlOrderIndex - 1;
+    traitsDiff = pearlBoostOrder.length - boostPearlOrderIndex + pearlOrderIndex - 1;
   }
 
   const startOfWeekMs = +startOfWeek * 1000;

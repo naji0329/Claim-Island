@@ -87,7 +87,7 @@ const PearlInfo = ({
 
       await burnPearl(pearl.pearlId, forfeit);
 
-      toast.success("Your pearl has been burned!");
+      //toast.success("Your pearl has been burned!");
       onBurnPearlSuccess(
         updateCharacter,
         forfeit,
