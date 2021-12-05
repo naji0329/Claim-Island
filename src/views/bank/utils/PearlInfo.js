@@ -11,7 +11,7 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { formatMsToDuration } from "utils/time";
-import { formatNumberToLocale } from "utils/formatNumberToLocale";
+import { getMaxApr, getMaxRoi } from "utils/pearlStats";
 
 import { pearlGrade } from "../../saferoom/utils/pearlSizeAndGradeValues";
 
@@ -43,24 +43,12 @@ const PearlInfo = ({
   maxBoostIn,
   gemPriceUSD,
 }) => {
-  const { pearlPrice, birthTime } = pearl.pearlDataValues;
+  const { pearlPrice } = pearl.pearlDataValues;
   const pearlPriceBN = new BigNumber(pearlPrice);
   const showApr = pearlPriceBN.gt(0);
-  const msInDay = 86400000;
 
-  const maxApr = formatNumberToLocale(
-    new BigNumber(pearl.bonusRewards)
-      .minus(pearlPriceBN)
-      .div(pearlPriceBN)
-      .div(((Math.ceil((Date.now() - birthTime) / msInDay) + maxBoostIn / msInDay) % 72) + 30)
-      .multipliedBy(365 * 100),
-    2
-  );
-
-  const maxRoi = formatNumberToLocale(
-    new BigNumber(pearl.bonusRewards).minus(pearlPriceBN).div(pearlPriceBN).multipliedBy(100),
-    2
-  );
+  const maxApr = getMaxApr(pearl.pearlDataValues, maxBoostIn, pearl.bonusRewards);
+  const maxRoi = getMaxRoi(pearl.pearlDataValues, pearl.bonusRewards);
 
   const [inTx, setInTx] = useState(false);
 
@@ -145,7 +133,6 @@ const PearlInfo = ({
                 </button>
               </>
             }
-            // value={bonusRewardFormatted}
             value={
               <>
                 {bonusRewardFormatted}

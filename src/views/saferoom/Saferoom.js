@@ -11,6 +11,8 @@ import PearlView from "./PearlView";
 import { TabContainer } from "./TabContainer";
 import { SaferoomNav } from "./SaferoomNav";
 
+import { color, shape, periodStart, periodInSeconds } from "web3/pearlBurner";
+
 import videoImage from "assets/locations/Saferoom.jpg";
 import videoMp4 from "assets/locations/Saferoom.mp4";
 import videoWebM from "assets/locations/Saferoom.webm";
@@ -26,15 +28,16 @@ const Saferoom = ({
   ui,
   account: { clamBalance, pearlBalance, address, clams, pearls },
   updateCharacter,
+  price: { gem: gemPriceUSD },
 }) => {
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? TABS.clam : TABS.pearl);
+  const [boostParams, setBoostParams] = useState({});
   let { path, url } = useRouteMatch();
   const { search, pathname } = useLocation();
   const history = useHistory();
 
   const { isShowing, toggleModal } = useModal();
-
 
   useAsync(async () => {
     updateCharacter({
@@ -122,6 +125,23 @@ const Saferoom = ({
     }
   }, [address, search, pearls, clams]);
 
+  useEffect(() => {
+    if (pearls.length) {
+      const getBoostParams = async () => {
+        const [boostColor, boostShape, boostPeriodStart, boostPeriodInSeconds] = await Promise.all([
+          color(),
+          shape(),
+          periodStart(),
+          periodInSeconds(),
+        ]);
+
+        setBoostParams({ boostColor, boostShape, boostPeriodStart, boostPeriodInSeconds });
+      };
+
+      getBoostParams();
+    }
+  }, [pearls]);
+
   return (
     <>
       {ui.isFetching && <LoadingScreen />}
@@ -143,6 +163,8 @@ const Saferoom = ({
         {tab === "Pearl" && (
           <PearlView
             {...selectedAsset}
+            gemPriceUSD={Number(gemPriceUSD)}
+            {...boostParams}
             onClickNext={isNextButtonShown() && onClickNext}
             onClickPrev={isPrevButtonShown() && onClickPrev}
           />

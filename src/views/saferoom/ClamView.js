@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { get } from "lodash";
 import ReactTooltip from "react-tooltip";
 
-import {formatNumberToLocale} from "utils/formatNumberToLocale"
+import { formatNumberToLocale } from "utils/formatNumberToLocale";
 
 import { getClamIncubationTime } from "web3/clam";
 import { getCurrentBlockTimestamp } from "web3/index";
@@ -53,15 +53,17 @@ export default ({
             }
           />
           <RowStat label="Size" value={get(dnaDecoded, "size")} />
-          <RowStat label={
-            <>
-              Clam boost&nbsp;
-              <button data-tip='Applied as a multiplier to the GEM yield for every Pearl produced by this Clam'>
-                <FontAwesomeIcon icon={faInfoCircle} />
-              </button>
-            </>
-          }
-          value={formatNumberToLocale(pearlBoost,2) + "x"} />
+          <RowStat
+            label={
+              <>
+                Clam boost&nbsp;
+                <button data-tip="Applied as a multiplier to the GEM yield for every Pearl produced by this Clam">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </button>
+              </>
+            }
+            value={formatNumberToLocale(pearlBoost, 2) + "x"}
+          />
           <RowStat
             label={
               <>
@@ -72,17 +74,22 @@ export default ({
               </>
             }
             value={
-                  formatNumberToLocale((((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
+              formatNumberToLocale(
+                (((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
                   (10 + +pearlProductionCapacity)) *
-                  100, 2)
-               +
+                  100,
+                2
+              ) +
               "% / " +
-                  formatNumberToLocale((((((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
+              formatNumberToLocale(
+                (((((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
                   (10 + +pearlProductionCapacity)) *
                   100) /
                   ((40 * +pearlProductionCapacity) / 24 + 18 + 30)) *
-                  365, 2)
-               + "%"
+                  365,
+                2
+              ) +
+              "%"
             }
           />
         </div>
@@ -127,7 +134,7 @@ export default ({
   }, [birthTime, pearlsProduced, pearlProductionCapacity]);
   return (
     <>
-      <ReactTooltip html={true} className="max-w-xl"/>
+      <ReactTooltip html={true} className="max-w-xl" />
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
           {/** 3D Clam with react three fiber */}
