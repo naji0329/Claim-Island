@@ -59,29 +59,12 @@ export const pearlSendToSaferoom = ({ updateCharacter }, cb) => {
   });
 };
 
-export const pearlGenerateNew = ({ updateCharacter, gems }, depositClamCb) => {
+export const pearlGenerateNew = ({ updateCharacter }, depositClamCb) => {
   updateCharacter({
     name: "al",
     action: "farms.pearlGenerateNew.text",
-    variables: { gems },
     button: {
-      text: "Yes please",
-      alt: {
-        action: "cb",
-        destination: () => {
-          dismissCharacter(updateCharacter);
-          depositClamCb();
-        },
-      },
-    },
-    buttonAlt: {
-      text: "No thanks",
-      alt: {
-        action: "cb",
-        destination: () => {
-          sendClamToSaferoom({ updateCharacter, variant: 2 });
-        },
-      },
+      text: undefined,
     },
   });
 };
@@ -105,6 +88,7 @@ export const pearlGemPrompt = ({ updateCharacter, pearlPrice, gems }, cb) => {
   updateCharacter({
     name: "al",
     action: gems ? "farms.legacyPearlCollectGemprompt.text" : "farms.pearlCollectGemprompt.text",
+    suppressSpeechBubble: false,
     variables: { pearlPrice, gems },
     button: {
       text: "Yes",

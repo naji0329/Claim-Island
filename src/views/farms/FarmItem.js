@@ -284,10 +284,10 @@ const FarmItem = ({
                 <p className="font-bold text-black">{clam.remainingFormattedTime}</p>
               </div>
               <div className="text-sm block">
-                <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
+                <p className="text-gray-500 font-semibold text-xs text-right mb-1 leading-none">
                   Lifespan Remaining
                 </p>
-                <p className="font-bold text-black text-right">{clam.remainingLifeSpan}</p>
+                <p className="font-bold text-black text-right">{clam.remainingLifeSpan + " Pearls"}</p>
               </div>
             </div>
           </div>

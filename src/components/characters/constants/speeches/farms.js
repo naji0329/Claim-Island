@@ -57,6 +57,7 @@ export const FARM_SPEECH = {
         `It costs ${pearlPrice} $GEM to collect the pearl. Do you want to proceed?`,
       next: `purchase`,
       dismiss: false,
+      suppressSpeechBubble: false,
       skip: false,
     },
     legacyPearlCollectGemprompt: {
@@ -81,9 +82,15 @@ export const FARM_SPEECH = {
       skip: false,
       hideable: true,
     },
+    pearlGenerateNewWarning: {
+      text: `WARNING! This is the last Pearl that your Clam is able to produce. Producing the last Pearl will kill the Clam. This means you will no longer be able to harvest it for $SHELL, although dead Clams can still be traded as a regular NFT. Are you sure you want to continue?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+      hideable: false,
+    },
     pearlGenerateNew: {
-      text: ({ gems }) =>
-        `Great! you will just need to pay ${gems} $GEM to produce another Pearl. Do you want to continue?`,
+      text: `Great! Please wait while we process the deposit...`,
       next: `purchase`,
       dismiss: false,
       skip: false,
