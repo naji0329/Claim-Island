@@ -26,7 +26,7 @@ const RowStat = ({ label, value }) => (
     </div>
 
     <div className="block">
-      <p className="font-bold">{value}</p>
+      <p className="font-bold capitalize">{value}</p>
     </div>
   </div>
 );
@@ -104,10 +104,11 @@ export default (props) => {
       title: "Traits",
       description: (
         <div>
+          <RowStat label="Rarity" value={get(dnaDecoded, "rarity")} />
           <RowStat label="Shape" value={get(dnaDecoded, "shape")} />
           <RowStat label="Color" value={get(dnaDecoded, "color")} />
           <RowStat label="Overtone" value={get(dnaDecoded, "overtone")} />
-          <RowStat label="Rarity" value={get(dnaDecoded, "rarity").toLowerCase()} />
+          <RowStat label="Size" value={size + " ("+get(dnaDecoded, "size")+")"} />
         </div>
       ),
     },
@@ -119,15 +120,6 @@ export default (props) => {
           <RowStat label="Surface" value={get(dnaDecoded, "surface")} />
           <RowStat label="Lustre" value={get(dnaDecoded, "lustre")} />
           <RowStat label="Nacre Quality" value={get(dnaDecoded, "nacreQuality")} />
-        </div>
-      ),
-    },
-    {
-      title: "Size",
-      description: (
-        <div>
-          <RowStat label="Size" value={size} />
-          <RowStat label="Value" value={get(dnaDecoded, "size")} />
         </div>
       ),
     },
