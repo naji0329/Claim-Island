@@ -144,6 +144,13 @@ export const CLAM_SHOP_SPEECH = {
     },
 
     harvest_warn: {
+      text: `WARNING!! Harvesting a Clam will allow you to receive $SHELL tokens, but it will destroy your Clam permanently. Are you sure you want to continue?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
+    harvest_final_warn: {
       text: (shell) =>
         `WARNING!! You are about to harvest this Clam for ${shell} $SHELL. This process will destroy your Clam and is not reversible. Do you want to continue?`,
       next: false,

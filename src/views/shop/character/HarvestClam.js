@@ -125,7 +125,7 @@ export const harvestChooseClams = ({ updateCharacter, setModalToShow }) => {
 export const harvestClamSpeak = ({ updateCharacter, setModalToShow, shell }, cb) => {
   updateCharacter({
     name: "diego",
-    action: "clam_shop.harvest_warn.text",
+    action: "clam_shop.harvest_final_warn.text",
     variables: shell,
     // button: harvestClamInfo(),
     button: {
