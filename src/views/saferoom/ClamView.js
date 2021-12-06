@@ -4,6 +4,7 @@ import { get } from "lodash";
 import ReactTooltip from "react-tooltip";
 
 import { formatNumberToLocale } from "utils/formatNumberToLocale";
+import { formatShell } from "utils/clams";
 
 import { getClamIncubationTime } from "web3/clam";
 import { getCurrentBlockTimestamp } from "web3/index";
@@ -20,11 +21,19 @@ export default ({
   dnaDecoded,
   pearlBoost,
   clamDataValues: { pearlProductionCapacity, pearlsProduced, birthTime },
+  clamValueInShellToken,
+  pearlValueInShellToken,
   onClickNext,
   onClickPrev,
 }) => {
   const [showTraits] = useState(false);
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
+
+  const harvestableShell =
+    +clamValueInShellToken > 0
+      ? +clamValueInShellToken + +pearlsProduced * +pearlValueInShellToken
+      : "0";
+  const formattedHarvestableShell = formatShell(harvestableShell);
 
   const RowStat = ({ label, value }) => (
     <div className="flex flex-row justify-between my-1 text-sm">
@@ -40,6 +49,21 @@ export default ({
 
   const accordionData = [
     {
+      title: "Traits",
+      description: (
+        <div>
+          <RowStat label="Shell Shape" value={get(dnaDecoded, "shellShape")} />
+          <RowStat label="Shell Colour" value={get(dnaDecoded, "shellColor")} />
+          <RowStat label="Shell Pattern" value={get(dnaDecoded, "pattern")} />
+          <RowStat label="Inner Color" value={get(dnaDecoded, "innerColor")} />
+          <RowStat label="Lip Color" value={get(dnaDecoded, "lipColor")} />
+          <RowStat label="Tongue Shape" value={get(dnaDecoded, "tongueShape")} />
+          <RowStat label="Tongue Colour" value={get(dnaDecoded, "tongueColor")} />
+          <RowStat label="Size" value={get(dnaDecoded, "size")} />
+        </div>
+      ),
+    },
+    {
       title: "General Stats",
       description: (
         <div>
@@ -52,7 +76,6 @@ export default ({
               pearlProductionCapacity.toString()
             }
           />
-          <RowStat label="Size" value={get(dnaDecoded, "size")} />
           <RowStat
             label={
               <>
@@ -92,27 +115,17 @@ export default ({
               "%"
             }
           />
-        </div>
-      ),
-    },
-    {
-      title: "Body",
-      description: (
-        <div>
-          <RowStat label="Shape" value={get(dnaDecoded, "shellShape")} />
-          <RowStat label="Shell Color" value={get(dnaDecoded, "shellColor")} />
-          <RowStat label="Inner Color" value={get(dnaDecoded, "innerColor")} />
-          <RowStat label="Lip Color" value={get(dnaDecoded, "lipColor")} />
-          <RowStat label="Pattern" value={get(dnaDecoded, "pattern")} />
-        </div>
-      ),
-    },
-    {
-      title: "Tongue",
-      description: (
-        <div>
-          <RowStat label="Shape" value={get(dnaDecoded, "tongueShape")} />
-          <RowStat label="Color" value={get(dnaDecoded, "tongueColor")} />
+          <RowStat
+            label={
+              <>
+                Harvestable $SHELL&nbsp;
+                <button data-tip="Amount of $SHELL you will receive if you harvest this Clam in the Shop">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </button>
+              </>
+            }
+            value={formattedHarvestableShell}
+          />
         </div>
       ),
     },

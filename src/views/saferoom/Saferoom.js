@@ -23,6 +23,7 @@ import { SAFEROOM_TABS as TABS } from "constants/ui";
 import { actions } from "store/redux";
 
 import LoadingScreen from "components/LoadingScreen";
+import { getClamValueInShellToken, getPearlValueInShellToken } from "../../web3/clam";
 
 const Saferoom = ({
   ui,
@@ -33,6 +34,8 @@ const Saferoom = ({
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? TABS.clam : TABS.pearl);
   const [boostParams, setBoostParams] = useState({});
+  const [clamValueInShellToken, setClamValueInShellToken] = useState("0");
+  const [pearlValueInShellToken, setPearlValueInShellToken] = useState("0");
   let { path, url } = useRouteMatch();
   const { search, pathname } = useLocation();
   const history = useHistory();
@@ -128,19 +131,48 @@ const Saferoom = ({
   useEffect(() => {
     if (pearls.length) {
       const getBoostParams = async () => {
-        const [boostColor, boostShape, boostPeriodStart, boostPeriodInSeconds] = await Promise.all([
+        const [
+          boostColor,
+          boostShape,
+          boostPeriodStart,
+          boostPeriodInSeconds,
+          clamValueInShellToken,
+          pearlValueInShellToken,
+        ] = await Promise.all([
           color(),
           shape(),
           periodStart(),
           periodInSeconds(),
+          getClamValueInShellToken(),
+          getPearlValueInShellToken(),
         ]);
 
-        setBoostParams({ boostColor, boostShape, boostPeriodStart, boostPeriodInSeconds });
+        setBoostParams({
+          boostColor,
+          boostShape,
+          boostPeriodStart,
+          boostPeriodInSeconds,
+          clamValueInShellToken,
+          pearlValueInShellToken,
+        });
       };
 
       getBoostParams();
     }
   }, [pearls]);
+
+  useEffect(() => {
+    const getValuesInShellToken = async () => {
+      const [clamValueInShellToken, pearlValueInShellToken] = await Promise.all([
+        getClamValueInShellToken(),
+        getPearlValueInShellToken(),
+      ]);
+      setClamValueInShellToken(clamValueInShellToken);
+      setPearlValueInShellToken(pearlValueInShellToken);
+    };
+
+    getValuesInShellToken();
+  }, []);
 
   return (
     <>
@@ -156,6 +188,8 @@ const Saferoom = ({
         {tab === "Clam" && (
           <ClamView
             {...selectedAsset}
+            clamValueInShellToken={clamValueInShellToken}
+            pearlValueInShellToken={pearlValueInShellToken}
             onClickNext={isNextButtonShown() && onClickNext}
             onClickPrev={isPrevButtonShown() && onClickPrev}
           />

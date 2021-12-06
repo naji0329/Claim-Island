@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Skeleton } from "@pancakeswap-libs/uikit";
 import { useInterval } from "react-use";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import ReactTooltip from "react-tooltip";
 
 import { getPearlDataByIds } from "web3/shared";
 import { getRemainingPearlProductionTime } from "web3/pearlFarm";
@@ -11,13 +14,11 @@ import { Clam3DView } from "components/clam3DView";
 import { Controls3DView } from "components/controls3DView";
 import { secondsToFormattedTime } from "utils/time";
 import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
-import { formatUnits } from "@ethersproject/units";
+import { formatShell } from "utils/clams";
 
 import PearlInfo from "../bank/utils/PearlInfo";
 
 import "./index.scss";
-
-const formatShell = (value) => (value ? formatUnits(String(value), 18) : "0");
 
 const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
   const [producedPearls, setProducedPearls] = useState([]);
@@ -47,6 +48,7 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
       return 0;
     });
     setProducedPearlsYieldTimers(updatedProducedPearlsYieldTimers);
+    ReactTooltip.rebuild();
   }, 1000);
 
   useEffect(() => {
@@ -98,6 +100,7 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
 
   return (
     <div className="ClamDetails flex flex-row">
+      <ReactTooltip />
       <div className="flex flex-1 flex-col items-start">
         <p
           className="font-extrabold text-green-600 text-center text-lg font-avenir mb-2"
@@ -126,7 +129,12 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
           ) : (
             <>
               <div className="grid md:grid-cols-2 md:grid-rows-2 gap-1 mt-2">
-                <div>Harvestable $SHELL</div>
+                <div>
+                  Harvestable $SHELL
+                  <button data-tip="Amount of $SHELL you will receive if you harvest this Clam in the Shop">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </button>
+                </div>
                 <div className="text-right">{formatShell(harvestableShell)}</div>
                 <div>Pearls Remaining</div>
                 <div className="text-right">{remainingLifeSpan}</div>

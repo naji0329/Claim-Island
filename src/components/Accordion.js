@@ -4,6 +4,9 @@ import ReactTooltip from "react-tooltip";
 
 export default ({ data, className }) => {
   const [tab, setTab] = useState(false);
+  setTimeout(() => {
+    ReactTooltip.rebuild();
+  }, 700);
 
   return (
     <>
@@ -15,9 +18,6 @@ export default ({ data, className }) => {
                 className="flex flex-row justify-between items-center font-semibold p-3 cursor-pointer rounded-xl border border-gray-400"
                 onClick={() => {
                   i === tab ? setTab(-1) : setTab(i);
-                  setTimeout(() => {
-                    ReactTooltip.rebuild();
-                  }, 1000);
                 }}
               >
                 <span className="text-black">{row.title}</span>

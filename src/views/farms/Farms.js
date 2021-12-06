@@ -71,8 +71,8 @@ const Farms = ({
   const [minPearlProductionTime, setMinPearlProductionTime] = useState(0);
   const [maxPearlProductionTime, setMaxPearlProductionTime] = useState(0);
 
-  const isPrevButtonShown = selectedClam !== clamsStaked[0];
-  const isNextButtonShown = selectedClam !== clamsStaked[clamsStaked.length - 1];
+  const isPrevButtonShown = selectedClam.clamId !== clamsStaked[0]?.clamId;
+  const isNextButtonShown = selectedClam.clamId !== clamsStaked[clamsStaked.length - 1]?.clamId;
 
   const handleWithdraw = async (clamId) => {
     try {
@@ -144,12 +144,12 @@ const Farms = ({
   };
 
   const onClickNext = () => {
-    const currentClamIndex = clamsStaked.findIndex((clam) => clam === selectedClam);
+    const currentClamIndex = clamsStaked.findIndex((clam) => clam.clamId === selectedClam.clamId);
     setSelectedClam(clamsStaked[currentClamIndex + 1]);
   };
 
   const onClickPrev = () => {
-    const currentAssetIndex = clamsStaked.findIndex((clam) => clam === selectedClam);
+    const currentAssetIndex = clamsStaked.findIndex((clam) => clam.clamId === selectedClam.clamId);
     setSelectedClam(clamsStaked[currentAssetIndex - 1]);
   };
 
