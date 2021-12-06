@@ -1,13 +1,15 @@
 import React, { useState } from "react";
+import ReactGA from "react-ga4";
 import { useForm } from "react-hook-form";
 import BigNumber from "bignumber.js";
 import { connect } from "redux-zero/react";
 import { actions } from "../../../store/redux";
-import { get } from "lodash";
+import { get, round } from "lodash";
 
 import { deposit, getAllPools } from "../../../web3/bank";
 import { approveBankForMaxUint } from "../../../web3/bep20";
 import { formatToWei } from "../../../web3/shared";
+import { ACTIONS, CATEGORIES } from "constants/googleAnalytics";
 
 import { formatNumber, getBalancesFormatted } from "./";
 
@@ -56,6 +58,12 @@ const DepositTab = ({
       await approveBankForMaxUint(address, selectedPool.lpToken, depositAmount);
 
       await deposit(selectedPool.poolId, formatToWei(depositAmount));
+
+      ReactGA.event({
+        action: `${ACTIONS.depositedInBank}_${selectedPool.name.replace("-","_")}`,
+        category: CATEGORIES.bank,
+        value: round(selectedPool.tokenPrice * depositAmount, 2),
+      });
 
       const balances = await getBalancesFormatted(
         address,
