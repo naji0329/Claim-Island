@@ -150,7 +150,11 @@ const ClamBuyModal = ({
 
       buyClamSuccess({ updateCharacter }); // character speaks
 
-      ReactGA.event({ action: ACTIONS.boughtClam, category: CATEGORIES.shop });
+      ReactGA.event({
+        action: ACTIONS.boughtClam,
+        category: CATEGORIES.shop,
+        value: parseFloat(clamUsdPrice)
+      });
       setIsLoading(false);
       setModalToShow("collect");
     } catch (e) {
