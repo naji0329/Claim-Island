@@ -62,7 +62,6 @@ const DepositTab = ({
       ReactGA.event({
         action: `${ACTIONS.depositedInBank}_${selectedPool.name.replace("-","_")}`,
         category: CATEGORIES.bank,
-        currency: "USD",
         value: round(selectedPool.tokenPrice * depositAmount, 2),
       });
 
