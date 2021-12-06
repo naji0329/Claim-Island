@@ -60,7 +60,7 @@ const ClamItem = ({
   };
 
   const triggerClamDepositSuccess = async () => {
-    toast.success("Your clam has been deposited!. You can choose to deposit another clam.");
+    toast.success("Your clam has been deposited! You can choose to deposit another clam.");
     depositClamSuccess({ updateCharacter });
     setRefreshClams(true);
     setIsClamDeposited(true);

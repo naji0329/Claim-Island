@@ -41,6 +41,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-select": "^4.3.1",
+    "react-text-reveal": "^1.1.2",
     "react-toastify": "^7.0.4",
     "react-tooltip": "^4.2.21",
     "react-use": "^17.2.4",

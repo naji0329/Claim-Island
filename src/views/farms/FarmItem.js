@@ -293,8 +293,14 @@ const FarmItem = ({
           </div>
 
           <div className="px-4 py-2">
+            <button className="btn btn-neutral btn-outline w-full" onClick={(e) => onViewDetails(e)}>
+              View Details
+            </button>
+          </div>
+
+          <div className="px-4 py-2">
             <button
-              className="withdraw-btn flex justify-center items-center"
+              className="btn btn-secondary w-full"
               onClick={onWithdrawClam}
               disabled={isWithdrawing}
             >
@@ -303,11 +309,7 @@ const FarmItem = ({
             </button>
           </div>
 
-          <div className="px-4 py-2 text-center">
-            <button className="view-details" onClick={(e) => onViewDetails(e)}>
-              View Details
-            </button>
-          </div>
+
         </>
       ) : (
         <div className="px-4 py-2">

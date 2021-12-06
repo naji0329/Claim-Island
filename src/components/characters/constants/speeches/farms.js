@@ -47,7 +47,7 @@ export const FARM_SPEECH = {
       skip: false,
     },
     depositClamSuccess: {
-      text: `Your clam has been deposited!. You can choose to deposit another clam.`,
+      text: `Your clam has been deposited! You can choose to deposit another clam.`,
       next: `purchase`,
       dismiss: false,
       skip: false,

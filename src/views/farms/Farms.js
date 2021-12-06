@@ -40,8 +40,7 @@ import {
   WelcomeUser,
   withdrawClamSpeak,
   speechWelcome,
-  speechWelcomeNext,
-  refundDepositedGemSpeak,
+  speechWelcomeNext
 } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
 
@@ -135,26 +134,12 @@ const Farms = ({
     }
   };
 
-  const refundDepositedGem = (clamId) => {
-    refundDepositedGemSpeak(
-      { updateCharacter },
-      async () => {
-        await handleWithdraw(clamId);
-        await prepareReclaiming(clamId);
-        await reclaimGems(clamId);
-        WelcomeUser({ updateCharacter, suppressSpeechBubble: true });
-      },
-      () => {
-        handleWithdraw(clamId);
-        WelcomeUser({ updateCharacter, suppressSpeechBubble: true });
-      }
-    );
-  };
 
   // when "Withdraw" is clicked - open the modal
-  const onWithdrawClam = (clam) => {
-    withdrawClamSpeak({ updateCharacter }, () => {
-      refundDepositedGem(clam.clamId);
+  const onWithdrawClam = (clamId) => {
+    withdrawClamSpeak({ updateCharacter, clamId }, () => {
+      handleWithdraw(clamId);
+      WelcomeUser({ updateCharacter, suppressSpeechBubble: true });
     });
   };
 
@@ -303,7 +288,7 @@ const Farms = ({
                       key={i}
                       {...clam}
                       onViewDetails={() => onViewDetails(clam)}
-                      onWithdrawClam={() => onWithdrawClam(clam)}
+                      onWithdrawClam={() => onWithdrawClam(clam.clamId)}
                       onViewPearl={onViewPearl}
                       updateCharacter={updateCharacter}
                       withdrawingClamId={withdrawingClamId}
