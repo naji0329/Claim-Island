@@ -14632,6 +14632,11 @@ react-ga4@^1.1.1:
   resolved "https://registry.yarnpkg.com/react-ga4/-/react-ga4-1.1.1.tgz#3800decc791d858d27ba064d91d2b073ac50b6e7"
   integrity sha512-x06O0Tg3nVGyBbsU27Px06sOv6u9VLXK4bDYVlMafLgK9pJYHVwhHlvwtR83mJvZRHK5HBkHwI9rdNPWM/vSWw==
 
+react-gtm-module@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/react-gtm-module/-/react-gtm-module-2.0.11.tgz#14484dac8257acd93614e347c32da9c5ac524206"
+  integrity sha512-8gyj4TTxeP7eEyc2QKawEuQoAZdjKvMY4pgWfycGmqGByhs17fR+zEBs0JUDq4US/l+vbTl+6zvUIx27iDo/Vw==
+
 react-hook-form@^7.8.2:
   version "7.10.1"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.10.1.tgz#fd7c78ab72402c2f4a7ac4f6184e84ff0df129b2"
