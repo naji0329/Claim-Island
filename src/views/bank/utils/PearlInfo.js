@@ -42,6 +42,7 @@ const PearlInfo = ({
   updateAccount,
   maxBoostIn,
   gemPriceUSD,
+  hideViewDetails,
 }) => {
   const { pearlPrice } = pearl.pearlDataValues;
   const pearlPriceBN = new BigNumber(pearlPrice);
@@ -185,13 +186,15 @@ const PearlInfo = ({
                 </button>
               </span>
             )}
-            <Link
-              to={`/saferoom/pearl?id=${pearl.pearlId}`}
-              className="ml-1 btn btn-outline btn-secondary"
-            >
-              View Details&nbsp;
-              <FontAwesomeIcon icon={faExternalLinkAlt} />
-            </Link>
+            {!hideViewDetails && (
+              <Link
+                to={`/saferoom/pearl?id=${pearl.pearlId}`}
+                className="ml-1 btn btn-outline btn-secondary"
+              >
+                View Details&nbsp;
+                <FontAwesomeIcon icon={faExternalLinkAlt} />
+              </Link>
+            )}
           </div>
         </div>
       </div>

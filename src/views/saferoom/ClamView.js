@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { get } from "lodash";
 import ReactTooltip from "react-tooltip";
+import { useInterval } from "react-use";
 
 import { formatNumberToLocale } from "utils/formatNumberToLocale";
 import { formatShell } from "utils/clams";
 
 import { getClamIncubationTime } from "web3/clam";
 import { getCurrentBlockTimestamp } from "web3/index";
+import { getPearlDataByIds } from "web3/shared";
 
 import { Clam3DView } from "components/clam3DView";
 import Accordion from "components/Accordion";
@@ -16,7 +18,10 @@ import { Controls3DView } from "components/controls3DView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
-import { pearlSize } from "./utils/pearlSizeAndGradeValues"
+import { pearlSize } from "./utils/pearlSizeAndGradeValues";
+import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
+
+import PearlInfo from "../bank/utils/PearlInfo";
 
 export default ({
   dna,
@@ -27,16 +32,40 @@ export default ({
   pearlValueInShellToken,
   onClickNext,
   onClickPrev,
+  clamId,
+  producedPearlIds,
+  gemPriceUSD,
+  boostColor,
+  boostShape,
+  boostPeriodInSeconds,
+  boostPeriodStart,
 }) => {
   const [showTraits] = useState(false);
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
+  const [producedPearls, setProducedPearls] = useState([]);
+  const [producedPearlsYieldTimers, setProducedPearlsYieldTimers] = useState([]);
+
+  useInterval(() => {
+    const updatedProducedPearlsYieldTimers = producedPearlsYieldTimers.map((time) => {
+      const remainingTime = time - 1000;
+      if (remainingTime > 0) {
+        return remainingTime;
+      }
+
+      return 0;
+    });
+    setProducedPearlsYieldTimers(updatedProducedPearlsYieldTimers);
+    ReactTooltip.rebuild();
+  }, 1000);
 
   const harvestableShell =
-    get(dnaDecoded, "shellShape") == "maxima" ? "N/A" :
-    +clamValueInShellToken > 0
+    get(dnaDecoded, "shellShape") == "maxima"
+      ? "N/A"
+      : +clamValueInShellToken > 0
       ? +clamValueInShellToken + +pearlsProduced * +pearlValueInShellToken
       : "0";
-  const formattedHarvestableShell = harvestableShell != "N/A" ? formatShell(harvestableShell) : "N/A";
+  const formattedHarvestableShell =
+    harvestableShell != "N/A" ? formatShell(harvestableShell) : "N/A";
 
   const RowStat = ({ label, value }) => (
     <div className="flex flex-row justify-between my-1 text-sm">
@@ -129,27 +158,64 @@ export default ({
           <RowStat label="Lip Color" value={get(dnaDecoded, "lipColor")} />
           <RowStat label="Tongue Shape" value={get(dnaDecoded, "tongueShape")} />
           <RowStat label="Tongue Colour" value={get(dnaDecoded, "tongueColor")} />
-          <RowStat label="Size" value={pearlSize(get(dnaDecoded, "size")) + " (" + get(dnaDecoded, "size") + ")"} />
+          <RowStat
+            label="Size"
+            value={pearlSize(get(dnaDecoded, "size")) + " (" + get(dnaDecoded, "size") + ")"}
+          />
         </div>
       ),
     },
-
+    {
+      title: "Produced pearls",
+      description: (
+        <div className="flex flex-col gap-2 overflow-y-auto" style={{ maxHeight: "210px" }}>
+          {producedPearls.map((pearl, i, a) => (
+            <PearlInfo
+              key={pearl.pearlId}
+              pearl={pearl}
+              isLast={i === a.length - 1}
+              maxBoostIn={producedPearlsYieldTimers[i]}
+              gemPriceUSD={gemPriceUSD}
+              hideViewDetails={true}
+            />
+          ))}
+        </div>
+      ),
+    },
   ];
 
   useEffect(() => {
     const initClamView = async () => {
-      const incubationTime = await getClamIncubationTime();
-      const currentBlockTimestamp = await getCurrentBlockTimestamp();
+      const [incubationTime, currentBlockTimestamp, pearls] = await Promise.all([
+        getClamIncubationTime(),
+        getCurrentBlockTimestamp(),
+        getPearlDataByIds(producedPearlIds),
+      ]);
 
       const isClamAvailableForHarvest =
         +pearlsProduced < +pearlProductionCapacity &&
         birthTime &&
         currentBlockTimestamp > +birthTime + +incubationTime;
       setIsClamAvailableForHarvest(isClamAvailableForHarvest);
+
+      setProducedPearls(pearls);
+
+      const pearlsYieldTimers = pearls.map((pearl) =>
+        getPearlsMaxBoostTime({
+          shape: pearl.dnaDecoded.shape,
+          colour: pearl.dnaDecoded.color,
+          currentBoostColour: boostColor,
+          currentBoostShape: boostShape,
+          period: boostPeriodInSeconds,
+          startOfWeek: boostPeriodStart,
+        })
+      );
+      setProducedPearlsYieldTimers(pearlsYieldTimers);
     };
 
     initClamView();
-  }, [birthTime, pearlsProduced, pearlProductionCapacity]);
+  }, [clamId]);
+
   return (
     <>
       <ReactTooltip html={true} className="max-w-xl" />
@@ -164,7 +230,7 @@ export default ({
             // clamTraits={clamTraits}
             showTraitsTable={showTraits}
           />
-          <div className="w-full md:w-1/2 px-4 md:px-6">
+          <div className="w-full px-4 md:px-6">
             <Accordion data={accordionData} />
           </div>
         </div>

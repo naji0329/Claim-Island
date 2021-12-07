@@ -129,37 +129,34 @@ const Saferoom = ({
   }, [address, search, pearls, clams]);
 
   useEffect(() => {
-    if (pearls.length) {
-      const getBoostParams = async () => {
-        const [
-          boostColor,
-          boostShape,
-          boostPeriodStart,
-          boostPeriodInSeconds,
-          clamValueInShellToken,
-          pearlValueInShellToken,
-        ] = await Promise.all([
-          color(),
-          shape(),
-          periodStart(),
-          periodInSeconds(),
-          getClamValueInShellToken(),
-          getPearlValueInShellToken(),
-        ]);
+    const getBoostParams = async () => {
+      const [
+        boostColor,
+        boostShape,
+        boostPeriodStart,
+        boostPeriodInSeconds,
+        clamValueInShellToken,
+        pearlValueInShellToken,
+      ] = await Promise.all([
+        color(),
+        shape(),
+        periodStart(),
+        periodInSeconds(),
+        getClamValueInShellToken(),
+        getPearlValueInShellToken(),
+      ]);
 
-        setBoostParams({
-          boostColor,
-          boostShape,
-          boostPeriodStart,
-          boostPeriodInSeconds,
-          clamValueInShellToken,
-          pearlValueInShellToken,
-        });
-      };
-
-      getBoostParams();
-    }
-  }, [pearls]);
+      setBoostParams({
+        boostColor,
+        boostShape,
+        boostPeriodStart,
+        boostPeriodInSeconds,
+        clamValueInShellToken,
+        pearlValueInShellToken,
+      });
+    };
+    getBoostParams();
+  }, []);
 
   useEffect(() => {
     const getValuesInShellToken = async () => {
@@ -190,6 +187,8 @@ const Saferoom = ({
             {...selectedAsset}
             clamValueInShellToken={clamValueInShellToken}
             pearlValueInShellToken={pearlValueInShellToken}
+            gemPriceUSD={gemPriceUSD}
+            {...boostParams}
             onClickNext={isNextButtonShown() && onClickNext}
             onClickPrev={isPrevButtonShown() && onClickPrev}
           />
