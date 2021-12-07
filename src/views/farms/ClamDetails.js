@@ -100,7 +100,6 @@ const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
 
   return (
     <div className="ClamDetails flex flex-row">
-      <ReactTooltip />
       <div className="flex flex-1 flex-col items-start">
         <p
           className="font-extrabold text-green-600 text-center text-lg font-avenir mb-2"
