@@ -16,6 +16,8 @@ import { Controls3DView } from "components/controls3DView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
+import { pearlSize } from "./utils/pearlSizeAndGradeValues"
+
 export default ({
   dna,
   dnaDecoded,
@@ -30,10 +32,11 @@ export default ({
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
 
   const harvestableShell =
+    get(dnaDecoded, "shellShape") == "maxima" ? "N/A" :
     +clamValueInShellToken > 0
       ? +clamValueInShellToken + +pearlsProduced * +pearlValueInShellToken
       : "0";
-  const formattedHarvestableShell = formatShell(harvestableShell);
+  const formattedHarvestableShell = harvestableShell != "N/A" ? formatShell(harvestableShell) : "N/A";
 
   const RowStat = ({ label, value }) => (
     <div className="flex flex-row justify-between my-1 text-sm">
@@ -42,27 +45,12 @@ export default ({
       </div>
 
       <div className="block">
-        <p className="font-bold">{value}</p>
+        <p className="font-bold capitalize">{value}</p>
       </div>
     </div>
   );
 
   const accordionData = [
-    {
-      title: "Traits",
-      description: (
-        <div>
-          <RowStat label="Shell Shape" value={get(dnaDecoded, "shellShape")} />
-          <RowStat label="Shell Colour" value={get(dnaDecoded, "shellColor")} />
-          <RowStat label="Shell Pattern" value={get(dnaDecoded, "pattern")} />
-          <RowStat label="Inner Color" value={get(dnaDecoded, "innerColor")} />
-          <RowStat label="Lip Color" value={get(dnaDecoded, "lipColor")} />
-          <RowStat label="Tongue Shape" value={get(dnaDecoded, "tongueShape")} />
-          <RowStat label="Tongue Colour" value={get(dnaDecoded, "tongueColor")} />
-          <RowStat label="Size" value={get(dnaDecoded, "size")} />
-        </div>
-      ),
-    },
     {
       title: "General Stats",
       description: (
@@ -129,6 +117,23 @@ export default ({
         </div>
       ),
     },
+
+    {
+      title: "Traits",
+      description: (
+        <div>
+          <RowStat label="Shell Shape" value={get(dnaDecoded, "shellShape")} />
+          <RowStat label="Shell Colour" value={get(dnaDecoded, "shellColor")} />
+          <RowStat label="Shell Pattern" value={get(dnaDecoded, "pattern")} />
+          <RowStat label="Inner Color" value={get(dnaDecoded, "innerColor")} />
+          <RowStat label="Lip Color" value={get(dnaDecoded, "lipColor")} />
+          <RowStat label="Tongue Shape" value={get(dnaDecoded, "tongueShape")} />
+          <RowStat label="Tongue Colour" value={get(dnaDecoded, "tongueColor")} />
+          <RowStat label="Size" value={pearlSize(get(dnaDecoded, "size")) + " (" + get(dnaDecoded, "size") + ")"} />
+        </div>
+      ),
+    },
+
   ];
 
   useEffect(() => {
