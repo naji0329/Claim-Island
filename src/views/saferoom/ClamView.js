@@ -44,7 +44,7 @@ export default ({
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
   const [producedPearls, setProducedPearls] = useState([]);
   const [producedPearlsYieldTimers, setProducedPearlsYieldTimers] = useState([]);
-
+/*
   useInterval(() => {
     const updatedProducedPearlsYieldTimers = producedPearlsYieldTimers.map((time) => {
       const remainingTime = time - 1000;
@@ -57,7 +57,7 @@ export default ({
     setProducedPearlsYieldTimers(updatedProducedPearlsYieldTimers);
     ReactTooltip.rebuild();
   }, 1000);
-
+*/
   const harvestableShell =
     get(dnaDecoded, "shellShape") == "maxima"
       ? "N/A"
@@ -79,13 +79,27 @@ export default ({
     </div>
   );
 
+  const CardStat = ({ label, value }) => (
+    <div className="card card-side my-1 text-sm rounded-xl border border-secondary" style={{ backgroundColor: "#e8f7fd" }}>
+      <div className="card-body px-2 py-3 text-center">
+        <div className="block pb-1">
+          <p className="font-semibold text-xs uppercase text-blue-400">{label}</p>
+        </div>
+        <div className="block">
+          <p className="font-bold capitalize text-base">{value}</p>
+        </div>
+      </div>
+    </div>
+  );
+
   const accordionData = [
     {
       title: "General Stats",
+      scroll: true,
       description: (
-        <div>
-          <RowStat label="Rarity" value={get(dnaDecoded, "rarity")} />
-          <RowStat
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+          <CardStat label="Rarity" value={get(dnaDecoded, "rarity")} />
+          <CardStat
             label="Pearls remaining / Lifespan"
             value={
               (+pearlProductionCapacity - +pearlsProduced).toString() +
@@ -93,7 +107,7 @@ export default ({
               pearlProductionCapacity.toString()
             }
           />
-          <RowStat
+          <CardStat
             label={
               <>
                 Clam boost&nbsp;
@@ -104,7 +118,7 @@ export default ({
             }
             value={formatNumberToLocale(pearlBoost, 2) + "x"}
           />
-          <RowStat
+          <CardStat
             label={
               <>
                 Indicative GEM ROI / APR&nbsp;
@@ -132,7 +146,7 @@ export default ({
               "%"
             }
           />
-          <RowStat
+          <CardStat
             label={
               <>
                 Harvestable $SHELL&nbsp;
@@ -150,26 +164,30 @@ export default ({
     {
       title: "Traits",
       description: (
-        <div>
-          <RowStat label="Shell Shape" value={get(dnaDecoded, "shellShape")} />
-          <RowStat label="Shell Colour" value={get(dnaDecoded, "shellColor")} />
-          <RowStat label="Shell Pattern" value={get(dnaDecoded, "pattern")} />
-          <RowStat label="Inner Color" value={get(dnaDecoded, "innerColor")} />
-          <RowStat label="Lip Color" value={get(dnaDecoded, "lipColor")} />
-          <RowStat label="Tongue Shape" value={get(dnaDecoded, "tongueShape")} />
-          <RowStat label="Tongue Colour" value={get(dnaDecoded, "tongueColor")} />
-          <RowStat
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+
+
+          <CardStat label="Shell Shape" value={get(dnaDecoded, "shellShape")} />
+          <CardStat label="Shell Colour" value={get(dnaDecoded, "shellColor")} />
+          <CardStat label="Shell Pattern" value={get(dnaDecoded, "pattern")} />
+          <CardStat label="Inner Color" value={get(dnaDecoded, "innerColor")} />
+          <CardStat label="Lip Color" value={get(dnaDecoded, "lipColor")} />
+          <CardStat label="Tongue Shape" value={get(dnaDecoded, "tongueShape")} />
+          <CardStat label="Tongue Colour" value={get(dnaDecoded, "tongueColor")} />
+          <CardStat
             label="Size"
             value={pearlSize(get(dnaDecoded, "size")) + " (" + get(dnaDecoded, "size") + ")"}
           />
         </div>
       ),
+      scroll: true,
     },
     {
       title: "Produced pearls",
       description: (
-        <div className="flex flex-col gap-2 overflow-y-auto" style={{ maxHeight: "210px" }}>
-          {producedPearls.map((pearl, i, a) => (
+        <div className="flex flex-col gap-2 overflow-y-auto" style={{ maxHeight: "220px" }}>
+          {producedPearls.length > 0 ?
+            producedPearls.map((pearl, i, a) => (
             <PearlInfo
               key={pearl.pearlId}
               pearl={pearl}
@@ -178,7 +196,7 @@ export default ({
               gemPriceUSD={gemPriceUSD}
               hideViewDetails={true}
             />
-          ))}
+          )) : "This Clam has not yet produced any Pearls."}
         </div>
       ),
     },
@@ -231,7 +249,7 @@ export default ({
             showTraitsTable={showTraits}
           />
           <div className="w-full px-4 md:px-6">
-            <Accordion data={accordionData} />
+            <Accordion data={accordionData} defaultTab="0" />
           </div>
         </div>
 
