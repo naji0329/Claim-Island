@@ -239,15 +239,24 @@ export default ({
       <ReactTooltip html={true} className="max-w-xl" />
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
-          {/** 3D Clam with react three fiber */}
+        <div className="grid">
+          <div className="w-96 h-96">
           <Clam3DView
-            width={400}
-            height={400}
+            width={"100%"}
+            height={"100%"}
             clamDna={dna}
             decodedDna={dnaDecoded}
             // clamTraits={clamTraits}
             showTraitsTable={showTraits}
           />
+          </div>
+          <div className="flex justify-between flex-row py-2">
+            <div className="badge badge-success">#{clamId}</div>
+            <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
+          </div>
+        </div>
+          {/** 3D Clam with react three fiber */}
+
           <div className="w-full px-4 md:px-6">
             <Accordion data={accordionData} defaultTab="0" />
           </div>

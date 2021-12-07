@@ -31,6 +31,19 @@ const RowStat = ({ label, value }) => (
   </div>
 );
 
+const CardStat = ({ label, value }) => (
+  <div className="card card-side my-1 text-sm rounded-xl border border-secondary" style={{ backgroundColor: "#e8f7fd" }}>
+    <div className="card-body px-2 py-3 text-center">
+      <div className="block pb-1">
+        <p className="font-semibold text-xs uppercase text-blue-400">{label}</p>
+      </div>
+      <div className="block">
+        <p className="font-bold capitalize text-base">{value}</p>
+      </div>
+    </div>
+  </div>
+);
+
 export default (props) => {
   const {
     dna,
@@ -38,6 +51,7 @@ export default (props) => {
     bonusRewards,
     gemPriceUSD,
     pearlDataValues,
+    pearlId,
     boostColor,
     boostShape,
     boostPeriodInSeconds,
@@ -103,31 +117,30 @@ export default (props) => {
     {
       title: "Traits",
       description: (
-        <div>
-          <RowStat label="Rarity" value={get(dnaDecoded, "rarity")} />
-          <RowStat label="Shape" value={get(dnaDecoded, "shape")} />
-          <RowStat label="Color" value={get(dnaDecoded, "color")} />
-          <RowStat label="Overtone" value={get(dnaDecoded, "overtone")} />
-          <RowStat label="Size" value={size + " ("+get(dnaDecoded, "size")+")"} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+          <CardStat label="Shape" value={get(dnaDecoded, "shape")} />
+          <CardStat label="Color" value={get(dnaDecoded, "color")} />
+          <CardStat label="Overtone" value={get(dnaDecoded, "overtone")} />
+          <CardStat label="Size" value={size + " ("+get(dnaDecoded, "size")+")"} />
         </div>
       ),
     },
     {
       title: "Grading",
       description: (
-        <div>
-          <RowStat label="Grade" value={grade} />
-          <RowStat label="Surface" value={get(dnaDecoded, "surface")} />
-          <RowStat label="Lustre" value={get(dnaDecoded, "lustre")} />
-          <RowStat label="Nacre Quality" value={get(dnaDecoded, "nacreQuality")} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+          <CardStat label="Grade" value={grade} />
+          <CardStat label="Surface" value={get(dnaDecoded, "surface")} />
+          <CardStat label="Lustre" value={get(dnaDecoded, "lustre")} />
+          <CardStat label="Nacre Quality" value={get(dnaDecoded, "nacreQuality")} />
         </div>
       ),
     },
     {
       title: "Gem Yield",
       description: (
-        <div>
-          <RowStat
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+          <CardStat
             label={
               <>
                 Max GEM Yield&nbsp;
@@ -142,7 +155,7 @@ export default (props) => {
             }
             value={maxGemYield}
           />
-          <RowStat
+          <CardStat
             label={
               <>
                 Max ROI / Max APR&nbsp;
@@ -153,7 +166,7 @@ export default (props) => {
             }
             value={maxAprRoiField}
           />
-          <RowStat
+          <CardStat
             label={
               <>
                 Max yield available in&nbsp;
@@ -173,9 +186,17 @@ export default (props) => {
       <ReactTooltip html={true} className="max-w-xl" />
       <div className="flex flex-col justify-between">
         <div className="flex justify-between flex-col sm:flex-row">
-          <Pearl3DView width={400} height={400} pearlDna={dna} decodedDna={dnaDecoded} />
-          <div className="w-full md:w-1/2 px-4 md:px-6 h-canvas">
-            <Accordion data={accordionData} />
+          <div className="grid">
+            <div className="w-96 h-96">
+              <Pearl3DView width={"100%"} height={"100%"} pearlDna={dna} decodedDna={dnaDecoded} />
+            </div>
+            <div className="flex justify-between flex-row py-2">
+              <div className="badge badge-success">#{pearlId}</div>
+              <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
+            </div>
+          </div>
+          <div className="w-full px-4 md:px-6">
+            <Accordion data={accordionData} defaultTab="0" />
           </div>
         </div>
 
