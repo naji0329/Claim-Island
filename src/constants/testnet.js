@@ -15,6 +15,7 @@ export default {
   pearlFarmAddress: "0x9d50b0640CFaa0DA9A427409A74f3a9b9Faf55B5",
   pearlHuntAddress: "0x4D96B949B49DFA43F4ef8b85060C0Ee118A9BA94",
   gemOracleAddress: "0x364aF36F53089061cEB09db52CB63A2E6aAb6B3D",
+  clamExchangeAddress: "0xCc706B214F7fD7c82E5D36B2e7116Beb9Be71745",
   // third party addresses
   pancakeRouterAddress: "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3",
   wBNB: "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
