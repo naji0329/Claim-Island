@@ -75,8 +75,11 @@ export const onWithdrawPearlRewardsAlert = (updateCharacter, cb) => {
       },
     },
     buttonAlt: {
-      text: "No, I won't withdraw now",
-      dismiss: truncate,
+      text: "No",
+      alt: {
+        action: "cb",
+        destination: () => WelcomeUserBack({ updateCharacter, suppressSpeechBubble: true }),
+      },
     },
   });
 };

@@ -1,4 +1,5 @@
 import { truncate } from "lodash";
+import { speechWelcomeNext } from "./WithdrawClam";
 
 const dismissCharacter = (updateCharacter) => {
   // dismiss bubble and show modal
@@ -101,7 +102,12 @@ export const pearlGemPrompt = ({ updateCharacter, pearlPrice, gems }, cb) => {
     },
     buttonAlt: {
       text: "No thanks",
-      dismiss: true,
+      alt: {
+        action: "cb",
+        destination: () => {
+          speechWelcomeNext({ updateCharacter, gem: pearlPrice, suppressSpeechBubble: true});
+        },
+      },
     },
   });
 };

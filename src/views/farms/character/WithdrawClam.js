@@ -60,11 +60,12 @@ export const speechWelcome = ({ updateCharacter }, cb) => {
   });
 };
 
-export const speechWelcomeNext = ({ updateCharacter, gem }) => {
+export const speechWelcomeNext = ({ updateCharacter, gem, suppressSpeechBubble }) => {
   updateCharacter({
     name: "al",
     action: "farms.welcome_next.text",
     variables: { gem },
+    suppressSpeechBubble: !!suppressSpeechBubble,
     button: {
       text: "Dismiss",
       dismiss: true,
