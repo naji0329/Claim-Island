@@ -98,7 +98,6 @@ export default ({
       scroll: true,
       description: (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
-          <CardStat label="Rarity" value={get(dnaDecoded, "rarity")} />
           <CardStat
             label="Pearls remaining / Lifespan"
             value={
