@@ -49,6 +49,7 @@ const FarmItem = ({
   updateAccount,
   account: { address },
   withdrawingClamId,
+  updateClams,
 }) => {
   const [inTx, setInTx] = useState(false);
   const [isInitLoading, setIsInitLoading] = useState(true);
@@ -213,7 +214,7 @@ const FarmItem = ({
                 showPearlModal: true,
               });
             };
-
+            await updateClams();
             setInTx(false);
 
             // character speaks
@@ -287,13 +288,18 @@ const FarmItem = ({
                 <p className="text-gray-500 font-semibold text-xs text-right mb-1 leading-none">
                   Lifespan Remaining
                 </p>
-                <p className="font-bold text-black text-right">{clam.remainingLifeSpan + " Pearls"}</p>
+                <p className="font-bold text-black text-right">
+                  {clam.remainingLifeSpan + " Pearls"}
+                </p>
               </div>
             </div>
           </div>
 
           <div className="px-4 py-2">
-            <button className="btn btn-neutral btn-outline w-full" onClick={(e) => onViewDetails(e)}>
+            <button
+              className="btn btn-neutral btn-outline w-full"
+              onClick={(e) => onViewDetails(e)}
+            >
               View Details
             </button>
           </div>
@@ -308,8 +314,6 @@ const FarmItem = ({
               Withdraw
             </button>
           </div>
-
-
         </>
       ) : (
         <div className="px-4 py-2">

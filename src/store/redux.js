@@ -261,6 +261,27 @@ export const actions = (store) => ({
       };
     }
   },
+  updateClams: async (state) => {
+    const {
+      account: { address },
+    } = state;
+
+    const clamBalance = await balanceOf(clamNFTAddress, address);
+
+    const clams = await getOwnedClams({
+      address,
+      balance: clamBalance,
+      clamContract,
+    });
+
+    return {
+      account: {
+        ...state.account,
+        clams,
+        clamBalance,
+      },
+    };
+  },
 });
 
 export default { store, actions };

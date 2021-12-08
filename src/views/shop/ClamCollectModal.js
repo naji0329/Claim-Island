@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
 
-import { collectClam, accountClamBalance } from "web3/clam";
+import { collectClam } from "web3/clam";
 
 import Card from "components/Card";
 
@@ -24,6 +24,7 @@ const ClamCollectModal = ({
   account: { address, clamToCollect },
   updateCharacter,
   updateAccount,
+  updateClams,
 }) => {
   const { handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
@@ -39,11 +40,10 @@ const ClamCollectModal = ({
 
     try {
       await collectClam(address);
-      const clamBalance = await accountClamBalance(address);
-      console.log(clamBalance);
+      await updateClams();
       setIsLoading(false);
 
-      updateAccount({ clamToCollect: null, clamBalance: clamBalance });
+      updateAccount({ clamToCollect: null });
 
       collectClamSuccess({ updateCharacter, setModalToShow }); // character speaks
       setModalToShow("display");
