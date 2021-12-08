@@ -23,6 +23,22 @@ import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
 
 import PearlInfo from "../bank/utils/PearlInfo";
 
+const CardStat = ({ label, value }) => (
+  <div
+    className="card card-side my-1 text-sm rounded-xl border border-secondary"
+    style={{ backgroundColor: "#e8f7fd" }}
+  >
+    <div className="card-body px-2 py-3 text-center">
+      <div className="block pb-1">
+        <p className="font-semibold text-xs uppercase text-blue-400">{label}</p>
+      </div>
+      <div className="block">
+        <p className="font-bold capitalize text-base">{value}</p>
+      </div>
+    </div>
+  </div>
+);
+
 export default ({
   dna,
   dnaDecoded,
@@ -44,7 +60,7 @@ export default ({
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
   const [producedPearls, setProducedPearls] = useState([]);
   const [producedPearlsYieldTimers, setProducedPearlsYieldTimers] = useState([]);
-/*
+  /*
   useInterval(() => {
     const updatedProducedPearlsYieldTimers = producedPearlsYieldTimers.map((time) => {
       const remainingTime = time - 1000;
@@ -66,31 +82,6 @@ export default ({
       : "0";
   const formattedHarvestableShell =
     harvestableShell != "N/A" ? formatShell(harvestableShell) : "N/A";
-
-  const RowStat = ({ label, value }) => (
-    <div className="flex flex-row justify-between my-1 text-sm">
-      <div className="block">
-        <p className="font-semibold text-gray-500">{label}</p>
-      </div>
-
-      <div className="block">
-        <p className="font-bold capitalize">{value}</p>
-      </div>
-    </div>
-  );
-
-  const CardStat = ({ label, value }) => (
-    <div className="card card-side my-1 text-sm rounded-xl border border-secondary" style={{ backgroundColor: "#e8f7fd" }}>
-      <div className="card-body px-2 py-3 text-center">
-        <div className="block pb-1">
-          <p className="font-semibold text-xs uppercase text-blue-400">{label}</p>
-        </div>
-        <div className="block">
-          <p className="font-bold capitalize text-base">{value}</p>
-        </div>
-      </div>
-    </div>
-  );
 
   const accordionData = [
     {
@@ -164,8 +155,6 @@ export default ({
       title: "Traits",
       description: (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
-
-
           <CardStat label="Shell Shape" value={get(dnaDecoded, "shellShape")} />
           <CardStat label="Shell Colour" value={get(dnaDecoded, "shellColor")} />
           <CardStat label="Shell Pattern" value={get(dnaDecoded, "pattern")} />
@@ -185,17 +174,18 @@ export default ({
       title: "Produced pearls",
       description: (
         <div className="flex flex-col gap-2 overflow-y-auto" style={{ maxHeight: "220px" }}>
-          {producedPearls.length > 0 ?
-            producedPearls.map((pearl, i, a) => (
-            <PearlInfo
-              key={pearl.pearlId}
-              pearl={pearl}
-              isLast={i === a.length - 1}
-              maxBoostIn={producedPearlsYieldTimers[i]}
-              gemPriceUSD={gemPriceUSD}
-              hideViewDetails={true}
-            />
-          )) : "This Clam has not yet produced any Pearls."}
+          {producedPearls.length > 0
+            ? producedPearls.map((pearl, i, a) => (
+                <PearlInfo
+                  key={pearl.pearlId}
+                  pearl={pearl}
+                  isLast={i === a.length - 1}
+                  maxBoostIn={producedPearlsYieldTimers[i]}
+                  gemPriceUSD={gemPriceUSD}
+                  hideViewDetails={true}
+                />
+              ))
+            : "This Clam has not yet produced any Pearls."}
         </div>
       ),
     },
@@ -238,24 +228,22 @@ export default ({
       <ReactTooltip html={true} className="max-w-xl" />
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
-        <div className="grid">
-          <div className="w-96 h-96">
-          <Clam3DView
-            width={"100%"}
-            height={"100%"}
-            clamDna={dna}
-            decodedDna={dnaDecoded}
-            // clamTraits={clamTraits}
-            showTraitsTable={showTraits}
-          />
+          <div className="grid">
+            <div className="w-96 h-96">
+              <Clam3DView
+                width={"100%"}
+                height={"100%"}
+                clamDna={dna}
+                decodedDna={dnaDecoded}
+                // clamTraits={clamTraits}
+                showTraitsTable={showTraits}
+              />
+            </div>
+            <div className="flex justify-between flex-row py-2">
+              <div className="badge badge-success">#{clamId}</div>
+              <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
+            </div>
           </div>
-          <div className="flex justify-between flex-row py-2">
-            <div className="badge badge-success">#{clamId}</div>
-            <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
-          </div>
-        </div>
-          {/** 3D Clam with react three fiber */}
-
           <div className="w-full px-4 md:px-6">
             <Accordion data={accordionData} defaultTab="0" />
           </div>
