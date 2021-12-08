@@ -253,6 +253,32 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "_boostFactor",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetBoostFactor",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_clamExchange",
+        "type": "address"
+      }
+    ],
+    "name": "SetClamExchange",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "baseGemRewards",
         "type": "uint256"
       }
@@ -361,7 +387,7 @@
         "type": "uint256"
       }
     ],
-    "stateMutability": "pure",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -538,17 +564,94 @@
         "type": "uint256"
       }
     ],
-    "name": "getPearlTraits",
+    "name": "getTraits",
     "outputs": [
       {
-        "internalType": "uint8[10]",
+        "components": [
+          {
+            "internalType": "string",
+            "name": "tongueShape",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "tongueColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "shellShape",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "shellColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "innerColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "lipColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "pattern",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "size",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lifespan",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "glow",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "rarity",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rarityValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8[10]",
+            "name": "pearlBodyColorNumber",
+            "type": "uint8[10]"
+          },
+          {
+            "internalType": "uint8[6]",
+            "name": "pearlShapeNumber",
+            "type": "uint8[6]"
+          },
+          {
+            "internalType": "uint256[3][4]",
+            "name": "defaultHSV",
+            "type": "uint256[3][4]"
+          },
+          {
+            "internalType": "uint256[3][4]",
+            "name": "adjHSV",
+            "type": "uint256[3][4]"
+          }
+        ],
+        "internalType": "struct IDNADecoder.Traits",
         "name": "",
-        "type": "uint8[10]"
-      },
-      {
-        "internalType": "uint8[6]",
-        "name": "",
-        "type": "uint8[6]"
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",

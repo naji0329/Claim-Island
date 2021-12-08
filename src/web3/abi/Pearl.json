@@ -389,6 +389,25 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "gemEarned",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
@@ -633,6 +652,11 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "clamId",
+        "type": "uint256"
+      },
+      {
         "internalType": "uint8[10]",
         "name": "pearlBodyColorNumber",
         "type": "uint8[10]"
@@ -752,6 +776,11 @@
       {
         "internalType": "uint256",
         "name": "pearlPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "clamId",
         "type": "uint256"
       }
     ],

@@ -225,8 +225,23 @@
         "type": "uint256"
       }
     ],
-    "name": "getPearlTraits",
+    "name": "getTraits",
     "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
       {
         "internalType": "uint8[10]",
         "name": "",

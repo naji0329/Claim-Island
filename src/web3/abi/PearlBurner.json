@@ -205,6 +205,35 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnedPearlData",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "forfeited",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "colour",
     "outputs": [
@@ -233,6 +262,25 @@
   {
     "inputs": [],
     "name": "currentPearlShapeIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "gemClaimed",
     "outputs": [
       {
         "internalType": "uint256",
@@ -297,30 +345,6 @@
   {
     "inputs": [],
     "name": "isCurrentPeriod",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_shape",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_colour",
-        "type": "string"
-      }
-    ],
-    "name": "isCurrentShapeAndColour",
     "outputs": [
       {
         "internalType": "bool",

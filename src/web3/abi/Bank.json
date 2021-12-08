@@ -409,7 +409,7 @@
   },
   {
     "inputs": [],
-    "name": "clamBonus_deprecated",
+    "name": "clamBonus",
     "outputs": [
       {
         "internalType": "address",

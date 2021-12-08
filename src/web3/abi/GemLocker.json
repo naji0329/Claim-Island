@@ -260,6 +260,62 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_bonusRemaining",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_bonusRemainingCorrected",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_pearlId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_startDay",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_lastRewardDay",
+        "type": "uint256"
+      }
+    ],
+    "name": "addUserLockPearlRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_accounts",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_pearlIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "addUserPearlsBurned",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "bps",
     "outputs": [
@@ -346,7 +402,7 @@
       },
       {
         "internalType": "uint256[]",
-        "name": "values",
+        "name": "_values",
         "type": "uint256[]"
       }
     ],
@@ -364,7 +420,7 @@
       },
       {
         "internalType": "uint256[]",
-        "name": "values",
+        "name": "_values",
         "type": "uint256[]"
       }
     ],

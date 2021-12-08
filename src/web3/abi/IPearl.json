@@ -128,7 +128,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "baseGemRewards",
+        "name": "pearlPrice",
         "type": "uint256"
       },
       {
@@ -283,6 +283,11 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "clamId",
+        "type": "uint256"
+      },
+      {
         "internalType": "uint8[10]",
         "name": "pearlBodyColorNumber",
         "type": "uint8[10]"
@@ -340,6 +345,16 @@
     ],
     "name": "pearlData",
     "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "",
