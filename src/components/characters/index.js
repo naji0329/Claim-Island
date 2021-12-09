@@ -330,7 +330,7 @@ const CharacterSpeak = (props) => {
             )}
           </div>
           <div className="speech">
-            <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"}>
+            <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"} duration={500}>
               <p className="speech-text">
                   {speech}
               </p>
@@ -342,7 +342,7 @@ const CharacterSpeak = (props) => {
             ) !== -1) ||
           ["shell_voting", "shell_voted_already", "shell_voting_complete"].indexOf(props.speech) ===
             -1 ? (
-            <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"}>
+            <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"} duration={500}>
               <div className="buttons">
                 <button
                   style={{ ...(trackCount === "second" ? { display: "block" } : {}) }}

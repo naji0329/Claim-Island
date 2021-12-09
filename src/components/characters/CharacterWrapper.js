@@ -147,12 +147,12 @@ const CharacterWrapper = ({
               <div className="name px-10">{character.name}</div>
               <div className="speech">
                 <div className="speech-text">
-                  <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"}>
+                  <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"} duration={500}>
                     {stateSpeech ? stateSpeech : speech}
                   </Reveal>
                 </div>
               </div>
-              <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"}>
+              <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"} duration={500}>
                 <div className="buttons">
                   {button.text && (
                     <button
