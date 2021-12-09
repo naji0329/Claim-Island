@@ -10,6 +10,7 @@ import { pearlLegacyBaseGemRewards } from "./pearlBurner";
 
 import NFTUnknown from "assets/img/clam_unknown.png";
 import PEARLunknown from "assets/img/pearl_unknown.png";
+import { calculatePearlBoost } from "./clam";
 
 export const formatFromWei = (value) => (value ? formatUnits(value, 18) : "0");
 
@@ -90,7 +91,11 @@ export const getClamsDataByIds = async ({ tokenIds, clamContract }) => {
 
         const isLegacyClam = new BigNumber(pearlBoostM).eq(0);
 
-        const pearlBoost = !isLegacyClam ? pearlBoostM / (1_000_000).toString() : "0";
+        const pearlBoost = new BigNumber(
+          !isLegacyClam ? pearlBoostM : await calculatePearlBoost(dnaDecoded)
+        )
+          .div(1000000)
+          .toString();
 
         const img = await getClamImageFromCache({ dna });
 
