@@ -77,7 +77,8 @@ const ClamSwap = ({
   updateCharacter,
 }) => {
   const [showSwapModal, setShowSwapModal] = useState(false);
-  const legacyClams = clams.filter(({ isLegacyClam }) => !isLegacyClam);
+  const legacyClams = clams.filter(({ isLegacyClam }) => isLegacyClam);
+
   const { isShowing, toggleModal } = useModal();
 
   useEffect(() => {

@@ -153,16 +153,17 @@ export const ClamItem = ({
                     pearls remaining
                   </dd>
                 </div>
-
-                <div className="bg-gray-50 flex flex-row justify-between sm:gap-4 p-2">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Clam boost&nbsp;
-                    <button data-tip="Applied as a boost multiplier when calculating the GEM yield for each Pearl produced by this Clam.">
-                      <FontAwesomeIcon icon={faInfoCircle} />
-                    </button>
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0">{pearlBoost}</dd>
-                </div>
+                {action === clamItemAction.DEPOSIT && (
+                  <div className="bg-gray-50 flex flex-row justify-between sm:gap-4 p-2">
+                    <dt className="text-sm font-medium text-gray-500">
+                      Clam boost&nbsp;
+                      <button data-tip="Applied as a boost multiplier when calculating the GEM yield for each Pearl produced by this Clam.">
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                      </button>
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0">{pearlBoost}</dd>
+                  </div>
+                )}
               </dl>
             </div>
           </div>
