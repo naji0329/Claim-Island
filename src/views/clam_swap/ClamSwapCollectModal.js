@@ -11,7 +11,7 @@ import Card from "../../components/Card";
 import { collectClam } from "../../web3/clamExchange";
 import { clamExchangeAddress } from "../../constants/constants";
 
-import RewardUnknown from "../../assets/img/pearl_unknown.png";
+import RewardUnknown from "../../assets/img/clam_unknown.png";
 import { actions } from "../../store/redux";
 
 const ClamSwapCollectModal = ({
