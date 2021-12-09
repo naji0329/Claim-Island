@@ -68,6 +68,9 @@ const initialState = {
     accountPearlCount: "0",
     lastWinner: undefined,
   },
+  clamSwapData: {
+    rng: undefined, // from call rngRequestHashFromBuyersClam
+  },
   character: {
     name: undefined,
     action: undefined,
@@ -167,6 +170,14 @@ export const actions = (store) => ({
     return {
       pearlHuntData: {
         ...state.pearlHuntData,
+        ...value,
+      },
+    };
+  },
+  updateClamSwap: (state, value) => {
+    return {
+      clamSwapData: {
+        ...state.clamSwapData,
         ...value,
       },
     };
