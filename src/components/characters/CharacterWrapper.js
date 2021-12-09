@@ -117,11 +117,13 @@ const CharacterWrapper = ({
         setCanPlay(true);
       }, 300);
     }
-
-    return () => {
-      setCanPlay(false);
-    };
   }, [action, loading, showBubble]);
+
+  useEffect(() => {
+    if (loading || !showBubble) {
+      setCanPlay(false);
+    }
+  }, [loading, showBubble]);
 
   return (
     <div
@@ -156,9 +158,10 @@ const CharacterWrapper = ({
                     <button
                       className="btn character-btn"
                       id="btn-next"
-                      onClick={() =>
-                        button.alt ? handleButtonCallback(button) : handleClickButton(button)
-                      }
+                      onClick={() => {
+                        setCanPlay(false);
+                        button.alt ? handleButtonCallback(button) : handleClickButton(button);
+                      }}
                     >
                       {button.text}
                     </button>
@@ -166,11 +169,12 @@ const CharacterWrapper = ({
                   {buttonAlt && buttonAlt.text && (
                     <button
                       className="btn character-btn"
-                      onClick={() =>
+                      onClick={() => {
+                        setCanPlay(false);
                         buttonAlt.alt
                           ? handleButtonCallback(buttonAlt)
-                          : handleClickButton(buttonAlt)
-                      }
+                          : handleClickButton(buttonAlt);
+                      }}
                     >
                       {buttonAlt.text}
                     </button>
