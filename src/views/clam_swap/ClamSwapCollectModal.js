@@ -37,64 +37,63 @@ const ClamSwapCollectModal = ({
       },
     });
 
-    await dispatchFetchAccountAssets();
-    await collectClam()
-      .then(() => {
-        setIsLoading(false);
+    try {
+      await collectClam();
+      setIsLoading(false);
 
-        updateCharacter({
-          name: "diego",
-          action: "clam_exchange.congratsCollection.text",
-          button: {
-            text: "Go to Saferoom",
-            alt: {
-              action: "internal",
-              destination: "/saferoom",
+      updateCharacter({
+        name: "diego",
+        action: "clam_exchange.congratsCollection.text",
+        button: {
+          text: "Go to Saferoom",
+          alt: {
+            action: "internal",
+            destination: "/saferoom",
+          },
+        },
+        buttonAlt: {
+          text: "Claim more",
+          alt: {
+            action: "cb",
+            destination: () => {
+              setShowMintModal(true);
+              updateCharacter({
+                name: "diego",
+                action: "clam_exchange.claim.text",
+                button: {
+                  text: "Back to Island",
+                  alt: {
+                    action: "internal",
+                    destination: "/",
+                  },
+                },
+                buttonAlt: {
+                  text: "Go to Saferoom",
+                  alt: {
+                    action: "internal",
+                    destination: "/saferoom",
+                  },
+                },
+              });
             },
           },
-          buttonAlt: {
-            text: "Claim more",
-            alt: {
-              action: "cb",
-              destination: () => {
-                setShowMintModal(true);
-                updateCharacter({
-                  name: "diego",
-                  action: "clam_exchange.claim.text",
-                  button: {
-                    text: "Back to Island",
-                    alt: {
-                      action: "internal",
-                      destination: "/",
-                    },
-                  },
-                  buttonAlt: {
-                    text: "Go to Saferoom",
-                    alt: {
-                      action: "internal",
-                      destination: "/saferoom",
-                    },
-                  },
-                });
-              },
-            },
-          },
-        });
-        setModalToShow("display");
-        updateClamSwap({ rng: undefined, hashRequest: undefined });
-      })
-      .catch((e) => {
-        console.error(e);
-        setIsLoading(false);
-        updateAccount({ error: e.message });
-        updateCharacter({
-          name: "diego",
-          action: "clam_exchange.error.text",
-          button: {
-            text: undefined,
-          },
-        });
+        },
       });
+      await dispatchFetchAccountAssets();
+      setModalToShow("display");
+      updateClamSwap({ rng: undefined, hashRequest: undefined });
+    } catch (e) {
+      console.error(e);
+      setIsLoading(false);
+      updateAccount({ error: e.message });
+      updateCharacter({
+        name: "diego",
+        action: "clam_exchange.error.text",
+        button: {
+          text: undefined,
+        },
+      });
+    }
   };
 
   useAsync(async () => {
