@@ -204,7 +204,9 @@ const ClamSwap = ({
           {hashRequest && rng && Number(rng) > 0 && modalToShow === "collect" && (
             <ClamSwapCollectModal setModalToShow={setModalToShow} />
           )}
-          {modalToShow === "display" && <ClamDisplayModal />}
+          {modalToShow === "display" && (
+            <ClamDisplayModal clam={legacyClams[0]} onClose={() => setModalToShow("")} />
+          )}
         </div>
       </div>
     </>
