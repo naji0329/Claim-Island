@@ -47,7 +47,7 @@ export const WELCOME_BUTTONS = {
       next: "No thanks, I'm good",
       alt: {
         action: "url_internal",
-        destination: "/infocenter",
+        destination: "/info",
         next: "fourth",
         text: "Go to Infocenter",
       },

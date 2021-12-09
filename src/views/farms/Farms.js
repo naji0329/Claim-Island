@@ -305,7 +305,7 @@ const Farms = ({
         </div>
       )}
 
-      <Character name="al" />
+      <Character name="al" loading={loading} />
     </div>
   );
 };

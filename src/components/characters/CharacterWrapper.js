@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { get } from "lodash";
 import { useHistory } from "react-router-dom";
+import { Reveal } from "react-text-reveal";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinusCircle, faTimesCircle, faEye } from "@fortawesome/free-solid-svg-icons";
@@ -26,6 +27,7 @@ const CharacterWrapper = ({
   skipDialogs,
   forceTop,
   suppressSpeechBubbleAction,
+  loading,
 }) => {
   const character = get(CHARACTERS, name);
   let speech = get(SPEECHES, action, action);
@@ -37,6 +39,7 @@ const CharacterWrapper = ({
   const isDialogHideable = get(SPEECHES, `${actionPath}.hideable`, false);
 
   const [showBubble, setShowBubble] = useState(true);
+  const [canPlay, setCanPlay] = useState(false);
   const [stateSpeech, setStateSpeech] = useState();
 
   let history = useHistory();
@@ -108,6 +111,18 @@ const CharacterWrapper = ({
     }
   }, [isNeedSkipDialog, actionPath]);
 
+  useEffect(() => {
+    if (!loading && showBubble) {
+      setTimeout(() => {
+        setCanPlay(true);
+      }, 300);
+    }
+
+    return () => {
+      setCanPlay(false);
+    };
+  }, [action, loading, showBubble]);
+
   return (
     <div
       className={classNames(
@@ -122,44 +137,46 @@ const CharacterWrapper = ({
             ? "character-bubble fixed z-999 bottom-8 pointer-events-none w-screen"
             : "character-bubble hide-bubble fixed justify-end"
         }
-        style={{ zIndex: forceTop ? 9999 : (speech ? undefined : 0) }}
+        style={{ zIndex: forceTop ? 9999 : speech ? undefined : 0 }}
       >
         {speech && (
           <div className="text-bubble flex-col justify-end pointer-events-none">
             <div className="text-wrapper">
               <div className="name px-10">{character.name}</div>
               <div className="speech">
-                <div
-                  className="speech-text"
-                  dangerouslySetInnerHTML={{
-                    __html: stateSpeech ? stateSpeech : speech,
-                  }}
-                />
+                <div className="speech-text">
+                  <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"}>
+                    {stateSpeech ? stateSpeech : speech}
+                  </Reveal>
+                </div>
               </div>
-              {/* todo */}
-              <div className="buttons">
-                {button.text && (
-                  <button
-                    className="btn character-btn"
-                    id="btn-next"
-                    onClick={() =>
-                      button.alt ? handleButtonCallback(button) : handleClickButton(button)
-                    }
-                  >
-                    {button.text}
-                  </button>
-                )}
-                {buttonAlt && buttonAlt.text && (
-                  <button
-                    className="btn character-btn"
-                    onClick={() =>
-                      buttonAlt.alt ? handleButtonCallback(buttonAlt) : handleClickButton(buttonAlt)
-                    }
-                  >
-                    {buttonAlt.text}
-                  </button>
-                )}
-              </div>
+              <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"}>
+                <div className="buttons">
+                  {button.text && (
+                    <button
+                      className="btn character-btn"
+                      id="btn-next"
+                      onClick={() =>
+                        button.alt ? handleButtonCallback(button) : handleClickButton(button)
+                      }
+                    >
+                      {button.text}
+                    </button>
+                  )}
+                  {buttonAlt && buttonAlt.text && (
+                    <button
+                      className="btn character-btn"
+                      onClick={() =>
+                        buttonAlt.alt
+                          ? handleButtonCallback(buttonAlt)
+                          : handleClickButton(buttonAlt)
+                      }
+                    >
+                      {buttonAlt.text}
+                    </button>
+                  )}
+                </div>
+              </Reveal>
               <div className="absolute mt-4 right-8 text-white">
                 {isDialogHideable && (
                   <button
