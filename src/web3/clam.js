@@ -27,13 +27,13 @@ export const getMinPearlProductionDelay = async () => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
   const minPearlProductionDelay = await clamNft.methods.minPearlProductionDelay().call();
   return minPearlProductionDelay;
-}
+};
 
 export const getMaxPearlProductionDelay = async () => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
   const maxPearlProductionDelay = await clamNft.methods.maxPearlProductionDelay().call();
   return maxPearlProductionDelay;
-}
+};
 
 export const totalClamSupply = async () => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
@@ -413,7 +413,8 @@ export const getPearlBoost = async (clamId) => {
   return "0";
 };
 
-export const calculatePearlBoost = async (size, lifespan, rarityValue) => {
+export const calculatePearlBoost = async (dnaDecoded) => {
+  const { size, lifespan, rarityValue } = dnaDecoded;
   const clamNft = contractFactory({
     abi: clamNFTAbi,
     address: clamNFTAddress,
