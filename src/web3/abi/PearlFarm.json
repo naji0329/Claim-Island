@@ -264,7 +264,7 @@
         "type": "uint256"
       }
     ],
-    "name": "clamHasBeenStaked",
+    "name": "clamBonusRewarded",
     "outputs": [
       {
         "internalType": "bool",

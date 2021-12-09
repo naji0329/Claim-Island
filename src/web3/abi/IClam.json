@@ -506,6 +506,11 @@
           },
           {
             "internalType": "uint256",
+            "name": "gemBoost",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
             "name": "pearlBoostM",
             "type": "uint256"
           }
