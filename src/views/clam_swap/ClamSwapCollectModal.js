@@ -31,7 +31,7 @@ const ClamSwapCollectModal = ({
 
     updateCharacter({
       name: "diego",
-      action: "clam_exchange.collectionProcessing.text",
+      action: "clam_swap.collectionProcessing.text",
       button: {
         text: undefined,
       },
@@ -43,7 +43,7 @@ const ClamSwapCollectModal = ({
 
       updateCharacter({
         name: "diego",
-        action: "clam_exchange.congratsCollection.text",
+        action: "clam_swap.congratsCollection.text",
         button: {
           text: "Go to Saferoom",
           alt: {
@@ -59,7 +59,7 @@ const ClamSwapCollectModal = ({
               setShowMintModal(true);
               updateCharacter({
                 name: "diego",
-                action: "clam_exchange.claim.text",
+                action: "clam_swap.claim.text",
                 button: {
                   text: "Back to Island",
                   alt: {
@@ -88,7 +88,7 @@ const ClamSwapCollectModal = ({
       updateAccount({ error: e.message });
       updateCharacter({
         name: "diego",
-        action: "clam_exchange.error.text",
+        action: "clam_swap.error.text",
         button: {
           text: undefined,
         },
@@ -99,7 +99,7 @@ const ClamSwapCollectModal = ({
   useAsync(async () => {
     updateCharacter({
       name: "diego",
-      action: "clam_exchange.collection.text",
+      action: "clam_swap.collection.text",
       button: {
         text: undefined,
       },
