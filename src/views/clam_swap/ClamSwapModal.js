@@ -11,6 +11,7 @@ const ClamSwapModal = ({
   updateAccount,
   dispatchFetchAccountAssets,
   legacyClams,
+  toggleModal,
 }) => (
   <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
     <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 flex-2">
@@ -23,6 +24,7 @@ const ClamSwapModal = ({
           updateCharacter={updateCharacter}
           dispatchFetchAccountAssets={dispatchFetchAccountAssets}
           action={clamItemAction.SWAP}
+          toggleModal={toggleModal}
         />
       ))}
     </div>

@@ -196,7 +196,7 @@ const ClamSwap = ({
           {address && // wallet is connected
             modalToShow === "swap" && // user has agreed clicked Yes
             !hashRequest &&
-            !rng && <ClamSwapModal legacyClams={legacyClams} />}
+            !rng && <ClamSwapModal legacyClams={legacyClams} toggleModal={toggleModal} />}
           {/* !rng = did not have clams to collect */}
         </Modal>
         <div className="flex absolute z-20 justify-center items-start top-40 w-full">

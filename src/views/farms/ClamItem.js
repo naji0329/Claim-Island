@@ -37,6 +37,7 @@ export const ClamItem = ({
   setRefreshClams,
   dispatchFetchAccountAssets,
   action,
+  toggleModal,
 }) => {
   const [remainingTime, setRemainingTime] = useState("");
   const [buttonText, setButtonText] = useState(
@@ -111,6 +112,7 @@ export const ClamItem = ({
       setButtonText("Swapping Clam...");
 
       await exchangeClam(clamId);
+      toggleModal();
       await dispatchFetchAccountAssets();
     } catch (err) {
       updateAccount({ error: err.message });
