@@ -96,6 +96,7 @@ export const getClamsDataByIds = async ({ tokenIds, clamContract }) => {
 
         return {
           ...clam,
+          isLegacyClam,
           dnaDecoded,
           producedPearlIds,
           dna,
