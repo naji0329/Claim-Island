@@ -340,6 +340,7 @@ export const decodeClamDataFromMulticall = (values, tokenIds) => {
             dna: "uint256",
             pearlProductionStart: "uint256",
             producedPearlIds: "uint256[]",
+            gemBoost: "uint256",
             pearlBoostM: "uint256",
           },
         },
