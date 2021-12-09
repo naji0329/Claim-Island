@@ -15,7 +15,7 @@ import RewardUnknown from "../../assets/img/pearl_unknown.png";
 import { actions } from "../../store/redux";
 
 const ClamSwapCollectModal = ({
-  toggleModal,
+  setModalToShow,
   updateClamSwap,
   account: { address },
   updateCharacter,
@@ -80,7 +80,7 @@ const ClamSwapCollectModal = ({
             },
           },
         });
-        toggleModal();
+        setModalToShow("display");
         updateClamSwap({ rng: undefined, hashRequest: undefined });
       })
       .catch((e) => {

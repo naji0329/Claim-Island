@@ -10,6 +10,7 @@ import ClamSwapModal from "./ClamSwapModal";
 import ClamSwapCollectModal from "./ClamSwapCollectModal";
 import Web3ClamClaimers from "./Web3ClamSwap";
 import { Modal, useModal } from "components/Modal";
+import ClamDisplayModal from "../shop/ClamDisplayModal";
 
 const WaitingOracle = () => (
   <Card>
@@ -76,9 +77,8 @@ const ClamSwap = ({
   clamSwapData: { hashRequest, rng },
   updateCharacter,
 }) => {
-  const [showSwapModal, setShowSwapModal] = useState(false);
   const legacyClams = clams.filter(({ isLegacyClam }) => isLegacyClam);
-
+  const [modalToShow, setModalToShow] = useState(null);
   const { isShowing, toggleModal } = useModal();
 
   useEffect(() => {
@@ -113,7 +113,10 @@ const ClamSwap = ({
               text: "Show",
               alt: {
                 action: "cb",
-                destination: toggleModal,
+                destination: () => {
+                  toggleModal();
+                  setModalToShow("collect");
+                },
               },
             },
           });
@@ -142,7 +145,7 @@ const ClamSwap = ({
                 action: "cb",
                 destination: () => {
                   toggleModal();
-                  setShowSwapModal(true);
+                  setModalToShow("swap");
                   updateCharacter({
                     name: "diego",
                     action: "clam_swap.claim.text",
@@ -188,22 +191,19 @@ const ClamSwap = ({
         <Modal
           isShowing={isShowing}
           onClose={() => toggleModal()}
-          title={showSwapModal ? "Choose a clam to swap" : "Collect new clam"}
-          modalClassName={
-            //  "w-4/5 max-w-5xl"
-            "w-full md:w-4/5"
-          }
+          title={modalToShow === "swap" ? "Choose a clam to swap" : "Collect new clam"}
+          modalClassName="w-full md:w-4/5"
         >
           {address && // wallet is connected
-            showSwapModal && // user has agreed clicked Yes
+            modalToShow === "swap" && // user has agreed clicked Yes
             !hashRequest &&
             !rng && <ClamSwapModal legacyClams={legacyClams} />}
           {/* !rng = did not have clams to collect */}
-
           {hashRequest && rng && rng === "0" && <WaitingOracle />}
-          {hashRequest && rng && Number(rng) > 0 && (
-            <ClamSwapCollectModal toggleModal={toggleModal} />
+          {hashRequest && rng && Number(rng) > 0 && modalToShow === "collect" && (
+            <ClamSwapCollectModal setModalToShow={setModalToShow} />
           )}
+          {modalToShow === "display" && <ClamDisplayModal />}
         </Modal>
       </div>
     </>
