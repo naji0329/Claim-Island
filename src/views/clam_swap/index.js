@@ -114,7 +114,6 @@ const ClamSwap = ({
               alt: {
                 action: "cb",
                 destination: () => {
-                  toggleModal();
                   setModalToShow("collect");
                 },
               },
@@ -199,12 +198,14 @@ const ClamSwap = ({
             !hashRequest &&
             !rng && <ClamSwapModal legacyClams={legacyClams} />}
           {/* !rng = did not have clams to collect */}
+        </Modal>
+        <div className="flex absolute z-20 justify-center items-start top-40 w-full">
           {hashRequest && rng && rng === "0" && <WaitingOracle />}
           {hashRequest && rng && Number(rng) > 0 && modalToShow === "collect" && (
             <ClamSwapCollectModal setModalToShow={setModalToShow} />
           )}
           {modalToShow === "display" && <ClamDisplayModal />}
-        </Modal>
+        </div>
       </div>
     </>
   );
