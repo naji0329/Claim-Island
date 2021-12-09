@@ -183,14 +183,14 @@ const ClamSwap = ({
         </video>
 
         {/* chat character   */}
-        <div className="flex-1 min-h-full min-w-full  md:flex items-center absolute z-20">
+        <div className="flex-1 min-h-full min-w-full md:flex items-center absolute z-20">
           <CharacterWrapper name="diego" />
         </div>
 
         <Modal
           isShowing={isShowing}
           onClose={() => toggleModal()}
-          title={modalToShow === "swap" ? "Choose a clam to swap" : "Collect new clam"}
+          title={"Choose a clam to swap"}
           modalClassName="w-full md:w-4/5"
         >
           {address && // wallet is connected
