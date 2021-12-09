@@ -90,7 +90,7 @@ const Shop = ({
           {/* step 2 */}
           {modalToShow === "collect" && <ClamCollectModal setModalToShow={setModalToShow} />}
           {/* step 3 */}
-          {modalToShow === "display" && <ClamDisplayModal setModalToShow={setModalToShow} />}
+          {modalToShow === "display" && <ClamDisplayModal onClose={() => setModalToShow("")} />}
           {/* step 4 */}
           {modalToShow === "harvest" && <ClamHarvestModal setModalToShow={setModalToShow} />}
         </div>
