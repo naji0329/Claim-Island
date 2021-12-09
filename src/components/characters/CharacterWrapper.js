@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "redux-zero/react";
 import { get } from "lodash";
 import { useHistory } from "react-router-dom";
-import { Reveal } from "react-text-reveal";
+import { Reveal, CharacterReveal } from "react-text-reveal";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinusCircle, faTimesCircle, faEye } from "@fortawesome/free-solid-svg-icons";
@@ -147,9 +147,7 @@ const CharacterWrapper = ({
               <div className="name px-10">{character.name}</div>
               <div className="speech">
                 <div className="speech-text">
-                  <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"}>
-                    {stateSpeech ? stateSpeech : speech}
-                  </Reveal>
+                  <CharacterReveal characterWordSpacing={".32em"} characterOffsetDelay={5} duration={200} from={"right"} canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"} copy={[stateSpeech ? stateSpeech : speech]} />
                 </div>
               </div>
               <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"}>
