@@ -5,7 +5,7 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { approveContractForMaxUintErc721 } from "../../web3/bep20";
-import { getAllowance, infiniteApproveSpending } from "../../web3/gem";
+import { getAllowance, infiniteApproveSpending, getBalance } from "../../web3/gem";
 import { exchangeClam, clamBonusData } from "../../web3/clamExchange";
 import { clamExchangeAddress, clamNFTAddress, pearlFarmAddress } from "../../constants/constants";
 import ReactTooltip from "react-tooltip";
@@ -18,6 +18,7 @@ import {
 import { depositClamError, depositClamSuccess } from "./character/clamDeposit";
 import { secondsToFormattedTime } from "utils/time";
 import BigNumber from "bignumber.js";
+import { formatNumberToLocale } from "../../utils/formatNumberToLocale";
 
 export const clamItemAction = {
   DEPOSIT: "deposit",
@@ -97,7 +98,12 @@ export const ClamItem = ({
     try {
       setInTx(true);
       const repayGem = await clamBonusData(clamId).then(BigNumber);
-
+      const gemBalance = await getBalance(address).then(BigNumber);
+      if(repayGem.gt(gemBalance)) {
+        console.log(repayGem, gemBalance);
+        setButtonText("Swap Clam");
+        throw new SyntaxError('Insufficient GEM balance - you need to repay ' + formatNumberToLocale(repayGem.toString(), 2, true) + ' GEM in order to swap this Clam.');
+      }
       if (new BigNumber(repayGem).gt(0)) {
         const gemAllowance = await getAllowance(address, clamExchangeAddress).then(BigNumber);
         if (gemAllowance.lt(repayGem)) {
