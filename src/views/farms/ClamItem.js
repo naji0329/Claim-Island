@@ -45,6 +45,7 @@ export const ClamItem = ({
     action === clamItemAction.DEPOSIT ? "Deposit Clam" : "Swap Clam"
   );
   const [inTx, setInTx] = useState(false);
+  const [insufficentGem, setInsufficientGem] = useState(false);
 
   const [isClamDeposited, setIsClamDeposited] = useState(false);
 
@@ -53,6 +54,15 @@ export const ClamItem = ({
       try {
         const remaining = await getRemainingPearlProductionTime(clamId);
         setRemainingTime(remaining);
+        if(action === clamItemAction.SWAP) {
+          const repayGem = await clamBonusData(clamId).then(BigNumber);
+          const gemBalance = await getBalance(address).then(BigNumber);
+          if(repayGem.gt(gemBalance)) {
+            setButtonText("Requires " + formatNumberToLocale(repayGem.toString(), 2, true) + " GEM");
+            setInsufficientGem(true);
+          }
+        }
+
       } catch (err) {
         updateAccount({ error: err.message });
       }
@@ -107,7 +117,6 @@ export const ClamItem = ({
       if (new BigNumber(repayGem).gt(0)) {
         const gemAllowance = await getAllowance(address, clamExchangeAddress).then(BigNumber);
         if (gemAllowance.lt(repayGem)) {
-          setButtonText("Approving Gem...");
           await infiniteApproveSpending(address, clamExchangeAddress, repayGem.toString());
         }
       }
@@ -122,7 +131,7 @@ export const ClamItem = ({
       await dispatchFetchAccountAssets();
     } catch (err) {
       updateAccount({ error: err.message });
-      setButtonText("Approve Clam");
+      setButtonText("Swap Clam");
       setInTx(false);
     }
   };
@@ -161,7 +170,7 @@ export const ClamItem = ({
                     pearls remaining
                   </dd>
                 </div>
-                {action === clamItemAction.DEPOSIT && (
+
                   <div className="bg-gray-50 flex flex-row justify-between sm:gap-4 p-2">
                     <dt className="text-sm font-medium text-gray-500">
                       Clam boost&nbsp;
@@ -171,7 +180,7 @@ export const ClamItem = ({
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0">{pearlBoost}</dd>
                   </div>
-                )}
+                
               </dl>
             </div>
           </div>
@@ -197,7 +206,7 @@ export const ClamItem = ({
             )}
             {action === clamItemAction.SWAP && (
               <button
-                disabled={inTx}
+                disabled={inTx || insufficentGem}
                 className="btn btn-secondary mt-4 font-montserrat font-bold w-full"
                 onClick={() => executeSwap()}
               >
