@@ -54,15 +54,16 @@ export const ClamItem = ({
       try {
         const remaining = await getRemainingPearlProductionTime(clamId);
         setRemainingTime(remaining);
-        if(action === clamItemAction.SWAP) {
+        if (action === clamItemAction.SWAP) {
           const repayGem = await clamBonusData(clamId).then(BigNumber);
           const gemBalance = await getBalance(address).then(BigNumber);
-          if(repayGem.gt(gemBalance)) {
-            setButtonText("Requires " + formatNumberToLocale(repayGem.toString(), 2, true) + " GEM");
+          if (repayGem.gt(gemBalance)) {
+            setButtonText(
+              "Requires " + formatNumberToLocale(repayGem.toString(), 2, true) + " GEM"
+            );
             setInsufficientGem(true);
           }
         }
-
       } catch (err) {
         updateAccount({ error: err.message });
       }
@@ -109,10 +110,14 @@ export const ClamItem = ({
       setInTx(true);
       const repayGem = await clamBonusData(clamId).then(BigNumber);
       const gemBalance = await getBalance(address).then(BigNumber);
-      if(repayGem.gt(gemBalance)) {
+      if (repayGem.gt(gemBalance)) {
         console.log(repayGem, gemBalance);
         setButtonText("Swap Clam");
-        throw new SyntaxError('Insufficient GEM balance - you need to repay ' + formatNumberToLocale(repayGem.toString(), 2, true) + ' GEM in order to swap this Clam.');
+        throw new SyntaxError(
+          "Insufficient GEM balance - you need to repay " +
+            formatNumberToLocale(repayGem.toString(), 2, true) +
+            " GEM in order to swap this Clam."
+        );
       }
       if (new BigNumber(repayGem).gt(0)) {
         const gemAllowance = await getAllowance(address, clamExchangeAddress).then(BigNumber);
@@ -171,16 +176,15 @@ export const ClamItem = ({
                   </dd>
                 </div>
 
-                  <div className="bg-gray-50 flex flex-row justify-between sm:gap-4 p-2">
-                    <dt className="text-sm font-medium text-gray-500">
-                      Clam boost&nbsp;
-                      <button data-tip="Applied as a boost multiplier when calculating the GEM yield for each Pearl produced by this Clam.">
-                        <FontAwesomeIcon icon={faInfoCircle} />
-                      </button>
-                    </dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0">{pearlBoost}</dd>
-                  </div>
-                
+                <div className="bg-gray-50 flex flex-row justify-between sm:gap-4 p-2">
+                  <dt className="text-sm font-medium text-gray-500">
+                    Clam boost&nbsp;
+                    <button data-tip="Applied as a boost multiplier when calculating the GEM yield for each Pearl produced by this Clam.">
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                    </button>
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0">{pearlBoost}</dd>
+                </div>
               </dl>
             </div>
           </div>

@@ -77,7 +77,7 @@ const ClamItem = ({ clam, clamValueInShellToken, pearlValueInShellToken, harvest
                     <div className="flex flex-row w-full justify-between">
                       <dt className="text-sm font-medium text-gray-500">Clam Boost</dt>
                       <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                        {formatNumberToLocale(clam.clamDataValues.pearlBoostM / 1e6, 3)}x
+                        {formatNumberToLocale(clam.pearlBoost, 2) + "x"}
                       </dd>
                     </div>
                   </div>
