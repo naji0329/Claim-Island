@@ -58,8 +58,8 @@ export default (props) => {
     boostPeriodStart,
     onClickNext,
     onClickPrev,
+    hideProduceButton,
   } = props;
-
   const [grade, setGrade] = useState(0);
   const [size, setSize] = useState(0);
   const [maxBoostIn, setMaxBoostIn] = useState(0);
@@ -207,13 +207,14 @@ export default (props) => {
               <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
             </button>
           </Link>
-
-          <Link to="/farms">
-            <button className="px-4 p-3 rounded-xl shadown-xl bg-green-500 text-white hover:bg-green-300 font-semibold">
-              Produce more pearls&nbsp;
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
-            </button>
-          </Link>
+          {!hideProduceButton && (
+            <Link to="/farms">
+              <button className="px-4 p-3 rounded-xl shadown-xl bg-green-500 text-white hover:bg-green-300 font-semibold">
+                Produce more pearls&nbsp;
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+              </button>
+            </Link>
+          )}
         </div>
 
         <Controls3DView onClickNext={onClickNext} onClickPrev={onClickPrev} />

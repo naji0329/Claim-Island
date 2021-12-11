@@ -11,8 +11,6 @@ import PearlView from "./PearlView";
 import { TabContainer } from "./TabContainer";
 import { SaferoomNav } from "./SaferoomNav";
 
-import { color, shape, periodStart, periodInSeconds } from "web3/pearlBurner";
-
 import videoImage from "assets/locations/Saferoom.jpg";
 import videoMp4 from "assets/locations/Saferoom.mp4";
 import videoWebM from "assets/locations/Saferoom.webm";
@@ -30,10 +28,10 @@ const Saferoom = ({
   account: { clamBalance, pearlBalance, address, clams, pearls },
   updateCharacter,
   price: { gem: gemPriceUSD },
+  boostParams,
 }) => {
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? TABS.clam : TABS.pearl);
-  const [boostParams, setBoostParams] = useState({});
   const [clamValueInShellToken, setClamValueInShellToken] = useState("0");
   const [pearlValueInShellToken, setPearlValueInShellToken] = useState("0");
   let { path, url } = useRouteMatch();
@@ -127,36 +125,6 @@ const Saferoom = ({
       }
     }
   }, [address, search, pearls, clams]);
-
-  useEffect(() => {
-    const getBoostParams = async () => {
-      const [
-        boostColor,
-        boostShape,
-        boostPeriodStart,
-        boostPeriodInSeconds,
-        clamValueInShellToken,
-        pearlValueInShellToken,
-      ] = await Promise.all([
-        color(),
-        shape(),
-        periodStart(),
-        periodInSeconds(),
-        getClamValueInShellToken(),
-        getPearlValueInShellToken(),
-      ]);
-
-      setBoostParams({
-        boostColor,
-        boostShape,
-        boostPeriodStart,
-        boostPeriodInSeconds,
-        clamValueInShellToken,
-        pearlValueInShellToken,
-      });
-    };
-    getBoostParams();
-  }, []);
 
   useEffect(() => {
     const getValuesInShellToken = async () => {

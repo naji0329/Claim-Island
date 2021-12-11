@@ -19,10 +19,9 @@ import {
 import { getRNGFromHashRequest } from "web3/rng";
 import { getAllowance, getBalance, infiniteApproveSpending } from "web3/gem";
 import { canCurrentlyProducePearl, canStillProducePearls } from "web3/clam";
-import { getPearlData, tokenOfOwnerByIndex, accountPearlBalance } from "web3/pearl";
-import { formatFromWei } from "web3/shared";
+import { tokenOfOwnerByIndex, accountPearlBalance } from "web3/pearl";
+import { formatFromWei, getOwnedPearls } from "web3/shared";
 import { pearlFarmAddress, zeroHash } from "constants/constants";
-import { getPearlDNADecoded } from "web3/pearlDnaDecoder";
 
 import {
   pearlCollectSuccess,
@@ -199,22 +198,24 @@ const FarmItem = ({
 
             await collectPearl(clamId);
 
-            const userBalanceOfPearls = await accountPearlBalance(address);
-            updateAccount({ pearlBalance: userBalanceOfPearls });
-            const lastUsersPearlId = await tokenOfOwnerByIndex(address, +userBalanceOfPearls - 1);
+            const [pearlBalance] = await Promise.all([accountPearlBalance(address), updateClams()]);
 
-            const { dna: pearlDna } = await getPearlData(lastUsersPearlId);
-            const pearlDnaDecoded = await getPearlDNADecoded(pearlDna);
+            const lastUsersPearlId = await tokenOfOwnerByIndex(address, +pearlBalance - 1);
+            const pearls = await getOwnedPearls({
+              address,
+              balance: pearlBalance,
+            });
+
+            updateAccount({ pearlBalance, pearls });
 
             const viewPearl = () => {
               onViewPearl({
                 clamId,
-                dna: pearlDna,
-                dnaDecoded: pearlDnaDecoded,
+                pearl: pearls.find(({ pearlId }) => pearlId === lastUsersPearlId),
                 showPearlModal: true,
               });
             };
-            await updateClams();
+
             setInTx(false);
 
             // character speaks

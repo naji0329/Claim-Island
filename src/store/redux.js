@@ -3,7 +3,7 @@ import { applyMiddleware } from "redux-zero/middleware";
 import { connect } from "redux-zero/devtools";
 
 // dispatcher imports
-import clamContract from "web3/clam";
+import clamContract, { getClamValueInShellToken, getPearlValueInShellToken } from "web3/clam";
 import {
   gemTokenAddress,
   shellTokenAddress,
@@ -13,6 +13,7 @@ import {
 import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm";
 import { EmptyBytes, getOwnedClams, getOwnedPearls, formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";
+import { color, periodInSeconds, periodStart, shape } from "web3/pearlBurner";
 
 const initialState = {
   account: {
@@ -95,6 +96,7 @@ const initialState = {
     selectedPool: undefined,
   },
   konvaObjects: [],
+  boostParams: {},
 };
 
 const middlewares = connect ? applyMiddleware(connect(initialState)) : [];
@@ -256,6 +258,31 @@ export const actions = (store) => ({
         balance: pearlBalance,
       });
 
+      const [
+        boostColor,
+        boostShape,
+        boostPeriodStart,
+        boostPeriodInSeconds,
+        clamValueInShellToken,
+        pearlValueInShellToken,
+      ] = await Promise.all([
+        color(),
+        shape(),
+        periodStart(),
+        periodInSeconds(),
+        getClamValueInShellToken(),
+        getPearlValueInShellToken(),
+      ]);
+
+      const boostParams = {
+        boostColor,
+        boostShape,
+        boostPeriodStart,
+        boostPeriodInSeconds,
+        clamValueInShellToken,
+        pearlValueInShellToken,
+      };
+
       return {
         account: {
           ...state.account,
@@ -268,6 +295,10 @@ export const actions = (store) => ({
           clams,
           pearls,
           reason: "dispatchFetchAccountAssets",
+        },
+        boostParams: {
+          ...state.boostParams,
+          ...boostParams,
         },
       };
     }

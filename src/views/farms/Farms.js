@@ -34,7 +34,7 @@ import ClamDetails from "./ClamDetails";
 import ClamDeposit from "./ClamDeposit";
 import { DepositClamCard } from "./depositClamCard";
 
-import PearlView from "./PearlView";
+import PearlView from "../saferoom/PearlView";
 import { MODAL_OPTS } from "./constants";
 import {
   WelcomeUser,
@@ -48,10 +48,12 @@ import { ifPearlSendSaferoom } from "./utils";
 import { isEmpty } from "lodash";
 
 const Farms = ({
-  account: { clamBalance, isBSChain, address, clams = [] },
+  account: { clamBalance, isBSChain, address, clams = [], pearls = [] },
   updateCharacter,
   updateAccount,
   dispatchFetchAccountAssets,
+  price: { gem: gemPriceUSD },
+  boostParams,
 }) => {
   let history = useHistory();
   const availableClamsForDepositing = [...clams].sort(sortClamsById);
@@ -110,10 +112,10 @@ const Farms = ({
   };
 
   // when pearl is ready and is to be viewed
-  const onViewPearl = async ({ clamId, dna, dnaDecoded, showPearlModal }) => {
+  const onViewPearl = async ({ clamId, pearl, showPearlModal }) => {
     setSelectedClamId(clamId);
     if (showPearlModal) {
-      setSelPearl({ dna, dnaDecoded });
+      setSelPearl(pearl);
       setModal(MODAL_OPTS.VIEW_PEARL);
       toggleModal();
     } else {
@@ -133,7 +135,6 @@ const Farms = ({
       }
     }
   };
-
 
   // when "Withdraw" is clicked - open the modal
   const onWithdrawClam = (clamId) => {
@@ -265,7 +266,12 @@ const Farms = ({
             setRefreshClams={setRefreshClams}
           />
         ) : (
-          <PearlView dna={selPearl.dna} dnaDecoded={selPearl.dnaDecoded} />
+          <PearlView
+            {...boostParams}
+            {...selPearl}
+            gemPriceUSD={Number(gemPriceUSD)}
+            hideProduceButton={true}
+          />
         )}
       </Modal>
 
