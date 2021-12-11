@@ -40,7 +40,7 @@ import {
   WelcomeUser,
   withdrawClamSpeak,
   speechWelcome,
-  speechWelcomeNext
+  speechWelcomeNext,
 } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
 
@@ -48,7 +48,7 @@ import { ifPearlSendSaferoom } from "./utils";
 import { isEmpty } from "lodash";
 
 const Farms = ({
-  account: { clamBalance, isBSChain, address, clams = [], pearls = [] },
+  account: { clamBalance, isBSChain, address, clams = [] },
   updateCharacter,
   updateAccount,
   dispatchFetchAccountAssets,
