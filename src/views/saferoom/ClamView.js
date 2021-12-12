@@ -12,7 +12,6 @@ import { getCurrentBlockTimestamp } from "web3/index";
 import { getPearlDataByIds } from "web3/shared";
 
 import { Clam3DView } from "components/clam3DView";
-import Accordion from "components/Accordion";
 import { Controls3DView } from "components/controls3DView";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,6 +23,8 @@ import { secondsToFormattedTime } from "utils/time";
 
 import PearlInfo from "../bank/utils/PearlInfo";
 import { getRemainingPearlProductionTime } from "../../web3/pearlFarm";
+
+import { Accordion2, Accordion2Item } from "components/accordion2";
 
 const CardStat = ({ label, value }) => (
   <div
@@ -59,13 +60,11 @@ export default ({
   boostPeriodStart,
   farmView,
 }) => {
-  const [showTraits] = useState(false);
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
   const [producedPearls, setProducedPearls] = useState([]);
   const [producedPearlsYieldTimers, setProducedPearlsYieldTimers] = useState([]);
   const [remainingPearlProductionTime, setRemainingPearlProductionTime] = useState(0);
   const remainingFormattedTime = secondsToFormattedTime(remainingPearlProductionTime);
-  /*
   useInterval(() => {
     const updatedProducedPearlsYieldTimers = producedPearlsYieldTimers.map((time) => {
       const remainingTime = time - 1000;
@@ -76,125 +75,18 @@ export default ({
       return 0;
     });
     setProducedPearlsYieldTimers(updatedProducedPearlsYieldTimers);
-    ReactTooltip.rebuild();
+    if (remainingPearlProductionTime > 0) {
+      setRemainingPearlProductionTime(remainingPearlProductionTime - 1);
+    }
   }, 1000);
-*/
   const harvestableShell =
-    get(dnaDecoded, "shellShape") == "maxima"
+    get(dnaDecoded, "shellShape") === "maxima"
       ? "N/A"
       : +clamValueInShellToken > 0
       ? +clamValueInShellToken + +pearlsProduced * +pearlValueInShellToken
       : "0";
   const formattedHarvestableShell =
-    harvestableShell != "N/A" ? formatShell(harvestableShell) : "N/A";
-
-  const accordionData = [
-    {
-      title: "General Stats",
-      scroll: true,
-      description: (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
-          <CardStat
-            label="Pearls remaining / Lifespan"
-            value={
-              (+pearlProductionCapacity - +pearlsProduced).toString() +
-              " / " +
-              pearlProductionCapacity.toString()
-            }
-          />
-          <CardStat
-            label={
-              <>
-                Clam boost&nbsp;
-                <button data-tip="Applied as a multiplier to the GEM yield for every Pearl produced by this Clam">
-                  <FontAwesomeIcon icon={faInfoCircle} />
-                </button>
-              </>
-            }
-            value={formatNumberToLocale(pearlBoost, 2) + "x"}
-          />
-          <CardStat
-            label={
-              <>
-                Indicative GEM ROI / APR&nbsp;
-                <button data-tip='<p class="mb-4">Indicative ROI is calculated based on an average Pearl boost of 2x, assuming Pearl production price is fixed at 1/10 Clam price and all Pearls are exchanged for max yield. Your actual ROI will vary.</p><p>Indicative APR represents annualised returns based on the indicative ROI and the average time it would take to farm all Pearls, exchange them for GEM and receive the 30-day stream for max yield.</p>'>
-                  <FontAwesomeIcon icon={faInfoCircle} />
-                </button>
-              </>
-            }
-            value={
-              formatNumberToLocale(
-                (((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
-                  (10 + +pearlProductionCapacity)) *
-                  100,
-                2
-              ) +
-              "% / " +
-              formatNumberToLocale(
-                (((((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
-                  (10 + +pearlProductionCapacity)) *
-                  100) /
-                  ((40 * +pearlProductionCapacity) / 24 + 18 + 30)) *
-                  365,
-                2
-              ) +
-              "%"
-            }
-          />
-          <CardStat
-            label={
-              <>
-                Harvestable $SHELL&nbsp;
-                <button data-tip="Amount of $SHELL you will receive if you harvest this Clam in the Shop">
-                  <FontAwesomeIcon icon={faInfoCircle} />
-                </button>
-              </>
-            }
-            value={formattedHarvestableShell}
-          />
-        </div>
-      ),
-    },
-
-    {
-      title: "Traits",
-      description: (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
-          <CardStat label="Shell Shape" value={get(dnaDecoded, "shellShape")} />
-          <CardStat label="Shell Colour" value={get(dnaDecoded, "shellColor")} />
-          <CardStat label="Shell Pattern" value={get(dnaDecoded, "pattern")} />
-          <CardStat label="Inner Color" value={get(dnaDecoded, "innerColor")} />
-          <CardStat label="Lip Color" value={get(dnaDecoded, "lipColor")} />
-          <CardStat label="Tongue Shape" value={get(dnaDecoded, "tongueShape")} />
-          <CardStat label="Tongue Colour" value={get(dnaDecoded, "tongueColor")} />
-          <CardStat
-            label="Size"
-            value={pearlSize(get(dnaDecoded, "size")) + " (" + get(dnaDecoded, "size") + ")"}
-          />
-        </div>
-      ),
-      scroll: true,
-    },
-    {
-      title: "Produced pearls",
-      description: (
-        <div className="flex flex-col gap-2 overflow-y-auto" style={{ maxHeight: "220px" }}>
-          {producedPearls.length > 0
-            ? producedPearls.map((pearl, i, a) => (
-                <PearlInfo
-                  key={pearl.pearlId}
-                  pearl={pearl}
-                  isLast={i === a.length - 1}
-                  maxBoostIn={producedPearlsYieldTimers[i]}
-                  gemPriceUSD={gemPriceUSD}
-                  hideViewDetails={true}
-                />
-              ))
-            : "This Clam has not yet produced any Pearls."}
-        </div>
-      ),
-    },
-  ];
+    harvestableShell !== "N/A" ? formatShell(harvestableShell) : "N/A";
 
   useEffect(() => {
     const initClamView = async () => {
@@ -205,7 +97,9 @@ export default ({
           getPearlDataByIds(producedPearlIds),
           getRemainingPearlProductionTime(clamId),
         ]);
-      setRemainingPearlProductionTime(remainingPearlProductionTime);
+      if (farmView) {
+        setRemainingPearlProductionTime(remainingPearlProductionTime);
+      }
 
       const isClamAvailableForHarvest =
         +pearlsProduced < +pearlProductionCapacity &&
@@ -244,7 +138,6 @@ export default ({
                 clamDna={dna}
                 decodedDna={dnaDecoded}
                 // clamTraits={clamTraits}
-                showTraitsTable={showTraits}
               />
             </div>
             <div className="flex justify-between flex-row py-2">
@@ -259,7 +152,101 @@ export default ({
             )}
           </div>
           <div className="w-full px-4 md:px-6">
-            <Accordion data={accordionData} defaultTab="0" />
+            <Accordion2 defaultTab="GeneralStats">
+              <Accordion2Item title="General Stats" id="GeneralStats" scroll={true}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+                  <CardStat
+                    label="Pearls remaining / Lifespan"
+                    value={
+                      (+pearlProductionCapacity - +pearlsProduced).toString() +
+                      " / " +
+                      pearlProductionCapacity.toString()
+                    }
+                  />
+                  <CardStat
+                    label={
+                      <>
+                        Clam boost&nbsp;
+                        <button data-tip="Applied as a multiplier to the GEM yield for every Pearl produced by this Clam">
+                          <FontAwesomeIcon icon={faInfoCircle} />
+                        </button>
+                      </>
+                    }
+                    value={formatNumberToLocale(pearlBoost, 2) + "x"}
+                  />
+                  <CardStat
+                    label={
+                      <>
+                        Indicative GEM ROI / APR&nbsp;
+                        <button data-tip='<p class="mb-4">Indicative ROI is calculated based on an average Pearl boost of 2x, assuming Pearl production price is fixed at 1/10 Clam price and all Pearls are exchanged for max yield. Your actual ROI will vary.</p><p>Indicative APR represents annualised returns based on the indicative ROI and the average time it would take to farm all Pearls, exchange them for GEM and receive the 30-day stream for max yield.</p>'>
+                          <FontAwesomeIcon icon={faInfoCircle} />
+                        </button>
+                      </>
+                    }
+                    value={
+                      formatNumberToLocale(
+                        (((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
+                          (10 + +pearlProductionCapacity)) *
+                        100,
+                        2
+                      ) +
+                      "% / " +
+                      formatNumberToLocale(
+                        (((((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
+                          (10 + +pearlProductionCapacity)) *
+                          100) /
+                          ((40 * +pearlProductionCapacity) / 24 + 18 + 30)) *
+                        365,
+                        2
+                      ) +
+                      "%"
+                    }
+                  />
+                  <CardStat
+                    label={
+                      <>
+                        Harvestable $SHELL&nbsp;
+                        <button data-tip="Amount of $SHELL you will receive if you harvest this Clam in the Shop">
+                          <FontAwesomeIcon icon={faInfoCircle} />
+                        </button>
+                      </>
+                    }
+                    value={formattedHarvestableShell}
+                  />
+                </div>
+              </Accordion2Item>
+              <Accordion2Item title="Traits" id="Traits" scroll={true}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+                  <CardStat label="Shell Shape" value={get(dnaDecoded, "shellShape")} />
+                  <CardStat label="Shell Colour" value={get(dnaDecoded, "shellColor")} />
+                  <CardStat label="Shell Pattern" value={get(dnaDecoded, "pattern")} />
+                  <CardStat label="Inner Color" value={get(dnaDecoded, "innerColor")} />
+                  <CardStat label="Lip Color" value={get(dnaDecoded, "lipColor")} />
+                  <CardStat label="Tongue Shape" value={get(dnaDecoded, "tongueShape")} />
+                  <CardStat label="Tongue Colour" value={get(dnaDecoded, "tongueColor")} />
+                  <CardStat
+                    label="Size"
+                    value={pearlSize(get(dnaDecoded, "size")) + " (" + get(dnaDecoded, "size") + ")"}
+                  />
+                </div>
+              </Accordion2Item>
+              <Accordion2Item title="Produced pearls" id="ProducedPearls" scroll={false}>
+                <div className="flex flex-col gap-2 overflow-y-auto" style={{ maxHeight: "220px" }}>
+                  {producedPearls.length > 0
+                    ? producedPearls.map((pearl, i, a) => (
+                      <PearlInfo
+                        key={pearl.pearlId}
+                        pearl={pearl}
+                        isLast={i === a.length - 1}
+                        maxBoostIn={producedPearlsYieldTimers[i]}
+                        gemPriceUSD={gemPriceUSD}
+                        hideViewDetails={true}
+                      />
+                    ))
+                    : "This Clam has not yet produced any Pearls."}
+                </div>
+              </Accordion2Item>
+            </Accordion2>
           </div>
         </div>
         {!farmView && (

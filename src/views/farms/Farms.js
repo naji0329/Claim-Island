@@ -30,7 +30,6 @@ import { formatFromWei, getClamsDataByIds } from "web3/shared";
 
 import "./index.scss";
 import FarmItem from "./FarmItem";
-import ClamDetails from "./ClamDetails";
 import ClamDeposit from "./ClamDeposit";
 import { DepositClamCard } from "./depositClamCard";
 
