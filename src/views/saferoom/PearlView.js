@@ -73,9 +73,7 @@ export default (props) => {
   const bonusRewardFormatted = Number(formatUnits(bonusRewards, 18)).toFixed(2);
   const maxGemYield = (
     <>
-      {bonusRewardFormatted}
-      &nbsp;($
-      {renderNumber(+(gemPriceUSD * +bonusRewardFormatted), 2)})
+      {bonusRewardFormatted + " ($" + renderNumber(+(gemPriceUSD * +bonusRewardFormatted), 2) + ")"}
     </>
   );
 

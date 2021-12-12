@@ -60,7 +60,7 @@ export const pearlSendToSaferoom = ({ updateCharacter }, cb) => {
   });
 };
 
-export const pearlGenerateNew = ({ updateCharacter }, depositClamCb) => {
+export const pearlGenerateNew = ({ updateCharacter }) => {
   updateCharacter({
     name: "al",
     action: "farms.pearlGenerateNew.text",

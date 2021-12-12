@@ -16,9 +16,9 @@ import {
 
 export const ifPearlSendSaferoom = async ({ updateCharacter, address, clamId, setInTx }) => {
   if (setInTx) setInTx(false);
-  pearlSendToSaferoom({ updateCharacter }, () => {
-    pearlGenerateNew({ updateCharacter }, async () => {
-      if (setInTx) setInTx(true);
+  pearlSendToSaferoom({ updateCharacter }, async () => {
+    pearlGenerateNew({ updateCharacter });
+      if (!setInTx) setInTx(true);
       try {
         await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
         const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
@@ -34,8 +34,5 @@ export const ifPearlSendSaferoom = async ({ updateCharacter, address, clamId, se
 
       if (setInTx) setInTx(false);
 
-
-
-    });
   });
 };
