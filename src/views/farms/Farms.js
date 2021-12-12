@@ -43,6 +43,7 @@ import {
   speechWelcomeNext,
 } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
+import ClamView from "../saferoom/ClamView";
 
 import { ifPearlSendSaferoom } from "./utils";
 import { isEmpty } from "lodash";
@@ -251,12 +252,13 @@ const Farms = ({
         }
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
-          <ClamDetails
-            clam={selectedClam}
-            clamProcessing={clamProcessing}
-            updateAccount={updateAccount}
-            onClickPrev={isPrevButtonShown && onClickPrev}
+          <ClamView
+            {...selectedClam}
+            {...boostParams}
+            gemPriceUSD={gemPriceUSD}
+            farmView={true}
             onClickNext={isNextButtonShown && onClickNext}
+            onClickPrev={isPrevButtonShown && onClickPrev}
           />
         ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
           <ClamDeposit
@@ -279,7 +281,6 @@ const Farms = ({
         <div className="w-full lg:w-4/5 mx-auto relative z-10">
           <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-start">
             <PageTitle title="Clam Farms" />
-            {/* clams and pears grid */}
             <div className="w-full my-4">
               <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-20">
                 <DepositClamCard
@@ -300,11 +301,6 @@ const Farms = ({
                       withdrawingClamId={withdrawingClamId}
                     />
                   ))}
-
-                {/* {PEARLS &&
-                  PEARLS.map((pearl, i) => (
-                    <PearlItem key={i} pearl={pearl} />
-                  ))} */}
               </div>
             </div>
           </div>

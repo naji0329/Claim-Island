@@ -20,8 +20,10 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { pearlSize } from "./utils/pearlSizeAndGradeValues";
 import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
+import { secondsToFormattedTime } from "utils/time";
 
 import PearlInfo from "../bank/utils/PearlInfo";
+import { getRemainingPearlProductionTime } from "../../web3/pearlFarm";
 
 const CardStat = ({ label, value }) => (
   <div
@@ -55,11 +57,14 @@ export default ({
   boostShape,
   boostPeriodInSeconds,
   boostPeriodStart,
+  farmView,
 }) => {
   const [showTraits] = useState(false);
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
   const [producedPearls, setProducedPearls] = useState([]);
   const [producedPearlsYieldTimers, setProducedPearlsYieldTimers] = useState([]);
+  const [remainingPearlProductionTime, setRemainingPearlProductionTime] = useState(0);
+  const remainingFormattedTime = secondsToFormattedTime(remainingPearlProductionTime);
   /*
   useInterval(() => {
     const updatedProducedPearlsYieldTimers = producedPearlsYieldTimers.map((time) => {
@@ -193,11 +198,14 @@ export default ({
 
   useEffect(() => {
     const initClamView = async () => {
-      const [incubationTime, currentBlockTimestamp, pearls] = await Promise.all([
-        getClamIncubationTime(),
-        getCurrentBlockTimestamp(),
-        getPearlDataByIds(producedPearlIds),
-      ]);
+      const [incubationTime, currentBlockTimestamp, pearls, remainingPearlProductionTime] =
+        await Promise.all([
+          getClamIncubationTime(),
+          getCurrentBlockTimestamp(),
+          getPearlDataByIds(producedPearlIds),
+          getRemainingPearlProductionTime(clamId),
+        ]);
+      setRemainingPearlProductionTime(remainingPearlProductionTime);
 
       const isClamAvailableForHarvest =
         +pearlsProduced < +pearlProductionCapacity &&
@@ -243,36 +251,43 @@ export default ({
               <div className="badge badge-success">#{clamId}</div>
               <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
             </div>
+            {farmView && (
+              <div className="flex flex-row justify-between my-2" style={{ width: "400px" }}>
+                <p className="float-left">Remaining Time</p>
+                <p className="float-right">{remainingFormattedTime}</p>
+              </div>
+            )}
           </div>
           <div className="w-full px-4 md:px-6">
             <Accordion data={accordionData} defaultTab="0" />
           </div>
         </div>
-
-        <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
-          <Link to="/farms">
-            <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
-              Stake in Farm
-            </button>
-          </Link>
-          <Link
-            className={isClamAvailableForHarvest ? "" : "cursor-not-allowed"}
-            to={isClamAvailableForHarvest ? "/shop?view=harvest" : "#"}
-          >
-            <button
-              disabled={!isClamAvailableForHarvest}
-              className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:opacity-50 font-semibold"
+        {!farmView && (
+          <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
+            <Link to="/farms">
+              <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
+                Stake in Farm
+              </button>
+            </Link>
+            <Link
+              className={isClamAvailableForHarvest ? "" : "cursor-not-allowed"}
+              to={isClamAvailableForHarvest ? "/shop?view=harvest" : "#"}
             >
-              Harvest for $SHELL
+              <button
+                disabled={!isClamAvailableForHarvest}
+                className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:opacity-50 font-semibold"
+              >
+                Harvest for $SHELL
+              </button>
+            </Link>
+            <button
+              disabled
+              className="disabled:opacity-50 cursor-not-allowed px-4 p-3 shadown-xl   text-red-700 font-semibold border-2 border-red-500 rounded-xl hover:text-white hover:bg-red-500 bg-transparent"
+            >
+              Sell
             </button>
-          </Link>
-          <button
-            disabled
-            className="disabled:opacity-50 cursor-not-allowed px-4 p-3 shadown-xl   text-red-700 font-semibold border-2 border-red-500 rounded-xl hover:text-white hover:bg-red-500 bg-transparent"
-          >
-            Sell
-          </button>
-        </div>
+          </div>
+        )}
         <Controls3DView onClickNext={onClickNext} onClickPrev={onClickPrev} />
       </div>
     </>
