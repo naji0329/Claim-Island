@@ -65,7 +65,7 @@ export const withSkipDialog = (WrappedComponent) => (props) => {
   };
 
   const onClickSkipRestoreButton = () => {
-    console.log('#######')
+    console.log("#######");
     setSkipModal({
       action: "skip.restore.text",
       button: {
@@ -90,6 +90,11 @@ export const withSkipDialog = (WrappedComponent) => (props) => {
   }, []);
 
   return (
-    <WrappedComponent {...props} onClickSkipDialogButton={onClickSkipDialogButton} onClickSkipRestoreButton={onClickSkipRestoreButton} {...skipModal} />
+    <WrappedComponent
+      {...props}
+      onClickSkipDialogButton={onClickSkipDialogButton}
+      onClickSkipRestoreButton={onClickSkipRestoreButton}
+      {...skipModal}
+    />
   );
 };

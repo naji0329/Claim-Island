@@ -188,6 +188,44 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "amountCorrected",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateIndividualClamRewards",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amountCorrected",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateIndividualPearlRewards",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "withdrawn",
         "type": "uint256"
       }
@@ -219,6 +257,62 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_bonusRemaining",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_bonusRemainingCorrected",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_pearlId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_startDay",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_lastRewardDay",
+        "type": "uint256"
+      }
+    ],
+    "name": "addUserLockPearlRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_accounts",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_pearlIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "addUserPearlsBurned",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -302,6 +396,42 @@
   {
     "inputs": [
       {
+        "internalType": "address[]",
+        "name": "_accounts",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_values",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "changeUserTotalLockedClamRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_accounts",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_values",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "changeUserTotalLockedPearlRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_account",
         "type": "address"
@@ -340,6 +470,32 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "correctIndividualClamBalancesToTotal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "correctIndividualPearlBalancesToTotal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

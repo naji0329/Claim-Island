@@ -1,5 +1,5 @@
 import communityRewardsAbi from "./abi/CommunityRewards.json";
-import { communityRewardsAddress } from "./constants";
+import { communityRewardsAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 import { getOracleFee } from "./rng";
 

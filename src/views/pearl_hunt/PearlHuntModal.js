@@ -34,7 +34,7 @@ const PearlHuntModal = ({
     try {
       const tokenIdsCalls = prepTokenOfOwnerByIndexMulticall(address, +pearlBalance);
 
-      const tokenIdsResult = await aggregate(tokenIdsCalls, chainIdentificaiton);
+      const tokenIdsResult = await aggregate(tokenIdsCalls);
       const tokenIdsDecoded = decodeTokenOfOwnerByIndexFromMulticall(tokenIdsResult.returnData);
 
       const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainIdentificaiton);
@@ -69,7 +69,7 @@ const PearlHuntModal = ({
         name: "diego",
         action: "pearl_hunt.add_tg_handle.text",
         button: {
-          text: '',
+          text: "",
         },
       });
     }
@@ -84,7 +84,7 @@ const PearlHuntModal = ({
   return (
     <>
       <Card>
-        <div className="w-full flex flex-col overflow-auto" style={{maxHeight: "460px"}}>
+        <div className="w-full flex flex-col overflow-auto" style={{ maxHeight: "460px" }}>
           {+accountPearlCount > 0 && (
             <p className="text-3xl font-aristotelica-bold text-gray-500 text-center mb-4">
               You have submitted {accountPearlCount} pearl{accountPearlCount > 1 ? "s" : ""}
@@ -100,21 +100,26 @@ const PearlHuntModal = ({
               <span>+</span>
               <div>
                 <span className="font-bold inline-block w-16">Color:</span>
-                <span>{eligibleColor} or {secondEligibleColor}</span>
+                <span>
+                  {eligibleColor} or {secondEligibleColor}
+                </span>
               </div>
             </div>
           </div>
 
           <div className="w-full mb-6">
             <div className="bg-gray-200 rounded-lg p-2 flex flex-col max-h-160">
-              <span>@<input
-                className="text-xl p-1 rounded"
-                placeholder="Enter Telegram Handle"
-                type="text"
-                step="any"
-                value={tgHandle}
-                onChange={handleTgHandle}
-              /></span>
+              <span>
+                @
+                <input
+                  className="text-xl p-1 rounded"
+                  placeholder="Enter Telegram Handle"
+                  type="text"
+                  step="any"
+                  value={tgHandle}
+                  onChange={handleTgHandle}
+                />
+              </span>
             </div>
           </div>
 

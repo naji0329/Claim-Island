@@ -13,6 +13,7 @@ import { SHELL_PRESALE_SPEECH, SHELL_PRESALE_BUTTONS } from "./speeches/shell_pr
 import { CLAM_PRESALE_BUTTONS, CLAM_PRESALE_SPEECH } from "./speeches/clam_presale";
 import { SHELL_VOTING_SPEECH, SHELL_VOTING_BUTTONS } from "./speeches/shell_voting";
 import { CLAM_CLAIMERS_SPEECH, CLAM_CLAIMERS_BUTTONS } from "./speeches/clam_claimers";
+import { CLAM_SWAP_SPEECH } from "./speeches/clam_swap";
 import { COMMUNITY_REWARDS_SPEECH, COMMUNITY_REWARDS_BUTTONS } from "./speeches/community_rewards";
 import { PEARL_HUNT_SPEECH, PEARL_HUNT_BUTTONS } from "./speeches/pearl_hunt";
 import { OTHER_SPEECH, OTHER_BUTTONS } from "./speeches/other";
@@ -57,6 +58,7 @@ export const SPEECHES = {
   ...INFOCENTER_SPEECH,
   ...MAP_SPEECH,
   ...PEARL_HUNT_SPEECH,
+  ...CLAM_SWAP_SPEECH,
 };
 
 export const BUTTONS = {

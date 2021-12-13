@@ -20,7 +20,7 @@ import "./3d_map.scss";
 import createWater from "./create_water";
 import createSky from "./create_sky";
 import { LiteVersionSwitcher } from "../liteVersionSwitcher";
-import { CAMERA_SETTINGS } from "constants/mapCameraSettings";
+import { CAMERA_SETTINGS } from "constants/ui/mapCameraSettings";
 
 import { ISLAND_OBJECTS, ISLANDS_NAMES } from './constants';
 import LoadingScreen from "components/LoadingScreen";

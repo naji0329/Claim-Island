@@ -4,7 +4,7 @@ import ForkedTongueModel from "../models/tongueModels/bigMouth/ForkedTongueModel
 import HeartTongueModel from "../models/tongueModels/bigMouth/HeartTongueModel";
 import SpiralTongueModel from "../models/tongueModels/bigMouth/SpiralTongueModel";
 import StarTongueModel from "../models/tongueModels/bigMouth/StarTongueModel";
-import { TONGUE_TYPES } from "../../constants/clams";
+import { TONGUE_TYPES } from "../../constants/ui/clams";
 
 const TONGUE_COMPONENTS = {
   [TONGUE_TYPES.common]: CommonTongueModel,

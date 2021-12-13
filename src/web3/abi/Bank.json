@@ -3,44 +3,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "clamBonus",
-        "type": "address"
-      }
-    ],
-    "name": "ClamBonusAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "reward",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "pearlId",
-        "type": "uint256"
-      }
-    ],
-    "name": "ClamBonusRewardAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "user",
@@ -379,29 +341,6 @@
       }
     ],
     "name": "add",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_reward",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_clamId",
-        "type": "uint256"
-      }
-    ],
-    "name": "addClamBonusReward",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1004,19 +943,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_clamBonus",
-        "type": "address"
-      }
-    ],
-    "name": "setClamBonus",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "_feeAddress",
         "type": "address"
       }
@@ -1076,6 +1002,24 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "simpleSafeGemMintAndTransfer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

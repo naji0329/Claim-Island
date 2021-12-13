@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import classNames from "classnames";
+import ReactTooltip from "react-tooltip";
 
-export default ({ data, className }) => {
-  const [tab, setTab] = useState(false);
+export default ({ data, defaultTab = "", className = "" }) => {
+  const dTab = defaultTab.length > 0 ? Number(defaultTab) : false;
+  const [tab, setTab] = useState(dTab);
+  setTimeout(() => {
+    ReactTooltip.rebuild();
+  }, 700);
 
   return (
     <>
@@ -30,12 +35,13 @@ export default ({ data, className }) => {
 
               <div
                 style={{
-                  overflow: "hidden",
+                  overflow: row.scroll ? "" : "hidden",
+                  overflowY: row.scroll ? "auto" : "hidden",
                   transition: "all 0.5s ease-out",
-                  maxHeight: i === tab ? "200px" : "0",
+                  maxHeight: i === tab ? "225px" : "0",
                 }}
               >
-                <div className="p-3 text-gray-900">{row.description}</div>
+                <div className="p-3 text-gray-900 overflow-auto">{row.description}</div>
               </div>
             </li>
           ))}

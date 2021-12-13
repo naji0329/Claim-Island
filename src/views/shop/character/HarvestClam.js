@@ -11,12 +11,23 @@ const harvestClamInfo = () => ({
   },
 });
 
-export const harvestCongrats = ({ updateCharacter, setModalToShow }) => {
+export const harvestClamProcessing = ({ updateCharacter }) => {
+  updateCharacter({
+    name: "diego",
+    action: "clam_shop.harvest_processing.text",
+    button: {
+      text: undefined,
+    },
+  });
+};
+
+export const harvestCongrats = ({ updateCharacter, setModalToShow, shell }) => {
   updateCharacter({
     name: "diego",
     action: "clam_shop.harvest_congrats.text",
+    variables: shell,
     buttonAlt: {
-      text: "Harvest Clams",
+      text: "Harvest another Clam",
       alt: {
         action: "cb",
         destination: () => {
@@ -111,13 +122,14 @@ export const harvestChooseClams = ({ updateCharacter, setModalToShow }) => {
   });
 };
 
-export const harvestClamSpeak = ({ updateCharacter, setModalToShow }, cb) => {
+export const harvestClamSpeak = ({ updateCharacter, setModalToShow, shell }, cb) => {
   updateCharacter({
     name: "diego",
-    action: "clam_shop.harvest_warn.text",
+    action: "clam_shop.harvest_final_warn.text",
+    variables: shell,
     // button: harvestClamInfo(),
     button: {
-      text: "No. Buy Clams instead.",
+      text: "No, buy Clams instead",
       alt: {
         action: "cb",
         destination: () => {

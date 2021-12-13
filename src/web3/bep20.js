@@ -1,12 +1,12 @@
 import clamNFTAbi from "./abi/Clam.json";
 import BEP20ABI from "./abi/BEP20.json";
 import ERC721ABI from "./abi/ERC721.json";
-import { shellTokenAddress, clamNFTAddress, bankAddress } from "./constants";
+import { shellTokenAddress, clamNFTAddress, bankAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 import { getAccount, MaxUint256 } from "./shared";
 import BigNumber from "bignumber.js";
 
-BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
+BigNumber.config({ EXPONENTIAL_AT: 1e9 });
 
 export const balanceOf = async (address, account) => {
   const token = contractFactory({ abi: BEP20ABI, address });
@@ -47,7 +47,10 @@ export const approveBankForMaxUint = async (account, tokenAddress, amount) => {
 
   if (new BigNumber(allowance).gte(amount)) return;
 
-  const method = token.methods.approve(bankAddress, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+  const method = token.methods.approve(
+    bankAddress,
+    "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  );
 
   const gasEstimation = await method.estimateGas({
     from: account,

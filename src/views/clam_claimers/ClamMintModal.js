@@ -10,7 +10,7 @@ import ClamUnknown from "../../assets/img/clam_unknown.png";
 import ArrowDown from "../../assets/img/arrow-down.svg";
 
 import { claimClam } from "../../web3/clamClaimers";
-import { clamClaimersAddress } from "../../web3/constants";
+import { clamClaimersAddress } from "../../constants/constants";
 import { actions } from "../../store/redux";
 
 const Divider = () => (

@@ -3,7 +3,7 @@ import { get } from "lodash";
 import { BUTTONS } from "components/characters/constants";
 import { fitModel } from "components/three/utils/fitModel";
 import { ISLANDS_NAMES } from "components/three/constants";
-import { CAMERA_SETTINGS } from "constants/mapCameraSettings";
+import { CAMERA_SETTINGS } from "constants/ui/mapCameraSettings";
 
 export function* GuidTourCameraFlow(controls, models) {
   controls.minPolarAngle = 1;
@@ -30,33 +30,30 @@ export class GuidTourSpeechFlow {
   }
 
   startTour() {
-    localStorage.getItem('notFirstTime') ?
-      this.updateCharacter({
-        name: "nacre",
-        action: "mapGuide.greeting_alt.text",
-        button: {
-          text: BUTTONS.mapGuide.greeting_alt.alt,
-          alt: {
-            action: "cb",
-            destination: () => {
-              this.step3();
+    localStorage.getItem("notFirstTime")
+      ? this.updateCharacter({
+          name: "nacre",
+          action: "mapGuide.greeting_alt.text",
+          button: {
+            text: BUTTONS.mapGuide.greeting_alt.alt,
+            alt: {
+              action: "cb",
+              destination: () => {
+                this.step3();
+              },
             },
           },
-        },
-        buttonAlt: {
-          text: BUTTONS.mapGuide.greeting_alt.next,
-          alt: {
-            action: "cb",
-            destination: () => {
-              this.step4();
+          buttonAlt: {
+            text: BUTTONS.mapGuide.greeting_alt.next,
+            alt: {
+              action: "cb",
+              destination: () => {
+                this.step4();
+              },
             },
           },
-        },
-      })
-
-      :
-
-      this.updateCharacterDraft(this.step2, "greeting", false, "greeting");
+        })
+      : this.updateCharacterDraft(this.step2, "greeting", false, "greeting");
   }
 
   step2 = () => {
@@ -109,7 +106,7 @@ export class GuidTourSpeechFlow {
         },
       },
     });
-    localStorage.setItem('notFirstTime', true);
+    localStorage.setItem("notFirstTime", true);
   };
 
   step4 = () => {
@@ -184,7 +181,8 @@ export class GuidTourSpeechFlow {
         text: BUTTONS.mapGuide.step19.alt,
         alt: {
           action: "url",
-          destination: "https://clamisland.medium.com/clarification-on-the-clam-island-arcidae-update-7cdc44ea8991",
+          destination:
+            "https://clamisland.medium.com/clarification-on-the-clam-island-arcidae-update-7cdc44ea8991",
         },
       },
       buttonAlt: {
@@ -211,7 +209,7 @@ export class GuidTourSpeechFlow {
   lastStep = () => {
     this.hideSpeechBubble(true);
     this.completeGuideTour();
-    localStorage.setItem('notFirstTime', true);
+    localStorage.setItem("notFirstTime", true);
   };
 
   updateCharacterDraft(nextSpeech, action, isNeedControlMap, button = "nextStep") {

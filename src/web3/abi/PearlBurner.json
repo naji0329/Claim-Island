@@ -194,19 +194,43 @@
         "type": "uint256"
       },
       {
-        "internalType": "string",
-        "name": "_shape",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_colour",
-        "type": "string"
+        "internalType": "bool",
+        "name": "_forfeitPearl",
+        "type": "bool"
       }
     ],
     "name": "burnPearl",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnedPearlData",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "forfeited",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -238,6 +262,25 @@
   {
     "inputs": [],
     "name": "currentPearlShapeIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "gemClaimed",
     "outputs": [
       {
         "internalType": "uint256",

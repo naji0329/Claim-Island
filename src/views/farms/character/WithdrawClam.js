@@ -31,38 +31,6 @@ export const withdrawClamSpeak = ({ updateCharacter }, cb) => {
   });
 };
 
-export const refundDepositedGemSpeak = ({ updateCharacter }, cbAccept, cdDecline) => {
-  updateCharacter({
-    name: "al",
-    action: "farms.refundDepositedGem.text",
-    show: true,
-    button: {
-      text: "Refund",
-      alt: {
-        action: "cb",
-        dismiss: true,
-        destination: () => {
-          cbAccept();
-        },
-      },
-    },
-    buttonAlt: {
-      text: "No",
-      alt: {
-        action: "cb",
-        dismiss: true,
-        destination: () => {
-          cdDecline();
-          updateCharacter({
-            name: "al",
-            action: undefined,
-          });
-        },
-      },
-    },
-  });
-};
-
 export const WelcomeUser = ({ updateCharacter, suppressSpeechBubble = false }) => {
   updateCharacter({
     name: "al",
@@ -92,11 +60,12 @@ export const speechWelcome = ({ updateCharacter }, cb) => {
   });
 };
 
-export const speechWelcomeNext = ({ updateCharacter, gem }) => {
+export const speechWelcomeNext = ({ updateCharacter, gem, suppressSpeechBubble }) => {
   updateCharacter({
     name: "al",
     action: "farms.welcome_next.text",
     variables: { gem },
+    suppressSpeechBubble: !!suppressSpeechBubble,
     button: {
       text: "Dismiss",
       dismiss: true,

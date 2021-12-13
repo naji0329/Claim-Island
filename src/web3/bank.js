@@ -3,13 +3,14 @@ import BigNumber from "bignumber.js";
 import { formatEther } from "@ethersproject/units";
 
 import bankAbi from "./abi/Bank.json";
-import { bankAddress, gemTokenAddress, shellTokenAddress } from "./constants";
+import { bankAddress, gemTokenAddress, shellTokenAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 import { getAccount, formatFromWei } from "./shared";
 
 import { aggregate } from "./multicall";
-import { poolAssets } from "../views/bank/poolsAssets";
-import { getUsdValueOfPair, getGemPrice, getUsdPriceOfToken } from "./pancakeRouter";
+import poolAssets from "../views/bank/poolsAssets";
+import { getUsdValueOfPair, getUsdPriceOfToken } from "./pancakeRouter";
+import { getGemPrice } from "./gemOracle";
 import { totalSupply } from "./bep20";
 
 const bank = () =>
@@ -268,26 +269,26 @@ const calculateAPRandTVL = async (pool) => {
   return [apr, tvl, +tokenPrice];
 };
 
-const getPoolInfoValues = async (poolLength, chainId) => {
+const getPoolInfoValues = async (poolLength) => {
   const poolInfocalls = prepGetPoolInfoForMulticall(poolLength);
-  const poolInfo = await aggregate(poolInfocalls, chainId);
+  const poolInfo = await aggregate(poolInfocalls);
   const poolInfoValues = decodePoolInfoReturnFromMulticall(poolInfo.returnData);
 
   return poolInfoValues;
 };
 
-const getUserInfoValues = async (address, poolLength, chainId) => {
+const getUserInfoValues = async (address, poolLength) => {
   if (!address) {
     return [];
   }
   const userInfocalls = prepGetUserInfoForMulticall(poolLength, address);
-  const userInfo = await aggregate(userInfocalls, chainId);
+  const userInfo = await aggregate(userInfocalls);
   const userInfoValues = decodeUserInfoReturnFromMulticall(userInfo.returnData);
 
   return userInfoValues;
 };
 
-export const getAllPools = async ({ address, chainId }) => {
+export const getAllPools = async ({ address }) => {
   const [poolLength, poolLpTokenBalances, totalAllocation] = await Promise.all([
     getPoolsLength(),
     getTokenSupplies(),
@@ -295,8 +296,8 @@ export const getAllPools = async ({ address, chainId }) => {
   ]);
 
   const [poolInfoValues, userInfoValues] = await Promise.all([
-    getPoolInfoValues(poolLength, chainId),
-    getUserInfoValues(address, poolLength, chainId),
+    getPoolInfoValues(poolLength),
+    getUserInfoValues(address, poolLength),
   ]);
 
   const pools = await Promise.all(

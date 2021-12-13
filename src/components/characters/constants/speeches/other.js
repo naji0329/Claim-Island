@@ -13,7 +13,7 @@ export const OTHER_SPEECH = {
       skip: false,
     },
     agree: {
-      text: "Ok, no problem, I will let you explore by yourself. If you change your mind, just come talk to me and click the \"Restore\" icon any time.",
+      text: 'Ok, no problem, I will let you explore by yourself. If you change your mind, just come talk to me and click the "Restore" icon any time.',
       next: true,
       dismiss: false,
       skip: false,

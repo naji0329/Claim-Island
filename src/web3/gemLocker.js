@@ -1,7 +1,7 @@
 import { formatEther } from "@ethersproject/units";
 import { contractFactory } from "./index";
 import gemLockerAbi from "./abi/GemLocker.json";
-import { gemLockerAddress } from "./constants";
+import { gemLockerAddress } from "../constants/constants";
 import { getAccount } from "./shared";
 import { aggregate } from "./multicall";
 
@@ -171,9 +171,9 @@ const decodeLockedNftBonus = (values) => {
   return result;
 };
 
-const getFarmingRewards = async (chainId) => {
+const getFarmingRewards = async () => {
   const calls = await prepFarmingRewardsCalls();
-  const lockedRewards = await aggregate(calls, chainId);
+  const lockedRewards = await aggregate(calls);
   const valuesDecoded = decodeLockedFarmingRewards(lockedRewards.returnData);
 
   const rewards = valuesDecoded.map((rewardData) => ({
@@ -184,9 +184,9 @@ const getFarmingRewards = async (chainId) => {
   return rewards.sort((a, b) => a.lockedUntilDay - b.lockedUntilDay);
 };
 
-const getNftRewards = async (chainId, isClam) => {
+const getNftRewards = async (isClam) => {
   const calls = await prepNftRewardsCalls(isClam);
-  const lockedNftRewards = await aggregate(calls, chainId);
+  const lockedNftRewards = await aggregate(calls);
   const valuesDecoded = decodeLockedNftBonus(lockedNftRewards.returnData);
 
   const rewards = valuesDecoded.map((bonusData) => ({
@@ -214,8 +214,8 @@ export const clamHasGeneratedBoost = async (clamId) => {
   return +bonusInfo.endDay > 0; // endDay cannot be 0 clam has generated rewards
 };
 
-const getVestedNftRewards = async (chainId, isClam) => {
-  const rewards = await getNftRewards(chainId, isClam);
+const getVestedNftRewards = async (isClam) => {
+  const rewards = await getNftRewards(isClam);
   let availableRewards = isClam ? +(await pendingClamRewards()) : +(await pendingPearlRewards());
 
   return rewards.reduce((acc, curr) => {
@@ -230,10 +230,10 @@ const getVestedNftRewards = async (chainId, isClam) => {
   }, []);
 };
 
-export const getVestedGem = async (chainId) => {
-  const farmingRewards = await getFarmingRewards(chainId);
-  const vestedClamRewards = await getVestedNftRewards(chainId, true);
-  const vestedPearlRewards = await getVestedNftRewards(chainId);
+export const getVestedGem = async () => {
+  const farmingRewards = await getFarmingRewards();
+  const vestedClamRewards = await getVestedNftRewards(true);
+  const vestedPearlRewards = await getVestedNftRewards();
 
   const totalFarmingRewards = farmingRewards.reduce((acc, curr) => acc + curr.amount, 0);
   const totalClamRewards = vestedClamRewards.reduce((acc, curr) => acc + +curr.bonusRemaining, 0);
@@ -243,11 +243,11 @@ export const getVestedGem = async (chainId) => {
   return totalVested;
 };
 
-export const fetchRewards = async (chainId) => {
+export const fetchRewards = async () => {
   const currentDay = await getCurrentDay();
-  const farmingRewards = await getFarmingRewards(chainId);
-  const vestedClamRewards = await getVestedNftRewards(chainId, true);
-  const vestedPearlRewards = await getVestedNftRewards(chainId);
+  const farmingRewards = await getFarmingRewards();
+  const vestedClamRewards = await getVestedNftRewards(true);
+  const vestedPearlRewards = await getVestedNftRewards();
   const totalLocked = await totalLockedRewards();
   const availableFarmingRewards = await pendingFarmingRewards();
   const availableClamRewards = await pendingClamRewards();

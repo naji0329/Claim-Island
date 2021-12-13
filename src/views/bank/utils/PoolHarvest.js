@@ -21,7 +21,7 @@ import { useTimer } from "hooks/useTimer";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
 const PoolHarvest = ({
-  account: { address, chainId },
+  account: { address },
   bank: { selectedPool, rewards },
   updateBank,
   updateCharacter,
@@ -79,7 +79,7 @@ const PoolHarvest = ({
     try {
       await harvest(selectedPool.poolId);
 
-      const setUpPools = await getAllPools({ address, chainId });
+      const setUpPools = await getAllPools({ address });
 
       updateBank({
         pools: setUpPools, //update all pools
@@ -309,7 +309,7 @@ const PoolHarvest = ({
                   {rewards.vestedPearlRewards?.map((rewardData, i) => (
                     <UnlockRow
                       key={`pearl-${i}`}
-                      type={"Pearl Boost"}
+                      type={"Pearl Yield"}
                       amount={renderNumber(rewardData.bonusRemaining)}
                       unlockDay={rewardData.endDay}
                     />

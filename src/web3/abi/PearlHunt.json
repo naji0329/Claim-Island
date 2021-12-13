@@ -1,5 +1,26 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "contract IPearl",
+        "name": "_pearl",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IPearlDNADecoder",
+        "name": "_pearlDnaDecoder",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_month",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -83,29 +104,6 @@
       }
     ],
     "name": "enter",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IPearl",
-        "name": "_pearl",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IPearlDNADecoder",
-        "name": "_pearlDnaDecoder",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_month",
-        "type": "uint256"
-      }
-    ],
-    "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

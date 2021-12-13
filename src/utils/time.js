@@ -14,11 +14,19 @@ export const secondsToFormattedTime = (timeinSeconds) => {
 };
 
 export const formatMsToDuration = (remainingMs) => {
-  const days = moment.duration(remainingMs).days();
+  const days = Math.floor(moment.duration(remainingMs).asDays());
   const hours = moment.duration(remainingMs).hours();
   const minutes = moment.duration(remainingMs).minutes();
   const seconds = moment.duration(remainingMs).seconds();
-  const duration = `${days}d, ${hours}h, ${minutes}m, ${seconds}s`;
+
+  const paddedHours = hours > 9 ? hours : `0${hours}`;
+  const paddedMinutes = minutes > 9 ? minutes : `0${minutes}`;
+  const paddedSeconds = seconds > 9 ? seconds : `0${seconds}`;
+
+  const duration =
+    days > 0
+      ? `${days}d ${paddedHours}:${paddedMinutes}:${paddedSeconds}`
+      : `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
 
   return duration;
 };

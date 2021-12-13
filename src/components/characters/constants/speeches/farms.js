@@ -9,7 +9,7 @@ export const FARM_SPEECH = {
 
     welcome_next: {
       text: ({ gem }) =>
-        `It will just cost ${gem} $GEM to produce a Pearl. Remember that each Clam can only produce a specific number of Pearls before it dies!`,
+        `It will just cost ${gem} $GEM to produce a Pearl, which is payable when you collect the produced Pearl. Remember that each Clam can only produce a specific number of Pearls before it dies!`,
       dismiss: true,
       skip: true,
       hideable: true,
@@ -46,19 +46,21 @@ export const FARM_SPEECH = {
       dismiss: false,
       skip: false,
     },
-    depositWithoutStaking: {
-      text: `Depositing a Clam without any deposits in native investment pools in the Bank will cause its GEM boost to be lost permanently. Are you sure you want to proceed?`,
-      next: `purchase`,
-      dismiss: false,
-      skip: false,
-    },
     depositClamSuccess: {
-      text: `Your clam has been deposited!. You can choose to deposit another clam.`,
+      text: `Your clam has been deposited! You can choose to deposit another clam.`,
       next: `purchase`,
       dismiss: false,
       skip: false,
     },
     pearlCollectGemprompt: {
+      text: ({ pearlPrice }) =>
+        `It costs ${pearlPrice} $GEM to collect the pearl. Do you want to proceed?`,
+      next: `purchase`,
+      dismiss: false,
+      suppressSpeechBubble: false,
+      skip: false,
+    },
+    legacyPearlCollectGemprompt: {
       text: ({ gems }) =>
         `Remember When you deposited your clam here you added ${gems} $GEM with it? So this $GEM will be spent now to collect the pearl. Do you want to proceed?`,
       next: `purchase`,
@@ -80,9 +82,15 @@ export const FARM_SPEECH = {
       skip: false,
       hideable: true,
     },
+    pearlGenerateNewWarning: {
+      text: `WARNING! This is the last Pearl that your Clam is able to produce. Producing the last Pearl will kill the Clam. This means you will no longer be able to harvest it for $SHELL, although dead Clams can still be traded as a regular NFT. Are you sure you want to continue?`,
+      next: `purchase`,
+      dismiss: false,
+      skip: false,
+      hideable: false,
+    },
     pearlGenerateNew: {
-      text: ({ gems }) =>
-        `Great! you will just need to pay ${gems} $GEM to produce another Pearl. Do you want to continue?`,
+      text: `Great! Please wait while we process the deposit...`,
       next: `purchase`,
       dismiss: false,
       skip: false,

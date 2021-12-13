@@ -23,7 +23,7 @@ import BigNumber from "bignumber.js";
 import { renderUsd } from "utils/number";
 
 const Bank = ({
-  account: { address, chainId, isBSChain, isWeb3Installed, isConnected },
+  account: { address, isBSChain, isWeb3Installed, isConnected },
   bank: { pools },
   updateCharacter,
   updateBank,
@@ -39,8 +39,8 @@ const Bank = ({
   useAsync(async () => {
     let setUpPools = pools;
     // if has no pools then load it
-    if (pools.length === 0 && chainId) {
-      setUpPools = await getAllPools({ address, chainId });
+    if (pools.length === 0) {
+      setUpPools = await getAllPools({ address });
     }
 
     const calcTotalTVL = setUpPools.reduce((prev, curr) => {
@@ -53,8 +53,7 @@ const Bank = ({
     updateBank({ pools: setUpPools });
 
     if (address) {
-      const rewards = await fetchRewards(chainId);
-      console.log({ rewards });
+      const rewards = await fetchRewards();
       updateBank({ rewards });
     }
   }, [pools, address, isBSChain]);
@@ -99,8 +98,13 @@ const Bank = ({
   return (
     <>
       <div className="bg-bank overflow-x-hidden">
-        <Modal isShowing={isShowing} onClose={toggleModal} width={"60rem"}>
-          <BurnPearlModal isNativeStaker={isNativeStaker} chainId={chainId} />
+        <Modal
+          isShowing={isShowing}
+          onClose={toggleModal}
+          width={"45rem"}
+          modalClassName="overflow-y-hidden"
+        >
+          <BurnPearlModal isNativeStaker={isNativeStaker} />
         </Modal>
         {/* container */}
         {/* video */}

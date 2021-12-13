@@ -167,19 +167,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "baseGemRewards",
-        "type": "uint256"
-      }
-    ],
-    "name": "SetCurrentBaseGemRewards",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "from",
@@ -333,7 +320,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "baseGemRewards",
+        "name": "pearlPrice",
         "type": "uint256"
       },
       {
@@ -394,6 +381,25 @@
         "internalType": "contract IPearlDNADecoder",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "gemEarned",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -577,6 +583,50 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "baseGemRewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "size",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lustre",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nacreQuality",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "surface",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rarityValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "legacyCalculateBonusRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "to",
         "type": "address"
@@ -588,7 +638,22 @@
       },
       {
         "internalType": "uint256",
+        "name": "pearlPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "pearlsRemaining",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pearlBoostM",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "clamId",
         "type": "uint256"
       },
       {
@@ -707,6 +772,16 @@
         "internalType": "uint256",
         "name": "gemBoost",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pearlPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "clamId",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -813,19 +888,6 @@
       }
     ],
     "name": "setApprovalForAll",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "baseGemRewards",
-        "type": "uint256"
-      }
-    ],
-    "name": "setCurrentBaseGemRewards",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

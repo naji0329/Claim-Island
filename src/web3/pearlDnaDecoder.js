@@ -1,5 +1,5 @@
 import pearlDnaDecoderAbi from "./abi/PearlDnaDecoder.json";
-import { pearlDnaDecoderAddress } from "./constants";
+import { pearlDnaDecoderAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 
 export const getPearlDNADecoded = async (dna) => {

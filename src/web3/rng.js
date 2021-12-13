@@ -1,5 +1,5 @@
 import rngAbi from "./abi/RNG.json";
-import { rngAddress } from "./constants";
+import { rngAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 
 export const getOracleFee = async () => {

@@ -51,7 +51,10 @@ export const SortingBar = (props) => {
         </button>
         Sort by: {selectedFilterName || "N/A"}
       </div>
-      <ul tabIndex="0" className="menu w-full dropdown-content rounded-xl bg-gray-900 bg-opacity-90">
+      <ul
+        tabIndex="0"
+        className="menu w-full dropdown-content rounded-xl bg-gray-900 bg-opacity-90"
+      >
         {sortButtonComponents}
       </ul>
     </div>

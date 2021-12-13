@@ -85,15 +85,44 @@ export const BANK_SPEECH = {
       skip: false,
     },
     burn_pearl_confirmation: {
-      text: ({ gems }) =>
-        `This will forfeit your Pearl in return for a boost of ${gems} $GEM streamed over 30 days. This is irreversible and you will not be able to get your Pearl back. Are you sure you want to continue?`,
+      text: "This will forfeit your Pearl. This is irreversible and you will not be able to get your Pearl back. Are you sure you want to continue?",
       next: false,
       dismiss: true,
       skip: false,
     },
-
+    burn_pearl_without_max_gem_yield_confirmation: {
+      text: ({ timer }) =>
+        `This Pearl is not available for max GEM Yield for another ${timer}. Exchanging it now will mean that you can only receive 50% of its max GEM Yield. Are you sure you want to proceed?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    forfeit_pearl: {
+      text: ({ fullReward }) =>
+        `This will exchange your Pearl in return for ${fullReward} GEM Yield. You can choose to receive your full GEM Yield streamed linearly over 30 days, or you can forfeit half in order to receive your GEM Yield now. How do you want to proceed?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
     burn_pearl_success: {
-      text: "All done! Your Pearl has been forfeited and your $GEM boost is now streaming.",
+      text: ({ forfeit }) =>
+        `All done! Your Pearl has been forfeited and your $GEM boost ${
+          forfeit ? "has been transferred" : "is now streaming"
+        }.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    stream_burn_pearl_success: {
+      text: ({ fullReward }) =>
+        `Your pearl has been exchanged successfully for a stream of ${fullReward} GEM over 30 days. Any streamed amount will be automatically collected when you harvest from any investment pool. You can check the vesting breakdown to see any remaining amount to be streamed.`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+    instant_burn_pearl_success: {
+      text: ({ halfReward }) =>
+        `Your pearl has been exchanged successfully for ${halfReward} GEM! The amount should be available in your wallet.`,
       next: false,
       dismiss: true,
       skip: false,

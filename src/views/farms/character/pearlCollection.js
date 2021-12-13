@@ -1,4 +1,5 @@
 import { truncate } from "lodash";
+import { speechWelcomeNext } from "./WithdrawClam";
 
 const dismissCharacter = (updateCharacter) => {
   // dismiss bubble and show modal
@@ -59,29 +60,12 @@ export const pearlSendToSaferoom = ({ updateCharacter }, cb) => {
   });
 };
 
-export const pearlGenerateNew = ({ updateCharacter, gems }, depositClamCb) => {
+export const pearlGenerateNew = ({ updateCharacter }) => {
   updateCharacter({
     name: "al",
     action: "farms.pearlGenerateNew.text",
-    variables: { gems },
     button: {
-      text: "Yes please",
-      alt: {
-        action: "cb",
-        destination: () => {
-          dismissCharacter(updateCharacter);
-          depositClamCb();
-        },
-      },
-    },
-    buttonAlt: {
-      text: "No thanks",
-      alt: {
-        action: "cb",
-        destination: () => {
-          sendClamToSaferoom({ updateCharacter, variant: 2 });
-        },
-      },
+      text: undefined,
     },
   });
 };
@@ -101,11 +85,12 @@ export const pearlNotEnoughGems = ({ updateCharacter, gems }, cb) => {
   });
 };
 
-export const pearlGemPrompt = ({ updateCharacter, gems }, cb) => {
+export const pearlGemPrompt = ({ updateCharacter, pearlPrice, gems }, cb) => {
   updateCharacter({
     name: "al",
-    action: "farms.pearlCollectGemprompt.text",
-    variables: { gems },
+    action: gems ? "farms.legacyPearlCollectGemprompt.text" : "farms.pearlCollectGemprompt.text",
+    suppressSpeechBubble: false,
+    variables: { pearlPrice, gems },
     button: {
       text: "Yes",
       alt: {
@@ -117,7 +102,12 @@ export const pearlGemPrompt = ({ updateCharacter, gems }, cb) => {
     },
     buttonAlt: {
       text: "No thanks",
-      dismiss: true,
+      alt: {
+        action: "cb",
+        destination: () => {
+          speechWelcomeNext({ updateCharacter, gem: pearlPrice, suppressSpeechBubble: true });
+        },
+      },
     },
   });
 };

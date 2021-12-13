@@ -1,14 +1,14 @@
 import multicallAbi from "./abi/MultiCall.json";
-import { multicallAddress } from "./constants";
+import { multicallAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 
-const multicall = (chainId) =>
+const multicall = () =>
   contractFactory({
     abi: multicallAbi,
-    address: multicallAddress[chainId],
+    address: multicallAddress,
   });
 
-export const aggregate = async (calls, chainId) => {
-  const values = await multicall(chainId).methods.aggregate(calls).call();
+export const aggregate = async (calls) => {
+  const values = await multicall().methods.aggregate(calls).call();
   return values;
 };

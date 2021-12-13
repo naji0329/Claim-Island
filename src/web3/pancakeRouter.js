@@ -1,6 +1,6 @@
 import { formatEther, parseEther } from "@ethersproject/units";
 import pancakeRouterAbi from "./abi/PancakeRouter.json";
-import { pancakeRouterAddress, wBNB, BUSD, gemTokenAddress } from "./constants";
+import { pancakeRouterAddress, wBNB, BUSD } from "../constants/constants";
 import { contractFactory } from "./index";
 import { getLPTokens, getReserves } from "./pancakePair";
 import BigNumber from "bignumber.js";
@@ -38,12 +38,6 @@ export const getUsdPriceOfToken = async (tokenAddress, baseCurrency = "BNB") => 
   const path = tokenAddress === base ? [tokenAddress, BUSD] : [tokenAddress, base, BUSD];
   const result = await getAmountsOut(parseEther("1"), path);
   const price = result[result.length - 1];
-
-  return formatEther(price);
-};
-
-export const getGemPrice = async () => {
-  const [, , price] = await getAmountsOut(parseEther("1"), [gemTokenAddress, wBNB, BUSD]);
 
   return formatEther(price);
 };

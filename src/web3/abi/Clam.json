@@ -341,6 +341,32 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "_boostFactor",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetBoostFactor",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_clamExchange",
+        "type": "address"
+      }
+    ],
+    "name": "SetClamExchange",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "baseGemRewards",
         "type": "uint256"
       }
@@ -489,6 +515,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "boostFactor",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -505,11 +544,6 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "baseGemRewards",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
         "name": "size",
         "type": "uint256"
       },
@@ -524,7 +558,7 @@
         "type": "uint256"
       }
     ],
-    "name": "calculateBonusRewards",
+    "name": "calculatePearlBoost",
     "outputs": [
       {
         "internalType": "uint256",
@@ -532,7 +566,7 @@
         "type": "uint256"
       }
     ],
-    "stateMutability": "pure",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -568,6 +602,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamExchange",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -731,6 +778,11 @@
             "internalType": "uint256",
             "name": "gemBoost",
             "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pearlBoostM",
+            "type": "uint256"
           }
         ],
         "internalType": "struct IClam.ClamInfo",
@@ -774,30 +826,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getPearlTraits",
-    "outputs": [
-      {
-        "internalType": "uint8[10]",
-        "name": "",
-        "type": "uint8[10]"
-      },
-      {
-        "internalType": "uint8[6]",
-        "name": "",
-        "type": "uint8[6]"
       }
     ],
     "stateMutability": "view",
@@ -879,6 +907,107 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTraits",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "tongueShape",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "tongueColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "shellShape",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "shellColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "innerColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "lipColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "pattern",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "size",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lifespan",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "glow",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "rarity",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rarityValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8[10]",
+            "name": "pearlBodyColorNumber",
+            "type": "uint8[10]"
+          },
+          {
+            "internalType": "uint8[6]",
+            "name": "pearlShapeNumber",
+            "type": "uint8[6]"
+          },
+          {
+            "internalType": "uint256[3][4]",
+            "name": "defaultHSV",
+            "type": "uint256[3][4]"
+          },
+          {
+            "internalType": "uint256[3][4]",
+            "name": "adjHSV",
+            "type": "uint256[3][4]"
+          }
+        ],
+        "internalType": "struct IDNADecoder.Traits",
+        "name": "",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -1303,11 +1432,24 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_clamMaximaMonthlyCap",
+        "name": "_boostFactor",
         "type": "uint256"
       }
     ],
-    "name": "setClamMaximaMonthlyCap",
+    "name": "setBoostFactor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_clamExchange",
+        "type": "address"
+      }
+    ],
+    "name": "setClamExchange",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1316,11 +1458,11 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "baseGemRewards",
+        "name": "_clamMaximaMonthlyCap",
         "type": "uint256"
       }
     ],
-    "name": "setCurrentBaseGemRewards",
+    "name": "setClamMaximaMonthlyCap",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

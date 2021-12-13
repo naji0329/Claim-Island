@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
+import { Reveal } from "react-text-reveal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinusCircle, faTimesCircle, faEye } from "@fortawesome/free-solid-svg-icons";
 
@@ -31,6 +32,7 @@ const CharacterSpeak = (props) => {
   const [buttonAltText, setButtonAltText] = useState(btnTrack[trackCount].alt.text);
   const [skipDialog, setSkipDialog] = useState(null);
   const [skipDialogs, setSkipDialogs] = useState(Boolean(localStorage.getItem("skipDialogs")));
+  const [canPlay, setCanPlay] = useState(false);
 
   const btnAlt = useRef();
   const btnNext = useRef();
@@ -229,7 +231,7 @@ const CharacterSpeak = (props) => {
     switch (btnTrack[trackCount].alt.action) {
       case "url_internal":
         window.location.href = destination;
-        if(btnTrack[trackCount].alt.next) {
+        if (btnTrack[trackCount].alt.next) {
           setSpeech(speechTrack[btnTrack[trackCount].alt.next].text);
           setTrackCount(btnTrack[trackCount].alt.next);
         }
@@ -237,7 +239,7 @@ const CharacterSpeak = (props) => {
 
       case "url":
         window.open(destination, "_blank");
-        if(btnTrack[trackCount].alt.next) {
+        if (btnTrack[trackCount].alt.next) {
           setSpeech(speechTrack[btnTrack[trackCount].alt.next].text);
           setTrackCount(btnTrack[trackCount].alt.next);
         }
@@ -283,6 +285,18 @@ const CharacterSpeak = (props) => {
     setShowBubble(!skipDialogs);
   }, []);
 
+  useEffect(() => {
+    if (showBubble) {
+      setTimeout(() => {
+        setCanPlay(true);
+      }, 300);
+    }
+
+    return () => {
+      setCanPlay(false);
+    };
+  }, [speech, showBubble]);
+
   return (
     <div className={showBubble ? "character-bubble" : "character-bubble hide-bubble"}>
       <div className="text-bubble">
@@ -316,7 +330,9 @@ const CharacterSpeak = (props) => {
             )}
           </div>
           <div className="speech">
-            <p className="speech-text">{speech}</p>
+            <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"} duration={500}>
+              <p className="speech-text">{speech}</p>
+            </Reveal>
           </div>
           {(votingWalletConnected &&
             ["shell_voting", "shell_voted_already", "shell_voting_complete"].indexOf(
@@ -324,25 +340,27 @@ const CharacterSpeak = (props) => {
             ) !== -1) ||
           ["shell_voting", "shell_voted_already", "shell_voting_complete"].indexOf(props.speech) ===
             -1 ? (
-            <div className="buttons">
-              <button
-                style={{ ...(trackCount === "second" ? { display: "block" } : {}) }}
-                className="btn character-btn"
-                id="btn-alt"
-                ref={btnAlt}
-                onClick={onClickAlt}
-              >
-                {buttonAltText}
-              </button>
-              <button
-                className="btn character-btn"
-                id="btn-next"
-                ref={btnNext}
-                onClick={() => onClickNext()}
-              >
-                {buttonNextText}
-              </button>
-            </div>
+            <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"} duration={500}>
+              <div className="buttons">
+                <button
+                  style={{ ...(trackCount === "second" ? { display: "block" } : {}) }}
+                  className="btn character-btn"
+                  id="btn-alt"
+                  ref={btnAlt}
+                  onClick={onClickAlt}
+                >
+                  {buttonAltText}
+                </button>
+                <button
+                  className="btn character-btn"
+                  id="btn-next"
+                  ref={btnNext}
+                  onClick={() => onClickNext()}
+                >
+                  {buttonNextText}
+                </button>
+              </div>
+            </Reveal>
           ) : (
             ""
           )}

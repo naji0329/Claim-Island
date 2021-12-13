@@ -13,7 +13,7 @@ import { SharpToothClam } from "./SharpToothClam";
 import { SpadeClam } from "./SpadeClam";
 import { ThreeLippedClam } from "./ThreeLippedClam";
 
-import { CLAM_TYPES } from "../../constants/clams";
+import { CLAM_TYPES } from "../../constants/ui/clams";
 
 const CLAM_COMPONENTS = {
   [CLAM_TYPES.barnacle]: BarnacleClam,

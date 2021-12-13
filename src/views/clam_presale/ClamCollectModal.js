@@ -9,7 +9,7 @@ import "./index.scss";
 import Card from "../../components/Card";
 
 import presaleContract from "../../web3/buyClamPresale";
-import { clamPresaleAddress } from "../../web3/constants";
+import { clamPresaleAddress } from "../../constants/constants";
 
 import ClamUnknown from "../../assets/img/clam_unknown.png";
 import { actions } from "../../store/redux";

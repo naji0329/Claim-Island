@@ -1,5 +1,5 @@
 import shellPresaleAbi from "./abi/shellPresale.json";
-import { shellPresaleAddress } from "./constants";
+import { shellPresaleAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 import { web3 } from "./index";
 

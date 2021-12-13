@@ -4,7 +4,7 @@ import { useInterval } from "react-use";
 import { useHistory, useLocation } from "react-router-dom";
 import { actions } from "store/redux";
 import { checkHasClamToCollect } from "web3/clam";
-import { zeroHash } from "web3/constants";
+import { zeroHash } from "constants/constants";
 
 import Character from "components/characters/CharacterWrapper";
 import { PageTitle } from "components/PageTitle";
@@ -53,7 +53,6 @@ const Shop = ({
 
   useInterval(
     async () => {
-      console.log("interval", { clamToCollect });
       if (modalToShow === "collect" && clamToCollect === null) {
         const clamToCollect = await checkHasClamToCollect(address);
         updateAccount({
@@ -91,7 +90,7 @@ const Shop = ({
           {/* step 2 */}
           {modalToShow === "collect" && <ClamCollectModal setModalToShow={setModalToShow} />}
           {/* step 3 */}
-          {modalToShow === "display" && <ClamDisplayModal setModalToShow={setModalToShow} />}
+          {modalToShow === "display" && <ClamDisplayModal onClose={() => setModalToShow("")} />}
           {/* step 4 */}
           {modalToShow === "harvest" && <ClamHarvestModal setModalToShow={setModalToShow} />}
         </div>

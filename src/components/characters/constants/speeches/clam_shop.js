@@ -52,7 +52,7 @@ export const CLAM_SHOP_SPEECH = {
         hideable: true,
       },
       step7: {
-        text: `The amount of $SHELL a Clam can be harvested for starts at 1, and increases by 0.1 for every new Pearl produced by the Clam that does not kill it.`,
+        text: `The amount of $SHELL for which a Clam can be harvested starts at 1, and increases by 0.1 for every new Pearl produced by the Clam that does not kill it.`,
         next: "second",
         dismiss: false,
         skip: true,
@@ -66,14 +66,14 @@ export const CLAM_SHOP_SPEECH = {
         hideable: true,
       },
       step9: {
-        text: `Now, to the really good part. I have a special arrangement with the Bank and the Farm, and that's what makes Clam Island so special. My Clams can earn you $GEM rewards in the Bank, and so can the Pearls that they produce!`,
+        text: `Now, to the really good part. I have a special arrangement with the Bank and the Farm, and that's what makes Clam Island so special. Pearls produced by a Clam can earn you $GEM, and every Clam you buy comes with a boost multiplier that gets applied to the $GEM yield for the Pearls that it produces!`,
         next: "second",
         dismiss: false,
         skip: true,
         hideable: true,
       },
       step10: {
-        text: `The $GEM rewards depend on the traits of each Clam and Pearl, but on average they earn more $GEM than they cost. This means that by buying my Clams and farming Pearls, not only will you own unique Clams and Pearls on Clam Island, you could also actually profit!`,
+        text: `The exact $GEM yield for each Pearl depend on its traits and the traits of the Clam that produced it, but on average a Pearl earns you about 4x of its production price in $GEM! This means that by buying my Clams and farming Pearls, not only will you own unique Clams and Pearls on Clam Island, you could also actually earn yield!`,
         next: "second",
         dismiss: false,
         skip: true,
@@ -144,7 +144,15 @@ export const CLAM_SHOP_SPEECH = {
     },
 
     harvest_warn: {
-      text: `WARNING!! Harvesting a Clam will destroy it but you will get $SHELL in return. This process is not reversible. Do you want to continue?`,
+      text: `WARNING!! Harvesting a Clam will allow you to receive $SHELL tokens, but it will destroy your Clam permanently. Are you sure you want to continue?`,
+      next: false,
+      dismiss: true,
+      skip: false,
+    },
+
+    harvest_final_warn: {
+      text: (shell) =>
+        `WARNING!! You are about to harvest this Clam for ${shell} $SHELL. This process will destroy your Clam and is not reversible. Do you want to continue?`,
       next: false,
       dismiss: true,
       skip: false,
@@ -166,8 +174,17 @@ export const CLAM_SHOP_SPEECH = {
       skip: false,
     },
 
+    harvest_processing: {
+      text: `One moment, let me just harvest your Clam for you. You might not want to watch, this ain't a pretty sight...`,
+      next: false,
+      dismiss: true,
+      skip: false,
+      hideable: true,
+    },
+
     harvest_congrats: {
-      text: `Big Decision. We have added $SHELL to your wallet`,
+      text: (shell) =>
+        `All done! Your Clam is no more. ${shell} $SHELL has been transferred to your wallet. Is there anything else that I can help you with?`,
       next: false,
       dismiss: true,
       skip: false,

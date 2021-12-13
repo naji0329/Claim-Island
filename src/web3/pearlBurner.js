@@ -1,5 +1,5 @@
 import PearlBurnerAbi from "./abi/PearlBurner.json";
-import { pearlBurnerAddress, pearlNFTAddress } from "./constants";
+import { pearlBurnerAddress, pearlNFTAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 import { getAccount } from "./shared";
 
@@ -29,9 +29,9 @@ export const pearlLegacyBaseGemRewards = async () => {
   return await pearlBurner().methods.baseGemRewards().call();
 };
 
-export const burnPearl = async (pearlId, shape, color) => {
+export const burnPearl = async (pearlId, forfeitPearl) => {
   const account = getAccount();
-  const method = pearlBurner().methods.burnPearl(pearlId, shape, color);
+  const method = pearlBurner().methods.burnPearl(pearlId, forfeitPearl);
   const gasEstimation = await method.estimateGas({ from: account });
 
   await method.send({ from: account, gas: gasEstimation });

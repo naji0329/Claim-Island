@@ -1,6 +1,6 @@
 import { contractFactory } from "./index";
 import clamShopAbi from "./abi/ClamShop.json";
-import { clamShopAddress } from "./constants";
+import { clamShopAddress } from "../constants/constants";
 
 const clamShop = () =>
   contractFactory({

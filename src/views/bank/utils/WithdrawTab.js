@@ -20,7 +20,7 @@ import {
 } from "../character/OnDepositHarvest";
 
 const WithdrawTab = ({
-  account: { address, chainId },
+  account: { address },
   bank: { withdrawAmount, selectedPool, rewards, ...bank },
   updateBank,
   updateCharacter,
@@ -28,7 +28,7 @@ const WithdrawTab = ({
   dispatchFetchAccountAssets,
 }) => {
   const [inTx, setInTx] = useState(false);
-  const hasPearlRewards = selectedPool.isNative && rewards.hasLockedPearlRewards;
+  const hasPearlRewards = selectedPool.isNative && rewards?.hasLockedPearlRewards;
 
   const { handleSubmit, formState } = useForm();
   const { errors } = formState;
@@ -63,7 +63,7 @@ const WithdrawTab = ({
       const withdrawAmountBigNumber = new BigNumber(withdrawAmount);
       const newWithdrawlAmount = currentWithdrawlAmount.minus(withdrawAmountBigNumber).toString();
 
-      const setUpPools = await getAllPools({ address, chainId });
+      const setUpPools = await getAllPools({ address });
 
       updateBank({
         pools: setUpPools, //update all pools

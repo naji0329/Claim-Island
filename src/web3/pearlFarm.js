@@ -1,6 +1,6 @@
 import pearlFarmAbi from "./abi/PearlFarm.json";
 import { contractFactory } from "./index";
-import { pearlFarmAddress } from "./constants";
+import { pearlFarmAddress } from "../constants/constants";
 import { getAccount } from "./shared";
 import { getOracleFee } from "./rng";
 
@@ -11,7 +11,7 @@ const pearlFarm = () =>
   });
 
 export const stakePrice = async () => {
-  return await pearlFarm().methods.pearlPrice().call();
+  return await pearlFarm().methods.getUpdatedPearlPrice().call();
 };
 
 export const getStakedClamIds = async (account) => {
@@ -19,8 +19,7 @@ export const getStakedClamIds = async (account) => {
 };
 
 export const hasClamBeenStakedBeforeByUser = async (clamId) => {
-  const account = getAccount();
-  return await pearlFarm().methods.hasClamBeenStakedBeforeByUser(account, clamId).call();
+  return await pearlFarm().methods.clamHasBeenStaked(clamId).call();
 };
 
 export const stakeClam = async (clamId) => {

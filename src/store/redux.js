@@ -3,16 +3,17 @@ import { applyMiddleware } from "redux-zero/middleware";
 import { connect } from "redux-zero/devtools";
 
 // dispatcher imports
-import clamContract from "web3/clam";
+import clamContract, { getClamValueInShellToken, getPearlValueInShellToken } from "web3/clam";
 import {
   gemTokenAddress,
   shellTokenAddress,
   clamNFTAddress,
   pearlNFTAddress,
-} from "web3/constants";
+} from "constants/constants";
 import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm";
 import { EmptyBytes, getOwnedClams, getOwnedPearls, formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";
+import { color, periodInSeconds, periodStart, shape } from "web3/pearlBurner";
 
 const initialState = {
   account: {
@@ -68,6 +69,9 @@ const initialState = {
     accountPearlCount: "0",
     lastWinner: undefined,
   },
+  clamSwapData: {
+    rng: undefined, // from call rngRequestHashFromBuyersClam
+  },
   character: {
     name: undefined,
     action: undefined,
@@ -92,6 +96,7 @@ const initialState = {
     selectedPool: undefined,
   },
   konvaObjects: [],
+  boostParams: {},
   sorting: {
     saferoom: {
       clams: {},
@@ -189,6 +194,14 @@ export const actions = (store) => ({
       },
     };
   },
+  updateClamSwap: (state, value) => {
+    return {
+      clamSwapData: {
+        ...state.clamSwapData,
+        ...value,
+      },
+    };
+  },
   updateCharacter: (state, value) => {
     if (!("skipDialogs" in value)) {
       value.buttonAlt = value.buttonAlt ? value.buttonAlt : {};
@@ -233,7 +246,7 @@ export const actions = (store) => ({
   dispatchFetchAccountAssets: async (state, value) => {
     console.log("dispatchFetchAccountAssets");
     const {
-      account: { address, chainId, isBSChain },
+      account: { address, isBSChain },
     } = state;
 
     if (isBSChain) {
@@ -253,17 +266,40 @@ export const actions = (store) => ({
       ]);
 
       const clams = await getOwnedClams({
-        chainId,
         address,
         balance: clamBalance,
         clamContract,
       });
 
       const pearls = await getOwnedPearls({
-        chainId,
         address,
         balance: pearlBalance,
       });
+
+      const [
+        boostColor,
+        boostShape,
+        boostPeriodStart,
+        boostPeriodInSeconds,
+        clamValueInShellToken,
+        pearlValueInShellToken,
+      ] = await Promise.all([
+        color(),
+        shape(),
+        periodStart(),
+        periodInSeconds(),
+        getClamValueInShellToken(),
+        getPearlValueInShellToken(),
+      ]);
+
+      const boostParams = {
+        boostColor,
+        boostShape,
+        boostPeriodStart,
+        boostPeriodInSeconds,
+        clamValueInShellToken,
+        pearlValueInShellToken,
+      };
 
       return {
         account: {
@@ -278,8 +314,33 @@ export const actions = (store) => ({
           pearls,
           reason: "dispatchFetchAccountAssets",
         },
+        boostParams: {
+          ...state.boostParams,
+          ...boostParams,
+        },
       };
     }
+  },
+  updateClams: async (state) => {
+    const {
+      account: { address },
+    } = state;
+
+    const clamBalance = await balanceOf(clamNFTAddress, address);
+
+    const clams = await getOwnedClams({
+      address,
+      balance: clamBalance,
+      clamContract,
+    });
+
+    return {
+      account: {
+        ...state.account,
+        clams,
+        clamBalance,
+      },
+    };
   },
   updateSortOrder: (state, sortOrder = {}, page, entity) => ({
     sorting: {

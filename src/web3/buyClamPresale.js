@@ -1,5 +1,5 @@
 import clamPresaleAbi from "./abi/clamPresale.json";
-import { clamPresaleAddress } from "./constants";
+import { clamPresaleAddress } from "../constants/constants";
 import { contractFactory } from "./index";
 import { getOracleFee } from "./rng";
 

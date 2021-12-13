@@ -1,26 +1,34 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Skeleton } from "@pancakeswap-libs/uikit";
+import { useInterval } from "react-use";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import ReactTooltip from "react-tooltip";
 
 import { getPearlDataByIds } from "web3/shared";
-import { clamHasGeneratedBoost } from "web3/gemLocker";
 import { getRemainingPearlProductionTime } from "web3/pearlFarm";
-import { getClamValueInShellToken, getPearlValueInShellToken } from "../../web3/clam";
+import { getClamValueInShellToken, getPearlValueInShellToken, getPearlBoost } from "web3/clam";
+import { color, shape, periodStart, periodInSeconds } from "web3/pearlBurner";
+import { getGemPrice } from "web3/gemOracle";
 import { Clam3DView } from "components/clam3DView";
 import { Controls3DView } from "components/controls3DView";
 import { secondsToFormattedTime } from "utils/time";
-import { formatUnits } from "@ethersproject/units";
+import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
+import { formatShell } from "utils/clams";
 
 import PearlInfo from "../bank/utils/PearlInfo";
 
-const formatShell = (value) => (value ? formatUnits(String(value), 18) : "0");
+import "./index.scss";
 
-const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev }) => {
+const ClamDetails = ({ clam, updateAccount, onClickNext, onClickPrev }) => {
   const [producedPearls, setProducedPearls] = useState([]);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [clamHasGeneratedBonus, setClamHasGeneratedBonus] = useState(false);
+  const [pearlBoost, setPearlBoost] = useState(0);
   const [clamValueInShellToken, setClamValueInShellToken] = useState("0");
   const [pearlValueInShellToken, setPearlValueInShellToken] = useState("0");
   const [isLoading, setIsLoading] = useState(false);
+  const [gemPriceUSD, setGemPriceUSD] = useState("0");
+  const [producedPearlsYieldTimers, setProducedPearlsYieldTimers] = useState([]);
   const remainingFormattedTime = secondsToFormattedTime(timeLeft);
   const { clamDataValues } = clam;
   const { dna, pearlsProduced, pearlProductionCapacity } = clamDataValues;
@@ -30,20 +38,47 @@ const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev })
       : "0";
   const remainingLifeSpan = +pearlProductionCapacity - +pearlsProduced;
 
+  useInterval(() => {
+    const updatedProducedPearlsYieldTimers = producedPearlsYieldTimers.map((time) => {
+      const remainingTime = time - 1000;
+      if (remainingTime > 0) {
+        return remainingTime;
+      }
+
+      return 0;
+    });
+    setProducedPearlsYieldTimers(updatedProducedPearlsYieldTimers);
+    ReactTooltip.rebuild();
+  }, 1000);
+
   useEffect(() => {
     const init = async () => {
       setIsLoading(true);
       try {
-        const pearls = await getPearlDataByIds(clam.producedPearlIds, chainId);
+        const pearls = await getPearlDataByIds(clam.producedPearlIds);
         setProducedPearls(pearls);
 
-        const hasGeneratedBonus = await clamHasGeneratedBoost(clam.clamId);
-        setClamHasGeneratedBonus(hasGeneratedBonus);
-
+        const boost = await getPearlBoost(clam.clamId);
+        boost > 0 ? setPearlBoost(boost) : setPearlBoost(clam.pearlBoost);
         const remainingPearlProductionTime = await getRemainingPearlProductionTime(clam.clamId);
         setTimeLeft(remainingPearlProductionTime);
         setClamValueInShellToken(await getClamValueInShellToken());
         setPearlValueInShellToken(await getPearlValueInShellToken());
+        const [boostedColor, boostedShape, periodInSecs, startOfWeek, gemPriceUSD] =
+          await Promise.all([color(), shape(), periodInSeconds(), periodStart(), getGemPrice()]);
+
+        const pearlsYieldTimers = pearls.map((pearl) =>
+          getPearlsMaxBoostTime({
+            shape: pearl.dnaDecoded.shape,
+            colour: pearl.dnaDecoded.color,
+            currentBoostColour: boostedColor,
+            currentBoostShape: boostedShape,
+            period: periodInSecs,
+            startOfWeek: startOfWeek,
+          })
+        );
+        setProducedPearlsYieldTimers(pearlsYieldTimers);
+        setGemPriceUSD(gemPriceUSD);
       } catch (err) {
         updateAccount({ error: err.message });
       } finally {
@@ -65,6 +100,7 @@ const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev })
 
   return (
     <div className="ClamDetails flex flex-row">
+      <ReactTooltip html={true} className="max-w-xl" />
       <div className="flex flex-1 flex-col items-start">
         <p
           className="font-extrabold text-green-600 text-center text-lg font-avenir mb-2"
@@ -85,7 +121,7 @@ const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev })
           <p className="float-right">{isLoading ? "" : remainingFormattedTime}</p>
         </div>
       </div>
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col clamStatsColumn">
         <div className="detail-box">
           <h1 className="heading">General Stats</h1>
           {isLoading ? (
@@ -93,14 +129,17 @@ const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev })
           ) : (
             <>
               <div className="grid md:grid-cols-2 md:grid-rows-2 gap-1 mt-2">
-                <div>Harvestable $SHELL</div>
+                <div>
+                  Harvestable $SHELL
+                  <button data-tip="Amount of $SHELL you will receive if you harvest this Clam in the Shop">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </button>
+                </div>
                 <div className="text-right">{formatShell(harvestableShell)}</div>
                 <div>Pearls Remaining</div>
                 <div className="text-right">{remainingLifeSpan}</div>
-                <div>$GEM boost</div>
-                <div className="text-right">
-                  {clamHasGeneratedBonus ? formatUnits(String(clam.clamBonus), 18) : 0}
-                </div>
+                <div>Clam boost</div>
+                <div className="text-right">{pearlBoost}</div>
               </div>
             </>
           )}
@@ -113,7 +152,13 @@ const ClamDetails = ({ clam, chainId, updateAccount, onClickNext, onClickPrev })
           ) : (
             <div className="flex flex-col gap-2 overflow-y-auto" style={{ maxHeight: "18rem" }}>
               {producedPearls.map((pearl, i, a) => (
-                <PearlInfo key={pearl.pearlId} pearl={pearl} isLast={i === a.length - 1} />
+                <PearlInfo
+                  key={pearl.pearlId}
+                  pearl={pearl}
+                  isLast={i === a.length - 1}
+                  maxBoostIn={producedPearlsYieldTimers[i]}
+                  gemPriceUSD={gemPriceUSD}
+                />
               ))}
             </div>
           )}

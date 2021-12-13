@@ -9,7 +9,7 @@ import "./index.scss";
 import Card from "../../components/Card";
 
 import communityRewardsContract from "../../web3/communityRewards";
-import { communityRewardsAddress } from "../../web3/constants";
+import { communityRewardsAddress } from "../../constants/constants";
 
 import RewardUnknown from "../../assets/img/pearl_unknown.png";
 import { actions } from "../../store/redux";

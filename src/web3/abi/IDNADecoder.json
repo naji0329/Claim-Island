@@ -1,0 +1,160 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "name": "decodeTraitsFromDNA",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "getDNADecoded",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "tongueShape",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "tongueColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "shellShape",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "shellColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "innerColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "lipColor",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "pattern",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "size",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lifespan",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "glow",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "rarity",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rarityValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8[10]",
+            "name": "pearlBodyColorNumber",
+            "type": "uint8[10]"
+          },
+          {
+            "internalType": "uint8[6]",
+            "name": "pearlShapeNumber",
+            "type": "uint8[6]"
+          },
+          {
+            "internalType": "uint256[3][4]",
+            "name": "defaultHSV",
+            "type": "uint256[3][4]"
+          },
+          {
+            "internalType": "uint256[3][4]",
+            "name": "adjHSV",
+            "type": "uint256[3][4]"
+          }
+        ],
+        "internalType": "struct IDNADecoder.Traits",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTraits",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8[10]",
+        "name": "",
+        "type": "uint8[10]"
+      },
+      {
+        "internalType": "uint8[6]",
+        "name": "",
+        "type": "uint8[6]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

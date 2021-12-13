@@ -13,7 +13,7 @@ export const WELCOME_SPEECH = {
       skip: false,
     },
     second: {
-      text: `We also have a Pearl Hunt Event on right now - if you produce the right type of Pearl, you could win a Tiffany & Co Necklace worth up to $10,000! Would you like to find out more about this event?`,
+      text: `If you need more help, you can always check out the Infocenter, where Janet can give you more information and guidance. You can also take a tour with me any time using the tour icon on the bottom left.`,
       next: "third",
       dismiss: false,
       skip: false,
@@ -44,12 +44,12 @@ export const WELCOME_BUTTONS = {
       alt: false,
     },
     second: {
-      next: "No thanks",
+      next: "No thanks, I'm good",
       alt: {
-        action: "url",
-        destination: "https://clamisland.medium.com/announcing-the-clam-island-pearl-hunt-event-e980c7b8f2eb",
+        action: "url_internal",
+        destination: "/info",
         next: "fourth",
-        text: "Yes please",
+        text: "Go to Infocenter",
       },
     },
     third: {

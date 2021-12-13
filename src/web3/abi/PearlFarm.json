@@ -16,19 +16,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "burnRateReclaim",
-        "type": "uint256"
-      }
-    ],
-    "name": "BurnRateReclaimSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "farmer",
@@ -61,25 +48,6 @@
       }
     ],
     "name": "ClamUnstaked",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "farmer",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "clamId",
-        "type": "uint256"
-      }
-    ],
-    "name": "GemReclaimed",
     "type": "event"
   },
   {
@@ -184,11 +152,43 @@
       {
         "indexed": false,
         "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_clamId",
+        "type": "uint256"
+      }
+    ],
+    "name": "RNGRequestHashSetToZero",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
         "name": "rngContractAddress",
         "type": "address"
       }
     ],
     "name": "RNGSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "contract IClamShop",
+        "name": "_clamShop",
+        "type": "address"
+      }
+    ],
+    "name": "SetClamShop",
     "type": "event"
   },
   {
@@ -283,10 +283,42 @@
         "type": "uint256"
       }
     ],
+    "name": "clamHasBeenStaked",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "clamIdToStaker",
     "outputs": [
       {
         "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamShop",
+    "outputs": [
+      {
+        "internalType": "contract IClamShop",
         "name": "",
         "type": "address"
       }
@@ -305,6 +337,25 @@
     "name": "collectPearl",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "gemSpent",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -383,27 +434,16 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
+    "inputs": [],
+    "name": "getUpdatedPearlPrice",
+    "outputs": [
       {
         "internalType": "uint256",
-        "name": "clamId",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "name": "hasClamBeenStakedBeforeByUser",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -439,11 +479,6 @@
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "_clamBonus",
-        "type": "address"
-      },
-      {
         "internalType": "uint256",
         "name": "_pearlPrice",
         "type": "uint256"
@@ -451,11 +486,6 @@
       {
         "internalType": "uint256",
         "name": "_burnRateProduction",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_burnRateReclaim",
         "type": "uint256"
       }
     ],
@@ -573,19 +603,6 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "clamId",
-        "type": "uint256"
-      }
-    ],
-    "name": "prepareReclaiming",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
         "name": "",
         "type": "uint256"
       }
@@ -633,29 +650,6 @@
         "internalType": "uint256",
         "name": "clamId",
         "type": "uint256"
-      }
-    ],
-    "name": "reclaimGems",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "clamId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "oldOwner",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
       }
     ],
     "name": "registerClamTransfer",
@@ -747,12 +741,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_burnRateReclaim",
-        "type": "uint256"
+        "internalType": "contract IClamShop",
+        "name": "_clamShop",
+        "type": "address"
       }
     ],
-    "name": "setBurnRateReclaim",
+    "name": "setClamShop",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -805,6 +799,24 @@
       }
     ],
     "name": "setRng",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_clamId",
+        "type": "uint256"
+      }
+    ],
+    "name": "setRngRequestHashForProducedPearlToZero",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

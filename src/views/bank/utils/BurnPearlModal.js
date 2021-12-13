@@ -11,27 +11,31 @@ import {
   decodeTokenOfOwnerByIndexFromMulticall,
 } from "web3/pearl";
 import { color, shape, periodStart, periodInSeconds, periodCheckpoint } from "web3/pearlBurner";
+import { getGemPrice } from "web3/gemOracle";
 import { useTimer } from "hooks/useTimer";
+import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
 import PearlInfo from "./PearlInfo";
 import { SORT_ORDER_PEARLS_KEY } from "constants/sorting";
 import { getSortedPearls } from "utils/pearlsSort";
 import { PearlsSorting } from "components/pearlsSorting";
+
+import "../bank.scss";
 
 const BurnPearlModal = (props) => {
   const {
     account: { address, pearlBalance },
     updateAccount,
     isNativeStaker,
-    chainId,
     sorting: {
       bank: { pearls: pearlsSortOrder },
     },
   } = props;
   const [pearls, setPearls] = useState([]);
-  const [eligibleShape, setEligibleShape] = useState("");
-  const [eligibleColor, setEligibleColor] = useState("");
+  const [boostedShape, setBoostedShape] = useState("");
+  const [boostedColor, setBoostedColor] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
   const [periodInSecs, setPeriodInSecs] = useState("");
+  const [gemPriceUSD, setGemPriceUSD] = useState(1);
   const [sortOrderPearls = {}] = useLocalStorage(SORT_ORDER_PEARLS_KEY);
 
   const calculateTimeLeft = () => {
@@ -47,7 +51,6 @@ const BurnPearlModal = (props) => {
   };
 
   const { timeLeft } = useTimer(calculateTimeLeft);
-
   const handlePeriodCheckpoint = async () => {
     await periodCheckpoint();
   };
@@ -55,10 +58,10 @@ const BurnPearlModal = (props) => {
   useAsync(async () => {
     try {
       const tokenIdsCalls = prepTokenOfOwnerByIndexMulticall(address, +pearlBalance);
-      const tokenIdsResult = await aggregate(tokenIdsCalls, chainId);
+      const tokenIdsResult = await aggregate(tokenIdsCalls);
       const tokenIdsDecoded = decodeTokenOfOwnerByIndexFromMulticall(tokenIdsResult.returnData);
 
-      const ownedPearls = await getPearlDataByIds(tokenIdsDecoded, chainId);
+      const ownedPearls = await getPearlDataByIds(tokenIdsDecoded);
       const sortedOwnedPearls = getSortedPearls(
         ownedPearls,
         sortOrderPearls.value,
@@ -66,108 +69,118 @@ const BurnPearlModal = (props) => {
       );
       setPearls(sortedOwnedPearls);
 
-      const elShape = await shape();
-      const elColor = await color();
-      setEligibleShape(elShape);
-      setEligibleColor(elColor);
+      const _shape = await shape();
+      const _color = await color();
+      setBoostedShape(_shape);
+      setBoostedColor(_color);
 
       const start = await periodStart();
       setStartOfWeek(start);
 
       const periodInSecs = await periodInSeconds();
       setPeriodInSecs(periodInSecs);
+
+      const gemPrice = await getGemPrice();
+      setGemPriceUSD(gemPrice);
     } catch (err) {
       console.error(err);
       updateAccount({ error: err.message });
     }
   });
 
-  const eligiblePearls = useMemo(
+  const boostedPearls = useMemo(
     () =>
       pearls.filter(
-        ({ dnaDecoded }) => dnaDecoded.shape === eligibleShape && dnaDecoded.color === eligibleColor
+        ({ dnaDecoded }) => dnaDecoded.shape === boostedShape && dnaDecoded.color === boostedColor
       ),
-    [pearls, eligibleShape, eligibleColor]
+    [pearls, boostedShape, boostedColor]
   );
-  const notEligiblePearls = useMemo(
+  const regularPearls = useMemo(
     () =>
       pearls.filter(
-        ({ dnaDecoded }) => dnaDecoded.shape !== eligibleShape || dnaDecoded.color !== eligibleColor
+        ({ dnaDecoded }) => dnaDecoded.shape !== boostedShape || dnaDecoded.color !== boostedColor
       ),
-    [pearls, eligibleShape, eligibleColor]
+    [pearls, boostedShape, boostedColor]
+  );
+
+  const renderPearl = (pearl, i, a) => (
+    <PearlInfo
+      key={pearl.pearlId}
+      pearl={pearl}
+      isLast={i === a.length - 1}
+      isNativeStaker={isNativeStaker}
+      showBurn
+      maxBoostIn={getPearlsMaxBoostTime({
+        shape: pearl.dnaDecoded.shape,
+        colour: pearl.dnaDecoded.color,
+        currentBoostColour: boostedColor,
+        currentBoostShape: boostedShape,
+        period: periodInSecs,
+        startOfWeek,
+      })}
+      gemPriceUSD={gemPriceUSD}
+    />
   );
 
   return (
     <div className="w-full flex flex-col">
-      <h1 className="text-3xl font-aristotelica-bold text-gray-500 text-center mb-4">
-        Choose a pearl
-      </h1>
-      <div className="w-full bg-gray-200 rounded-lg mb-6 p-4 flex justify-between">
+      <h1 className="text-3xl font-aristotelica-bold black text-center mb-4">Choose a pearl</h1>
+      <div className="w-full mb-6 p-4 flex justify-between">
         <div className="flex flex-col w-3/5">
-          <span className="font-bold">Pearls with these traits are available:</span>
-          <div>
-            <span className="text-gray-500 inline-block w-16">Shape:</span>
-            <span className="text-gray-500">{eligibleShape}</span>
-          </div>
-          <div>
-            <span className="text-gray-500 inline-block w-16">Color:</span>
-            <span className="text-gray-500">{eligibleColor}</span>
-          </div>
-        </div>
-        {timeLeft.includes("-") ? (
-          <div className="flex flex-col w-2/5 items-end">
-            <button onClick={handlePeriodCheckpoint} className="btn btn-outline btn-primary">
-              Update Pearl Boost Traits
-            </button>
-          </div>
-        ) : (
-          <div className="flex flex-col w-2/5 items-end">
-            <span className="font-bold">Changes in</span>
-            <span className="text-gray-500">{timeLeft}</span>
-          </div>
-        )}
-      </div>
-      <div className="max-w-325">
-        <PearlsSorting page="bank" />
-      </div>
-      <div className="w-full flex justify-between mt-2">
-        <div className="w-1/2 mr-8 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160 overflow-y-auto">
-          <p className="font-bold mb-4">Available for boost</p>
-          {eligiblePearls.length ? (
-            getSortedPearls(eligiblePearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
-              (pearl, i, a) => (
-                <PearlInfo
-                  key={pearl.pearlId}
-                  pearl={pearl}
-                  isLast={i === a.length - 1}
-                  isEligible
-                  isNativeStaker={isNativeStaker}
-                  showBurn
-                />
-              )
-            )
+          <span className="font-aristotelica-bold text-xl">Traits for Max GEM Yield</span>
+          {timeLeft.includes("-") ? (
+            <div>
+              <button onClick={handlePeriodCheckpoint} className="btn btn-outline btn-primary">
+                Update Pearl Boost Traits
+              </button>
+            </div>
           ) : (
-            <p>No pearls available</p>
+            <span className="text-gray-500">Changes in: {timeLeft}</span>
           )}
         </div>
-        <div className="w-1/2 bg-gray-200 rounded-lg p-4 flex flex-col max-h-160">
-          <div className="overflow-y-auto">
-            <p className="font-bold mb-4">Not available this week</p>
-            {notEligiblePearls.length ? (
-              getSortedPearls(notEligiblePearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
-                (pearl, i, a) => (
-                  <PearlInfo
-                    key={i}
-                    pearl={pearl}
-                    isLast={i === a.length - 1}
-                    isNativeStaker={isNativeStaker}
-                    showBurn
-                  />
+        <div className="flex flex-col w-2/5 items-end">
+          <div>
+            <span className="inline-block mr-2">Shape:</span>
+            <span>{boostedShape}</span>
+          </div>
+          <div>
+            <span className="inline-block mr-2">Color:</span>
+            <span>{boostedColor}</span>
+          </div>
+        </div>
+      </div>
+      <div style={{ height: window.innerHeight * 0.5 }} className="overflow-y-auto p-5">
+        <div className="w-full flex flex-col">
+          <div
+            className={
+              boostedPearls.length
+                ? "w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow"
+                : "w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow hidden"
+            }
+          >
+            <div className="w-full">
+              {boostedPearls.length ? (
+                getSortedPearls(boostedPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
+                  renderPearl
                 )
-              )
-            ) : (
-              <p>No pearls available</p>
-            )}
+              ) : (
+                <p>No pearls available for Max GEM Yield</p>
+              )}
+            </div>
+          </div>
+          <div className="w-full p-4 flex flex-col max-h-160 mt-4">
+            <div>
+              {!!regularPearls.length && (
+                <p className="font-bold mb-4">Not available for Max GEM Yield:</p>
+              )}
+              {regularPearls.length ? (
+                getSortedPearls(regularPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
+                  renderPearl
+                )
+              ) : (
+                <p>No pearls available for GEM Yield</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

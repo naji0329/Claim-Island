@@ -66,37 +66,3 @@ export const depositClamSuccess = ({ updateCharacter }) => {
     },
   });
 };
-
-export const depositWithoutStaking = ({ updateCharacter, dismissModal }, cb) => {
-  updateCharacter({
-    name: "al",
-    action: "farms.depositWithoutStaking.text",
-    forceTop: true,
-    button: {
-      text: "Yes",
-      alt: {
-        action: "cb",
-        destination: () => {
-          updateCharacter({
-            name: "al",
-            action: undefined,
-          });
-          cb();
-        },
-      },
-    },
-    buttonAlt: {
-      text: "No thanks",
-      alt: {
-        action: "cb",
-        destination: () => {
-          updateCharacter({
-            name: "al",
-            action: undefined,
-          });
-          dismissModal();
-        },
-      },
-    },
-  });
-};

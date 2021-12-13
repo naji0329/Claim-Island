@@ -3,6 +3,8 @@ import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import moment from "moment";
+
 import { actions } from "store/redux";
 import { isEmpty } from "lodash";
 
@@ -10,12 +12,14 @@ import Character from "components/characters/CharacterWrapper";
 import { Modal, useModal } from "components/Modal";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
+import { sortClamsById } from "utils/clams";
+import { formatNumberToLocale } from "utils/formatNumberToLocale";
 
 import videoImage from "assets/locations/Farm.jpg";
 import videoMp4 from "assets/locations/Farm.mp4";
 import videoWebM from "assets/locations/Farm.webm";
 
-import clamContract from "web3/clam";
+import clamContract, { getMinPearlProductionDelay, getMaxPearlProductionDelay } from "web3/clam";
 import {
   getStakedClamIds,
   unstakeClam,
@@ -33,14 +37,13 @@ import ClamDetails from "./ClamDetails";
 import ClamDeposit from "./ClamDeposit";
 import { DepositClamCard } from "./depositClamCard";
 
-import PearlView from "./PearlView";
+import PearlView from "../saferoom/PearlView";
 import { MODAL_OPTS } from "./constants";
 import {
   WelcomeUser,
   withdrawClamSpeak,
   speechWelcome,
   speechWelcomeNext,
-  refundDepositedGemSpeak,
 } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
 
@@ -49,10 +52,12 @@ import { getSortedClams } from "utils/clamsSort";
 import { ClamsSorting } from "components/clamsSorting";
 
 const Farms = ({
-  account: { clamBalance, chainId, isBSChain, address, clams = [] },
+  account: { clamBalance, isBSChain, address, clams = [] },
   updateCharacter,
   updateAccount,
   dispatchFetchAccountAssets,
+  price: { gem: gemPriceUSD },
+  boostParams,
   sorting: {
     farm: { clams: clamsSortOrder },
   },
@@ -65,7 +70,6 @@ const Farms = ({
   const [loading, setLoading] = useState(false);
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [selPearl, setSelPearl] = useState({});
-  const [stakedRarities, setStakedRarities] = useState([]);
   const [refreshClams, setRefreshClams] = useState(false);
   const { isShowing, toggleModal } = useModal();
 
@@ -73,9 +77,13 @@ const Farms = ({
   const [selectedClam, setSelectedClam] = useState({});
   const [selectedClamId, setSelectedClamId] = useState({});
   const [withdrawingClamId, setWithdrawingClamId] = useState(null);
+  const [pearlProductionPrice, setPearlProductionPrice] = useState(0);
+  const [minPearlProductionTime, setMinPearlProductionTime] = useState(0);
+  const [maxPearlProductionTime, setMaxPearlProductionTime] = useState(0);
 
-  const isPrevButtonShown = selectedClam !== clamsStakedSorted[0];
-  const isNextButtonShown = selectedClam !== clamsStakedSorted[clamsStakedSorted.length - 1];
+  const isPrevButtonShown = selectedClam.clamId !== clamsStakedSorted[0]?.clamId;
+  const isNextButtonShown =
+    selectedClam.clamId !== clamsStakedSorted[clamsStakedSorted.length - 1]?.clamId;
 
   const handleWithdraw = async (clamId) => {
     try {
@@ -113,10 +121,10 @@ const Farms = ({
   };
 
   // when pearl is ready and is to be viewed
-  const onViewPearl = async ({ clamId, dna, dnaDecoded, showPearlModal }) => {
+  const onViewPearl = async ({ clamId, pearl, showPearlModal }) => {
     setSelectedClamId(clamId);
     if (showPearlModal) {
-      setSelPearl({ dna, dnaDecoded });
+      setSelPearl(pearl);
       setModal(MODAL_OPTS.VIEW_PEARL);
       toggleModal();
     } else {
@@ -137,36 +145,25 @@ const Farms = ({
     }
   };
 
-  const refundDepositedGem = (clamId) => {
-    refundDepositedGemSpeak(
-      { updateCharacter },
-      async () => {
-        await handleWithdraw(clamId);
-        await prepareReclaiming(clamId);
-        await reclaimGems(clamId);
-        WelcomeUser({ updateCharacter, suppressSpeechBubble: true });
-      },
-      () => {
-        handleWithdraw(clamId);
-        WelcomeUser({ updateCharacter, suppressSpeechBubble: true });
-      }
-    );
-  };
-
   // when "Withdraw" is clicked - open the modal
-  const onWithdrawClam = (clam) => {
-    withdrawClamSpeak({ updateCharacter }, () => {
-      refundDepositedGem(clam.clamId);
+  const onWithdrawClam = (clamId) => {
+    withdrawClamSpeak({ updateCharacter, clamId }, () => {
+      handleWithdraw(clamId);
+      WelcomeUser({ updateCharacter, suppressSpeechBubble: true });
     });
   };
 
   const onClickNext = () => {
-    const currentClamIndex = clamsStakedSorted.findIndex((clam) => clam === selectedClam);
+    const currentClamIndex = clamsStakedSorted.findIndex(
+      (clam) => clam.clamId === selectedClam.clamId
+    );
     setSelectedClam(clamsStakedSorted[currentClamIndex + 1]);
   };
 
   const onClickPrev = () => {
-    const currentAssetIndex = clamsStakedSorted.findIndex((clam) => clam === selectedClam);
+    const currentAssetIndex = clamsStakedSorted.findIndex(
+      (clam) => clam.clamId === selectedClam.clamId
+    );
     setSelectedClam(clamsStakedSorted[currentAssetIndex - 1]);
   };
 
@@ -186,26 +183,13 @@ const Farms = ({
             if (!isEmpty(clamsStakedIds)) {
               const stakedClams = await getClamsDataByIds({
                 tokenIds: clamsStakedIds,
-                chainId,
                 clamContract,
               });
 
-              const now = Math.round(new Date().getTime() / 1000);
-              const productionTimesTotal = await Promise.all(
-                stakedClams.map(({ clamId }) => getRemainingPearlProductionTime(clamId))
-              );
-              for (let i = 0; i < stakedClams.length; i++) {
-                stakedClams[i].pearlProductionTime = +productionTimesTotal[i] + +now;
-                stakedClams[i].pearlProductionTimeLeft = +productionTimesTotal[i];
-              }
-
-              const rarities = stakedClams.map((clam) => clam.dnaDecoded.rarity);
-              setStakedRarities(rarities);
               setClamsStaked(stakedClams);
             } else {
               console.log("when no clams staked");
               setClamsStaked([]);
-              setStakedRarities([]);
             }
           }
         } catch (error) {
@@ -241,9 +225,10 @@ const Farms = ({
     if (address) {
       const priceForPearlInGem = await stakePrice();
       const price = formatFromWei(priceForPearlInGem);
+      setPearlProductionPrice(Number(price).toFixed(2));
       speechWelcome({ updateCharacter }, async () => {
         //     [get Pearl production price in $GEM]
-        return speechWelcomeNext({ updateCharacter, gem: price });
+        return speechWelcomeNext({ updateCharacter, gem: formatNumberToLocale(price, 2) });
       });
     } else {
       updateCharacter({
@@ -255,6 +240,19 @@ const Farms = ({
       });
     }
   }, [address]);
+
+  useEffect(() => {
+    const getPearlProductionTime = async () => {
+      const [minTime, maxTime] = await Promise.all([
+        getMinPearlProductionDelay(),
+        getMaxPearlProductionDelay(),
+      ]);
+      setMinPearlProductionTime(Math.floor(moment.duration(minTime * 1000).asHours()));
+      setMaxPearlProductionTime(Math.floor(moment.duration(maxTime * 1000).asHours()));
+    };
+
+    getPearlProductionTime();
+  }, []);
 
   return (
     <div className="overflow-x-hidden">
@@ -277,7 +275,6 @@ const Farms = ({
       >
         {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
           <ClamDetails
-            chainId={chainId}
             clam={selectedClam}
             clamProcessing={clamProcessing}
             updateAccount={updateAccount}
@@ -289,11 +286,15 @@ const Farms = ({
             clams={availableClamsForDepositing}
             updateCharacter={updateCharacter}
             toggleModal={toggleModal}
-            stakedRarities={stakedRarities}
             setRefreshClams={setRefreshClams}
           />
         ) : (
-          <PearlView dna={selPearl.dna} dnaDecoded={selPearl.dnaDecoded} />
+          <PearlView
+            {...boostParams}
+            {...selPearl}
+            gemPriceUSD={Number(gemPriceUSD)}
+            hideProduceButton={true}
+          />
         )}
       </Modal>
 
@@ -304,19 +305,25 @@ const Farms = ({
             <ClamsSorting page="farm" />
             {/* clams and pears grid */}
             <div className="w-full my-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-20">
-                <DepositClamCard onClick={onDepositClam} />
-                {clamsStakedSorted.map((clam, i) => (
-                  <FarmItem
-                    key={i}
-                    {...clam}
-                    onViewDetails={() => onViewDetails(clam)}
-                    onWithdrawClam={() => onWithdrawClam(clam)}
-                    onViewPearl={onViewPearl}
-                    updateCharacter={updateCharacter}
-                    withdrawingClamId={withdrawingClamId}
-                  />
-                ))}
+              <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-20">
+                <DepositClamCard
+                  pearlProductionPrice={pearlProductionPrice}
+                  minPearlProductionTime={minPearlProductionTime}
+                  maxPearlProductionTime={maxPearlProductionTime}
+                  onClick={onDepositClam}
+                />
+                {clamsStakedSorted &&
+                  clamsStakedSorted.map((clam, i) => (
+                    <FarmItem
+                      key={i}
+                      {...clam}
+                      onViewDetails={() => onViewDetails(clam)}
+                      onWithdrawClam={() => onWithdrawClam(clam.clamId)}
+                      onViewPearl={onViewPearl}
+                      updateCharacter={updateCharacter}
+                      withdrawingClamId={withdrawingClamId}
+                    />
+                  ))}
 
                 {/* {PEARLS &&
                   PEARLS.map((pearl, i) => (
@@ -328,7 +335,7 @@ const Farms = ({
         </div>
       )}
 
-      <Character name="al" />
+      <Character name="al" loading={loading} />
     </div>
   );
 };
