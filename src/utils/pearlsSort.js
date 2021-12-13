@@ -63,12 +63,12 @@ const sortPearlsByGradeDesc = (pearl1, pearl2) => {
 const sortPearlsByBoostAsc = (pearl1, pearl2) => {
   const gemBoost1 = get(pearl1, ["pearlDataValues", "gemBoost"]);
   const gemBoost2 = get(pearl2, ["pearlDataValues", "gemBoost"]);
-  return +gemBoost2 - +gemBoost1;
+  return +gemBoost1 - +gemBoost2;
 };
 const sortPearlsByBoostDesc = (pearl1, pearl2) => {
   const gemBoost1 = get(pearl1, ["pearlDataValues", "gemBoost"]);
   const gemBoost2 = get(pearl2, ["pearlDataValues", "gemBoost"]);
-  return +gemBoost1 - +gemBoost2;
+  return +gemBoost2 - +gemBoost1;
 };
 
 const SORT_FUNCTIONS = {

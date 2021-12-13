@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useAsync } from "react-use";
 import { connect } from "redux-zero/react";
 import { actions } from "../../store/redux";
@@ -10,7 +11,6 @@ const ClamDeposit = ({
   clams: unsortedClams,
   updateCharacter,
   dispatchFetchAccountAssets,
-  toggleModal,
   updateAccount,
   account: { address },
   setRefreshClams,

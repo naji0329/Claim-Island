@@ -149,6 +149,9 @@ const BurnPearlModal = (props) => {
           </div>
         </div>
       </div>
+      <div className="max-w-325">
+        <PearlsSorting page="bank" />
+      </div>
       <div style={{ height: window.innerHeight * 0.5 }} className="overflow-y-auto p-5">
         <div className="w-full flex flex-col">
           <div
