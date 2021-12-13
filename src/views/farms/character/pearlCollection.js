@@ -105,7 +105,7 @@ export const pearlGemPrompt = ({ updateCharacter, pearlPrice, gems }, cb) => {
       alt: {
         action: "cb",
         destination: () => {
-          speechWelcomeNext({ updateCharacter, gem: pearlPrice, suppressSpeechBubble: true});
+          speechWelcomeNext({ updateCharacter, gem: pearlPrice, suppressSpeechBubble: true });
         },
       },
     },

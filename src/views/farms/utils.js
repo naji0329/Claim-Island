@@ -1,7 +1,7 @@
 import {
   pearlSendToSaferoom,
   pearlGenerateNew,
-  pearlGenerateNewWarning
+  pearlGenerateNewWarning,
 } from "./character/pearlCollection";
 
 import { depositClamSuccess, depositClamError } from "./character/clamDeposit";
@@ -18,21 +18,20 @@ export const ifPearlSendSaferoom = async ({ updateCharacter, address, clamId, se
   if (setInTx) setInTx(false);
   pearlSendToSaferoom({ updateCharacter }, async () => {
     pearlGenerateNew({ updateCharacter });
-      if (!setInTx) setInTx(true);
-      try {
-        await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
-        const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
-        if (hasClamBeenStakeByUserBefore) {
-          await stakeClamAgain(clamId);
-        } else {
-          await stakeClam(clamId);
-        }
-        depositClamSuccess({updateCharacter});
-      } catch (err) {
-        depositClamError({ updateCharacter, err});
+    if (!setInTx) setInTx(true);
+    try {
+      await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
+      const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
+      if (hasClamBeenStakeByUserBefore) {
+        await stakeClamAgain(clamId);
+      } else {
+        await stakeClam(clamId);
       }
+      depositClamSuccess({ updateCharacter });
+    } catch (err) {
+      depositClamError({ updateCharacter, err });
+    }
 
-      if (setInTx) setInTx(false);
-
+    if (setInTx) setInTx(false);
   });
 };

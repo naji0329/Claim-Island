@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useAsync } from "react-use";
+import { useAsync, useLocalStorage } from "react-use";
 import { connect } from "redux-zero/react";
 import moment from "moment";
 import { actions } from "store/redux";
@@ -15,6 +15,9 @@ import { getGemPrice } from "web3/gemOracle";
 import { useTimer } from "hooks/useTimer";
 import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
 import PearlInfo from "./PearlInfo";
+import { SORT_ORDER_PEARLS_KEY } from "constants/sorting";
+import { getSortedPearls } from "utils/pearlsSort";
+import { PearlsSorting } from "components/pearlsSorting";
 
 import "../bank.scss";
 
@@ -23,6 +26,9 @@ const BurnPearlModal = (props) => {
     account: { address, pearlBalance },
     updateAccount,
     isNativeStaker,
+    sorting: {
+      bank: { pearls: pearlsSortOrder },
+    },
   } = props;
   const [pearls, setPearls] = useState([]);
   const [boostedShape, setBoostedShape] = useState("");
@@ -30,6 +36,7 @@ const BurnPearlModal = (props) => {
   const [startOfWeek, setStartOfWeek] = useState("");
   const [periodInSecs, setPeriodInSecs] = useState("");
   const [gemPriceUSD, setGemPriceUSD] = useState(1);
+  const [sortOrderPearls = {}] = useLocalStorage(SORT_ORDER_PEARLS_KEY);
 
   const calculateTimeLeft = () => {
     if (startOfWeek === "") return "calculating...";
@@ -55,7 +62,12 @@ const BurnPearlModal = (props) => {
       const tokenIdsDecoded = decodeTokenOfOwnerByIndexFromMulticall(tokenIdsResult.returnData);
 
       const ownedPearls = await getPearlDataByIds(tokenIdsDecoded);
-      setPearls(ownedPearls);
+      const sortedOwnedPearls = getSortedPearls(
+        ownedPearls,
+        sortOrderPearls.value,
+        sortOrderPearls.order
+      );
+      setPearls(sortedOwnedPearls);
 
       const _shape = await shape();
       const _color = await color();
@@ -137,12 +149,23 @@ const BurnPearlModal = (props) => {
           </div>
         </div>
       </div>
+      <div className="max-w-325">
+        <PearlsSorting page="bank" />
+      </div>
       <div style={{ height: window.innerHeight * 0.5 }} className="overflow-y-auto p-5">
         <div className="w-full flex flex-col">
-          <div className={boostedPearls.length ? "w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow" : "w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow hidden"}>
+          <div
+            className={
+              boostedPearls.length
+                ? "w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow"
+                : "w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow hidden"
+            }
+          >
             <div className="w-full">
               {boostedPearls.length ? (
-                boostedPearls.map(renderPearl)
+                getSortedPearls(boostedPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
+                  renderPearl
+                )
               ) : (
                 <p>No pearls available for Max GEM Yield</p>
               )}
@@ -154,7 +177,9 @@ const BurnPearlModal = (props) => {
                 <p className="font-bold mb-4">Not available for Max GEM Yield:</p>
               )}
               {regularPearls.length ? (
-                regularPearls.map(renderPearl)
+                getSortedPearls(regularPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
+                  renderPearl
+                )
               ) : (
                 <p>No pearls available for GEM Yield</p>
               )}

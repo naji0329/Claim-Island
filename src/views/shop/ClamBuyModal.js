@@ -17,7 +17,14 @@ import ArrowDown from "assets/img/arrow-down.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import { buyClam, getPrice, checkHasClamToCollect, buyClamWithVestedTokens, getMinPearlProductionDelay, getMaxPearlProductionDelay } from "web3/clam";
+import {
+  buyClam,
+  getPrice,
+  checkHasClamToCollect,
+  buyClamWithVestedTokens,
+  getMinPearlProductionDelay,
+  getMaxPearlProductionDelay,
+} from "web3/clam";
 import { zeroHash } from "constants/constants";
 import { infiniteApproveSpending } from "web3/gem";
 import { getVestedGem } from "web3/gemLocker";
@@ -68,8 +75,6 @@ const ClamBuyModal = ({
   const [pearlPrice, setPearlPrice] = useState("...");
   const { handleSubmit } = useForm();
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       const [_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek] = await Promise.all(
@@ -94,13 +99,11 @@ const ClamBuyModal = ({
       const getPearlPrice = async () => {
         const pearlPrice = await stakePrice();
         setPearlPrice(formatNumberToLocale(pearlPrice, 2, true));
-      }
+      };
 
       getPearlPrice();
 
-      const _clamUsdPrice = new BigNumber(_clamPrice)
-        .multipliedBy(_gemPrice)
-        .div(1e18); // remove 18 decimals once
+      const _clamUsdPrice = new BigNumber(_clamPrice).multipliedBy(_gemPrice).div(1e18); // remove 18 decimals once
 
       setClamUsdPrice(_clamUsdPrice);
 
@@ -153,7 +156,7 @@ const ClamBuyModal = ({
       ReactGA.event({
         action: ACTIONS.boughtClam,
         category: CATEGORIES.shop,
-        value: parseFloat(clamUsdPrice)
+        value: parseFloat(clamUsdPrice),
       });
       setIsLoading(false);
       setModalToShow("collect");
@@ -167,7 +170,7 @@ const ClamBuyModal = ({
 
   return (
     <>
-      <ReactTooltip html={true} className="max-w-xl"/>
+      <ReactTooltip html={true} className="max-w-xl" />
       <Card>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col mb-4">
@@ -279,22 +282,23 @@ const ClamBuyModal = ({
                 <span>{pearlPrice + " GEM"}</span>
               </div>
               <div className="w-full flex flex-row justify-between">
-                <span>Clam Boost&nbsp;
-                  <button data-tip='Dependent on the traits of the Clam purchased. Applied as a multiplier to the GEM yield for every Pearl produced by a Clam, in addition to the Pearl Boost.'>
+                <span>
+                  Clam Boost&nbsp;
+                  <button data-tip="Dependent on the traits of the Clam purchased. Applied as a multiplier to the GEM yield for every Pearl produced by a Clam, in addition to the Pearl Boost.">
                     <FontAwesomeIcon icon={faInfoCircle} />
                   </button>
                 </span>
                 <span>0.7-30x</span>
               </div>
               <div className="w-full flex flex-row justify-between">
-                <span>Pearl Boost&nbsp;
-                  <button data-tip='Dependent on the traits of the Pearl produced. Applied as a multiplier to the Pearl production price to give a GEM yield for the Pearl.'>
+                <span>
+                  Pearl Boost&nbsp;
+                  <button data-tip="Dependent on the traits of the Pearl produced. Applied as a multiplier to the Pearl production price to give a GEM yield for the Pearl.">
                     <FontAwesomeIcon icon={faInfoCircle} />
                   </button>
                 </span>
                 <span>0.7-30x</span>
               </div>
-
             </div>
           </div>
 

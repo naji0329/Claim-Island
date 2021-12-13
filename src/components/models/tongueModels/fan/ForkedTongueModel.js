@@ -16,7 +16,7 @@ export default function Model(props) {
           geometry={nodes.cs_forked4.geometry}
           position={[-0.007061, -0.142, -0.379]}
           rotation={[0.405964, 0.004836, 0.007651]}
-          scale={36.896427, 36.896427, 39.536427}
+          scale={(36.896427, 36.896427, 39.536427)}
         >
           <meshStandardMaterial
             attach="material"

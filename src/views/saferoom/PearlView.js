@@ -32,7 +32,10 @@ const RowStat = ({ label, value }) => (
 );
 
 const CardStat = ({ label, value }) => (
-  <div className="card card-side my-1 text-sm rounded-xl border border-secondary" style={{ backgroundColor: "#e8f7fd" }}>
+  <div
+    className="card card-side my-1 text-sm rounded-xl border border-secondary"
+    style={{ backgroundColor: "#e8f7fd" }}
+  >
     <div className="card-body px-2 py-3 text-center">
       <div className="block pb-1">
         <p className="font-semibold text-xs uppercase text-blue-400">{label}</p>
@@ -119,7 +122,7 @@ export default (props) => {
           <CardStat label="Shape" value={get(dnaDecoded, "shape")} />
           <CardStat label="Color" value={get(dnaDecoded, "color")} />
           <CardStat label="Overtone" value={get(dnaDecoded, "overtone")} />
-          <CardStat label="Size" value={size + " ("+get(dnaDecoded, "size")+")"} />
+          <CardStat label="Size" value={size + " (" + get(dnaDecoded, "size") + ")"} />
         </div>
       ),
     },

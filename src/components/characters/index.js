@@ -231,7 +231,7 @@ const CharacterSpeak = (props) => {
     switch (btnTrack[trackCount].alt.action) {
       case "url_internal":
         window.location.href = destination;
-        if(btnTrack[trackCount].alt.next) {
+        if (btnTrack[trackCount].alt.next) {
           setSpeech(speechTrack[btnTrack[trackCount].alt.next].text);
           setTrackCount(btnTrack[trackCount].alt.next);
         }
@@ -239,7 +239,7 @@ const CharacterSpeak = (props) => {
 
       case "url":
         window.open(destination, "_blank");
-        if(btnTrack[trackCount].alt.next) {
+        if (btnTrack[trackCount].alt.next) {
           setSpeech(speechTrack[btnTrack[trackCount].alt.next].text);
           setTrackCount(btnTrack[trackCount].alt.next);
         }
@@ -331,9 +331,7 @@ const CharacterSpeak = (props) => {
           </div>
           <div className="speech">
             <Reveal canPlay={canPlay} ease={"cubic-bezier(0,0.4,0.4,1)"} duration={500}>
-              <p className="speech-text">
-                  {speech}
-              </p>
+              <p className="speech-text">{speech}</p>
             </Reveal>
           </div>
           {(votingWalletConnected &&

@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import moment from "moment";
 
 import { actions } from "store/redux";
+import { isEmpty } from "lodash";
+
 import Character from "components/characters/CharacterWrapper";
 import { Modal, useModal } from "components/Modal";
 import VideoBackground from "components/VideoBackground";
@@ -25,6 +27,7 @@ import {
   stakePrice,
   prepareReclaiming,
   reclaimGems,
+  getRemainingPearlProductionTime,
 } from "web3/pearlFarm";
 import { formatFromWei, getClamsDataByIds } from "web3/shared";
 
@@ -45,7 +48,8 @@ import LoadingScreen from "components/LoadingScreen";
 import ClamView from "../saferoom/ClamView";
 
 import { ifPearlSendSaferoom } from "./utils";
-import { isEmpty } from "lodash";
+import { getSortedClams } from "utils/clamsSort";
+import { ClamsSorting } from "components/clamsSorting";
 
 const Farms = ({
   account: { clamBalance, isBSChain, address, clams = [] },
@@ -54,11 +58,15 @@ const Farms = ({
   dispatchFetchAccountAssets,
   price: { gem: gemPriceUSD },
   boostParams,
+  sorting: {
+    farm: { clams: clamsSortOrder },
+  },
 }) => {
   let history = useHistory();
-  const availableClamsForDepositing = [...clams].sort(sortClamsById);
+  const availableClamsForDepositing = clams;
   const [clamProcessing, setClamProcessing] = useState({}); // pearl process details
   const [clamsStaked, setClamsStaked] = useState([]);
+  const [clamsStakedSorted, setClamsStakedSorted] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [selPearl, setSelPearl] = useState({});
@@ -73,8 +81,9 @@ const Farms = ({
   const [minPearlProductionTime, setMinPearlProductionTime] = useState(0);
   const [maxPearlProductionTime, setMaxPearlProductionTime] = useState(0);
 
-  const isPrevButtonShown = selectedClam.clamId !== clamsStaked[0]?.clamId;
-  const isNextButtonShown = selectedClam.clamId !== clamsStaked[clamsStaked.length - 1]?.clamId;
+  const isPrevButtonShown = selectedClam.clamId !== clamsStakedSorted[0]?.clamId;
+  const isNextButtonShown =
+    selectedClam.clamId !== clamsStakedSorted[clamsStakedSorted.length - 1]?.clamId;
 
   const handleWithdraw = async (clamId) => {
     try {
@@ -145,13 +154,17 @@ const Farms = ({
   };
 
   const onClickNext = () => {
-    const currentClamIndex = clamsStaked.findIndex((clam) => clam.clamId === selectedClam.clamId);
-    setSelectedClam(clamsStaked[currentClamIndex + 1]);
+    const currentClamIndex = clamsStakedSorted.findIndex(
+      (clam) => clam.clamId === selectedClam.clamId
+    );
+    setSelectedClam(clamsStakedSorted[currentClamIndex + 1]);
   };
 
   const onClickPrev = () => {
-    const currentAssetIndex = clamsStaked.findIndex((clam) => clam.clamId === selectedClam.clamId);
-    setSelectedClam(clamsStaked[currentAssetIndex - 1]);
+    const currentAssetIndex = clamsStakedSorted.findIndex(
+      (clam) => clam.clamId === selectedClam.clamId
+    );
+    setSelectedClam(clamsStakedSorted[currentAssetIndex - 1]);
   };
 
   useEffect(async () => {
@@ -193,10 +206,20 @@ const Farms = ({
   }, [address, clamBalance, refreshClams]);
 
   useEffect(() => {
-    if (!clamsStaked.find(({ clamId }) => clamId === withdrawingClamId)) {
+    if (!clamsStakedSorted.find(({ clamId }) => clamId === withdrawingClamId)) {
       setWithdrawingClamId(null);
     }
-  }, [clamsStaked]);
+  }, [clamsStakedSorted]);
+
+  useEffect(() => {
+    const clamsReadyToCollect = clamsStaked.filter((clam) => clam.pearlProductionTimeLeft === 0);
+    const clamsNotReadyToCollect = clamsStaked.filter((clam) => clam.pearlProductionTimeLeft !== 0);
+    const sortedClams = [
+      ...clamsReadyToCollect,
+      ...getSortedClams(clamsNotReadyToCollect, clamsSortOrder.value, clamsSortOrder.order),
+    ];
+    setClamsStakedSorted(sortedClams);
+  }, [clamsStaked, clamsSortOrder.value, clamsSortOrder.order]);
 
   useAsync(async () => {
     if (address) {
@@ -280,6 +303,8 @@ const Farms = ({
         <div className="w-full lg:w-4/5 mx-auto relative z-10">
           <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-start">
             <PageTitle title="Clam Farms" />
+            <ClamsSorting page="farm" />
+            {/* clams and pears grid */}
             <div className="w-full my-4">
               <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-20">
                 <DepositClamCard
@@ -288,8 +313,8 @@ const Farms = ({
                   maxPearlProductionTime={maxPearlProductionTime}
                   onClick={onDepositClam}
                 />
-                {clamsStaked &&
-                  clamsStaked.map((clam, i) => (
+                {clamsStakedSorted &&
+                  clamsStakedSorted.map((clam, i) => (
                     <FarmItem
                       key={i}
                       {...clam}

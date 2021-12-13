@@ -60,7 +60,7 @@ const DepositTab = ({
       await deposit(selectedPool.poolId, formatToWei(depositAmount));
 
       ReactGA.event({
-        action: `${ACTIONS.depositedInBank}_${selectedPool.name.replace("-","_")}`,
+        action: `${ACTIONS.depositedInBank}_${selectedPool.name.replace("-", "_")}`,
         category: CATEGORIES.bank,
         value: round(selectedPool.tokenPrice * depositAmount, 2),
       });

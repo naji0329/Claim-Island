@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import classNames from "classnames";
 import ReactTooltip from "react-tooltip";
 
-export default ({ data, defaultTab="", className="" }) => {
+export default ({ data, defaultTab = "", className = "" }) => {
   const dTab = defaultTab.length > 0 ? Number(defaultTab) : false;
   const [tab, setTab] = useState(dTab);
   setTimeout(() => {
@@ -34,7 +34,6 @@ export default ({ data, defaultTab="", className="" }) => {
               </h2>
 
               <div
-
                 style={{
                   overflow: row.scroll ? "" : "hidden",
                   overflowY: row.scroll ? "auto" : "hidden",

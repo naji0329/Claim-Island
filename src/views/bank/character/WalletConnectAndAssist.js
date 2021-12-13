@@ -11,8 +11,8 @@ const ifWeb3NotInstalled = ({ updateCharacter, isWeb3Installed }) => {
       alt: {
         action: "cb",
         destination: async () => {
-          if(isWeb3Installed) {
-            await NetworkService.createOrSwitchNetwork()
+          if (isWeb3Installed) {
+            await NetworkService.createOrSwitchNetwork();
           } else {
             window.open(
               "https://medium.com/stakingbits/setting-up-metamask-for-binance-smart-chain-bsc-921d9a2625fd",
@@ -73,7 +73,7 @@ export const WalletConnectAndAssist = ({
   isBSChain,
   isConnected,
   assistantAcknowledged,
-  updateCharacter
+  updateCharacter,
 }) => {
   if (!isWeb3Installed || !isBSChain) {
     ifWeb3NotInstalled({ updateCharacter, isWeb3Installed });

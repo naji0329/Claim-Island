@@ -7,7 +7,7 @@ import { Loading3DView } from "../Loading3DView";
 
 export const ClamScene = (props) => {
   const { children } = props;
-  
+
   return (
     <Canvas
       gl={{ preserveDrawingBuffer: true }}

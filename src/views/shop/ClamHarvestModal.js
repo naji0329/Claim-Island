@@ -18,6 +18,8 @@ import "./index.scss";
 
 import { actions } from "../../store/redux";
 import { Modal, useModal } from "components/Modal";
+import { ClamsSorting } from "components/clamsSorting";
+import { getSortedClams } from "utils/clamsSort";
 
 import { formatNumberToLocale } from "utils/formatNumberToLocale";
 
@@ -126,6 +128,9 @@ const ClamHarvestModal = ({
   updateCharacter,
   updateAccount,
   updateClams,
+  sorting: {
+    shop: { clams: clamsSortOrder },
+  },
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [clams, setClams] = useState([]);
@@ -238,16 +243,19 @@ const ClamHarvestModal = ({
               <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
                 <div>
                   <h3 className="heading">{message}</h3>
-                  <div className="grid md:grid-cols-4 grid-cols-1 gap-4 flex-2">
-                    {clams.map((clam, i) => (
-                      <ClamItem
-                        key={i}
-                        clam={clam}
-                        harvestClam={harvestClam}
-                        clamValueInShellToken={clamValueInShellToken}
-                        pearlValueInShellToken={pearlValueInShellToken}
-                      />
-                    ))}
+                  <ClamsSorting page="shop" />
+                  <div className="grid md:grid-cols-4 grid-cols-1 gap-4 flex-2 mt-2">
+                    {getSortedClams(clams, clamsSortOrder.value, clamsSortOrder.order).map(
+                      (clam, i) => (
+                        <ClamItem
+                          key={i}
+                          clam={clam}
+                          harvestClam={harvestClam}
+                          clamValueInShellToken={clamValueInShellToken}
+                          pearlValueInShellToken={pearlValueInShellToken}
+                        />
+                      )
+                    )}
                   </div>
                 </div>
               </div>

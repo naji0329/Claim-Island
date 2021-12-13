@@ -97,6 +97,24 @@ const initialState = {
   },
   konvaObjects: [],
   boostParams: {},
+  sorting: {
+    saferoom: {
+      clams: {},
+      pearls: {},
+    },
+    farmDepositingModal: {
+      clams: {},
+    },
+    farm: {
+      clams: {},
+    },
+    shop: {
+      clams: {},
+    },
+    bank: {
+      pearls: {},
+    },
+  },
 };
 
 const middlewares = connect ? applyMiddleware(connect(initialState)) : [];
@@ -324,6 +342,15 @@ export const actions = (store) => ({
       },
     };
   },
+  updateSortOrder: (state, sortOrder = {}, page, entity) => ({
+    sorting: {
+      ...state.sorting,
+      [page]: {
+        ...state.sorting[page],
+        [entity]: sortOrder,
+      },
+    },
+  }),
 });
 
 export default { store, actions };

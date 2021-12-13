@@ -38,12 +38,10 @@ const testNetwork = {
 
 const NetworkService = {
   createOrSwitchNetwork: async () => {
-    let rpcData = process.env.REACT_APP_BSC_TESTNET_FORK === "true" ? testNetwork : productionNetwork;
+    let rpcData =
+      process.env.REACT_APP_BSC_TESTNET_FORK === "true" ? testNetwork : productionNetwork;
 
-    return web3.currentProvider.sendAsync(
-      rpcData,
-      (err, result) => {},
-    );
+    return web3.currentProvider.sendAsync(rpcData, (err, result) => {});
   },
 };
 
