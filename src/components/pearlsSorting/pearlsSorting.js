@@ -14,7 +14,7 @@ import { sortingOrderSelectors } from "selectors/sorting";
 
 const { updateSortOrder: updateSortOrderAC } = actions();
 
-export const PearlsSorting = ({ page }) => {
+export const PearlsSorting = ({ page, textSize }) => {
   const [sortOrderPearlsLS, setSortOrderPearlsLS] = useLocalStorage(SORT_ORDER_PEARLS_KEYS[page]);
   const updateSortOrder = useAction(updateSortOrderAC);
   const sortOrderPearls = useSelector(sortingOrderSelectors[page].pearls);
@@ -57,6 +57,7 @@ export const PearlsSorting = ({ page }) => {
       sortButtons={PEARLS_SORT_BUTTONS}
       onSortValueClick={onSortValueClick}
       onSortOrderClick={onSortOrderClick}
+      textSize={textSize}
     />
   );
 };

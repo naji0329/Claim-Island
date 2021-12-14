@@ -10,11 +10,13 @@ const ICONS_MAP = {
 };
 
 export const SortingBar = (props) => {
-  const { sortButtons, selected, order, onSortValueClick, onSortOrderClick } = props;
+  const { sortButtons, selected, order, onSortValueClick, onSortOrderClick, textSize } = props;
 
   if (!sortButtons) {
     return null;
   }
+
+  const size = !textSize ? "2xl" : textSize;
 
   const selectedFilterName = sortButtons.find((button) => button.value === selected)?.displayValue;
 
@@ -40,7 +42,7 @@ export const SortingBar = (props) => {
     <div className="dropdown dropdown-hover text-white h-full cursor-pointer min-w-180">
       <div
         tabIndex="0"
-        className="flex flex-none bg-gray-900 bg-opacity-90 p-4 rounded-xl text-2xl"
+        className={`flex flex-none bg-gray-900 bg-opacity-90 p-4 rounded-xl text-${size}`}
       >
         <button
           data-tip="Сhange the sorting order"

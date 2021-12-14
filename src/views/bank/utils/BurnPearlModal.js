@@ -124,8 +124,13 @@ const BurnPearlModal = (props) => {
 
   return (
     <div className="w-full flex flex-col">
-      <h1 className="text-3xl font-aristotelica-bold black text-center mb-4">Choose a pearl</h1>
-      <div className="w-full mb-6 p-4 flex justify-between">
+      <div className="w-full flex flex-row justify-center gap-4 item-center">
+        <h1 className="text-3xl font-aristotelica-bold black text-center pt-2">Choose a pearl</h1>
+        <div className="max-w-325">
+          <PearlsSorting page="bank" textSize="md" />
+        </div>
+      </div>
+      <div className="w-full p-4 flex justify-between">
         <div className="flex flex-col w-3/5">
           <span className="font-aristotelica-bold text-xl">Traits for Max GEM Yield</span>
           {timeLeft.includes("-") ? (
@@ -149,18 +154,9 @@ const BurnPearlModal = (props) => {
           </div>
         </div>
       </div>
-      <div className="max-w-325">
-        <PearlsSorting page="bank" />
-      </div>
-      <div style={{ height: window.innerHeight * 0.5 }} className="overflow-y-auto p-5">
-        <div className="w-full flex flex-col">
-          <div
-            className={
-              boostedPearls.length
-                ? "w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow"
-                : "w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow hidden"
-            }
-          >
+      <div style={{ height: window.innerHeight * 0.5 }} className="overflow-y-auto">
+        <div className="w-full flex flex-col p-4">
+          <div className={`w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow mb-6 ${!boostedPearls.length ? "hidden" : ""}`}>
             <div className="w-full">
               {boostedPearls.length ? (
                 getSortedPearls(boostedPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
@@ -171,7 +167,7 @@ const BurnPearlModal = (props) => {
               )}
             </div>
           </div>
-          <div className="w-full p-4 flex flex-col max-h-160 mt-4">
+          <div className="w-full flex flex-col max-h-160">
             <div>
               {!!regularPearls.length && (
                 <p className="font-bold mb-4">Not available for Max GEM Yield:</p>
