@@ -224,6 +224,10 @@ const FarmItem = ({
                 updateCharacter,
                 address,
                 clamId,
+                cb: () => {
+                  updateStakedClams();
+                  updateClams();
+                },
               });
             });
             updateStakedClams();

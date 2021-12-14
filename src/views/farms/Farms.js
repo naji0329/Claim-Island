@@ -61,6 +61,7 @@ const Farms = ({
   sorting: {
     farm: { clams: clamsSortOrder },
   },
+  updateClams,
 }) => {
   let history = useHistory();
   const availableClamsForDepositing = clams;
@@ -99,7 +100,15 @@ const Farms = ({
   const onModalClose = async () => {
     toggleModal();
     if (modalSelected === MODAL_OPTS.VIEW_PEARL) {
-      ifPearlSendSaferoom({ updateCharacter, address, clamId: selectedClamId, cb: () => {setRefreshClams(true)} });
+      ifPearlSendSaferoom({
+        updateCharacter,
+        address,
+        clamId: selectedClamId,
+        cb: () => {
+          setRefreshClams(true);
+          updateClams();
+        },
+      });
     }
   };
 
