@@ -49,6 +49,7 @@ const FarmItem = ({
   account: { address },
   withdrawingClamId,
   updateClams,
+  updateStakedClams,
 }) => {
   const [inTx, setInTx] = useState(false);
   const [isInitLoading, setIsInitLoading] = useState(true);
@@ -62,7 +63,6 @@ const FarmItem = ({
   const [readyForPearl, setReadyForPearl] = useState(false);
   const [gemApproved, setGemApproved] = useState(false);
   const [pearlPrice, setPearlPrice] = useState("0");
-  const [isPearlCollected, setIsPearlCollected] = useState(false);
   const isWithdrawing = withdrawingClamId === clamId;
   const calculateTimeLeft = useCallback(() => {
     const now = Math.round(Date.now() / 1000);
@@ -224,10 +224,9 @@ const FarmItem = ({
                 updateCharacter,
                 address,
                 clamId,
-                setInTx,
               });
             });
-            setIsPearlCollected(true);
+            updateStakedClams();
           } catch (err) {
             updateAccount({ error: err.message });
             setInTx(false);
@@ -253,10 +252,6 @@ const FarmItem = ({
     if (action === "collect") return onClickCollectPearl();
     if (action === "open") return onClickOpenClam();
   };
-
-  if (isPearlCollected) {
-    return null;
-  }
 
   return (
     <div className="FarmItem bg-opacity-90">

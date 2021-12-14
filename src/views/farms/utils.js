@@ -14,11 +14,9 @@ import {
   hasClamBeenStakedBeforeByUser,
 } from "web3/pearlFarm";
 
-export const ifPearlSendSaferoom = async ({ updateCharacter, address, clamId, setInTx }) => {
-  if (setInTx) setInTx(false);
+export const ifPearlSendSaferoom = async ({ updateCharacter, address, clamId, cb }) => {
   pearlSendToSaferoom({ updateCharacter }, async () => {
     pearlGenerateNew({ updateCharacter });
-    if (!setInTx) setInTx(true);
     try {
       await approveContractForMaxUintErc721(clamNFTAddress, pearlFarmAddress);
       const hasClamBeenStakeByUserBefore = await hasClamBeenStakedBeforeByUser(clamId);
@@ -31,7 +29,8 @@ export const ifPearlSendSaferoom = async ({ updateCharacter, address, clamId, se
     } catch (err) {
       depositClamError({ updateCharacter, err });
     }
-
-    if (setInTx) setInTx(false);
+    if (cb) {
+      cb();
+    }
   });
 };

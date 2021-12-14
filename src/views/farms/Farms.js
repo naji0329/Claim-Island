@@ -99,10 +99,8 @@ const Farms = ({
   const onModalClose = async () => {
     toggleModal();
     if (modalSelected === MODAL_OPTS.VIEW_PEARL) {
-      ifPearlSendSaferoom({ updateCharacter, address, clamId: selectedClamId });
+      ifPearlSendSaferoom({ updateCharacter, address, clamId: selectedClamId, cb: () => {setRefreshClams(true)} });
     }
-
-    setRefreshClams(true);
   };
 
   // When Deposit Clam Button is clicked - open the modal to show list of clams
@@ -323,6 +321,7 @@ const Farms = ({
                       onViewPearl={onViewPearl}
                       updateCharacter={updateCharacter}
                       withdrawingClamId={withdrawingClamId}
+                      updateStakedClams={() => setRefreshClams(true)}
                     />
                   ))}
               </div>
