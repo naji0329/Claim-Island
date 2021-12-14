@@ -37,26 +37,22 @@ const Bank = ({
     pools.length && pools.some((p) => p.isNative && +p.userDepositAmountInPool > 0);
 
   useAsync(async () => {
-    let setUpPools = pools;
-    // if has no pools then load it
-    if (pools.length === 0) {
-      setUpPools = await getAllPools({ address });
-    }
+    const currentPools = await getAllPools({ address });
 
-    const calcTotalTVL = setUpPools.reduce((prev, curr) => {
+    const calcTotalTVL = currentPools.reduce((prev, curr) => {
       if (curr.tvl) {
         return prev.plus(curr.tvl);
       }
     }, new BigNumber(0));
 
     setTotalTVL(renderUsd(+calcTotalTVL));
-    updateBank({ pools: setUpPools });
+    updateBank({ pools: currentPools });
 
     if (address) {
       const rewards = await fetchRewards();
       updateBank({ rewards });
     }
-  }, [pools, address, isBSChain]);
+  }, [address, isBSChain]);
 
   // update pools data every 5 seconds
   /* removing is causing memory leak => TODO: replace to api request */
