@@ -323,7 +323,7 @@ const Farms = ({
                 {clamsStakedSorted &&
                   clamsStakedSorted.map((clam, i) => (
                     <FarmItem
-                      key={i}
+                      key={clam.clamId}
                       {...clam}
                       onViewDetails={() => onViewDetails(clam)}
                       onWithdrawClam={() => onWithdrawClam(clam.clamId)}

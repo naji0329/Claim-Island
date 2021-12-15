@@ -225,11 +225,12 @@ const FarmItem = ({
                 address,
                 clamId,
                 cb: () => {
-                  updateStakedClams();
                   updateClams();
+                  updateStakedClams();
                 },
               });
             });
+            updateClams();
             updateStakedClams();
           } catch (err) {
             updateAccount({ error: err.message });
