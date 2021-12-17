@@ -131,7 +131,7 @@ export default ({
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
           <div className="grid">
-            <div className="w-96 h-96">
+            <div className="w-[400px] h-[400px]">
               <Clam3DView
                 width={"100%"}
                 height={"100%"}

@@ -270,7 +270,7 @@ const Farms = ({
         isShowing={isShowing}
         onClose={onModalClose}
         title={
-          modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL
+          modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL || MODAL_OPTS.DEPOSIT_CLAM
             ? ""
             : "Choose a Clam"
         }
@@ -309,8 +309,10 @@ const Farms = ({
       {address && (
         <div className="w-full lg:w-4/5 mx-auto relative z-10">
           <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-start">
+            <div className="flex flex-row gap-8 mb-8">
             <PageTitle title="Clam Farms" />
             <ClamsSorting page="farm" />
+            </div>
             {/* clams and pears grid */}
             <div className="w-full my-4">
               <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-20">

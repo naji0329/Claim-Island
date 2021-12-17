@@ -212,7 +212,7 @@ const ClamHarvestModal = ({
 
   return (
     <div className="HarvestModal">
-      <Modal isShowing={isShowing} onClose={closeModal} width={"90rem"} title={"Choose a Clam"}>
+      <Modal isShowing={isShowing} onClose={closeModal} width={"90rem"}>
         {isLoading ? (
           <div>
             <h1>Loading ...</h1>
@@ -240,11 +240,14 @@ const ClamHarvestModal = ({
         ) : (
           <div>
             {clams.length && !isLoading ? (
-              <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
+              <div className="ClamDeposit p-2">
                 <div>
                   <h3 className="heading">{message}</h3>
-                  <ClamsSorting page="shop" />
-                  <div className="grid md:grid-cols-4 grid-cols-1 gap-4 flex-2 mt-2">
+                  <div className="flex flex-row justify-center text-center gap-6 mb-3">
+                    <h1 className="text-gray-600 font-aristotelica-bold text-3xl pt-3">Choose a Clam</h1>
+                    <ClamsSorting page="shop" textSize="sm" />
+                  </div>
+                  <div className="max-h-160 overflow-y-auto grid md:grid-cols-4 grid-cols-1 gap-4 flex-2 pt-3">
                     {getSortedClams(clams, clamsSortOrder.value, clamsSortOrder.order).map(
                       (clam, i) => (
                         <ClamItem

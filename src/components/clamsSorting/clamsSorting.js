@@ -15,7 +15,7 @@ import { sortingOrderSelectors } from "selectors/sorting";
 
 const { updateSortOrder: updateSortOrderAC } = actions();
 
-export const ClamsSorting = ({ page }) => {
+export const ClamsSorting = ({ page, textSize }) => {
   const [sortOrderClamsLS, setSortOrderClamsLS] = useLocalStorage(SORT_ORDER_CLAMS_KEYS[page]);
   const updateSortOrder = useAction(updateSortOrderAC);
   const sortOrderClams = useSelector(sortingOrderSelectors[page].clams);
@@ -58,6 +58,7 @@ export const ClamsSorting = ({ page }) => {
       sortButtons={page === "farm" ? FARM_CLAMS_SORT_BUTTONS : CLAMS_SORT_BUTTONS}
       onSortValueClick={onSortValueClick}
       onSortOrderClick={onSortOrderClick}
+      textSize={textSize}
     />
   );
 };

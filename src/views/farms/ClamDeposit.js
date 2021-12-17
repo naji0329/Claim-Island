@@ -31,15 +31,18 @@ const ClamDeposit = ({
   }, [unsortedClams, clamsSortOrder.order, clamsSortOrder.value]);
 
   return (
-    <div className="ClamDeposit max-h-160 overflow-y-auto p-2">
+    <div className="ClamDeposit p-2">
       {request.loading ? (
         <div> Loading... </div>
       ) : (
         <>
           {clams.length ? (
             <>
-              <ClamsSorting page="farmDepositingModal" />
-              <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 flex-2">
+              <div className="flex flex-row justify-center text-center gap-6 mb-3">
+                <h1 className="text-gray-600 font-aristotelica-bold text-3xl pt-3">Choose a Clam</h1>
+                <ClamsSorting page="farmDepositingModal" textSize="sm" />
+              </div>
+              <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 flex-2 max-h-160 overflow-y-auto pt-3">
                 {clams.map((clam) => (
                   <ClamItem
                     key={clam.clamId}
