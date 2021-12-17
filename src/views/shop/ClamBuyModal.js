@@ -28,10 +28,10 @@ import {
 import { zeroHash } from "constants/constants";
 import { infiniteApproveSpending } from "web3/gem";
 import { getVestedGem } from "web3/gemLocker";
-import { getGemPrice } from "web3/gemOracle";
+import { getUsdPriceOfToken } from "web3/pancakeRouter";
 import { getMintedThisWeek, getClamsPerWeek } from "web3/clamShop";
 import { stakePrice } from "web3/pearlFarm";
-import { clamShopAddress } from "constants/constants";
+import { clamShopAddress, gemTokenAddress, BUSD } from "constants/constants";
 import { actions } from "store/redux";
 import { ACTIONS, CATEGORIES } from "constants/googleAnalytics";
 
@@ -78,7 +78,7 @@ const ClamBuyModal = ({
   useEffect(() => {
     const fetchData = async () => {
       const [_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek] = await Promise.all(
-        [getGemPrice(), getPrice(), getVestedGem(), getClamsPerWeek(), getMintedThisWeek()]
+        [getUsdPriceOfToken(gemTokenAddress, BUSD), getPrice(), getVestedGem(), getClamsPerWeek(), getMintedThisWeek()]
       );
       setClamPrice(_clamPrice);
       setLockedGem(_lockedGem);
@@ -227,13 +227,9 @@ const ClamBuyModal = ({
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex items-center text-xl">
                         <img className="w-12 h-12 mr-2" src={ClamIcon} />
-                        <div className="flex flex-col text-right w-20 text-black p-2 font-extrabold">
-                          <span>{renderNumber(+formatEther(clamPrice), 2)}</span>
-                          <span className="text-sm">{renderNumber(+clamUsdPrice, 2)}</span>
-                        </div>
-                        <div className="flex flex-col items-start font-sans mx-1">
-                          <span className="text-lg">GEM</span>
-                          <span className="text-sm ">USD</span>
+                        <div className="flex flex-col text-right text-black p-2 font-extrabold">
+                          <span>{renderNumber(+formatEther(clamPrice), 2)} GEM</span>
+                          <span className="text-sm">{renderNumber(+clamUsdPrice, 2)} USD</span>
                         </div>
                       </div>
                       <div className="flex flex-col my-2 pl-4 w-1/2">
@@ -298,6 +294,21 @@ const ClamBuyModal = ({
                   </button>
                 </span>
                 <span>0.7-30x</span>
+              </div>
+              <div className="w-full flex flex-row justify-between">
+                <span>
+                  Net GEM ROI&nbsp;
+                  <button data-tip="Assuming fixed Pearl production price, Clam price and Pearl production price in GEM will fluctuate in practice">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </button>
+                </span>
+                <span>{renderNumber((+formatEther(clamPrice) * 0.7 * 0.7 - (formatEther(clamPrice) * 2)) / (formatEther(clamPrice) * 2) * 100, 0) + "% to " + renderNumber((+formatEther(clamPrice) * 30 * 30 - (formatEther(clamPrice) * 2)) / (formatEther(clamPrice) * 2) * 100, 0) + "%"}</span>
+              </div>
+              <div className="w-full flex flex-row justify-between">
+                <span>
+                  &nbsp;
+                </span>
+                <span className="text-gray-400 text-sm">{"(Average " + renderNumber((+formatEther(clamPrice) * 2 * 2 - (formatEther(clamPrice) * 2)) / (formatEther(clamPrice) * 2) * 100, 0) + "%)"}</span>
               </div>
             </div>
           </div>
