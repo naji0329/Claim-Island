@@ -156,7 +156,7 @@ const BurnPearlModal = (props) => {
       </div>
       <div style={{ height: window.innerHeight * 0.5 }} className="overflow-y-auto">
         <div className="w-full flex flex-col p-4">
-          <div className={`w-full mr-8 rounded-lg p-4 flex flex-col max-h-160 card-shadow mb-6 ${!boostedPearls.length ? "hidden" : ""}`}>
+          <div className={`w-full mr-8 rounded-lg p-4 flex flex-col card-shadow mb-6 ${!boostedPearls.length ? "hidden" : ""}`}>
             <div className="w-full">
               {boostedPearls.length ? (
                 getSortedPearls(boostedPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
