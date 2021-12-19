@@ -4,7 +4,7 @@ export const formatOwnerAddress = (ownerAddress, userAddress) => {
   }
 
   if (ownerAddress === userAddress) {
-    return "You";
+    return "you";
   }
 
   return ownerAddress.replace(/^(.{8}).+(.{4})$/, "$1...$2");

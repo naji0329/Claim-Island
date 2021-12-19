@@ -18,6 +18,8 @@ import { faExternalLinkAlt, faInfoCircle } from "@fortawesome/free-solid-svg-ico
 
 import { pearlGrade, pearlSize } from "./utils/pearlSizeAndGradeValues";
 import ReactTooltip from "react-tooltip";
+import { formatOwnerAddress } from "utils/formatOwnerAddress";
+import { pearlNFTAddress } from "constants/constants";
 
 const CardStat = ({ label, value }) => (
   <div
@@ -51,6 +53,7 @@ export default (props) => {
     onClickPrev,
     hideProduceButton,
     owner,
+    ownerAddress,
     view,
   } = props;
   const [grade, setGrade] = useState(0);
@@ -167,7 +170,7 @@ export default (props) => {
                 </button>
               </>
             }
-            value={formatMsToDuration(maxBoostIn)}
+            value={owner != "N/A" ? formatMsToDuration(maxBoostIn) : "N/A"}
           />
         </div>
       ),
@@ -180,12 +183,17 @@ export default (props) => {
         <div className="flex justify-between flex-col sm:flex-row">
           <div className="grid">
             {owner && (
-              <div className="flex justify-between">
-                <span>Owner</span>
-                <span>{owner}</span>
+              <div className="flex justify-center">
+                <span>Owned by <a className="" target="_blank" rel="noreferrer" href={`https://bscscan.com/token/${pearlNFTAddress}?a=${ownerAddress}#inventory`}>
+                    {owner}
+                    <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+                </a></span>
               </div>
             )}
-            <div className="w-96 h-96">
+            <div className="w-[400px] h-[400px] relative">
+              <div className={`absolute flex w-full h-full justify-center items-center z-20 bg-white bg-opacity-50 ${owner != "N/A" ? "hidden" : ""}`}>
+                <span className="text-center text-3xl px-4">Pearl exchanged for GEM Yield</span>
+              </div>
               <Pearl3DView width={"100%"} height={"100%"} pearlDna={dna} decodedDna={dnaDecoded} />
             </div>
             <div className="flex justify-between flex-row py-2">
@@ -201,8 +209,9 @@ export default (props) => {
         <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
           {isInspectorView ? (
             <button
-              disabled
-              className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
+
+              className="cursor-not-allowed opacity-50 px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
+              data-tip="Coming soon..."
             >
               Make Offer
             </button>

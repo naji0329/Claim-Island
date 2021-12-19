@@ -32,6 +32,7 @@ export const PearlInspect = (props) => {
           ownerOfPearl(parsedTokenId),
         ]);
         pearl.owner = formatOwnerAddress(owner.value, props.address);
+        pearl.ownerAddress = owner.value;
         setPearl(pearl);
         setIsLoading(false);
       };
@@ -57,8 +58,8 @@ export const PearlInspect = (props) => {
           <div className="hero-overlay  bg-opacity-10" />
           <div className="text-center hero-content text-gray-600">
             <div className="max-w-md">
-              <h1 className="mb-5 text-3xl font-bold">
-                {pearl ? "Such a pearl does not exist" : "Chose pearl that you want inspect"}
+              <h1 className="mb-5 text-xl font-bold">
+                {pearl ? "A Pearl with that ID# does not exist." : "Enter Pearl ID# above to inspect the Pearl."}
               </h1>
             </div>
           </div>

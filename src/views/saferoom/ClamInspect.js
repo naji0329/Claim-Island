@@ -35,6 +35,7 @@ export const ClamInspect = (props) => {
           clamContract.ownerOfClam(parsedTokenId),
         ]);
         clam.owner = formatOwnerAddress(owner.value, props.address);
+        clam.ownerAddress = owner.value;
         setClam(clam);
         setIsLoading(false);
       };
@@ -60,8 +61,8 @@ export const ClamInspect = (props) => {
           <div className="hero-overlay bg-opacity-10" />
           <div className="text-center hero-content text-gray-600">
             <div className="max-w-md">
-              <h1 className="mb-5 text-3xl font-bold">
-                {clam ? "Such a clam does not exist" : "Chose pearl that you want inspect"}
+              <h1 className="mb-5 text-xl font-bold">
+                {clam ? "A Clam with that ID# does not exist." : "Enter Clam ID# above to inspect the Clam."}
               </h1>
             </div>
           </div>

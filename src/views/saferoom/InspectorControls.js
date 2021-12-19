@@ -21,18 +21,18 @@ export const InspectorControls = ({ tokenId: defaultTokenId, view }) => {
   };
 
   return (
-    <div className="flex justify-center align-middle mb-4">
+    <div className="flex justify-center items-center mb-4">
       <span className="mr-2">{`Enter ${isClamView ? "Clam" : "Pearl"} ID: #`}</span>
       <input
         type="number"
         placeholder="ID"
-        className="input input-bordered input-sm mr-2"
+        className="input input-bordered w-32 mr-2 text-2xl"
         value={tokenId}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
       <Link
-        className="btn btn-primary btn-sm"
+        className="btn btn-primary btn-md text-lg"
         role="button"
         aria-pressed="true"
         to={`/saferoom/${view}/inspect/${tokenId}`}

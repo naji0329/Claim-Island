@@ -15,7 +15,7 @@ import { Clam3DView } from "components/clam3DView";
 import { Controls3DView } from "components/controls3DView";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faExternalLinkAlt, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { pearlSize } from "./utils/pearlSizeAndGradeValues";
 import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
@@ -23,6 +23,8 @@ import { secondsToFormattedTime } from "utils/time";
 
 import PearlInfo from "../bank/utils/PearlInfo";
 import { getRemainingPearlProductionTime } from "../../web3/pearlFarm";
+
+import { clamNFTAddress, pearlFarmAddress } from "constants/constants";
 
 import { Accordion2, Accordion2Item } from "components/accordion2";
 
@@ -60,6 +62,7 @@ export default ({
   boostPeriodStart,
   view,
   owner,
+  ownerAddress,
 }) => {
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
   const [producedPearls, setProducedPearls] = useState([]);
@@ -134,13 +137,23 @@ export default ({
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
           <div className="grid">
-            {owner && (
-              <div className="flex justify-between">
-                <span>Owner</span>
-                <span>{owner}</span>
+            {owner && (ownerAddress != pearlFarmAddress ? (
+              <div className="flex justify-center">
+              <span>Owned by <a className="" target="_blank" rel="noreferrer" href={`https://bscscan.com/token/${clamNFTAddress}?a=${ownerAddress}#inventory`}>
+                  {owner} <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+              </a></span>
               </div>
+            ) :
+            (
+              <div className="flex justify-center">
+              <span>Currently in Clam Farm</span>
+              </div>
+            )
             )}
-            <div className="w-[400px] h-[400px]">
+            <div className="w-[400px] h-[400px] relative">
+              <div className={`absolute flex w-full h-full justify-center items-center z-20 bg-white bg-opacity-50 ${owner != "N/A" ? "hidden" : ""}`}>
+                <span className="text-3xl">Clam Harvested</span>
+              </div>
               <Clam3DView
                 width={"100%"}
                 height={"100%"}
@@ -264,8 +277,9 @@ export default ({
           (isInspectorView ? (
             <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
               <button
-                disabled
-                className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
+
+                className="cursor-not-allowed opacity-50 px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
+                data-tip="Coming soon..."
               >
                 Make Offer
               </button>

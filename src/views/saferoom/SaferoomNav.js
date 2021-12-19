@@ -5,6 +5,9 @@ import { SAFEROOM_TABS as TABS } from "constants/ui";
 import { ClamsSorting } from "components/clamsSorting";
 import { PearlsSorting } from "components/pearlsSorting";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+
 export const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
   const showNumberOfAssets = (number, asset) => {
     return +number > 1 ? `${number} ${asset}s` : `${number} ${asset}`;
@@ -38,9 +41,9 @@ export const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => 
       {tab === TABS.clam ? <ClamsSorting page="saferoom" /> : <PearlsSorting page="saferoom" />}
       <div className="flex-grow" />
       <Link to={`/saferoom/${tab}/inspect/-1`}>
-        <div className="flex-none text-2xl bg-blue-700 hover:bg-blue-500 text-white rounded-xl align-middle shadow-md px-8 py-2 mx-2">
-          Inspector
-        </div>
+        <button className="btn btn-secondary btn-lg">
+          <FontAwesomeIcon icon={faSearch} className="mx-1" /> Inspector
+        </button>
       </Link>
     </div>
   );
