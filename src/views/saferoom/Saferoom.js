@@ -10,6 +10,8 @@ import ClamView from "./ClamView";
 import PearlView from "./PearlView";
 import { TabContainer } from "./TabContainer";
 import { SaferoomNav } from "./SaferoomNav";
+import { ClamInspect } from "./ClamInspect";
+import { PearlInspect } from "./PearlInspect";
 
 import videoImage from "assets/locations/Saferoom.jpg";
 import videoMp4 from "assets/locations/Saferoom.mp4";
@@ -23,7 +25,6 @@ import { getSortedPearls } from "utils/pearlsSort";
 import { actions } from "store/redux";
 
 import LoadingScreen from "components/LoadingScreen";
-import { getClamValueInShellToken, getPearlValueInShellToken } from "../../web3/clam";
 
 const Saferoom = ({
   ui,
@@ -35,8 +36,6 @@ const Saferoom = ({
 }) => {
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? TABS.clam : TABS.pearl);
-  const [clamValueInShellToken, setClamValueInShellToken] = useState("0");
-  const [pearlValueInShellToken, setPearlValueInShellToken] = useState("0");
   const [clams, setClams] = useState([]);
   const [pearls, setPearls] = useState([]);
   let { path, url } = useRouteMatch();
@@ -132,19 +131,6 @@ const Saferoom = ({
   }, [address, search, pearls, clams]);
 
   useEffect(() => {
-    const getValuesInShellToken = async () => {
-      const [clamValueInShellToken, pearlValueInShellToken] = await Promise.all([
-        getClamValueInShellToken(),
-        getPearlValueInShellToken(),
-      ]);
-      setClamValueInShellToken(clamValueInShellToken);
-      setPearlValueInShellToken(pearlValueInShellToken);
-    };
-
-    getValuesInShellToken();
-  }, []);
-
-  useEffect(() => {
     const { order, value } = saferoomSorting.clams;
     const sortedClams = getSortedClams(unsortedCalms, value, order);
     setClams(sortedClams);
@@ -170,8 +156,6 @@ const Saferoom = ({
         {tab === "Clam" && (
           <ClamView
             {...selectedAsset}
-            clamValueInShellToken={clamValueInShellToken}
-            pearlValueInShellToken={pearlValueInShellToken}
             gemPriceUSD={gemPriceUSD}
             {...boostParams}
             onClickNext={isNextButtonShown() && onClickNext}
@@ -218,6 +202,18 @@ const Saferoom = ({
                   </Route>
                 </Switch>
               </div>
+              <Switch>
+                <Route path={`${path}/clam/inspect/:tokenId`}>
+                  {!ui.isFetching && (
+                    <ClamInspect gemPriceUSD={gemPriceUSD} address={address} {...boostParams} />
+                  )}
+                </Route>
+                <Route path={`${path}/pearl/inspect/:tokenId`}>
+                  {!ui.isFetching && (
+                    <PearlInspect gemPriceUSD={gemPriceUSD} address={address} {...boostParams} />
+                  )}
+                </Route>
+              </Switch>
             </>
           )}
         </div>

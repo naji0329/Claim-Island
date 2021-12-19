@@ -58,7 +58,8 @@ export default ({
   boostShape,
   boostPeriodInSeconds,
   boostPeriodStart,
-  farmView,
+  view,
+  owner,
 }) => {
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
   const [producedPearls, setProducedPearls] = useState([]);
@@ -87,6 +88,8 @@ export default ({
       : "0";
   const formattedHarvestableShell =
     harvestableShell !== "N/A" ? formatShell(harvestableShell) : "N/A";
+  const isFarmView = view === "farm";
+  const isInspectorView = view === "inspector";
 
   useEffect(() => {
     const initClamView = async () => {
@@ -97,7 +100,7 @@ export default ({
           getPearlDataByIds(producedPearlIds),
           getRemainingPearlProductionTime(clamId),
         ]);
-      if (farmView) {
+      if (isFarmView) {
         setRemainingPearlProductionTime(remainingPearlProductionTime);
       }
 
@@ -131,6 +134,12 @@ export default ({
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
           <div className="grid">
+            {owner && (
+              <div className="flex justify-between">
+                <span>Owner</span>
+                <span>{owner}</span>
+              </div>
+            )}
             <div className="w-[400px] h-[400px]">
               <Clam3DView
                 width={"100%"}
@@ -144,7 +153,7 @@ export default ({
               <div className="badge badge-success">#{clamId}</div>
               <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
             </div>
-            {farmView && (
+            {isFarmView && (
               <div className="flex flex-row justify-between my-2" style={{ width: "400px" }}>
                 <p className="float-left">Remaining Time</p>
                 <p className="float-right">{remainingFormattedTime}</p>
@@ -187,7 +196,7 @@ export default ({
                       formatNumberToLocale(
                         (((pearlBoost * 2 - 1) * pearlProductionCapacity - 10) /
                           (10 + +pearlProductionCapacity)) *
-                        100,
+                          100,
                         2
                       ) +
                       "% / " +
@@ -196,7 +205,7 @@ export default ({
                           (10 + +pearlProductionCapacity)) *
                           100) /
                           ((40 * +pearlProductionCapacity) / 24 + 18 + 30)) *
-                        365,
+                          365,
                         2
                       ) +
                       "%"
@@ -226,7 +235,9 @@ export default ({
                   <CardStat label="Tongue Colour" value={get(dnaDecoded, "tongueColor")} />
                   <CardStat
                     label="Size"
-                    value={pearlSize(get(dnaDecoded, "size")) + " (" + get(dnaDecoded, "size") + ")"}
+                    value={
+                      pearlSize(get(dnaDecoded, "size")) + " (" + get(dnaDecoded, "size") + ")"
+                    }
                   />
                 </div>
               </Accordion2Item>
@@ -234,47 +245,63 @@ export default ({
                 <div className="flex flex-col gap-2 overflow-y-auto" style={{ maxHeight: "220px" }}>
                   {producedPearls.length > 0
                     ? producedPearls.map((pearl, i, a) => (
-                      <PearlInfo
-                        key={pearl.pearlId}
-                        pearl={pearl}
-                        isLast={i === a.length - 1}
-                        maxBoostIn={producedPearlsYieldTimers[i]}
-                        gemPriceUSD={gemPriceUSD}
-                        hideViewDetails={true}
-                      />
-                    ))
+                        <PearlInfo
+                          key={pearl.pearlId}
+                          pearl={pearl}
+                          isLast={i === a.length - 1}
+                          maxBoostIn={producedPearlsYieldTimers[i]}
+                          gemPriceUSD={gemPriceUSD}
+                          hideViewDetails={true}
+                        />
+                      ))
                     : "This Clam has not yet produced any Pearls."}
                 </div>
               </Accordion2Item>
             </Accordion2>
           </div>
         </div>
-        {!farmView && (
-          <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
-            <Link to="/farms">
-              <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
-                Stake in Farm
-              </button>
-            </Link>
-            <Link
-              className={isClamAvailableForHarvest ? "" : "cursor-not-allowed"}
-              to={isClamAvailableForHarvest ? "/shop?view=harvest" : "#"}
-            >
+        {!isFarmView &&
+          (isInspectorView ? (
+            <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
               <button
-                disabled={!isClamAvailableForHarvest}
-                className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:opacity-50 font-semibold"
+                disabled
+                className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
               >
-                Harvest for $SHELL
+                Make Offer
               </button>
-            </Link>
-            <button
-              disabled
-              className="disabled:opacity-50 cursor-not-allowed px-4 p-3 shadown-xl   text-red-700 font-semibold border-2 border-red-500 rounded-xl hover:text-white hover:bg-red-500 bg-transparent"
-            >
-              Sell
-            </button>
-          </div>
-        )}
+
+              <Link to="/shop">
+                <button className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:opacity-50 font-semibold">
+                  Clam Shop
+                </button>
+              </Link>
+            </div>
+          ) : (
+            <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
+              <Link to="/farms">
+                <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
+                  Stake in Farm
+                </button>
+              </Link>
+              <Link
+                className={isClamAvailableForHarvest ? "" : "cursor-not-allowed"}
+                to={isClamAvailableForHarvest ? "/shop?view=harvest" : "#"}
+              >
+                <button
+                  disabled={!isClamAvailableForHarvest}
+                  className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:opacity-50 font-semibold"
+                >
+                  Harvest for $SHELL
+                </button>
+              </Link>
+              <button
+                disabled
+                className="disabled:opacity-50 cursor-not-allowed px-4 p-3 shadown-xl   text-red-700 font-semibold border-2 border-red-500 rounded-xl hover:text-white hover:bg-red-500 bg-transparent"
+              >
+                Sell
+              </button>
+            </div>
+          ))}
         <Controls3DView onClickNext={onClickNext} onClickPrev={onClickPrev} />
       </div>
     </>

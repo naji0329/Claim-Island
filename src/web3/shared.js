@@ -119,6 +119,11 @@ export const getClamsDataByIds = async ({ tokenIds, clamContract }) => {
   return clamsFiltered;
 };
 
+export const getClamById = async ({ tokenId, clamContract }) => {
+  const clams = await getClamsDataByIds({ tokenIds: [tokenId], clamContract });
+  return clams[0];
+};
+
 export const getPearlDataByIds = async (tokenIds) => {
   const pearlDataCalls = pearlShared.prepPearlDataMulticall(tokenIds);
   const pearlDataResult = await aggregate(pearlDataCalls);
@@ -175,6 +180,11 @@ export const getPearlDataByIds = async (tokenIds) => {
   const pearlsFiltered = pearls.filter((c) => c);
 
   return pearlsFiltered;
+};
+
+export const getPearlById = async (tokenId) => {
+  const pearls = await getPearlDataByIds([tokenId]);
+  return pearls[0];
 };
 
 export const getOwnedClams = async ({ address, balance, clamContract }) => {

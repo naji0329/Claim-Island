@@ -214,7 +214,7 @@ export const collectClam = async (account) => {
   });
 };
 
-export const ownerOf = async (tokenId) => {
+export const ownerOfClam = async (tokenId) => {
   const clamNft = contractFactory({ abi: clamNFTAbi, address: clamNFTAddress });
   const owner = await clamNft.methods.ownerOf(tokenId).call();
 
@@ -445,4 +445,5 @@ export default {
   prepClamProducedPearlIds,
   decodeProducedPearlIdsFromMulticall,
   calculatePearlBoost,
+  ownerOfClam,
 };

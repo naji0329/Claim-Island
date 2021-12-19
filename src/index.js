@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { ModalProvider } from "@pancakeswap-libs/uikit";
 import { ThemeProvider } from "styled-components";
-import { dark } from "@pancakeswap-libs/uikit";
+import { light } from "@pancakeswap-libs/uikit";
 import TagManager from "react-gtm-module";
 
 import { Provider } from "redux-zero/react";
@@ -24,7 +24,7 @@ TagManager.initialize(tagManagerArgs);
 
 ReactDOM.render(
   <Provider store={store}>
-    <ThemeProvider theme={dark}>
+    <ThemeProvider theme={light}>
       <ModalProvider>
         <App />
       </ModalProvider>

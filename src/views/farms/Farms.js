@@ -12,7 +12,6 @@ import Character from "components/characters/CharacterWrapper";
 import { Modal, useModal } from "components/Modal";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
-import { sortClamsById } from "utils/clams";
 import { formatNumberToLocale } from "utils/formatNumberToLocale";
 
 import videoImage from "assets/locations/Farm.jpg";
@@ -20,15 +19,7 @@ import videoMp4 from "assets/locations/Farm.mp4";
 import videoWebM from "assets/locations/Farm.webm";
 
 import clamContract, { getMinPearlProductionDelay, getMaxPearlProductionDelay } from "web3/clam";
-import {
-  getStakedClamIds,
-  unstakeClam,
-  collectPearl,
-  stakePrice,
-  prepareReclaiming,
-  reclaimGems,
-  getRemainingPearlProductionTime,
-} from "web3/pearlFarm";
+import { getStakedClamIds, unstakeClam, collectPearl, stakePrice } from "web3/pearlFarm";
 import { formatFromWei, getClamsDataByIds } from "web3/shared";
 
 import "./index.scss";
@@ -270,7 +261,9 @@ const Farms = ({
         isShowing={isShowing}
         onClose={onModalClose}
         title={
-          modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL || MODAL_OPTS.DEPOSIT_CLAM
+          modalSelected === MODAL_OPTS.CLAM_DETAILS ||
+          modalSelected === MODAL_OPTS.VIEW_PEARL ||
+          MODAL_OPTS.DEPOSIT_CLAM
             ? ""
             : "Choose a Clam"
         }
@@ -286,6 +279,7 @@ const Farms = ({
             {...boostParams}
             gemPriceUSD={gemPriceUSD}
             farmView={true}
+            view="farm"
             onClickNext={isNextButtonShown && onClickNext}
             onClickPrev={isPrevButtonShown && onClickPrev}
           />
@@ -310,8 +304,8 @@ const Farms = ({
         <div className="w-full lg:w-4/5 mx-auto relative z-10">
           <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-start">
             <div className="flex flex-row gap-8 mb-8">
-            <PageTitle title="Clam Farms" />
-            <ClamsSorting page="farm" />
+              <PageTitle title="Clam Farms" />
+              <ClamsSorting page="farm" />
             </div>
             {/* clams and pears grid */}
             <div className="w-full my-4">

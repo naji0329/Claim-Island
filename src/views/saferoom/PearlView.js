@@ -19,18 +19,6 @@ import { faExternalLinkAlt, faInfoCircle } from "@fortawesome/free-solid-svg-ico
 import { pearlGrade, pearlSize } from "./utils/pearlSizeAndGradeValues";
 import ReactTooltip from "react-tooltip";
 
-const RowStat = ({ label, value }) => (
-  <div className="text-sm flex flex-row justify-between my-1">
-    <div className="block">
-      <p className="text-gray-500 font-semibold">{label}</p>
-    </div>
-
-    <div className="block">
-      <p className="font-bold capitalize">{value}</p>
-    </div>
-  </div>
-);
-
 const CardStat = ({ label, value }) => (
   <div
     className="card card-side my-1 text-sm rounded-xl border border-secondary"
@@ -62,10 +50,13 @@ export default (props) => {
     onClickNext,
     onClickPrev,
     hideProduceButton,
+    owner,
+    view,
   } = props;
   const [grade, setGrade] = useState(0);
   const [size, setSize] = useState(0);
   const [maxBoostIn, setMaxBoostIn] = useState(0);
+  const isInspectorView = view === "inspector";
 
   useInterval(() => {
     if (maxBoostIn > 0) {
@@ -188,6 +179,12 @@ export default (props) => {
       <div className="flex flex-col justify-between">
         <div className="flex justify-between flex-col sm:flex-row">
           <div className="grid">
+            {owner && (
+              <div className="flex justify-between">
+                <span>Owner</span>
+                <span>{owner}</span>
+              </div>
+            )}
             <div className="w-96 h-96">
               <Pearl3DView width={"100%"} height={"100%"} pearlDna={dna} decodedDna={dnaDecoded} />
             </div>
@@ -202,12 +199,21 @@ export default (props) => {
         </div>
 
         <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
-          <Link to="/bank">
-            <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
-              Boost yield&nbsp;
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+          {isInspectorView ? (
+            <button
+              disabled
+              className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
+            >
+              Make Offer
             </button>
-          </Link>
+          ) : (
+            <Link to="/bank">
+              <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
+                Boost yield&nbsp;
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+              </button>
+            </Link>
+          )}
           {!hideProduceButton && (
             <Link to="/farms">
               <button className="px-4 p-3 rounded-xl shadown-xl bg-green-500 text-white hover:bg-green-300 font-semibold">
