@@ -3,30 +3,26 @@ import { Link } from "react-router-dom";
 import { get } from "lodash";
 import ReactTooltip from "react-tooltip";
 import { useInterval } from "react-use";
-
-import { formatNumberToLocale } from "utils/formatNumberToLocale";
-import { formatShell } from "utils/clams";
-
-import { getClamIncubationTime } from "web3/clam";
-import { getCurrentBlockTimestamp } from "web3/index";
-import { getPearlDataByIds } from "web3/shared";
+import { Skeleton } from "@pancakeswap-libs/uikit";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera, faExternalLinkAlt, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { Clam3DView } from "components/clam3DView";
 import { Controls3DView } from "components/controls3DView";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExternalLinkAlt, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-
-import { pearlSize } from "./utils/pearlSizeAndGradeValues";
+import { Accordion2, Accordion2Item } from "components/accordion2";
+import { clamNFTAddress, pearlFarmAddress } from "constants/constants";
+import { formatNumberToLocale } from "utils/formatNumberToLocale";
+import { formatShell } from "utils/clams";
 import { getPearlsMaxBoostTime } from "utils/getPearlsMaxBoostTime";
 import { secondsToFormattedTime } from "utils/time";
+import { takeSnapshot } from "utils/takeSnapshot";
+import { getClamIncubationTime } from "web3/clam";
+import { getCurrentBlockTimestamp } from "web3/index";
+import { getPearlDataByIds } from "web3/shared";
+import { getRemainingPearlProductionTime } from "web3/pearlFarm";
 
+import { pearlSize } from "./utils/pearlSizeAndGradeValues";
 import PearlInfo from "../bank/utils/PearlInfo";
-import { getRemainingPearlProductionTime } from "../../web3/pearlFarm";
-
-import { clamNFTAddress, pearlFarmAddress } from "constants/constants";
-
-import { Accordion2, Accordion2Item } from "components/accordion2";
 
 const CardStat = ({ label, value }) => (
   <div
@@ -68,6 +64,7 @@ export default ({
   const [producedPearls, setProducedPearls] = useState([]);
   const [producedPearlsYieldTimers, setProducedPearlsYieldTimers] = useState([]);
   const [remainingPearlProductionTime, setRemainingPearlProductionTime] = useState(0);
+  const [isTakingSnapshot, setIsTakingSnapshot] = useState(false);
   const remainingFormattedTime = secondsToFormattedTime(remainingPearlProductionTime);
   useInterval(() => {
     const updatedProducedPearlsYieldTimers = producedPearlsYieldTimers.map((time) => {
@@ -93,6 +90,19 @@ export default ({
     harvestableShell !== "N/A" ? formatShell(harvestableShell) : "N/A";
   const isFarmView = view === "farm";
   const isInspectorView = view === "inspector";
+
+  const handleTakeSnapshot = () => {
+    setIsTakingSnapshot(true);
+  };
+
+  useEffect(() => {
+    if (isTakingSnapshot) {
+      setTimeout(() => {
+        const cb = () => setIsTakingSnapshot(false);
+        takeSnapshot("clam-view", cb);
+      }, 500);
+    }
+  }, [isTakingSnapshot]);
 
   useEffect(() => {
     const initClamView = async () => {
@@ -134,24 +144,40 @@ export default ({
   return (
     <>
       <ReactTooltip html={true} className="max-w-xl" />
-      <div className="flex flex-col justify-between w-full">
-        <div className="flex justify-between flex-col sm:flex-row">
+      <div className="flex flex-col justify-between w-full relative">
+        {isTakingSnapshot && (
+          <div className="absolute w-full h-full z-10">
+            <Skeleton animation="waves" variant="rect" height="100%" />
+          </div>
+        )}
+        <div id="clam-view" className="flex justify-between flex-col sm:flex-row">
           <div className="grid">
-            {owner && (ownerAddress != pearlFarmAddress ? (
-              <div className="flex justify-center">
-              <span>Owned by <a className="" target="_blank" rel="noreferrer" href={`https://bscscan.com/token/${clamNFTAddress}?a=${ownerAddress}#inventory`}>
-                  {owner} <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
-              </a></span>
-              </div>
-            ) :
-            (
-              <div className="flex justify-center">
-              <span>Currently in Clam Farm</span>
-              </div>
-            )
-            )}
+            {owner &&
+              (ownerAddress != pearlFarmAddress ? (
+                <div className="flex justify-center">
+                  <span>
+                    Owned by{" "}
+                    <a
+                      className=""
+                      target="_blank"
+                      rel="noreferrer"
+                      href={`https://bscscan.com/token/${clamNFTAddress}?a=${ownerAddress}#inventory`}
+                    >
+                      {owner} <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+                    </a>
+                  </span>
+                </div>
+              ) : (
+                <div className="flex justify-center">
+                  <span>Currently in Clam Farm</span>
+                </div>
+              ))}
             <div className="w-[400px] h-[400px] relative">
-              <div className={`absolute flex w-full h-full justify-center items-center z-20 bg-white bg-opacity-50 ${owner != "N/A" ? "hidden" : ""}`}>
+              <div
+                className={`absolute flex w-full h-full justify-center items-center z-20 bg-white bg-opacity-50 ${
+                  owner != "N/A" ? "hidden" : ""
+                }`}
+              >
                 <span className="text-3xl">Clam Harvested</span>
               </div>
               <Clam3DView
@@ -174,7 +200,7 @@ export default ({
             )}
           </div>
           <div className="w-full px-4 md:px-6">
-            <Accordion2 defaultTab="GeneralStats">
+            <Accordion2 defaultTab="GeneralStats" isOpened={isTakingSnapshot}>
               <Accordion2Item title="General Stats" id="GeneralStats" scroll={true}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
                   <CardStat
@@ -254,22 +280,27 @@ export default ({
                   />
                 </div>
               </Accordion2Item>
-              <Accordion2Item title="Produced pearls" id="ProducedPearls" scroll={false}>
-                <div className="flex flex-col gap-2 overflow-y-auto" style={{ maxHeight: "220px" }}>
-                  {producedPearls.length > 0
-                    ? producedPearls.map((pearl, i, a) => (
-                        <PearlInfo
-                          key={pearl.pearlId}
-                          pearl={pearl}
-                          isLast={i === a.length - 1}
-                          maxBoostIn={producedPearlsYieldTimers[i]}
-                          gemPriceUSD={gemPriceUSD}
-                          hideViewDetails={true}
-                        />
-                      ))
-                    : "This Clam has not yet produced any Pearls."}
-                </div>
-              </Accordion2Item>
+              {!isTakingSnapshot && (
+                <Accordion2Item title="Produced pearls" id="ProducedPearls" scroll={false}>
+                  <div
+                    className="flex flex-col gap-2 overflow-y-auto"
+                    style={{ maxHeight: "220px" }}
+                  >
+                    {producedPearls.length > 0
+                      ? producedPearls.map((pearl, i, a) => (
+                          <PearlInfo
+                            key={pearl.pearlId}
+                            pearl={pearl}
+                            isLast={i === a.length - 1}
+                            maxBoostIn={producedPearlsYieldTimers[i]}
+                            gemPriceUSD={gemPriceUSD}
+                            hideViewDetails={true}
+                          />
+                        ))
+                      : "This Clam has not yet produced any Pearls."}
+                  </div>
+                </Accordion2Item>
+              )}
             </Accordion2>
           </div>
         </div>
@@ -277,7 +308,6 @@ export default ({
           (isInspectorView ? (
             <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
               <button
-
                 className="cursor-not-allowed opacity-50 px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
                 data-tip="Coming soon..."
               >
@@ -297,6 +327,15 @@ export default ({
                   Stake in Farm
                 </button>
               </Link>
+              {view === "saferoom" && (
+                <button
+                  className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
+                  data-tip="Take a shareable snapshot"
+                  onClick={handleTakeSnapshot}
+                >
+                  <FontAwesomeIcon icon={faCamera} size="1x" />
+                </button>
+              )}
               <Link
                 className={isClamAvailableForHarvest ? "" : "cursor-not-allowed"}
                 to={isClamAvailableForHarvest ? "/shop?view=harvest" : "#"}
@@ -316,8 +355,8 @@ export default ({
               </button>
             </div>
           ))}
-        <Controls3DView onClickNext={onClickNext} onClickPrev={onClickPrev} />
       </div>
+      <Controls3DView onClickNext={onClickNext} onClickPrev={onClickPrev} />
     </>
   );
 };

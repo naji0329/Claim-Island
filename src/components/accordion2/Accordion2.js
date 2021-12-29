@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 
 import { AccordionContext } from "./accordionContext";
 
-export const Accordion2 = ({ defaultTab = null, className = "", children }) => {
+export const Accordion2 = ({ defaultTab = null, className = "", isOpened = false, children }) => {
   const [tab, setTab] = useState(defaultTab);
 
   const toggle = useCallback(
@@ -17,7 +17,7 @@ export const Accordion2 = ({ defaultTab = null, className = "", children }) => {
   );
 
   return (
-    <AccordionContext.Provider value={{ tab, toggle }}>
+    <AccordionContext.Provider value={{ tab, toggle, isOpened }}>
       <ul className={`${className} flex flex-col`}>{children}</ul>
     </AccordionContext.Provider>
   );

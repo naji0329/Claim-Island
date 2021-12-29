@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { AccordionContext } from "./accordionContext";
 
 export const Accordion2Item = ({ scroll, id, title, children }) => {
-  const { tab, toggle } = useContext(AccordionContext);
+  const { tab, toggle, isOpened } = useContext(AccordionContext);
 
   return (
     <li className="bg-white mb-2" key={id}>
@@ -18,7 +18,7 @@ export const Accordion2Item = ({ scroll, id, title, children }) => {
         <svg
           className={classNames(
             "fill-current text-blue-700 h-6 w-6 transform transition-transform duration-500",
-            { "rotate-180": id === tab }
+            { "rotate-180": isOpened || id === tab }
           )}
           viewBox="0 0 20 20"
         >
@@ -31,7 +31,7 @@ export const Accordion2Item = ({ scroll, id, title, children }) => {
           overflow: scroll ? "" : "hidden",
           overflowY: scroll ? "auto" : "hidden",
           transition: "all 0.5s ease-out",
-          maxHeight: id === tab ? "225px" : "0",
+          maxHeight: isOpened || id === tab ? "225px" : "0",
         }}
       >
         <div className="p-3 text-gray-900 overflow-auto">{children}</div>
