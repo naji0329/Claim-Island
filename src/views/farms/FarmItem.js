@@ -264,7 +264,7 @@ const FarmItem = ({
       <div className=" badge badge-success">#{clamId}</div>
       <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
     </div>
-      <div className="flex-1 justify-center md:flex items-center p-4">
+      <div className="flex-1 justify-center md:flex items-start p-4">
         <button onClick={(e) => onViewDetails(e)}>
           <img className="w-auto" src={img} />
         </button>
@@ -324,21 +324,33 @@ const FarmItem = ({
           {isInitLoading ? (
             <ActionButton
               onClick={getClamFunction}
-              style={action === "open" ? "btn-deposit w-full" : "btn-harvest w-full"}
+              style={action === "open" ? "btn btn-primary w-full" : "btn btn-secondary w-full"}
               isDisabled={true}
               isLoading={inTx}
             >
               <Spinner show="true" color="#333333" /> Loading...
             </ActionButton>
           ) : (
-            <ActionButton
-              onClick={getClamFunction}
-              style={action === "open" ? "btn-deposit w-full" : "btn-harvest w-full"}
-              isDisabled={!canProducePearl || inTx || now <= pearlProductionTime}
-              isLoading={inTx}
-            >
-              {buttonText}
-            </ActionButton>
+            <>
+              <ActionButton
+                onClick={getClamFunction}
+                style={action === "open" ? "btn btn-primary w-full" : "btn btn-secondary w-full"}
+                isDisabled={!canProducePearl || inTx || now <= pearlProductionTime}
+                isLoading={inTx}
+              >
+                {buttonText}
+              </ActionButton>
+
+                <button
+                  className="btn btn-secondary w-full mt-4"
+                  onClick={onWithdrawClam}
+                  disabled={isWithdrawing || inTx || action === "collect"}
+                >
+                  <Spinner show={isWithdrawing} color="#ff4b47" />
+                  Withdraw
+                </button>
+
+            </>
           )}
         </div>
       )}

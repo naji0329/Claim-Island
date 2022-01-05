@@ -148,7 +148,7 @@ const PoolHarvest = ({
           <div className="flex items-start">
             <div className="avatar -mt-1">
               <div className="rounded-full w-12 h-12">
-                <img src="https://clamisland.fi/favicon/android-chrome-192x192.png" />
+                <img src={`${process.env.PUBLIC_URL}/favicon/android-chrome-192x192.png`} />
               </div>
             </div>
           </div>
@@ -240,7 +240,7 @@ const PoolHarvest = ({
         <div className="dropdown dropdown-top dropdown-end dropdown-hover">
           <ActionButton
             onClick={handleHarvest}
-            style="btn-harvest w-full"
+            style="btn-secondary w-full"
             isDisabled={inTx || !address}
             isLoading={inTx}
           >
