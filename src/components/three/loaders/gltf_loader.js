@@ -1,9 +1,16 @@
 import * as THREE from "three";
 import GLTFLoader from "../../../loaders/GLTFLoader";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
 const loadGLTFPromise = (url) => {
   return new Promise((resolve) => {
-    new GLTFLoader().load(url, resolve);
+    const gltfLoader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath( '/draco/' );
+
+    gltfLoader
+      .setDRACOLoader(dracoLoader)
+      .load(url, resolve);
   });
 };
 
@@ -146,6 +153,12 @@ const loadGLTF = async (url, scene, type = "island", name) => {
     gltf.scene.scale.set(20, 20, 20);
     gltf.scene.position.set(-380, 0, 120);
     gltf.scene.rotation.y = 0.6;
+  } else if (type === "boats") {
+    gltf.scene.scale.set(1250, 1000, 1250);
+    gltf.scene.position.x = 120; //Position (x = right+ left-)
+    gltf.scene.position.y = 30; //Position (y = up+, down-)
+    gltf.scene.position.z = -120;
+    gltf.scene.rotation.y = 1
   }
 
   if (["dolphin", "seagull"].indexOf(type) === -1) {
