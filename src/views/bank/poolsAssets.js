@@ -3,14 +3,14 @@ import { gemTokenAddress, shellTokenAddress } from "constants/constants";
 const mainnetPools = {
   [gemTokenAddress]: {
     name: `GEM`,
-    images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
+    images: [`${process.env.PUBLIC_URL}/favicon/android-chrome-192x192.png`],
     risk: "High Risk",
     isSingleStake: true,
     isNative: true,
   },
   [shellTokenAddress]: {
     name: `SHELL`,
-    images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
+    images: [`${process.env.PUBLIC_URL}/favicon/android-chrome-192x192.png`],
     risk: "High Risk",
     isSingleStake: true,
     isNative: true,
@@ -18,7 +18,7 @@ const mainnetPools = {
   "0x4FF96A563c257152d3766DF8116AcCEB2146775c": {
     name: `SHELL-BNB`, // real
     images: [
-      "https://clamisland.fi/favicon/android-chrome-192x192.png",
+      `${process.env.PUBLIC_URL}/favicon/android-chrome-192x192.png`,
       "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
     ],
     isNative: true,
@@ -27,7 +27,7 @@ const mainnetPools = {
   "0xD0Bdd50F090c7A09230a9eE9B996676D15b5fec5": {
     name: `GEM-BNB`, // real
     images: [
-      "https://clamisland.fi/favicon/android-chrome-192x192.png",
+      `${process.env.PUBLIC_URL}/favicon/android-chrome-192x192.png`,
       "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
     ],
     isNative: true,
@@ -120,14 +120,14 @@ const mainnetPools = {
 const testnetPools = {
   [gemTokenAddress]: {
     name: `$GEM`,
-    images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
+    images: [`${process.env.PUBLIC_URL}/favicon/android-chrome-192x192.png`],
     risk: "High Risk",
     isSingleStake: true,
     isNative: true,
   },
   [shellTokenAddress]: {
     name: `$SHELL`,
-    images: ["https://clamisland.fi/favicon/android-chrome-192x192.png"],
+    images: [`${process.env.PUBLIC_URL}/favicon/android-chrome-192x192.png`],
     risk: "High Risk",
     isSingleStake: true,
     isNative: true,
@@ -135,7 +135,7 @@ const testnetPools = {
   "0xC5080b85bd6F7e926730892D2ED7dE24D574F4D2": {
     name: `GEM - BNB`,
     images: [
-      "https://clamisland.fi/favicon/android-chrome-192x192.png",
+      `${process.env.PUBLIC_URL}/favicon/android-chrome-192x192.png`,
       "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
     ],
     isNative: true,
@@ -144,7 +144,7 @@ const testnetPools = {
   "0x3783898F93dc4eF532Dc7128906f4E75FE29Ed87": {
     name: `SHELL - BNB`, // dummy bnb - carapace
     images: [
-      "https://clamisland.fi/favicon/android-chrome-192x192.png",
+      `${process.env.PUBLIC_URL}/favicon/android-chrome-192x192.png`,
       "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
     ],
     isNative: true,

@@ -4,7 +4,7 @@ import classnames from "classnames";
 const ActionButton = ({
   children,
   type = "submit",
-  style = "btn-deposit", // btn-deposit btn-harvest btn-withdraw
+  style = "btn-primary", // btn-deposit btn-harvest btn-withdraw
   isDisabled,
   isLoading,
   ...rest
@@ -16,8 +16,8 @@ const ActionButton = ({
       type={type}
       className={classnames(
         "inline-flex items-center transition ease-in-out duration-150",
-        { "btn-clam btn-disabled": isDisabled },
-        "btn-clam",
+        { "btn btn-disabled": isDisabled },
+        "btn",
         style
       )}
       disabled={isDisabled}
