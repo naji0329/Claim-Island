@@ -4,12 +4,6 @@ import { connect } from "redux-zero/react";
 import moment from "moment";
 import { actions } from "store/redux";
 import { formatMsToDuration } from "utils/time";
-import { getPearlDataByIds } from "web3/shared";
-import { aggregate } from "web3/multicall";
-import {
-  prepTokenOfOwnerByIndexMulticall,
-  decodeTokenOfOwnerByIndexFromMulticall,
-} from "web3/pearl";
 import { color, shape, periodStart, periodInSeconds, periodCheckpoint } from "web3/pearlBurner";
 import { getGemPrice } from "web3/gemOracle";
 import { useTimer } from "hooks/useTimer";
@@ -23,7 +17,7 @@ import "../bank.scss";
 
 const BurnPearlModal = (props) => {
   const {
-    account: { address, pearlBalance },
+    account: { pearls: unsortedPearls },
     updateAccount,
     isNativeStaker,
     sorting: {
@@ -57,13 +51,8 @@ const BurnPearlModal = (props) => {
 
   useAsync(async () => {
     try {
-      const tokenIdsCalls = prepTokenOfOwnerByIndexMulticall(address, +pearlBalance);
-      const tokenIdsResult = await aggregate(tokenIdsCalls);
-      const tokenIdsDecoded = decodeTokenOfOwnerByIndexFromMulticall(tokenIdsResult.returnData);
-
-      const ownedPearls = await getPearlDataByIds(tokenIdsDecoded);
       const sortedOwnedPearls = getSortedPearls(
-        ownedPearls,
+        unsortedPearls,
         sortOrderPearls.value,
         sortOrderPearls.order
       );
@@ -156,7 +145,11 @@ const BurnPearlModal = (props) => {
       </div>
       <div style={{ height: window.innerHeight * 0.5 }} className="overflow-y-auto">
         <div className="w-full flex flex-col p-4">
-          <div className={`w-full mr-8 rounded-lg p-4 flex flex-col card-shadow mb-6 ${!boostedPearls.length ? "hidden" : ""}`}>
+          <div
+            className={`w-full mr-8 rounded-lg p-4 flex flex-col card-shadow mb-6 ${
+              !boostedPearls.length ? "hidden" : ""
+            }`}
+          >
             <div className="w-full">
               {boostedPearls.length ? (
                 getSortedPearls(boostedPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(

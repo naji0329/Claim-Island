@@ -14,6 +14,7 @@ import { getStakedClamIds, rngRequestHashForProducedPearl } from "web3/pearlFarm
 import { EmptyBytes, getOwnedClams, getOwnedPearls, formatFromWei } from "web3/shared";
 import { balanceOf } from "web3/bep20";
 import { color, periodInSeconds, periodStart, shape } from "web3/pearlBurner";
+import { getTraitsBeforeMaxYield } from "utils/getTraitsBeforeMaxYield";
 
 const initialState = {
   account: {
@@ -311,7 +312,16 @@ export const actions = (store) => ({
           gemBalance,
           shellBalance,
           clams,
-          pearls,
+          pearls: pearls.map((pearl) =>
+            Object.assign(pearl, {
+              traitsBeforeMaxBoost: getTraitsBeforeMaxYield({
+                shape: pearl.dnaDecoded.shape,
+                color: pearl.dnaDecoded.color,
+                currentBoostColour: boostColor,
+                currentBoostShape: boostShape,
+              }),
+            })
+          ),
           reason: "dispatchFetchAccountAssets",
         },
         boostParams: {

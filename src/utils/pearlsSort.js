@@ -71,6 +71,17 @@ const sortPearlsByBoostDesc = (pearl1, pearl2) => {
   return +gemBoost2 - +gemBoost1;
 };
 
+const sortPearlsByMaxYieldInAsc = (pearl1, pearl2) => {
+  const traitsBeforeMaxBoost1 = get(pearl1, ["traitsBeforeMaxBoost"]);
+  const traitsBeforeMaxBoost2 = get(pearl2, ["traitsBeforeMaxBoost"]);
+  return +traitsBeforeMaxBoost1 - +traitsBeforeMaxBoost2;
+};
+const sortPearlsByMaxYieldInDesc = (pearl1, pearl2) => {
+  const traitsBeforeMaxBoost1 = get(pearl1, ["traitsBeforeMaxBoost"]);
+  const traitsBeforeMaxBoost2 = get(pearl2, ["traitsBeforeMaxBoost"]);
+  return +traitsBeforeMaxBoost2 - +traitsBeforeMaxBoost1;
+};
+
 const SORT_FUNCTIONS = {
   [SORT_PEARLS_OPTIONS.id]: {
     [SORT_ORDERS.asc]: sortPearlsByIdAsc,
@@ -95,6 +106,10 @@ const SORT_FUNCTIONS = {
   [SORT_PEARLS_OPTIONS.boost]: {
     [SORT_ORDERS.asc]: sortPearlsByBoostAsc,
     [SORT_ORDERS.desc]: sortPearlsByBoostDesc,
+  },
+  [SORT_PEARLS_OPTIONS.maxYieldIn]: {
+    [SORT_ORDERS.asc]: sortPearlsByMaxYieldInAsc,
+    [SORT_ORDERS.desc]: sortPearlsByMaxYieldInDesc,
   },
 };
 
