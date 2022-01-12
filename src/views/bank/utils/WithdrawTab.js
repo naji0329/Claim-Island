@@ -153,7 +153,7 @@ const WithdrawTab = ({
         </div>
 
         <ActionButton
-          style="btn-withdraw"
+          style="btn-error"
           isLoading={inTx}
           isDisabled={inTx || (selectedPool.isNative && !rewards)}
         >
