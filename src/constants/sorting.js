@@ -41,6 +41,7 @@ export const SORT_PEARLS_OPTIONS = {
   grading: "grading",
   colour: "colour",
   boost: "boost",
+  maxYieldIn: "maxYieldIn",
 };
 
 export const CLAMS_SORT_BUTTONS = [
@@ -102,5 +103,9 @@ export const PEARLS_SORT_BUTTONS = [
   {
     value: SORT_PEARLS_OPTIONS.boost,
     displayValue: "GEM Boost",
+  },
+  {
+    value: SORT_PEARLS_OPTIONS.maxYieldIn,
+    displayValue: "Max Yield In",
   },
 ];

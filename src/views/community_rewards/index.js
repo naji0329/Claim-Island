@@ -166,11 +166,18 @@ const CommunityReward = ({
           updateCharacter({
             name: "diego",
             action: "community_rewards_not_allowed.claimed.text",
-            button: {
+            buttonAlt: {
               text: "Back to Island",
               alt: {
                 action: "internal",
                 destination: "/",
+              },
+            },
+            button: {
+              text: "Yes",
+              alt: {
+                action: "internal",
+                destination: "/shop",
               },
             },
           });
