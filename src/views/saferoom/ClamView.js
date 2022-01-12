@@ -13,6 +13,7 @@ import { getPearlDataByIds } from "web3/shared";
 
 import { Clam3DView } from "components/clam3DView";
 import { Controls3DView } from "components/controls3DView";
+import { SocialMediaButtons } from "components/socialMediaButtons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
@@ -137,21 +138,32 @@ export default ({
       <div className="flex flex-col justify-between w-full">
         <div className="flex justify-between flex-col sm:flex-row">
           <div className="grid">
-            {owner && (ownerAddress != pearlFarmAddress ? (
-              <div className="flex justify-center">
-              <span>Owned by <a className="" target="_blank" rel="noreferrer" href={`https://bscscan.com/token/${clamNFTAddress}?a=${ownerAddress}#inventory`}>
-                  {owner} <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
-              </a></span>
-              </div>
-            ) :
-            (
-              <div className="flex justify-center">
-              <span>Currently in Clam Farm</span>
-              </div>
-            )
-            )}
+            {owner &&
+              (ownerAddress != pearlFarmAddress ? (
+                <div className="flex justify-center">
+                  <span>
+                    Owned by{" "}
+                    <a
+                      className=""
+                      target="_blank"
+                      rel="noreferrer"
+                      href={`https://bscscan.com/token/${clamNFTAddress}?a=${ownerAddress}#inventory`}
+                    >
+                      {owner} <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+                    </a>
+                  </span>
+                </div>
+              ) : (
+                <div className="flex justify-center">
+                  <span>Currently in Clam Farm</span>
+                </div>
+              ))}
             <div className="w-[400px] h-[400px] relative">
-              <div className={`absolute flex w-full h-full justify-center items-center z-20 bg-white bg-opacity-50 ${owner != "N/A" ? "hidden" : ""}`}>
+              <div
+                className={`absolute flex w-full h-full justify-center items-center z-20 bg-white bg-opacity-50 ${
+                  owner != "N/A" ? "hidden" : ""
+                }`}
+              >
                 <span className="text-3xl">Clam Harvested</span>
               </div>
               <Clam3DView
@@ -162,9 +174,10 @@ export default ({
                 // clamTraits={clamTraits}
               />
             </div>
-            <div className="flex justify-between flex-row py-2">
+            <div className="flex justify-between flex-row py-2 items-center">
               <div className="badge badge-success">#{clamId}</div>
               <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
+              {isInspectorView && <SocialMediaButtons />}
             </div>
             {isFarmView && (
               <div className="flex flex-row justify-between my-2" style={{ width: "400px" }}>
@@ -277,7 +290,6 @@ export default ({
           (isInspectorView ? (
             <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
               <button
-
                 className="cursor-not-allowed opacity-50 px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
                 data-tip="Coming soon..."
               >
