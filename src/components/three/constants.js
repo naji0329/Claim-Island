@@ -8,7 +8,7 @@ export const ISLANDS_NAMES = {
 
 export const ISLAND_OBJECTS = [
   {
-    objectUrl: "glb_files/Bank_Island.glb",
+    objectUrl: "glb_files/Bank_Island_draco.glb",
     type: "island",
     name: ISLANDS_NAMES.bank,
     clickable: true,
@@ -16,14 +16,14 @@ export const ISLAND_OBJECTS = [
     buoyancy: { factor: 2, init: -5 }
   },
   {
-    objectUrl: "glb_files/farm_island.glb",
+    objectUrl: "glb_files/farm_island_draco.glb",
     type: "island",
     name: ISLANDS_NAMES.farm,
     clickable: true,
     url: "/farms",
   },
   {
-    objectUrl: "glb_files/Market_Island.glb",
+    objectUrl: "glb_files/Market_Island_draco.glb",
     type: "island",
     name: ISLANDS_NAMES.market,
     clickable: true,
@@ -31,7 +31,7 @@ export const ISLAND_OBJECTS = [
     buoyancy: { factor: 2, init: 2 }
   },
   {
-    objectUrl: "glb_files/Vault_Island.glb",
+    objectUrl: "glb_files/Vault_Island_draco.glb",
     type: "island",
     name: ISLANDS_NAMES.vault,
     clickable: true,
@@ -39,7 +39,7 @@ export const ISLAND_OBJECTS = [
     buoyancy: { factor: 2, init: -4 }
   },
   {
-    objectUrl: "glb_files/Info_Island.glb",
+    objectUrl: "glb_files/Info_Island_draco.glb",
     type: "island",
     name: ISLANDS_NAMES.lighthouse,
     clickable: true,
@@ -85,13 +85,13 @@ export const ISLAND_OBJECTS = [
     type: "rocks",
   },
   {
-    objectUrl: "glb_files/Boats.glb",
+    objectUrl: "glb_files/Boats_draco.glb",
     type: "boats",
     name: "boats",
     buoyancy: { factor: 1.5, init: 1 }
   },
   {
-    objectUrl: "glb_files/ship-2.glb",
+    objectUrl: "glb_files/ship-2_draco.glb",
     type: "ship",
     name: "ship",
     buoyancy: { factor: 4, init: 35 }
