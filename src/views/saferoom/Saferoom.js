@@ -158,6 +158,7 @@ const Saferoom = ({
             {...selectedAsset}
             gemPriceUSD={gemPriceUSD}
             {...boostParams}
+            view="saferoom"
             onClickNext={isNextButtonShown() && onClickNext}
             onClickPrev={isPrevButtonShown() && onClickPrev}
           />
@@ -167,6 +168,7 @@ const Saferoom = ({
             {...selectedAsset}
             gemPriceUSD={Number(gemPriceUSD)}
             {...boostParams}
+            view="saferoom"
             onClickNext={isNextButtonShown() && onClickNext}
             onClickPrev={isPrevButtonShown() && onClickPrev}
           />
