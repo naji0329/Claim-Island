@@ -21,9 +21,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt, faInfoCircle, faCamera } from "@fortawesome/free-solid-svg-icons";
 
 import { pearlGrade, pearlSize } from "./utils/pearlSizeAndGradeValues";
-import ReactTooltip from "react-tooltip";
 import { formatOwnerAddress } from "utils/formatOwnerAddress";
-import { pearlNFTAddress } from "constants/constants";
 import {SocialMediaButtons} from "../../components/socialMediaButtons";
 
 const CardStat = ({ label, value }) => (

@@ -20,12 +20,7 @@ import { getClamIncubationTime } from "web3/clam";
 import { getCurrentBlockTimestamp } from "web3/index";
 import { getPearlDataByIds } from "web3/shared";
 
-import { Clam3DView } from "components/clam3DView";
-import { Controls3DView } from "components/controls3DView";
 import { SocialMediaButtons } from "components/socialMediaButtons";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExternalLinkAlt, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { getRemainingPearlProductionTime } from "web3/pearlFarm";
 
