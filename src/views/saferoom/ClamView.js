@@ -146,11 +146,18 @@ export default ({
       <ReactTooltip html={true} className="max-w-xl" />
       <div className="flex flex-col justify-between w-full relative">
         {isTakingSnapshot && (
-          <div className="absolute w-full h-full z-10">
+          <div className="absolute w-full h-full z-10 min-w-[1024px]">
             <Skeleton animation="waves" variant="rect" height="100%" />
           </div>
         )}
-        <div id="clam-view" className="flex justify-between flex-col sm:flex-row">
+        <div
+          id="clam-view"
+          className={
+            isTakingSnapshot
+              ? "flex justify-between flex-row"
+              : "flex justify-between flex-col sm:flex-row"
+          }
+        >
           <div className="grid">
             {owner &&
               (ownerAddress != pearlFarmAddress ? (
@@ -202,7 +209,13 @@ export default ({
           <div className="w-full px-4 md:px-6">
             <Accordion2 defaultTab="GeneralStats" isOpened={isTakingSnapshot}>
               <Accordion2Item title="General Stats" id="GeneralStats" scroll={true}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+                <div
+                  className={
+                    isTakingSnapshot
+                      ? "grid grid-cols-4 grid-rows-1 gap-3"
+                      : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3"
+                  }
+                >
                   <CardStat
                     label="Pearls remaining / Lifespan"
                     value={
@@ -264,7 +277,13 @@ export default ({
                 </div>
               </Accordion2Item>
               <Accordion2Item title="Traits" id="Traits" scroll={true}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+                <div
+                  className={
+                    isTakingSnapshot
+                      ? "grid grid-cols-4 grid-rows-1 gap-3"
+                      : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3"
+                  }
+                >
                   <CardStat label="Shell Shape" value={get(dnaDecoded, "shellShape")} />
                   <CardStat label="Shell Colour" value={get(dnaDecoded, "shellColor")} />
                   <CardStat label="Shell Pattern" value={get(dnaDecoded, "pattern")} />

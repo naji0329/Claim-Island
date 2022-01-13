@@ -128,11 +128,18 @@ export default (props) => {
       <ReactTooltip html={true} className="max-w-xl" />
       <div className="flex flex-col justify-between relative">
         {isTakingSnapshot && (
-          <div className="absolute w-full h-full z-10">
+          <div className="absolute w-full h-full z-10 min-w-[1024px]">
             <Skeleton animation="waves" variant="rect" height="100%" />
           </div>
         )}
-        <div id="pearl-view" className="flex justify-between flex-col sm:flex-row">
+        <div
+          id="pearl-view"
+          className={
+            isTakingSnapshot
+              ? "flex justify-between flex-row"
+              : "flex justify-between flex-col sm:flex-row"
+          }
+        >
           <div className="grid">
             {owner && (
               <div className="flex justify-center">
@@ -168,7 +175,13 @@ export default (props) => {
           <div className="w-full px-4 md:px-6">
             <Accordion2 defaultTab="Traits" isOpened={isTakingSnapshot}>
               <Accordion2Item title="Traits" id="Traits">
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+                <div
+                  className={
+                    isTakingSnapshot
+                      ? "grid grid-cols-4 grid-rows-1 gap-3"
+                      : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3"
+                  }
+                >
                   <CardStat label="Shape" value={get(dnaDecoded, "shape")} />
                   <CardStat label="Color" value={get(dnaDecoded, "color")} />
                   <CardStat label="Overtone" value={get(dnaDecoded, "overtone")} />
@@ -176,7 +189,13 @@ export default (props) => {
                 </div>
               </Accordion2Item>
               <Accordion2Item title="Grading" id="Grading">
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+                <div
+                  className={
+                    isTakingSnapshot
+                      ? "grid grid-cols-4 grid-rows-1 gap-3"
+                      : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3"
+                  }
+                >
                   <CardStat label="Grade" value={grade} />
                   <CardStat label="Surface" value={get(dnaDecoded, "surface")} />
                   <CardStat label="Lustre" value={get(dnaDecoded, "lustre")} />
@@ -184,7 +203,13 @@ export default (props) => {
                 </div>
               </Accordion2Item>
               <Accordion2Item title="Gem Yield" id="GemYield">
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+                <div
+                  className={
+                    isTakingSnapshot
+                      ? "grid grid-cols-4 grid-rows-1 gap-3"
+                      : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3"
+                  }
+                >
                   <CardStat
                     label={
                       <>
