@@ -26,7 +26,7 @@ export const SocialMediaButtons = (props) => {
   const { assetId, assetName } = props;
 
   const shareUrl = window.location.href;
-  const title = `${assetName} #${assetId} - Clam Island"`;
+  const title = `${assetName} #${assetId} - Clam Island`;
 
   return (
     <div className="dropdown dropdown-hover">

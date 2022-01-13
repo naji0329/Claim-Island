@@ -24,7 +24,7 @@ import {SocialMediaButtons} from "../../components/socialMediaButtons";
 
 const CardStat = ({ label, value }) => (
   <div
-    className="card card-side my-1 text-sm rounded-xl border border-secondary"
+    className="card card-side my-1 text-sm rounded-xl border border-secondary items-center"
     style={{ backgroundColor: "#e8f7fd" }}
   >
     <div className="card-body px-2 py-3 text-center">
@@ -200,7 +200,7 @@ export default (props) => {
             <div className="flex justify-between flex-row py-2">
               <div className="badge badge-success">#{pearlId}</div>
               <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
-              {isInspectorView && <SocialMediaButtons assetId={pearlId} assetName="Pearl" />}
+              <SocialMediaButtons assetId={pearlId} assetName="Pearl" />
             </div>
           </div>
           <div className="w-full px-4 md:px-6">
@@ -212,14 +212,14 @@ export default (props) => {
           {isInspectorView ? (
             <button
 
-              className="cursor-not-allowed opacity-50 px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
+              className="cursor-not-allowed opacity-50 btn btn-secondary"
               data-tip="Coming soon..."
             >
               Make Offer
             </button>
           ) : (
             <Link to="/bank">
-              <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
+              <button className="btn btn-secondary">
                 Boost yield&nbsp;
                 <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
               </button>
@@ -227,7 +227,7 @@ export default (props) => {
           )}
           {!hideProduceButton && (
             <Link to="/farms">
-              <button className="px-4 p-3 rounded-xl shadown-xl bg-green-500 text-white hover:bg-green-300 font-semibold">
+              <button className="btn btn-secondary">
                 Produce more pearls&nbsp;
                 <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
               </button>

@@ -31,7 +31,7 @@ import { Accordion2, Accordion2Item } from "components/accordion2";
 
 const CardStat = ({ label, value }) => (
   <div
-    className="card card-side my-1 text-sm rounded-xl border border-secondary"
+    className="card card-side my-1 text-sm rounded-xl border border-secondary items-center"
     style={{ backgroundColor: "#e8f7fd" }}
   >
     <div className="card-body px-2 py-3 text-center">
@@ -177,7 +177,7 @@ export default ({
             <div className="flex justify-between flex-row py-2 items-center">
               <div className="badge badge-success">#{clamId}</div>
               <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
-              {isInspectorView && <SocialMediaButtons assetId={clamId} assetName="Clam" />}
+              <SocialMediaButtons assetId={clamId} assetName="Clam" />
             </div>
             {isFarmView && (
               <div className="flex flex-row justify-between my-2" style={{ width: "400px" }}>
@@ -290,14 +290,14 @@ export default ({
           (isInspectorView ? (
             <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
               <button
-                className="cursor-not-allowed opacity-50 px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
+                className="cursor-not-allowed opacity-50 btn btn-secondary"
                 data-tip="Coming soon..."
               >
                 Make Offer
               </button>
 
               <Link to="/shop">
-                <button className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:opacity-50 font-semibold">
+                <button className="disabled:opacity-50 disabled:cursor-not-allowed btn btn-secondary">
                   Clam Shop
                 </button>
               </Link>
@@ -305,7 +305,7 @@ export default ({
           ) : (
             <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
               <Link to="/farms">
-                <button className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold">
+                <button className="btn btn-secondary">
                   Stake in Farm
                 </button>
               </Link>
@@ -315,14 +315,14 @@ export default ({
               >
                 <button
                   disabled={!isClamAvailableForHarvest}
-                  className="disabled:opacity-50 disabled:cursor-not-allowed px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:opacity-50 font-semibold"
+                  className="disabled:opacity-50 disabled:cursor-not-allowed btn btn-secondary"
                 >
                   Harvest for $SHELL
                 </button>
               </Link>
               <button
                 disabled
-                className="disabled:opacity-50 cursor-not-allowed px-4 p-3 shadown-xl   text-red-700 font-semibold border-2 border-red-500 rounded-xl hover:text-white hover:bg-red-500 bg-transparent"
+                className="disabled:opacity-50 cursor-not-allowed btn btn-warning"
               >
                 Sell
               </button>
