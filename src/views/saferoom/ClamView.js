@@ -177,7 +177,7 @@ export default ({
             <div className="flex justify-between flex-row py-2 items-center">
               <div className="badge badge-success">#{clamId}</div>
               <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
-              {isInspectorView && <SocialMediaButtons />}
+              {isInspectorView && <SocialMediaButtons assetId={clamId} assetName="Clam" />}
             </div>
             {isFarmView && (
               <div className="flex flex-row justify-between my-2" style={{ width: "400px" }}>

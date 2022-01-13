@@ -20,6 +20,7 @@ import { pearlGrade, pearlSize } from "./utils/pearlSizeAndGradeValues";
 import ReactTooltip from "react-tooltip";
 import { formatOwnerAddress } from "utils/formatOwnerAddress";
 import { pearlNFTAddress } from "constants/constants";
+import {SocialMediaButtons} from "../../components/socialMediaButtons";
 
 const CardStat = ({ label, value }) => (
   <div
@@ -199,6 +200,7 @@ export default (props) => {
             <div className="flex justify-between flex-row py-2">
               <div className="badge badge-success">#{pearlId}</div>
               <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
+              {isInspectorView && <SocialMediaButtons assetId={pearlId} assetName="Pearl" />}
             </div>
           </div>
           <div className="w-full px-4 md:px-6">
