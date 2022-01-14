@@ -40,7 +40,7 @@ export const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => 
       </div>
       {tab === TABS.clam ? <ClamsSorting page="saferoom" /> : <PearlsSorting page="saferoom" />}
       <div className="flex-grow" />
-      <Link to={`/saferoom/${tab}/inspect/-1`}>
+      <Link to={`/saferoom/${tab.toLowerCase()}/inspect/-1`}>
         <button className="btn btn-secondary btn-lg">
           <FontAwesomeIcon icon={faSearch} className="mx-1" /> Inspector
         </button>

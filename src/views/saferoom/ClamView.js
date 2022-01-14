@@ -198,10 +198,20 @@ export default ({
                 // clamTraits={clamTraits}
               />
             </div>
-            <div className="flex justify-between flex-row py-2 items-center">
-              <div className="badge badge-success">#{clamId}</div>
-              <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
-              <SocialMediaButtons assetId={clamId} assetName="Clam" />
+            <div className="flex justify-between items-start py-2">
+              <div className="flex items-center">
+                <div className="badge badge-success mr-2">#{clamId}</div>
+                <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
+              </div>
+              <div className="flex">
+                <FontAwesomeIcon
+                  data-tip="Take a shareable snapshot"
+                  className="cursor-pointer"
+                  icon={faCamera}
+                  onClick={handleTakeSnapshot}
+                />
+                <SocialMediaButtons assetId={clamId} assetName="Clam" />
+              </div>
             </div>
             {isFarmView && (
               <div className="flex flex-row justify-between my-2" style={{ width: "400px" }}>
@@ -346,19 +356,8 @@ export default ({
           ) : (
             <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
               <Link to="/farms">
-                <button className="btn btn-secondary">
-                  Stake in Farm
-                </button>
+                <button className="btn btn-secondary">Stake in Farm</button>
               </Link>
-              {view === "saferoom" && (
-                <button
-                  className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
-                  data-tip="Take a shareable snapshot"
-                  onClick={handleTakeSnapshot}
-                >
-                  <FontAwesomeIcon icon={faCamera} size="1x" />
-                </button>
-              )}
               <Link
                 className={isClamAvailableForHarvest ? "" : "cursor-not-allowed"}
                 to={isClamAvailableForHarvest ? "/shop?view=harvest" : "#"}
@@ -370,10 +369,7 @@ export default ({
                   Harvest for $SHELL
                 </button>
               </Link>
-              <button
-                disabled
-                className="disabled:opacity-50 cursor-not-allowed btn btn-warning"
-              >
+              <button disabled className="disabled:opacity-50 cursor-not-allowed btn btn-warning">
                 Sell
               </button>
             </div>

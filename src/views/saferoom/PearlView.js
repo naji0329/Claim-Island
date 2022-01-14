@@ -10,6 +10,7 @@ import { Skeleton } from "@pancakeswap-libs/uikit";
 import { Pearl3DView } from "components/pearl3DView";
 import { Controls3DView } from "components/controls3DView";
 import { Accordion2, Accordion2Item } from "components/accordion2";
+import { SocialMediaButtons } from "components/socialMediaButtons";
 import { pearlNFTAddress } from "constants/constants";
 import { renderNumber } from "utils/number";
 import { formatMsToDuration } from "utils/time";
@@ -21,8 +22,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt, faInfoCircle, faCamera } from "@fortawesome/free-solid-svg-icons";
 
 import { pearlGrade, pearlSize } from "./utils/pearlSizeAndGradeValues";
-import { formatOwnerAddress } from "utils/formatOwnerAddress";
-import {SocialMediaButtons} from "../../components/socialMediaButtons";
 
 const CardStat = ({ label, value }) => (
   <div
@@ -169,10 +168,20 @@ export default (props) => {
               </div>
               <Pearl3DView width={"100%"} height={"100%"} pearlDna={dna} decodedDna={dnaDecoded} />
             </div>
-            <div className="flex justify-between flex-row py-2">
-              <div className="badge badge-success">#{pearlId}</div>
-              <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
-              <SocialMediaButtons assetId={pearlId} assetName="Pearl" />
+            <div className="flex justify-between items-start py-2">
+              <div className="flex items-center">
+                <div className="badge badge-success mr-2">#{pearlId}</div>
+                <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
+              </div>
+              <div className="flex">
+                <FontAwesomeIcon
+                  data-tip="Take a shareable snapshot"
+                  className="cursor-pointer"
+                  icon={faCamera}
+                  onClick={handleTakeSnapshot}
+                />
+                <SocialMediaButtons assetId={pearlId} assetName="Pearl" />
+              </div>
             </div>
           </div>
           <div className="w-full px-4 md:px-6">
@@ -259,7 +268,6 @@ export default (props) => {
         <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
           {isInspectorView ? (
             <button
-
               className="cursor-not-allowed opacity-50 btn btn-secondary"
               data-tip="Coming soon..."
             >
@@ -272,15 +280,6 @@ export default (props) => {
                 <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
               </button>
             </Link>
-          )}
-          {view === "saferoom" && (
-            <button
-              className="px-4 p-3 rounded-xl shadown-xl bg-blue-500 text-white hover:bg-blue-300 font-semibold"
-              data-tip="Take a shareable snapshot"
-              onClick={handleTakeSnapshot}
-            >
-              <FontAwesomeIcon icon={faCamera} size="1x" />
-            </button>
           )}
           {!hideProduceButton && (
             <Link to="/farms">

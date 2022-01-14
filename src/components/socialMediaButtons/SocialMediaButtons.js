@@ -25,41 +25,41 @@ import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 export const SocialMediaButtons = (props) => {
   const { assetId, assetName } = props;
 
-  const shareUrl = window.location.href;
+  const sharedUrl = `${window.location.origin}/saferoom/${assetName.toLowerCase()}/inspect/${assetId}`;
   const title = `${assetName} #${assetId} - Clam Island`;
 
   return (
-    <div className="dropdown dropdown-hover">
-      <div tabIndex="0" className="w-16 flex justify-end p-2">
-        <FontAwesomeIcon className="cursor-pointer" icon={faShareAlt} />
+    <div className="dropdown dropdown-hover cursor-pointer">
+      <div tabIndex="0" className="flex justify-end ml-4">
+        <FontAwesomeIcon icon={faShareAlt} />
       </div>
-      <div className="dropdown-content">
+      <div className="dropdown-content pt-2">
         <div className="flex bg-gray-900 p-2 rounded-lg">
-          <FacebookShareButton className="mr-2" url={shareUrl} quote={title}>
+          <FacebookShareButton className="mr-2" url={sharedUrl} quote={title}>
             <FacebookIcon size={32} round={true} />
           </FacebookShareButton>
-          <TwitterShareButton className="mr-2" url={shareUrl} title={title}>
+          <TwitterShareButton className="mr-2" url={sharedUrl} title={title}>
             <TwitterIcon size={32} round={true} />
           </TwitterShareButton>
-          <TelegramShareButton className="mr-2" url={shareUrl} title={title}>
+          <TelegramShareButton className="mr-2" url={sharedUrl} title={title}>
             <TelegramIcon size={32} round={true} />
           </TelegramShareButton>
-          <RedditShareButton className="mr-2" url={shareUrl} title={title}>
+          <RedditShareButton className="mr-2" url={sharedUrl} title={title}>
             <RedditIcon size={32} round={true} />
           </RedditShareButton>
-          <PinterestShareButton className="mr-2" url={shareUrl} description={title}>
+          <PinterestShareButton className="mr-2" url={sharedUrl} description={title}>
             <PinterestIcon size={32} round={true} />
           </PinterestShareButton>
-          <WhatsappShareButton className="mr-2" url={shareUrl} title={title}>
+          <WhatsappShareButton className="mr-2" url={sharedUrl} title={title}>
             <WhatsappIcon size={32} round={true} />
           </WhatsappShareButton>
-          <LineShareButton className="mr-2" url={shareUrl} title={title}>
+          <LineShareButton className="mr-2" url={sharedUrl} title={title}>
             <LineIcon size={32} round={true} />
           </LineShareButton>
-          <WeiboShareButton className="mr-2" url={shareUrl} title={title}>
+          <WeiboShareButton className="mr-2" url={sharedUrl} title={title}>
             <WeiboIcon size={32} round={true} />
           </WeiboShareButton>
-          <EmailShareButton url={shareUrl} subject={title}>
+          <EmailShareButton url={sharedUrl} subject={title}>
             <EmailIcon size={32} round={true} />
           </EmailShareButton>
         </div>
