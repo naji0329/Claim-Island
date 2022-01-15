@@ -157,7 +157,7 @@ export default ({
           id="clam-view"
           className={
             isTakingSnapshot
-              ? "flex justify-between flex-row"
+              ? "flex justify-between flex-row pt-4 pl-4"
               : "flex justify-between flex-col sm:flex-row"
           }
         >
