@@ -4,12 +4,8 @@ import { get } from "lodash";
 
 import NFTItem from "./NFTItem";
 
-export const TabContainer = ({ clams, openDetailedInfo, pearls, setTab }) => {
+export const TabContainer = ({ clams, openDetailedInfo, pearls }) => {
   const { tabId } = useParams();
-
-  useEffect(() => {
-    setTab(tabId[0].toUpperCase() + tabId.slice(1));
-  }, []);
 
   return (
     <>
@@ -55,9 +51,14 @@ export const TabContainer = ({ clams, openDetailedInfo, pearls, setTab }) => {
             })}
         </div>
       )}
-      {!pearls.length && !clams.length && (
+      {!pearls.length && tabId === "pearl" && (
         <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
-          You&#39;ve got no clams or pearls &#128542;
+          You&#39;ve got no pearls &#128542;
+        </div>
+      )}
+      {!clams.length && tabId === "clam" && (
+        <div className="w-full bg-white shadow-md rounded-xl text-center text-2xl p-5 text-black">
+          You&#39;ve got no clams &#128542;
         </div>
       )}
     </>

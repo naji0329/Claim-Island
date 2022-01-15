@@ -1,8 +1,7 @@
 export const SAFEROOM_SPEECH = {
   saferoom: {
     connect: {
-      text: `Excellent! First, let's get your wallet connected. You will need to do this in order to see your Clams. Press the "Connect Wallet" button in the top right of the screen.`,
-      next: `purchase`,
+      text: "Hi there, traveller, welcome to the Saferoom! You will need to connect your wallet to see the Clams and Pearls in your Safe. Alternatively, if you want to inspect a particular Clam or Pearl in the Saferoom or the Clam Farm, we can help you do that too.",
       dismiss: false,
       skip: false,
     },

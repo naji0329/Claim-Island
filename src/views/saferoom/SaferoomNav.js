@@ -8,7 +8,7 @@ import { PearlsSorting } from "components/pearlsSorting";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-export const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => {
+export const SaferoomNav = ({ tab, url, clamBalance, pearlBalance }) => {
   const showNumberOfAssets = (number, asset) => {
     return +number > 1 ? `${number} ${asset}s` : `${number} ${asset}`;
   };
@@ -21,7 +21,6 @@ export const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => 
             tab === TABS.clam ? " text-blue-700 bg-gray-200 bg-opacity-80 rounded" : "text-gray-400"
           }`}
           to={`${url}/clam`}
-          onClick={() => setTab(TABS.clam)}
         >
           {showNumberOfAssets(clamBalance, TABS.clam)}
         </Link>
@@ -33,7 +32,6 @@ export const SaferoomNav = ({ setTab, tab, url, clamBalance, pearlBalance }) => 
               : "text-gray-400"
           }`}
           to={`${url}/pearl`}
-          onClick={() => setTab(TABS.pearl)}
         >
           {showNumberOfAssets(pearlBalance, TABS.pearl)}
         </Link>
