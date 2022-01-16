@@ -127,6 +127,7 @@ const Saferoom = ({
             },
           },
         },
+        restrictReveal: true,
       });
     }
   }, [address, pathname]);

@@ -28,6 +28,7 @@ const CharacterWrapper = ({
   forceTop,
   suppressSpeechBubbleAction,
   loading,
+  restrictReveal,
 }) => {
   const character = get(CHARACTERS, name);
   let speech = get(SPEECHES, action, action);
@@ -159,7 +160,9 @@ const CharacterWrapper = ({
                       className="btn character-btn"
                       id="btn-next"
                       onClick={() => {
-                        setCanPlay(false);
+                        if (!restrictReveal) {
+                          setCanPlay(false);
+                        }
                         button.alt ? handleButtonCallback(button) : handleClickButton(button);
                       }}
                     >
@@ -238,6 +241,7 @@ const mapToProps = ({
     suppressSpeechBubble,
     skipDialogs,
     forceTop,
+    restrictReveal,
   },
 }) => ({
   name,
@@ -248,6 +252,7 @@ const mapToProps = ({
   suppressSpeechBubble,
   skipDialogs,
   forceTop,
+  restrictReveal,
 });
 
 const mapDispatchToProps = () => ({
