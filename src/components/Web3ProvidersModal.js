@@ -221,7 +221,8 @@ const Web3ProvidersModal = ({
 
   useAsync(async () => {
     console.log("on init check for web3");
-    if (web3Modal.cachedProvider) {
+    // only auto connect if web3modal has been selected and wallet is unlocked
+    if (window.ethereum.selectedAddress && web3Modal.cachedProvider) {
       onConnect();
     }
   });
