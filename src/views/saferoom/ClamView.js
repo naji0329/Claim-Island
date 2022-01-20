@@ -198,17 +198,18 @@ export default ({
                 // clamTraits={clamTraits}
               />
             </div>
-            <div className="flex justify-between items-start py-2">
+            <div className="flex justify-between items-center py-2">
               <div className="flex items-center">
                 <div className="badge badge-success mr-2">#{clamId}</div>
                 <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
               </div>
-              <div className="flex">
+              <div className="flex gap-2">
                 <FontAwesomeIcon
                   data-tip="Take a shareable snapshot"
                   className="cursor-pointer"
                   icon={faCamera}
                   onClick={handleTakeSnapshot}
+                  size="lg"
                 />
                 <SocialMediaButtons assetId={clamId} assetName="Clam" />
               </div>

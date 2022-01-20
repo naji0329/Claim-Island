@@ -31,7 +31,7 @@ export const SocialMediaButtons = (props) => {
   return (
     <div className="dropdown dropdown-hover cursor-pointer">
       <div tabIndex="0" className="flex justify-end ml-4">
-        <FontAwesomeIcon icon={faShareAlt} />
+        <FontAwesomeIcon icon={faShareAlt} size="lg" />
       </div>
       <div className="dropdown-content pt-2">
         <div className="flex bg-gray-900 p-2 rounded-lg">
