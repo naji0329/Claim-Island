@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
-import { useAsync } from "react-use";
 import "./index.scss";
 
 import { Switch, Route, useRouteMatch, Redirect, useLocation, useHistory } from "react-router-dom";
@@ -18,6 +17,7 @@ import videoMp4 from "assets/locations/Saferoom.mp4";
 import videoWebM from "assets/locations/Saferoom.webm";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
+import { useWeb3Modal } from "components/Web3ProvidersModal";
 import { SAFEROOM_TABS as TABS } from "constants/ui";
 import { getSortedClams } from "utils/clamsSort";
 import { getSortedPearls } from "utils/pearlsSort";
@@ -33,6 +33,7 @@ const Saferoom = ({
   price: { gem: gemPriceUSD },
   boostParams,
   sorting: { saferoom: saferoomSorting },
+  ...state
 }) => {
   const [selectedAsset, setSelectedAsset] = useState();
   const [tab, setTab] = useState(clamBalance !== "0" ? TABS.clam : TABS.pearl);
@@ -41,18 +42,11 @@ const Saferoom = ({
   let { path, url } = useRouteMatch();
   const { search, pathname } = useLocation();
   const history = useHistory();
+  const { onConnect } = useWeb3Modal(state);
+
+  const isInspectPage = pathname.includes("inspect");
 
   const { isShowing, toggleModal } = useModal();
-
-  useAsync(async () => {
-    updateCharacter({
-      name: "tanja",
-      action: "saferoom.connect.text",
-      button: {
-        text: undefined,
-      },
-    });
-  });
 
   const isPrevButtonShown = () => {
     if (TABS.clam === tab && selectedAsset) {
@@ -113,6 +107,32 @@ const Saferoom = ({
   };
 
   useEffect(() => {
+    if (!address) {
+      updateCharacter({
+        name: "tanja",
+        action: "saferoom.connect.text",
+        button: {
+          text: "Connect Wallet",
+          alt: {
+            action: "cb",
+            destination: onConnect,
+          },
+        },
+        buttonAlt: {
+          text: "Inspect Clam / Pearl",
+          alt: {
+            action: "cb",
+            destination: () => {
+              history.push("/saferoom/clam/inspect/-1");
+            },
+          },
+        },
+        restrictReveal: true,
+      });
+    }
+  }, [address, pathname]);
+
+  useEffect(() => {
     const query = new URLSearchParams(search);
     const id = query.get("id");
 
@@ -142,6 +162,16 @@ const Saferoom = ({
     setPearls(sortedPearls);
   }, [unsortedPearls, saferoomSorting.pearls.order, saferoomSorting.pearls.value]);
 
+  useEffect(() => {
+    if (pathname.includes("clam") && tab !== TABS.clam) {
+      setTab(TABS.clam);
+    }
+
+    if (pathname.includes("pearl") && tab !== TABS.pearl) {
+      setTab(TABS.pearl);
+    }
+  }, [pathname]);
+
   return (
     <>
       {ui.isFetching && <LoadingScreen />}
@@ -150,7 +180,7 @@ const Saferoom = ({
       <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
       {/* chat character   */}
-      {!address && <Character name="tanja" />}
+      {!address && !isInspectPage && <Character name="tanja" />}
 
       <Modal isShowing={isShowing} onClose={toggleModal}>
         {tab === "Clam" && (
@@ -181,7 +211,6 @@ const Saferoom = ({
             <>
               {/* navbar */}
               <SaferoomNav
-                setTab={setTab}
                 tab={tab}
                 url={url}
                 clamBalance={clamBalance}
@@ -197,27 +226,26 @@ const Saferoom = ({
                   <Route path={`${path}/:tabId`}>
                     <TabContainer
                       clams={clams}
-                      setTab={setTab}
                       pearls={pearls}
                       openDetailedInfo={openDetailedInfo}
                     />
                   </Route>
                 </Switch>
               </div>
-              <Switch>
-                <Route path={`${path}/clam/inspect/:tokenId`}>
-                  {!ui.isFetching && (
-                    <ClamInspect gemPriceUSD={gemPriceUSD} address={address} {...boostParams} />
-                  )}
-                </Route>
-                <Route path={`${path}/pearl/inspect/:tokenId`}>
-                  {!ui.isFetching && (
-                    <PearlInspect gemPriceUSD={gemPriceUSD} address={address} {...boostParams} />
-                  )}
-                </Route>
-              </Switch>
             </>
           )}
+          <Switch>
+            <Route path={`${path}/clam/inspect/:tokenId`}>
+              {!ui.isFetching && (
+                <ClamInspect gemPriceUSD={gemPriceUSD} address={address} {...boostParams} />
+              )}
+            </Route>
+            <Route path={`${path}/pearl/inspect/:tokenId`}>
+              {!ui.isFetching && (
+                <PearlInspect gemPriceUSD={gemPriceUSD} address={address} {...boostParams} />
+              )}
+            </Route>
+          </Switch>
         </div>
       </div>
     </>

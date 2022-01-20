@@ -361,6 +361,13 @@ export const actions = (store) => ({
       },
     },
   }),
+
+  updateBoostParams: (state, params) => ({
+    boostParams: {
+      ...state.boostParams,
+      ...params,
+    },
+  }),
 });
 
 export default { store, actions };

@@ -32,13 +32,32 @@ export const InspectorControls = ({ tokenId: defaultTokenId, view }) => {
         onKeyDown={handleKeyDown}
       />
       <Link
-        className="btn btn-primary btn-md text-lg"
+        className="btn btn-primary btn-md text-lg mr-2"
         role="button"
         aria-pressed="true"
         to={`/saferoom/${view}/inspect/${tokenId}`}
       >
         Inspect
       </Link>
+      <div className="flex flex-none bg-gray-900 bg-opacity-80 p-2 rounded mr-2">
+        <Link
+          className={`px-5 py-1 text-xl ${
+            isClamView ? " text-blue-700 bg-gray-200 bg-opacity-80 rounded" : "text-gray-400"
+          }`}
+          to="/saferoom/clam/inspect/-1"
+        >
+          Clams
+        </Link>
+
+        <Link
+          className={`px-5 py-1  text-xl ${
+            !isClamView ? "text-blue-700  bg-gray-200 bg-opacity-80 rounded" : "text-gray-400"
+          }`}
+          to="/saferoom/pearl/inspect/-1"
+        >
+          Pearls
+        </Link>
+      </div>
     </div>
   );
 };
