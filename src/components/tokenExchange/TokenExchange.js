@@ -29,7 +29,7 @@ export const TokenExchange = () => {
       <Modal
         isShowing={isShowing}
         onClose={toggleModal}
-        width={"45rem"}
+        width={"35rem"}
         modalClassName="overflow-y-auto"
       >
         <div className="flex flex-col items-center ">
