@@ -1,0 +1,9 @@
+.exchange-tabs-content {
+    width: 440px;
+    height: 595px;
+    margin: auto;
+}
+
+.exchange-tabs-content .Onramper * {
+    box-sizing: content-box;
+}
