@@ -22,6 +22,7 @@ const CLAM_COMPONENTS = {
   [CLAM_TYPES.fan]: FanClam,
   [CLAM_TYPES.hamburger]: HamburgerClam,
   [CLAM_TYPES.heart]: HeartClam,
+  [CLAM_TYPES.Valentine]: HeartClam,
   [CLAM_TYPES.maxima]: MaximaClam,
   [CLAM_TYPES.octo]: OctoClam,
   [CLAM_TYPES.sharptooth]: SharpToothClam,
@@ -83,7 +84,7 @@ export const Clam = (props) => {
     <>
       <group ref={groupMesh} position={[0, -0.02, -0.05]} scale={scaleFactor}>
         <group position={[0, 0, 0.1]}>
-          <ClamComponent tongueType={tongueType} textures={textures} />
+          <ClamComponent tongueType={tongueType} textures={textures} clamType={clamType} />
         </group>
       </group>
       <OrbitControls

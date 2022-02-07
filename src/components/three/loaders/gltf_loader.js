@@ -2,7 +2,7 @@ import * as THREE from "three";
 import GLTFLoader from "../../../loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
-const loadGLTFPromise = (url) => {
+export const loadGLTFPromise = (url) => {
   return new Promise((resolve) => {
     const gltfLoader = new GLTFLoader();
     const dracoLoader = new DRACOLoader();

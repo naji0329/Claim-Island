@@ -18,4 +18,5 @@ export const CLAM_TYPES = {
   sharptooth: "sharptooth",
   spade: "spade",
   threelipped: "threelipped",
+  Valentine: "Valentine",
 };
