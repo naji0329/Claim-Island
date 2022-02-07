@@ -26,7 +26,7 @@ export const HeartClam = (props) => {
   const [valentine, setValentine] = useState(null);
 
   useEffect(() => {
-    if (clamType === CLAM_TYPES.Valentine) {
+    if (clamType === CLAM_TYPES.valentine) {
       const init = async () => {
         const { scene } = await loadGLTFPromise("/clam-models/heart/roses_opt.glb");
         setValentine(scene);
