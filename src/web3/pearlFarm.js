@@ -84,7 +84,7 @@ export const collectPearl = async (clamId) => {
   const method = pearlFarm().methods.collectPearl(clamId);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method.send({ from: account, gas: gasEstimation });
+  await method.send({ from: account, gas: gasEstimation*1.2 });
 };
 
 export const getRemainingPearlProductionTime = async (clamId) => {
