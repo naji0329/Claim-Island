@@ -52,7 +52,7 @@ export const TokenExchange = () => {
             </a>
           </div>
           <div className="exchange-tabs-content mt-4">
-            {isBuy && <Onramper />}
+            {isBuy && (<div className="h-full w-full relative"><Onramper /><div className="w-full h-full absolute top-0 z-999 bg-gray-200 bg-opacity-90 flex items-center justify-center text-2xl">Coming Soon</div></div>)}
             {isExchange && <Exchange />}
           </div>
         </div>
