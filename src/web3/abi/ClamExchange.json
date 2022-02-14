@@ -63,6 +63,19 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "pearl",
+        "type": "address"
+      }
+    ],
+    "name": "SetPearl",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256[2][]",
@@ -202,6 +215,19 @@
   },
   {
     "inputs": [],
+    "name": "pearl",
+    "outputs": [
+      {
+        "internalType": "contract IPearl",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -218,6 +244,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_pearl",
+        "type": "address"
+      }
+    ],
+    "name": "setPearl",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

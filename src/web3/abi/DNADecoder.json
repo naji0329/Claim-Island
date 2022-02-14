@@ -262,5 +262,169 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "patterns",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "pattern",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "dropRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "pearlBoost",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "pearlBoostShape",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "setPatterns",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "setSharedColors",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "setShellShapes",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "setTongueShapes",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "sharedColors",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "color",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "dropRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pearlBodyColorNumber",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "boost",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "shellShapes",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "shape",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "dropRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "pearlBoost",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "pearlBoostShape",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "tongues",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "shape",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "dropRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "pearlBoost",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "pearlBoostShape",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   }
 ]

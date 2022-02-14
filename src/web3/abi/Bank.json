@@ -66,6 +66,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "gemPerBlock",
+        "type": "uint256"
+      }
+    ],
+    "name": "GemPerBlockReduced",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -264,6 +277,32 @@
       }
     ],
     "name": "SetFeeAddress",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "gemLockerV2",
+        "type": "address"
+      }
+    ],
+    "name": "SetGemLockerV2",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "gemReducePercentageBP",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetGemReducePercentageBP",
     "type": "event"
   },
   {
@@ -518,7 +557,46 @@
   },
   {
     "inputs": [],
+    "name": "gemLockerV2",
+    "outputs": [
+      {
+        "internalType": "contract IGemLockerV2",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "gemPerBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gemReducePercentageBP",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gemReducedAtWeek",
     "outputs": [
       {
         "internalType": "uint256",
@@ -866,6 +944,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "reduceGemPerBlock",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -948,6 +1033,32 @@
       }
     ],
     "name": "setFeeAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_gemLockerV2",
+        "type": "address"
+      }
+    ],
+    "name": "setGemLockerV2",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gemReducePercentageBP",
+        "type": "uint256"
+      }
+    ],
+    "name": "setGemReducePercentageBP",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
