@@ -22,7 +22,7 @@ import { useTimer } from "hooks/useTimer";
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
 const PoolHarvest = ({
   account: { address },
-  bank: { selectedPool, rewards },
+  bank: { selectedPool, rewards, rewards_old },
   updateBank,
   updateCharacter,
   updateAccount,
@@ -33,29 +33,60 @@ const PoolHarvest = ({
   const [pearlBoostYield, setPearlBoostYield] = useState(false);
   const [inTx, setInTx] = useState(false);
   const { isShowing, toggleModal: toggleBreakdownModal } = useModal();
-  const startTime = +rewards?.startTime * 1000;
 
   const calculateTimeLeft = () => {
-    if (!rewards) return "calculating...";
-    const { farmingRewards, vestedClamRewards, vestedPearlRewards } = rewards;
-    if (!farmingRewards?.length && !vestedClamRewards?.length && !vestedPearlRewards?.length)
+    if (!rewards_old || !rewards) return "calculating...";
+    const {
+      farmingRewards: farmingRewards_old,
+      vestedClamRewards: vestedClamRewards_old,
+      vestedPearlRewards: vestedPearlRewards_old,
+    } = rewards_old;
+    const { farmingRewards, vestedPearlRewards } = rewards;
+    if (
+      !farmingRewards_old?.length &&
+      !vestedClamRewards_old?.length &&
+      !vestedPearlRewards_old?.length &&
+      !farmingRewards?.length &&
+      !vestedClamRewards?.length &&
+      !vestedPearlRewards?.length
+    )
       return "No locked rewards yet";
 
-    const getUnlockDay = () => {
-      if (vestedClamRewards.length || vestedPearlRewards.length) {
-        const sortedRewards = [...vestedClamRewards, ...vestedPearlRewards].sort(
+    const getUnlockDay_old = () => {
+      const endDays = [];
+      if (vestedClamRewards_old.length || vestedPearlRewards_old.length) {
+        const sortedRewards = [...vestedClamRewards_old, ...vestedPearlRewards_old].sort(
           (a, b) => b.endDay - a.endDay
         );
-        return sortedRewards[0].endDay;
+        endDays.push(+sortedRewards[0].endDay);
       }
-      if (farmingRewards.length) return farmingRewards[farmingRewards.length - 1].lockedUntilDay;
+      if (farmingRewards_old.length) {
+        endDays.push(+farmingRewards_old[farmingRewards_old.length - 1].lockedUntilDay);
+      }
+      if (!endDays.length) return 0;
+      return Math.max(...endDays);
     };
 
-    const unlockDay = getUnlockDay();
-    if (!unlockDay) return "No locked rewards yet";
+    const getUnlockDay = () => {
+      if (farmingRewards.length || vestedPearlRewards.length) {
+        const sortedRewards = [...farmingRewards, ...vestedPearlRewards].sort(
+          (a, b) => b.unlockDay - a.unlockDay
+        );
+        return +sortedRewards[0].unlockDay;
+      }
+      return 0;
+    };
 
-    const unlockMoment = moment(startTime).add(unlockDay + 1, "d");
-    const remainingMs = unlockMoment.diff(moment());
+    const unlockDay_old = getUnlockDay_old();
+    const unlockDay = getUnlockDay();
+    if (!unlockDay && !unlockDay_old) return "No locked rewards yet";
+
+    const unlockMoment_old = moment(+rewards_old.startTime * 1000).add(unlockDay_old + 1, "d");
+    const unlockMoment = moment(+rewards.startTime * 1000).add(unlockDay + 1, "d");
+
+    const remainingMs = (
+      unlockMoment.isAfter(unlockMoment_old) ? unlockMoment : unlockMoment_old
+    ).diff(moment());
 
     return formatMsToDuration(remainingMs);
   };
@@ -96,9 +127,11 @@ const PoolHarvest = ({
     }
   };
 
-  const UnlockRow = ({ type, amount, unlockDay }) => {
+  const UnlockRow = ({ type, amount, unlockDay, isOld }) => {
     const calculateTimeLeft = () => {
-      if (!rewards) return "calculating...";
+      if (!rewards_old || !rewards) return "calculating...";
+
+      const startTime = +(isOld ? rewards_old.startTime : rewards.startTime) * 1000;
 
       const unlockMoment = moment(startTime).add(unlockDay + 1, "d");
       const remainingMs = unlockMoment.diff(moment());
@@ -157,14 +190,16 @@ const PoolHarvest = ({
             <div className="mx-2 text-4xl text-right">{harvestAmount}</div>
             {selectedPool.isNative &&
               address &&
-              (!rewards ? (
+              (!rewards_old || !rewards ? (
                 <div className="text-center">Loading rewards data...</div>
               ) : (
                 <div className="flex flex-row items-center justify-end">
                   <div className="mx-2 text-2xl text-right">
                     +
                     {renderNumber(
-                      +rewards.availableClamRewards + +rewards.availablePearlRewards,
+                      +rewards_old.availableClamRewards +
+                        +rewards_old.availablePearlRewards +
+                        +rewards.availablePearlRewards,
                       2
                     )}
                   </div>
@@ -173,7 +208,7 @@ const PoolHarvest = ({
           </div>
           <div className="flex flex-col justify-around">
             <div className="text-md">GEM EARNED</div>
-            {selectedPool.isNative && rewards && (
+            {selectedPool.isNative && (rewards_old || rewards) && (
               <div className="dropdown dropdown-bottom dropdown-end dropdown-hover">
                 <div className="flex text-sm items-center">
                   GEM BOOST
@@ -200,11 +235,16 @@ const PoolHarvest = ({
                     </div>
                     <div className="flex justify-between p-2">
                       <span>Clams:</span>
-                      <span>{renderNumber(+rewards.availableClamRewards, 2)}</span>
+                      <span>{renderNumber(+rewards_old.availableClamRewards, 2)}</span>
                     </div>
                     <div className="flex justify-between p-2">
                       <span>Pearls:</span>
-                      <span>{renderNumber(+rewards.availablePearlRewards, 2)}</span>
+                      <span>
+                        {renderNumber(
+                          +rewards_old.availablePearlRewards + +rewards.availablePearlRewards,
+                          2
+                        )}
+                      </span>
                     </div>
                     <div className="flex justify-between p-2">
                       <a className="link" onClick={toggleBreakdownModal}>
@@ -218,7 +258,7 @@ const PoolHarvest = ({
           </div>
         </div>
 
-        {selectedPool.isNative && rewards && (
+        {selectedPool.isNative && (rewards_old || rewards) && (
           <div className="flex justify-around">
             <div className="flex flex-col">
               <div>
@@ -231,7 +271,9 @@ const PoolHarvest = ({
               <div>Fully unlocks in:</div>
             </div>
             <div className="flex flex-col">
-              <div className="text-right">{renderNumber(+rewards.totalVested, 2)} GEM</div>
+              <div className="text-right">
+                {renderNumber(+rewards_old.totalVested + +rewards.totalVested, 2)} GEM
+              </div>
               <div className="text-right">{timeLeft}</div>
             </div>
           </div>
@@ -253,10 +295,12 @@ const PoolHarvest = ({
                 50% of GEM earned is locked for a 7-day vesting period starting from the following
                 day. During this time the vesting GEM can still be used to purchase Clams.
               </p>
-              {rewards && (
+              {(rewards_old || rewards) && (
                 <>
                   <p className="mb-2">
-                    You currently have {renderNumber(+rewards.totalVested, 2)} GEM rewards vesting.
+                    You currently have{" "}
+                    {renderNumber(+rewards_old.totalVested + +rewards.totalVested, 2)} GEM rewards
+                    vesting.
                   </p>
                   <a className="link" onClick={toggleBreakdownModal}>
                     View vesting breakdown
@@ -271,7 +315,7 @@ const PoolHarvest = ({
           )}
         </div>
       </div>
-      {rewards && (
+      {(rewards_old || rewards) && (
         <Modal
           isShowing={isShowing}
           onClose={toggleBreakdownModal}
@@ -289,21 +333,39 @@ const PoolHarvest = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {rewards.farmingRewards?.map((rewardData) => (
+                  {rewards_old.farmingRewards?.map((rewardData) => (
                     <UnlockRow
-                      key={rewardData.lockedUntilDay}
+                      key={`farming_old-${rewardData.lockedUntilDay}`}
                       type={"Bank Harvest"}
                       amount={renderNumber(rewardData.amount)}
                       unlockDay={rewardData.lockedUntilDay}
+                      isOld
                     />
                   ))}
-
-                  {rewards.vestedClamRewards?.map((rewardData, i) => (
+                  {rewards.farmingRewards?.map((rewardData) => (
+                    <UnlockRow
+                      key={`farming-${rewardData.lockedUntilDay}`}
+                      type={"Bank Harvest"}
+                      amount={renderNumber(rewardData.amount)}
+                      unlockDay={rewardData.unlockDay}
+                    />
+                  ))}
+                  {rewards_old.vestedClamRewards?.map((rewardData, i) => (
                     <UnlockRow
                       key={`clam-${i}`}
                       type={"Clam Deposit"}
                       amount={renderNumber(rewardData.bonusRemaining)}
                       unlockDay={rewardData.endDay}
+                      isOld
+                    />
+                  ))}
+                  {rewards_old.vestedPearlRewards?.map((rewardData, i) => (
+                    <UnlockRow
+                      key={`pear_old-${i}`}
+                      type={"Pearl Yield"}
+                      amount={renderNumber(rewardData.bonusRemaining)}
+                      unlockDay={rewardData.endDay}
+                      isOld
                     />
                   ))}
                   {rewards.vestedPearlRewards?.map((rewardData, i) => (
@@ -311,13 +373,15 @@ const PoolHarvest = ({
                       key={`pearl-${i}`}
                       type={"Pearl Yield"}
                       amount={renderNumber(rewardData.bonusRemaining)}
-                      unlockDay={rewardData.endDay}
+                      unlockDay={rewardData.unlockDay}
                     />
                   ))}
 
                   <tr>
                     <th>Total vesting GEM:</th>
-                    <td className="text-right">{renderNumber(+rewards.totalVested, 3)}</td>
+                    <td className="text-right">
+                      {renderNumber(+rewards_old.totalVested + +rewards.totalVested, 3)}
+                    </td>
                     <td />
                   </tr>
                 </tbody>

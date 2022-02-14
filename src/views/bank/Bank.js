@@ -13,7 +13,8 @@ import { Modal, useModal } from "components/Modal";
 import { PageTitle } from "components/PageTitle";
 
 import { getAllPools, harvestAllPools } from "web3/bank";
-import { fetchRewards } from "web3/gemLocker";
+import { fetchRewards_old } from "web3/gemLocker";
+import { fetchRewards } from "web3/gemLockerV2";
 
 import "./bank.scss";
 import PoolItem from "./PoolItem";
@@ -49,8 +50,9 @@ const Bank = ({
     updateBank({ pools: currentPools });
 
     if (address) {
+      const rewards_old = await fetchRewards_old();
       const rewards = await fetchRewards();
-      updateBank({ rewards });
+      updateBank({ rewards, rewards_old });
     }
   }, [address, isBSChain]);
 
