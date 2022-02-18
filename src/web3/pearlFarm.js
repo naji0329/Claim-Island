@@ -28,7 +28,7 @@ export const stakeClam = async (clamId) => {
   const method = pearlFarm().methods.stakeClam(clamId);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method.send({ from: account, gas: gasEstimation });
+  await method.send({ from: account, gas: Math.floor(gasEstimation*1.2) });
 };
 
 export const stakeClamAgain = async (clamId) => {
@@ -37,7 +37,7 @@ export const stakeClamAgain = async (clamId) => {
   const method = pearlFarm().methods.stakeClamAgain(clamId);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method.send({ from: account, gas: gasEstimation });
+  await method.send({ from: account, gas: Math.floor(gasEstimation*1.2) });
 };
 
 export const unstakeClam = async (clamId) => {
@@ -46,7 +46,7 @@ export const unstakeClam = async (clamId) => {
   const method = pearlFarm().methods.unstakeClam(clamId);
   const gasEstimation = await method.estimateGas({ from: account });
 
-  await method.send({ from: account, gas: gasEstimation });
+  await method.send({ from: account, gas: Math.floor(gasEstimation*1.2) });
 };
 
 export const prepareReclaiming = async (clamId) => {
@@ -75,7 +75,7 @@ export const propClamOpenForPearl = async (clamId) => {
   const method = pearlFarm().methods.propClamOpenForPearl(clamId);
   const gasEstimation = await method.estimateGas({ from: account, value: +oracleFee });
 
-  await method.send({ from: account, gas: gasEstimation, value: +oracleFee });
+  await method.send({ from: account, gas: Math.floor(gasEstimation*1.2), value: +oracleFee });
 };
 
 export const collectPearl = async (clamId) => {
