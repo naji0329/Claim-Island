@@ -47,7 +47,6 @@ const PoolHarvest = ({
       !vestedClamRewards_old?.length &&
       !vestedPearlRewards_old?.length &&
       !farmingRewards?.length &&
-      !vestedClamRewards?.length &&
       !vestedPearlRewards?.length
     )
       return "No locked rewards yet";
