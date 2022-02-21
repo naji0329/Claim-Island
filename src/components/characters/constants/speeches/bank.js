@@ -72,7 +72,7 @@ export const BANK_SPEECH = {
       dismiss: true,
       skip: false,
     },
-    withdraw_pearl_rewards_alert: {
+    withdraw_rewards_alert: {
       text: "You still have locked yield currently streaming. Withdrawing from this pool will cause all pending streams to be reduced proportionally after 24 hours.To prevent the reduction, you must deposit your withdrawal back within 24 hours. Are you sure you want to withdraw?",
       next: false,
       dismiss: true,
@@ -140,7 +140,7 @@ export const BANK_BUTTONS = {
       next: "OK",
       alt: false,
     },
-    withdraw_pearl_rewards_alert: {
+    withdraw_rewards_alert: {
       next: "OK",
       alt: false,
     },
