@@ -343,7 +343,7 @@ const PoolHarvest = ({
                   ))}
                   {rewards.farmingRewards?.map((rewardData) => (
                     <UnlockRow
-                      key={`farming-${rewardData.lockedUntilDay}`}
+                      key={`farming-${rewardData.unlockDay}`}
                       type={"Bank Harvest"}
                       amount={renderNumber(rewardData.amount)}
                       unlockDay={rewardData.unlockDay}
