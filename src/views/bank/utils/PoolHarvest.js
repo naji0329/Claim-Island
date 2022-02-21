@@ -18,6 +18,8 @@ import { CONNECT_WALLET_TIP } from "constants/ui";
 import ActionButton from "./ActionButton";
 import moment from "moment";
 import { useTimer } from "hooks/useTimer";
+import { fetchRewards_old } from "web3/gemLocker";
+import { fetchRewards } from "web3/gemLockerV2";
 
 // WHEN HARVEST IS CLICKED. CALLED IN ./Poolitem.js
 const PoolHarvest = ({
@@ -110,6 +112,8 @@ const PoolHarvest = ({
       await harvest(selectedPool.poolId);
 
       const setUpPools = await getAllPools({ address });
+      const rewards_old = await fetchRewards_old();
+      const rewards = await fetchRewards();
 
       updateBank({
         pools: setUpPools, //update all pools
@@ -117,6 +121,8 @@ const PoolHarvest = ({
           ...selectedPool,
           userRewardAmountInPool: 0,
         },
+        rewards,
+        rewards_old,
       });
 
       onDepositHarvestSuccess(updateCharacter);
