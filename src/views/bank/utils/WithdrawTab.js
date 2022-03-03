@@ -28,7 +28,7 @@ const WithdrawTab = ({
   dispatchFetchAccountAssets,
 }) => {
   const [inTx, setInTx] = useState(false);
-  const hasPearlRewards = selectedPool.isNative && rewards?.hasLockedPearlRewards;
+  const hasPearlRewards = rewards?.hasLockedPearlRewards;
 
   const { handleSubmit, formState } = useForm();
   const { errors } = formState;
