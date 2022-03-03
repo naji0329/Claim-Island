@@ -110,15 +110,10 @@ const PearlInfo = ({
       <div className="w-full flex justify-between px-5">
         <div className="w-32 mr-4 h-full overflow-hidden">
           <img src={image} className="rounded-full" />
+          <div className="flex justify-center text-center text-gray-600 pt-2">
+            <span className="badge badge-success">#{pearl.pearlId}</span>
+          </div>
           <p className="text-center text-gray-600 pt-2">{pearl.dnaDecoded["rarity"]}</p>
-          <p className="text-center text-gray-600">
-            {"Grade " +
-              pearlGrade(
-                pearl.dnaDecoded["surface"],
-                pearl.dnaDecoded["lustre"],
-                pearl.dnaDecoded["nacreQuality"]
-              )}
-          </p>
         </div>
         <div className="w-2/3">
           <InfoLine
@@ -167,6 +162,13 @@ const PearlInfo = ({
           />
           <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
           <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
+          <InfoLine label="Grade:" value={
+            pearlGrade(
+              pearl.dnaDecoded["surface"],
+              pearl.dnaDecoded["lustre"],
+              pearl.dnaDecoded["nacreQuality"]
+            )
+          } />
           <div className="flex justify-between w-full my-2">
             {showBurn && (
               <span
