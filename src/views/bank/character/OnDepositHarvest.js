@@ -61,10 +61,10 @@ export const onDepositFeeAlert = (updateCharacter, cb) => {
   });
 };
 
-export const onWithdrawPearlRewardsAlert = (updateCharacter, cb) => {
+export const onWithdrawRewardsAlert = (updateCharacter, cb) => {
   updateCharacter({
     name: "tanja",
-    action: "bank.withdraw_pearl_rewards_alert.text",
+    action: "bank.withdraw_rewards_alert.text",
     button: {
       text: "Yes, I understand",
       alt: {

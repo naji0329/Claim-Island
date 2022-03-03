@@ -150,6 +150,14 @@ const testnetPools = {
     isNative: true,
     risk: "High Risk",
   },
+  "0xe0e92035077c39594793e61802a350347c320cf2": {
+    name: `BNB - BUSD`,
+    images: [
+      "https://assets.coingecko.com/coins/images/825/small/binance-coin-logo.png",
+      "https://assets.coingecko.com/coins/images/9576/small/BUSD.png",
+    ],
+    risk: "Low Risk",
+  },
 };
 
 // this sets addresses of testnet when running locally. Change this if mainnet addresses are desired

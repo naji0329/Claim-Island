@@ -191,6 +191,19 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "gemLockerV2",
+        "type": "address"
+      }
+    ],
+    "name": "SetGemLockerV2",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "gemOracle",
         "type": "address"
       }
@@ -413,6 +426,19 @@
     "outputs": [
       {
         "internalType": "contract IGemLocker",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gemLockerV2",
+    "outputs": [
+      {
+        "internalType": "contract IGemLockerV2",
         "name": "",
         "type": "address"
       }
@@ -751,6 +777,19 @@
       }
     ],
     "name": "setFloorPriceUsd",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_gemLockerV2",
+        "type": "address"
+      }
+    ],
+    "name": "setGemLockerV2",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

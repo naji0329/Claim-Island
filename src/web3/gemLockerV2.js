@@ -1,14 +1,14 @@
 import { formatEther } from "@ethersproject/units";
 import { contractFactory } from "./index";
-import gemLockerAbi from "./abi/GemLocker.json";
-import { gemLockerAddress } from "../constants/constants";
+import gemLockerAbi from "./abi/GemLockerV2.json";
+import { gemLockerV2Address } from "../constants/constants";
 import { getAccount } from "./shared";
 import { aggregate } from "./multicall";
 
 const gemLocker = () =>
   contractFactory({
     abi: gemLockerAbi,
-    address: gemLockerAddress,
+    address: gemLockerV2Address,
   });
 
 const totalLockedRewards = async () => {
@@ -21,11 +21,6 @@ const pendingFarmingRewards = async () => {
   return formatEther(await gemLocker().methods.pendingFarmingRewards(account).call());
 };
 
-const pendingClamRewards = async () => {
-  const account = getAccount();
-  return formatEther(await gemLocker().methods.pendingClamRewards(account).call());
-};
-
 const pendingPearlRewards = async () => {
   const account = getAccount();
   return formatEther(await gemLocker().methods.pendingPearlRewards(account).call());
@@ -36,29 +31,22 @@ const lockedFarmingRewardsLength = async () => {
   return gemLocker().methods.lockedFarmingRewardsLength(account).call();
 };
 
-const clamsStakedPerUserLength = async () => {
+const lockedPearlRewardsLength = async () => {
   const account = getAccount();
-  return gemLocker().methods.clamsStakedPerUserLength(account).call();
-};
-
-const clamIdsStakedPerUserAt = async (index) => {
-  const account = getAccount();
-  return gemLocker().methods.clamIdsStakedPerUserAt(account, index).call();
-};
-
-const pearlsBurnedPerUserLength = async () => {
-  const account = getAccount();
-  return gemLocker().methods.pearlsBurnedPerUserLength(account).call();
-};
-
-const pearlIdsBurnedPerUserAt = async (index) => {
-  const account = getAccount();
-  return gemLocker().methods.pearlIdsBurnedPerUserAt(account, index).call();
+  return gemLocker().methods.lockedPearlRewardsLength(account).call();
 };
 
 const totalPearlRewardsLocked = async () => {
   const account = getAccount();
   return gemLocker().methods.totalPearlRewardsLocked(account).call();
+};
+
+const getCurrentDay = async () => {
+  return gemLocker().methods.getDay().call();
+};
+
+const startTimestamp = async () => {
+  return gemLocker().methods.startTimestamp().call();
 };
 
 const prepFarmingRewardsCalls = async () => {
@@ -67,7 +55,7 @@ const prepFarmingRewardsCalls = async () => {
   const calls = [];
   for (let index = 0; index < +length; index++) {
     calls.push([
-      gemLockerAddress,
+      gemLockerV2Address,
       web3.eth.abi.encodeFunctionCall(
         {
           name: "lockedFarmingRewards",
@@ -93,20 +81,16 @@ const prepFarmingRewardsCalls = async () => {
   return calls;
 };
 
-const prepNftRewardsCalls = async (isClam) => {
+const prepPearlRewardsCalls = async () => {
   const account = getAccount();
-  const length = isClam ? await clamsStakedPerUserLength() : await pearlsBurnedPerUserLength();
+  const length = await lockedPearlRewardsLength();
   const calls = [];
-
-  for (let index = 0; index < length; index++) {
-    const nftId = isClam
-      ? await clamIdsStakedPerUserAt(index)
-      : await pearlIdsBurnedPerUserAt(index);
+  for (let index = 0; index < +length; index++) {
     calls.push([
-      gemLockerAddress,
+      gemLockerV2Address,
       web3.eth.abi.encodeFunctionCall(
         {
-          name: isClam ? "lockedClamRewards" : "lockedPearlRewards",
+          name: "lockedPearlRewards",
           type: "function",
           inputs: [
             {
@@ -121,7 +105,7 @@ const prepNftRewardsCalls = async (isClam) => {
             },
           ],
         },
-        [account, nftId]
+        [account, index]
       ),
     ]);
   }
@@ -138,7 +122,8 @@ const decodeLockedFarmingRewards = (values) => {
         {
           lockedFarmingRewards: {
             amount: "uint256",
-            lockedUntilDay: "uint256",
+            startDay: "uint256",
+            unlockDay: "uint256",
           },
         },
         values[index]
@@ -149,18 +134,19 @@ const decodeLockedFarmingRewards = (values) => {
   return result;
 };
 
-const decodeLockedNftBonus = (values) => {
+const decodeLockedPearlRewards = (values) => {
   const result = [];
 
   for (let index = 0; index < values.length; index++) {
     result.push(
       web3.eth.abi.decodeParameter(
         {
-          lockedNftBonus: {
+          lockedPearlRewards: {
             bonusRemaining: "uint256",
             bonusRemainingCorrected: "uint256",
             startDay: "uint256",
-            endDay: "uint256",
+            unlockDay: "uint256",
+            lastRewardDay: "uint256",
           },
         },
         values[index]
@@ -178,45 +164,29 @@ const getFarmingRewards = async () => {
 
   const rewards = valuesDecoded.map((rewardData) => ({
     amount: +formatEther(rewardData.amount),
-    lockedUntilDay: +rewardData.lockedUntilDay,
+    unlockDay: +rewardData.unlockDay,
   }));
 
   return rewards.sort((a, b) => a.lockedUntilDay - b.lockedUntilDay);
 };
 
-const getNftRewards = async (isClam) => {
-  const calls = await prepNftRewardsCalls(isClam);
-  const lockedNftRewards = await aggregate(calls);
-  const valuesDecoded = decodeLockedNftBonus(lockedNftRewards.returnData);
+const getPearlRewards = async () => {
+  const calls = await prepPearlRewardsCalls();
+  const lockedRewards = await aggregate(calls);
+  const valuesDecoded = decodeLockedPearlRewards(lockedRewards.returnData);
 
-  const rewards = valuesDecoded.map((bonusData) => ({
-    bonusRemaining: +formatEther(
-      isClam ? bonusData.bonusRemaining : bonusData.bonusRemainingCorrected
-    ),
-    startDay: +bonusData.startDay,
-    endDay: +bonusData.endDay,
+  const rewards = valuesDecoded.map((rewardData) => ({
+    startDay: +rewardData.startDay,
+    unlockDay: +rewardData.unlockDay,
+    bonusRemaining: +formatEther(rewardData.bonusRemainingCorrected),
   }));
 
-  return rewards.sort((a, b) => a.startDay - b.startDay);
+  return rewards.sort((a, b) => a.lockedUntilDay - b.lockedUntilDay);
 };
 
-const getCurrentDay = async () => {
-  return gemLocker().methods.getDay().call();
-};
-
-const startTimestamp = async () => {
-  return gemLocker().methods.startTimestamp().call();
-};
-
-export const clamHasGeneratedBoost = async (clamId) => {
-  const account = getAccount();
-  const bonusInfo = await gemLocker().methods.lockedClamRewards(account, clamId).call();
-  return +bonusInfo.endDay > 0; // endDay cannot be 0 clam has generated rewards
-};
-
-const getVestedNftRewards = async (isClam) => {
-  const rewards = await getNftRewards(isClam);
-  let availableRewards = isClam ? +(await pendingClamRewards()) : +(await pendingPearlRewards());
+const getVestedPearlRewards = async () => {
+  const rewards = await getPearlRewards();
+  let availableRewards = +(await pendingPearlRewards());
 
   return rewards.reduce((acc, curr) => {
     if (availableRewards >= curr.bonusRemaining) {
@@ -232,43 +202,36 @@ const getVestedNftRewards = async (isClam) => {
 
 export const getVestedGem = async () => {
   const farmingRewards = await getFarmingRewards();
-  const vestedClamRewards = await getVestedNftRewards(true);
-  const vestedPearlRewards = await getVestedNftRewards();
+  const vestedPearlRewards = await getVestedPearlRewards();
 
   const totalFarmingRewards = farmingRewards.reduce((acc, curr) => acc + curr.amount, 0);
-  const totalClamRewards = vestedClamRewards.reduce((acc, curr) => acc + +curr.bonusRemaining, 0);
   const totalPearlRewards = vestedPearlRewards.reduce((acc, curr) => acc + +curr.bonusRemaining, 0);
-  const totalVested = totalFarmingRewards + totalClamRewards + totalPearlRewards;
+  const totalVested = totalFarmingRewards + totalPearlRewards;
 
   return totalVested;
 };
 
-export const fetchRewards_old = async () => {
+export const fetchRewards = async () => {
   const currentDay = await getCurrentDay();
   const farmingRewards = await getFarmingRewards();
-  const vestedClamRewards = await getVestedNftRewards(true);
-  const vestedPearlRewards = await getVestedNftRewards();
+  const vestedPearlRewards = await getVestedPearlRewards();
   const totalLocked = await totalLockedRewards();
   const availableFarmingRewards = await pendingFarmingRewards();
-  const availableClamRewards = await pendingClamRewards();
   const availablePearlRewards = await pendingPearlRewards();
   const startTime = await startTimestamp();
   const hasLockedPearlRewards = +(await totalPearlRewardsLocked()) > 0;
 
   const totalFarmingRewards = farmingRewards.reduce((acc, curr) => acc + curr.amount, 0);
-  const totalClamRewards = vestedClamRewards.reduce((acc, curr) => acc + +curr.bonusRemaining, 0);
   const totalPearlRewards = vestedPearlRewards.reduce((acc, curr) => acc + +curr.bonusRemaining, 0);
-  const totalVested = totalFarmingRewards + totalClamRewards + totalPearlRewards;
+  const totalVested = totalFarmingRewards + totalPearlRewards;
 
   const rewards = {
     startTime,
     currentDay,
     farmingRewards,
-    vestedClamRewards,
     vestedPearlRewards,
     totalLocked,
     availableFarmingRewards,
-    availableClamRewards,
     availablePearlRewards,
     hasLockedPearlRewards,
     totalVested,

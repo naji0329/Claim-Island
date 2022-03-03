@@ -26,26 +26,27 @@ export const communityRewardsAddress = "0x6684C3Fb0a85cE9B05187c770c4aa6A824Ed59
 
 export const zapAddress = "0x25AE8E764b0c8318c093d8eFdd03000b442bb56a";
 
-export const shellTokenAddress = addresses.shellTokenAddress;
-export const clamNFTAddress = addresses.clamNFTAddress;
-export const gemTokenAddress = addresses.gemTokenAddress;
-export const gemLockerAddress = addresses.gemLockerAddress;
-export const pearlProductionTimeReductionAddress = addresses.pearlProductionTimeReductionAddress;
-export const bankAddress = addresses.bankAddress;
-export const pearlDnaDecoderAddress = addresses.pearlDnaDecoderAddress;
-export const pearlNFTAddress = addresses.pearlNFTAddress;
-export const pearlBurnerAddress = addresses.pearlBurnerAddress;
-export const rngAddress = addresses.rngAddress;
-export const dnaDecoderAddress = addresses.dnaDecoderAddress;
-export const clamLotteryAddress = addresses.clamLotteryAddress;
-export const clamShopAddress = addresses.clamShopAddress;
-export const pearlFarmAddress = addresses.pearlFarmAddress;
-export const pearlHuntAddress = addresses.pearlHuntAddress;
-export const gemOracleAddress = addresses.gemOracleAddress;
-export const clamExchangeAddress = addresses.clamExchangeAddress;
-
-export const pancakeRouterAddress = addresses.pancakeRouterAddress;
-export const multicallAddress = addresses.multicallAddress;
-
-export const wBNB = addresses.wBNB;
-export const BUSD = addresses.BUSD;
+export const {
+  shellTokenAddress,
+  clamNFTAddress,
+  gemTokenAddress,
+  gemLockerAddress,
+  gemLockerV2Address,
+  pearlProductionTimeReductionAddress,
+  bankAddress,
+  pearlDnaDecoderAddress,
+  pearlNFTAddress,
+  pearlBurnerAddress,
+  rngAddress,
+  dnaDecoderAddress,
+  clamLotteryAddress,
+  clamShopAddress,
+  pearlFarmAddress,
+  pearlHuntAddress,
+  gemOracleAddress,
+  clamExchangeAddress,
+  pancakeRouterAddress,
+  multicallAddress,
+  wBNB,
+  BUSD,
+} = addresses;
