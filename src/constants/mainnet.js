@@ -22,4 +22,5 @@ export default {
   wBNB: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
   BUSD: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
   multicallAddress: "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1",
+  zapAddress: "0x25AE8E764b0c8318c093d8eFdd03000b442bb56a",
 };

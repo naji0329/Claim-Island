@@ -151,7 +151,7 @@ export const buyClamWithBnb = async (account) => {
   const oracleFee = await getOracleFee();
   const amount = Number(oracleFee) + Number(clamPriceBnb);
 
-  const method = clamShop.methods.buyClamWithBNB();
+  const method = clamShop.methods.buyClamWithBnb();
 
   const gasEstimation = await method.estimateGas({
     from: account,
