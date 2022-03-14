@@ -24,6 +24,7 @@ import {
   buyClamWithVestedTokens,
   getMinPearlProductionDelay,
   getMaxPearlProductionDelay,
+  getClamPriceBnb,
 } from "web3/clam";
 import { zeroHash } from "constants/constants";
 import { infiniteApproveSpending } from "web3/gem";
@@ -73,17 +74,25 @@ const ClamBuyModal = ({
   const [minPearlProductionTime, setMinPearlProductionTime] = useState("...");
   const [maxPearlProductionTime, setMaxPearlProductionTime] = useState("...");
   const [pearlPrice, setPearlPrice] = useState("...");
+  const [clamPriceBnb, setClamPriceBnb] = useState("...");
   const { handleSubmit } = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
-      const [_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek] = await Promise.all(
-        [getUsdPriceOfToken(gemTokenAddress, BUSD), getPrice(), getVestedGem(), getClamsPerWeek(), getMintedThisWeek()]
-      );
+      const [_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek, _clamPriceBnb] =
+        await Promise.all([
+          getUsdPriceOfToken(gemTokenAddress, BUSD),
+          getPrice(),
+          getVestedGem(),
+          getClamsPerWeek(),
+          getMintedThisWeek(),
+          getClamPriceBnb(),
+        ]);
       setClamPrice(_clamPrice);
       setLockedGem(_lockedGem);
       setClamsPerWeek(_clamsPerWeek);
       setMintedThisWeek(_mintedThisWeek);
+      setClamPriceBnb(_clamPriceBnb);
 
       const getPearlProductionTime = async () => {
         const [minTime, maxTime] = await Promise.all([
@@ -302,13 +311,35 @@ const ClamBuyModal = ({
                     <FontAwesomeIcon icon={faInfoCircle} />
                   </button>
                 </span>
-                <span>{renderNumber((+formatEther(clamPrice) * 0.7 * 0.7 - (formatEther(clamPrice) * 2)) / (formatEther(clamPrice) * 2) * 100, 0) + "% to " + renderNumber((+formatEther(clamPrice) * 30 * 30 - (formatEther(clamPrice) * 2)) / (formatEther(clamPrice) * 2) * 100, 0) + "%"}</span>
+                <span>
+                  {renderNumber(
+                    ((+formatEther(clamPrice) * 0.7 * 0.7 - formatEther(clamPrice) * 2) /
+                      (formatEther(clamPrice) * 2)) *
+                      100,
+                    0
+                  ) +
+                    "% to " +
+                    renderNumber(
+                      ((+formatEther(clamPrice) * 30 * 30 - formatEther(clamPrice) * 2) /
+                        (formatEther(clamPrice) * 2)) *
+                        100,
+                      0
+                    ) +
+                    "%"}
+                </span>
               </div>
               <div className="w-full flex flex-row justify-between">
-                <span>
-                  &nbsp;
+                <span>&nbsp;</span>
+                <span className="text-gray-400 text-sm">
+                  {"(Average " +
+                    renderNumber(
+                      ((+formatEther(clamPrice) * 2 * 2 - formatEther(clamPrice) * 2) /
+                        (formatEther(clamPrice) * 2)) *
+                        100,
+                      0
+                    ) +
+                    "%)"}
                 </span>
-                <span className="text-gray-400 text-sm">{"(Average " + renderNumber((+formatEther(clamPrice) * 2 * 2 - (formatEther(clamPrice) * 2)) / (formatEther(clamPrice) * 2) * 100, 0) + "%)"}</span>
               </div>
             </div>
           </div>
