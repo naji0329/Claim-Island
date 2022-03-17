@@ -3,6 +3,7 @@ export default {
   clamNFTAddress: "0x77ab76cc8193cafbe7ec748d52e57b25d184b311",
   gemTokenAddress: "0x9fb4DEF63f8caEC83Cb3EBcC22Ba0795258C988a",
   gemLockerAddress: "0x93CdD7c46504cAC2E3c2c6BdAfc3Cc2866E94127",
+  gemLockerV2Address: "0xF441054893Cd18f36f274aba4a055b110c297815",
   pearlProductionTimeReductionAddress: "0x8D2592412AB893cE5048d836c49147993C3eBEE3",
   bankAddress: "0x1cB9Abaf22cB2D41808c998BbC07EE9e773a007A",
   pearlDnaDecoderAddress: "0xD0772158DFcedf5E067c2E50083BC7EC019BDE37",

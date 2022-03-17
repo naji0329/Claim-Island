@@ -328,7 +328,7 @@ export default ({
                             isLast={i === a.length - 1}
                             maxBoostIn={producedPearlsYieldTimers[i]}
                             gemPriceUSD={gemPriceUSD}
-                            hideViewDetails={true}
+                            hideViewDetails={false}
                           />
                         ))
                       : "This Clam has not yet produced any Pearls."}
