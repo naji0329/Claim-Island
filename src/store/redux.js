@@ -259,11 +259,12 @@ export const actions = (store) => ({
       const pearlBalanceInFarm = pearlsReadyInFarm.filter((el) => el !== EmptyBytes).length;
       const clamBalanceInFarm = stakedClamsInFarm.length;
 
-      const [clamBalance, pearlBalance, gemBalance, shellBalance] = await Promise.all([
+      const [clamBalance, pearlBalance, gemBalance, shellBalance, bnbBalance] = await Promise.all([
         balanceOf(clamNFTAddress, address),
         balanceOf(pearlNFTAddress, address),
         balanceOf(gemTokenAddress, address).then((b) => formatFromWei(b)),
         balanceOf(shellTokenAddress, address).then((b) => formatFromWei(b)),
+        web3.eth.getBalance(address).then((b) => formatFromWei(b)),
       ]);
 
       const clams = await getOwnedClams({
@@ -312,6 +313,7 @@ export const actions = (store) => ({
           gemBalance,
           shellBalance,
           clams,
+          bnbBalance,
           pearls: pearls.map((pearl) =>
             Object.assign(pearl, {
               traitsBeforeMaxBoost: getTraitsBeforeMaxYield({
