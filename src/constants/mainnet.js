@@ -16,12 +16,12 @@ export default {
   clamShopAddress: "0xb073dD56EDc93Ea80Bd3cBbB62eB2093aDAa5903",
   pearlFarmAddress: "0x6e4942Cc0FF4138A5148f96efc68F95C2f14F973",
   pearlHuntAddress: "0x3CefCe21F06bA801A97f7167E2292ea38854Df96",
-  gemOracleAddress: "0x66Fff147d22e9604aEc34B7C7067e9F5662c9bF0", // TODO: this is testnet address, add mainnet address here when deployed
-  clamExchangeAddress: "0x4faaa3754330313351B41cD21BeEC4A9786b336f", // TODO: this is testnet address, add mainnet address here when deployed
+  gemOracleAddress: "0x66Fff147d22e9604aEc34B7C7067e9F5662c9bF0",
+  clamExchangeAddress: "0x4faaa3754330313351B41cD21BeEC4A9786b336f",
   // third party addresses
   pancakeRouterAddress: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
   wBNB: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
   BUSD: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
   multicallAddress: "0x0AD12d0cF5137e51e82B486381f4a6E4cbddE2F1",
-  zapAddress: "0x25AE8E764b0c8318c093d8eFdd03000b442bb56a",
+  zapAddress: "0x0db5aEf2b07fE1Df1cfD34cd43B411A73E4A0534",
 };
