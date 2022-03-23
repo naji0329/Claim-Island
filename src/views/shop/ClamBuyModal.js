@@ -166,10 +166,9 @@ const ClamBuyModal = ({
 
     buyClamProcessing({ updateCharacter }); // character speaks
 
-    await infiniteApproveSpending(address, clamShopAddress, clamPrice);
-
     try {
       if (buyWithGem) {
+        await infiniteApproveSpending(address, clamShopAddress, clamPrice);
         withVested ? await buyClamWithVestedTokens(address) : await buyClam(address);
       } else {
         await buyClamWithBnb(address);
