@@ -243,6 +243,32 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "router",
+        "type": "address"
+      }
+    ],
+    "name": "SetRouter",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "wbnb",
+        "type": "address"
+      }
+    ],
+    "name": "SetWbnb",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "zap",
         "type": "address"
       }
@@ -750,6 +776,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "router",
+    "outputs": [
+      {
+        "internalType": "contract IUniswapV2Router02",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -909,11 +948,37 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_router",
+        "type": "address"
+      }
+    ],
+    "name": "setRouter",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_treasury",
         "type": "address"
       }
     ],
     "name": "setTreasuryAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_wbnb",
+        "type": "address"
+      }
+    ],
+    "name": "setWbnb",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -960,6 +1025,19 @@
   {
     "inputs": [],
     "name": "treasury",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "wbnb",
     "outputs": [
       {
         "internalType": "address",
