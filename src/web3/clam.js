@@ -149,7 +149,7 @@ export const buyClamWithBnb = async (account) => {
 
   const clamPriceBnb = await getClamPriceBnb();
   const oracleFee = await getOracleFee();
-  const amount = Number(oracleFee) + Number(clamPriceBnb);
+  const amount = new BigNumber(clamPriceBnb).plus(new BigNumber(oracleFee)).toString();
 
   const method = clamShop.methods.buyClamWithBnb();
 
