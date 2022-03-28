@@ -70,7 +70,7 @@ const NavigationButton = () => {
           </a>
           <a
             className="social-btn"
-            href="https://discord.com/invite/aH6U2hjby7"
+            href="https://discord.gg/F4ak27n8Sh"
             target="_blank"
             rel="noreferrer"
           >
