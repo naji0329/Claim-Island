@@ -147,7 +147,8 @@ export const buyClamWithBnb = async (account) => {
     address: clamShopAddress,
   });
 
-  const clamPriceBnb = await getClamPriceBnb();
+  const price = await getPrice();
+  const clamPriceBnb = await getClamPriceBnb(price);
   const oracleFee = await getOracleFee();
   const amount = new BigNumber(clamPriceBnb).plus(new BigNumber(oracleFee)).toString();
 
@@ -195,12 +196,12 @@ export const getPriceUsd = async () => {
   return value;
 };
 
-export const getClamPriceBnb = async () => {
+export const getClamPriceBnb = async (price) => {
   const clamShop = contractFactory({
     abi: clamShopAbi,
     address: clamShopAddress,
   });
-  const value = await clamShop.methods.getClamPriceBnb().call();
+  const value = await clamShop.methods.getClamPriceBnb(price).call();
   return value;
 };
 

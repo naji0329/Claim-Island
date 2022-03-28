@@ -105,8 +105,8 @@ export function useWeb3Modal({
             getUsdPriceOfToken(gemTokenAddress, BUSD),
             getUsdPriceOfToken(shellTokenAddress, BUSD),
           ])
-        ).map((price) => new BigNumber(price).toFixed(2));
-        updatePrice({ gem: gemPrice, shell: shellPrice });
+        ).map((price) => new BigNumber(price).toFixed(4));
+        updatePrice({ gem: gemPrice, shell: Math.round(shellPrice*100)/100 });
       }
 
       if (updateBoostParams) {
@@ -157,8 +157,8 @@ export function useWeb3Modal({
             getUsdPriceOfToken(gemTokenAddress, BUSD),
             getUsdPriceOfToken(shellTokenAddress, BUSD),
           ])
-        ).map((price) => new BigNumber(price).toFixed(2));
-        updatePrice({ gem: gemPrice, shell: shellPrice });
+        ).map((price) => new BigNumber(price).toFixed(4));
+        updatePrice({ gem: gemPrice, shell: Math.round(shellPrice*100)/100 });
 
         await dispatchFetchAccountAssets();
 

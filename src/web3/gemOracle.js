@@ -12,3 +12,8 @@ export const getGemPrice = async () => {
   const GemPriceInWei = await gemOracle.methods.consult().call();
   return formatFromWei(GemPriceInWei);
 };
+
+export const getBnbPrice = async () => {
+  const BNBPriceInWei = await gemOracle.methods.getLatestBnbPrice().call();
+  return formatFromWei(BNBPriceInWei);
+};
