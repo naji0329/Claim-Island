@@ -19,6 +19,8 @@ import {
   collectClamReady,
 } from "./character/CollectClam";
 
+import { zeroHash } from "constants/constants";
+
 const ClamCollectModal = ({
   setModalToShow,
   account: { address, clamToCollect },
@@ -58,7 +60,7 @@ const ClamCollectModal = ({
   return (
     <>
       <Card>
-        {clamToCollect === null ? (
+        {clamToCollect === null || zeroHash ? (
           <div className="flex flex-col mb-4">
             <div className="bg-white flex-1 justify-center  md:flex items-center">
               <img src={ClamUnknown} width="300" />
