@@ -60,7 +60,7 @@ const ClamCollectModal = ({
   return (
     <>
       <Card>
-        {clamToCollect === null || zeroHash ? (
+        {clamToCollect === null || clamToCollect == zeroHash ? (
           <div className="flex flex-col mb-4">
             <div className="bg-white flex-1 justify-center  md:flex items-center">
               <img src={ClamUnknown} width="300" />

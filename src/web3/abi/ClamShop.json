@@ -190,6 +190,19 @@
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "uint256",
+				"name": "clamSalesTarget",
+				"type": "uint256"
+			}
+		],
+		"name": "SetClamSalesTarget",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
 				"internalType": "address",
 				"name": "gemLockerV2",
 				"type": "address"
@@ -803,6 +816,19 @@
 			}
 		],
 		"name": "setBurnRate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_clamSalesTarget",
+				"type": "uint256"
+			}
+		],
+		"name": "setClamSalesTarget",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

@@ -92,8 +92,9 @@ const ClamBuyModal = ({
           getClamsPerWeek(),
           getMintedThisWeek(),
         ]);
-        console.log(_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek)
+        console.log(_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek);
       const _clamPriceBnb = await getClamPriceBnb(_clamPrice);
+      console.log(_clamPriceBnb);
       setClamPrice(_clamPrice);
       setLockedGem(_lockedGem);
       setClamsPerWeek(_clamsPerWeek);
@@ -258,8 +259,11 @@ const ClamBuyModal = ({
                         <div className="flex flex-col text-right text-black p-2 font-extrabold">
                           <span>
                             {buyWithGem
-                              ? `${renderNumber(+formatEther(clamPrice), 2)} GEM`
-                              : `${renderNumber(+formatEther(clamPriceBnb), 2)} BNB`}
+                              ? clamPrice == 0 ? "... GEM" : `${renderNumber(+formatEther(clamPrice), 2)} GEM`
+                              : clamPriceBnb == 0 ? "... BNB" : `${renderNumber(+formatEther(clamPriceBnb), 2)} BNB`}
+                              {!buyWithGem && <button data-tip="80% of BNB price is used to purchase GEM, the other 20% is sent to treasury. BNB price may be more than USD equivalent price displayed below due to slippage on conversion to GEM.">
+                                <FontAwesomeIcon className="ml-1" icon={faInfoCircle} />
+                              </button>}
                           </span>
                           <span className="text-sm">{renderNumber(+clamUsdPrice, 2)} USD</span>
                         </div>
