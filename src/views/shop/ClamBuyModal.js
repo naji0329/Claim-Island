@@ -27,9 +27,8 @@ import {
   getMinPearlProductionDelay,
   getMaxPearlProductionDelay,
   getClamPriceBnb,
-  buyClamWithBnb
+  buyClamWithBnb,
 } from "web3/clam";
-import { getBnbPrice } from "web3/gemOracle";
 import { zeroHash } from "constants/constants";
 import { infiniteApproveSpending } from "web3/gem";
 import { getVestedGem } from "web3/gemLocker";
@@ -79,22 +78,23 @@ const ClamBuyModal = ({
   const [maxPearlProductionTime, setMaxPearlProductionTime] = useState("...");
   const [pearlPrice, setPearlPrice] = useState("...");
   const [clamPriceBnb, setClamPriceBnb] = useState(0);
-  const [buyWithGem, setBuyWithGem] = useState(false); //TODO: change back
+  const [buyWithGem, setBuyWithGem] = useState(true);
   const { handleSubmit } = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
-      const [_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek] =
-        await Promise.all([
+      const [_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek] = await Promise.all(
+        [
           getUsdPriceOfToken(gemTokenAddress, BUSD),
           getPrice(),
           getVestedGem(),
           getClamsPerWeek(),
           getMintedThisWeek(),
-        ]);
-        console.log(_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek);
+        ]
+      );
+
       const _clamPriceBnb = await getClamPriceBnb(_clamPrice);
-      console.log(_clamPriceBnb);
+
       setClamPrice(_clamPrice);
       setLockedGem(_lockedGem);
       setClamsPerWeek(_clamsPerWeek);
@@ -150,7 +150,7 @@ const ClamBuyModal = ({
     if (!!clamToCollect && clamToCollect != zeroHash) {
       setModalToShow("collect");
     }
-  }, [gemBalance, clamPrice, lockedGem, clamToCollect]);
+  }, [gemBalance, clamPrice, lockedGem, clamToCollect, buyWithGem]);
 
   const onSubmit = async () => {
     if (new BigNumber(lockedGem).gt(0)) {
@@ -259,11 +259,17 @@ const ClamBuyModal = ({
                         <div className="flex flex-col text-right text-black p-2 font-extrabold">
                           <span>
                             {buyWithGem
-                              ? clamPrice == 0 ? "... GEM" : `${renderNumber(+formatEther(clamPrice), 2)} GEM`
-                              : clamPriceBnb == 0 ? "... BNB" : `${renderNumber(+formatEther(clamPriceBnb), 2)} BNB`}
-                              {!buyWithGem && <button data-tip="80% of BNB price is used to purchase GEM, the other 20% is sent to treasury. BNB price may be more than USD equivalent price displayed below due to slippage on conversion to GEM.">
+                              ? clamPrice == 0
+                                ? "... GEM"
+                                : `${renderNumber(+formatEther(clamPrice), 2)} GEM`
+                              : clamPriceBnb == 0
+                              ? "... BNB"
+                              : `${renderNumber(+formatEther(clamPriceBnb), 2)} BNB`}
+                            {!buyWithGem && (
+                              <button data-tip="80% of BNB price is used to purchase GEM, the other 20% is sent to treasury. BNB price may be more than USD equivalent price displayed below due to slippage on conversion to GEM.">
                                 <FontAwesomeIcon className="ml-1" icon={faInfoCircle} />
-                              </button>}
+                              </button>
+                            )}
                           </span>
                           <span className="text-sm">{renderNumber(+clamUsdPrice, 2)} USD</span>
                         </div>
