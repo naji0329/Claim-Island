@@ -312,7 +312,7 @@ const ClamBuyModal = ({
           {/* output */}
           <div className="flex flex-row justify-between items-center">
             <video autoPlay playsinline loop className="w-1/3">
-            <source src={ClamVariety} type="video/mp4" />
+            <source src="https://clam-island-public.s3.us-east-2.amazonaws.com/clam-preview.mp4" type="video/mp4" />
             </video>
             <div className="w-full ml-4 grid">
               <div className="w-full flex flex-row justify-between">
