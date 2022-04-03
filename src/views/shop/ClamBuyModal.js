@@ -12,6 +12,7 @@ import clsx from "clsx";
 
 import Card from "components/Card";
 import ClamUnknown from "assets/img/clam_unknown.png";
+import ClamVariety from "assets/img/clam-variety.mp4";
 import ClamIcon from "assets/clam-icon.png";
 import BnbIcon from "assets/bnb-icon.png";
 import ArrowDown from "assets/img/arrow-down.svg";
@@ -78,7 +79,7 @@ const ClamBuyModal = ({
   const [maxPearlProductionTime, setMaxPearlProductionTime] = useState("...");
   const [pearlPrice, setPearlPrice] = useState("...");
   const [clamPriceBnb, setClamPriceBnb] = useState(0);
-  const [buyWithGem, setBuyWithGem] = useState(true);
+  const [buyWithGem, setBuyWithGem] = useState(false);
   const { handleSubmit } = useForm();
 
   useEffect(() => {
@@ -198,7 +199,7 @@ const ClamBuyModal = ({
     <>
       <ReactTooltip html={true} className="max-w-xl" />
       <Card>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{maxWidth: "600px"}}>
           <div className="flex flex-col mb-4">
             <h2 className="text-blue-700 text-center font-semibold text-3xl mb-2">Get Clams</h2>
 
@@ -310,8 +311,10 @@ const ClamBuyModal = ({
 
           {/* output */}
           <div className="flex flex-row justify-between items-center">
-            <img className="w-1/3" src={ClamUnknown} />
-            <div className="w-3/5 grid">
+            <video autoPlay playsinline loop className="w-1/3">
+            <source src={ClamVariety} type="video/mp4" />
+            </video>
+            <div className="w-full ml-4 grid">
               <div className="w-full flex flex-row justify-between">
                 <span>Lifespan</span>
                 <span>5-15 Pearls</span>
