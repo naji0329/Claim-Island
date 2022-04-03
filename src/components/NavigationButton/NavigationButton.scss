@@ -43,3 +43,10 @@
 .overlay {
   @apply fixed top-0 left-0 w-screen h-screen bg-black z-9998 transition-opacity;
 }
+
+@media screen and (max-width: 600px) {
+  
+  .nav-access-btn {
+    display: none;
+  }
+}

@@ -9,7 +9,7 @@ const LoadingScreen = (props) => {
       <div className="loading-elems-cls">
         <img src={clamIcon} />
         <p>{props.text || "Loading..."}</p>
-        {isProgressShown && (
+        {/* {isProgressShown && (
           <div className="p-6 space-y-2">
             <progress
               className="progress progress-info bg-white"
@@ -17,7 +17,7 @@ const LoadingScreen = (props) => {
               max="100"
             />
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

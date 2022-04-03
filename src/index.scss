@@ -103,6 +103,62 @@ canvas {
   .video-container {
     height: 100%;
   }
+
+  
+  .web3providermodal {
+    display: none;
+  }
+
+  .mNavbar {
+    background-color: white;
+  }
+
+  .mNavbarItems {
+    display: flex;
+    justify-content: space-between;
+
+    div {
+      img {
+        height: 40px;
+        width: auto;
+      }
+      p {
+        color: #0072E3;
+        margin-left: 20px;
+      }
+    }
+  }
+
+  
+  .overlay_m_items {
+    width: 100%;
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    background-color: white;
+    overflow-y: hidden;
+
+    .overlay_m_container {
+      position: relative;
+
+      .connect_btn {
+        background-color: #0072E3;
+        color: white;
+        border-radius: 10px;
+        padding: 10px 20px 10px 20px;
+      }
+
+      .nav-access-btn {
+        color: black;
+      }
+
+      .social-btn {
+        margin: 20px;
+      }
+    }
+  }
+  
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */

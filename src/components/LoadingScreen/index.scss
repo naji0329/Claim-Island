@@ -12,14 +12,16 @@
   }
 
   .loading-elems-cls {
-    @apply absolute w-1/4 h-1/4 top-1/4;
+    @apply absolute w-full h-1/4 top-1/4;
 
     img {
-      @apply w-full mb-10;
+      @apply w-1/4 mb-10;
+      margin: auto;
       animation: blink 1s ease-in infinite;
     }
 
     p {
+      margin-top: 50px;
       @apply text-white font-aristotelica text-center font-bold text-2xl text-theme_blue;
     }
   }

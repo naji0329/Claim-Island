@@ -135,9 +135,21 @@ const Map3D = ({ isGuidedTourPassed, setIsGuidedTourPassed }) => {
 
     renderer.domElement.addEventListener("mousemove", onMouseMove);
     renderer.domElement.addEventListener("click", onMouseClick);
+    window.addEventListener( 'resize', onWindowResize );
 
     animate();
   };
+
+  const onWindowResize = () => {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+    animate();
+
+  }
 
   const addLights = () => {
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);

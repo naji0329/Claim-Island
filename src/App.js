@@ -46,7 +46,7 @@ const App = () => {
       ) : (
         <Router>
           <div className="p-0 h-full">
-            <Web3ProvidersModal />
+            <Web3ProvidersModal  className="web3providermodal"/>
             <Switch>
               {ROUTES.map((k, i) => {
                 return <Route key={i} path={k.url} exact={k.exact} component={k.component} />;
