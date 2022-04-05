@@ -112,104 +112,104 @@ const Navbar = ({
         </>
       )}
 
-      <nav className="flex min-h-48 min-w-full justify-end fixed px-6 py-4 bg-transparent mt-2 z-20">
+      {/* <nav className="flex min-h-48 min-w-full justify-end fixed px-6 py-4 bg-transparent mt-2 z-20">
         <div className="w-full lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
-          <div className="flex">
-            {address && (
-              <>
-                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
-                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    Balance: {Number(gemBalance).toFixed(2)}{" "}
-                    <IconTip text="$GEM Balance">
-                      <img style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }} src={GemIcon} />
-                    </IconTip>{" "}
-                    | {Number(shellBalance).toFixed(2)}{" "}
-                    <IconTip text="$SHELL Balance">
-                      <img style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }} src={ShellIcon} />
-                    </IconTip>
-                  </span>
-                </div>
-
-                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
-                  <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                    Price:{" "}
-                    <IconTip text="Price of 1 $GEM">
-                      <img style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }} src={GemIcon} />
-                    </IconTip>{" "}
-                    = $ {price.gem} |{" "}
-                    <IconTip text="Price of 1 $SHELL">
-                      <img style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }} src={ShellIcon} />
-                    </IconTip>{" "}
-                    = $ {price.shell}
-                  </span>
-                </div>
-
-                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
-                  <Link
-                    to="/saferoom/clam"
-                    className="flex"
-                    style={
-                      location.pathname.indexOf("saferoom") === -1
-                        ? null
-                        : { pointerEvents: "none" }
-                    }
-                  >
-                    <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Safe: {clamBalance}{" "}
-                      <IconTip text="Clams owned">
-                        <img
-                          style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }}
-                          src={ClamIcon}
-                        />
-                      </IconTip>{" "}
-                      | {pearlBalance}{" "}
-                      <IconTip text="Pearls owned">
-                        <img
-                          style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }}
-                          src={PearlIcon}
-                        />{" "}
-                      </IconTip>{" "}
-                      {location.pathname.indexOf("saferoom") === -1 && (
-                        <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
-                      )}
-                    </span>
-                  </Link>
-                </div>
-                <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 bg-opacity-80">
-                  <Link
-                    to="/farms"
-                    className="flex"
-                    style={
-                      location.pathname.indexOf("farms") === -1 ? null : { pointerEvents: "none" }
-                    }
-                  >
-                    <span className="p-1 text-sm text-gray-200 font-bold font-sans">
-                      Farm: {clamBalanceInFarm}{" "}
-                      <IconTip text="Clams deposited">
-                        <img
-                          style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }}
-                          src={ClamIcon}
-                        />
-                      </IconTip>{" "}
-                      | {pearlBalanceInFarm}{" "}
-                      <IconTip text="Pearls for collection">
-                        <img
-                          style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }}
-                          src={PearlIcon}
-                        />
-                      </IconTip>
-                      {location.pathname.indexOf("farms") === -1 && (
-                        <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
-                      )}
-                    </span>
-                  </Link>
-                </div>
-                <NavBarUserProfile account={address} disconnect={onDisconnect} />
-              </>
-            )}
+          <div className="flex"> */}
+      {address && (
+  <>
+          <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 my-2 justify-center bg-opacity-80">
+            <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+              Balance: {Number(gemBalance).toFixed(2)}{" "}
+              <IconTip text="$GEM Balance">
+                <img style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }} src={GemIcon} />
+              </IconTip>{" "}
+              | {Number(shellBalance).toFixed(2)}{" "}
+              <IconTip text="$SHELL Balance">
+                <img style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }} src={ShellIcon} />
+              </IconTip>
+            </span>
           </div>
+
+          <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 my-2 justify-center bg-opacity-80">
+            <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+              Price:{" "}
+              <IconTip text="Price of 1 $GEM">
+                <img style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }} src={GemIcon} />
+              </IconTip>{" "}
+              = $ {price.gem} |{" "}
+              <IconTip text="Price of 1 $SHELL">
+                <img style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }} src={ShellIcon} />
+              </IconTip>{" "}
+              = $ {price.shell}
+            </span>
+          </div>
+
+          <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 my-2 justify-center bg-opacity-80">
+            <Link
+              to="/saferoom/clam"
+              className="flex"
+              style={
+                location.pathname.indexOf("saferoom") === -1
+                  ? null
+                  : { pointerEvents: "none" }
+              }
+            >
+              <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                Safe: {clamBalance}{" "}
+                <IconTip text="Clams owned">
+                  <img
+                    style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }}
+                    src={ClamIcon}
+                  />
+                </IconTip>{" "}
+                | {pearlBalance}{" "}
+                <IconTip text="Pearls owned">
+                  <img
+                    style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }}
+                    src={PearlIcon}
+                  />{" "}
+                </IconTip>{" "}
+                {location.pathname.indexOf("saferoom") === -1 && (
+                  <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+                )}
+              </span>
+            </Link>
+          </div>
+          <div className="flex lg:mt-0 px-4 py-2 mr-2 rounded-xl shadow bg-gray-600 my-2 justify-center bg-opacity-80">
+            <Link
+              to="/farms"
+              className="flex"
+              style={
+                location.pathname.indexOf("farms") === -1 ? null : { pointerEvents: "none" }
+              }
+            >
+              <span className="p-1 text-sm text-gray-200 font-bold font-sans">
+                Farm: {clamBalanceInFarm}{" "}
+                <IconTip text="Clams deposited">
+                  <img
+                    style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }}
+                    src={ClamIcon}
+                  />
+                </IconTip>{" "}
+                | {pearlBalanceInFarm}{" "}
+                <IconTip text="Pearls for collection">
+                  <img
+                    style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }}
+                    src={PearlIcon}
+                  />e no
+                </IconTip>
+                {location.pathname.indexOf("farms") === -1 && (
+                  <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+                )}
+              </span>
+            </Link>
+          </div>
+          <NavBarUserProfile account={address} className="mt-2" disconnect={onDisconnect} />
+        </>
+      )}
+          {/* </div>
         </div>
-      </nav>
+      </nav> */}
     </>
   );
 };

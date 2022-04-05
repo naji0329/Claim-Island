@@ -143,7 +143,10 @@ const CharacterWrapper = ({
         style={{ zIndex: forceTop ? 9999 : speech ? undefined : 0 }}
       >
         {speech && (
-          <div className="text-bubble flex-col justify-end pointer-events-none">
+          <div className="text-bubble">
+            <div className="flex justify-end">
+              <img src={character.charImg} className="charactor_1_img" onClick={handleClickCharacter} style={{height: "200px", marginBottom: "-100px", marginRight: "30px", pointerEvents: "auto"}}/>
+            </div>
             <div className="text-wrapper">
               <div className="name px-10">{character.name}</div>
               <div className="speech">
@@ -223,8 +226,8 @@ const CharacterWrapper = ({
             onClick={handleClickCharacter}
           />
         </div>
-        <button className="btn character-container-round" onClick={handleClickCharacter}>
-          <img src={character.charImg} className="character" />
+        <button className="btn character-container-round" onClick={handleClickCharacter} style={{display: showBubble ? "none" : "block" }}>
+          <img src={character.charImg} className="character"/>
         </button>
       </div>
     </div>

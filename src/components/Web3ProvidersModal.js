@@ -311,12 +311,15 @@ const Web3ProvidersModal = ({
 
   return (
     <>
-      {address ? (
+      {/* {address ? (
         <Navbar onDisconnect={onDisconnect} />
-      ) : (
-        <>
-          <nav className="mNavbar flex min-h-48 min-w-full justify-end fixed px-6 py-4 bg-transparent z-20">
-            <div className="w-full lg:flex lg:items-center lg:w-auto lg:px-3 px-8 web3providermodal">
+      ) : ( */}
+      <>
+        <nav className="mNavbar flex min-h-48 min-w-full justify-end fixed px-6 py-4 bg-transparent z-20">
+          <div className="w-full lg:flex lg:items-center lg:w-auto lg:px-3 px-8 web3providermodal">
+            {address ? (
+              <Navbar onDisconnect={onDisconnect} />
+            ) : (
               <div className="flex">
                 <button
                   type="button"
@@ -326,30 +329,36 @@ const Web3ProvidersModal = ({
                   Connect Wallet
                 </button>
               </div>
-            </div>
+            )}
+          </div>
 
-            <div className="hidden mNavbarItems w-full flex items-center">
-              <div className="flex items-center">
-                <img src={clamIcon} className="max-h-48" />
-                <p>Claim Island</p>
-              </div>
+          <div className="hidden mNavbarItems w-full flex items-center">
+            <div className="flex items-center">
+              <img src={clamIcon} className="max-h-48" />
+              <p>Claim Island</p>
+            </div>
+            <img src={ mStatus ? close : open } onClick={toggle} />
+          </div>
+        </nav>
+        
+        <div className="overlay_m_items"  style={{height: mStatus ? "100%" : "0px" }}>
+          <div className="overlay_m_container px-6 py-4 w-full" style={{height: "100%"}}>
+            <div className="flex justify-between">
+              <p></p>
               <img src={ mStatus ? close : open } onClick={toggle} />
             </div>
-          </nav>
-          
-          <div className="overlay_m_items"  style={{height: mStatus ? "100%" : "0px" }}>
-            <div className="overlay_m_container px-6 py-4 w-full">
-              <div className="flex justify-between">
-                <p></p>
-                <img src={ mStatus ? close : open } onClick={toggle} />
-              </div>
-              <div className="text-center items-center pt-5">
-                
+            <div className="text-center items-center pt-5">
+              {address ? (
+                <>
+                  {/* <Navbar onDisconnect={onDisconnect} /> */}
+                </>
+              ) : (
                 <button type="button" className="connect_btn" onClick={onConnect}>
                   Connect Wallet
                 </button>
+              )}
 
-                <div className="mt-5">
+              <div className="mt-5">
                 {
                   NAV_ROUTES.map((item, index) => {
                     return (
@@ -361,39 +370,51 @@ const Web3ProvidersModal = ({
                     );
                   })
                 }
-                </div>
-
-                <div className="flex justify-center">
-
-                  <a
-                    className="social-btn m-0"
-                    href="https://twitter.com/clam_island"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <button className="nav-icon" style={{ width: "75px" }}>
-                      <img src={IMG_LOC + "twitter.svg"} />
-                    </button>
-                  </a>
-                  <a
-                    className="social-btn"
-                    href="https://discord.gg/F4ak27n8Sh"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <button className="nav-icon">
-                      <img src={IMG_LOC + "discord.svg"} />
-                    </button>
-                  </a>
-                </div>
-
-
               </div>
 
+              
+              {address ? (
+                <>
+                  <Navbar onDisconnect={onDisconnect} />
+                </>
+              ) : (
+                <>
+                  {/* <button type="button" className="connect_btn" onClick={onConnect}>
+                    Connect Wallet
+                  </button> */}
+                </>
+              )}
+
+              <div style={{position: "absolute", bottom: "0", left: "0", width: "100%"}} className="flex justify-center">
+                <a
+                  className="social-btn m-0"
+                  href="https://twitter.com/clam_island"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <button className="nav-icon" style={{ width: "75px" }}>
+                    <img src={IMG_LOC + "twitter.svg"} />
+                  </button>
+                </a>
+                <a
+                  className="social-btn"
+                  href="https://discord.gg/F4ak27n8Sh"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <button className="nav-icon">
+                    <img src={IMG_LOC + "discord.svg"} />
+                  </button>
+                </a>
+              </div>
+
+
             </div>
+
           </div>
-        </>
-      )}
+        </div>
+      </>
+      {/* )} */}
     </>
   );
 };
