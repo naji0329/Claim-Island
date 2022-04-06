@@ -385,7 +385,7 @@ const Web3ProvidersModal = ({
                 </>
               )}
 
-              <div style={{position: "absolute", bottom: "0", left: "0", width: "100%"}} className="flex justify-center">
+              <div style={{display: mStatus ? "block" : "none", position: "absolute", bottom: "0", left: "0", width: "100%"}} className="flex justify-center">
                 <a
                   className="social-btn m-0"
                   href="https://twitter.com/clam_island"

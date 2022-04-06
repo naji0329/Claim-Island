@@ -196,7 +196,7 @@ const Navbar = ({
                   <img
                     style={{ maxHeight: "1rem", marginBottom: "-0.1rem" }}
                     src={PearlIcon}
-                  />e no
+                  />
                 </IconTip>
                 {location.pathname.indexOf("farms") === -1 && (
                   <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
