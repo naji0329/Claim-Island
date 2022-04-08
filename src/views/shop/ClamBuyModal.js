@@ -33,6 +33,7 @@ import {
 import { zeroHash } from "constants/constants";
 import { infiniteApproveSpending } from "web3/gem";
 import { getVestedGem } from "web3/gemLocker";
+import { getVestedGem as getVestedGemV2 } from "web3/gemLockerV2";
 import { getUsdPriceOfToken } from "web3/pancakeRouter";
 import { getMintedThisWeek, getClamsPerWeek } from "web3/clamShop";
 import { stakePrice } from "web3/pearlFarm";
@@ -84,20 +85,19 @@ const ClamBuyModal = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const [_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek] = await Promise.all(
+      const [_gemPrice, _clamPrice, _lockedGemV1, _lockedGemV2, _clamsPerWeek, _mintedThisWeek] = await Promise.all(
         [
           getUsdPriceOfToken(gemTokenAddress, BUSD),
           getPrice(),
           getVestedGem(),
+          getVestedGemV2(),
           getClamsPerWeek(),
-          getMintedThisWeek(),
+          getMintedThisWeek()
         ]
       );
-
       const _clamPriceBnb = await getClamPriceBnb(_clamPrice);
-
       setClamPrice(_clamPrice);
-      setLockedGem(_lockedGem);
+      setLockedGem(_lockedGemV1 + _lockedGemV2);
       setClamsPerWeek(_clamsPerWeek);
       setMintedThisWeek(_mintedThisWeek);
       setClamPriceBnb(_clamPriceBnb);
