@@ -187,7 +187,7 @@ const CharacterWrapper = ({
                   )}
                 </div>
               </Reveal>
-              <div className="absolute mt-4 right-8 text-white">
+              <div className="absolute mt-2 right-8 text-white">
                 {isDialogHideable && (
                   <button
                     data-tip="Hide"
@@ -226,7 +226,7 @@ const CharacterWrapper = ({
             onClick={handleClickCharacter}
           />
         </div>
-        <button className="btn character-container-round" onClick={handleClickCharacter} style={{display: showBubble ? "none": "block"}} >
+        <button className="btn character-container-round" onClick={handleClickCharacter} style={{display: showBubble ? "none": "block"}}>
           <img src={character.charImg} className="character"/>
         </button>
       </div>

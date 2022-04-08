@@ -302,7 +302,7 @@ const CharacterSpeak = (props) => {
       <div className="text-bubble">
         <div className="text-wrapper">
           <div className="name">{charName}</div>
-          <div className="absolute mt-4 right-8 text-white">
+          <div className="absolute mt-3 right-8 mb-1 text-white">
             <button
               data-tip="Hide"
               className="mr-2 pointer-events-auto tooltip"

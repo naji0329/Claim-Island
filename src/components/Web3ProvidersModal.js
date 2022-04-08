@@ -335,7 +335,7 @@ const Web3ProvidersModal = ({
           <div className="hidden mNavbarItems w-full flex items-center">
             <div className="flex items-center">
               <img src={clamIcon} className="max-h-48" />
-              <p>Claim Island</p>
+              <p>Clam Island</p>
             </div>
             <img src={ mStatus ? close : open } onClick={toggle} />
           </div>
@@ -385,15 +385,15 @@ const Web3ProvidersModal = ({
                 </>
               )}
 
-              <div style={{display: mStatus ? "block" : "none", position: "absolute", bottom: "0", left: "0", width: "100%"}} className="flex justify-center">
+              <div style={{display: mStatus ? "flex" : "none", position: "absolute", bottom: "0", left: "0", width: "100%"}} className="flex justify-center">
                 <a
                   className="social-btn m-0"
                   href="https://twitter.com/clam_island"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <button className="nav-icon" style={{ width: "75px" }}>
-                    <img src={IMG_LOC + "twitter.svg"} />
+                  <button className="nav-icon" style={{ width: "32px", height: "auto" }}>
+                    <img src={IMG_LOC + "twitter-32.png"} />
                   </button>
                 </a>
                 <a
@@ -402,8 +402,8 @@ const Web3ProvidersModal = ({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <button className="nav-icon">
-                    <img src={IMG_LOC + "discord.svg"} />
+                  <button className="nav-icon" style={{ width: "32px", height: "auto" }}>
+                    <img src={IMG_LOC + "discord_gray.png"} />
                   </button>
                 </a>
               </div>
