@@ -386,7 +386,7 @@ const Web3ProvidersModal = ({
               )}
 
               <div style={{display: mStatus ? "flex" : "none", position: "absolute", bottom: "0", left: "0", width: "100%"}} className="flex justify-center">
-                <a
+              <a
                   className="social-btn m-0"
                   href="https://twitter.com/clam_island"
                   target="_blank"
@@ -404,6 +404,26 @@ const Web3ProvidersModal = ({
                 >
                   <button className="nav-icon" style={{ width: "32px", height: "auto" }}>
                     <img src={IMG_LOC + "discord_gray.png"} />
+                  </button>
+                </a>
+                <a
+                  className="social-btn"
+                  href="https://t.me/clamisland"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <button className="nav-icon" style={{ width: "32px", height: "auto" }}>
+                    <img src={IMG_LOC + "telegram_gray.png"} />
+                  </button>
+                </a>
+                <a
+                  className="social-btn"
+                  href="https://clamisland.medium.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <button className="nav-icon" style={{ width: "32px", height: "auto" }}>
+                    <img src={IMG_LOC + "medium_gray.png"} />
                   </button>
                 </a>
               </div>

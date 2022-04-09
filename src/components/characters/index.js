@@ -84,7 +84,7 @@ const CharacterSpeak = (props) => {
     let timeOut = 0;
     if (speechTrack[trackCount].dismiss && !direct) {
       setShowBubble(false);
-      characterImg.current.style.marginTop = characterImg.current.offsetHeight - 76 + "px";
+      characterImg.current.style.marginTop = characterImg.current.offsetHeight + "px";
       switch (charName) {
         case "Tanja":
           characterImg.current.style.paddingRight = "15px";
@@ -300,6 +300,9 @@ const CharacterSpeak = (props) => {
   return (
     <div className={showBubble ? "character-bubble" : "character-bubble hide-bubble"}>
       <div className="text-bubble">
+        <div className="flex justify-end">
+          <img src={charImg} className="charactor_1_img" onClick={onClickCharacter} style={{height: "200px", marginBottom: "-100px", marginRight: "30px", pointerEvents: "auto"}}/>
+        </div>
         <div className="text-wrapper">
           <div className="name">{charName}</div>
           <div className="absolute mt-3 right-8 mb-1 text-white">
@@ -312,7 +315,7 @@ const CharacterSpeak = (props) => {
             </button>
             {!skipDialogs && (
               <button
-                data-tip="Don't show again"
+                data-tip="Don't show again" 
                 className="pointer-events-auto tooltip"
                 onClick={onClickSkipDialogButton}
               >
@@ -376,7 +379,7 @@ const CharacterSpeak = (props) => {
           />
         </div>
       </div>
-      <button className="btn character-container-round" onClick={onClickCharacter}>
+      <button className="btn character-container-round" onClick={onClickCharacter} style={{display: showBubble ? "none": "block"}}>
         <img src={charImg} className="character cursor-pointer" ref={characterImg} />
       </button>
     </div>
