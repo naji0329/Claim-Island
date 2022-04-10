@@ -1,0 +1,27 @@
+.clam-presale {
+  width: 100%;
+  height: 100vh;
+  background-color: #e1c18b;
+}
+
+.shop-bg {
+  background-image: url("../../assets/locations/Shop.jpg") !important;
+  background-size: cover;
+  background-position: center bottom;
+}
+
+#env-wrapper-clam-presale {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+
+  .env {
+    object-fit: cover;
+    object-position: right center;
+    position: absolute;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
+}

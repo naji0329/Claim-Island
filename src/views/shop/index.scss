@@ -1,0 +1,26 @@
+.collect-clam-btn {
+  @apply block font-extrabold text-center shadow bg-blue-600;
+  @apply hover:bg-blue-700 focus:ring focus:outline-none;
+  @apply text-white text-xl py-3 px-10 rounded-2xl;
+}
+
+.sending-txn-btn {
+  @apply flex justify-center items-center;
+  @apply block uppercase text-center shadow bg-yellow-200;
+  @apply text-yellow-600 text-xl py-3 px-10 rounded-xl cursor-not-allowed;
+}
+
+.ClamDeposit {
+  @apply w-full;
+  .heading {
+    @apply text-black font-bold font-aristotelica text-2xl;
+  }
+  .clam-details {
+    @apply flex flex-row items-center;
+    @apply border-4 border-blue-200 rounded-xl p-4 my-4;
+
+    .details {
+      @apply flex flex-1 flex-col;
+    }
+  }
+}

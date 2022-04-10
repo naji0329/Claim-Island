@@ -1,0 +1,287 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.flex-col {
+  flex-direction: column;
+}
+@font-face {
+  font-family: AristotelicaBold;
+  src: url(./assets/fonts/aristotelicaText_bold.otf) format("opentype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Montserrat-Medium;
+  src: url(./assets/fonts/Montserrat-Medium.otf) format("opentype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: TrioGrotesk;
+  src: url(./assets/fonts/TrioGrotesk.otf) format("opentype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: AvenirBlack;
+  src: url(./assets/fonts/avenir_ff/AvenirLTStd-Black.otf) format("opentype");
+  font-weight: bold;
+}
+@font-face {
+  font-family: AvenirBook;
+  src: url(./assets/fonts/avenir_ff/AvenirLTStd-Book.otf) format("opentype");
+  font-weight: bold;
+}
+@font-face {
+  font-family: AvenirRoman;
+  src: url(./assets/fonts/avenir_ff/AvenirLTStd-Roman.otf) format("opentype");
+  font-weight: bold;
+}
+
+body {
+  margin: 0;
+
+  /* -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Montserrat-Medium";
+}
+
+* {
+  font-family: "Montserrat-Medium";
+}
+
+.opening-soon {
+  width: 420px;
+  height: 180px;
+  position: absolute;
+  z-index: 9999;
+  background-image: url(./assets/img/clam_island_sign.png);
+  left: calc(50% - 210px);
+}
+
+.social-icon {
+  position: absolute;
+  bottom: 25px;
+}
+
+.container-fluid {
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+canvas {
+  height: auto;
+  width: 100% !important; //overwrite 3dcam width canva
+}
+
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  // height: 100%;
+  overflow: hidden;
+  z-index: -1;
+
+  video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+}
+
+.overlay_m_items {
+  overflow: hidden;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .video-container {
+    height: 100%;
+  }
+
+  
+  .web3providermodal {
+    display: none;
+  }
+
+  .mNavbar {
+    background-color: white;
+  }
+
+  .mNavbarItems {
+    display: flex;
+    justify-content: space-between;
+
+    div {
+      img {
+        height: 40px;
+        width: auto;
+      }
+      p {
+        color: #0072E3;
+        margin-left: 20px;
+      }
+    }
+  }
+
+  
+  .overlay_m_items {
+    width: 100%;
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    background-color: white;
+    overflow-y: hidden;
+
+    .overlay_m_container {
+      position: relative;
+
+      .connect_btn {
+        background-color: #0072E3;
+        color: white;
+        border-radius: 10px;
+        padding: 10px 20px 10px 20px;
+      }
+
+      .nav-access-btn {
+        color: black;
+      }
+
+      .social-btn {
+        margin: 20px;
+      }
+    }
+  }
+  
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .video-container {
+    height: 100%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .video-container {
+    height: 100%;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .video-container {
+    height: 100%;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .video-container {
+    height: 155%;
+  }
+}
+
+.text-shadow {
+  text-shadow: 1px 3px 4px black;
+}
+
+.font-aristotelica-bold {
+  font-family: "AristotelicaBold";
+}
+
+.csstooltip {
+  display: inline;
+  position: relative;
+}
+.csstooltip:hover:after{
+  @apply text-xs;
+  position: absolute;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  background: black;
+  border-radius: 8px;
+  color: #fff;
+  content: attr(title);
+  margin: -9rem auto 0;
+  padding: 13px;
+  width: 18rem;
+  z-index: 9999;
+}
+.csstooltip:hover:before{
+  border: solid;
+  border-color: black transparent;
+  border-width: 12px 6px 0 6px;
+  content: "";
+  position: absolute;
+  bottom: 1.6rem;
+  z-index: 9999;
+  //right: -1rem;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #c4d3fd;
+  border-radius: 1px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0176dd;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #008fb3;
+}
+
+.btn-clam {
+  @apply text-white text-center text-2xl; /*font weight and size*/
+  @apply rounded-xl shadow-xl p-2 justify-center; /* button padding, width, radius*/
+}
+
+.btn-deposit {
+  @apply bg-green-500 hover:bg-green-400; /* border and text color*/
+}
+
+.btn-withdraw {
+  @apply bg-red-500 hover:bg-red-400; /* border and text color*/
+  // @apply text-white text-center text-2xl; /*font weight and size*/
+  // @apply rounded-xl shadow-xl p-2 justify-center; /* button padding, width, radius*/
+}
+
+.btn-harvest {
+  @apply bg-blue-500 hover:bg-blue-400;
+}
+
+.btn-unclickable {
+  pointer-events: none;
+}
+
+.btn-disabled{
+  @apply bg-gray-200 cursor-not-allowed;
+}
+
+
+// overwrite web3modal style
+.web3modal-modal-lightbox{
+  z-index: 999999999 !important;
+}
+.web3modal-modal-card {
+  top: -25%;
+}

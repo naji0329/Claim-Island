@@ -1,0 +1,418 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_maxBurn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_baseGemRewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_shape",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_colour",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "_clamAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IMasterChef",
+        "name": "_masterChef",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IDNADecoder",
+        "name": "_clamDNADecoder",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "BurnClam",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "previousCount",
+        "type": "uint256"
+      }
+    ],
+    "name": "ResetClamCounter",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newBase",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetBaseGemRewards",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newMax",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetMaxBurn",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "newShape",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "newColour",
+        "type": "string"
+      }
+    ],
+    "name": "SetShapeAndColour",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newDivider",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetTraitsDivider",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "baseGemRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_clamId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_shape",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_colour",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isMaxima",
+        "type": "bool"
+      }
+    ],
+    "name": "burnClam",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "size",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lifespan",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculateBonusRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamDNADecoder",
+    "outputs": [
+      {
+        "internalType": "contract IDNADecoder",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clamsBurned",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_value",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "colour",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "masterChef",
+    "outputs": [
+      {
+        "internalType": "contract IMasterChef",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxBurn",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "poolId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "resetclamsBurned",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_baseGemRewards",
+        "type": "uint256"
+      }
+    ],
+    "name": "setBaseGemRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_maxBurn",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMaxBurn",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_shape",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_colour",
+        "type": "string"
+      }
+    ],
+    "name": "setShapeAndColour",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_traitsDivider",
+        "type": "uint256"
+      }
+    ],
+    "name": "setTraitsDivider",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "shape",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

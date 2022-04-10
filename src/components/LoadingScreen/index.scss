@@ -1,0 +1,28 @@
+.loading-screen-cls {
+  @apply absolute z-9999 w-full h-screen bg-black flex items-center justify-center;
+
+  @keyframes blink {
+    from,
+    to {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.95);
+    }
+  }
+
+  .loading-elems-cls {
+    @apply absolute w-full h-1/4 top-1/4;
+
+    img {
+      @apply w-1/4 mb-10;
+      margin: auto;
+      animation: blink 1s ease-in infinite;
+    }
+
+    p {
+      margin-top: 50px;
+      @apply text-white font-aristotelica text-center font-bold text-2xl text-theme_blue;
+    }
+  }
+}

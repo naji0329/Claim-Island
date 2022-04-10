@@ -1,0 +1,48 @@
+@font-face {
+  font-family: AristotelicaBold;
+  src: url(./assets/fonts/aristotelicaText_bold.otf) format("opentype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Montserrat-Medium;
+  src: url(./assets/fonts/Montserrat-Medium.otf) format("opentype");
+  font-weight: bold;
+}
+
+body {
+  margin: 0;
+
+  /* -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Montserrat-Medium";
+}
+
+* {
+  font-family: "Montserrat-Medium";
+}
+
+.opening-soon {
+  margin-left: auto;
+  margin-right: auto;
+  width: 420px;
+  height: 180px;
+  position: relative;
+  z-index: 9999;
+  background-image: url(./assets/img/clam_island_sign.png);
+}
+
+.social-icon {
+  position: absolute;
+  bottom: 25px;
+}
+
+.container-fluid {
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  height: 100%;
+}
