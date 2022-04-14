@@ -4,7 +4,7 @@ import testnetAddresses from "./testnet";
 // this sets addresses of testnet when running locally. Change this if mainnet addresses are desired
 const addresses =
   process.env.NODE_ENV === "development" || window.location.hostname === "clam-island-beta.web.app"
-    ? mainnetAddresses
+    ? testnetAddresses
     : mainnetAddresses;
 
 export const ClamIslandChain = {

@@ -3,3 +3,180 @@
   background-size: cover;
   background-position: center bottom;
 }
+
+
+.saferoom_lg {
+
+}
+
+.saferoom_sm {
+  display: none;
+}
+
+.div_lg {
+}
+
+.div_sm {
+  display: none;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 500px) {
+  .saferoom_lg {
+    display: none;
+
+  }
+
+  .div_lg {
+    display: none;
+  }
+  .div_sm {
+    display: block;
+  }
+
+  .saferoom_sm {
+    display: block;
+    padding: 72px 0px 60px 0px;
+
+
+
+    .selectBtn {
+
+      /* Heading + CTAs */
+      margin-top: 5px;
+      background: #0072E3;
+      border-radius: 15px;
+      color: white;
+      font-size: 12px;
+      padding: 6px 20px 6px 20px;
+
+    }
+    
+    .pearlDiv {
+      text-align: center;
+      padding: 0px 20px 0px 20px;
+
+      .title {
+        font-family: 'Aristotelica Text';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 30px;
+        line-height: 33px;
+        /* identical to box height */
+        text-align: center;
+
+        color: #757575;
+
+        margin-bottom: 20px;
+        margin-top: 20px;
+      }
+
+      .pearlitems {
+        text-align: center;
+        width: 100%;
+
+  
+        .pearlitem {
+          background: rgba(255, 255, 255, 0.8);
+          /* Disabled text */
+          border: 1px solid #757575;
+          box-sizing: border-box;
+          border-radius: 10px;
+
+          .lifeSpan {
+            font-family: 'Montserrat';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 15px;
+            /* identical to box height */
+
+            /* Disabled text */
+            color: #757575;
+          }
+
+          .lifeSpanValue {
+            font-family: 'Montserrat';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 18px;
+
+            /* Text */
+            color: #0F0F0F;
+          }
+
+          .lifeRarity {
+
+            font-family: 'Montserrat';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 15px;
+            /* identical to box height */
+
+            /* Disabled text */
+            color: #757575;
+
+          }
+
+          .lifeRarityValue {
+
+            font-family: 'Montserrat';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 18px;
+
+            /* Text */
+            color: #0F0F0F;
+
+          }
+
+        }
+      }
+    }
+
+    .bottom_menu {
+      z-index: 10;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: white;
+
+      .menu_item {
+        text-align: center;
+        
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 15px;
+
+        color: #38DCDC;
+
+        .active {
+          background: rgba(0, 114, 227, 0.5);
+          border-radius: 20px;
+        }
+
+        img {
+          margin: auto;
+        }
+
+        p {
+          margin: auto;
+        }
+      }
+    }
+  }
+  
+}
