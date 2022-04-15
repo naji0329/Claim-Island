@@ -28,7 +28,7 @@ export const SaferoomNav = ({ tab, url, clamBalance, pearlBalance }) => {
         <Link
           className={`px-5 py-2  text-2xl ${
             tab === TABS.pearl
-              ? "text-blue-700  bg-gray-200 bg-opacity-80 rounded"
+              ? "text-blue-700 bg-gray-200 bg-opacity-80 rounded"
               : "text-gray-400"
           }`}
           to={`${url}/pearl`}

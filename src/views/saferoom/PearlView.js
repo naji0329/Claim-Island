@@ -361,7 +361,7 @@ export default (props) => {
             </div>
             <div className="w-full px-4 md:px-6">
               <Accordion2 defaultTab="Traits" isOpened={isTakingSnapshot}>
-                <Accordion2Item title="Traits" id="Traits">
+                <Accordion2Item title="Traits" id="Traits" scroll={true}>
                   <div
                     className={
                       isTakingSnapshot
@@ -375,7 +375,7 @@ export default (props) => {
                     <CardStat label="Size" value={size + " (" + get(dnaDecoded, "size") + ")"} />
                   </div>
                 </Accordion2Item>
-                <Accordion2Item title="Grading" id="Grading">
+                <Accordion2Item title="Grading" id="Grading" scroll={true}>
                   <div
                     className={
                       isTakingSnapshot
@@ -389,7 +389,7 @@ export default (props) => {
                     <CardStat label="Nacre Quality" value={get(dnaDecoded, "nacreQuality")} />
                   </div>
                 </Accordion2Item>
-                <Accordion2Item title="Gem Yield" id="GemYield">
+                <Accordion2Item title="Gem Yield" id="GemYield" scroll={true}>
                   <div
                     className={
                       isTakingSnapshot

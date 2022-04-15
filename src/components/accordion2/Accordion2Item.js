@@ -34,7 +34,7 @@ export const Accordion2Item = ({ scroll, id, title, children }) => {
           maxHeight: isOpened || id === tab ? "225px" : "0",
         }}
       >
-        <div className="p-3 text-gray-900 overflow-auto">{children}</div>
+        <div className="p-0 text-gray-900 overflow-auto">{children}</div>
       </div>
     </li>
   );

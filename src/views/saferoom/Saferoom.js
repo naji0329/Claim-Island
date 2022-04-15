@@ -305,7 +305,7 @@ const Saferoom = ({
         }
 
         <Switch>
-          <Route path={`/saferoom/claim`}>
+          <Route path={`/saferoom/clam`}>
 
             <div className="pearlDiv mb-3" style={{ display: isClamShowing || isPearlShowing ? "none" : "block" }}>
               <h1 className="title">My Clams</h1>
@@ -398,7 +398,7 @@ const Saferoom = ({
             </Link>
           </div>
           <div className="menu_item">
-            <Link to="/saferoom/claim" onClick={() => { toogleClamShowing(false); tooglePearlShowing(false); }}>
+            <Link to="/saferoom/clam" onClick={() => { toogleClamShowing(false); tooglePearlShowing(false); }}>
               <img src="/saferoom/clam.png" alt="" />
               <p>Clams</p>
             </Link>
