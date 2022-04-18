@@ -63,6 +63,7 @@ export default ({
   owner,
   ownerAddress,
   mopenPearlDetailedInfo,
+  showlists
 }) => {
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
   const [producedPearls, setProducedPearls] = useState([]);
@@ -454,8 +455,13 @@ export default ({
                 </div>
               )}
             </div>
-            <div className="w-full py-2 text-center items-center" style={{ color: "#0072E3", fontSize: "30px", fontFamily: "Aristotelica Text" }}>
-              <h1>Clam {clamId}</h1>
+            <div className="w-full p-4 text-center items-center" style={{ color: "white", fontSize: "30px", fontFamily: "Aristotelica Text" }}>
+              <h1 className="float-left">Clam {clamId}</h1>
+              <div className="float-right">
+                <Link to="/saferoom/clam" onClick={showlists}>
+                  &#10006;
+                </Link>
+              </div>
             </div>
             <div className="w-full px-4 md:px-6">
               <Accordion2 defaultTab="GeneralStats" isOpened={isTakingSnapshot}>
@@ -464,7 +470,7 @@ export default ({
                     className={
                       isTakingSnapshot
                         ? "grid grid-cols-4 grid-rows-1 gap-3"
-                        : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3"
+                        : "grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 p-2"
                     }
                   >
                     <CardStat
@@ -527,12 +533,12 @@ export default ({
                     />
                   </div>
                 </Accordion2Item>
-                <Accordion2Item title="Traits" id="Traits" scroll={true}>
+                <Accordion2Item title="Traits" id="Traits">
                   <div
                     className={
                       isTakingSnapshot
                         ? "grid grid-cols-4 grid-rows-1 gap-3"
-                        : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3"
+                        : "grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 p-2"
                     }
                   >
                     <CardStat label="Shell Shape" value={get(dnaDecoded, "shellShape")} />
@@ -552,56 +558,53 @@ export default ({
                 </Accordion2Item>
                 {!isTakingSnapshot && (
                   <Accordion2Item title="Produced pearls" id="ProducedPearls" scroll={false}>
-                    <div
-                      className="grid grid-cols-2 gap-4 overflow-y-auto"
-                      style={{ maxHeight: "220px" }}
-                    >
-                      {producedPearls.length > 0
-                        ? producedPearls.map((pearl, i, a) =>  {
+                    {
+                      producedPearls.length > 0 ? (
+                        <>
+                        <div
+                          className="grid grid-cols-2 gap-4 overflow-y-auto p-2"
+                        >
+                          {
+                            producedPearls.map((pearl, i, a) =>  {
 
-                          const rarity = get(pearl.dnaDecoded, "rarity");
-                          let shape = get(pearl.dnaDecoded, "shape");
-                          shape = shape.charAt(0).toUpperCase() + shape.slice(1);
-      
-                          return (
-                            <div key={i} className="pearlitem text-center p-2">
-                              <div className="flex align-center justify-center">
-                                <img src={pearl.img} alt="" style={{ width: "60%" }}/>
-                              </div>
-                              
-                              <p className="mt-1">{pearl.pearlId}</p>
-                              <div className="flex justify-between w-100 m-auto">
-                                <div>
-                                  <p className="lifeSpan">Rarity</p>
-                                  <p className="lifeSpanValue">{rarity}</p>
+                              const rarity = get(pearl.dnaDecoded, "rarity");
+                              let shape = get(pearl.dnaDecoded, "shape");
+                              shape = shape.charAt(0).toUpperCase() + shape.slice(1);
+          
+                              return (
+                                <div key={i} className="pearlitem text-center p-2">
+                                  <div className="flex align-center justify-center">
+                                    <img src={pearl.img} alt="" style={{ width: "60%" }}/>
+                                  </div>
+                                  
+                                  <p className="mt-1">{pearl.pearlId}</p>
+                                  <div className="flex justify-between w-100 m-auto">
+                                    <div>
+                                      <p className="lifeSpan">Rarity</p>
+                                      <p className="lifeSpanValue">{rarity}</p>
+                                    </div>
+                                    <div>
+                                      <p className="lifeRarity">Shape</p>
+                                      <p className="lifeRarityValue">{shape}</p>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <button className="selectBtn" onClick={() => { mopenPearlDetailedInfo(pearl) }}>Select</button>
+                                  </div>
                                 </div>
-                                <div>
-                                  <p className="lifeRarity">Shape</p>
-                                  <p className="lifeRarityValue">{shape}</p>
-                                </div>
-                              </div>
-                              <div>
-                                <button className="selectBtn" onClick={() => { mopenPearlDetailedInfo(pearl) }}>Select</button>
-                              </div>
-                            </div>
-                          );
-                        })
-                        : "This Clam has not yet produced any Pearls."}
-{/*                     
-                      {producedPearls.length > 0
-                        ? producedPearls.map((pearl, i, a) => (
-                          
-                            // <PearlInfo
-                            //   key={pearl.pearlId}
-                            //   pearl={pearl}
-                            //   isLast={i === a.length - 1}
-                            //   maxBoostIn={producedPearlsYieldTimers[i]}
-                            //   gemPriceUSD={gemPriceUSD}
-                            //   hideViewDetails={false}
-                            // />
-                          ))
-                        : "This Clam has not yet produced any Pearls."} */}
-                    </div>
+                              );
+                            })
+                          }
+                        </div>
+                        </> 
+                      ) : (
+                        <>
+                          <div className="p-2">
+                            This Clam has not yet produced any Pearls.
+                          </div>
+                        </>
+                      )
+                    }
                   </Accordion2Item>
                 )}
               </Accordion2>

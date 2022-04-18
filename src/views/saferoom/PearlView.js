@@ -57,6 +57,7 @@ export default (props) => {
     owner,
     ownerAddress,
     view,
+    showlists
   } = props;
   const [grade, setGrade] = useState(0);
   const [size, setSize] = useState(0);
@@ -356,8 +357,13 @@ export default (props) => {
                 </div>
               </div> */}
             </div>
-            <div className="w-full py-2 text-center items-center" style={{ color: "#0072E3", fontSize: "30px", fontFamily: "Aristotelica Text" }}>
-              <h1>Pearl {pearlId}</h1>
+            <div className="w-full p-4 text-center items-center" style={{ color: "white", fontSize: "30px", fontFamily: "Aristotelica Text" }}>
+              <h1 className="float-left">Pearl {pearlId}</h1>
+              <div className="float-right">
+                <Link to="/saferoom/pearl" onClick={showlists}>
+                  &#10006;
+                </Link>
+              </div>
             </div>
             <div className="w-full px-4 md:px-6">
               <Accordion2 defaultTab="Traits" isOpened={isTakingSnapshot}>
@@ -366,7 +372,7 @@ export default (props) => {
                     className={
                       isTakingSnapshot
                         ? "grid grid-cols-4 grid-rows-1 gap-3"
-                        : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3"
+                        : "grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 p-2"
                     }
                   >
                     <CardStat label="Shape" value={get(dnaDecoded, "shape")} />
@@ -380,7 +386,7 @@ export default (props) => {
                     className={
                       isTakingSnapshot
                         ? "grid grid-cols-4 grid-rows-1 gap-3"
-                        : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3"
+                        : "grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 p-2"
                     }
                   >
                     <CardStat label="Grade" value={grade} />
@@ -394,7 +400,7 @@ export default (props) => {
                     className={
                       isTakingSnapshot
                         ? "grid grid-cols-4 grid-rows-1 gap-3"
-                        : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3"
+                        : "grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 p-2"
                     }
                   >
                     <CardStat

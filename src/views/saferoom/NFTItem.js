@@ -3,7 +3,7 @@ import React from "react";
 export default ({ rarity, shape, img, tokenId }) => {
   return (
     <>
-      <div className="bg-white bg-opacity-90 rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 hover:border-black flex flex-col justify-between cursor-pointer">
+      <div style={{height: "100%"}} className="bg-white bg-opacity-90 rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 hover:border-black flex flex-col justify-between cursor-pointer">
         <div className="w-1/4 m-2 mx-auto text-center px-4 py-2 badge badge-success">
           #{tokenId}
         </div>

@@ -37,24 +37,26 @@
     display: block;
   }
 
+  
+  .selectBtn {
+
+    /* Heading + CTAs */
+    margin-top: 5px;
+    background: #0072E3;
+    border-radius: 15px;
+    color: white;
+    font-size: 12px;
+    padding: 6px 20px 6px 20px;
+
+  }
+  
+
   .saferoom_sm {
     display: block;
     padding: 72px 0px 60px 0px;
 
 
 
-    .selectBtn {
-
-      /* Heading + CTAs */
-      margin-top: 5px;
-      background: #0072E3;
-      border-radius: 15px;
-      color: white;
-      font-size: 12px;
-      padding: 6px 20px 6px 20px;
-
-    }
-    
     .pearlDiv {
       text-align: center;
       padding: 0px 20px 0px 20px;
@@ -68,76 +70,12 @@
         /* identical to box height */
         text-align: center;
 
-        color: #757575;
+        color: white;
 
         margin-bottom: 20px;
         margin-top: 20px;
       }
 
-      .pearlitems {
-        text-align: center;
-        width: 100%;
-
-  
-        .pearlitem {
-          background: rgba(255, 255, 255, 0.8);
-          /* Disabled text */
-          border: 1px solid #757575;
-          box-sizing: border-box;
-          border-radius: 10px;
-
-          .lifeSpan {
-            font-family: 'Montserrat';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 15px;
-            /* identical to box height */
-
-            /* Disabled text */
-            color: #757575;
-          }
-
-          .lifeSpanValue {
-            font-family: 'Montserrat';
-            font-style: normal;
-            font-weight: 600;
-            font-size: 15px;
-            line-height: 18px;
-
-            /* Text */
-            color: #0F0F0F;
-          }
-
-          .lifeRarity {
-
-            font-family: 'Montserrat';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 15px;
-            /* identical to box height */
-
-            /* Disabled text */
-            color: #757575;
-
-          }
-
-          .lifeRarityValue {
-
-            font-family: 'Montserrat';
-            font-style: normal;
-            font-weight: 600;
-            font-size: 15px;
-            line-height: 18px;
-
-            /* Text */
-            color: #0F0F0F;
-
-          }
-
-        }
-      }
     }
 
     .bottom_menu {
@@ -179,4 +117,53 @@
     }
   }
   
+  .pearlitems {
+    text-align: center;
+    width: 100%;
+
+  }
+  
+  .pearlitem {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #030303;
+    box-sizing: border-box;
+    border-radius: 10px;
+
+    .lifeSpan {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 15px;
+      color: #757575;
+    }
+
+    .lifeSpanValue {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 18px;
+      color: #0F0F0F;
+    }
+
+    .lifeRarity {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 15px;
+      color: #757575;
+    }
+
+    .lifeRarityValue {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 18px;
+      color: #0F0F0F;
+    }
+
+  }
 }

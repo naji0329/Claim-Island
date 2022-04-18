@@ -12,7 +12,6 @@ import { TabContainer } from "./TabContainer";
 import { SaferoomNav } from "./SaferoomNav";
 import { ClamInspect } from "./ClamInspect";
 import { PearlInspect } from "./PearlInspect";
-
 import videoImage from "assets/locations/Saferoom.jpg";
 import videoMp4 from "assets/locations/Saferoom.mp4";
 import videoWebM from "assets/locations/Saferoom.webm";
@@ -123,6 +122,11 @@ const Saferoom = ({
     setSelectedAsset(item);
     console.log('pearl item data:', item);
     tooglePearlShowing(true);
+  }
+
+  const showlists = () => {
+    tooglePearlShowing(false);
+    toogleClamShowing(false);
   }
 
   useEffect(() => {
@@ -272,6 +276,7 @@ const Saferoom = ({
         </div>
       </div>
       <div className="saferoom_sm" style={{ display: address ? "" : "none" }}>
+        <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
         {
           isClamShowing ? (
@@ -283,6 +288,7 @@ const Saferoom = ({
               onClickNext={isNextButtonShown() && onClickNext}
               onClickPrev={isPrevButtonShown() && onClickPrev}
               mopenPearlDetailedInfo={mopenPearlDetailedInfo}
+              showlists={showlists}
             />
           ) : (
             <></>
@@ -298,6 +304,7 @@ const Saferoom = ({
               view="saferoom"
               onClickNext={isNextButtonShown() && onClickNext}
               onClickPrev={isPrevButtonShown() && onClickPrev}
+              showlists={showlists}
             />
           ) : (
             <></>
@@ -321,23 +328,25 @@ const Saferoom = ({
                     shape = shape.charAt(0).toUpperCase() + shape.slice(1);
                     return (
                       <div key={i} className="pearlitem text-center p-2">
-                        <div className="flex align-center justify-center">
-                          <img src={clam.img} alt="" style={{ width: "60%" }}/>
+                        <div className="flex align-center items-center justify-center" style={{minHeight: "85px"}} >
+                          <img src={clam.img} alt="" style={{ width: "60%", height: "auto" }}/>
                         </div>
                         
-                        <p className="mt-1">{clam.clamId}</p>
-                        <div className="flex justify-between w-100 m-auto">
-                          <div>
-                            <p className="lifeSpan">Lifespan</p>
-                            <p className="lifeSpanValue">{lifespan} Pearls</p>
+                        <div className="">
+                          <p className="mt-1">{clam.clamId}</p>
+                          <div className="flex justify-between w-100 m-auto">
+                            <div>
+                              <p className="lifeSpan">Lifespan</p>
+                              <p className="lifeSpanValue">{lifespan} Pearls</p>
+                            </div>
+                            <div>
+                              <p className="lifeRarity">Rarity</p>
+                              <p className="lifeRarityValue">{rarity}</p>
+                            </div>
                           </div>
                           <div>
-                            <p className="lifeRarity">Rarity</p>
-                            <p className="lifeRarityValue">{rarity}</p>
+                            <button className="selectBtn" onClick={() => { mopenClamDetailedInfo(clam) }}>Select</button>
                           </div>
-                        </div>
-                        <div>
-                          <button className="selectBtn" onClick={() => { mopenClamDetailedInfo(clam) }}>Select</button>
                         </div>
                       </div>
                     );
@@ -360,8 +369,8 @@ const Saferoom = ({
 
                     return (
                       <div key={i} className="pearlitem text-center p-2">
-                        <div className="flex align-center justify-center">
-                          <img src={pearl.img} alt="" style={{ width: "60%" }}/>
+                        <div className="flex align-center items-center justify-center" style={{minHeight: "85px"}} >
+                          <img src={pearl.img} alt="" style={{ width: "60%", height: "auto" }}/>
                         </div>
                         
                         <p className="mt-1">{pearl.pearlId}</p>
@@ -384,6 +393,7 @@ const Saferoom = ({
               </div>
             </div>
           </Route>
+
         </Switch>
 
 
@@ -410,7 +420,7 @@ const Saferoom = ({
             </Link>
           </div>
           <div className="menu_item">
-            <Link to="">
+            <Link to="/saferoom/clam/inspect/-1">
               <img src="/saferoom/opened.png" alt="" />
               <p>Inspector</p>
             </Link>
