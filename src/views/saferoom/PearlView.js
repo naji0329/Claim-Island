@@ -129,7 +129,7 @@ export default (props) => {
     <>
       <div className="div_lg">
         <ReactTooltip html={true} className="max-w-xl" />
-        <div className="flex flex-col justify-between relative">
+        <div className="flex flex-col justify-between relative bg-white">
           {isTakingSnapshot && (
             <div className="absolute w-full h-full z-10 min-w-[1024px]">
               <Skeleton animation="waves" variant="rect" height="100%" />
@@ -297,9 +297,9 @@ export default (props) => {
         <Controls3DView onClickNext={onClickNext} onClickPrev={onClickPrev} />
       </div>
       <div className="div_sm">
-        
+
         <ReactTooltip html={true} className="max-w-xl" />
-        <div className="flex flex-col justify-between relative">
+        <div className="flex flex-col justify-between relative bg-white">
           {isTakingSnapshot && (
             <div className="absolute w-full h-full z-10 min-w-[1024px]">
               <Skeleton animation="waves" variant="rect" height="100%" />
@@ -357,7 +357,7 @@ export default (props) => {
                 </div>
               </div> */}
             </div>
-            <div className="w-full p-4 text-center items-center" style={{ color: "white", fontSize: "30px", fontFamily: "Aristotelica Text" }}>
+            <div className="w-full p-4 text-center items-center text-white text-2xl">
               <h1 className="float-left">Pearl {pearlId}</h1>
               <div className="float-right">
                 <Link to="/saferoom/pearl" onClick={showlists}>

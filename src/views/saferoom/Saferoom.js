@@ -116,7 +116,7 @@ const Saferoom = ({
     console.log(item)
     toogleClamShowing(true);
   }
-  
+
   const mopenPearlDetailedInfo = (item) => {
     toogleClamShowing(false);
     setSelectedAsset(item);
@@ -229,7 +229,7 @@ const Saferoom = ({
           )}
         </Modal>
 
-        <div className="flex-1 min-h-full min-w-full flex relative z-10 justify-center items-start">
+        <div className="flex-1 min-h-full min-w-full flex relative z-10 justify-center items-start overflow-scroll">
           <div className="w-4/5 flex flex-col relative pt-24">
             <PageTitle title="My Saferoom" />
             {address && (
@@ -327,14 +327,14 @@ const Saferoom = ({
                     let rarityValue = get(clam.dnaDecoded, "rarityValue");
                     shape = shape.charAt(0).toUpperCase() + shape.slice(1);
                     return (
-                      <div key={i} className="pearlitem text-center p-2">
+                      <div key={i} className="pearlitem text-center p-4">
                         <div className="flex align-center items-center justify-center" style={{minHeight: "85px"}} >
                           <img src={clam.img} alt="" style={{ width: "60%", height: "auto" }}/>
                         </div>
-                        
+
                         <div className="">
-                          <p className="mt-1">{clam.clamId}</p>
-                          <div className="flex justify-between w-100 m-auto">
+                          <p className="mt-1">#{clam.clamId}</p>
+                          <div className="flex flex-col xs:justify-between w-100 m-auto">
                             <div>
                               <p className="lifeSpan">Lifespan</p>
                               <p className="lifeSpanValue">{lifespan} Pearls</p>
@@ -368,13 +368,13 @@ const Saferoom = ({
                     shape = shape.charAt(0).toUpperCase() + shape.slice(1);
 
                     return (
-                      <div key={i} className="pearlitem text-center p-2">
+                      <div key={i} className="pearlitem text-center p-4">
                         <div className="flex align-center items-center justify-center" style={{minHeight: "85px"}} >
                           <img src={pearl.img} alt="" style={{ width: "60%", height: "auto" }}/>
                         </div>
-                        
-                        <p className="mt-1">{pearl.pearlId}</p>
-                        <div className="flex justify-between w-100 m-auto">
+
+                        <p className="mt-1">#{pearl.pearlId}</p>
+                        <div className="flex flex-col items-center justify-center gap-2 xs:flex-row xs: gap-4 py-2 w-100 m-auto">
                           <div>
                             <p className="lifeSpan">Rarity</p>
                             <p className="lifeSpanValue">{rarity}</p>
@@ -385,7 +385,7 @@ const Saferoom = ({
                           </div>
                         </div>
                         <div>
-                          <button className="selectBtn" onClick={() => { mopenPearlDetailedInfo(pearl) }}>Select</button>
+                          <button className="selectBtn" onClick={() => { mopenPearlDetailedInfo(pearl) }}>View Details</button>
                         </div>
                       </div>
                     );
