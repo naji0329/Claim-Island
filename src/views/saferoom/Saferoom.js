@@ -15,6 +15,7 @@ import { PearlInspect } from "./PearlInspect";
 import videoImage from "assets/locations/Saferoom.jpg";
 import videoMp4 from "assets/locations/Saferoom.mp4";
 import videoWebM from "assets/locations/Saferoom.webm";
+import clamIcon from "assets/img/clam_icon.png";
 import VideoBackground from "components/VideoBackground";
 import { PageTitle } from "components/PageTitle";
 import { useWeb3Modal } from "components/Web3ProvidersModal";
@@ -334,7 +335,7 @@ const Saferoom = ({
 
                         <div className="">
                           <p className="mt-1">#{clam.clamId}</p>
-                          <div className="flex flex-col xs:justify-between w-100 m-auto">
+                          <div className="flex flex-col items-center justify-center gap-2 xs:flex-row xs: gap-4 py-2 w-100 m-auto">
                             <div>
                               <p className="lifeSpan">Lifespan</p>
                               <p className="lifeSpanValue">{lifespan} Pearls</p>
@@ -345,7 +346,7 @@ const Saferoom = ({
                             </div>
                           </div>
                           <div>
-                            <button className="selectBtn" onClick={() => { mopenClamDetailedInfo(clam) }}>Select</button>
+                            <button className="selectBtn" onClick={() => { mopenClamDetailedInfo(clam) }}>View Details</button>
                           </div>
                         </div>
                       </div>
@@ -409,7 +410,7 @@ const Saferoom = ({
           </div>
           <div className="menu_item">
             <Link to="/saferoom/clam" onClick={() => { toogleClamShowing(false); tooglePearlShowing(false); }}>
-              <img src="/saferoom/clam.png" alt="" />
+              <img src={clamIcon} alt="" />
               <p>Clams</p>
             </Link>
           </div>

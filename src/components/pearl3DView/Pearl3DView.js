@@ -9,7 +9,7 @@ export const Pearl3DView = (props) => {
 
   return (
     <div
-      className="w-full max-w-canvas h-canvas cursor-grab active:cursor-grabbing"
+      className="w-full sm:max-w-canvas h-canvas cursor-grab active:cursor-grabbing"
       style={{ height }}
     >
       <PearlScene>

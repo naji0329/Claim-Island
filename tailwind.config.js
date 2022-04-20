@@ -73,6 +73,7 @@ module.exports = {
       },
       width: {
         "7/10": "70%",
+        canvas: "400px",
       },
       dropShadow: {
         center: "0 0 5px rgba(0, 0, 0, 0.5)",

@@ -160,7 +160,7 @@ export default (props) => {
                   </span>
                 </div>
               )}
-              <div className="w-[400px] h-[400px] relative">
+              <div className="md:w-[400px] md:h-[400px] relative">
                 <div
                   className={`absolute flex w-full h-full justify-center items-center z-20 bg-white bg-opacity-50 ${
                     owner != "N/A" ? "hidden" : ""
@@ -170,7 +170,7 @@ export default (props) => {
                 </div>
                 <Pearl3DView width={"100%"} height={"100%"} pearlDna={dna} decodedDna={dnaDecoded} />
               </div>
-              <div className="flex justify-between items-center py-2">
+              <div className="flex flex-col gap-x-2 sm:flex-row justify-between items-center py-2">
                 <div className="flex items-center">
                   <div className="badge badge-success mr-2">#{pearlId}</div>
                   <div className="text-green-400 text-bold">{get(dnaDecoded, "rarity")}</div>
@@ -357,9 +357,9 @@ export default (props) => {
                 </div>
               </div> */}
             </div>
-            <div className="w-full p-4 text-center items-center text-white text-2xl">
-              <h1 className="float-left">Pearl {pearlId}</h1>
-              <div className="float-right">
+            <div className="flex justify-center w-full p-4 text-center items-center text-2xl">
+              <h1>Pearl {pearlId}</h1>
+              <div className="absolute right-4">
                 <Link to="/saferoom/pearl" onClick={showlists}>
                   &#10006;
                 </Link>
@@ -446,7 +446,7 @@ export default (props) => {
             </div>
           </div>
 
-          <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
+          <div className="flex flex-col items-center xs:flex-row xs:justify-between mt-4 p-4 gap-4">
             {isInspectorView ? (
               <button
                 className="cursor-not-allowed opacity-50 btn btn-secondary"
@@ -457,16 +457,16 @@ export default (props) => {
             ) : (
               <Link to="/bank">
                 <button className="btn btn-secondary">
-                  Boost yield&nbsp;
-                  <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+                  <div>Claim yield&nbsp;
+                  <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" /></div>
                 </button>
               </Link>
             )}
             {!hideProduceButton && (
               <Link to="/farms">
                 <button className="btn btn-secondary">
-                  Produce more pearls&nbsp;
-                  <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" />
+                  <div>Produce more pearls&nbsp;
+                  <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-1" /></div>
                 </button>
               </Link>
             )}

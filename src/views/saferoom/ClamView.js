@@ -380,12 +380,12 @@ export default ({
             ))}
         </div>
         <Controls3DView onClickNext={onClickNext} onClickPrev={onClickPrev} />
-      
+
       </div>
       <div className="div_sm">
-        
+
         <ReactTooltip html={true} className="max-w-xl" />
-        <div className="flex flex-col justify-between w-full relative">
+        <div className="flex flex-col justify-between w-full relative bg-white">
           {isTakingSnapshot && (
             <div className="absolute w-full h-full z-10 min-w-[1024px]">
               <Skeleton animation="waves" variant="rect" height="100%" />
@@ -455,9 +455,9 @@ export default ({
                 </div>
               )}
             </div>
-            <div className="w-full p-4 text-center items-center" style={{ color: "white", fontSize: "30px", fontFamily: "Aristotelica Text" }}>
-              <h1 className="float-left">Clam {clamId}</h1>
-              <div className="float-right">
+            <div className="flex justify-center w-full p-4 text-center items-center text-2xl">
+              <h1 className="float-left">Clam #{clamId}</h1>
+              <div className="absolute right-4">
                 <Link to="/saferoom/clam" onClick={showlists}>
                   &#10006;
                 </Link>
@@ -570,13 +570,13 @@ export default ({
                               const rarity = get(pearl.dnaDecoded, "rarity");
                               let shape = get(pearl.dnaDecoded, "shape");
                               shape = shape.charAt(0).toUpperCase() + shape.slice(1);
-          
+
                               return (
                                 <div key={i} className="pearlitem text-center p-2">
                                   <div className="flex align-center justify-center">
                                     <img src={pearl.img} alt="" style={{ width: "60%" }}/>
                                   </div>
-                                  
+
                                   <p className="mt-1">{pearl.pearlId}</p>
                                   <div className="flex justify-between w-100 m-auto">
                                     <div>
@@ -596,7 +596,7 @@ export default ({
                             })
                           }
                         </div>
-                        </> 
+                        </>
                       ) : (
                         <>
                           <div className="p-2">
@@ -612,7 +612,7 @@ export default ({
           </div>
           {!isFarmView &&
             (isInspectorView ? (
-              <div className="flex justify-between mt-4 pt-4 space-x-14 border-t">
+              <div className="flex flex-col items-center xs:flex-row xs:justify-between mt-4 p-4 gap-4">
                 <button
                   className="cursor-not-allowed opacity-50 btn btn-secondary"
                   data-tip="Coming soon..."
@@ -627,7 +627,7 @@ export default ({
                 </Link>
               </div>
             ) : (
-              <div className="flex justify-between my-4 pt-4 space-x-14 border-t">
+              <div className="flex flex-col items-center xs:flex-row xs:justify-between mt-4 p-4 gap-4">
                 <Link to="/farms">
                   <button className="btn btn-secondary">Stake in Farm</button>
                 </Link>
@@ -649,7 +649,7 @@ export default ({
             ))}
         </div>
         {/* <Controls3DView onClickNext={onClickNext} onClickPrev={onClickPrev} /> */}
-      
+
       </div>
     </>
   );
