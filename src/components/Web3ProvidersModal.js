@@ -341,8 +341,8 @@ const Web3ProvidersModal = ({
           </div>
         </nav>
         
-        <div className="overlay_m_items"  style={{height: mStatus ? "100%" : "0px" }}>
-          <div className="overlay_m_container px-6 py-4 w-full" style={{height: "100%"}}>
+        <div className={`overlay_m_items ${ mStatus ? 'h-full' : 'h-0' } `}>
+          <div className="overlay_m_container px-6 py-4 w-full h-full">
             <div className="flex justify-between">
               <p></p>
               <img src={ mStatus ? close : open } onClick={toggle} />
@@ -385,14 +385,14 @@ const Web3ProvidersModal = ({
                 </>
               )}
 
-              <div style={{display: mStatus ? "flex" : "none", position: "absolute", bottom: "0", left: "0", width: "100%"}} className="flex justify-center">
+              <div className={`justify-center w-full left-0 bottom-0 absolute ${ mStatus ? 'flex' : 'hidden' }`}>
               <a
                   className="social-btn m-0"
                   href="https://twitter.com/clam_island"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <button className="nav-icon" style={{ width: "32px", height: "auto" }}>
+                  <button className="nav-icon sm-nav-icon">
                     <img src={IMG_LOC + "twitter-32.png"} />
                   </button>
                 </a>
@@ -402,7 +402,7 @@ const Web3ProvidersModal = ({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <button className="nav-icon" style={{ width: "32px", height: "auto" }}>
+                  <button className="nav-icon sm-nav-icon">
                     <img src={IMG_LOC + "discord_gray.png"} />
                   </button>
                 </a>
@@ -412,7 +412,7 @@ const Web3ProvidersModal = ({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <button className="nav-icon" style={{ width: "32px", height: "auto" }}>
+                  <button className="nav-icon sm-nav-icon">
                     <img src={IMG_LOC + "telegram_gray.png"} />
                   </button>
                 </a>
@@ -422,7 +422,7 @@ const Web3ProvidersModal = ({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <button className="nav-icon" style={{ width: "32px", height: "auto" }}>
+                  <button className="nav-icon sm-nav-icon">
                     <img src={IMG_LOC + "medium_gray.png"} />
                   </button>
                 </a>

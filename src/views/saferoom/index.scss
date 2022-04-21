@@ -26,7 +26,7 @@
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (max-width: 500px) {
   .saferoom_lg {
-    display: none;
+    display: none !important;
 
   }
 
@@ -52,8 +52,8 @@
   
 
   .saferoom_sm {
-    display: block;
-    padding: 72px 0px 60px 0px;
+    display: block !important;
+    padding: 72px 0px 35px 0px;
 
 
 

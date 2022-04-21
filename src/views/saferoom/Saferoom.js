@@ -23,6 +23,10 @@ import { SAFEROOM_TABS as TABS } from "constants/ui";
 import { getSortedClams } from "utils/clamsSort";
 import { getSortedPearls } from "utils/pearlsSort";
 
+
+import { ClamsSorting } from "components/clamsSorting";
+import { PearlsSorting } from "components/pearlsSorting";
+
 import { get } from "lodash";
 import { actions } from "store/redux";
 
@@ -200,7 +204,7 @@ const Saferoom = ({
     <>
       {ui.isFetching && <LoadingScreen />}
 
-      <div className="saferoom_lg" style={{ display: !address ? "block" : "" }}>
+      <div className={`saferoom_lg ${ !address ? 'block' : '' }`}>
         {/* container */}
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
@@ -230,7 +234,7 @@ const Saferoom = ({
           )}
         </Modal>
 
-        <div className="flex-1 min-h-full min-w-full flex relative z-10 justify-center items-start overflow-scroll">
+        <div className="flex-1 min-h-full min-w-full flex relative z-10 justify-center items-start">
           <div className="w-4/5 flex flex-col relative pt-24">
             <PageTitle title="My Saferoom" />
             {address && (
@@ -276,7 +280,8 @@ const Saferoom = ({
           </div>
         </div>
       </div>
-      <div className="saferoom_sm" style={{ display: address ? "" : "none" }}>
+      <div className={`saferoom_sm ${ address ? '' : 'hiddden' }`} >
+        
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
         {
@@ -315,9 +320,11 @@ const Saferoom = ({
         <Switch>
           <Route path={`/saferoom/clam`}>
 
-            <div className="pearlDiv mb-3" style={{ display: isClamShowing || isPearlShowing ? "none" : "block" }}>
+            <div className={`pearlDiv mb-3 ${isClamShowing ? 'hidden' : "block" }`}>
               <h1 className="title">My Clams</h1>
-
+              <div className="mb-3">
+                <ClamsSorting page="saferoom" textSize="sm" />
+              </div>
               <div className="pearlitems grid grid-cols-2 gap-4">
                 {clams &&
                   clams.map((clam, i) => {
@@ -330,12 +337,12 @@ const Saferoom = ({
                     return (
                       <div key={i} className="pearlitem text-center p-4">
                         <div className="flex align-center items-center justify-center" style={{minHeight: "85px"}} >
-                          <img src={clam.img} alt="" style={{ width: "60%", height: "auto" }}/>
+                          <img src={clam.img} alt="" className="h-auto" style={{ width: "60%" }}/>
                         </div>
 
                         <div className="">
                           <p className="mt-1">#{clam.clamId}</p>
-                          <div className="flex flex-col items-center justify-center gap-2 xs:flex-row xs: gap-4 py-2 w-100 m-auto">
+                          <div className="flex items-center justify-center gap-2 py-2 w-100 m-auto">
                             <div>
                               <p className="lifeSpan">Lifespan</p>
                               <p className="lifeSpanValue">{lifespan} Pearls</p>
@@ -356,11 +363,11 @@ const Saferoom = ({
             </div>
           </Route>
           <Route path={`/saferoom/pearl`}>
-
-
-            <div className="pearlDiv mb-3" style={{ display: isPearlShowing ? "none" : "block" }}>
+            <div className={`pearlDiv mb-3 ${isPearlShowing ? 'hidden' : "block" }`}>
               <h1 className="title">My Pearls</h1>
-
+              <div className="mb-3">
+                <PearlsSorting page="saferoom" textSize="sm" />
+              </div>
               <div className="pearlitems grid grid-cols-2 gap-4">
                 {pearls &&
                   pearls.map((pearl, i) => {
@@ -371,7 +378,7 @@ const Saferoom = ({
                     return (
                       <div key={i} className="pearlitem text-center p-4">
                         <div className="flex align-center items-center justify-center" style={{minHeight: "85px"}} >
-                          <img src={pearl.img} alt="" style={{ width: "60%", height: "auto" }}/>
+                          <img src={pearl.img} alt="" className="h-auto" style={{ width: "60%" }}/>
                         </div>
 
                         <p className="mt-1">#{pearl.pearlId}</p>
@@ -401,7 +408,7 @@ const Saferoom = ({
 
 
 
-        <div className="bottom_menu" style={{ borderTop: "1px solid blue" }}>
+        <div className="bottom_menu border-t border-blue-700">
           <div className="menu_item active">
             <Link to="/">
               <img src="/saferoom/map.png" alt="" />
@@ -410,7 +417,7 @@ const Saferoom = ({
           </div>
           <div className="menu_item">
             <Link to="/saferoom/clam" onClick={() => { toogleClamShowing(false); tooglePearlShowing(false); }}>
-              <img src={clamIcon} alt="" />
+              <img src="/saferoom/clam.png" alt="" />
               <p>Clams</p>
             </Link>
           </div>

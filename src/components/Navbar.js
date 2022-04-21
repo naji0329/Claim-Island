@@ -16,7 +16,7 @@ import ShellIcon from "../assets/img/shell_icon.png";
 const ErrorAlert = ({ title, description, onClose }) => (
   <div className="w-full absolute">
     <div
-      className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 absolute z-9999"
+      className="bg-red-200 border-t-4 border-red-600 rounded-md text-red-800 p-4 m-2 mt-5 fixed z-9999"
       role="alert"
     >
       <div className="flex">

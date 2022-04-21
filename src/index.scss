@@ -5,6 +5,15 @@
 .flex-col {
   flex-direction: column;
 }
+
+.h-0 {
+  height: 0px;
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
 @font-face {
   font-family: AristotelicaBold;
   src: url(./assets/fonts/aristotelicaText_bold.otf) format("opentype");
@@ -101,6 +110,11 @@ canvas {
 .overlay_m_items {
   overflow: hidden;
 }
+
+.sm-nav-icon {
+  width: 32px !important;
+  height: auto;
+} 
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
