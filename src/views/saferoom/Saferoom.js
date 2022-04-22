@@ -325,7 +325,7 @@ const Saferoom = ({
               <div className="mb-3">
                 <ClamsSorting page="saferoom" textSize="sm" />
               </div>
-              <div className="pearlitems grid grid-cols-2 gap-4">
+              <div className="pearlitems grid grid-cols-2 gap-4 mb-5">
                 {clams &&
                   clams.map((clam, i) => {
                     const rarity = get(clam.dnaDecoded, "rarity");
@@ -368,7 +368,7 @@ const Saferoom = ({
               <div className="mb-3">
                 <PearlsSorting page="saferoom" textSize="sm" />
               </div>
-              <div className="pearlitems grid grid-cols-2 gap-4">
+              <div className="pearlitems grid grid-cols-2 gap-4 mb-5">
                 {pearls &&
                   pearls.map((pearl, i) => {
                     const rarity = get(pearl.dnaDecoded, "rarity");
@@ -382,7 +382,7 @@ const Saferoom = ({
                         </div>
 
                         <p className="mt-1">#{pearl.pearlId}</p>
-                        <div className="flex flex-col items-center justify-center gap-2 xs:flex-row xs: gap-4 py-2 w-100 m-auto">
+                        <div className="flex items-center justify-center gap-2 py-2 w-100 m-auto">
                           <div>
                             <p className="lifeSpan">Rarity</p>
                             <p className="lifeSpanValue">{rarity}</p>

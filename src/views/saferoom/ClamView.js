@@ -612,7 +612,7 @@ export default ({
           </div>
           {!isFarmView &&
             (isInspectorView ? (
-              <div className="flex flex-col items-center xs:flex-row xs:justify-between mt-4 p-4 gap-4">
+              <div className="flex flex-col items-center xs:flex-row xs:justify-between my-4 p-4 gap-4">
                 <button
                   className="cursor-not-allowed opacity-50 btn btn-secondary"
                   data-tip="Coming soon..."
@@ -627,7 +627,7 @@ export default ({
                 </Link>
               </div>
             ) : (
-              <div className="flex flex-col items-center xs:flex-row xs:justify-between mt-4 p-4 gap-4">
+              <div className="flex flex-col items-center xs:flex-row xs:justify-between my-4 p-4 gap-4">
                 <Link to="/farms">
                   <button className="btn btn-secondary">Stake in Farm</button>
                 </Link>

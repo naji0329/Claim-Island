@@ -446,7 +446,7 @@ export default (props) => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center xs:flex-row xs:justify-between mt-4 p-4 gap-4">
+          <div className="flex flex-col items-center xs:flex-row xs:justify-between my-4 p-4 gap-4">
             {isInspectorView ? (
               <button
                 className="cursor-not-allowed opacity-50 btn btn-secondary"
