@@ -27,6 +27,12 @@ import { getSortedPearls } from "utils/pearlsSort";
 import { ClamsSorting } from "components/clamsSorting";
 import { PearlsSorting } from "components/pearlsSorting";
 
+import mobileClamIcon from "assets/img/clam-icon-outline.png";
+import mobilePearlsIcon from "assets/img/pearls-icon-outline.png";
+import mobileMapIcon from "assets/img/map.png";
+import mobileSearchIcon from "assets/img/search.png";
+
+
 import { get } from "lodash";
 import { actions } from "store/redux";
 
@@ -281,7 +287,7 @@ const Saferoom = ({
         </div>
       </div>
       <div className={`saferoom_sm ${ address ? '' : 'hiddden' }`} >
-        
+
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
         {
@@ -411,25 +417,25 @@ const Saferoom = ({
         <div className="bottom_menu border-t border-blue-700">
           <div className="menu_item active">
             <Link to="/">
-              <img src="/saferoom/map.png" alt="" />
+              <img src={mobileMapIcon} alt="" />
               <p>Map</p>
             </Link>
           </div>
           <div className="menu_item">
             <Link to="/saferoom/clam" onClick={() => { toogleClamShowing(false); tooglePearlShowing(false); }}>
-              <img src="/saferoom/clam.png" alt="" />
+              <img src={mobileClamIcon} alt="" />
               <p>Clams</p>
             </Link>
           </div>
           <div className="menu_item">
             <Link to="/saferoom/pearl" onClick={() => { toogleClamShowing(false); tooglePearlShowing(false); }}>
-              <img src="/saferoom/pearl.png" alt="" />
+              <img src={mobilePearlsIcon} alt="" />
               <p>Pearls</p>
             </Link>
           </div>
           <div className="menu_item">
             <Link to="/saferoom/clam/inspect/-1">
-              <img src="/saferoom/opened.png" alt="" />
+              <img src={mobileSearchIcon} alt="" />
               <p>Inspector</p>
             </Link>
           </div>
