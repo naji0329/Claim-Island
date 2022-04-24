@@ -137,6 +137,47 @@ export const buyClamWithVestedTokens = async (account) => {
     });
 };
 
+export const buyClamWithBnb = async (account) => {
+  if (!account) {
+    throw new Error("There is no account connected!");
+  }
+
+  const clamShop = contractFactory({
+    abi: clamShopAbi,
+    address: clamShopAddress,
+  });
+
+  const price = await getPrice();
+  const clamPriceBnb = await getClamPriceBnb(price);
+  const oracleFee = await getOracleFee();
+  const amount = new BigNumber(clamPriceBnb).plus(new BigNumber(oracleFee)).toString();
+
+  const method = clamShop.methods.buyClamWithBnb();
+
+  const gasEstimation = await method.estimateGas({
+    from: account,
+    value: amount,
+  });
+
+  await method
+    .send({
+      from: account,
+      gas: gasEstimation,
+      value: amount,
+    })
+    .once("confirmation", async (res) => {
+      try {
+        console.log("Success", { res }); // add a toaster here
+        // return "sale_success";
+        return res;
+      } catch (error) {
+        console.error(error); // add toaster to show error
+        // callback("sale_failure");
+        return error;
+      }
+    });
+};
+
 export const getPrice = async () => {
   const clamShop = contractFactory({
     abi: clamShopAbi,
@@ -154,6 +195,16 @@ export const getPriceUsd = async () => {
   const value = await clamShop.methods.priceUsd().call();
   return value;
 };
+
+export const getClamPriceBnb = async (price) => {
+  const clamShop = contractFactory({
+    abi: clamShopAbi,
+    address: clamShopAddress,
+  });
+  const value = await clamShop.methods.getClamPriceBnb(price).call();
+  return value;
+};
+
 export const getWeekSupply = async () => {
   const clamShop = contractFactory({
     abi: clamShopAbi,

@@ -24,8 +24,6 @@ export const zeroHash = "0x00000000000000000000000000000000000000000000000000000
 
 export const communityRewardsAddress = "0x6684C3Fb0a85cE9B05187c770c4aa6A824Ed590C";
 
-export const zapAddress = "0x25AE8E764b0c8318c093d8eFdd03000b442bb56a";
-
 export const {
   shellTokenAddress,
   clamNFTAddress,
@@ -49,4 +47,5 @@ export const {
   multicallAddress,
   wBNB,
   BUSD,
+  zapAddress,
 } = addresses;

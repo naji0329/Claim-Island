@@ -8,10 +8,13 @@ import BigNumber from "bignumber.js";
 import "./index.scss";
 import ReactTooltip from "react-tooltip";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import clsx from "clsx";
 
 import Card from "components/Card";
 import ClamUnknown from "assets/img/clam_unknown.png";
+import ClamVariety from "assets/img/clam-variety.mp4";
 import ClamIcon from "assets/clam-icon.png";
+import BnbIcon from "assets/bnb-icon.png";
 import ArrowDown from "assets/img/arrow-down.svg";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,10 +27,13 @@ import {
   buyClamWithVestedTokens,
   getMinPearlProductionDelay,
   getMaxPearlProductionDelay,
+  getClamPriceBnb,
+  buyClamWithBnb,
 } from "web3/clam";
 import { zeroHash } from "constants/constants";
 import { infiniteApproveSpending } from "web3/gem";
 import { getVestedGem } from "web3/gemLocker";
+import { getVestedGem as getVestedGemV2 } from "web3/gemLockerV2";
 import { getUsdPriceOfToken } from "web3/pancakeRouter";
 import { getMintedThisWeek, getClamsPerWeek } from "web3/clamShop";
 import { stakePrice } from "web3/pearlFarm";
@@ -54,7 +60,7 @@ const Divider = () => (
 );
 
 const ClamBuyModal = ({
-  account: { gemBalance, address, clamToCollect },
+  account: { gemBalance, bnbBalance, address, clamToCollect },
   presale: { usersPurchasedClam },
   updateCharacter,
   updateAccount,
@@ -73,17 +79,28 @@ const ClamBuyModal = ({
   const [minPearlProductionTime, setMinPearlProductionTime] = useState("...");
   const [maxPearlProductionTime, setMaxPearlProductionTime] = useState("...");
   const [pearlPrice, setPearlPrice] = useState("...");
+  const [clamPriceBnb, setClamPriceBnb] = useState(0);
+  const [buyWithGem, setBuyWithGem] = useState(false);
   const { handleSubmit } = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
-      const [_gemPrice, _clamPrice, _lockedGem, _clamsPerWeek, _mintedThisWeek] = await Promise.all(
-        [getUsdPriceOfToken(gemTokenAddress, BUSD), getPrice(), getVestedGem(), getClamsPerWeek(), getMintedThisWeek()]
+      const [_gemPrice, _clamPrice, _lockedGemV1, _lockedGemV2, _clamsPerWeek, _mintedThisWeek] = await Promise.all(
+        [
+          getUsdPriceOfToken(gemTokenAddress, BUSD),
+          getPrice(),
+          getVestedGem(),
+          getVestedGemV2(),
+          getClamsPerWeek(),
+          getMintedThisWeek()
+        ]
       );
+      const _clamPriceBnb = await getClamPriceBnb(_clamPrice);
       setClamPrice(_clamPrice);
-      setLockedGem(_lockedGem);
+      setLockedGem(_lockedGemV1 + _lockedGemV2);
       setClamsPerWeek(_clamsPerWeek);
       setMintedThisWeek(_mintedThisWeek);
+      setClamPriceBnb(_clamPriceBnb);
 
       const getPearlProductionTime = async () => {
         const [minTime, maxTime] = await Promise.all([
@@ -118,16 +135,23 @@ const ClamBuyModal = ({
   }, []);
 
   useEffect(() => {
-    const balanceBN = new BigNumber(parseEther(gemBalance).toString());
-    const lockedBN = new BigNumber(lockedGem * 1e18);
-    const totalBN = balanceBN.plus(lockedBN);
-    setCanBuy(totalBN.isGreaterThanOrEqualTo(new BigNumber(clamPrice)));
+    if (buyWithGem) {
+      const balanceBN = new BigNumber(parseEther(gemBalance).toString());
+      const lockedBN = new BigNumber(lockedGem * 1e18);
+      const totalBN = balanceBN.plus(lockedBN);
+
+      setCanBuy(totalBN.isGreaterThanOrEqualTo(new BigNumber(clamPrice)));
+    } else {
+      const balanceBN = new BigNumber(parseEther(bnbBalance).toString());
+
+      setCanBuy(balanceBN.isGreaterThanOrEqualTo(new BigNumber(clamPriceBnb)));
+    }
 
     //already has rng
     if (!!clamToCollect && clamToCollect != zeroHash) {
       setModalToShow("collect");
     }
-  }, [gemBalance, clamPrice, lockedGem, clamToCollect]);
+  }, [gemBalance, clamPrice, lockedGem, clamToCollect, buyWithGem]);
 
   const onSubmit = async () => {
     if (new BigNumber(lockedGem).gt(0)) {
@@ -146,10 +170,13 @@ const ClamBuyModal = ({
 
     buyClamProcessing({ updateCharacter }); // character speaks
 
-    await infiniteApproveSpending(address, clamShopAddress, clamPrice);
-
     try {
-      withVested ? await buyClamWithVestedTokens(address) : await buyClam(address);
+      if (buyWithGem) {
+        await infiniteApproveSpending(address, clamShopAddress, clamPrice);
+        withVested ? await buyClamWithVestedTokens(address) : await buyClam(address);
+      } else {
+        await buyClamWithBnb(address);
+      }
 
       buyClamSuccess({ updateCharacter }); // character speaks
 
@@ -172,31 +199,9 @@ const ClamBuyModal = ({
     <>
       <ReactTooltip html={true} className="max-w-xl" />
       <Card>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{maxWidth: "600px"}}>
           <div className="flex flex-col mb-4">
             <h2 className="text-blue-700 text-center font-semibold text-3xl mb-2">Get Clams</h2>
-
-            {/* <div className="alert alert-success">
-              <div className="flex-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="w-6 h-6 mx-2 stroke-current"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-                <label>
-                  You&apos;ve bought {usersPurchasedClam} out of{" "}
-                  {INDIVIDUAL_CAP} Clams allowed per address
-                </label>
-              </div>
-            </div> */}
 
             {address ? (
               <a
@@ -221,21 +226,63 @@ const ClamBuyModal = ({
           <div className="bg-white border-2 shadow rounded-xl">
             <div className="px-2 py-2">
               <div className="flex flex-col">
-                <div className="text-lg font-semibold my-2">Price of Clam</div>
+                <div className="flex justify-between items-center my-2">
+                  <div className="text-lg font-semibold">Price of Clam</div>
+                  <div onClick={() => setBuyWithGem(!buyWithGem)}>
+                    <label className="label cursor-pointer p-0">
+                      <span className="label-text">Buy with {buyWithGem ? "GEM" : "BNB"}</span>
+                      <div
+                        className={clsx(
+                          "w-14 h-8 ml-2 rounded-2xl bg-gray-200 flex items-center px-1",
+                          !buyWithGem && "justify-end"
+                        )}
+                      >
+                        {buyWithGem ? (
+                          <div
+                            className="rounded-full w-6 h-6 bg-contain"
+                            style={{ backgroundImage: `url(${ClamIcon})` }}
+                          />
+                        ) : (
+                          <div
+                            className="rounded-full w-6 h-6 bg-contain"
+                            style={{ backgroundImage: `url(${BnbIcon})` }}
+                          />
+                        )}
+                      </div>
+                    </label>
+                  </div>
+                </div>
                 <div className="flex flex-col text-sm text-gray-600">
                   <div className="flex flex-col">
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex items-center text-xl">
-                        <img className="w-12 h-12 mr-2" src={ClamIcon} />
+                        <img className="w-12 h-12 mr-2" src={buyWithGem ? ClamIcon : BnbIcon} />
                         <div className="flex flex-col text-right text-black p-2 font-extrabold">
-                          <span>{renderNumber(+formatEther(clamPrice), 2)} GEM</span>
+                          <span>
+                            {buyWithGem
+                              ? clamPrice == 0
+                                ? "... GEM"
+                                : `${renderNumber(+formatEther(clamPrice), 2)} GEM`
+                              : clamPriceBnb == 0
+                              ? "... BNB"
+                              : `${renderNumber(+formatEther(clamPriceBnb), 2)} BNB`}
+                            {!buyWithGem && (
+                              <button data-tip="80% of BNB price is used to purchase GEM, the other 20% is sent to treasury. BNB price may be more than USD equivalent price displayed below due to slippage on conversion to GEM.">
+                                <FontAwesomeIcon className="ml-1" icon={faInfoCircle} />
+                              </button>
+                            )}
+                          </span>
                           <span className="text-sm">{renderNumber(+clamUsdPrice, 2)} USD</span>
                         </div>
                       </div>
                       <div className="flex flex-col my-2 pl-4 w-1/2">
                         <div className="flex justify-between">
                           <span>Wallet:</span>
-                          <span>{formatNumber(+gemBalance, 3)} GEM</span>
+                          <span>
+                            {buyWithGem
+                              ? `${formatNumber(+gemBalance, 3)} GEM`
+                              : `${formatNumber(+bnbBalance, 3)} BNB`}
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span>Vested:</span>
@@ -244,8 +291,9 @@ const ClamBuyModal = ({
                         <div className="flex justify-between">
                           <span>1 CLAM =</span>
                           <span>
-                            {renderNumber(+formatEther(clamPrice), 2)}
-                            GEM
+                            {buyWithGem
+                              ? `${renderNumber(+formatEther(clamPrice), 2)} GEM`
+                              : `${renderNumber(+formatEther(clamPriceBnb), 2)} BNB`}
                           </span>
                         </div>
                       </div>
@@ -263,8 +311,10 @@ const ClamBuyModal = ({
 
           {/* output */}
           <div className="flex flex-row justify-between items-center">
-            <img className="w-1/3" src={ClamUnknown} />
-            <div className="w-3/5 grid">
+            <video autoPlay playsinline loop className="w-1/3">
+            <source src="https://clam-island-public.s3.us-east-2.amazonaws.com/clam-preview.mp4" type="video/mp4" />
+            </video>
+            <div className="w-full ml-4 grid">
               <div className="w-full flex flex-row justify-between">
                 <span>Lifespan</span>
                 <span>5-15 Pearls</span>
@@ -302,13 +352,35 @@ const ClamBuyModal = ({
                     <FontAwesomeIcon icon={faInfoCircle} />
                   </button>
                 </span>
-                <span>{renderNumber((+formatEther(clamPrice) * 0.7 * 0.7 - (formatEther(clamPrice) * 2)) / (formatEther(clamPrice) * 2) * 100, 0) + "% to " + renderNumber((+formatEther(clamPrice) * 30 * 30 - (formatEther(clamPrice) * 2)) / (formatEther(clamPrice) * 2) * 100, 0) + "%"}</span>
+                <span>
+                  {renderNumber(
+                    ((+formatEther(clamPrice) * 0.7 * 0.7 - formatEther(clamPrice) * 2) /
+                      (formatEther(clamPrice) * 2)) *
+                      100,
+                    0
+                  ) +
+                    "% to " +
+                    renderNumber(
+                      ((+formatEther(clamPrice) * 30 * 30 - formatEther(clamPrice) * 2) /
+                        (formatEther(clamPrice) * 2)) *
+                        100,
+                      0
+                    ) +
+                    "%"}
+                </span>
               </div>
               <div className="w-full flex flex-row justify-between">
-                <span>
-                  &nbsp;
+                <span>&nbsp;</span>
+                <span className="text-gray-400 text-sm">
+                  {"(Average " +
+                    renderNumber(
+                      ((+formatEther(clamPrice) * 2 * 2 - formatEther(clamPrice) * 2) /
+                        (formatEther(clamPrice) * 2)) *
+                        100,
+                      0
+                    ) +
+                    "%)"}
                 </span>
-                <span className="text-gray-400 text-sm">{"(Average " + renderNumber((+formatEther(clamPrice) * 2 * 2 - (formatEther(clamPrice) * 2)) / (formatEther(clamPrice) * 2) * 100, 0) + "%)"}</span>
               </div>
             </div>
           </div>
@@ -360,7 +432,7 @@ const ClamBuyModal = ({
                         ${canBuy ? "bg-blue-600" : "btn-disabled bg-grey-light"}
                         `}
                   >
-                    {canBuy ? "Buy Clam" : "Not enough GEM"}
+                    {canBuy ? "Buy Clam" : "Not enough balance"}
                   </button>
                 )}
               </>
