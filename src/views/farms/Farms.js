@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "redux-zero/react";
 import { useAsync } from "react-use";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
 
@@ -41,6 +41,11 @@ import ClamView from "../saferoom/ClamView";
 import { ifPearlSendSaferoom } from "./utils";
 import { getSortedClams } from "utils/clamsSort";
 import { ClamsSorting } from "components/clamsSorting";
+
+import mobileClamIcon from "assets/img/clam-icon-outline.png";
+import mobilePearlsIcon from "assets/img/pearls-icon-outline.png";
+import mobileMapIcon from "assets/img/map.png";
+import mobileSearchIcon from "assets/img/search.png";
 
 const Farms = ({
   account: { clamBalance, isBSChain, address, clams = [] },
@@ -253,90 +258,166 @@ const Farms = ({
   }, []);
 
   return (
-    <div className="overflow-x-hidden">
-      {loading && <LoadingScreen />}
-      <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
+    <>
+      <div className="div_lg">
+        <div className="overflow-x-hidden">
+          {loading && <LoadingScreen />}
+          <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
-      <Modal
-        isShowing={isShowing}
-        onClose={onModalClose}
-        title={
-          modalSelected === MODAL_OPTS.CLAM_DETAILS ||
-          modalSelected === MODAL_OPTS.VIEW_PEARL ||
-          MODAL_OPTS.DEPOSIT_CLAM
-            ? ""
-            : "Choose a Clam"
-        }
-        modalClassName={
-          modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL
-            ? "w-4/5 max-w-5xl"
-            : "w-full md:w-4/5"
-        }
-      >
-        {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
-          <ClamView
-            {...selectedClam}
-            {...boostParams}
-            gemPriceUSD={gemPriceUSD}
-            farmView={true}
-            view="farm"
-            onClickNext={isNextButtonShown && onClickNext}
-            onClickPrev={isPrevButtonShown && onClickPrev}
-          />
-        ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
-          <ClamDeposit
-            clams={availableClamsForDepositing}
-            updateCharacter={updateCharacter}
-            toggleModal={toggleModal}
-            setRefreshClams={setRefreshClams}
-          />
-        ) : (
-          <PearlView
-            {...boostParams}
-            {...selPearl}
-            gemPriceUSD={Number(gemPriceUSD)}
-            hideProduceButton={true}
-          />
-        )}
-      </Modal>
+          <Modal
+            isShowing={isShowing}
+            onClose={onModalClose}
+            title={
+              modalSelected === MODAL_OPTS.CLAM_DETAILS ||
+              modalSelected === MODAL_OPTS.VIEW_PEARL ||
+              MODAL_OPTS.DEPOSIT_CLAM
+                ? ""
+                : "Choose a Clam"
+            }
+            modalClassName={
+              modalSelected === MODAL_OPTS.CLAM_DETAILS || modalSelected === MODAL_OPTS.VIEW_PEARL
+                ? "w-4/5 max-w-5xl"
+                : "w-full md:w-4/5"
+            }
+          >
+            {modalSelected === MODAL_OPTS.CLAM_DETAILS ? (
+              <ClamView
+                {...selectedClam}
+                {...boostParams}
+                gemPriceUSD={gemPriceUSD}
+                farmView={true}
+                view="farm"
+                onClickNext={isNextButtonShown && onClickNext}
+                onClickPrev={isPrevButtonShown && onClickPrev}
+              />
+            ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
+              <ClamDeposit
+                clams={availableClamsForDepositing}
+                updateCharacter={updateCharacter}
+                toggleModal={toggleModal}
+                setRefreshClams={setRefreshClams}
+              />
+            ) : (
+              <PearlView
+                {...boostParams}
+                {...selPearl}
+                gemPriceUSD={Number(gemPriceUSD)}
+                hideProduceButton={true}
+              />
+            )}
+          </Modal>
 
-      {address && (
-        <div className="w-full lg:w-4/5 mx-auto relative z-10">
-          <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-start">
-            <div className="flex flex-row gap-8 mb-8">
-              <PageTitle title="Clam Farms" />
-              <ClamsSorting page="farm" />
-            </div>
-            {/* clams and pears grid */}
-            <div className="w-full my-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-20">
-                <DepositClamCard
-                  pearlProductionPrice={pearlProductionPrice}
-                  minPearlProductionTime={minPearlProductionTime}
-                  maxPearlProductionTime={maxPearlProductionTime}
-                  onClick={onDepositClam}
-                />
-                {clamsStakedSorted &&
-                  clamsStakedSorted.map((clam, i) => (
-                    <FarmItem
-                      key={clam.clamId}
-                      {...clam}
-                      onViewDetails={() => onViewDetails(clam)}
-                      onWithdrawClam={() => onWithdrawClam(clam.clamId)}
-                      onViewPearl={onViewPearl}
-                      updateCharacter={updateCharacter}
-                      withdrawingClamId={withdrawingClamId}
-                      updateStakedClams={() => setRefreshClams(true)}
+          {address && (
+            <div className="w-full lg:w-4/5 mx-auto relative z-10">
+              <div className="px-2 md:px-8 py-4 mt-24 flex flex-col items-start">
+                <div className="flex flex-row gap-8 mb-8">
+                  <PageTitle title="Clam Farms" />
+                  <ClamsSorting page="farm" />
+                </div>
+                {/* clams and pears grid */}
+                <div className="w-full my-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-20">
+                    <DepositClamCard
+                      pearlProductionPrice={pearlProductionPrice}
+                      minPearlProductionTime={minPearlProductionTime}
+                      maxPearlProductionTime={maxPearlProductionTime}
+                      onClick={onDepositClam}
                     />
-                  ))}
+                    {clamsStakedSorted &&
+                      clamsStakedSorted.map((clam, i) => (
+                        <FarmItem
+                          key={clam.clamId}
+                          {...clam}
+                          onViewDetails={() => onViewDetails(clam)}
+                          onWithdrawClam={() => onWithdrawClam(clam.clamId)}
+                          onViewPearl={onViewPearl}
+                          updateCharacter={updateCharacter}
+                          withdrawingClamId={withdrawingClamId}
+                          updateStakedClams={() => setRefreshClams(true)}
+                        />
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <Character name="al" loading={loading} />
+        </div>
+      </div>
+      <div className={`saferoom_sm ${ address ? '' : 'hiddden' }`} >
+        {loading && <LoadingScreen />}
+        <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
+          
+          
+        {address && (
+          <div className="w-full lg:w-4/5 mx-auto relative z-10">
+            <div className="px-2 md:px-3 py-4 mt-12 flex flex-col items-start">
+              <div className="mb-2 text-center w-full">
+                <PageTitle title="Clam Farms" />
+                <ClamsSorting page="farm" textSize="sm" />
+              </div>
+              {/* clams and pears grid */}
+              <div className="w-full my-4">
+                <div className="grid grid-cols-2 md:grid-cols-2 2xl:grid-cols-2 gap-4">
+                  {/* <DepositClamCard
+                    pearlProductionPrice={pearlProductionPrice}
+                    minPearlProductionTime={minPearlProductionTime}
+                    maxPearlProductionTime={maxPearlProductionTime}
+                    onClick={onDepositClam}
+                  /> */}
+                  {clamsStakedSorted &&
+                    clamsStakedSorted.map((clam, i) => (
+                      <FarmItem
+                        key={clam.clamId}
+                        {...clam}
+                        onViewDetails={() => onViewDetails(clam)}
+                        onWithdrawClam={() => onWithdrawClam(clam.clamId)}
+                        onViewPearl={onViewPearl}
+                        updateCharacter={updateCharacter}
+                        withdrawingClamId={withdrawingClamId}
+                        updateStakedClams={() => setRefreshClams(true)}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <Character name="al" loading={loading} />
-    </div>
+        
+        
+        <Character name="al" loading={loading} />
+                        
+        <div className="bottom_menu border-t border-blue-700">
+          <div className="menu_item active">
+            <Link to="/">
+              <img src={mobileMapIcon} alt="" />
+              <p>Map</p>
+            </Link>
+          </div>
+          <div className="menu_item">
+            <Link to="/farms" onClick={() => { }}>
+              <img src={mobileClamIcon} alt="" />
+              <p>Farming</p>
+            </Link>
+          </div>
+          <div className="menu_item">
+            <Link to="/saferoom/pearl" onClick={() => { toogleClamShowing(false); tooglePearlShowing(false); }}>
+              <img src={mobilePearlsIcon} alt="" />
+              <p>Ready<br/> Claims</p>
+            </Link>
+          </div>
+          <div className="menu_item">
+            <Link to="/saferoom/clam/inspect/-1">
+              <img src={mobileSearchIcon} alt="" />
+              <p>Deposit<br/> Claims</p>
+            </Link>
+          </div>
+        </div>
+      </div>
+    
+    </>
   );
 };
 

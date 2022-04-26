@@ -9,7 +9,7 @@
 }
 
 .FarmItem {
-  @apply rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 bg-white;
+  @apply rounded-xl shadow-md overflow-hidden border-b-4 border-blue-500 sm:border-0 bg-white;
   @apply flex flex-col justify-between;
 
   .progress-bar {
