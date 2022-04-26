@@ -210,7 +210,7 @@ const Saferoom = ({
     <>
       {ui.isFetching && <LoadingScreen />}
 
-      <div className={`saferoom_lg ${ !address ? 'block' : '' }`}>
+      <div className={`saferoom_lg`}>
         {/* container */}
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
@@ -407,7 +407,6 @@ const Saferoom = ({
               </div>
             </div>
           </Route>
-
         </Switch>
 
 

@@ -47,27 +47,31 @@ export const ClamInspect = (props) => {
   }, [tokenId]);
 
   return (
-    <Modal
-      isShowing={true}
-      title={<InspectorControls tokenId={parseInt(tokenId)} view="clam" />}
-      onClose={handleModalClose}
-    >
-      {isLoading ? (
-        <Skeleton animation="waves" variant="rect" height={200} />
-      ) : clam && clam.clamDataValues.birthTime !== "0" ? (
-        <ClamView {...props} {...clam} view="inspector" />
-      ) : (
-        <div className="hero h-[200px]">
-          <div className="hero-overlay bg-opacity-10" />
-          <div className="text-center hero-content text-gray-600">
-            <div className="max-w-md">
-              <h1 className="mb-5 text-xl font-bold">
-                {clam ? "A Clam with that ID# does not exist." : "Enter Clam ID# above to inspect the Clam."}
-              </h1>
+    <>
+        <Modal
+          isShowing={true}
+          title={<InspectorControls tokenId={parseInt(tokenId)} view="clam" />}
+          onClose={handleModalClose}
+        >
+          {isLoading ? (
+            <Skeleton animation="waves" variant="rect" height={200} />
+          ) : clam && clam.clamDataValues.birthTime !== "0" ? (
+            <ClamView {...props} {...clam} view="inspector" />
+          ) : (
+            <div className="hero h-[200px]">
+              <div className="hero-overlay bg-opacity-10" />
+              <div className="text-center hero-content text-gray-600">
+                <div className="max-w-md">
+                  <h1 className="mb-5 text-xl font-bold">
+                    {clam ? "A Clam with that ID# does not exist." : "Enter Clam ID# above to inspect the Clam."}
+                  </h1>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-    </Modal>
+          )}
+        </Modal>
+    </>
   );
 };
+
+
