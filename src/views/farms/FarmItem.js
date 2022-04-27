@@ -341,14 +341,14 @@ const FarmItem = ({
                 {buttonText}
               </ActionButton>
 
-                <button
-                  className="btn btn-secondary w-full mt-4"
-                  onClick={onWithdrawClam}
-                  disabled={isWithdrawing || inTx || action === "collect"}
-                >
-                  <Spinner show={isWithdrawing} color="#ff4b47" />
-                  Withdraw
-                </button>
+              <button
+                className="btn btn-secondary w-full mt-4"
+                onClick={onWithdrawClam}
+                disabled={isWithdrawing || inTx || action === "collect"}
+              >
+                <Spinner show={isWithdrawing} color="#ff4b47" />
+                Withdraw
+              </button>
 
             </>
           )}

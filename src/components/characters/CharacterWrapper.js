@@ -226,7 +226,7 @@ const CharacterWrapper = ({
             onClick={handleClickCharacter}
           />
         </div>
-        <button className="btn character-container-round" onClick={handleClickCharacter} style={{display: showBubble ? "none": "block"}}>
+        <button className="btn character-container-round mb-6" onClick={handleClickCharacter} style={{display: showBubble ? "none": "block"}}>
           <img src={character.charImg} className="character"/>
         </button>
       </div>

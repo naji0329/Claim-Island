@@ -346,12 +346,13 @@ const Farms = ({
         </div>
       </div>
       <div className={`saferoom_sm ${ address ? '' : 'hiddden' }`} >
+
         {loading && <LoadingScreen />}
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
           
           
         {address && (
-          <div className="w-full lg:w-4/5 mx-auto relative z-10">
+          <div className="w-full lg:w-4/5 mx-auto relative z-5">
             <div className="px-2 md:px-3 py-4 mt-12 flex flex-col items-start">
               <div className="mb-2 text-center w-full">
                 <PageTitle title="Clam Farms" />
@@ -360,12 +361,6 @@ const Farms = ({
               {/* clams and pears grid */}
               <div className="w-full my-4">
                 <div className="grid grid-cols-2 md:grid-cols-2 2xl:grid-cols-2 gap-4">
-                  {/* <DepositClamCard
-                    pearlProductionPrice={pearlProductionPrice}
-                    minPearlProductionTime={minPearlProductionTime}
-                    maxPearlProductionTime={maxPearlProductionTime}
-                    onClick={onDepositClam}
-                  /> */}
                   {clamsStakedSorted &&
                     clamsStakedSorted.map((clam, i) => (
                       <FarmItem
@@ -397,25 +392,28 @@ const Farms = ({
             </Link>
           </div>
           <div className="menu_item">
-            <Link to="/farms" onClick={() => { }}>
+            <Link to="/farms" onClick={() => { toggleModal() }}>
               <img src={mobileClamIcon} alt="" />
               <p>Farming</p>
             </Link>
           </div>
           <div className="menu_item">
-            <Link to="/saferoom/pearl" onClick={() => { toogleClamShowing(false); tooglePearlShowing(false); }}>
+            <Link to="#">
               <img src={mobilePearlsIcon} alt="" />
               <p>Ready<br/> Claims</p>
             </Link>
           </div>
           <div className="menu_item">
-            <Link to="/saferoom/clam/inspect/-1">
+            <Link to="#" onClick={onDepositClam}>
               <img src={mobileSearchIcon} alt="" />
               <p>Deposit<br/> Claims</p>
             </Link>
           </div>
         </div>
+
+
       </div>
+
     
     </>
   );

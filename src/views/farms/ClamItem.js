@@ -148,78 +148,154 @@ export const ClamItem = ({
   return (
     <>
       <ReactTooltip className="max-w-xl" />
-      <div className="card bg-white shadow-lg overflow-visible w-full border-4 border-gray-50 hover:border-4 hover:border-blue-200 ">
-        <figure>
-          <img className="h-64  w-full object-cover" src={img} alt="" />
-        </figure>
 
-        <div className="flex justify-between px-4 py-2">
-          <div className=" badge badge-success">#{tokenId}</div>
-          <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
-        </div>
 
-        <div className="bg-white p-2 grid sm:gap-4">
-          <div className="block">
-            <div className="border rounded border-gray-200">
-              <dl>
-                <div className="bg-gray-50 flex flex-row justify-between sm:gap-4 p-2">
-                  <dt className="text-sm font-medium text-gray-500">Pearl ETA</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                    {secondsToFormattedTime(remainingTime)}
-                  </dd>
-                </div>
-                <div className="bg-gray-100 flex flex-row justify-between sm:gap-4 p-2">
-                  <dt className="text-sm font-medium text-gray-500">Lifespan</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                    {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced}{" "}
-                    pearls remaining
-                  </dd>
-                </div>
+        <div className="div_lg">
+          <div className="card bg-white shadow-lg overflow-visible w-full border-4 border-gray-50 hover:border-4 hover:border-blue-200 ">
+            <figure>
+              <img className="h-64 w-full object-cover" src={img} alt="" />
+            </figure>
 
-                <div className="bg-gray-50 flex flex-row justify-between sm:gap-4 p-2">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Clam boost&nbsp;
-                    <button data-tip="Applied as a boost multiplier when calculating the GEM yield for each Pearl produced by this Clam.">
-                      <FontAwesomeIcon icon={faInfoCircle} />
-                    </button>
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0">{pearlBoost}</dd>
+            <div className="flex justify-between px-4 py-2">
+              <div className=" badge badge-success">#{tokenId}</div>
+              <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
+            </div>
+
+            <div className="bg-white sm:p-2 grid sm:gap-4">
+              <div className="block">
+                <div className="border rounded border-gray-200">
+                  <dl>
+                    <div className="bg-gray-50 flex flex-row justify-between sm:gap-4 p-2">
+                      <dt className="text-sm font-medium text-gray-500">Pearl ETA</dt>
+                      <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
+                        {secondsToFormattedTime(remainingTime)}
+                      </dd>
+                    </div>
+                    <div className="bg-gray-100 flex flex-row justify-between sm:gap-4 p-2">
+                      <dt className="text-sm font-medium text-gray-500">Lifespan</dt>
+                      <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
+                        {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced}{" "}
+                        pearls remaining
+                      </dd>
+                    </div>
+
+                    <div className="bg-gray-50 flex flex-row justify-between sm:gap-4 p-2">
+                      <dt className="text-sm font-medium text-gray-500">
+                        Clam boost&nbsp;
+                        <button data-tip="Applied as a boost multiplier when calculating the GEM yield for each Pearl produced by this Clam.">
+                          <FontAwesomeIcon icon={faInfoCircle} />
+                        </button>
+                      </dt>
+                      <dd className="mt-1 text-sm text-gray-900 sm:mt-0">{pearlBoost}</dd>
+                    </div>
+                  </dl>
                 </div>
-              </dl>
+              </div>
+
+              <div className="flex flex-col items-center justify-items-center">
+                <Link
+                  to={`/saferoom/clam?id=${tokenId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-outline btn-neutral mt-4 font-montserrat font-bold w-full"
+                >
+                  View in saferoom&nbsp;
+                  <FontAwesomeIcon icon={faExternalLinkAlt} />
+                </Link>
+                {action === clamItemAction.DEPOSIT && (
+                  <button
+                    disabled={inTx}
+                    className="btn btn-secondary mt-4 font-montserrat font-bold w-full"
+                    onClick={() => executeDeposit()}
+                  >
+                    {buttonText}
+                  </button>
+                )}
+                {action === clamItemAction.SWAP && (
+                  <button
+                    disabled={inTx || insufficentGem}
+                    className="btn btn-secondary mt-4 font-montserrat font-bold w-full"
+                    onClick={() => executeSwap()}
+                  >
+                    {buttonText}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="flex flex-col items-center justify-items-center">
-            <Link
-              to={`/saferoom/clam?id=${tokenId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-outline btn-neutral mt-4 font-montserrat font-bold w-full"
-            >
-              View in saferoom&nbsp;
-              <FontAwesomeIcon icon={faExternalLinkAlt} />
-            </Link>
-            {action === clamItemAction.DEPOSIT && (
-              <button
-                disabled={inTx}
-                className="btn btn-secondary mt-4 font-montserrat font-bold w-full"
-                onClick={() => executeDeposit()}
-              >
-                {buttonText}
-              </button>
-            )}
-            {action === clamItemAction.SWAP && (
-              <button
-                disabled={inTx || insufficentGem}
-                className="btn btn-secondary mt-4 font-montserrat font-bold w-full"
-                onClick={() => executeSwap()}
-              >
-                {buttonText}
-              </button>
-            )}
+        <div className="div_sm">
+          <div className="card bg-white shadow-lg overflow-visible w-full border-4 border-gray-50 ">
+
+            <div className="flex justify-between px-2 py-2">
+              <div className="badge badge-success">#{tokenId}</div>
+              <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
+            </div>
+
+            <figure>
+              <img className="h-32 w-full object-cover" src={img} alt="" />
+            </figure>
+
+            <div className="flex justify-between items-center border-1">
+              <dt className="text-xs font-medium text-gray-500">Lifespan</dt>
+              <dd className="mt-1 text-xs text-gray-900 sm:mt-0 text-right">
+                {+clamDataValues.pearlProductionCapacity - +clamDataValues.pearlsProduced}{" "}
+                pearls remaining
+              </dd>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <dt className="text-xs font-medium text-gray-500">Pearl ETA</dt>
+              <dd className="mt-1 text-xs text-gray-900 sm:mt-0">
+                {secondsToFormattedTime(remainingTime)}
+              </dd>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <dt className="text-xs font-medium text-gray-500">
+                Clam boost&nbsp;
+                <button data-tip="Applied as a boost multiplier when calculating the GEM yield for each Pearl produced by this Clam.">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </button>
+              </dt>
+              <dd className="mt-1 text-xs text-gray-900 sm:mt-0">{pearlBoost}</dd>
+            </div>
+
+            <div className="bg-white ">
+
+              <div className="flex flex-col items-center justify-items-center">
+                <Link
+                  to={`/saferoom/clam?id=${tokenId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-center mt-2 font-montserrat font-bold w-full"
+                >
+                  View in saferoom&nbsp;
+                  <FontAwesomeIcon icon={faExternalLinkAlt} />
+                </Link>
+                {action === clamItemAction.DEPOSIT && (
+                  <button
+                    disabled={inTx}
+                    className="btn btn-secondary mt-2 font-montserrat font-bold w-full"
+                    onClick={() => executeDeposit()}
+                  >
+                    {buttonText}
+                  </button>
+                )}
+                {action === clamItemAction.SWAP && (
+                  <button
+                    disabled={inTx || insufficentGem}
+                    className="btn btn-secondary mt-2 font-montserrat font-bold w-full"
+                    onClick={() => executeSwap()}
+                  >
+                    {buttonText}
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
     </>
   );
 };
