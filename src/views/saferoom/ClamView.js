@@ -63,7 +63,8 @@ export default ({
   owner,
   ownerAddress,
   mopenPearlDetailedInfo,
-  showlists
+  showlists,
+  onClose
 }) => {
   const [isClamAvailableForHarvest, setIsClamAvailableForHarvest] = useState(false);
   const [producedPearls, setProducedPearls] = useState([]);
@@ -449,7 +450,7 @@ export default ({
                 <SocialMediaButtons assetId={clamId} assetName="Clam" />
               </div> */}
               {isFarmView && (
-                <div className="flex flex-row justify-between my-2" style={{ width: "400px" }}>
+                <div className="flex flex-row justify-between my-2" style={{ width: "100%" }}>
                   <p className="float-left">Remaining Time</p>
                   <p className="float-right">{remainingFormattedTime}</p>
                 </div>
@@ -458,7 +459,7 @@ export default ({
             <div className="flex justify-center w-full p-4 text-center items-center text-2xl">
               <h1 className="float-left">Clam #{clamId}</h1>
               <div className="absolute right-4">
-                <Link to="/saferoom/clam" onClick={showlists}>
+                <Link to="#" onClick={onClose}>
                   &#10006;
                 </Link>
               </div>

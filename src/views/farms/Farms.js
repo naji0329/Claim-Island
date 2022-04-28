@@ -19,12 +19,13 @@ import videoMp4 from "assets/locations/Farm.mp4";
 import videoWebM from "assets/locations/Farm.webm";
 
 import clamContract, { getMinPearlProductionDelay, getMaxPearlProductionDelay } from "web3/clam";
-import { getStakedClamIds, unstakeClam, collectPearl, stakePrice } from "web3/pearlFarm";
+import { getStakedClamIds, unstakeClam, collectPearl, stakePrice, getRemainingPearlProductionTime } from "web3/pearlFarm";
 import { formatFromWei, getClamsDataByIds } from "web3/shared";
 
 import "./index.scss";
 import FarmItem from "./FarmItem";
 import ClamDeposit from "./ClamDeposit";
+import BottomMenu from './BottomMenu';
 import { DepositClamCard } from "./depositClamCard";
 
 import PearlView from "../saferoom/PearlView";
@@ -42,10 +43,6 @@ import { ifPearlSendSaferoom } from "./utils";
 import { getSortedClams } from "utils/clamsSort";
 import { ClamsSorting } from "components/clamsSorting";
 
-import mobileClamIcon from "assets/img/clam-icon-outline.png";
-import mobilePearlsIcon from "assets/img/pearls-icon-outline.png";
-import mobileMapIcon from "assets/img/map.png";
-import mobileSearchIcon from "assets/img/search.png";
 
 const Farms = ({
   account: { clamBalance, isBSChain, address, clams = [] },
@@ -77,6 +74,15 @@ const Farms = ({
   const [pearlProductionPrice, setPearlProductionPrice] = useState(0);
   const [minPearlProductionTime, setMinPearlProductionTime] = useState(0);
   const [maxPearlProductionTime, setMaxPearlProductionTime] = useState(0);
+  const [viewTab, setViewTab] = useState('farms');
+
+
+  const setViewTabF = (_viewTab) => {
+    // alert("_viewTab", _viewTab);
+    setViewTab(_viewTab);
+  }
+
+
 
   const isPrevButtonShown = selectedClam.clamId !== clamsStakedSorted[0]?.clamId;
   const isNextButtonShown =
@@ -221,6 +227,8 @@ const Farms = ({
       ...clamsReadyToCollect,
       ...getSortedClams(clamsNotReadyToCollect, clamsSortOrder.value, clamsSortOrder.order),
     ];
+    console.log("Ready To collect", clamsReadyToCollect);
+    console.log("Not Ready To collect", clamsNotReadyToCollect);
     setClamsStakedSorted(sortedClams);
   }, [clamsStaked, clamsSortOrder.value, clamsSortOrder.order]);
 
@@ -362,59 +370,40 @@ const Farms = ({
               <div className="w-full my-4">
                 <div className="grid grid-cols-2 md:grid-cols-2 2xl:grid-cols-2 gap-4">
                   {clamsStakedSorted &&
-                    clamsStakedSorted.map((clam, i) => (
-                      <FarmItem
-                        key={clam.clamId}
-                        {...clam}
-                        onViewDetails={() => onViewDetails(clam)}
-                        onWithdrawClam={() => onWithdrawClam(clam.clamId)}
-                        onViewPearl={onViewPearl}
-                        updateCharacter={updateCharacter}
-                        withdrawingClamId={withdrawingClamId}
-                        updateStakedClams={() => setRefreshClams(true)}
-                      />
-                    ))}
+                    clamsStakedSorted.map( (clam, i) => { 
+                      console.log('clam data', clam);
+                      console.log('viewTab viewTab', viewTab);
+                      return (
+                        <FarmItem
+                          key={clam.clamId}
+                          {...clam}
+                          onViewDetails={() => onViewDetails(clam)}
+                          onWithdrawClam={() => onWithdrawClam(clam.clamId)}
+                          onViewPearl={onViewPearl}
+                          updateCharacter={updateCharacter}
+                          withdrawingClamId={withdrawingClamId}
+                          updateStakedClams={() => setRefreshClams(true)}
+                          viewTab={viewTab}
+                        />
+                      )
+                    // }
+                    }
+                  )}
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        
-        
         <Character name="al" loading={loading} />
-                        
-        <div className="bottom_menu border-t border-blue-700">
-          <div className="menu_item active">
-            <Link to="/">
-              <img src={mobileMapIcon} alt="" />
-              <p>Map</p>
-            </Link>
-          </div>
-          <div className="menu_item">
-            <Link to="/farms" onClick={() => { toggleModal() }}>
-              <img src={mobileClamIcon} alt="" />
-              <p>Farming</p>
-            </Link>
-          </div>
-          <div className="menu_item">
-            <Link to="#">
-              <img src={mobilePearlsIcon} alt="" />
-              <p>Ready<br/> Claims</p>
-            </Link>
-          </div>
-          <div className="menu_item">
-            <Link to="#" onClick={onDepositClam}>
-              <img src={mobileSearchIcon} alt="" />
-              <p>Deposit<br/> Claims</p>
-            </Link>
-          </div>
-        </div>
-
-
+        
+        <BottomMenu 
+          isShowing={isShowing}
+          toggleModal={toggleModal}
+          setViewTabF={setViewTabF}
+          onDepositClam={onDepositClam}
+        />
       </div>
-
-    
     </>
   );
 };
