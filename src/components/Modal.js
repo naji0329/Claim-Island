@@ -73,7 +73,7 @@ export const Modal = ({
 
             <div
               className={`fixed bg-white w-full inset-0 z-50 overflow-hidden flex justify-center animated fadeIn faster`}
-              style={{ zIndex: 5, paddingTop: "75px", paddingBottom: "60px" }}
+              style={{ zIndex: 5, paddingTop: "75px", paddingBottom: "70px" }}
             >
               <div
                 className={classNames(

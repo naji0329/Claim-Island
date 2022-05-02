@@ -11,7 +11,7 @@ const BottomMenu = ({isShowing, toggleModal, setViewTabF, onDepositClam }) => {
   return (
       <>
       
-        <div className="bottom_menu border-t border-blue-700">
+        <div className="bottom_menu border-t border-blue-700 py-2">
             <div className="menu_item active">
                 <Link to="/">
                     <img src={mobileMapIcon} alt="" />
@@ -27,13 +27,13 @@ const BottomMenu = ({isShowing, toggleModal, setViewTabF, onDepositClam }) => {
             <div className="menu_item">
                 <Link to="#" onClick={() => { setViewTabF('ready_claims'); if(isShowing) { toggleModal();} }}>
                 <img src={mobilePearlsIcon} alt="" />
-                <p>Ready<br/> Claims</p>
+                <p>Ready<br/> Clams</p>
                 </Link>
             </div>
             <div className="menu_item">
                 <Link to="#" onClick={onDepositClam}>
                     <img src={mobileSearchIcon} alt="" />
-                    <p>Deposit<br/> Claims</p>
+                    <p>Deposit<br/> Clams</p>
                 </Link>
             </div>
         </div>

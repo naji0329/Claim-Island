@@ -374,9 +374,10 @@ const FarmItem = ({
                       <div className=" badge badge-success">#{clamId}</div>
                       <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
                     </div>
+                    
                     <div className="flex-1 justify-center md:flex items-start p-4">
                       <button onClick={(e) => onViewDetails(e)}>
-                        <img className="w-auto h-16" src={img} />
+                        <img className="w-auto" src={img} />
                       </button>
                     </div>
 
@@ -389,26 +390,28 @@ const FarmItem = ({
                     </div>
 
                     {/* Details */}
-                    <div className="px-4 md:px-6 py-2">
-                      <div className="text-sm flex flex-row justify-between">
+                    <div className="px-4 md:px-6 py-1">
+                      <div className="text-sm flex flex-row justify-center">
                         <div className="text-sm block">
                           <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                             Remaining Time
                           </p>
-                          <p className="font-bold text-black">{clam.remainingFormattedTime}</p>
+                          <p className="font-bold text-black text-center">{clam.remainingFormattedTime}</p>
                         </div>
+                      </div>
+                      <div className="text-sm flex flex-row justify-center">
                         <div className="text-sm block">
-                          <p className="text-gray-500 font-semibold text-xs text-right mb-1 leading-none">
+                          <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                             Lifespan Remaining
                           </p>
-                          <p className="font-bold text-black text-right">
+                          <p className="font-bold text-black text-center">
                             {clam.remainingLifeSpan + " Pearls"}
                           </p>
                         </div>
                       </div>
                     </div>
-
-                    <div className="px-4 py-2">
+                    
+                    <div className="px-4 py-1">
                       <button
                         className="btn btn-neutral btn-outline w-full"
                         onClick={(e) => onViewDetails(e)}
@@ -417,7 +420,7 @@ const FarmItem = ({
                       </button>
                     </div>
 
-                    <div className="px-4 py-2">
+                    <div className="px-4 py-1">
                       <button
                         className="btn btn-secondary w-full"
                         onClick={onWithdrawClam}
@@ -445,12 +448,14 @@ const FarmItem = ({
                     <div className=" badge badge-success">#{clamId}</div>
                     <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
                   </div>
-                  <div className="flex-1 justify-center md:flex items-start p-4">
+
+                  <div className="flex-1 justify-center md:flex items-start py-1 px-4">
                     <button onClick={(e) => onViewDetails(e)}>
-                      <img className="w-auto h-16" src={img} />
+                      <img className="w-auto" src={img} />
                     </button>
                   </div>
-                  <div className="px-4 py-2">
+
+                  <div className="px-4 py-1">
                     {isInitLoading ? (
                       <ActionButton
                         onClick={getClamFunction}
@@ -472,7 +477,7 @@ const FarmItem = ({
                         </ActionButton>
       
                         <button
-                          className="btn btn-secondary w-full mt-4"
+                          className="btn btn-secondary w-full mt-2"
                           onClick={onWithdrawClam}
                           disabled={isWithdrawing || inTx || action === "collect"}
                         >

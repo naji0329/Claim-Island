@@ -90,6 +90,9 @@ module.exports = {
       inset: {
         "1/10": "10%",
       },
+      colors: {
+        'pri-color': '#0072E3',
+      },
     },
   },
   variants: {

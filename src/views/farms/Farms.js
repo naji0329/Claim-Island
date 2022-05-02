@@ -297,6 +297,7 @@ const Farms = ({
                 view="farm"
                 onClickNext={isNextButtonShown && onClickNext}
                 onClickPrev={isPrevButtonShown && onClickPrev}
+                onClose={onModalClose}
               />
             ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
               <ClamDeposit
@@ -304,6 +305,7 @@ const Farms = ({
                 updateCharacter={updateCharacter}
                 toggleModal={toggleModal}
                 setRefreshClams={setRefreshClams}
+                onClose={onModalClose}
               />
             ) : (
               <PearlView
@@ -358,15 +360,16 @@ const Farms = ({
         {loading && <LoadingScreen />}
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
           
-          
-        {address && (
-          <div className="w-full lg:w-4/5 mx-auto relative z-5">
-            <div className="px-2 md:px-3 py-4 mt-12 flex flex-col items-start">
-              <div className="mb-2 text-center w-full">
-                <PageTitle title="Clam Farms" />
-                <ClamsSorting page="farm" textSize="sm" />
-              </div>
-              {/* clams and pears grid */}
+        <div className="w-full lg:w-4/5 mx-auto relative z-5">
+          <div className="px-2 md:px-3 py-4 mt-8 sm:mt-12 flex flex-col items-start">
+            <div className="mb-2 text-center w-full"> 
+
+              <PageTitle title="Clam Farms" />
+              <ClamsSorting page="farm" textSize="sm" />
+
+            </div>
+            {address && (
+              
               <div className="w-full my-4">
                 <div className="grid grid-cols-2 md:grid-cols-2 2xl:grid-cols-2 gap-4">
                   {clamsStakedSorted &&
@@ -391,9 +394,9 @@ const Farms = ({
                   )}
                 </div>
               </div>
-            </div>
+            )}
           </div>
-        )}
+        </div>
 
         <Character name="al" loading={loading} />
         
