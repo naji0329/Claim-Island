@@ -47,7 +47,7 @@
     color: white;
     font-size: 12px;
     padding: 6px 20px 6px 20px;
-
+    margin: auto;
   }
   
 
@@ -79,7 +79,7 @@
     }
 
     .bottom_menu {
-      z-index: 10;
+      z-index: 9999;
       position: fixed;
       bottom: 0;
       left: 0;

@@ -369,7 +369,7 @@ const FarmItem = ({
                { viewTab == "farms" && clam.processing && !isInitLoading ? (
                 <>
                 <div className="div_sm">
-                  <div className={`FarmItem bg-opacity-90`} >
+                  <div className={`mFarmItem bg-opacity-90`} >
                     <div className="flex justify-between px-4 pt-4">
                       <div className=" badge badge-success">#{clamId}</div>
                       <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
@@ -399,7 +399,7 @@ const FarmItem = ({
                           <p className="font-bold text-black text-center">{clam.remainingFormattedTime}</p>
                         </div>
                       </div>
-                      <div className="text-sm flex flex-row justify-center">
+                      {/* <div className="text-sm flex flex-row justify-center">
                         <div className="text-sm block">
                           <p className="text-gray-500 font-semibold text-xs mb-1 leading-none">
                             Lifespan Remaining
@@ -408,19 +408,17 @@ const FarmItem = ({
                             {clam.remainingLifeSpan + " Pearls"}
                           </p>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                     
-                    <div className="px-4 py-1">
-                      <button
-                        className="btn btn-neutral btn-outline w-full"
-                        onClick={(e) => onViewDetails(e)}
-                      >
-                        View Details
-                      </button>
-                    </div>
+                    <button
+                      className="selectBtn"
+                      onClick={(e) => onViewDetails(e)}
+                    >
+                      View Details
+                    </button>
 
-                    <div className="px-4 py-1">
+                    {/* <div className="px-4 py-1">
                       <button
                         className="btn btn-secondary w-full"
                         onClick={onWithdrawClam}
@@ -429,7 +427,7 @@ const FarmItem = ({
                         <Spinner show={isWithdrawing} color="#ff4b47" />
                         Withdraw
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 </>
@@ -443,7 +441,7 @@ const FarmItem = ({
             <>
               {clam.processing && !isInitLoading ? "" : (
                 <div className="div_sm">
-                <div className="FarmItem bg-opacity-90">
+                <div className="mFarmItem bg-opacity-90">
                   <div className="flex justify-between px-4 pt-4">
                     <div className=" badge badge-success">#{clamId}</div>
                     <div className="text-green-400 text-bold">{dnaDecoded.rarity}</div>
@@ -467,23 +465,47 @@ const FarmItem = ({
                       </ActionButton>
                     ) : (
                       <>
-                        <ActionButton
+                        <div className="text-center">
+                          <p className="text-xs text-neutral">Pearl is ready!</p>
+
+                          <p className="text-xs text-neutral mt-1">Remaining Time</p>
+                          <p className="text-sm text-neutral font-black mb-1">0:00</p>
+                        </div>
+                        <div className="text-center">
+                          <button
+                            className="selectBtn"
+                            onClick={(e) => onViewDetails(e)}
+                          >
+                            View Details
+                          </button>
+
+                        </div>
+
+                        {/* <button
+                          className={action === "open" ? "selectBtn btn-primary w-full" : "selectBtn btn-secondary w-full"}
+                          isDisabled={!canProducePearl || inTx || now <= pearlProductionTime}
+                          isLoading={inTx}
                           onClick={getClamFunction}
+                        >
+                          {buttonText}
+                        </button> */}
+
+                        {/* <ActionButton
                           style={action === "open" ? "btn btn-primary w-full" : "btn btn-secondary w-full"}
                           isDisabled={!canProducePearl || inTx || now <= pearlProductionTime}
                           isLoading={inTx}
                         >
                           {buttonText}
-                        </ActionButton>
+                        </ActionButton> */}
       
-                        <button
-                          className="btn btn-secondary w-full mt-2"
+                        {/* <button
+                          className="selectBtn"
                           onClick={onWithdrawClam}
                           disabled={isWithdrawing || inTx || action === "collect"}
                         >
                           <Spinner show={isWithdrawing} color="#ff4b47" />
                           Withdraw
-                        </button>
+                        </button> */}
       
                       </>
                     )}

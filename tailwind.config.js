@@ -32,6 +32,7 @@ module.exports = {
       999: 999,
       9998: 9998,
       9999: 9999,
+      10000: 10000
     },
     borderColor: (theme) => ({
       ...theme("colors"),

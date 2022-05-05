@@ -1,5 +1,5 @@
 .loading-screen-cls {
-  @apply absolute z-9999 w-full h-screen bg-black flex items-center justify-center top-0;
+  @apply absolute z-10000 w-full h-screen bg-black flex items-center justify-center top-0;
 
   @keyframes blink {
     from,

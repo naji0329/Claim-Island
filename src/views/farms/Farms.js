@@ -298,6 +298,15 @@ const Farms = ({
                 onClickNext={isNextButtonShown && onClickNext}
                 onClickPrev={isPrevButtonShown && onClickPrev}
                 onClose={onModalClose}
+                address={address}
+                updateAccount={updateAccount}
+                onWithdrawClam={() => onWithdrawClam(selectedClam.clamId)}
+                onViewPearl={onViewPearl}
+                updateCharacter={updateCharacter}
+                withdrawingClamId={withdrawingClamId}
+                updateStakedClams={() => setRefreshClams(true)}
+                viewTab={viewTab}
+                updateClams={updateClams}
               />
             ) : modalSelected === MODAL_OPTS.DEPOSIT_CLAM ? (
               <ClamDeposit
@@ -361,7 +370,7 @@ const Farms = ({
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
           
         <div className="w-full lg:w-4/5 mx-auto relative z-5">
-          <div className="px-2 md:px-3 py-4 mt-8 sm:mt-12 flex flex-col items-start">
+          <div className="px-2 md:px-3 py-5 mb-5 mt-8 sm:mt-12 flex flex-col items-start">
             <div className="mb-2 text-center w-full"> 
 
               <PageTitle title="Clam Farms" />

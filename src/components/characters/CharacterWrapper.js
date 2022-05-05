@@ -137,7 +137,7 @@ const CharacterWrapper = ({
       <div
         className={
           showBubble
-            ? "character-bubble fixed z-999 bottom-8 pointer-events-none w-screen"
+            ? "character-bubble fixed z-999 bottom-15 pointer-events-none w-screen"
             : "character-bubble hide-bubble fixed justify-end"
         }
         style={{ zIndex: forceTop ? 9999 : speech ? undefined : 0 }}
@@ -226,7 +226,7 @@ const CharacterWrapper = ({
             onClick={handleClickCharacter}
           />
         </div>
-        <button className="btn character-container-round mb-6" onClick={handleClickCharacter} style={{display: showBubble ? "none": "block"}}>
+        <button className="btn character-container-round" onClick={handleClickCharacter} style={{display: showBubble ? "none": "block"}}>
           <img src={character.charImg} className="character"/>
         </button>
       </div>
