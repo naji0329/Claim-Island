@@ -206,6 +206,15 @@ const Saferoom = ({
     }
   }, [pathname]);
 
+  
+  const onModalClose = async () => {
+    if(isShowing) {
+      alert("asdfasdf");
+      toggleModal();
+
+    }
+  };
+
   return (
     <>
       {ui.isFetching && <LoadingScreen />}
@@ -301,6 +310,7 @@ const Saferoom = ({
               onClickPrev={isPrevButtonShown() && onClickPrev}
               mopenPearlDetailedInfo={mopenPearlDetailedInfo}
               showlists={showlists}
+              onClose={onModalClose}
             />
           ) : (
             <></>
@@ -317,6 +327,7 @@ const Saferoom = ({
               onClickNext={isNextButtonShown() && onClickNext}
               onClickPrev={isPrevButtonShown() && onClickPrev}
               showlists={showlists}
+              onClose={onModalClose}
             />
           ) : (
             <></>

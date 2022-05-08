@@ -37,7 +37,7 @@ import {
   speechWelcomeNext,
 } from "./character/WithdrawClam";
 import LoadingScreen from "components/LoadingScreen";
-import ClamView from "../saferoom/ClamView";
+import ClamView from "./ClamView";
 
 import { ifPearlSendSaferoom } from "./utils";
 import { getSortedClams } from "utils/clamsSort";

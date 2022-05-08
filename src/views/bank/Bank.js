@@ -23,6 +23,8 @@ import { ExternalLinksBlock } from "./ExternalLinksBlock";
 import BigNumber from "bignumber.js";
 import { renderUsd } from "utils/number";
 
+import BottomMenu from './BottomMenu';
+
 const Bank = ({
   account: { address, isBSChain, isWeb3Installed, isConnected },
   bank: { pools },
@@ -34,6 +36,9 @@ const Bank = ({
   );
   const [totalTVL, setTotalTVL] = useState(0);
   const { isShowing, toggleModal } = useModal();
+
+  const [mTitle, setMTitle] = useState('Yield Pools');
+
   const isNativeStaker =
     pools.length && pools.some((p) => p.isNative && +p.userDepositAmountInPool > 0);
 
@@ -108,19 +113,50 @@ const Bank = ({
         {/* video */}
         <VideoBackground videoImage={videoImage} videoMp4={videoMp4} videoWebM={videoWebM} />
 
-        <div className="w-full lg:w-7/10 mx-auto relative z-10 mt-24 px-2 md:px-4%">
-          <div className="flex justify-between items-center">
-            <PageTitle title="Clam Bank" />
-            <ExternalLinksBlock
-              totalTVL={totalTVL}
-              harvestAllPools={address ? harvestAllPools : null}
-            />
+        <div className="div_lg">
+
+          <div className="w-full lg:w-7/10 mx-auto relative z-10 mt-24 px-2 md:px-4%">
+            <div className="flex justify-between items-center">
+              <PageTitle title="Clam Bank" />
+              <ExternalLinksBlock
+                totalTVL={totalTVL}
+                harvestAllPools={address ? harvestAllPools : null}
+              />
+            </div>
+            <div className="py-4 flex flex-col">
+              {pools &&
+                pools.map((pool, i) => <PoolItem key={i} pool={pool} toggleModal={toggleModal} />)}
+            </div>
           </div>
-          <div className="py-4 flex flex-col">
-            {pools &&
-              pools.map((pool, i) => <PoolItem key={i} pool={pool} toggleModal={toggleModal} />)}
-          </div>
+
         </div>
+        <div className="div_sm">
+
+          <div className="w-full lg:w-7/10 mx-auto relative z-10 mt-24 px-2 mb-6 md:px-4%">
+            <div className="flex justify-center">
+              <PageTitle title={mTitle} />
+            </div>
+
+            <div className="mt-1 flex justify-center gap-3">
+                <button className="mSelectP">Exchange</button>
+                <button className="mSelectP">Boost Pools</button>
+            </div>
+
+            <div className="py-4 flex flex-col">
+              {pools &&
+                pools.map((pool, i) => <PoolItem key={i} pool={pool} toggleModal={toggleModal} />)}
+            </div>
+          </div>
+
+          <div className="mt-24">
+
+          </div>
+
+          <BottomMenu />
+          
+        </div>
+
+
       </div>
 
       {/* chat character   */}

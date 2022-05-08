@@ -53,34 +53,61 @@ export const PoolData = ({ urlForExchange, tvl }) => {
   }, [tvl]);
 
   return (
-    <div className="w-full px-2">
-      <div className="flex flex-row justify-between">
-        <div className="text-gray-500 font-semibold">
-          TVL:
-          <InfoTooltip text="Total Value Locked - the value of deposits in this pool" />
+    <>
+      <div className="div_lg">
+        <div className="w-full px-2">
+          <div className="flex flex-row justify-between">
+            <div className="text-gray-500 font-semibold">
+              TVL:
+              <InfoTooltip text="Total Value Locked - the value of deposits in this pool" />
+            </div>
+            <div className="font-bold text-black text-center">{tvlFmtd}</div>
+          </div>
+          <div className="flex">
+            <a
+              href={`https://bscscan.com/address/${bankAddress}`}
+              target="_blank"
+              className="text-gray-500 font-semibold underline"
+              rel="noreferrer"
+            >
+              BSC Scan
+            </a>
+          </div>
+          <div className="flex">
+            <a
+              href={urlForExchange}
+              target="_blank"
+              className="text-gray-500 font-semibold underline"
+              rel="noreferrer"
+            >
+              Get Token
+            </a>
+          </div>
         </div>
-        <div className="font-bold text-black text-center">{tvlFmtd}</div>
       </div>
-      <div className="flex">
-        <a
-          href={`https://bscscan.com/address/${bankAddress}`}
-          target="_blank"
-          className="text-gray-500 font-semibold underline"
-          rel="noreferrer"
-        >
-          BSC Scan
-        </a>
+      <div className="div_sm">
+        <div className="w-full px-2 mt-2 text-center">
+          <div className="flex flex-row justify-center">
+            <div className="text-gray-500 font-semibold">
+              TVL: &nbsp;
+              <InfoTooltip text="Total Value Locked - the value of deposits in this pool" />
+            </div>
+            <div className="font-bold text-black text-center">{tvlFmtd}</div>
+          </div>
+          <div className="">
+            <a
+              href={`https://bscscan.com/address/${bankAddress}`}
+              target="_blank"
+              className="text-gray-500 font-semibold underline"
+              rel="noreferrer"
+            >
+              BSC in BSC Scan
+            </a>
+          </div>
+        </div>
+
       </div>
-      <div className="flex">
-        <a
-          href={urlForExchange}
-          target="_blank"
-          className="text-gray-500 font-semibold underline"
-          rel="noreferrer"
-        >
-          Get Token
-        </a>
-      </div>
-    </div>
+    
+    </>
   );
 };
