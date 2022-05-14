@@ -106,101 +106,208 @@ const PearlInfo = ({
 
   return (
     <>
-      <ReactTooltip html={true} className="max-w-xl" />
-      <div className="w-full flex justify-between px-5">
-        <div className="w-32 mr-4 h-full overflow-hidden">
-          <img src={image} className="rounded-full" />
-          <div className="flex justify-center text-center text-gray-600 pt-2">
-            <span className="badge badge-success">#{pearl.pearlId}</span>
+      <div className="div_lg">
+
+        <ReactTooltip html={true} className="max-w-xl" />
+        <div className="w-full flex justify-between px-5">
+          <div className="w-32 mr-4 h-full overflow-hidden">
+            <img src={image} className="rounded-full" />
+            <div className="flex justify-center text-center text-gray-600 pt-2">
+              <span className="badge badge-success">#{pearl.pearlId}</span>
+            </div>
+            <p className="text-center text-gray-600 pt-2">{pearl.dnaDecoded["rarity"]}</p>
           </div>
-          <p className="text-center text-gray-600 pt-2">{pearl.dnaDecoded["rarity"]}</p>
-        </div>
-        <div className="w-2/3">
-          <InfoLine
-            label={
-              <>
-                Max GEM Yield&nbsp;
-                <button
+          <div className="w-2/3">
+            <InfoLine
+              label={
+                <>
+                  Max GEM Yield&nbsp;
+                  <button
+                    data-tip={
+                      '<p class="text-left pb-2">Streamed linearly over 30 days.</p><p class="text-left pb-2">Max GEM Yield is available when traits match with the Bank\'s requirements.</p><p class="text-left pb-2">Claiming the boost without a match will result in a 50% reduction of GEM Yield.'
+                    }
+                  >
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </button>
+                </>
+              }
+              value={
+                <>
+                  {bonusRewardFormatted}
+                  &nbsp;($
+                  {renderNumber(+(gemPriceUSD * +bonusRewardFormatted), 2)})
+                </>
+              }
+            />
+
+            <InfoLine
+              label={
+                <>
+                  Max ROI / Max APR&nbsp;
+                  <button data-tip='<p class="text-left pb-2">Assumes that the Pearl is exchanged for max GEM yield.</p><p class="text-left pb-2">APR shows annualised returns where the Pearl is exchanged for max GEM yield as soon as it next becomes available.'>
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </button>
+                </>
+              }
+              value={`${showApr ? maxRoi + "% / " + maxApr : "?% / ?"}%`}
+            />
+            
+            <InfoLine
+              label={
+                <>
+                  Max yield available in&nbsp;
+                  <button data-tip="Shows the time until this Pearl can next be exchanged for max GEM yield">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </button>
+                </>
+              }
+              value={formatMsToDuration(maxBoostIn)}
+            />
+            <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
+            <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
+            <InfoLine label="Grade:" value={
+              pearlGrade(
+                pearl.dnaDecoded["surface"],
+                pearl.dnaDecoded["lustre"],
+                pearl.dnaDecoded["nacreQuality"]
+              )
+            } />
+            <div className="flex justify-between w-full my-2">
+              {showBurn && (
+                <span
+                  data-tip-disable={false}
                   data-tip={
-                    '<p class="text-left pb-2">Streamed linearly over 30 days.</p><p class="text-left pb-2">Max GEM Yield is available when traits match with the Bank\'s requirements.</p><p class="text-left pb-2">Claiming the boost without a match will result in a 50% reduction of GEM Yield.'
+                    !isNativeStaker
+                      ? "You need to make a deposit in a GEM or SHELL pool before you can exchange Pearls for GEM yield."
+                      : ""
                   }
                 >
-                  <FontAwesomeIcon icon={faInfoCircle} />
-                </button>
-              </>
-            }
-            value={
-              <>
-                {bonusRewardFormatted}
-                &nbsp;($
-                {renderNumber(+(gemPriceUSD * +bonusRewardFormatted), 2)})
-              </>
-            }
-          />
-
-          <InfoLine
-            label={
-              <>
-                Max ROI / Max APR&nbsp;
-                <button data-tip='<p class="text-left pb-2">Assumes that the Pearl is exchanged for max GEM yield.</p><p class="text-left pb-2">APR shows annualised returns where the Pearl is exchanged for max GEM yield as soon as it next becomes available.'>
-                  <FontAwesomeIcon icon={faInfoCircle} />
-                </button>
-              </>
-            }
-            value={`${showApr ? maxRoi + "% / " + maxApr : "?% / ?"}%`}
-          />
-          <InfoLine
-            label={
-              <>
-                Max yield available in&nbsp;
-                <button data-tip="Shows the time until this Pearl can next be exchanged for max GEM yield">
-                  <FontAwesomeIcon icon={faInfoCircle} />
-                </button>
-              </>
-            }
-            value={formatMsToDuration(maxBoostIn)}
-          />
-          <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
-          <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
-          <InfoLine label="Grade:" value={
-            pearlGrade(
-              pearl.dnaDecoded["surface"],
-              pearl.dnaDecoded["lustre"],
-              pearl.dnaDecoded["nacreQuality"]
-            )
-          } />
-          <div className="flex justify-between w-full my-2">
-            {showBurn && (
-              <span
-                data-tip-disable={false}
-                data-tip={
-                  !isNativeStaker
-                    ? "You need to make a deposit in a GEM or SHELL pool before you can exchange Pearls for GEM yield."
-                    : ""
-                }
-              >
-                <button
-                  onClick={() => handleBurn()}
-                  className="mr-1 btn btn-outline btn-primary"
-                  disabled={!isNativeStaker || inTx}
+                  <button
+                    onClick={() => handleBurn()}
+                    className="mr-1 btn btn-outline btn-primary"
+                    disabled={!isNativeStaker || inTx}
+                  >
+                    Use
+                  </button>
+                </span>
+              )}
+              {!hideViewDetails && (
+                <Link
+                  to={`/saferoom/pearl?id=${pearl.pearlId}`}
+                  className="ml-1 btn btn-outline btn-secondary"
                 >
-                  Use
-                </button>
-              </span>
-            )}
-            {!hideViewDetails && (
-              <Link
-                to={`/saferoom/pearl?id=${pearl.pearlId}`}
-                className="ml-1 btn btn-outline btn-secondary"
-              >
-                View Details&nbsp;
-                <FontAwesomeIcon icon={faExternalLinkAlt} />
-              </Link>
-            )}
+                  View Details&nbsp;
+                  <FontAwesomeIcon icon={faExternalLinkAlt} />
+                </Link>
+              )}
+            </div>
           </div>
         </div>
+        {!isLast && <div className="py-px mx-8 my-4 bg-blue-300 rounded-xl" />}
       </div>
-      {!isLast && <div className="py-px mx-8 my-4 bg-blue-300 rounded-xl" />}
+      <div className="div_sm">
+        <div className="mFarmItem pt-4">
+          <ReactTooltip html={true} className="max-w-xl" />
+          <div className="w-32 m-auto">
+            <img src={image} className="rounded-full" />
+            <div className="flex justify-between items-center text-gray-600 pt-2">
+              <span className="badge badge-success">#{pearl.pearlId}</span>
+              <p className="text-center text-gray-600">{pearl.dnaDecoded["rarity"]}</p>
+            </div>
+          </div>
+          <div className="w-full flex justify-between px-1">
+            <div className="w-full">
+              {/* <InfoLine
+                label={
+                  <>
+                    Max GEM Yield&nbsp;
+                    <button
+                      data-tip={
+                        '<p class="text-left pb-2">Streamed linearly over 30 days.</p><p class="text-left pb-2">Max GEM Yield is available when traits match with the Bank\'s requirements.</p><p class="text-left pb-2">Claiming the boost without a match will result in a 50% reduction of GEM Yield.'
+                      }
+                    >
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                    </button>
+                  </>
+                }
+                value={
+                  <>
+                    {bonusRewardFormatted}
+                    &nbsp;($
+                    {renderNumber(+(gemPriceUSD * +bonusRewardFormatted), 2)})
+                  </>
+                }
+              />
+
+              <InfoLine
+                label={
+                  <>
+                    Max ROI / Max APR&nbsp;
+                    <button data-tip='<p class="text-left pb-2">Assumes that the Pearl is exchanged for max GEM yield.</p><p class="text-left pb-2">APR shows annualised returns where the Pearl is exchanged for max GEM yield as soon as it next becomes available.'>
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                    </button>
+                  </>
+                }
+                value={`${showApr ? maxRoi + "% / " + maxApr : "?% / ?"}%`}
+              />
+              <InfoLine
+                label={
+                  <>
+                    Max yield available in&nbsp;
+                    <button data-tip="Shows the time until this Pearl can next be exchanged for max GEM yield">
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                    </button>
+                  </>
+                }
+                value={formatMsToDuration(maxBoostIn)}
+              />
+              <InfoLine label="Shape:" value={pearl.dnaDecoded.shape} />
+              <InfoLine label="Color:" value={pearl.dnaDecoded.color} />
+              <InfoLine label="Grade:" value={
+                pearlGrade(
+                  pearl.dnaDecoded["surface"],
+                  pearl.dnaDecoded["lustre"],
+                  pearl.dnaDecoded["nacreQuality"]
+                )
+              } /> */}
+              <div className="text-center m-auto w-full my-2">
+                {showBurn && (
+                  <div>
+                    <span
+                      data-tip-disable={false}
+                      data-tip={
+                        !isNativeStaker
+                          ? "You need to make a deposit in a GEM or SHELL pool before you can exchange Pearls for GEM yield."
+                          : ""
+                      }
+                    >
+                      <button
+                        onClick={() => handleBurn()}
+                        className="selectBtn"
+                        disabled={!isNativeStaker || inTx}
+                      >
+                        Use
+                      </button>
+                    </span>
+                  </div>
+                )}
+                {!hideViewDetails && (
+                  <div className="mt-2">
+                    <Link
+                      to={`/saferoom/pearl?id=${pearl.pearlId}`}
+                      className="selectBtn"
+                    >
+                      View Details&nbsp;
+                      <FontAwesomeIcon icon={faExternalLinkAlt} />
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          {/* {!isLast && <div className="py-px mx-8 my-4 bg-blue-300 rounded-xl" />} */}
+        </div>
+      </div>
     </>
   );
 };

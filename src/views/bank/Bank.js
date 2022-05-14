@@ -132,27 +132,36 @@ const Bank = ({
         </div>
         <div className="div_sm">
 
-          <div className="w-full lg:w-7/10 mx-auto relative z-10 mt-24 px-2 mb-6 md:px-4%">
-            <div className="flex justify-center">
-              <PageTitle title={mTitle} />
-            </div>
-
-            <div className="mt-1 flex justify-center gap-3">
-                <button className="mSelectP">Exchange</button>
-                <button className="mSelectP">Boost Pools</button>
-            </div>
-
-            <div className="py-4 flex flex-col">
-              {pools &&
-                pools.map((pool, i) => <PoolItem key={i} pool={pool} toggleModal={toggleModal} />)}
-            </div>
-          </div>
-
+          {
+            mTitle == "Yield Pools" ? (
+              <>
+                <div className="w-full lg:w-7/10 mx-auto relative z-10 mt-24 px-2 mb-6 md:px-4%">
+                  <div className="flex justify-center">
+                    <PageTitle title={mTitle} />
+                  </div>
+      
+                  <div className="mt-1 flex justify-center gap-3">
+                      <button className="mSelectP">Exchange</button>
+                      <button className="mSelectP">Boost Pools</button>
+                  </div>
+      
+                  <div className="py-4 flex flex-col">
+                    {pools &&
+                      pools.map((pool, i) => <PoolItem key={i} pool={pool} toggleModal={toggleModal} />)}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+              
+              </>
+            )
+          }
           <div className="mt-24">
 
           </div>
 
-          <BottomMenu />
+          <BottomMenu setMTitle={setMTitle} toggleModal={toggleModal} isShowing={isShowing} />
           
         </div>
 

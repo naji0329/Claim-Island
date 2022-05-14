@@ -112,71 +112,147 @@ const BurnPearlModal = (props) => {
   );
 
   return (
-    <div className="w-full flex flex-col">
-      <div className="w-full flex flex-row justify-center gap-4 item-center">
-        <h1 className="text-3xl font-aristotelica-bold black text-center pt-2">Choose a pearl</h1>
-        <div className="max-w-325">
-          <PearlsSorting page="bank" textSize="md" />
-        </div>
-      </div>
-      <div className="w-full p-4 flex justify-between">
-        <div className="flex flex-col w-3/5">
-          <span className="font-aristotelica-bold text-xl">Traits for Max GEM Yield</span>
-          {timeLeft.includes("-") ? (
-            <div>
-              <button onClick={handlePeriodCheckpoint} className="btn btn-outline btn-primary">
-                Update Pearl Boost Traits
-              </button>
+    <>
+      <div className="div_lg">
+        
+        <div className="w-full flex flex-col">
+          <div className="w-full flex flex-row justify-center gap-4 item-center">
+            <h1 className="text-3xl font-aristotelica-bold black text-center pt-2">Choose a pearl</h1>
+            <div className="max-w-325">
+              <PearlsSorting page="bank" textSize="md" />
             </div>
-          ) : (
-            <span className="text-gray-500">Changes in: {timeLeft}</span>
-          )}
-        </div>
-        <div className="flex flex-col w-2/5 items-end">
-          <div>
-            <span className="inline-block mr-2">Shape:</span>
-            <span>{boostedShape}</span>
           </div>
-          <div>
-            <span className="inline-block mr-2">Color:</span>
-            <span>{boostedColor}</span>
-          </div>
-        </div>
-      </div>
-      <div style={{ height: window.innerHeight * 0.5 }} className="overflow-y-auto">
-        <div className="w-full flex flex-col p-4">
-          <div
-            className={`w-full mr-8 rounded-lg p-4 flex flex-col card-shadow mb-6 ${
-              !boostedPearls.length ? "hidden" : ""
-            }`}
-          >
-            <div className="w-full">
-              {boostedPearls.length ? (
-                getSortedPearls(boostedPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
-                  renderPearl
-                )
+          <div className="w-full p-4 flex justify-between">
+            <div className="flex flex-col w-3/5">
+              <span className="font-aristotelica-bold text-xl">Traits for Max GEM Yield</span>
+              {timeLeft.includes("-") ? (
+                <div>
+                  <button onClick={handlePeriodCheckpoint} className="btn btn-outline btn-primary">
+                    Update Pearl Boost Traits
+                  </button>
+                </div>
               ) : (
-                <p>No pearls available for Max GEM Yield</p>
+                <span className="text-gray-500">Changes in: {timeLeft}</span>
               )}
             </div>
+            <div className="flex flex-col w-2/5 items-end">
+              <div>
+                <span className="inline-block mr-2">Shape:</span>
+                <span>{boostedShape}</span>
+              </div>
+              <div>
+                <span className="inline-block mr-2">Color:</span>
+                <span>{boostedColor}</span>
+              </div>
+            </div>
           </div>
-          <div className="w-full flex flex-col max-h-160">
-            <div>
-              {!!regularPearls.length && (
-                <p className="font-bold mb-4">Not available for Max GEM Yield:</p>
-              )}
-              {regularPearls.length ? (
-                getSortedPearls(regularPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
-                  renderPearl
-                )
-              ) : (
-                <p>No pearls available for GEM Yield</p>
-              )}
+          <div style={{ height: window.innerHeight * 0.5 }} className="overflow-y-auto">
+            <div className="w-full flex flex-col p-4">
+              <div
+                className={`w-full mr-8 rounded-lg p-4 flex flex-col card-shadow mb-6 ${
+                  !boostedPearls.length ? "hidden" : ""
+                }`}
+              >
+                <div className="w-full">
+                  {boostedPearls.length ? (
+                    getSortedPearls(boostedPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
+                      renderPearl
+                    )
+                  ) : (
+                    <p>No pearls available for Max GEM Yield</p>
+                  )}
+                </div>
+              </div>
+              <div className="w-full flex flex-col max-h-160">
+                <div>
+                  {!!regularPearls.length && (
+                    <p className="font-bold mb-4">Not available for Max GEM Yield:</p>
+                  )}
+                  {regularPearls.length ? (
+                    getSortedPearls(regularPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
+                      renderPearl
+                    )
+                  ) : (
+                    <p>No pearls available for GEM Yield</p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <div className="div_sm">
+        <div className="w-full flex flex-col overflow-y-auto">
+          <div className="w-full">
+            <h1 className="text-3xl font-aristotelica-bold black text-center pt-2">Choose a pearl</h1>
+            <div className="max-w-325 text-center m-auto">
+              <PearlsSorting page="bank" textSize="xs" />
+            </div>
+          </div>
+          <div className="w-full p-4 flex justify-between">
+            <div className="flex flex-col w-3/5">
+              <span className="font-aristotelica-bold text-xl">Traits for Max GEM Yield</span>
+            </div>
+            <div className="flex flex-col w-2/5 items-end">
+              <div>
+                <span className="inline-block mr-2">Shape:</span>
+                <span>{boostedShape}</span>
+              </div>
+              <div>
+                <span className="inline-block mr-2">Color:</span>
+                <span>{boostedColor}</span>
+              </div>
+            </div>
+          </div>
+          <div className="w-full">
+            {timeLeft.includes("-") ? (
+              <div className="m-auto text-center">
+                <button onClick={handlePeriodCheckpoint} className="btn btn-outline btn-primary">
+                  Update Pearl Boost Traits
+                </button>
+              </div>
+            ) : (
+              <span className="text-gray-500">Changes in: {timeLeft}</span>
+            )}
+          </div>
+          <div className="">
+            <div className="w-full flex flex-col p-4">
+              <div
+                className={`w-full mr-8 rounded-lg p-4 flex flex-col card-shadow mb-6 ${
+                  !boostedPearls.length ? "hidden" : ""
+                }`}
+              >
+                <div className="w-full grid grid-cols-2">
+                  {boostedPearls.length ? (
+                    getSortedPearls(boostedPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
+                      renderPearl
+                    )
+                  ) : (
+                    <p>No pearls available for Max GEM Yield</p>
+                  )}
+                </div>
+              </div>
+              <div className="w-full flex flex-col max-h-160">
+                <div className="">
+                  {!!regularPearls.length && (
+                    <p className="font-bold mb-4">Not available for Max GEM Yield:</p>
+                  )}
+                  {regularPearls.length ? (
+                    <div className="grid grid-cols-2 gap-4 " style={{marginBottom: "200px"}}>
+                      { getSortedPearls(regularPearls, pearlsSortOrder.value, pearlsSortOrder.order).map(
+                        renderPearl
+                      ) }
+                    </div>
+                  ) : (
+                    <p>No pearls available for GEM Yield</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

@@ -176,7 +176,7 @@ const PoolItem = ({
         </div>
       </div>
       <div className="div_sm">
-        <div className="flex flex-col justify-between pb-5 mb-4 glass bg-white hover:bg-white bg-opacity-50 hover:bg-opacity-50 backdrop-blur-lg hover:backdrop-blur-lg border-2 border-gray-800 shadow-md rounded-xl">
+        <div className="flex flex-col justify-between mb-4 glass bg-white hover:bg-white bg-opacity-50 hover:bg-opacity-50 backdrop-blur-lg hover:backdrop-blur-lg border-2 border-gray-800 shadow-md rounded-xl">
           <div
             className="flex items-center justify-between px-1 py-1 cursor-pointer"
             onClick={handleClick}

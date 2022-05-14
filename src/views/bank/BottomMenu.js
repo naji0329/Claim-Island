@@ -6,7 +6,7 @@ import mobilePearlsIcon from "assets/img/pearls-icon-outline.png";
 import mobileMapIcon from "assets/img/map.png";
 import mobileSearchIcon from "assets/img/search.png";
 
-const BottomMenu = () => {
+const BottomMenu = ({setMTitle, toggleModal, isShowing}) => {
 
   return (
       <>
@@ -19,19 +19,19 @@ const BottomMenu = () => {
                 </Link>
             </div>
             <div className="menu_item">
-                <Link to="#" >
+                <Link to="#" onClick={() => {setMTitle("Exchange"); if(isShowing) {toggleModal()}}}>
                     <img src={mobileClamIcon} alt="" />
                     <p>Exchange</p>
                 </Link>
             </div>
             <div className="menu_item">
-                <Link to="#" >
-                <img src={mobilePearlsIcon} alt="" />
-                <p>Yield<br/>Pools</p>
+                <Link to="#" onClick={() => {setMTitle("Yield Pools"); if(isShowing) {toggleModal()}}}>
+                    <img src={mobilePearlsIcon} alt="" />
+                    <p>Yield<br/>Pools</p>
                 </Link>
             </div>
             <div className="menu_item">
-                <Link to="#">
+                <Link to="#" onClick={() => {setMTitle("Boost Pools"); if(!isShowing) {toggleModal()} }}>
                     <img src={mobileSearchIcon} alt="" />
                     <p>Boost<br/>Pools</p>
                 </Link>
